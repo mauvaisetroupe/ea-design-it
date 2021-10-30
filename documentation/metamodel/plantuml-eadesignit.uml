@@ -1,0 +1,109 @@
+@startuml
+LandscapeView "1" o-down- "many" FunctionalFlow : flows
+FunctionalFlow "many" o-down- "1" Interface : flows
+FunctionalFlow "1" o-- "many" DataFlow
+
+
+
+Interface "1" o-- "1" Application : source
+Interface "1" o-- "1" Application : target
+Application "1" o-- "n" ApplicationComponent : module
+DataFlow <|-- FileDataFlow
+DataFlow <|-- EventDataFlow
+DataFlow <|-- APIDataFlow
+
+DataFlow "1" o-left- "1" ApplicationComponent : source
+DataFlow "1" o-left- "1" ApplicationComponent : target
+
+
+
+Class LandscapeView {
+}
+note right of LandscapeView
+  LanscapeView is for example a 
+  target landscape schema in a ADD
+  
+  The name 'view' come from in TOGAF vocabulary
+  A view responds to a template (viewpoint)
+
+  A landscape view is composed of <b>FunctionalFlow</b>
+end note 
+
+Class FunctionalFlow {
+    String alias
+    String description
+    String comment
+	Interface interface
+	String frequency
+}
+note right of FunctionalFlow
+  In the context of a <b>LandscapeView</b>,
+  a FunctionalFlow represents a functional information 
+  exchange between two applications
+  Ex : From CRM to CoreBanking, createProspect 
+  
+  A FunctionalFlow leverage on a <b>Inteface</b> to transfer
+  information betwwens source and target
+
+  Exchange data, through a specific Interface, 
+  is implmented by <b>DataFlow</b> (<b>File</b>, <b>Event</b>
+  <b>API</b>).  A single FunctionalFlow (createCustomer) could 
+  be implemented with many Files 
+  (Customer-Core.cvs, Customer-Address.csv)
+end note 
+
+Class Interface {
+    String id
+    Application source
+    Application target
+	String protocol
+    format Format,
+    status String,
+}
+note left of Interface
+   Interface is a "tuyau"
+   Fully defined by 
+    - a source <b>Application</b>
+    - a target <b>Applications</b>
+    - a protocol (API, Files, Events)
+   A Functional Flow is implemented through one (or more?) <b>Interface</b>
+end note
+
+
+Class Application {
+String name
+}
+note right of Application
+   L2 Application, 
+   present in ADD
+end note
+
+Class ApplicationComponent {
+String name
+}
+note left of ApplicationComponent
+   L3 Application, 
+   present in Solution Blueprint
+end note
+
+
+Class DataFlow {
+}
+
+Class FileDataFlow <?extends DataFlow > {
+   String fileName
+   String description
+   String documentationURL
+}
+
+Class EventDataFlow <?extends DataFlow > {
+   String topicName
+   String description
+   String xsdURL
+}
+
+Class APIDataFlow <?extends DataFlow > {
+   String swaggerURL
+}
+
+@enduml
