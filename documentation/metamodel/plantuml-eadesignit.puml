@@ -18,6 +18,7 @@ DataFlow "1" o-left- "1" ApplicationComponent : target
 
 
 Class LandscapeView {
+   String diagramName 
 }
 note right of LandscapeView
   LanscapeView is for example a 
@@ -72,6 +73,7 @@ end note
 
 Class Application {
 String name
+String description
 }
 note right of Application
    L2 Application, 
@@ -80,6 +82,9 @@ end note
 
 Class ApplicationComponent {
 String name
+String description
+String technology
+
 }
 note left of ApplicationComponent
    L3 Application, 
@@ -105,5 +110,4 @@ Class EventDataFlow <?extends DataFlow > {
 Class APIDataFlow <?extends DataFlow > {
    String swaggerURL
 }
-
 @enduml
