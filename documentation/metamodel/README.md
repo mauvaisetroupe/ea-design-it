@@ -1,5 +1,6 @@
 # Introduction
-This application is about have a cartography of your applications eand flows between applications
+This application is tool to model application architecturete building diagrams to document applications and flows between applications.
+
 
 # Teminology 
 In order to undurstand the metamodel of this tool, let's share the same language.
@@ -20,11 +21,11 @@ In a bank, an Application is for example you web banking. Outside de DEV & IT-OP
 
 In the context of a **Landscape**, a Functional Flow represents a functional information exchange between two applications
 
-```
-FrontEnd component need to push data to its BackEnd, 
+
+> :information_source: FrontEnd component need to push data to its BackEnd, 
 through a Microservice for creating a new customer. 
 This is a 'Create Customer' functional flow.
-```
+
 
 ![flow view](png/plantuml-functionalflow/plantuml-functionalflow.png)
 
