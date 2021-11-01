@@ -21,7 +21,7 @@ DataFlow <|-- APIDataFlow
 Class LandscapeView {
    String diagramName 
 }
-note right of LandscapeView
+note left of LandscapeView
   LanscapeView is for example a 
   target landscape schema in a ADD
   
@@ -38,20 +38,13 @@ Class FunctionalFlow {
 	Interface interface
 	String frequency
 }
-note right of FunctionalFlow
+note left of FunctionalFlow
   In the context of a <b>LandscapeView</b>,
   a FunctionalFlow represents a functional information 
   exchange between two applications
-  Ex : From CRM to CoreBanking, createProspect 
   
   A FunctionalFlow leverage on a <b>Inteface</b> to transfer
-  information betwwens source and target
-
-  Exchange data, through a specific Interface, 
-  is implmented by <b>DataFlow</b> (<b>File</b>, <b>Event</b>
-  <b>API</b>).  A single FunctionalFlow (createCustomer) could 
-  be implemented with many Files 
-  (Customer-Core.cvs, Customer-Address.csv)
+  information between source and target
 end note 
 
 Class Interface {
@@ -62,13 +55,13 @@ Class Interface {
     format Format,
     status String,
 }
-note right of Interface
-   Interface is a "tuyau"
-   Fully defined by 
+note top of Interface
+   Interface is a "pipeleline" defined by 
     - a source <b>Application</b>
     - a target <b>Applications</b>
     - a protocol (API, Files, Events)
-   A Functional Flow is implemented through one (or more?) <b>Interface</b>
+   A Functional Flow is implemented 
+   through one or more <b>Interface</b>
 end note
 
 
@@ -76,25 +69,23 @@ Class Application {
 String name
 String description
 }
-note right of Application
-   L2 Application, 
-   present in ADD
-end note
 
 Class ApplicationComponent {
 String name
 String description
 String technology
-
 }
-note left of ApplicationComponent
-   L3 Application, 
-   present in Solution Blueprint
-end note
 
 
 Class DataFlow {
 }
+note left of DataFlow
+  Exchange data, through a specific Interface, 
+  is implmented by <b>DataFlow</b> (<b>File</b>, <b>Event</b>
+  <b>API</b>).  A single FunctionalFlow could 
+  be implemented with many Files, Events or API calls
+end note 
+
 
 Class FileDataFlow <?extends DataFlow > {
    String fileName

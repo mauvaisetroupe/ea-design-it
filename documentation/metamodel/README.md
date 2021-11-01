@@ -33,7 +33,7 @@ In the context of a **Landscape**, a Functional Flow represents a functional inf
 
 A Functional Flow is implemented through one or more **Interface** to transfer information between source and target.
 
-Interface is a "tuyau" and it's fully defined by :
+Interface is a "pipeline" between two applications and it's fully defined by :
 - a source **Application**
 - a target **Applications**
 - a protocol (API, Files, Events, etc.)
@@ -50,7 +50,7 @@ Interface is a "tuyau" and it's fully defined by :
 
 ## DataFlow
 
-In the context of a Function Flow, exchange data through a specific Interface is implmented by **DataFlow** (**File**, **Event** or **API**). 
+In the context of a Function Flow, exchange data through a specific Interface is implemented by **DataFlow** (**File**, **Event** or **API**). 
 
 
 
