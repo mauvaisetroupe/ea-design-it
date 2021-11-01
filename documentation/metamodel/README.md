@@ -22,12 +22,11 @@ In a bank, an Application is for example you web banking. Outside de DEV & IT-OP
 In the context of a **Landscape**, a Functional Flow represents a functional information exchange between two applications
 
 
-> :information_source: FrontEnd component need to push data to its BackEnd, 
-through a Microservice for creating a new customer. 
-This is a 'Create Customer' functional flow.
-
-
-![flow view](png/plantuml-functionalflow/plantuml-functionalflow.png)
+> FrontEnd component need to push data to its BackEnd, 
+> through a Microservice for creating a new customer. 
+> This is a 'createCustomer' functional flow.
+>
+> ![flow view](png/plantuml-functionalflow/plantuml-functionalflow.png)
 
 
 ## Interfaces
@@ -40,16 +39,13 @@ Interface is a "tuyau" and it's fully defined by :
 - a protocol (API, Files, Events, etc.)
 
 
-```
-A single Functional Flow (createCustomer) could be implemented trough two different Interfaces:
-- an REST API between FrontEnd and Microservice
-- an SFTP file transfer between Microservice et Backend
-```
 
-
-
-
-![interface view](png/plantuml-interface/plantuml-interface.png)
+> A single Functional Flow (createCustomer) could be implemented 
+> trough two different Interfaces:
+> - an REST API between FrontEnd and Microservice
+> - an SFTP file transfer between Microservice et Backend
+>
+> ![interface view](png/plantuml-interface/plantuml-interface.png)
 
 
 ## DataFlow
@@ -57,13 +53,14 @@ A single Functional Flow (createCustomer) could be implemented trough two differ
 In the context of a Function Flow, exchange data through a specific Interface is implmented by **DataFlow** (**File**, **Event** or **API**). 
 
 
-```
-FunctionalFlow createCustome is implemented trhough two Interfcaces, and then via multiple DataFlow transfer in each Interface :
-- two API call between FrontEnd and MicroService
-- then by SFTP transfer with many Files (customer-core.cvs & address.csv) between MicroService and BackEnd
-```
 
-![dataflow view](png/plantuml-dataflow/plantuml-dataflow.png)
+> FunctionalFlow createCustomer is implemented trhough two 
+> Interfcaces, and then via multiple DataFlow transfer in each 
+> Interface :
+> - two API call between FrontEnd and MicroService
+> - then by SFTP transfer with many Files (customer-core.cvs &  address.csv) between MicroService and BackEnd
+> 
+> ![dataflow view](png/plantuml-dataflow/plantuml-dataflow.png)
 
 
 # Meta-Model
