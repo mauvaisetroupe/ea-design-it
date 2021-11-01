@@ -1,7 +1,8 @@
 @startuml
 LandscapeView "1" o-down- "many" FunctionalFlow : flows
 FunctionalFlow "many" o-down- "1" Interface : flows
-FunctionalFlow "1" o-- "many" DataFlow
+'FunctionalFlow "1" o-- "many" DataFlow
+DataFlow "1" o-right- "1" Interface
 
 
 
@@ -12,8 +13,8 @@ DataFlow <|-- FileDataFlow
 DataFlow <|-- EventDataFlow
 DataFlow <|-- APIDataFlow
 
-DataFlow "1" o-left- "1" ApplicationComponent : source
-DataFlow "1" o-left- "1" ApplicationComponent : target
+'DataFlow "1" o-left- "1" ApplicationComponent : source
+'DataFlow "1" o-left- "1" ApplicationComponent : target
 
 
 
@@ -61,7 +62,7 @@ Class Interface {
     format Format,
     status String,
 }
-note left of Interface
+note right of Interface
    Interface is a "tuyau"
    Fully defined by 
     - a source <b>Application</b>
