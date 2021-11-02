@@ -1,6 +1,4 @@
 @startuml
-
-
 LandscapeView "1" *-down- "n" FunctionalFlow : flows
 FunctionalFlow "n" o-down- "1" Interface : flows
 'FunctionalFlow "1" o-- "n" DataFlow
