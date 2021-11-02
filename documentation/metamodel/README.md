@@ -1,26 +1,35 @@
 # Introduction
 This application is tool to model application architecture building diagrams to document applications and interactions between applications (data flows).
 
-
 # Teminology 
-In order to undurstand the metamodel of this tool, let's share the same language.
 
 ## Viewpoint
-IT lanscape, composed by hundred of application components is difficult to model. A single and comprehensive model is often too complex to be understood. That's why it's important to introduce viewpoints.
+IT lanscape, composed by hundred of applications and components is difficult to model. A single and comprehensive model is often too complex to be understood. 
 
-Using TOGAF terminology, A **view** is a representation of a whole system from the perspective of a related set of concerns. A **viewpoint** defines the perspective from which a view is taken
+That's why it's important to introduce views and viewpoints.
 
-This first version of the tool implement a uniqeu ViewPoint : Application **Landscape**
+Using TOGAF terminology, A **view** is a representation of a whole system from the perspective of a related set of concerns. A **viewpoint** defines the perspective from which a view is taken. Viepoint a kind of template, and View is an instantiation of a a specific viewpoint
+
+This first version of the tool implement a unique ViewPoint : Application **Landscape**
 
 ## Application and Application Components
-What an application is? There is no obvious reponse. But anyway, you need a abstraction in order to have a high-level view of your landscape. A approach is to decide that an Application is an homogenous set of Application Components seen as one from an external point of view. 
+What an application is? There is no obvious reponse. But anyway, you need a abstraction in order to have a high-level view of your landscape. A pragmatic approach is to decide that an Application is an homogenous set of Application Components seen as one from an external point of view. 
 
-In a bank, an Application is for example you web banking. Outside de DEV & IT-OPS teams, no importance to decompose it in 3 ou 4 different Application Components. But inside the team, your components are deployable components that together creat your application
+<br/>
+
+> In a bank for example, an Application could be the web 
+> banking. Customers use the web banking 
+> as their main bank application. 
+> From DEV & IT-OPS teams perspective, web bankink application 
+> is decomposed into in 3 ou 4 different Application Components
+> separately deployable, that together create the web banking 
+> application
 
 ## Functional Flows
 
 In the context of a **Landscape**, a Functional Flow represents a functional information exchange between two applications
 
+<br/>
 
 > FrontEnd component need to push data to its BackEnd, 
 > through a Microservice for creating a new customer. 
@@ -38,7 +47,7 @@ Interface is a "pipeline" between two applications and it's fully defined by :
 - a target **Applications**
 - a protocol (API, Files, Events, etc.)
 
-
+<br/>
 
 > A single Functional Flow (createCustomer) could be implemented 
 > trough two different Interfaces:
@@ -47,11 +56,20 @@ Interface is a "pipeline" between two applications and it's fully defined by :
 >
 > ![interface view](png/plantuml-interface/plantuml-interface.png)
 
+<br/>
+
+On the other hand, an Interfcae could be used to implement different Functional Flows, even in different Landscapes.
 
 ## DataFlow
 
-In the context of a Function Flow, exchange data through a specific Interface is implemented by **DataFlow** (**File**, **Event** or **API**). 
+In the context of a Function Flow, exchange data through a specific Interface is implemented by **DataFlow** 
 
+Concretly, DataFlow is one of the following artifact:
+- a **File**, 
+- an **Event** 
+- or **API**
+
+<br/>
 
 
 > FunctionalFlow createCustomer is implemented trhough two 

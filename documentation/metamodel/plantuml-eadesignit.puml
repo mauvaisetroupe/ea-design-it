@@ -1,8 +1,12 @@
 @startuml
-LandscapeView "1" o-down- "many" FunctionalFlow : flows
-FunctionalFlow "many" o-down- "1" Interface : flows
-'FunctionalFlow "1" o-- "many" DataFlow
-DataFlow "1" o-right- "1" Interface
+
+
+LandscapeView "1" *-down- "n" FunctionalFlow : flows
+FunctionalFlow "n" o-down- "1" Interface : flows
+'FunctionalFlow "1" o-- "n" DataFlow
+DataFlow "n" -right-o "1" Interface
+DataFlow "n" -up-o "n" FunctionalFlow
+
 
 
 
@@ -80,10 +84,12 @@ String technology
 Class DataFlow {
 }
 note left of DataFlow
-  Exchange data, through a specific Interface, 
-  is implmented by <b>DataFlow</b> (<b>File</b>, <b>Event</b>
-  <b>API</b>).  A single FunctionalFlow could 
-  be implemented with many Files, Events or API calls
+  Exchange data, is modeled by a <b>Data Flow</b>.
+  A Data flow is implemented :
+   - through a specific <b>Interface</b>, 
+   - in the context of one or more <b>Functional Flow</b>
+  
+  DataFlow is a <b>File</b>, an <b>Event</b> or an <b>API</b>
 end note 
 
 
