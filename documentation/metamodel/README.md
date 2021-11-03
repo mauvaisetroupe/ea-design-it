@@ -60,9 +60,13 @@ Interface is a "pipeline" between two applications and it's fully defined by :
 
 On the other hand, an Interfcae could be used to implement different Functional Flows, even in different Landscapes.
 
+But an Interface has a unique owner (a DEVOPS team)
+
+
 ## DataFlow
 
-In the context of a Function Flow, exchange data through a specific Interface is implemented by **DataFlow** 
+In the context of a Function Flow, exchange data through a specific Interface is implemented by a **DataFlow** 
+
 
 Concretly, DataFlow is one of the following artifact:
 - a **File**, 
@@ -70,7 +74,6 @@ Concretly, DataFlow is one of the following artifact:
 - or **API**
 
 <br/>
-
 
 > FunctionalFlow createCustomer is implemented trhough two 
 > Interfcaces, and then via multiple DataFlow transfer in each 
@@ -80,6 +83,9 @@ Concretly, DataFlow is one of the following artifact:
 > 
 > ![dataflow view](png/plantuml-dataflow/plantuml-dataflow.png)
 
+<br/>
+
+A dataflow if implemented through an Interface, hence dataflow ownership is define by Interface owner.
 
 # Meta-Model
 

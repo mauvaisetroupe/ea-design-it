@@ -8,20 +8,23 @@ DataFlow "n" -up-o "n" FunctionalFlow
 
 
 
-Interface "1" o-- "1" Application : source
-Interface "1" o-- "1" Application : target
+Interface "n" o-right- "1" Application : source
+Interface "n" o-right- "1" Application : target
+Interface "n" o-- "1" ApplicationComponent : source
+Interface "n" o-- "1" ApplicationComponent : target
+
 Application "1" o-- "n" ApplicationComponent : module
+
 DataFlow <|-- FileDataFlow
 DataFlow <|-- EventDataFlow
 DataFlow <|-- APIDataFlow
 
-'DataFlow "1" o-left- "1" ApplicationComponent : source
-'DataFlow "1" o-left- "1" ApplicationComponent : target
 
 
 
 Class LandscapeView {
    String diagramName 
+   String owner
 }
 note left of LandscapeView
   LanscapeView is for example a 
@@ -34,11 +37,11 @@ note left of LandscapeView
 end note 
 
 Class FunctionalFlow {
-    String alias
-    String description
-    String comment
-	Interface interface
-	String frequency
+   String alias
+   String description
+   String comment
+   String status
+	Interface interfaces
 }
 note left of FunctionalFlow
   In the context of a <b>LandscapeView</b>,
@@ -50,12 +53,11 @@ note left of FunctionalFlow
 end note 
 
 Class Interface {
-    String id
-    Application source
-    Application target
-	String protocol
-    format Format,
-    status String,
+   Application source
+   Application target
+   String protocol
+   String status
+   String owner
 }
 note top of Interface
    Interface is a "pipeleline" defined by 
@@ -68,18 +70,29 @@ end note
 
 
 Class Application {
-String name
-String description
+   String name
+   String description
+   String comment
+   String type
+   String owner
+   String technology
 }
 
 Class ApplicationComponent {
-String name
-String description
-String technology
+   String name
+   String description
+   String comment
+   String type
+   String owner
+   String technology
 }
 
 
 Class DataFlow {
+	String frequency
+   String format 
+   String documentationURL
+   String description
 }
 note left of DataFlow
   Exchange data, is modeled by a <b>Data Flow</b>.
@@ -88,19 +101,21 @@ note left of DataFlow
    - in the context of one or more <b>Functional Flow</b>
   
   DataFlow is a <b>File</b>, an <b>Event</b> or an <b>API</b>
+
+  Format is JSON, XML, CSV, etc.
 end note 
 
 
 Class FileDataFlow <?extends DataFlow > {
    String fileName
-   String description
-   String documentationURL
+   String formatDocumentationURL
 }
 
 Class EventDataFlow <?extends DataFlow > {
    String topicName
-   String description
    String xsdURL
+   String ResyncMechanismURL
+   String ReconciliationMechanismURL
 }
 
 Class APIDataFlow <?extends DataFlow > {
