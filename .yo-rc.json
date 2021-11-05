@@ -7,7 +7,7 @@
     "skipServer": false,
     "skipUserManagement": false,
     "skipCheckLengthOfIdentifier": false,
-    "skipFakeData": false,
+    "skipFakeData": true,
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
@@ -42,6 +42,8 @@
     "clientPackageManager": "npm",
     "clientThemeVariant": "",
     "enableGradleEnterprise": false,
-    "languages": ["en", "fr"]
+    "languages": ["en", "fr"],
+    "entities": ["LandscapeView", "Owner", "FunctionalFlow", "FlowInterface", "Application", "DataFlow", "ApplicationComponent"],
+    "lastLiquibaseTimestamp": 1636053548000
   }
 }
