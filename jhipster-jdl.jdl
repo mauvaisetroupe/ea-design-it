@@ -1,0 +1,146 @@
+relationship OneToMany {
+	LandscapeView{flows} to FunctionalFlow{landscape(diagramName) required}
+}
+relationship ManyToMany {
+	FunctionalFlow{interfaces} to FlowInterface{functionalFlows}
+}
+relationship ManyToOne {
+	FlowInterface{source(name) required} to Application
+	FlowInterface{target(name) required} to Application
+	FlowInterface{sourceComponent(name)} to ApplicationComponent
+	FlowInterface{targetComponent(name)} to ApplicationComponent
+}
+
+relationship OneToMany {
+	FlowInterface{dataFlows} to DataFlow{flowInterface required}
+}
+
+relationship ManyToMany {
+	DataFlow{functionalFlows required} to FunctionalFlow{dataFlows}
+}
+
+
+relationship ManyToOne {
+	ApplicationComponent{application(name) required} to Application{applicationsList(name)}
+}
+
+
+// Ownership for Lanscape && Interfaces
+// Functional Flows ownership inheried from LanscapeView
+relationship ManyToOne {
+	LandscapeView{owner(name) required} to Owner
+	FlowInterface{owner(name) required} to Owner
+    Application{owner(name)} to Owner
+}
+
+
+entity LandscapeView {
+    viewpoint ViewPoint
+	diagramName String // Example ADD_Payment_Landscape
+}
+entity Owner {
+	name String
+}
+
+entity FunctionalFlow {
+    alias String
+    description String
+    comment String
+    status String
+}
+
+entity FlowInterface {
+    protocol Protocol
+    status String
+}
+
+entity Application {
+	@id @AutoGenerate(false) id String,
+	name String,
+    description String 
+    type ApplicationType
+	technology String
+    comment String 
+}
+
+entity DataFlow {
+    frequency Frequency
+    format Format
+    type FlowType
+    description String
+    resourceName String /** TOPIC name for event, FileName for Files*/
+    contractURL String /** Swagger or XSD URL */
+    documentationURL String
+}
+
+
+entity ApplicationComponent {
+	name String,
+    description String ,
+    type ApplicationType
+    technology String 
+    comment String 
+}
+
+enum ViewPoint {
+  APPLICATION_LANDSCAPE
+}
+
+enum Protocol {
+  API
+  ESB
+  BATCH_FILE
+  BATCH_FILE_MFT
+  EVENT
+  O2O_NODS
+  T24_API
+  T24_NOTIF
+  T24_ESB
+  T24_DATA_SYNC_OUT
+  T24_DATA_SYNC_IN
+  T24_FILE_IN
+  T24_TAP
+  T24_BATCH_IN
+  T24_BATCH_OUT
+  T24_DIRECT_IN
+  T24_DIRECT_JMS
+  SOAP
+  DEEPLINK
+  MQ
+  MANUAL
+  RPA
+  DIRECT_QUEUE_OVER_MQ
+  MAIL_FILE
+  LINK
+}
+
+enum Frequency {
+	DAILY
+    WEEKLY
+    ON_DEMAND
+}
+
+enum Format {
+	XML
+    JSON
+    CSV
+}
+
+enum FlowType {
+	FILE
+    EVENT
+    API
+}
+
+enum ApplicationType {
+	MICROSERVICE
+    EXTERNAL
+    JAVA
+    PACKAGE
+    INFRASTRUCTURE
+}
+
+filter Owner, Application
+paginate Owner, Application with pagination
+
+
