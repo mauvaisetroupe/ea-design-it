@@ -48,6 +48,20 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.User.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Authority.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.LandscapeView.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.LandscapeView.class.getName() + ".flows");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Owner.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.FunctionalFlow.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.FunctionalFlow.class.getName() + ".interfaces");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.FunctionalFlow.class.getName() + ".dataFlows");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.FlowInterface.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.FlowInterface.class.getName() + ".dataFlows");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.FlowInterface.class.getName() + ".functionalFlows");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Application.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Application.class.getName() + ".applicationsLists");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataFlow.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataFlow.class.getName() + ".functionalFlows");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.ApplicationComponent.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

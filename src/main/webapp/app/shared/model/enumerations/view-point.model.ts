@@ -1,0 +1,3 @@
+export enum ViewPoint {
+  APPLICATION_LANDSCAPE = 'APPLICATION_LANDSCAPE',
+}

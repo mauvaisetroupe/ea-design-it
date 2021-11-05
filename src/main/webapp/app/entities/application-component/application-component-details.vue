@@ -1,0 +1,68 @@
+<template>
+  <div class="row justify-content-center">
+    <div class="col-8">
+      <div v-if="applicationComponent">
+        <h2 class="jh-entity-heading" data-cy="applicationComponentDetailsHeading">
+          <span>ApplicationComponent</span> {{ applicationComponent.id }}
+        </h2>
+        <dl class="row jh-entity-details">
+          <dt>
+            <span>Name</span>
+          </dt>
+          <dd>
+            <span>{{ applicationComponent.name }}</span>
+          </dd>
+          <dt>
+            <span>Description</span>
+          </dt>
+          <dd>
+            <span>{{ applicationComponent.description }}</span>
+          </dd>
+          <dt>
+            <span>Type</span>
+          </dt>
+          <dd>
+            <span>{{ applicationComponent.type }}</span>
+          </dd>
+          <dt>
+            <span>Technology</span>
+          </dt>
+          <dd>
+            <span>{{ applicationComponent.technology }}</span>
+          </dd>
+          <dt>
+            <span>Comment</span>
+          </dt>
+          <dd>
+            <span>{{ applicationComponent.comment }}</span>
+          </dd>
+          <dt>
+            <span>Application</span>
+          </dt>
+          <dd>
+            <div v-if="applicationComponent.application">
+              <router-link :to="{ name: 'ApplicationView', params: { applicationId: applicationComponent.application.id } }">{{
+                applicationComponent.application.name
+              }}</router-link>
+            </div>
+          </dd>
+        </dl>
+        <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
+        </button>
+        <router-link
+          v-if="applicationComponent.id"
+          :to="{ name: 'ApplicationComponentEdit', params: { applicationComponentId: applicationComponent.id } }"
+          custom
+          v-slot="{ navigate }"
+        >
+          <button @click="navigate" class="btn btn-primary">
+            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
+          </button>
+        </router-link>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" src="./application-component-details.component.ts"></script>

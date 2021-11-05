@@ -29,6 +29,34 @@
             <font-awesome-icon icon="th-list" />
             <span class="no-bold">Entities</span>
           </span>
+          <b-dropdown-item to="/landscape-view">
+            <font-awesome-icon icon="asterisk" />
+            <span>Landscape View</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/owner">
+            <font-awesome-icon icon="asterisk" />
+            <span>Owner</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/functional-flow">
+            <font-awesome-icon icon="asterisk" />
+            <span>Functional Flow</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/flow-interface">
+            <font-awesome-icon icon="asterisk" />
+            <span>Flow Interface</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/application">
+            <font-awesome-icon icon="asterisk" />
+            <span>Application</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/data-flow">
+            <font-awesome-icon icon="asterisk" />
+            <span>Data Flow</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/application-component">
+            <font-awesome-icon icon="asterisk" />
+            <span>Application Component</span>
+          </b-dropdown-item>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </b-nav-item-dropdown>
         <b-nav-item-dropdown

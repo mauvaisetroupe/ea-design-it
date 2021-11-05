@@ -1,0 +1,40 @@
+{
+  "name": "LandscapeView",
+  "fields": [
+    {
+      "fieldName": "viewpoint",
+      "fieldType": "ViewPoint",
+      "fieldValues": "APPLICATION_LANDSCAPE"
+    },
+    {
+      "fieldName": "diagramName",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "functionalFlow",
+      "otherEntityRelationshipName": "landscape",
+      "relationshipName": "flows"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "owner",
+      "otherEntityRelationshipName": "landscapeView",
+      "relationshipValidateRules": "required",
+      "relationshipName": "owner",
+      "otherEntityField": "name"
+    }
+  ],
+  "entityTableName": "landscape_view",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211104191902"
+}

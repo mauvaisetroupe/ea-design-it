@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity FunctionalFlow.
+    -->
+    <changeSet id="20211104191904-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="functional_flow_id"
+                                 baseTableName="rel_functional_flow__interfaces"
+                                 constraintName="fk_rel_functional_flow__interfaces__functional_flow_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="functional_flow"/>
+
+        <addForeignKeyConstraint baseColumnNames="interfaces_id"
+                                 baseTableName="rel_functional_flow__interfaces"
+                                 constraintName="fk_rel_functional_flow__interfaces__interfaces_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="flow_interface"/>
+
+        <addForeignKeyConstraint baseColumnNames="landscape_id"
+                                 baseTableName="functional_flow"
+                                 constraintName="fk_functional_flow__landscape_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landscape_view"/>
+    </changeSet>
+</databaseChangeLog>

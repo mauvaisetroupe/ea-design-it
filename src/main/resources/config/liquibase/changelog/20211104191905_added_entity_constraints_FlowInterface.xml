@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity FlowInterface.
+    -->
+    <changeSet id="20211104191905-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="source_id"
+                                 baseTableName="flow_interface"
+                                 constraintName="fk_flow_interface__source_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application"/>
+
+        <addForeignKeyConstraint baseColumnNames="target_id"
+                                 baseTableName="flow_interface"
+                                 constraintName="fk_flow_interface__target_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application"/>
+
+        <addForeignKeyConstraint baseColumnNames="source_component_id"
+                                 baseTableName="flow_interface"
+                                 constraintName="fk_flow_interface__source_component_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_component"/>
+
+        <addForeignKeyConstraint baseColumnNames="target_component_id"
+                                 baseTableName="flow_interface"
+                                 constraintName="fk_flow_interface__target_component_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_component"/>
+
+        <addForeignKeyConstraint baseColumnNames="owner_id"
+                                 baseTableName="flow_interface"
+                                 constraintName="fk_flow_interface__owner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="owner"/>
+    </changeSet>
+</databaseChangeLog>

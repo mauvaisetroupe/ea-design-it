@@ -1,0 +1,11 @@
+export enum ApplicationType {
+  MICROSERVICE = 'MICROSERVICE',
+
+  EXTERNAL = 'EXTERNAL',
+
+  JAVA = 'JAVA',
+
+  PACKAGE = 'PACKAGE',
+
+  INFRASTRUCTURE = 'INFRASTRUCTURE',
+}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity DataFlow.
+    -->
+    <changeSet id="20211104191907-1" author="jhipster">
+        <createTable tableName="data_flow">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="frequency" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="format" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="resource_name" type="varchar(255)" remarks="TOPIC name for event, FileName for Files">
+                <constraints nullable="true" />
+            </column>
+            <column name="contract_url" type="varchar(255)" remarks="Swagger or XSD URL">
+                <constraints nullable="true" />
+            </column>
+            <column name="documentation_url" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="flow_interface_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20211104191907-1-relations" author="jhipster">
+
+        <createTable tableName="rel_data_flow__functional_flows">
+            <column name="functional_flows_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_flow_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="data_flow_id, functional_flows_id" tableName="rel_data_flow__functional_flows"/>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+</databaseChangeLog>

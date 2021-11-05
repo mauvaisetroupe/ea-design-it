@@ -1,0 +1,77 @@
+{
+  "name": "FlowInterface",
+  "fields": [
+    {
+      "fieldName": "protocol",
+      "fieldType": "Protocol",
+      "fieldValues": "API,ESB,BATCH_FILE,BATCH_FILE_MFT,EVENT,O2O_NODS,T24_API,T24_NOTIF,T24_ESB,T24_DATA_SYNC_OUT,T24_DATA_SYNC_IN,T24_FILE_IN,T24_TAP,T24_BATCH_IN,T24_BATCH_OUT,T24_DIRECT_IN,T24_DIRECT_JMS,SOAP,DEEPLINK,MQ,MANUAL,RPA,DIRECT_QUEUE_OVER_MQ,MAIL_FILE,LINK"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "dataFlow",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipName": "dataFlows"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "application",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipValidateRules": "required",
+      "relationshipName": "source",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "application",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipValidateRules": "required",
+      "relationshipName": "target",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "applicationComponent",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipName": "sourceComponent",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "applicationComponent",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipName": "targetComponent",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "owner",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipValidateRules": "required",
+      "relationshipName": "owner",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "functionalFlow",
+      "otherEntityRelationshipName": "interfaces",
+      "relationshipName": "functionalFlows",
+      "ownerSide": false
+    }
+  ],
+  "entityTableName": "flow_interface",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211104191905"
+}

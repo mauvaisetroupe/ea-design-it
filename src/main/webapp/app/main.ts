@@ -27,6 +27,13 @@ import '../content/scss/vendor.scss';
 import UserOAuth2Service from '@/entities/user/user.oauth2.service';
 /* tslint:disable */
 
+import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
+import OwnerService from '@/entities/owner/owner.service';
+import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
+import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
+import ApplicationService from '@/entities/application/application.service';
+import DataFlowService from '@/entities/data-flow/data-flow.service';
+import ApplicationComponentService from '@/entities/application-component/application-component.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
@@ -82,6 +89,13 @@ new Vue({
     metricsService: () => new MetricsService(),
 
     userOAuth2Service: () => new UserOAuth2Service(),
+    landscapeViewService: () => new LandscapeViewService(),
+    ownerService: () => new OwnerService(),
+    functionalFlowService: () => new FunctionalFlowService(),
+    flowInterfaceService: () => new FlowInterfaceService(),
+    applicationService: () => new ApplicationService(),
+    dataFlowService: () => new DataFlowService(),
+    applicationComponentService: () => new ApplicationComponentService(),
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService,
     alertService: () => new AlertService(),
