@@ -43,7 +43,16 @@
     "clientThemeVariant": "",
     "enableGradleEnterprise": false,
     "languages": ["en", "fr"],
-    "entities": ["LandscapeView", "Owner", "FunctionalFlow", "FlowInterface", "Application", "DataFlow", "ApplicationComponent"],
-    "lastLiquibaseTimestamp": 1636053548000
+    "entities": [
+      "LandscapeView",
+      "Owner",
+      "FunctionalFlow",
+      "FlowInterface",
+      "Application",
+      "DataFlow",
+      "ApplicationComponent",
+      "ApplicationImport"
+    ],
+    "lastLiquibaseTimestamp": 1636121756000
   }
 }

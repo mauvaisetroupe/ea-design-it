@@ -62,6 +62,7 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataFlow.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataFlow.class.getName() + ".functionalFlows");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.ApplicationComponent.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.ApplicationImport.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

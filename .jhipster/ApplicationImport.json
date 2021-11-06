@@ -1,0 +1,48 @@
+{
+  "name": "ApplicationImport",
+  "fields": [
+    {
+      "fieldName": "importId",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "excelFileName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "idFromExcel",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "technology",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "comment",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "tmp_import_application_import",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211105141556"
+}

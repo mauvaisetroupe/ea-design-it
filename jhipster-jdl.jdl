@@ -143,4 +143,13 @@ enum ApplicationType {
 filter Owner, Application
 paginate Owner, Application with pagination
 
-
+entity ApplicationImport(tmp_import_application_import) {
+	importId Instant
+    excelFileName String
+    idFromExcel String,
+	name String,
+    description String 
+    type String
+	technology String
+    comment String 
+}

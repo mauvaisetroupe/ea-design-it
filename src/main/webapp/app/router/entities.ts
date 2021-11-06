@@ -44,6 +44,12 @@ const ApplicationComponent = () => import('@/entities/application-component/appl
 const ApplicationComponentUpdate = () => import('@/entities/application-component/application-component-update.vue');
 // prettier-ignore
 const ApplicationComponentDetails = () => import('@/entities/application-component/application-component-details.vue');
+// prettier-ignore
+const ApplicationImport = () => import('@/entities/application-import/application-import.vue');
+// prettier-ignore
+const ApplicationImportUpdate = () => import('@/entities/application-import/application-import-update.vue');
+// prettier-ignore
+const ApplicationImportDetails = () => import('@/entities/application-import/application-import-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default [
@@ -213,6 +219,30 @@ export default [
     path: '/application-component/:applicationComponentId/view',
     name: 'ApplicationComponentView',
     component: ApplicationComponentDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/application-import',
+    name: 'ApplicationImport',
+    component: ApplicationImport,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/application-import/new',
+    name: 'ApplicationImportCreate',
+    component: ApplicationImportUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/application-import/:applicationImportId/edit',
+    name: 'ApplicationImportEdit',
+    component: ApplicationImportUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/application-import/:applicationImportId/view',
+    name: 'ApplicationImportView',
+    component: ApplicationImportDetails,
     meta: { authorities: [Authority.USER] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
