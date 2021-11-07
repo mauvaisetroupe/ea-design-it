@@ -29,4 +29,8 @@ public enum Protocol {
     DIRECT_QUEUE_OVER_MQ,
     MAIL_FILE,
     LINK,
+    N_A,
+    HTTP_DIRECT,
+    HTTP_REDIRECT,
+    INDIRECT_THROUGH_CUSTOMER_BROWSER,
 }
