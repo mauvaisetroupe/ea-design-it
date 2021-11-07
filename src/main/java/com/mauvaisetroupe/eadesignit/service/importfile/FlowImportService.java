@@ -80,7 +80,7 @@ public class FlowImportService {
 
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);
-            Optional<FunctionalFlow> functionalFlowOption = flowRepository.findById(flowImport.getIdFlowFromExcel());
+            Optional<FunctionalFlow> functionalFlowOption = flowRepository.findById(flowImport.getFlowAlias());
 
             FunctionalFlow functionalFlow;
 
