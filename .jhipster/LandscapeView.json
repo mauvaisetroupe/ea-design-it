@@ -22,7 +22,6 @@
       "relationshipType": "many-to-one",
       "otherEntityName": "owner",
       "otherEntityRelationshipName": "landscapeView",
-      "relationshipValidateRules": "required",
       "relationshipName": "owner",
       "otherEntityField": "name"
     }

@@ -37,8 +37,8 @@
           </div>
           <div class="form-group">
             <label class="form-control-label" for="landscape-view-owner">Owner</label>
-            <select class="form-control" id="landscape-view-owner" data-cy="owner" name="owner" v-model="landscapeView.owner" required>
-              <option v-if="!landscapeView.owner" v-bind:value="null" selected></option>
+            <select class="form-control" id="landscape-view-owner" data-cy="owner" name="owner" v-model="landscapeView.owner">
+              <option v-bind:value="null"></option>
               <option
                 v-bind:value="landscapeView.owner && ownerOption.id === landscapeView.owner.id ? landscapeView.owner : ownerOption"
                 v-for="ownerOption in owners"
@@ -47,9 +47,6 @@
                 {{ ownerOption.name }}
               </option>
             </select>
-          </div>
-          <div v-if="$v.landscapeView.owner.$anyDirty && $v.landscapeView.owner.$invalid">
-            <small class="form-text text-danger" v-if="!$v.landscapeView.owner.required"> This field is required. </small>
           </div>
         </div>
         <div>

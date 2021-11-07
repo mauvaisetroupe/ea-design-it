@@ -7,7 +7,7 @@ export interface ILandscapeView {
   viewpoint?: ViewPoint | null;
   diagramName?: string | null;
   flows?: IFunctionalFlow[] | null;
-  owner?: IOwner;
+  owner?: IOwner | null;
 }
 
 export class LandscapeView implements ILandscapeView {
@@ -16,6 +16,6 @@ export class LandscapeView implements ILandscapeView {
     public viewpoint?: ViewPoint | null,
     public diagramName?: string | null,
     public flows?: IFunctionalFlow[] | null,
-    public owner?: IOwner
+    public owner?: IOwner | null
   ) {}
 }

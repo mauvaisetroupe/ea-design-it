@@ -8,8 +8,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,7 +46,7 @@ public class FlowInterfaceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/flow-interfaces")
-    public ResponseEntity<FlowInterface> createFlowInterface(@Valid @RequestBody FlowInterface flowInterface) throws URISyntaxException {
+    public ResponseEntity<FlowInterface> createFlowInterface(@RequestBody FlowInterface flowInterface) throws URISyntaxException {
         log.debug("REST request to save FlowInterface : {}", flowInterface);
         if (flowInterface.getId() != null) {
             throw new BadRequestAlertException("A new flowInterface cannot already have an ID", ENTITY_NAME, "idexists");
@@ -73,7 +71,7 @@ public class FlowInterfaceResource {
     @PutMapping("/flow-interfaces/{id}")
     public ResponseEntity<FlowInterface> updateFlowInterface(
         @PathVariable(value = "id", required = false) final String id,
-        @Valid @RequestBody FlowInterface flowInterface
+        @RequestBody FlowInterface flowInterface
     ) throws URISyntaxException {
         log.debug("REST request to update FlowInterface : {}, {}", id, flowInterface);
         if (flowInterface.getId() == null) {
@@ -108,7 +106,7 @@ public class FlowInterfaceResource {
     @PatchMapping(value = "/flow-interfaces/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<FlowInterface> partialUpdateFlowInterface(
         @PathVariable(value = "id", required = false) final String id,
-        @NotNull @RequestBody FlowInterface flowInterface
+        @RequestBody FlowInterface flowInterface
     ) throws URISyntaxException {
         log.debug("REST request to partial update FlowInterface partially : {}, {}", id, flowInterface);
         if (flowInterface.getId() == null) {

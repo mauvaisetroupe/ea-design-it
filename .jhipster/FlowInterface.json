@@ -30,7 +30,6 @@
       "relationshipType": "many-to-one",
       "otherEntityName": "application",
       "otherEntityRelationshipName": "flowInterface",
-      "relationshipValidateRules": "required",
       "relationshipName": "source",
       "otherEntityField": "name"
     },
@@ -38,7 +37,6 @@
       "relationshipType": "many-to-one",
       "otherEntityName": "application",
       "otherEntityRelationshipName": "flowInterface",
-      "relationshipValidateRules": "required",
       "relationshipName": "target",
       "otherEntityField": "name"
     },
@@ -60,7 +58,6 @@
       "relationshipType": "many-to-one",
       "otherEntityName": "owner",
       "otherEntityRelationshipName": "flowInterface",
-      "relationshipValidateRules": "required",
       "relationshipName": "owner",
       "otherEntityField": "name"
     },

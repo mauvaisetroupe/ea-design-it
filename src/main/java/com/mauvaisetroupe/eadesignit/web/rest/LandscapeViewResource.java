@@ -8,8 +8,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,7 +46,7 @@ public class LandscapeViewResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/landscape-views")
-    public ResponseEntity<LandscapeView> createLandscapeView(@Valid @RequestBody LandscapeView landscapeView) throws URISyntaxException {
+    public ResponseEntity<LandscapeView> createLandscapeView(@RequestBody LandscapeView landscapeView) throws URISyntaxException {
         log.debug("REST request to save LandscapeView : {}", landscapeView);
         if (landscapeView.getId() != null) {
             throw new BadRequestAlertException("A new landscapeView cannot already have an ID", ENTITY_NAME, "idexists");
@@ -73,7 +71,7 @@ public class LandscapeViewResource {
     @PutMapping("/landscape-views/{id}")
     public ResponseEntity<LandscapeView> updateLandscapeView(
         @PathVariable(value = "id", required = false) final Long id,
-        @Valid @RequestBody LandscapeView landscapeView
+        @RequestBody LandscapeView landscapeView
     ) throws URISyntaxException {
         log.debug("REST request to update LandscapeView : {}, {}", id, landscapeView);
         if (landscapeView.getId() == null) {
@@ -108,7 +106,7 @@ public class LandscapeViewResource {
     @PatchMapping(value = "/landscape-views/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<LandscapeView> partialUpdateLandscapeView(
         @PathVariable(value = "id", required = false) final Long id,
-        @NotNull @RequestBody LandscapeView landscapeView
+        @RequestBody LandscapeView landscapeView
     ) throws URISyntaxException {
         log.debug("REST request to partial update LandscapeView partially : {}, {}", id, landscapeView);
         if (landscapeView.getId() == null) {

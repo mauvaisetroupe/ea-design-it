@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -36,13 +35,11 @@ public class FlowInterface implements Serializable {
     @JsonIgnoreProperties(value = { "functionalFlows", "flowInterface" }, allowSetters = true)
     private Set<DataFlow> dataFlows = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties(value = { "owner", "applicationsLists" }, allowSetters = true)
     private Application source;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties(value = { "owner", "applicationsLists" }, allowSetters = true)
     private Application target;
 
@@ -54,8 +51,7 @@ public class FlowInterface implements Serializable {
     @JsonIgnoreProperties(value = { "application" }, allowSetters = true)
     private ApplicationComponent targetComponent;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     private Owner owner;
 
     @ManyToMany(mappedBy = "interfaces")

@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
-import com.mauvaisetroupe.eadesignit.domain.Owner;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ViewPoint;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import java.util.List;
@@ -62,16 +61,6 @@ class LandscapeViewResourceIT {
      */
     public static LandscapeView createEntity(EntityManager em) {
         LandscapeView landscapeView = new LandscapeView().viewpoint(DEFAULT_VIEWPOINT).diagramName(DEFAULT_DIAGRAM_NAME);
-        // Add required entity
-        Owner owner;
-        if (TestUtil.findAll(em, Owner.class).isEmpty()) {
-            owner = OwnerResourceIT.createEntity(em);
-            em.persist(owner);
-            em.flush();
-        } else {
-            owner = TestUtil.findAll(em, Owner.class).get(0);
-        }
-        landscapeView.setOwner(owner);
         return landscapeView;
     }
 
@@ -83,16 +72,6 @@ class LandscapeViewResourceIT {
      */
     public static LandscapeView createUpdatedEntity(EntityManager em) {
         LandscapeView landscapeView = new LandscapeView().viewpoint(UPDATED_VIEWPOINT).diagramName(UPDATED_DIAGRAM_NAME);
-        // Add required entity
-        Owner owner;
-        if (TestUtil.findAll(em, Owner.class).isEmpty()) {
-            owner = OwnerResourceIT.createUpdatedEntity(em);
-            em.persist(owner);
-            em.flush();
-        } else {
-            owner = TestUtil.findAll(em, Owner.class).get(0);
-        }
-        landscapeView.setOwner(owner);
         return landscapeView;
     }
 

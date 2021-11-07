@@ -10,11 +10,11 @@ export interface IFlowInterface {
   protocol?: Protocol | null;
   status?: string | null;
   dataFlows?: IDataFlow[] | null;
-  source?: IApplication;
-  target?: IApplication;
+  source?: IApplication | null;
+  target?: IApplication | null;
   sourceComponent?: IApplicationComponent | null;
   targetComponent?: IApplicationComponent | null;
-  owner?: IOwner;
+  owner?: IOwner | null;
   functionalFlows?: IFunctionalFlow[] | null;
 }
 
@@ -24,11 +24,11 @@ export class FlowInterface implements IFlowInterface {
     public protocol?: Protocol | null,
     public status?: string | null,
     public dataFlows?: IDataFlow[] | null,
-    public source?: IApplication,
-    public target?: IApplication,
+    public source?: IApplication | null,
+    public target?: IApplication | null,
     public sourceComponent?: IApplicationComponent | null,
     public targetComponent?: IApplicationComponent | null,
-    public owner?: IOwner,
+    public owner?: IOwner | null,
     public functionalFlows?: IFunctionalFlow[] | null
   ) {}
 }

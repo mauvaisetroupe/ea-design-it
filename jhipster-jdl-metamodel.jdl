@@ -5,8 +5,8 @@ relationship ManyToMany {
 	FunctionalFlow{interfaces} to FlowInterface{functionalFlows}
 }
 relationship ManyToOne {
-	FlowInterface{source(name) required} to Application
-	FlowInterface{target(name) required} to Application
+	FlowInterface{source(name)} to Application
+	FlowInterface{target(name)} to Application
 	FlowInterface{sourceComponent(name)} to ApplicationComponent
 	FlowInterface{targetComponent(name)} to ApplicationComponent
 }
@@ -28,8 +28,8 @@ relationship ManyToOne {
 // Ownership for Lanscape && Interfaces
 // Functional Flows ownership inheried from LanscapeView
 relationship ManyToOne {
-	LandscapeView{owner(name) required} to Owner
-	FlowInterface{owner(name) required} to Owner
+	LandscapeView{owner(name)} to Owner
+	FlowInterface{owner(name)} to Owner
     Application{owner(name)} to Owner
 }
 

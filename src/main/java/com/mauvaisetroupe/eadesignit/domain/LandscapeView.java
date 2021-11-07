@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -38,8 +37,7 @@ public class LandscapeView implements Serializable {
     @JsonIgnoreProperties(value = { "interfaces", "landscape", "dataFlows" }, allowSetters = true)
     private Set<FunctionalFlow> flows = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     private Owner owner;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

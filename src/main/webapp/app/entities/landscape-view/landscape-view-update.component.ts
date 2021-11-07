@@ -1,7 +1,5 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import { required } from 'vuelidate/lib/validators';
-
 import AlertService from '@/shared/alert/alert.service';
 
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
@@ -18,9 +16,6 @@ const validations: any = {
   landscapeView: {
     viewpoint: {},
     diagramName: {},
-    owner: {
-      required,
-    },
   },
 };
 

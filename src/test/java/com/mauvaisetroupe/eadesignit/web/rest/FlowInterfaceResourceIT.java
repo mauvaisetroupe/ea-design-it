@@ -6,9 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
-import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
-import com.mauvaisetroupe.eadesignit.domain.Owner;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Protocol;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import java.util.List;
@@ -59,28 +57,6 @@ class FlowInterfaceResourceIT {
      */
     public static FlowInterface createEntity(EntityManager em) {
         FlowInterface flowInterface = new FlowInterface().protocol(DEFAULT_PROTOCOL).status(DEFAULT_STATUS);
-        // Add required entity
-        Application application;
-        if (TestUtil.findAll(em, Application.class).isEmpty()) {
-            application = ApplicationResourceIT.createEntity(em);
-            em.persist(application);
-            em.flush();
-        } else {
-            application = TestUtil.findAll(em, Application.class).get(0);
-        }
-        flowInterface.setSource(application);
-        // Add required entity
-        flowInterface.setTarget(application);
-        // Add required entity
-        Owner owner;
-        if (TestUtil.findAll(em, Owner.class).isEmpty()) {
-            owner = OwnerResourceIT.createEntity(em);
-            em.persist(owner);
-            em.flush();
-        } else {
-            owner = TestUtil.findAll(em, Owner.class).get(0);
-        }
-        flowInterface.setOwner(owner);
         return flowInterface;
     }
 
@@ -92,28 +68,6 @@ class FlowInterfaceResourceIT {
      */
     public static FlowInterface createUpdatedEntity(EntityManager em) {
         FlowInterface flowInterface = new FlowInterface().protocol(UPDATED_PROTOCOL).status(UPDATED_STATUS);
-        // Add required entity
-        Application application;
-        if (TestUtil.findAll(em, Application.class).isEmpty()) {
-            application = ApplicationResourceIT.createUpdatedEntity(em);
-            em.persist(application);
-            em.flush();
-        } else {
-            application = TestUtil.findAll(em, Application.class).get(0);
-        }
-        flowInterface.setSource(application);
-        // Add required entity
-        flowInterface.setTarget(application);
-        // Add required entity
-        Owner owner;
-        if (TestUtil.findAll(em, Owner.class).isEmpty()) {
-            owner = OwnerResourceIT.createUpdatedEntity(em);
-            em.persist(owner);
-            em.flush();
-        } else {
-            owner = TestUtil.findAll(em, Owner.class).get(0);
-        }
-        flowInterface.setOwner(owner);
         return flowInterface;
     }
 
