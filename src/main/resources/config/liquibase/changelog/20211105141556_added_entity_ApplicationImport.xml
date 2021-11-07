@@ -14,7 +14,7 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="import_id" type="${datetimeType}">
+            <column name="import_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="excel_file_name" type="varchar(255)">
@@ -38,9 +38,17 @@
             <column name="comment" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="import_status" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="import_status_message" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="existing_application_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
-        <dropDefaultValue tableName="tmp_import_application_import" columnName="import_id" columnDataType="${datetimeType}"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

@@ -7,9 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationImportRepository;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -31,8 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ApplicationImportResourceIT {
 
-    private static final Instant DEFAULT_IMPORT_ID = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_IMPORT_ID = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final String DEFAULT_IMPORT_ID = "AAAAAAAAAA";
+    private static final String UPDATED_IMPORT_ID = "BBBBBBBBBB";
 
     private static final String DEFAULT_EXCEL_FILE_NAME = "AAAAAAAAAA";
     private static final String UPDATED_EXCEL_FILE_NAME = "BBBBBBBBBB";
@@ -54,6 +53,15 @@ class ApplicationImportResourceIT {
 
     private static final String DEFAULT_COMMENT = "AAAAAAAAAA";
     private static final String UPDATED_COMMENT = "BBBBBBBBBB";
+
+    private static final ImportStatus DEFAULT_IMPORT_STATUS = ImportStatus.NEW;
+    private static final ImportStatus UPDATED_IMPORT_STATUS = ImportStatus.EXISTING;
+
+    private static final String DEFAULT_IMPORT_STATUS_MESSAGE = "AAAAAAAAAA";
+    private static final String UPDATED_IMPORT_STATUS_MESSAGE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_EXISTING_APPLICATION_ID = "AAAAAAAAAA";
+    private static final String UPDATED_EXISTING_APPLICATION_ID = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/application-imports";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -87,7 +95,10 @@ class ApplicationImportResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .type(DEFAULT_TYPE)
             .technology(DEFAULT_TECHNOLOGY)
-            .comment(DEFAULT_COMMENT);
+            .comment(DEFAULT_COMMENT)
+            .importStatus(DEFAULT_IMPORT_STATUS)
+            .importStatusMessage(DEFAULT_IMPORT_STATUS_MESSAGE)
+            .existingApplicationID(DEFAULT_EXISTING_APPLICATION_ID);
         return applicationImport;
     }
 
@@ -106,7 +117,10 @@ class ApplicationImportResourceIT {
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
             .technology(UPDATED_TECHNOLOGY)
-            .comment(UPDATED_COMMENT);
+            .comment(UPDATED_COMMENT)
+            .importStatus(UPDATED_IMPORT_STATUS)
+            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE)
+            .existingApplicationID(UPDATED_EXISTING_APPLICATION_ID);
         return applicationImport;
     }
 
@@ -138,6 +152,9 @@ class ApplicationImportResourceIT {
         assertThat(testApplicationImport.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testApplicationImport.getTechnology()).isEqualTo(DEFAULT_TECHNOLOGY);
         assertThat(testApplicationImport.getComment()).isEqualTo(DEFAULT_COMMENT);
+        assertThat(testApplicationImport.getImportStatus()).isEqualTo(DEFAULT_IMPORT_STATUS);
+        assertThat(testApplicationImport.getImportStatusMessage()).isEqualTo(DEFAULT_IMPORT_STATUS_MESSAGE);
+        assertThat(testApplicationImport.getExistingApplicationID()).isEqualTo(DEFAULT_EXISTING_APPLICATION_ID);
     }
 
     @Test
@@ -172,14 +189,17 @@ class ApplicationImportResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(applicationImport.getId().intValue())))
-            .andExpect(jsonPath("$.[*].importId").value(hasItem(DEFAULT_IMPORT_ID.toString())))
+            .andExpect(jsonPath("$.[*].importId").value(hasItem(DEFAULT_IMPORT_ID)))
             .andExpect(jsonPath("$.[*].excelFileName").value(hasItem(DEFAULT_EXCEL_FILE_NAME)))
             .andExpect(jsonPath("$.[*].idFromExcel").value(hasItem(DEFAULT_ID_FROM_EXCEL)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].technology").value(hasItem(DEFAULT_TECHNOLOGY)))
-            .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)));
+            .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)))
+            .andExpect(jsonPath("$.[*].importStatus").value(hasItem(DEFAULT_IMPORT_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].importStatusMessage").value(hasItem(DEFAULT_IMPORT_STATUS_MESSAGE)))
+            .andExpect(jsonPath("$.[*].existingApplicationID").value(hasItem(DEFAULT_EXISTING_APPLICATION_ID)));
     }
 
     @Test
@@ -194,14 +214,17 @@ class ApplicationImportResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(applicationImport.getId().intValue()))
-            .andExpect(jsonPath("$.importId").value(DEFAULT_IMPORT_ID.toString()))
+            .andExpect(jsonPath("$.importId").value(DEFAULT_IMPORT_ID))
             .andExpect(jsonPath("$.excelFileName").value(DEFAULT_EXCEL_FILE_NAME))
             .andExpect(jsonPath("$.idFromExcel").value(DEFAULT_ID_FROM_EXCEL))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.technology").value(DEFAULT_TECHNOLOGY))
-            .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT));
+            .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT))
+            .andExpect(jsonPath("$.importStatus").value(DEFAULT_IMPORT_STATUS.toString()))
+            .andExpect(jsonPath("$.importStatusMessage").value(DEFAULT_IMPORT_STATUS_MESSAGE))
+            .andExpect(jsonPath("$.existingApplicationID").value(DEFAULT_EXISTING_APPLICATION_ID));
     }
 
     @Test
@@ -231,7 +254,10 @@ class ApplicationImportResourceIT {
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
             .technology(UPDATED_TECHNOLOGY)
-            .comment(UPDATED_COMMENT);
+            .comment(UPDATED_COMMENT)
+            .importStatus(UPDATED_IMPORT_STATUS)
+            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE)
+            .existingApplicationID(UPDATED_EXISTING_APPLICATION_ID);
 
         restApplicationImportMockMvc
             .perform(
@@ -253,6 +279,9 @@ class ApplicationImportResourceIT {
         assertThat(testApplicationImport.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testApplicationImport.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
         assertThat(testApplicationImport.getComment()).isEqualTo(UPDATED_COMMENT);
+        assertThat(testApplicationImport.getImportStatus()).isEqualTo(UPDATED_IMPORT_STATUS);
+        assertThat(testApplicationImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
+        assertThat(testApplicationImport.getExistingApplicationID()).isEqualTo(UPDATED_EXISTING_APPLICATION_ID);
     }
 
     @Test
@@ -325,7 +354,12 @@ class ApplicationImportResourceIT {
         ApplicationImport partialUpdatedApplicationImport = new ApplicationImport();
         partialUpdatedApplicationImport.setId(applicationImport.getId());
 
-        partialUpdatedApplicationImport.importId(UPDATED_IMPORT_ID).name(UPDATED_NAME).type(UPDATED_TYPE);
+        partialUpdatedApplicationImport
+            .importId(UPDATED_IMPORT_ID)
+            .name(UPDATED_NAME)
+            .type(UPDATED_TYPE)
+            .importStatus(UPDATED_IMPORT_STATUS)
+            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE);
 
         restApplicationImportMockMvc
             .perform(
@@ -347,6 +381,9 @@ class ApplicationImportResourceIT {
         assertThat(testApplicationImport.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testApplicationImport.getTechnology()).isEqualTo(DEFAULT_TECHNOLOGY);
         assertThat(testApplicationImport.getComment()).isEqualTo(DEFAULT_COMMENT);
+        assertThat(testApplicationImport.getImportStatus()).isEqualTo(UPDATED_IMPORT_STATUS);
+        assertThat(testApplicationImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
+        assertThat(testApplicationImport.getExistingApplicationID()).isEqualTo(DEFAULT_EXISTING_APPLICATION_ID);
     }
 
     @Test
@@ -369,7 +406,10 @@ class ApplicationImportResourceIT {
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
             .technology(UPDATED_TECHNOLOGY)
-            .comment(UPDATED_COMMENT);
+            .comment(UPDATED_COMMENT)
+            .importStatus(UPDATED_IMPORT_STATUS)
+            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE)
+            .existingApplicationID(UPDATED_EXISTING_APPLICATION_ID);
 
         restApplicationImportMockMvc
             .perform(
@@ -391,6 +431,9 @@ class ApplicationImportResourceIT {
         assertThat(testApplicationImport.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testApplicationImport.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
         assertThat(testApplicationImport.getComment()).isEqualTo(UPDATED_COMMENT);
+        assertThat(testApplicationImport.getImportStatus()).isEqualTo(UPDATED_IMPORT_STATUS);
+        assertThat(testApplicationImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
+        assertThat(testApplicationImport.getExistingApplicationID()).isEqualTo(UPDATED_EXISTING_APPLICATION_ID);
     }
 
     @Test

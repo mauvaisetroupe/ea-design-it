@@ -143,8 +143,10 @@ enum ApplicationType {
 filter Owner, Application
 paginate Owner, Application with pagination
 
+// ADD Helper for import, not part of main model
+
 entity ApplicationImport(tmp_import_application_import) {
-	importId Instant
+	importId String
     excelFileName String
     idFromExcel String,
 	name String,
@@ -152,4 +154,15 @@ entity ApplicationImport(tmp_import_application_import) {
     type String
 	technology String
     comment String 
+    importStatus ImportStatus
+    importStatusMessage String
+    existingApplicationID String // ID of Application when importStatus = EXISINT or UPDATED
+}
+
+
+enum ImportStatus {
+    NEW
+	EXISTING
+    UPDATED
+    ERROR
 }

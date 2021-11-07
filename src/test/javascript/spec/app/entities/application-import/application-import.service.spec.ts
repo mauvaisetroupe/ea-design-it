@@ -1,11 +1,10 @@
 /* tslint:disable max-line-length */
 import axios from 'axios';
 import sinon from 'sinon';
-import dayjs from 'dayjs';
 
-import { DATE_TIME_FORMAT } from '@/shared/date/filters';
 import ApplicationImportService from '@/entities/application-import/application-import.service';
 import { ApplicationImport } from '@/shared/model/application-import.model';
+import { ImportStatus } from '@/shared/model/enumerations/import-status.model';
 
 const error = {
   response: {
@@ -28,22 +27,28 @@ describe('Service Tests', () => {
   describe('ApplicationImport Service', () => {
     let service: ApplicationImportService;
     let elemDefault;
-    let currentDate: Date;
 
     beforeEach(() => {
       service = new ApplicationImportService();
-      currentDate = new Date();
-      elemDefault = new ApplicationImport(123, currentDate, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new ApplicationImport(
+        123,
+        'AAAAAAA',
+        'AAAAAAA',
+        'AAAAAAA',
+        'AAAAAAA',
+        'AAAAAAA',
+        'AAAAAAA',
+        'AAAAAAA',
+        'AAAAAAA',
+        ImportStatus.NEW,
+        'AAAAAAA',
+        'AAAAAAA'
+      );
     });
 
     describe('Service methods', () => {
       it('should find an element', async () => {
-        const returnedFromService = Object.assign(
-          {
-            importId: dayjs(currentDate).format(DATE_TIME_FORMAT),
-          },
-          elemDefault
-        );
+        const returnedFromService = Object.assign({}, elemDefault);
         axiosStub.get.resolves({ data: returnedFromService });
 
         return service.find(123).then(res => {
@@ -65,16 +70,10 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 123,
-            importId: dayjs(currentDate).format(DATE_TIME_FORMAT),
           },
           elemDefault
         );
-        const expected = Object.assign(
-          {
-            importId: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
 
         axiosStub.post.resolves({ data: returnedFromService });
         return service.create({}).then(res => {
@@ -96,7 +95,7 @@ describe('Service Tests', () => {
       it('should update a ApplicationImport', async () => {
         const returnedFromService = Object.assign(
           {
-            importId: dayjs(currentDate).format(DATE_TIME_FORMAT),
+            importId: 'BBBBBB',
             excelFileName: 'BBBBBB',
             idFromExcel: 'BBBBBB',
             name: 'BBBBBB',
@@ -104,16 +103,14 @@ describe('Service Tests', () => {
             type: 'BBBBBB',
             technology: 'BBBBBB',
             comment: 'BBBBBB',
+            importStatus: 'BBBBBB',
+            importStatusMessage: 'BBBBBB',
+            existingApplicationID: 'BBBBBB',
           },
           elemDefault
         );
 
-        const expected = Object.assign(
-          {
-            importId: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
         axiosStub.put.resolves({ data: returnedFromService });
 
         return service.update(expected).then(res => {
@@ -144,12 +141,7 @@ describe('Service Tests', () => {
         );
         const returnedFromService = Object.assign(patchObject, elemDefault);
 
-        const expected = Object.assign(
-          {
-            importId: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
         axiosStub.patch.resolves({ data: returnedFromService });
 
         return service.partialUpdate(patchObject).then(res => {
@@ -171,7 +163,7 @@ describe('Service Tests', () => {
       it('should return a list of ApplicationImport', async () => {
         const returnedFromService = Object.assign(
           {
-            importId: dayjs(currentDate).format(DATE_TIME_FORMAT),
+            importId: 'BBBBBB',
             excelFileName: 'BBBBBB',
             idFromExcel: 'BBBBBB',
             name: 'BBBBBB',
@@ -179,15 +171,13 @@ describe('Service Tests', () => {
             type: 'BBBBBB',
             technology: 'BBBBBB',
             comment: 'BBBBBB',
+            importStatus: 'BBBBBB',
+            importStatusMessage: 'BBBBBB',
+            existingApplicationID: 'BBBBBB',
           },
           elemDefault
         );
-        const expected = Object.assign(
-          {
-            importId: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
         axiosStub.get.resolves([returnedFromService]);
         return service.retrieve().then(res => {
           expect(res).toContainEqual(expected);

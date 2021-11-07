@@ -1,12 +1,10 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import dayjs from 'dayjs';
-import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
-
 import AlertService from '@/shared/alert/alert.service';
 
 import { IApplicationImport, ApplicationImport } from '@/shared/model/application-import.model';
 import ApplicationImportService from './application-import.service';
+import { ImportStatus } from '@/shared/model/enumerations/import-status.model';
 
 const validations: any = {
   applicationImport: {
@@ -18,6 +16,9 @@ const validations: any = {
     type: {},
     technology: {},
     comment: {},
+    importStatus: {},
+    importStatusMessage: {},
+    existingApplicationID: {},
   },
 };
 
@@ -29,6 +30,7 @@ export default class ApplicationImportUpdate extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
 
   public applicationImport: IApplicationImport = new ApplicationImport();
+  public importStatusValues: string[] = Object.keys(ImportStatus);
   public isSaving = false;
   public currentLanguage = '';
 
@@ -93,34 +95,10 @@ export default class ApplicationImportUpdate extends Vue {
     }
   }
 
-  public convertDateTimeFromServer(date: Date): string {
-    if (date && dayjs(date).isValid()) {
-      return dayjs(date).format(DATE_TIME_LONG_FORMAT);
-    }
-    return null;
-  }
-
-  public updateInstantField(field, event) {
-    if (event.target.value) {
-      this.applicationImport[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
-    } else {
-      this.applicationImport[field] = null;
-    }
-  }
-
-  public updateZonedDateTimeField(field, event) {
-    if (event.target.value) {
-      this.applicationImport[field] = dayjs(event.target.value, DATE_TIME_LONG_FORMAT);
-    } else {
-      this.applicationImport[field] = null;
-    }
-  }
-
   public retrieveApplicationImport(applicationImportId): void {
     this.applicationImportService()
       .find(applicationImportId)
       .then(res => {
-        res.importId = new Date(res.importId);
         this.applicationImport = res;
       })
       .catch(error => {

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { IApplicationImport } from '@/shared/model/application-import.model';
 
 const baseApiUrl = 'api/application-imports';
+const apiForImportUrl = 'api/import';
 
 export default class ApplicationImportService {
   public find(id: number): Promise<IApplicationImport> {
@@ -60,7 +61,7 @@ export default class ApplicationImportService {
   public update(entity: IApplicationImport): Promise<IApplicationImport> {
     return new Promise<IApplicationImport>((resolve, reject) => {
       axios
-        .post(`${baseApiUrl}/${entity.id}`, entity)
+        .put(`${baseApiUrl}/${entity.id}`, entity)
         .then(res => {
           resolve(res.data);
         })
@@ -88,7 +89,7 @@ export default class ApplicationImportService {
     formData.append('file', file);
     return new Promise<any>((resolve, reject) => {
       axios
-        .post(`${baseApiUrl}/upload-file`, formData)
+        .post(`${apiForImportUrl}/application/upload-file`, formData)
         .then(res => {
           console.log(res);
           resolve(res);

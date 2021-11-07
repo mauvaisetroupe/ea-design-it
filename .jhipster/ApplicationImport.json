@@ -3,7 +3,7 @@
   "fields": [
     {
       "fieldName": "importId",
-      "fieldType": "Instant"
+      "fieldType": "String"
     },
     {
       "fieldName": "excelFileName",
@@ -31,6 +31,19 @@
     },
     {
       "fieldName": "comment",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "importStatus",
+      "fieldType": "ImportStatus",
+      "fieldValues": "NEW,EXISTING,UPDATED,ERROR"
+    },
+    {
+      "fieldName": "importStatusMessage",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "existingApplicationID",
       "fieldType": "String"
     }
   ],

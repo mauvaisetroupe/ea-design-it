@@ -1,7 +1,7 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
+import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import java.io.Serializable;
-import java.time.Instant;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -23,7 +23,7 @@ public class ApplicationImport implements Serializable {
     private Long id;
 
     @Column(name = "import_id")
-    private Instant importId;
+    private String importId;
 
     @Column(name = "excel_file_name")
     private String excelFileName;
@@ -46,6 +46,16 @@ public class ApplicationImport implements Serializable {
     @Column(name = "comment")
     private String comment;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "import_status")
+    private ImportStatus importStatus;
+
+    @Column(name = "import_status_message")
+    private String importStatusMessage;
+
+    @Column(name = "existing_application_id")
+    private String existingApplicationID;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -61,16 +71,16 @@ public class ApplicationImport implements Serializable {
         this.id = id;
     }
 
-    public Instant getImportId() {
+    public String getImportId() {
         return this.importId;
     }
 
-    public ApplicationImport importId(Instant importId) {
+    public ApplicationImport importId(String importId) {
         this.setImportId(importId);
         return this;
     }
 
-    public void setImportId(Instant importId) {
+    public void setImportId(String importId) {
         this.importId = importId;
     }
 
@@ -165,6 +175,45 @@ public class ApplicationImport implements Serializable {
         this.comment = comment;
     }
 
+    public ImportStatus getImportStatus() {
+        return this.importStatus;
+    }
+
+    public ApplicationImport importStatus(ImportStatus importStatus) {
+        this.setImportStatus(importStatus);
+        return this;
+    }
+
+    public void setImportStatus(ImportStatus importStatus) {
+        this.importStatus = importStatus;
+    }
+
+    public String getImportStatusMessage() {
+        return this.importStatusMessage;
+    }
+
+    public ApplicationImport importStatusMessage(String importStatusMessage) {
+        this.setImportStatusMessage(importStatusMessage);
+        return this;
+    }
+
+    public void setImportStatusMessage(String importStatusMessage) {
+        this.importStatusMessage = importStatusMessage;
+    }
+
+    public String getExistingApplicationID() {
+        return this.existingApplicationID;
+    }
+
+    public ApplicationImport existingApplicationID(String existingApplicationID) {
+        this.setExistingApplicationID(existingApplicationID);
+        return this;
+    }
+
+    public void setExistingApplicationID(String existingApplicationID) {
+        this.existingApplicationID = existingApplicationID;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -197,6 +246,9 @@ public class ApplicationImport implements Serializable {
             ", type='" + getType() + "'" +
             ", technology='" + getTechnology() + "'" +
             ", comment='" + getComment() + "'" +
+            ", importStatus='" + getImportStatus() + "'" +
+            ", importStatusMessage='" + getImportStatusMessage() + "'" +
+            ", existingApplicationID='" + getExistingApplicationID() + "'" +
             "}";
     }
 }

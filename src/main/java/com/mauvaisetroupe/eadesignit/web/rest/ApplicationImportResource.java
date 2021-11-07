@@ -3,31 +3,17 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationImportRepository;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
-import io.jsonwebtoken.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellUtil;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -162,6 +148,15 @@ public class ApplicationImportResource {
                 if (applicationImport.getComment() != null) {
                     existingApplicationImport.setComment(applicationImport.getComment());
                 }
+                if (applicationImport.getImportStatus() != null) {
+                    existingApplicationImport.setImportStatus(applicationImport.getImportStatus());
+                }
+                if (applicationImport.getImportStatusMessage() != null) {
+                    existingApplicationImport.setImportStatusMessage(applicationImport.getImportStatusMessage());
+                }
+                if (applicationImport.getExistingApplicationID() != null) {
+                    existingApplicationImport.setExistingApplicationID(applicationImport.getExistingApplicationID());
+                }
 
                 return existingApplicationImport;
             })
@@ -211,49 +206,5 @@ public class ApplicationImportResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
-    }
-
-    @PostMapping("/application-imports/upload-file")
-    public List<ApplicationImport> uploadFile(@RequestPart MultipartFile file) throws URISyntaxException, IOException, java.io.IOException {
-        Workbook offices;
-        String lowerCaseFileName = file.getOriginalFilename().toLowerCase();
-        if (lowerCaseFileName.endsWith(".xlsx")) {
-            offices = new XSSFWorkbook(file.getInputStream());
-        } else {
-            offices = new HSSFWorkbook(file.getInputStream());
-        }
-        Sheet sheet = offices.getSheetAt(0);
-
-        Instant instant = Instant.now();
-
-        int index = 0;
-        Map<String, Integer> map = new HashMap<String, Integer>(); //Create map
-
-        List<ApplicationImport> result = new ArrayList<ApplicationImport>();
-        Long i = 0L;
-        for (Row row : sheet) {
-            if (index == 0) {
-                for (Cell cell : row) {
-                    // map column name and column index
-                    map.put(cell.getStringCellValue(), cell.getColumnIndex());
-                }
-            } else {
-                //application.name application.description application.comment application.type
-                ApplicationImport applicationImport = new ApplicationImport();
-                applicationImport.setIdFromExcel(CellUtil.getCell(row, map.get("application.id")).getStringCellValue());
-                applicationImport.setName(CellUtil.getCell(row, map.get("application.name")).getStringCellValue());
-                applicationImport.setDescription(CellUtil.getCell(row, map.get("application.description")).getStringCellValue());
-                applicationImport.setComment(CellUtil.getCell(row, map.get("application.comment")).getStringCellValue());
-                applicationImport.setType(CellUtil.getCell(row, map.get("application.type")).getStringCellValue());
-                applicationImport.setImportId(instant);
-                applicationImport.setExcelFileName(lowerCaseFileName);
-                applicationImport.setId(i++);
-
-                result.add(applicationImport);
-            }
-            index++;
-        }
-        offices.close();
-        return result;
     }
 }

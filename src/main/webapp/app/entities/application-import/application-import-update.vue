@@ -12,18 +12,15 @@
           </div>
           <div class="form-group">
             <label class="form-control-label" for="application-import-importId">Import Id</label>
-            <div class="d-flex">
-              <input
-                id="application-import-importId"
-                data-cy="importId"
-                type="datetime-local"
-                class="form-control"
-                name="importId"
-                :class="{ valid: !$v.applicationImport.importId.$invalid, invalid: $v.applicationImport.importId.$invalid }"
-                :value="convertDateTimeFromServer($v.applicationImport.importId.$model)"
-                @change="updateInstantField('importId', $event)"
-              />
-            </div>
+            <input
+              type="text"
+              class="form-control"
+              name="importId"
+              id="application-import-importId"
+              data-cy="importId"
+              :class="{ valid: !$v.applicationImport.importId.$invalid, invalid: $v.applicationImport.importId.$invalid }"
+              v-model="$v.applicationImport.importId.$model"
+            />
           </div>
           <div class="form-group">
             <label class="form-control-label" for="application-import-excelFileName">Excel File Name</label>
@@ -107,6 +104,49 @@
               data-cy="comment"
               :class="{ valid: !$v.applicationImport.comment.$invalid, invalid: $v.applicationImport.comment.$invalid }"
               v-model="$v.applicationImport.comment.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="application-import-importStatus">Import Status</label>
+            <select
+              class="form-control"
+              name="importStatus"
+              :class="{ valid: !$v.applicationImport.importStatus.$invalid, invalid: $v.applicationImport.importStatus.$invalid }"
+              v-model="$v.applicationImport.importStatus.$model"
+              id="application-import-importStatus"
+              data-cy="importStatus"
+            >
+              <option v-for="importStatus in importStatusValues" :key="importStatus" v-bind:value="importStatus">{{ importStatus }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="application-import-importStatusMessage">Import Status Message</label>
+            <input
+              type="text"
+              class="form-control"
+              name="importStatusMessage"
+              id="application-import-importStatusMessage"
+              data-cy="importStatusMessage"
+              :class="{
+                valid: !$v.applicationImport.importStatusMessage.$invalid,
+                invalid: $v.applicationImport.importStatusMessage.$invalid,
+              }"
+              v-model="$v.applicationImport.importStatusMessage.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="application-import-existingApplicationID">Existing Application ID</label>
+            <input
+              type="text"
+              class="form-control"
+              name="existingApplicationID"
+              id="application-import-existingApplicationID"
+              data-cy="existingApplicationID"
+              :class="{
+                valid: !$v.applicationImport.existingApplicationID.$invalid,
+                invalid: $v.applicationImport.existingApplicationID.$invalid,
+              }"
+              v-model="$v.applicationImport.existingApplicationID.$model"
             />
           </div>
         </div>

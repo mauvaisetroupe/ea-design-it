@@ -36,6 +36,9 @@
             <th scope="row"><span>Type</span></th>
             <th scope="row"><span>Technology</span></th>
             <th scope="row"><span>Comment</span></th>
+            <th scope="row"><span>Import Status</span></th>
+            <th scope="row"><span>Import Status Message</span></th>
+            <th scope="row"><span>Existing Application ID</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -46,7 +49,7 @@
                 applicationImport.id
               }}</router-link>
             </td>
-            <td>{{ applicationImport.importId | formatDate }}</td>
+            <td>{{ applicationImport.importId }}</td>
             <td>{{ applicationImport.excelFileName }}</td>
             <td>{{ applicationImport.idFromExcel }}</td>
             <td>{{ applicationImport.name }}</td>
@@ -54,6 +57,9 @@
             <td>{{ applicationImport.type }}</td>
             <td>{{ applicationImport.technology }}</td>
             <td>{{ applicationImport.comment }}</td>
+            <td>{{ applicationImport.importStatus }}</td>
+            <td>{{ applicationImport.importStatusMessage }}</td>
+            <td>{{ applicationImport.existingApplicationID }}</td>
             <td class="text-right">
               <div class="btn-group">
                 <router-link

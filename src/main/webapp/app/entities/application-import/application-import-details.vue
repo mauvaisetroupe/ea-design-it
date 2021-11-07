@@ -10,7 +10,7 @@
             <span>Import Id</span>
           </dt>
           <dd>
-            <span>{{ applicationImport.importId | formatDate }}</span>
+            <span>{{ applicationImport.importId }}</span>
           </dd>
           <dt>
             <span>Excel File Name</span>
@@ -53,6 +53,24 @@
           </dt>
           <dd>
             <span>{{ applicationImport.comment }}</span>
+          </dd>
+          <dt>
+            <span>Import Status</span>
+          </dt>
+          <dd>
+            <span>{{ applicationImport.importStatus }}</span>
+          </dd>
+          <dt>
+            <span>Import Status Message</span>
+          </dt>
+          <dd>
+            <span>{{ applicationImport.importStatusMessage }}</span>
+          </dd>
+          <dt>
+            <span>Existing Application ID</span>
+          </dt>
+          <dd>
+            <span>{{ applicationImport.existingApplicationID }}</span>
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

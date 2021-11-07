@@ -2,6 +2,20 @@
   <div>
     <h2 id="page-heading" data-cy="ApplicationImportHeading">
       <span id="application-import-heading">Application Imports</span>
+
+      <div class="d-flex justify-content-end" v-if="rowsLoaded">
+        <router-link :to="{ name: 'ApplicationImportCreate' }" custom v-slot="{ navigate }">
+          <button
+            @click="navigate"
+            id="jh-create-entity"
+            data-cy="entityCreateButton"
+            class="btn btn-primary jh-create-entity create-application-import"
+          >
+            <font-awesome-icon icon="plus"></font-awesome-icon>
+            <span>Import and update</span>
+          </button>
+        </router-link>
+      </div>
     </h2>
 
     <div v-if="!rowsLoaded">
@@ -34,6 +48,9 @@
             <th scope="row"><span>Type</span></th>
             <th scope="row"><span>Technology</span></th>
             <th scope="row"><span>Comment</span></th>
+            <th scope="row"><span>Import Status</span></th>
+            <th scope="row"><span>Import Status Message</span></th>
+            <th scope="row"><span>Existing Application ID</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -44,7 +61,7 @@
                 applicationImport.id
               }}</router-link>
             </td>
-            <td>{{ applicationImport.importId | formatDate }}</td>
+            <td>{{ applicationImport.importId }}</td>
             <td>{{ applicationImport.excelFileName }}</td>
             <td>{{ applicationImport.idFromExcel }}</td>
             <td>{{ applicationImport.name }}</td>
@@ -52,40 +69,9 @@
             <td>{{ applicationImport.type }}</td>
             <td>{{ applicationImport.technology }}</td>
             <td>{{ applicationImport.comment }}</td>
-            <td class="text-right">
-              <div class="btn-group">
-                <router-link
-                  :to="{ name: 'ApplicationImportView', params: { applicationImportId: applicationImport.id } }"
-                  custom
-                  v-slot="{ navigate }"
-                >
-                  <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
-                    <font-awesome-icon icon="eye"></font-awesome-icon>
-                    <span class="d-none d-md-inline">View</span>
-                  </button>
-                </router-link>
-                <router-link
-                  :to="{ name: 'ApplicationImportEdit', params: { applicationImportId: applicationImport.id } }"
-                  custom
-                  v-slot="{ navigate }"
-                >
-                  <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
-                    <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                    <span class="d-none d-md-inline">Edit</span>
-                  </button>
-                </router-link>
-                <b-button
-                  v-on:click="prepareRemove(applicationImport)"
-                  variant="danger"
-                  class="btn btn-sm"
-                  data-cy="entityDeleteButton"
-                  v-b-modal.removeEntity
-                >
-                  <font-awesome-icon icon="times"></font-awesome-icon>
-                  <span class="d-none d-md-inline">Delete</span>
-                </b-button>
-              </div>
-            </td>
+            <td>{{ applicationImport.importStatus }}</td>
+            <td>{{ applicationImport.importStatusMessage }}</td>
+            <td>{{ applicationImport.existingApplicationID }}</td>
           </tr>
         </tbody>
       </table>
