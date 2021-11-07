@@ -3,7 +3,7 @@ import { ILandscapeView } from '@/shared/model/landscape-view.model';
 import { IDataFlow } from '@/shared/model/data-flow.model';
 
 export interface IFunctionalFlow {
-  id?: number;
+  id?: string;
   alias?: string | null;
   description?: string | null;
   comment?: string | null;
@@ -15,7 +15,7 @@ export interface IFunctionalFlow {
 
 export class FunctionalFlow implements IFunctionalFlow {
   constructor(
-    public id?: number,
+    public id?: string,
     public alias?: string | null,
     public description?: string | null,
     public comment?: string | null,

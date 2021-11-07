@@ -14,7 +14,7 @@ export default class FunctionalFlow extends Vue {
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
   @Inject('alertService') private alertService: () => AlertService;
 
-  private removeId: number = null;
+  private removeId: string = null;
 
   public functionalFlows: IFunctionalFlow[] = [];
 

@@ -43,6 +43,7 @@ entity Owner {
 }
 
 entity FunctionalFlow {
+    @id @AutoGenerate(false) id String
     alias String
     description String
     comment String
@@ -50,6 +51,7 @@ entity FunctionalFlow {
 }
 
 entity FlowInterface {
+    @id @AutoGenerate(false) id String
     protocol Protocol
     status String
 }

@@ -35,7 +35,7 @@
             <column name="documentation_url" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="flow_interface_id" type="bigint">
+            <column name="flow_interface_id" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -45,7 +45,7 @@
     <changeSet id="20211104191907-1-relations" author="jhipster">
 
         <createTable tableName="rel_data_flow__functional_flows">
-            <column name="functional_flows_id" type="bigint">
+            <column name="functional_flows_id" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="data_flow_id" type="bigint">

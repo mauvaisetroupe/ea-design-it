@@ -6,7 +6,7 @@ import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 import { Protocol } from '@/shared/model/enumerations/protocol.model';
 export interface IFlowInterface {
-  id?: number;
+  id?: string;
   protocol?: Protocol | null;
   status?: string | null;
   dataFlows?: IDataFlow[] | null;
@@ -20,7 +20,7 @@ export interface IFlowInterface {
 
 export class FlowInterface implements IFlowInterface {
   constructor(
-    public id?: number,
+    public id?: string,
     public protocol?: Protocol | null,
     public status?: string | null,
     public dataFlows?: IDataFlow[] | null,

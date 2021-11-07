@@ -39,11 +39,11 @@ describe('Component Tests', () => {
     describe('OnInit', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const foundFlowInterface = { id: 123 };
+        const foundFlowInterface = { id: 'ABC' };
         flowInterfaceServiceStub.find.resolves(foundFlowInterface);
 
         // WHEN
-        comp.retrieveFlowInterface(123);
+        comp.retrieveFlowInterface('ABC');
         await comp.$nextTick();
 
         // THEN
@@ -54,11 +54,11 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundFlowInterface = { id: 123 };
+        const foundFlowInterface = { id: 'ABC' };
         flowInterfaceServiceStub.find.resolves(foundFlowInterface);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { flowInterfaceId: 123 } }, null, cb => cb(comp));
+        comp.beforeRouteEnter({ params: { flowInterfaceId: 'ABC' } }, null, cb => cb(comp));
         await comp.$nextTick();
 
         // THEN

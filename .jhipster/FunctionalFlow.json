@@ -2,6 +2,14 @@
   "name": "FunctionalFlow",
   "fields": [
     {
+      "fieldName": "id",
+      "fieldType": "String",
+      "options": {
+        "id": true,
+        "autoGenerate": "false"
+      }
+    },
+    {
       "fieldName": "alias",
       "fieldType": "String"
     },

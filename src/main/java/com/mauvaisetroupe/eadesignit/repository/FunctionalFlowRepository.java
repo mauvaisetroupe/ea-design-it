@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
  * Spring Data SQL repository for the FunctionalFlow entity.
  */
 @Repository
-public interface FunctionalFlowRepository extends JpaRepository<FunctionalFlow, Long> {
+public interface FunctionalFlowRepository extends JpaRepository<FunctionalFlow, String> {
     @Query(
         value = "select distinct functionalFlow from FunctionalFlow functionalFlow left join fetch functionalFlow.interfaces",
         countQuery = "select count(distinct functionalFlow) from FunctionalFlow functionalFlow"
@@ -26,5 +26,5 @@ public interface FunctionalFlowRepository extends JpaRepository<FunctionalFlow, 
     @Query(
         "select functionalFlow from FunctionalFlow functionalFlow left join fetch functionalFlow.interfaces where functionalFlow.id =:id"
     )
-    Optional<FunctionalFlow> findOneWithEagerRelationships(@Param("id") Long id);
+    Optional<FunctionalFlow> findOneWithEagerRelationships(@Param("id") String id);
 }

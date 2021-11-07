@@ -12,8 +12,7 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.UUID;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,9 +51,6 @@ class FunctionalFlowResourceIT {
 
     private static final String ENTITY_API_URL = "/api/functional-flows";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private FunctionalFlowRepository functionalFlowRepository;
@@ -150,7 +146,7 @@ class FunctionalFlowResourceIT {
     @Transactional
     void createFunctionalFlowWithExistingId() throws Exception {
         // Create the FunctionalFlow with an existing ID
-        functionalFlow.setId(1L);
+        functionalFlow.setId("existing_id");
 
         int databaseSizeBeforeCreate = functionalFlowRepository.findAll().size();
 
@@ -177,7 +173,7 @@ class FunctionalFlowResourceIT {
             .perform(get(ENTITY_API_URL + "?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(functionalFlow.getId().intValue())))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(functionalFlow.getId())))
             .andExpect(jsonPath("$.[*].alias").value(hasItem(DEFAULT_ALIAS)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)))
@@ -213,7 +209,7 @@ class FunctionalFlowResourceIT {
             .perform(get(ENTITY_API_URL_ID, functionalFlow.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.id").value(functionalFlow.getId().intValue()))
+            .andExpect(jsonPath("$.id").value(functionalFlow.getId()))
             .andExpect(jsonPath("$.alias").value(DEFAULT_ALIAS))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT))
@@ -263,7 +259,7 @@ class FunctionalFlowResourceIT {
     @Transactional
     void putNonExistingFunctionalFlow() throws Exception {
         int databaseSizeBeforeUpdate = functionalFlowRepository.findAll().size();
-        functionalFlow.setId(count.incrementAndGet());
+        functionalFlow.setId(UUID.randomUUID().toString());
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFunctionalFlowMockMvc
@@ -283,12 +279,12 @@ class FunctionalFlowResourceIT {
     @Transactional
     void putWithIdMismatchFunctionalFlow() throws Exception {
         int databaseSizeBeforeUpdate = functionalFlowRepository.findAll().size();
-        functionalFlow.setId(count.incrementAndGet());
+        functionalFlow.setId(UUID.randomUUID().toString());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFunctionalFlowMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, count.incrementAndGet())
+                put(ENTITY_API_URL_ID, UUID.randomUUID().toString())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtil.convertObjectToJsonBytes(functionalFlow))
             )
@@ -303,7 +299,7 @@ class FunctionalFlowResourceIT {
     @Transactional
     void putWithMissingIdPathParamFunctionalFlow() throws Exception {
         int databaseSizeBeforeUpdate = functionalFlowRepository.findAll().size();
-        functionalFlow.setId(count.incrementAndGet());
+        functionalFlow.setId(UUID.randomUUID().toString());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFunctionalFlowMockMvc
@@ -383,7 +379,7 @@ class FunctionalFlowResourceIT {
     @Transactional
     void patchNonExistingFunctionalFlow() throws Exception {
         int databaseSizeBeforeUpdate = functionalFlowRepository.findAll().size();
-        functionalFlow.setId(count.incrementAndGet());
+        functionalFlow.setId(UUID.randomUUID().toString());
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFunctionalFlowMockMvc
@@ -403,12 +399,12 @@ class FunctionalFlowResourceIT {
     @Transactional
     void patchWithIdMismatchFunctionalFlow() throws Exception {
         int databaseSizeBeforeUpdate = functionalFlowRepository.findAll().size();
-        functionalFlow.setId(count.incrementAndGet());
+        functionalFlow.setId(UUID.randomUUID().toString());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFunctionalFlowMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, count.incrementAndGet())
+                patch(ENTITY_API_URL_ID, UUID.randomUUID().toString())
                     .contentType("application/merge-patch+json")
                     .content(TestUtil.convertObjectToJsonBytes(functionalFlow))
             )
@@ -423,7 +419,7 @@ class FunctionalFlowResourceIT {
     @Transactional
     void patchWithMissingIdPathParamFunctionalFlow() throws Exception {
         int databaseSizeBeforeUpdate = functionalFlowRepository.findAll().size();
-        functionalFlow.setId(count.incrementAndGet());
+        functionalFlow.setId(UUID.randomUUID().toString());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFunctionalFlowMockMvc

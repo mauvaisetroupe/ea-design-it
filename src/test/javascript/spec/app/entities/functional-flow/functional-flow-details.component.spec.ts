@@ -39,11 +39,11 @@ describe('Component Tests', () => {
     describe('OnInit', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const foundFunctionalFlow = { id: 123 };
+        const foundFunctionalFlow = { id: 'ABC' };
         functionalFlowServiceStub.find.resolves(foundFunctionalFlow);
 
         // WHEN
-        comp.retrieveFunctionalFlow(123);
+        comp.retrieveFunctionalFlow('ABC');
         await comp.$nextTick();
 
         // THEN
@@ -54,11 +54,11 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundFunctionalFlow = { id: 123 };
+        const foundFunctionalFlow = { id: 'ABC' };
         functionalFlowServiceStub.find.resolves(foundFunctionalFlow);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { functionalFlowId: 123 } }, null, cb => cb(comp));
+        comp.beforeRouteEnter({ params: { functionalFlowId: 'ABC' } }, null, cb => cb(comp));
         await comp.$nextTick();
 
         // THEN

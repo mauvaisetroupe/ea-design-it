@@ -57,7 +57,7 @@ public class FunctionalFlowResource {
         FunctionalFlow result = functionalFlowRepository.save(functionalFlow);
         return ResponseEntity
             .created(new URI("/api/functional-flows/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
             .body(result);
     }
 
@@ -73,7 +73,7 @@ public class FunctionalFlowResource {
      */
     @PutMapping("/functional-flows/{id}")
     public ResponseEntity<FunctionalFlow> updateFunctionalFlow(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @Valid @RequestBody FunctionalFlow functionalFlow
     ) throws URISyntaxException {
         log.debug("REST request to update FunctionalFlow : {}, {}", id, functionalFlow);
@@ -91,7 +91,7 @@ public class FunctionalFlowResource {
         FunctionalFlow result = functionalFlowRepository.save(functionalFlow);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, functionalFlow.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, functionalFlow.getId()))
             .body(result);
     }
 
@@ -108,7 +108,7 @@ public class FunctionalFlowResource {
      */
     @PatchMapping(value = "/functional-flows/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<FunctionalFlow> partialUpdateFunctionalFlow(
-        @PathVariable(value = "id", required = false) final Long id,
+        @PathVariable(value = "id", required = false) final String id,
         @NotNull @RequestBody FunctionalFlow functionalFlow
     ) throws URISyntaxException {
         log.debug("REST request to partial update FunctionalFlow partially : {}, {}", id, functionalFlow);
@@ -145,7 +145,7 @@ public class FunctionalFlowResource {
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, functionalFlow.getId().toString())
+            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, functionalFlow.getId())
         );
     }
 
@@ -168,7 +168,7 @@ public class FunctionalFlowResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the functionalFlow, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/functional-flows/{id}")
-    public ResponseEntity<FunctionalFlow> getFunctionalFlow(@PathVariable Long id) {
+    public ResponseEntity<FunctionalFlow> getFunctionalFlow(@PathVariable String id) {
         log.debug("REST request to get FunctionalFlow : {}", id);
         Optional<FunctionalFlow> functionalFlow = functionalFlowRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(functionalFlow);
@@ -181,12 +181,9 @@ public class FunctionalFlowResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/functional-flows/{id}")
-    public ResponseEntity<Void> deleteFunctionalFlow(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteFunctionalFlow(@PathVariable String id) {
         log.debug("REST request to delete FunctionalFlow : {}", id);
         functionalFlowRepository.deleteById(id);
-        return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
-            .build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
     }
 }

@@ -11,7 +11,7 @@
     -->
     <changeSet id="20211104191905-1" author="jhipster">
         <createTable tableName="flow_interface">
-            <column name="id" type="bigint">
+            <column name="id" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="protocol" type="varchar(255)">

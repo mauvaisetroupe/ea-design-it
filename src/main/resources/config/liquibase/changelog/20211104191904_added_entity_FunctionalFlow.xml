@@ -11,7 +11,7 @@
     -->
     <changeSet id="20211104191904-1" author="jhipster">
         <createTable tableName="functional_flow">
-            <column name="id" type="bigint">
+            <column name="id" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="alias" type="varchar(255)">
@@ -36,10 +36,10 @@
     <changeSet id="20211104191904-1-relations" author="jhipster">
 
         <createTable tableName="rel_functional_flow__interfaces">
-            <column name="interfaces_id" type="bigint">
+            <column name="interfaces_id" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="functional_flow_id" type="bigint">
+            <column name="functional_flow_id" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
