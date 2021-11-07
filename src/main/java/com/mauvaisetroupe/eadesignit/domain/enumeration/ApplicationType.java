@@ -9,4 +9,5 @@ public enum ApplicationType {
     JAVA,
     PACKAGE,
     INFRASTRUCTURE,
+    GINKO,
 }
