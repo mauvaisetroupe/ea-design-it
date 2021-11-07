@@ -1,4 +1,4 @@
-package com.mauvaisetroupe.eadesignit.service;
+package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
@@ -23,14 +23,13 @@ import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class ImportService {
+public class ApplicationImportService {
 
     private static final String APPLICATION_TYPE = "application.type";
     private static final String APPLICATION_COMMENT = "application.comment";
@@ -38,14 +37,12 @@ public class ImportService {
     private static final String APPLICATION_NAME = "application.name";
     private static final String APPLICATION_ID = "application.id";
 
-    private final Logger log = LoggerFactory.getLogger(ApplicationService.class);
+    private final Logger log = LoggerFactory.getLogger(ApplicationImportService.class);
 
     private final ApplicationRepository applicationRepository;
-    private final ApplicationImportRepository applicationImportRepository;
 
-    public ImportService(ApplicationRepository applicationRepository, ApplicationImportRepository applicationImportRepository) {
+    public ApplicationImportService(ApplicationRepository applicationRepository) {
         this.applicationRepository = applicationRepository;
-        this.applicationImportRepository = applicationImportRepository;
     }
 
     public List<ApplicationImport> importExcel(MultipartFile file) throws IOException {

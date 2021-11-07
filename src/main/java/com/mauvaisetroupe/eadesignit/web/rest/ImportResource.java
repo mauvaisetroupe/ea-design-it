@@ -1,7 +1,7 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
-import com.mauvaisetroupe.eadesignit.service.ImportService;
+import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationImportService;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -20,9 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 public class ImportResource {
 
-    private final ImportService importService;
+    private final ApplicationImportService importService;
 
-    public ImportResource(ImportService importService) {
+    public ImportResource(ApplicationImportService importService) {
         this.importService = importService;
     }
 
