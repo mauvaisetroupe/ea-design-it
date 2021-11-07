@@ -1,0 +1,23 @@
+// ADD Helper for import, not part of main model
+
+entity ApplicationImport(tmp_import_application_import) {
+	importId String
+    excelFileName String
+    idFromExcel String,
+	name String,
+    description String 
+    type String
+	technology String
+    comment String 
+    importStatus ImportStatus
+    importStatusMessage String
+    existingApplicationID String // ID of Application when importStatus = EXISINT or UPDATED
+}
+
+
+enum ImportStatus {
+    NEW
+	EXISTING
+    UPDATED
+    ERROR
+}
