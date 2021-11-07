@@ -51,8 +51,9 @@
       "Application",
       "DataFlow",
       "ApplicationComponent",
-      "ApplicationImport"
+      "ApplicationImport",
+      "FlowImport"
     ],
-    "lastLiquibaseTimestamp": 1636121756000
+    "lastLiquibaseTimestamp": 1636298620000
   }
 }

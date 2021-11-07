@@ -50,6 +50,12 @@ const ApplicationImport = () => import('@/entities/application-import/applicatio
 const ApplicationImportUpdate = () => import('@/entities/application-import/application-import-update.vue');
 // prettier-ignore
 const ApplicationImportDetails = () => import('@/entities/application-import/application-import-details.vue');
+// prettier-ignore
+const FlowImport = () => import('@/entities/flow-import/flow-import.vue');
+// prettier-ignore
+const FlowImportUpdate = () => import('@/entities/flow-import/flow-import-update.vue');
+// prettier-ignore
+const FlowImportDetails = () => import('@/entities/flow-import/flow-import-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default [
@@ -243,6 +249,30 @@ export default [
     path: '/application-import/:applicationImportId/view',
     name: 'ApplicationImportView',
     component: ApplicationImportDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/flow-import',
+    name: 'FlowImport',
+    component: FlowImport,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/flow-import/new',
+    name: 'FlowImportCreate',
+    component: FlowImportUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/flow-import/:flowImportId/edit',
+    name: 'FlowImportEdit',
+    component: FlowImportUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/flow-import/:flowImportId/view',
+    name: 'FlowImportView',
+    component: FlowImportDetails,
     meta: { authorities: [Authority.USER] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

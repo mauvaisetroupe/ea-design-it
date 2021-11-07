@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Long> {}
+public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Long> {
+    void findAllBySourceAndTarget(String source, String target);
+}

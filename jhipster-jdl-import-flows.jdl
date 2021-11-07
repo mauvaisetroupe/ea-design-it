@@ -1,0 +1,31 @@
+// ADD Helper for import, not part of main model
+
+enum ImportStatus {
+    NEW
+	EXISTING
+    UPDATED
+    ERROR
+}
+
+
+entity FlowImport(tmp_import_flows) {
+    idFlowFromExcel String
+    flowAlias String
+    sourceElement String
+    targetElement String
+    description String
+    integrationPattern String
+  	frequency String
+  	format String
+	swagger String
+  	blueprint String
+  	blueprintStatus String
+  	flowStatus String
+  	comment String
+  	documentName String
+    importInterfaceStatus ImportStatus
+    importFunctionalFlowStatus ImportStatus
+	importDataFlowStatus ImportStatus
+	importStatusMessage String
+    existingApplicationID String // ID of Application when importStatus = EXISINT or UPDATED
+}

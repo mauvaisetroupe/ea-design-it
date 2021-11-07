@@ -1,0 +1,95 @@
+{
+  "name": "FlowImport",
+  "fields": [
+    {
+      "fieldName": "idFlowFromExcel",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "flowAlias",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "sourceElement",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "targetElement",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "integrationPattern",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "frequency",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "format",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "swagger",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "blueprint",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "blueprintStatus",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "flowStatus",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "comment",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "documentName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "importInterfaceStatus",
+      "fieldType": "ImportStatus",
+      "fieldValues": "NEW,EXISTING,UPDATED,ERROR"
+    },
+    {
+      "fieldName": "importFunctionalFlowStatus",
+      "fieldType": "ImportStatus",
+      "fieldValues": "NEW,EXISTING,UPDATED,ERROR"
+    },
+    {
+      "fieldName": "importDataFlowStatus",
+      "fieldType": "ImportStatus",
+      "fieldValues": "NEW,EXISTING,UPDATED,ERROR"
+    },
+    {
+      "fieldName": "importStatusMessage",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "existingApplicationID",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "tmp_import_flows",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211107152340"
+}
