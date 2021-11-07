@@ -27,7 +27,7 @@ public class ImportResource {
     }
 
     @PostMapping("/import/application/upload-file")
-    public List<ApplicationImport> uploadFile(@RequestPart MultipartFile file) throws URISyntaxException, IOException, java.io.IOException {
+    public List<ApplicationImport> uploadFile(@RequestPart MultipartFile file) throws Exception {
         return importService.importExcel(file);
     }
 }

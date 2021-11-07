@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ApplicationRepository extends JpaRepository<Application, String>, JpaSpecificationExecutor<Application> {}
+public interface ApplicationRepository extends JpaRepository<Application, String>, JpaSpecificationExecutor<Application> {
+    Application findByName(String name);
+}

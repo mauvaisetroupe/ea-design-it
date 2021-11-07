@@ -4,23 +4,13 @@ import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
-import com.mauvaisetroupe.eadesignit.repository.ApplicationImportRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellUtil;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -45,58 +35,47 @@ public class ApplicationImportService {
         this.applicationRepository = applicationRepository;
     }
 
-    public List<ApplicationImport> importExcel(MultipartFile file) throws IOException {
-        Workbook offices;
-        String lowerCaseFileName = file.getOriginalFilename().toLowerCase();
-        if (lowerCaseFileName.endsWith(".xlsx")) {
-            offices = new XSSFWorkbook(file.getInputStream());
-        } else {
-            offices = new HSSFWorkbook(file.getInputStream());
-        }
-        Sheet sheet = offices.getSheetAt(0);
+    public List<ApplicationImport> importExcel(MultipartFile file) throws Exception {
+        ExcelReader excelReader = new ExcelReader(file);
+        List<Map<String, Object>> applicationDF = excelReader.getSheetAt(0);
 
         String importID = (new SimpleDateFormat("YYYYMMddhhmmss")).format(new Date());
-
-        int index = 0;
-        Map<String, Integer> map = new HashMap<String, Integer>(); //Create map
+        String lowerCaseFileName = file.getOriginalFilename().toLowerCase();
 
         List<ApplicationImport> result = new ArrayList<ApplicationImport>();
         Long i = 0L;
-        for (Row row : sheet) {
-            if (index == 0) {
-                for (Cell cell : row) {
-                    // map column name and column index
-                    map.put(cell.getStringCellValue(), cell.getColumnIndex());
-                }
-            } else {
-                //application.name application.description application.comment application.type
-                final ApplicationImport applicationImport = new ApplicationImport();
-                applicationImport.setIdFromExcel(CellUtil.getCell(row, map.get(APPLICATION_ID)).getStringCellValue());
-                applicationImport.setName(CellUtil.getCell(row, map.get(APPLICATION_NAME)).getStringCellValue());
-                applicationImport.setDescription(CellUtil.getCell(row, map.get(APPLICATION_DESCRIPTION)).getStringCellValue());
-                applicationImport.setComment(CellUtil.getCell(row, map.get(APPLICATION_COMMENT)).getStringCellValue());
-                applicationImport.setType(CellUtil.getCell(row, map.get(APPLICATION_TYPE)).getStringCellValue());
-                applicationImport.setImportId(importID);
-                applicationImport.setExcelFileName(lowerCaseFileName);
-                applicationImport.setId(i++);
+        for (Map<String, Object> map : applicationDF) {
+            ApplicationImport applicationImport = mapArrayToImportApplication(map);
+            applicationImport.setImportId(importID);
+            applicationImport.setExcelFileName(lowerCaseFileName);
+            applicationImport.setId(i++);
 
-                Application application = mapImportToApplicayion(applicationImport);
-                if (application.getId() != null) {
-                    applicationImport.setImportStatus(ImportStatus.EXISTING);
-                } else {
-                    applicationImport.setImportStatus(ImportStatus.UPDATED);
-                    application.setId(applicationImport.getIdFromExcel());
-                }
-                applicationRepository.save(application);
-                result.add(applicationImport);
+            Application application = mapImportToApplication(applicationImport);
+
+            if (application.getId() != null) {
+                applicationImport.setImportStatus(ImportStatus.EXISTING);
+            } else {
+                applicationImport.setImportStatus(ImportStatus.NEW);
+                application.setId(applicationImport.getIdFromExcel());
             }
-            index++;
+            applicationRepository.save(application);
+            result.add(applicationImport);
         }
-        offices.close();
+
         return result;
     }
 
-    public Application mapImportToApplicayion(ApplicationImport applicationImport) {
+    private ApplicationImport mapArrayToImportApplication(Map<String, Object> map) {
+        ApplicationImport applicationImport = new ApplicationImport();
+        applicationImport.setIdFromExcel((String) map.get(APPLICATION_ID));
+        applicationImport.setName((String) map.get(APPLICATION_NAME));
+        applicationImport.setDescription((String) map.get(APPLICATION_DESCRIPTION));
+        applicationImport.setComment((String) map.get(APPLICATION_COMMENT));
+        applicationImport.setType((String) map.get(APPLICATION_TYPE));
+        return applicationImport;
+    }
+
+    public Application mapImportToApplication(ApplicationImport applicationImport) {
         Optional<Application> optional = applicationRepository.findById(applicationImport.getIdFromExcel());
         final Application application;
         if (optional.isPresent()) {
