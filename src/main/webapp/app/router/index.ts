@@ -14,6 +14,7 @@ import admin from '@/router/admin';
 import entities from '@/router/entities';
 import pages from '@/router/pages';
 import applicationimportuploadfile from '@/router/application-import-upload-file';
+import flowimportuploadfile from '@/router/flow-import-upload-file';
 
 Vue.use(Router);
 
@@ -42,6 +43,7 @@ export default new Router({
     ...admin,
     ...entities,
     ...pages,
-    ...applicationimportuploadfile
+    ...applicationimportuploadfile,
+    ...flowimportuploadfile
   ]
 });

@@ -5,6 +5,7 @@ import com.mauvaisetroupe.eadesignit.domain.FlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Protocol;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
@@ -12,12 +13,14 @@ import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +42,8 @@ public class FlowImportService {
     private static final String FLOW_STATUS_FLOW = "Status flow";
     private static final String FLOW_COMMENT = "Comment";
     private static final String FLOW_ADD_CORRESPONDENT_ID = "ADD correspondent ID";
+
+    private static final String FLOW_SHEET_NAME = "Message_Flow";
 
     private final Logger log = LoggerFactory.getLogger(FlowImportService.class);
 
@@ -65,9 +70,11 @@ public class FlowImportService {
         this.landscapeViewRepository = landscapeViewRepository;
     }
 
-    public void importExcel(MultipartFile file) throws Exception {
+    public List<FlowImport> importExcel(MultipartFile file) throws Exception {
+        List<FlowImport> result = new ArrayList<FlowImport>();
+
         ExcelReader excelReader = new ExcelReader(file);
-        List<Map<String, Object>> flowsDF = excelReader.getSheetAt(0);
+        List<Map<String, Object>> flowsDF = excelReader.getSheet(FLOW_SHEET_NAME);
 
         String lowerCaseFileName = file.getOriginalFilename().toLowerCase();
 
@@ -78,35 +85,54 @@ public class FlowImportService {
             FunctionalFlow functionalFlow;
 
             if (!functionalFlowOption.isPresent()) {
+                flowImport.setImportFunctionalFlowStatus(ImportStatus.NEW);
+
                 // Landscape
-                LandscapeView landscapeView = landscapeViewRepository.findByDiagramName(lowerCaseFileName);
+                LandscapeView landscapeView = landscapeViewRepository.findByDiagramNameIgnoreCase(lowerCaseFileName);
                 if (landscapeView == null) {
                     landscapeView = mapToLandscapeView(lowerCaseFileName);
                     landscapeViewRepository.save(landscapeView);
                 }
 
-                // FlowInterface
-                Optional<FlowInterface> flowInterfaceOption = interfaceRepository.findById(flowImport.getIdFlowFromExcel());
-                FlowInterface flowInterface;
-                if (!flowInterfaceOption.isPresent()) {
-                    flowInterface = mapToFlowInterface(flowImport);
-                    interfaceRepository.save(flowInterface);
-                } else {
-                    flowInterface = flowInterfaceOption.get();
-                }
-
                 // FunctionalFlow
                 functionalFlow = mapToFunctionalFlow(flowImport);
-                functionalFlow.addInterfaces(flowInterface);
+                functionalFlow.setLandscape(landscapeView);
                 flowRepository.save(functionalFlow);
             } else {
                 functionalFlow = functionalFlowOption.get();
+                flowImport.setImportFunctionalFlowStatus(ImportStatus.EXISTING);
             }
+
+            // FlowInterface
+            Optional<FlowInterface> flowInterfaceOption = interfaceRepository.findById(flowImport.getIdFlowFromExcel());
+            FlowInterface flowInterface;
+            if (!flowInterfaceOption.isPresent()) {
+                flowInterface = mapToFlowInterface(flowImport);
+                functionalFlow.addInterfaces(flowInterface);
+                Assert.isTrue(
+                    flowInterface.getSource() != null && flowInterface.getTarget() != null,
+                    "Flow need a source and a target, pb with " + flowImport
+                );
+                interfaceRepository.save(flowInterface);
+                flowRepository.save(functionalFlow);
+            } else {
+                flowInterface = flowInterfaceOption.get();
+                if (!functionalFlow.getInterfaces().contains(flowInterface)) {
+                    System.out.println(functionalFlow.getInterfaces().size());
+                    functionalFlow.addInterfaces(flowInterface);
+                    flowRepository.save(functionalFlow);
+                }
+            }
+
+            result.add(flowImport);
         }
+        return result;
     }
 
     private FunctionalFlow mapToFunctionalFlow(FlowImport flowImport) {
         FunctionalFlow functionalFlow = new FunctionalFlow();
+        // use alias as ID
+        functionalFlow.setId(flowImport.getFlowAlias());
         functionalFlow.setAlias(flowImport.getFlowAlias());
         functionalFlow.setDescription(flowImport.getDescription());
         functionalFlow.setComment(flowImport.getComment());
@@ -136,19 +162,24 @@ public class FlowImportService {
         flowImport.setFlowStatus((String) map.get(FLOW_STATUS_FLOW));
         flowImport.setComment((String) map.get(FLOW_COMMENT));
         flowImport.setDocumentName((String) map.get(FLOW_ADD_CORRESPONDENT_ID));
+        Assert.isTrue(flowImport.getIdFlowFromExcel() != null, "Error with map : " + map);
         return flowImport;
     }
 
     private FlowInterface mapToFlowInterface(FlowImport flowImport) {
-        Application source = applicationRepository.findByName(flowImport.getSourceElement());
-        Application target = applicationRepository.findByName(flowImport.getTargetElement());
+        Application source = applicationRepository.findByNameIgnoreCase(flowImport.getSourceElement());
+        Application target = applicationRepository.findByNameIgnoreCase(flowImport.getTargetElement());
         FlowInterface flowInterface = new FlowInterface();
         flowInterface.setId(flowImport.getIdFlowFromExcel());
         flowInterface.setSource(source);
         flowInterface.setTarget(target);
         if (StringUtils.hasText(flowImport.getIntegrationPattern())) {
-            flowInterface.setProtocol(ObjectUtils.caseInsensitiveValueOf(Protocol.values(), flowImport.getIntegrationPattern()));
+            flowInterface.setProtocol(ObjectUtils.caseInsensitiveValueOf(Protocol.values(), clean(flowImport.getIntegrationPattern())));
         }
         return flowInterface;
+    }
+
+    private String clean(String value) {
+        return value.replace('/', '_').replace(' ', '_');
     }
 }

@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
+import com.mauvaisetroupe.eadesignit.domain.FlowImport;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.FlowImportService;
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class ImportResource {
     }
 
     @PostMapping("/import/flow/upload-file")
-    public void uploadFlowsFile(@RequestPart MultipartFile file) throws Exception {
-        flowImportService.importExcel(file);
+    public List<FlowImport> uploadFlowsFile(@RequestPart MultipartFile file) throws Exception {
+        return flowImportService.importExcel(file);
     }
 }

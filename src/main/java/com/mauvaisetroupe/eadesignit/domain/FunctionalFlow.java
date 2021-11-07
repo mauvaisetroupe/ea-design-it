@@ -35,7 +35,7 @@ public class FunctionalFlow implements Serializable {
     @Column(name = "status")
     private String status;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_functional_flow__interfaces",
         joinColumns = @JoinColumn(name = "functional_flow_id"),

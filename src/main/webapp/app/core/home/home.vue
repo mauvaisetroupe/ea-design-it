@@ -27,7 +27,8 @@
         <div v-if="authenticated">
           <p>Import Excel files</p>
           <ul>
-            <li><a href="/application-import-upload-file">Import Excel file applications</a></li>
+            <li><a href="/application-import-upload-file">Import Excel applications file</a></li>
+            <li><a href="/flow-import-upload-file">Import Excel flows file</a></li>
           </ul>
         </div>
       </div>

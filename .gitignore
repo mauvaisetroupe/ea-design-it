@@ -159,3 +159,4 @@ Desktop.ini
 ######################
 /coverage/
 /.nyc_output/
+.jhipster/LandscapeView.json
