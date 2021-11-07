@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -96,7 +97,7 @@ public class ApplicationImportService {
         application.setName(applicationImport.getName());
         application.setTechnology(applicationImport.getTechnology());
         if (StringUtils.hasText(applicationImport.getType())) {
-            application.setType(ApplicationType.valueOf(applicationImport.getType().toUpperCase()));
+            application.setType(ObjectUtils.caseInsensitiveValueOf(ApplicationType.values(), applicationImport.getType()));
         }
         return application;
     }
