@@ -32,6 +32,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ImportService {
 
+    private static final String APPLICATION_TYPE = "application.type";
+    private static final String APPLICATION_COMMENT = "application.comment";
+    private static final String APPLICATION_DESCRIPTION = "application.description";
+    private static final String APPLICATION_NAME = "application.name";
+    private static final String APPLICATION_ID = "application.id";
+
     private final Logger log = LoggerFactory.getLogger(ApplicationService.class);
 
     private final ApplicationRepository applicationRepository;
@@ -68,11 +74,11 @@ public class ImportService {
             } else {
                 //application.name application.description application.comment application.type
                 final ApplicationImport applicationImport = new ApplicationImport();
-                applicationImport.setIdFromExcel(CellUtil.getCell(row, map.get("application.id")).getStringCellValue());
-                applicationImport.setName(CellUtil.getCell(row, map.get("application.name")).getStringCellValue());
-                applicationImport.setDescription(CellUtil.getCell(row, map.get("application.description")).getStringCellValue());
-                applicationImport.setComment(CellUtil.getCell(row, map.get("application.comment")).getStringCellValue());
-                applicationImport.setType(CellUtil.getCell(row, map.get("application.type")).getStringCellValue());
+                applicationImport.setIdFromExcel(CellUtil.getCell(row, map.get(APPLICATION_ID)).getStringCellValue());
+                applicationImport.setName(CellUtil.getCell(row, map.get(APPLICATION_NAME)).getStringCellValue());
+                applicationImport.setDescription(CellUtil.getCell(row, map.get(APPLICATION_DESCRIPTION)).getStringCellValue());
+                applicationImport.setComment(CellUtil.getCell(row, map.get(APPLICATION_COMMENT)).getStringCellValue());
+                applicationImport.setType(CellUtil.getCell(row, map.get(APPLICATION_TYPE)).getStringCellValue());
                 applicationImport.setImportId(importID);
                 applicationImport.setExcelFileName(lowerCaseFileName);
                 applicationImport.setId(i++);
