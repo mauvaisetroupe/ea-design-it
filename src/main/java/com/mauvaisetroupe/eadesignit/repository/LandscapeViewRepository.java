@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface LandscapeViewRepository extends JpaRepository<LandscapeView, Long> {}
+public interface LandscapeViewRepository extends JpaRepository<LandscapeView, Long> {
+    LandscapeView findByDiagramName(String diagramName);
+}

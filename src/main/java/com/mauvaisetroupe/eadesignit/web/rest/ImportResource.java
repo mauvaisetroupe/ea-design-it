@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationImportService;
+import com.mauvaisetroupe.eadesignit.service.importfile.FlowImportService;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -21,13 +22,20 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImportResource {
 
     private final ApplicationImportService importService;
+    private final FlowImportService flowImportService;
 
-    public ImportResource(ApplicationImportService importService) {
+    public ImportResource(ApplicationImportService importService, FlowImportService flowImportService) {
         this.importService = importService;
+        this.flowImportService = flowImportService;
     }
 
     @PostMapping("/import/application/upload-file")
     public List<ApplicationImport> uploadFile(@RequestPart MultipartFile file) throws Exception {
         return importService.importExcel(file);
+    }
+
+    @PostMapping("/import/flow/upload-file")
+    public void uploadFlowsFile(@RequestPart MultipartFile file) throws Exception {
+        flowImportService.importExcel(file);
     }
 }
