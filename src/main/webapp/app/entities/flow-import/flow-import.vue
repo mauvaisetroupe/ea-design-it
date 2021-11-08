@@ -37,8 +37,10 @@
             <th scope="row"><span>Frequency</span></th>
             <th scope="row"><span>Format</span></th>
             <th scope="row"><span>Swagger</span></th>
-            <th scope="row"><span>Blueprint</span></th>
-            <th scope="row"><span>Blueprint Status</span></th>
+            <th scope="row"><span>Source URL Documentation</span></th>
+            <th scope="row"><span>Target URL Documentation</span></th>
+            <th scope="row"><span>Source Documentation Status</span></th>
+            <th scope="row"><span>Target Documentation Status</span></th>
             <th scope="row"><span>Flow Status</span></th>
             <th scope="row"><span>Comment</span></th>
             <th scope="row"><span>Document Name</span></th>
@@ -46,7 +48,6 @@
             <th scope="row"><span>Import Functional Flow Status</span></th>
             <th scope="row"><span>Import Data Flow Status</span></th>
             <th scope="row"><span>Import Status Message</span></th>
-            <th scope="row"><span>Existing Application ID</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -64,8 +65,10 @@
             <td>{{ flowImport.frequency }}</td>
             <td>{{ flowImport.format }}</td>
             <td>{{ flowImport.swagger }}</td>
-            <td>{{ flowImport.blueprint }}</td>
-            <td>{{ flowImport.blueprintStatus }}</td>
+            <td>{{ flowImport.sourceURLDocumentation }}</td>
+            <td>{{ flowImport.targetURLDocumentation }}</td>
+            <td>{{ flowImport.sourceDocumentationStatus }}</td>
+            <td>{{ flowImport.targetDocumentationStatus }}</td>
             <td>{{ flowImport.flowStatus }}</td>
             <td>{{ flowImport.comment }}</td>
             <td>{{ flowImport.documentName }}</td>
@@ -73,7 +76,6 @@
             <td>{{ flowImport.importFunctionalFlowStatus }}</td>
             <td>{{ flowImport.importDataFlowStatus }}</td>
             <td>{{ flowImport.importStatusMessage }}</td>
-            <td>{{ flowImport.existingApplicationID }}</td>
             <td class="text-right">
               <div class="btn-group">
                 <router-link :to="{ name: 'FlowImportView', params: { flowImportId: flowImport.id } }" custom v-slot="{ navigate }">

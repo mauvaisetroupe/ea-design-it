@@ -117,27 +117,57 @@
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="flow-import-blueprint">Blueprint</label>
+            <label class="form-control-label" for="flow-import-sourceURLDocumentation">Source URL Documentation</label>
             <input
               type="text"
               class="form-control"
-              name="blueprint"
-              id="flow-import-blueprint"
-              data-cy="blueprint"
-              :class="{ valid: !$v.flowImport.blueprint.$invalid, invalid: $v.flowImport.blueprint.$invalid }"
-              v-model="$v.flowImport.blueprint.$model"
+              name="sourceURLDocumentation"
+              id="flow-import-sourceURLDocumentation"
+              data-cy="sourceURLDocumentation"
+              :class="{ valid: !$v.flowImport.sourceURLDocumentation.$invalid, invalid: $v.flowImport.sourceURLDocumentation.$invalid }"
+              v-model="$v.flowImport.sourceURLDocumentation.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="flow-import-blueprintStatus">Blueprint Status</label>
+            <label class="form-control-label" for="flow-import-targetURLDocumentation">Target URL Documentation</label>
             <input
               type="text"
               class="form-control"
-              name="blueprintStatus"
-              id="flow-import-blueprintStatus"
-              data-cy="blueprintStatus"
-              :class="{ valid: !$v.flowImport.blueprintStatus.$invalid, invalid: $v.flowImport.blueprintStatus.$invalid }"
-              v-model="$v.flowImport.blueprintStatus.$model"
+              name="targetURLDocumentation"
+              id="flow-import-targetURLDocumentation"
+              data-cy="targetURLDocumentation"
+              :class="{ valid: !$v.flowImport.targetURLDocumentation.$invalid, invalid: $v.flowImport.targetURLDocumentation.$invalid }"
+              v-model="$v.flowImport.targetURLDocumentation.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="flow-import-sourceDocumentationStatus">Source Documentation Status</label>
+            <input
+              type="text"
+              class="form-control"
+              name="sourceDocumentationStatus"
+              id="flow-import-sourceDocumentationStatus"
+              data-cy="sourceDocumentationStatus"
+              :class="{
+                valid: !$v.flowImport.sourceDocumentationStatus.$invalid,
+                invalid: $v.flowImport.sourceDocumentationStatus.$invalid,
+              }"
+              v-model="$v.flowImport.sourceDocumentationStatus.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="flow-import-targetDocumentationStatus">Target Documentation Status</label>
+            <input
+              type="text"
+              class="form-control"
+              name="targetDocumentationStatus"
+              id="flow-import-targetDocumentationStatus"
+              data-cy="targetDocumentationStatus"
+              :class="{
+                valid: !$v.flowImport.targetDocumentationStatus.$invalid,
+                invalid: $v.flowImport.targetDocumentationStatus.$invalid,
+              }"
+              v-model="$v.flowImport.targetDocumentationStatus.$model"
             />
           </div>
           <div class="form-group">
@@ -228,18 +258,6 @@
               data-cy="importStatusMessage"
               :class="{ valid: !$v.flowImport.importStatusMessage.$invalid, invalid: $v.flowImport.importStatusMessage.$invalid }"
               v-model="$v.flowImport.importStatusMessage.$model"
-            />
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="flow-import-existingApplicationID">Existing Application ID</label>
-            <input
-              type="text"
-              class="form-control"
-              name="existingApplicationID"
-              id="flow-import-existingApplicationID"
-              data-cy="existingApplicationID"
-              :class="{ valid: !$v.flowImport.existingApplicationID.$invalid, invalid: $v.flowImport.existingApplicationID.$invalid }"
-              v-model="$v.flowImport.existingApplicationID.$model"
             />
           </div>
         </div>

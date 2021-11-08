@@ -10,8 +10,10 @@ export interface IFlowImport {
   frequency?: string | null;
   format?: string | null;
   swagger?: string | null;
-  blueprint?: string | null;
-  blueprintStatus?: string | null;
+  sourceURLDocumentation?: string | null;
+  targetURLDocumentation?: string | null;
+  sourceDocumentationStatus?: string | null;
+  targetDocumentationStatus?: string | null;
   flowStatus?: string | null;
   comment?: string | null;
   documentName?: string | null;
@@ -19,7 +21,6 @@ export interface IFlowImport {
   importFunctionalFlowStatus?: ImportStatus | null;
   importDataFlowStatus?: ImportStatus | null;
   importStatusMessage?: string | null;
-  existingApplicationID?: string | null;
 }
 
 export class FlowImport implements IFlowImport {
@@ -34,15 +35,16 @@ export class FlowImport implements IFlowImport {
     public frequency?: string | null,
     public format?: string | null,
     public swagger?: string | null,
-    public blueprint?: string | null,
-    public blueprintStatus?: string | null,
+    public sourceURLDocumentation?: string | null,
+    public targetURLDocumentation?: string | null,
+    public sourceDocumentationStatus?: string | null,
+    public targetDocumentationStatus?: string | null,
     public flowStatus?: string | null,
     public comment?: string | null,
     public documentName?: string | null,
     public importInterfaceStatus?: ImportStatus | null,
     public importFunctionalFlowStatus?: ImportStatus | null,
     public importDataFlowStatus?: ImportStatus | null,
-    public importStatusMessage?: string | null,
-    public existingApplicationID?: string | null
+    public importStatusMessage?: string | null
   ) {}
 }

@@ -17,8 +17,10 @@ const validations: any = {
     frequency: {},
     format: {},
     swagger: {},
-    blueprint: {},
-    blueprintStatus: {},
+    sourceURLDocumentation: {},
+    targetURLDocumentation: {},
+    sourceDocumentationStatus: {},
+    targetDocumentationStatus: {},
     flowStatus: {},
     comment: {},
     documentName: {},
@@ -26,7 +28,6 @@ const validations: any = {
     importFunctionalFlowStatus: {},
     importDataFlowStatus: {},
     importStatusMessage: {},
-    existingApplicationID: {},
   },
 };
 

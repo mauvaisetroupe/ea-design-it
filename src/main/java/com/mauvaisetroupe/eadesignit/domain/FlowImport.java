@@ -49,11 +49,17 @@ public class FlowImport implements Serializable {
     @Column(name = "swagger")
     private String swagger;
 
-    @Column(name = "blueprint")
-    private String blueprint;
+    @Column(name = "source_url_documentation")
+    private String sourceURLDocumentation;
 
-    @Column(name = "blueprint_status")
-    private String blueprintStatus;
+    @Column(name = "target_url_documentation")
+    private String targetURLDocumentation;
+
+    @Column(name = "source_documentation_status")
+    private String sourceDocumentationStatus;
+
+    @Column(name = "target_documentation_status")
+    private String targetDocumentationStatus;
 
     @Column(name = "flow_status")
     private String flowStatus;
@@ -78,9 +84,6 @@ public class FlowImport implements Serializable {
 
     @Column(name = "import_status_message")
     private String importStatusMessage;
-
-    @Column(name = "existing_application_id")
-    private String existingApplicationID;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -214,30 +217,56 @@ public class FlowImport implements Serializable {
         this.swagger = swagger;
     }
 
-    public String getBlueprint() {
-        return this.blueprint;
+    public String getSourceURLDocumentation() {
+        return this.sourceURLDocumentation;
     }
 
-    public FlowImport blueprint(String blueprint) {
-        this.setBlueprint(blueprint);
+    public FlowImport sourceURLDocumentation(String sourceURLDocumentation) {
+        this.setSourceURLDocumentation(sourceURLDocumentation);
         return this;
     }
 
-    public void setBlueprint(String blueprint) {
-        this.blueprint = blueprint;
+    public void setSourceURLDocumentation(String sourceURLDocumentation) {
+        this.sourceURLDocumentation = sourceURLDocumentation;
     }
 
-    public String getBlueprintStatus() {
-        return this.blueprintStatus;
+    public String getTargetURLDocumentation() {
+        return this.targetURLDocumentation;
     }
 
-    public FlowImport blueprintStatus(String blueprintStatus) {
-        this.setBlueprintStatus(blueprintStatus);
+    public FlowImport targetURLDocumentation(String targetURLDocumentation) {
+        this.setTargetURLDocumentation(targetURLDocumentation);
         return this;
     }
 
-    public void setBlueprintStatus(String blueprintStatus) {
-        this.blueprintStatus = blueprintStatus;
+    public void setTargetURLDocumentation(String targetURLDocumentation) {
+        this.targetURLDocumentation = targetURLDocumentation;
+    }
+
+    public String getSourceDocumentationStatus() {
+        return this.sourceDocumentationStatus;
+    }
+
+    public FlowImport sourceDocumentationStatus(String sourceDocumentationStatus) {
+        this.setSourceDocumentationStatus(sourceDocumentationStatus);
+        return this;
+    }
+
+    public void setSourceDocumentationStatus(String sourceDocumentationStatus) {
+        this.sourceDocumentationStatus = sourceDocumentationStatus;
+    }
+
+    public String getTargetDocumentationStatus() {
+        return this.targetDocumentationStatus;
+    }
+
+    public FlowImport targetDocumentationStatus(String targetDocumentationStatus) {
+        this.setTargetDocumentationStatus(targetDocumentationStatus);
+        return this;
+    }
+
+    public void setTargetDocumentationStatus(String targetDocumentationStatus) {
+        this.targetDocumentationStatus = targetDocumentationStatus;
     }
 
     public String getFlowStatus() {
@@ -331,19 +360,6 @@ public class FlowImport implements Serializable {
         this.importStatusMessage = importStatusMessage;
     }
 
-    public String getExistingApplicationID() {
-        return this.existingApplicationID;
-    }
-
-    public FlowImport existingApplicationID(String existingApplicationID) {
-        this.setExistingApplicationID(existingApplicationID);
-        return this;
-    }
-
-    public void setExistingApplicationID(String existingApplicationID) {
-        this.existingApplicationID = existingApplicationID;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -377,8 +393,10 @@ public class FlowImport implements Serializable {
             ", frequency='" + getFrequency() + "'" +
             ", format='" + getFormat() + "'" +
             ", swagger='" + getSwagger() + "'" +
-            ", blueprint='" + getBlueprint() + "'" +
-            ", blueprintStatus='" + getBlueprintStatus() + "'" +
+            ", sourceURLDocumentation='" + getSourceURLDocumentation() + "'" +
+            ", targetURLDocumentation='" + getTargetURLDocumentation() + "'" +
+            ", sourceDocumentationStatus='" + getSourceDocumentationStatus() + "'" +
+            ", targetDocumentationStatus='" + getTargetDocumentationStatus() + "'" +
             ", flowStatus='" + getFlowStatus() + "'" +
             ", comment='" + getComment() + "'" +
             ", documentName='" + getDocumentName() + "'" +
@@ -386,7 +404,6 @@ public class FlowImport implements Serializable {
             ", importFunctionalFlowStatus='" + getImportFunctionalFlowStatus() + "'" +
             ", importDataFlowStatus='" + getImportDataFlowStatus() + "'" +
             ", importStatusMessage='" + getImportStatusMessage() + "'" +
-            ", existingApplicationID='" + getExistingApplicationID() + "'" +
             "}";
     }
 }

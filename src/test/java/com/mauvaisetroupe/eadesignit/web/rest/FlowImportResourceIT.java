@@ -59,11 +59,17 @@ class FlowImportResourceIT {
     private static final String DEFAULT_SWAGGER = "AAAAAAAAAA";
     private static final String UPDATED_SWAGGER = "BBBBBBBBBB";
 
-    private static final String DEFAULT_BLUEPRINT = "AAAAAAAAAA";
-    private static final String UPDATED_BLUEPRINT = "BBBBBBBBBB";
+    private static final String DEFAULT_SOURCE_URL_DOCUMENTATION = "AAAAAAAAAA";
+    private static final String UPDATED_SOURCE_URL_DOCUMENTATION = "BBBBBBBBBB";
 
-    private static final String DEFAULT_BLUEPRINT_STATUS = "AAAAAAAAAA";
-    private static final String UPDATED_BLUEPRINT_STATUS = "BBBBBBBBBB";
+    private static final String DEFAULT_TARGET_URL_DOCUMENTATION = "AAAAAAAAAA";
+    private static final String UPDATED_TARGET_URL_DOCUMENTATION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SOURCE_DOCUMENTATION_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_SOURCE_DOCUMENTATION_STATUS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_TARGET_DOCUMENTATION_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_TARGET_DOCUMENTATION_STATUS = "BBBBBBBBBB";
 
     private static final String DEFAULT_FLOW_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_FLOW_STATUS = "BBBBBBBBBB";
@@ -85,9 +91,6 @@ class FlowImportResourceIT {
 
     private static final String DEFAULT_IMPORT_STATUS_MESSAGE = "AAAAAAAAAA";
     private static final String UPDATED_IMPORT_STATUS_MESSAGE = "BBBBBBBBBB";
-
-    private static final String DEFAULT_EXISTING_APPLICATION_ID = "AAAAAAAAAA";
-    private static final String UPDATED_EXISTING_APPLICATION_ID = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/flow-imports";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -123,16 +126,17 @@ class FlowImportResourceIT {
             .frequency(DEFAULT_FREQUENCY)
             .format(DEFAULT_FORMAT)
             .swagger(DEFAULT_SWAGGER)
-            .blueprint(DEFAULT_BLUEPRINT)
-            .blueprintStatus(DEFAULT_BLUEPRINT_STATUS)
+            .sourceURLDocumentation(DEFAULT_SOURCE_URL_DOCUMENTATION)
+            .targetURLDocumentation(DEFAULT_TARGET_URL_DOCUMENTATION)
+            .sourceDocumentationStatus(DEFAULT_SOURCE_DOCUMENTATION_STATUS)
+            .targetDocumentationStatus(DEFAULT_TARGET_DOCUMENTATION_STATUS)
             .flowStatus(DEFAULT_FLOW_STATUS)
             .comment(DEFAULT_COMMENT)
             .documentName(DEFAULT_DOCUMENT_NAME)
             .importInterfaceStatus(DEFAULT_IMPORT_INTERFACE_STATUS)
             .importFunctionalFlowStatus(DEFAULT_IMPORT_FUNCTIONAL_FLOW_STATUS)
             .importDataFlowStatus(DEFAULT_IMPORT_DATA_FLOW_STATUS)
-            .importStatusMessage(DEFAULT_IMPORT_STATUS_MESSAGE)
-            .existingApplicationID(DEFAULT_EXISTING_APPLICATION_ID);
+            .importStatusMessage(DEFAULT_IMPORT_STATUS_MESSAGE);
         return flowImport;
     }
 
@@ -153,16 +157,17 @@ class FlowImportResourceIT {
             .frequency(UPDATED_FREQUENCY)
             .format(UPDATED_FORMAT)
             .swagger(UPDATED_SWAGGER)
-            .blueprint(UPDATED_BLUEPRINT)
-            .blueprintStatus(UPDATED_BLUEPRINT_STATUS)
+            .sourceURLDocumentation(UPDATED_SOURCE_URL_DOCUMENTATION)
+            .targetURLDocumentation(UPDATED_TARGET_URL_DOCUMENTATION)
+            .sourceDocumentationStatus(UPDATED_SOURCE_DOCUMENTATION_STATUS)
+            .targetDocumentationStatus(UPDATED_TARGET_DOCUMENTATION_STATUS)
             .flowStatus(UPDATED_FLOW_STATUS)
             .comment(UPDATED_COMMENT)
             .documentName(UPDATED_DOCUMENT_NAME)
             .importInterfaceStatus(UPDATED_IMPORT_INTERFACE_STATUS)
             .importFunctionalFlowStatus(UPDATED_IMPORT_FUNCTIONAL_FLOW_STATUS)
             .importDataFlowStatus(UPDATED_IMPORT_DATA_FLOW_STATUS)
-            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE)
-            .existingApplicationID(UPDATED_EXISTING_APPLICATION_ID);
+            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE);
         return flowImport;
     }
 
@@ -193,8 +198,10 @@ class FlowImportResourceIT {
         assertThat(testFlowImport.getFrequency()).isEqualTo(DEFAULT_FREQUENCY);
         assertThat(testFlowImport.getFormat()).isEqualTo(DEFAULT_FORMAT);
         assertThat(testFlowImport.getSwagger()).isEqualTo(DEFAULT_SWAGGER);
-        assertThat(testFlowImport.getBlueprint()).isEqualTo(DEFAULT_BLUEPRINT);
-        assertThat(testFlowImport.getBlueprintStatus()).isEqualTo(DEFAULT_BLUEPRINT_STATUS);
+        assertThat(testFlowImport.getSourceURLDocumentation()).isEqualTo(DEFAULT_SOURCE_URL_DOCUMENTATION);
+        assertThat(testFlowImport.getTargetURLDocumentation()).isEqualTo(DEFAULT_TARGET_URL_DOCUMENTATION);
+        assertThat(testFlowImport.getSourceDocumentationStatus()).isEqualTo(DEFAULT_SOURCE_DOCUMENTATION_STATUS);
+        assertThat(testFlowImport.getTargetDocumentationStatus()).isEqualTo(DEFAULT_TARGET_DOCUMENTATION_STATUS);
         assertThat(testFlowImport.getFlowStatus()).isEqualTo(DEFAULT_FLOW_STATUS);
         assertThat(testFlowImport.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testFlowImport.getDocumentName()).isEqualTo(DEFAULT_DOCUMENT_NAME);
@@ -202,7 +209,6 @@ class FlowImportResourceIT {
         assertThat(testFlowImport.getImportFunctionalFlowStatus()).isEqualTo(DEFAULT_IMPORT_FUNCTIONAL_FLOW_STATUS);
         assertThat(testFlowImport.getImportDataFlowStatus()).isEqualTo(DEFAULT_IMPORT_DATA_FLOW_STATUS);
         assertThat(testFlowImport.getImportStatusMessage()).isEqualTo(DEFAULT_IMPORT_STATUS_MESSAGE);
-        assertThat(testFlowImport.getExistingApplicationID()).isEqualTo(DEFAULT_EXISTING_APPLICATION_ID);
     }
 
     @Test
@@ -244,16 +250,17 @@ class FlowImportResourceIT {
             .andExpect(jsonPath("$.[*].frequency").value(hasItem(DEFAULT_FREQUENCY)))
             .andExpect(jsonPath("$.[*].format").value(hasItem(DEFAULT_FORMAT)))
             .andExpect(jsonPath("$.[*].swagger").value(hasItem(DEFAULT_SWAGGER)))
-            .andExpect(jsonPath("$.[*].blueprint").value(hasItem(DEFAULT_BLUEPRINT)))
-            .andExpect(jsonPath("$.[*].blueprintStatus").value(hasItem(DEFAULT_BLUEPRINT_STATUS)))
+            .andExpect(jsonPath("$.[*].sourceURLDocumentation").value(hasItem(DEFAULT_SOURCE_URL_DOCUMENTATION)))
+            .andExpect(jsonPath("$.[*].targetURLDocumentation").value(hasItem(DEFAULT_TARGET_URL_DOCUMENTATION)))
+            .andExpect(jsonPath("$.[*].sourceDocumentationStatus").value(hasItem(DEFAULT_SOURCE_DOCUMENTATION_STATUS)))
+            .andExpect(jsonPath("$.[*].targetDocumentationStatus").value(hasItem(DEFAULT_TARGET_DOCUMENTATION_STATUS)))
             .andExpect(jsonPath("$.[*].flowStatus").value(hasItem(DEFAULT_FLOW_STATUS)))
             .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)))
             .andExpect(jsonPath("$.[*].documentName").value(hasItem(DEFAULT_DOCUMENT_NAME)))
             .andExpect(jsonPath("$.[*].importInterfaceStatus").value(hasItem(DEFAULT_IMPORT_INTERFACE_STATUS.toString())))
             .andExpect(jsonPath("$.[*].importFunctionalFlowStatus").value(hasItem(DEFAULT_IMPORT_FUNCTIONAL_FLOW_STATUS.toString())))
             .andExpect(jsonPath("$.[*].importDataFlowStatus").value(hasItem(DEFAULT_IMPORT_DATA_FLOW_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].importStatusMessage").value(hasItem(DEFAULT_IMPORT_STATUS_MESSAGE)))
-            .andExpect(jsonPath("$.[*].existingApplicationID").value(hasItem(DEFAULT_EXISTING_APPLICATION_ID)));
+            .andExpect(jsonPath("$.[*].importStatusMessage").value(hasItem(DEFAULT_IMPORT_STATUS_MESSAGE)));
     }
 
     @Test
@@ -277,16 +284,17 @@ class FlowImportResourceIT {
             .andExpect(jsonPath("$.frequency").value(DEFAULT_FREQUENCY))
             .andExpect(jsonPath("$.format").value(DEFAULT_FORMAT))
             .andExpect(jsonPath("$.swagger").value(DEFAULT_SWAGGER))
-            .andExpect(jsonPath("$.blueprint").value(DEFAULT_BLUEPRINT))
-            .andExpect(jsonPath("$.blueprintStatus").value(DEFAULT_BLUEPRINT_STATUS))
+            .andExpect(jsonPath("$.sourceURLDocumentation").value(DEFAULT_SOURCE_URL_DOCUMENTATION))
+            .andExpect(jsonPath("$.targetURLDocumentation").value(DEFAULT_TARGET_URL_DOCUMENTATION))
+            .andExpect(jsonPath("$.sourceDocumentationStatus").value(DEFAULT_SOURCE_DOCUMENTATION_STATUS))
+            .andExpect(jsonPath("$.targetDocumentationStatus").value(DEFAULT_TARGET_DOCUMENTATION_STATUS))
             .andExpect(jsonPath("$.flowStatus").value(DEFAULT_FLOW_STATUS))
             .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT))
             .andExpect(jsonPath("$.documentName").value(DEFAULT_DOCUMENT_NAME))
             .andExpect(jsonPath("$.importInterfaceStatus").value(DEFAULT_IMPORT_INTERFACE_STATUS.toString()))
             .andExpect(jsonPath("$.importFunctionalFlowStatus").value(DEFAULT_IMPORT_FUNCTIONAL_FLOW_STATUS.toString()))
             .andExpect(jsonPath("$.importDataFlowStatus").value(DEFAULT_IMPORT_DATA_FLOW_STATUS.toString()))
-            .andExpect(jsonPath("$.importStatusMessage").value(DEFAULT_IMPORT_STATUS_MESSAGE))
-            .andExpect(jsonPath("$.existingApplicationID").value(DEFAULT_EXISTING_APPLICATION_ID));
+            .andExpect(jsonPath("$.importStatusMessage").value(DEFAULT_IMPORT_STATUS_MESSAGE));
     }
 
     @Test
@@ -318,16 +326,17 @@ class FlowImportResourceIT {
             .frequency(UPDATED_FREQUENCY)
             .format(UPDATED_FORMAT)
             .swagger(UPDATED_SWAGGER)
-            .blueprint(UPDATED_BLUEPRINT)
-            .blueprintStatus(UPDATED_BLUEPRINT_STATUS)
+            .sourceURLDocumentation(UPDATED_SOURCE_URL_DOCUMENTATION)
+            .targetURLDocumentation(UPDATED_TARGET_URL_DOCUMENTATION)
+            .sourceDocumentationStatus(UPDATED_SOURCE_DOCUMENTATION_STATUS)
+            .targetDocumentationStatus(UPDATED_TARGET_DOCUMENTATION_STATUS)
             .flowStatus(UPDATED_FLOW_STATUS)
             .comment(UPDATED_COMMENT)
             .documentName(UPDATED_DOCUMENT_NAME)
             .importInterfaceStatus(UPDATED_IMPORT_INTERFACE_STATUS)
             .importFunctionalFlowStatus(UPDATED_IMPORT_FUNCTIONAL_FLOW_STATUS)
             .importDataFlowStatus(UPDATED_IMPORT_DATA_FLOW_STATUS)
-            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE)
-            .existingApplicationID(UPDATED_EXISTING_APPLICATION_ID);
+            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE);
 
         restFlowImportMockMvc
             .perform(
@@ -350,8 +359,10 @@ class FlowImportResourceIT {
         assertThat(testFlowImport.getFrequency()).isEqualTo(UPDATED_FREQUENCY);
         assertThat(testFlowImport.getFormat()).isEqualTo(UPDATED_FORMAT);
         assertThat(testFlowImport.getSwagger()).isEqualTo(UPDATED_SWAGGER);
-        assertThat(testFlowImport.getBlueprint()).isEqualTo(UPDATED_BLUEPRINT);
-        assertThat(testFlowImport.getBlueprintStatus()).isEqualTo(UPDATED_BLUEPRINT_STATUS);
+        assertThat(testFlowImport.getSourceURLDocumentation()).isEqualTo(UPDATED_SOURCE_URL_DOCUMENTATION);
+        assertThat(testFlowImport.getTargetURLDocumentation()).isEqualTo(UPDATED_TARGET_URL_DOCUMENTATION);
+        assertThat(testFlowImport.getSourceDocumentationStatus()).isEqualTo(UPDATED_SOURCE_DOCUMENTATION_STATUS);
+        assertThat(testFlowImport.getTargetDocumentationStatus()).isEqualTo(UPDATED_TARGET_DOCUMENTATION_STATUS);
         assertThat(testFlowImport.getFlowStatus()).isEqualTo(UPDATED_FLOW_STATUS);
         assertThat(testFlowImport.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testFlowImport.getDocumentName()).isEqualTo(UPDATED_DOCUMENT_NAME);
@@ -359,7 +370,6 @@ class FlowImportResourceIT {
         assertThat(testFlowImport.getImportFunctionalFlowStatus()).isEqualTo(UPDATED_IMPORT_FUNCTIONAL_FLOW_STATUS);
         assertThat(testFlowImport.getImportDataFlowStatus()).isEqualTo(UPDATED_IMPORT_DATA_FLOW_STATUS);
         assertThat(testFlowImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
-        assertThat(testFlowImport.getExistingApplicationID()).isEqualTo(UPDATED_EXISTING_APPLICATION_ID);
     }
 
     @Test
@@ -434,11 +444,12 @@ class FlowImportResourceIT {
             .idFlowFromExcel(UPDATED_ID_FLOW_FROM_EXCEL)
             .sourceElement(UPDATED_SOURCE_ELEMENT)
             .swagger(UPDATED_SWAGGER)
-            .flowStatus(UPDATED_FLOW_STATUS)
+            .sourceDocumentationStatus(UPDATED_SOURCE_DOCUMENTATION_STATUS)
+            .comment(UPDATED_COMMENT)
             .importInterfaceStatus(UPDATED_IMPORT_INTERFACE_STATUS)
+            .importFunctionalFlowStatus(UPDATED_IMPORT_FUNCTIONAL_FLOW_STATUS)
             .importDataFlowStatus(UPDATED_IMPORT_DATA_FLOW_STATUS)
-            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE)
-            .existingApplicationID(UPDATED_EXISTING_APPLICATION_ID);
+            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE);
 
         restFlowImportMockMvc
             .perform(
@@ -461,16 +472,17 @@ class FlowImportResourceIT {
         assertThat(testFlowImport.getFrequency()).isEqualTo(DEFAULT_FREQUENCY);
         assertThat(testFlowImport.getFormat()).isEqualTo(DEFAULT_FORMAT);
         assertThat(testFlowImport.getSwagger()).isEqualTo(UPDATED_SWAGGER);
-        assertThat(testFlowImport.getBlueprint()).isEqualTo(DEFAULT_BLUEPRINT);
-        assertThat(testFlowImport.getBlueprintStatus()).isEqualTo(DEFAULT_BLUEPRINT_STATUS);
-        assertThat(testFlowImport.getFlowStatus()).isEqualTo(UPDATED_FLOW_STATUS);
-        assertThat(testFlowImport.getComment()).isEqualTo(DEFAULT_COMMENT);
+        assertThat(testFlowImport.getSourceURLDocumentation()).isEqualTo(DEFAULT_SOURCE_URL_DOCUMENTATION);
+        assertThat(testFlowImport.getTargetURLDocumentation()).isEqualTo(DEFAULT_TARGET_URL_DOCUMENTATION);
+        assertThat(testFlowImport.getSourceDocumentationStatus()).isEqualTo(UPDATED_SOURCE_DOCUMENTATION_STATUS);
+        assertThat(testFlowImport.getTargetDocumentationStatus()).isEqualTo(DEFAULT_TARGET_DOCUMENTATION_STATUS);
+        assertThat(testFlowImport.getFlowStatus()).isEqualTo(DEFAULT_FLOW_STATUS);
+        assertThat(testFlowImport.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testFlowImport.getDocumentName()).isEqualTo(DEFAULT_DOCUMENT_NAME);
         assertThat(testFlowImport.getImportInterfaceStatus()).isEqualTo(UPDATED_IMPORT_INTERFACE_STATUS);
-        assertThat(testFlowImport.getImportFunctionalFlowStatus()).isEqualTo(DEFAULT_IMPORT_FUNCTIONAL_FLOW_STATUS);
+        assertThat(testFlowImport.getImportFunctionalFlowStatus()).isEqualTo(UPDATED_IMPORT_FUNCTIONAL_FLOW_STATUS);
         assertThat(testFlowImport.getImportDataFlowStatus()).isEqualTo(UPDATED_IMPORT_DATA_FLOW_STATUS);
         assertThat(testFlowImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
-        assertThat(testFlowImport.getExistingApplicationID()).isEqualTo(UPDATED_EXISTING_APPLICATION_ID);
     }
 
     @Test
@@ -495,16 +507,17 @@ class FlowImportResourceIT {
             .frequency(UPDATED_FREQUENCY)
             .format(UPDATED_FORMAT)
             .swagger(UPDATED_SWAGGER)
-            .blueprint(UPDATED_BLUEPRINT)
-            .blueprintStatus(UPDATED_BLUEPRINT_STATUS)
+            .sourceURLDocumentation(UPDATED_SOURCE_URL_DOCUMENTATION)
+            .targetURLDocumentation(UPDATED_TARGET_URL_DOCUMENTATION)
+            .sourceDocumentationStatus(UPDATED_SOURCE_DOCUMENTATION_STATUS)
+            .targetDocumentationStatus(UPDATED_TARGET_DOCUMENTATION_STATUS)
             .flowStatus(UPDATED_FLOW_STATUS)
             .comment(UPDATED_COMMENT)
             .documentName(UPDATED_DOCUMENT_NAME)
             .importInterfaceStatus(UPDATED_IMPORT_INTERFACE_STATUS)
             .importFunctionalFlowStatus(UPDATED_IMPORT_FUNCTIONAL_FLOW_STATUS)
             .importDataFlowStatus(UPDATED_IMPORT_DATA_FLOW_STATUS)
-            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE)
-            .existingApplicationID(UPDATED_EXISTING_APPLICATION_ID);
+            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE);
 
         restFlowImportMockMvc
             .perform(
@@ -527,8 +540,10 @@ class FlowImportResourceIT {
         assertThat(testFlowImport.getFrequency()).isEqualTo(UPDATED_FREQUENCY);
         assertThat(testFlowImport.getFormat()).isEqualTo(UPDATED_FORMAT);
         assertThat(testFlowImport.getSwagger()).isEqualTo(UPDATED_SWAGGER);
-        assertThat(testFlowImport.getBlueprint()).isEqualTo(UPDATED_BLUEPRINT);
-        assertThat(testFlowImport.getBlueprintStatus()).isEqualTo(UPDATED_BLUEPRINT_STATUS);
+        assertThat(testFlowImport.getSourceURLDocumentation()).isEqualTo(UPDATED_SOURCE_URL_DOCUMENTATION);
+        assertThat(testFlowImport.getTargetURLDocumentation()).isEqualTo(UPDATED_TARGET_URL_DOCUMENTATION);
+        assertThat(testFlowImport.getSourceDocumentationStatus()).isEqualTo(UPDATED_SOURCE_DOCUMENTATION_STATUS);
+        assertThat(testFlowImport.getTargetDocumentationStatus()).isEqualTo(UPDATED_TARGET_DOCUMENTATION_STATUS);
         assertThat(testFlowImport.getFlowStatus()).isEqualTo(UPDATED_FLOW_STATUS);
         assertThat(testFlowImport.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testFlowImport.getDocumentName()).isEqualTo(UPDATED_DOCUMENT_NAME);
@@ -536,7 +551,6 @@ class FlowImportResourceIT {
         assertThat(testFlowImport.getImportFunctionalFlowStatus()).isEqualTo(UPDATED_IMPORT_FUNCTIONAL_FLOW_STATUS);
         assertThat(testFlowImport.getImportDataFlowStatus()).isEqualTo(UPDATED_IMPORT_DATA_FLOW_STATUS);
         assertThat(testFlowImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
-        assertThat(testFlowImport.getExistingApplicationID()).isEqualTo(UPDATED_EXISTING_APPLICATION_ID);
     }
 
     @Test

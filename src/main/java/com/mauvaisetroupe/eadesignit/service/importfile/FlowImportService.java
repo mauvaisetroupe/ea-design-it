@@ -37,16 +37,16 @@ public class FlowImportService {
     private static final String FLOW_FREQUENCY = "Frequency";
     private static final String FLOW_FORMAT = "Format";
     private static final String FLOW_SWAGGER = "Swagger";
-    private static final String FLOW_BLUEPRINT = "Blueprint";
-    private static final String FLOW_BLUEPRINT_STATUS = "Status Blueprint";
+    private static final String FLOW_BLUEPRINT_SOURCE = "Blueprint From Source";
+    private static final String FLOW_BLUEPRINT_TARGET = "Blueprint From Target";
+    private static final String FLOW_BLUEPRINT_SOURCE_STATUS = "Status Blueprint From Source";
+    private static final String FLOW_BLUEPRINT_TARGET_STATUS = "Status Blueprint From Target";
     private static final String FLOW_STATUS_FLOW = "Status flow";
     private static final String FLOW_COMMENT = "Comment";
     private static final String FLOW_ADD_CORRESPONDENT_ID = "ADD correspondent ID";
     private static final String FLOW_CHECK_COLUMN_1 = "Source Element in application list";
     private static final String FLOW_CHECK_COLUMN_2 = "Target Element in application list";
     private static final String FLOW_CHECK_COLUMN_3 = "Integration pattern in pattern list";
-    private static final String FLOW_CHECK_COLUMN_4 = "Status Blueprint in status list";
-    private static final String FLOW_CHECK_COLUMN_5 = "Status flow in status list";
 
     private final List<String> columnsArray = new ArrayList<String>();
 
@@ -85,16 +85,16 @@ public class FlowImportService {
         this.columnsArray.add(FLOW_FREQUENCY);
         this.columnsArray.add(FLOW_FORMAT);
         this.columnsArray.add(FLOW_SWAGGER);
-        this.columnsArray.add(FLOW_BLUEPRINT);
-        this.columnsArray.add(FLOW_BLUEPRINT_STATUS);
+        this.columnsArray.add(FLOW_BLUEPRINT_SOURCE);
+        this.columnsArray.add(FLOW_BLUEPRINT_TARGET);
+        this.columnsArray.add(FLOW_BLUEPRINT_SOURCE_STATUS);
+        this.columnsArray.add(FLOW_BLUEPRINT_TARGET_STATUS);
         this.columnsArray.add(FLOW_STATUS_FLOW);
         this.columnsArray.add(FLOW_COMMENT);
         this.columnsArray.add(FLOW_ADD_CORRESPONDENT_ID);
         this.columnsArray.add(FLOW_CHECK_COLUMN_1);
         this.columnsArray.add(FLOW_CHECK_COLUMN_2);
         this.columnsArray.add(FLOW_CHECK_COLUMN_3);
-        this.columnsArray.add(FLOW_CHECK_COLUMN_4);
-        this.columnsArray.add(FLOW_CHECK_COLUMN_5);
     }
 
     public List<FlowImport> importExcel(MultipartFile file) throws Exception {
@@ -186,8 +186,10 @@ public class FlowImportService {
         flowImport.setFrequency((String) map.get(FLOW_FREQUENCY));
         flowImport.setFormat((String) map.get(FLOW_FORMAT));
         flowImport.setSwagger((String) map.get(FLOW_SWAGGER));
-        flowImport.setBlueprint((String) map.get(FLOW_BLUEPRINT));
-        flowImport.setBlueprintStatus((String) map.get(FLOW_BLUEPRINT_STATUS));
+        flowImport.setSourceURLDocumentation((String) map.get(FLOW_BLUEPRINT_SOURCE));
+        flowImport.setTargetURLDocumentation((String) map.get(FLOW_BLUEPRINT_TARGET));
+        flowImport.setSourceDocumentationStatus((String) map.get(FLOW_BLUEPRINT_SOURCE_STATUS));
+        flowImport.setTargetDocumentationStatus((String) map.get(FLOW_BLUEPRINT_TARGET_STATUS));
         flowImport.setFlowStatus((String) map.get(FLOW_STATUS_FLOW));
         flowImport.setComment((String) map.get(FLOW_COMMENT));
         flowImport.setDocumentName((String) map.get(FLOW_ADD_CORRESPONDENT_ID));

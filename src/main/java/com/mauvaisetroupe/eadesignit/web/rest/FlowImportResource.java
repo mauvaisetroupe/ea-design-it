@@ -150,11 +150,17 @@ public class FlowImportResource {
                 if (flowImport.getSwagger() != null) {
                     existingFlowImport.setSwagger(flowImport.getSwagger());
                 }
-                if (flowImport.getBlueprint() != null) {
-                    existingFlowImport.setBlueprint(flowImport.getBlueprint());
+                if (flowImport.getSourceURLDocumentation() != null) {
+                    existingFlowImport.setSourceURLDocumentation(flowImport.getSourceURLDocumentation());
                 }
-                if (flowImport.getBlueprintStatus() != null) {
-                    existingFlowImport.setBlueprintStatus(flowImport.getBlueprintStatus());
+                if (flowImport.getTargetURLDocumentation() != null) {
+                    existingFlowImport.setTargetURLDocumentation(flowImport.getTargetURLDocumentation());
+                }
+                if (flowImport.getSourceDocumentationStatus() != null) {
+                    existingFlowImport.setSourceDocumentationStatus(flowImport.getSourceDocumentationStatus());
+                }
+                if (flowImport.getTargetDocumentationStatus() != null) {
+                    existingFlowImport.setTargetDocumentationStatus(flowImport.getTargetDocumentationStatus());
                 }
                 if (flowImport.getFlowStatus() != null) {
                     existingFlowImport.setFlowStatus(flowImport.getFlowStatus());
@@ -176,9 +182,6 @@ public class FlowImportResource {
                 }
                 if (flowImport.getImportStatusMessage() != null) {
                     existingFlowImport.setImportStatusMessage(flowImport.getImportStatusMessage());
-                }
-                if (flowImport.getExistingApplicationID() != null) {
-                    existingFlowImport.setExistingApplicationID(flowImport.getExistingApplicationID());
                 }
 
                 return existingFlowImport;

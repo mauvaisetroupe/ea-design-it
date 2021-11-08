@@ -46,10 +46,11 @@ describe('Service Tests', () => {
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
-        ImportStatus.NEW,
-        ImportStatus.NEW,
-        ImportStatus.NEW,
         'AAAAAAA',
+        'AAAAAAA',
+        ImportStatus.NEW,
+        ImportStatus.NEW,
+        ImportStatus.NEW,
         'AAAAAAA'
       );
     });
@@ -112,8 +113,10 @@ describe('Service Tests', () => {
             frequency: 'BBBBBB',
             format: 'BBBBBB',
             swagger: 'BBBBBB',
-            blueprint: 'BBBBBB',
-            blueprintStatus: 'BBBBBB',
+            sourceURLDocumentation: 'BBBBBB',
+            targetURLDocumentation: 'BBBBBB',
+            sourceDocumentationStatus: 'BBBBBB',
+            targetDocumentationStatus: 'BBBBBB',
             flowStatus: 'BBBBBB',
             comment: 'BBBBBB',
             documentName: 'BBBBBB',
@@ -121,7 +124,6 @@ describe('Service Tests', () => {
             importFunctionalFlowStatus: 'BBBBBB',
             importDataFlowStatus: 'BBBBBB',
             importStatusMessage: 'BBBBBB',
-            existingApplicationID: 'BBBBBB',
           },
           elemDefault
         );
@@ -155,10 +157,11 @@ describe('Service Tests', () => {
             integrationPattern: 'BBBBBB',
             format: 'BBBBBB',
             swagger: 'BBBBBB',
-            blueprintStatus: 'BBBBBB',
-            comment: 'BBBBBB',
-            importFunctionalFlowStatus: 'BBBBBB',
-            existingApplicationID: 'BBBBBB',
+            targetURLDocumentation: 'BBBBBB',
+            targetDocumentationStatus: 'BBBBBB',
+            documentName: 'BBBBBB',
+            importDataFlowStatus: 'BBBBBB',
+            importStatusMessage: 'BBBBBB',
           },
           new FlowImport()
         );
@@ -195,8 +198,10 @@ describe('Service Tests', () => {
             frequency: 'BBBBBB',
             format: 'BBBBBB',
             swagger: 'BBBBBB',
-            blueprint: 'BBBBBB',
-            blueprintStatus: 'BBBBBB',
+            sourceURLDocumentation: 'BBBBBB',
+            targetURLDocumentation: 'BBBBBB',
+            sourceDocumentationStatus: 'BBBBBB',
+            targetDocumentationStatus: 'BBBBBB',
             flowStatus: 'BBBBBB',
             comment: 'BBBBBB',
             documentName: 'BBBBBB',
@@ -204,7 +209,6 @@ describe('Service Tests', () => {
             importFunctionalFlowStatus: 'BBBBBB',
             importDataFlowStatus: 'BBBBBB',
             importStatusMessage: 'BBBBBB',
-            existingApplicationID: 'BBBBBB',
           },
           elemDefault
         );

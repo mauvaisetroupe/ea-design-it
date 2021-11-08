@@ -59,16 +59,28 @@
             <span>{{ flowImport.swagger }}</span>
           </dd>
           <dt>
-            <span>Blueprint</span>
+            <span>Source URL Documentation</span>
           </dt>
           <dd>
-            <span>{{ flowImport.blueprint }}</span>
+            <span>{{ flowImport.sourceURLDocumentation }}</span>
           </dd>
           <dt>
-            <span>Blueprint Status</span>
+            <span>Target URL Documentation</span>
           </dt>
           <dd>
-            <span>{{ flowImport.blueprintStatus }}</span>
+            <span>{{ flowImport.targetURLDocumentation }}</span>
+          </dd>
+          <dt>
+            <span>Source Documentation Status</span>
+          </dt>
+          <dd>
+            <span>{{ flowImport.sourceDocumentationStatus }}</span>
+          </dd>
+          <dt>
+            <span>Target Documentation Status</span>
+          </dt>
+          <dd>
+            <span>{{ flowImport.targetDocumentationStatus }}</span>
           </dd>
           <dt>
             <span>Flow Status</span>
@@ -111,12 +123,6 @@
           </dt>
           <dd>
             <span>{{ flowImport.importStatusMessage }}</span>
-          </dd>
-          <dt>
-            <span>Existing Application ID</span>
-          </dt>
-          <dd>
-            <span>{{ flowImport.existingApplicationID }}</span>
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
