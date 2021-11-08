@@ -27,6 +27,9 @@ public class ApplicationImportService {
     private static final String APPLICATION_DESCRIPTION = "application.description";
     private static final String APPLICATION_NAME = "application.name";
     private static final String APPLICATION_ID = "application.id";
+    private final List<String> columnsArray = new ArrayList<String>();
+
+    private static final String APPLICATION_SHEET_NAME = "Application";
 
     private final Logger log = LoggerFactory.getLogger(ApplicationImportService.class);
 
@@ -34,11 +37,18 @@ public class ApplicationImportService {
 
     public ApplicationImportService(ApplicationRepository applicationRepository) {
         this.applicationRepository = applicationRepository;
+
+        this.columnsArray.add(APPLICATION_TYPE);
+        this.columnsArray.add(APPLICATION_COMMENT);
+        this.columnsArray.add(APPLICATION_DESCRIPTION);
+        this.columnsArray.add(APPLICATION_NAME);
+        this.columnsArray.add(APPLICATION_ID);
     }
 
     public List<ApplicationImport> importExcel(MultipartFile file) throws Exception {
-        ExcelReader excelReader = new ExcelReader(file);
-        List<Map<String, Object>> applicationDF = excelReader.getSheetAt(0);
+        ExcelReader excelReader = new ExcelReader(file, this.columnsArray, APPLICATION_SHEET_NAME);
+        List<Map<String, Object>> applicationDF = excelReader.getSheet(APPLICATION_SHEET_NAME);
+        log.info("Found Excel sheet " + applicationDF);
 
         String importID = (new SimpleDateFormat("YYYYMMddhhmmss")).format(new Date());
         String lowerCaseFileName = file.getOriginalFilename().toLowerCase();

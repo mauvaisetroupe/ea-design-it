@@ -3,6 +3,7 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -19,16 +20,22 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ExcelReader {
 
     private final Logger log = LoggerFactory.getLogger(ExcelReader.class);
     private final Map<String, List<Map<String, Object>>> excelDF;
+    private final List<String> columnNames;
+    private final List<String> sheetName;
 
-    public ExcelReader(MultipartFile excel) throws Exception {
+    public ExcelReader(MultipartFile excel, List<String> columnNames, String... sheetName) throws Exception {
+        this.columnNames = columnNames;
         this.excelDF = importExcel(excel);
+        this.sheetName = Arrays.asList(sheetName);
     }
 
     private Map<String, List<Map<String, Object>>> importExcel(MultipartFile excel) throws Exception {
@@ -45,8 +52,20 @@ public class ExcelReader {
             Row firstRow = sheet.getRow(0);
             if (firstRow != null) {
                 String[] labels = new String[firstRow.getLastCellNum()];
+
                 for (int j = 0; j < firstRow.getLastCellNum(); j++) {
-                    labels[j] = CellUtil.getCell(firstRow, j).getStringCellValue();
+                    String cellVal = CellUtil.getCell(firstRow, j).getStringCellValue();
+                    if (StringUtils.hasText(cellVal)) {
+                        labels[j] = removeParenthesis(CellUtil.getCell(firstRow, j).getStringCellValue());
+                        if (this.sheetName != null && this.sheetName.contains(sheet.getSheetName())) {
+                            Assert.isTrue(
+                                columnNames.contains(labels[j]),
+                                "Could not find column name '" + labels[j] + "' in Excel File. Authorized valuesc : " + this.columnNames
+                            );
+                        }
+                    } else {
+                        log.error("Ignoring column numer #" + j + ".");
+                    }
                 }
                 System.out.println(sheet.getSheetName());
                 List<Map<String, Object>> rowAsArrayList = new ArrayList<>();
@@ -71,6 +90,12 @@ public class ExcelReader {
         }
 
         return sheetAsMapOfArray;
+    }
+
+    private String removeParenthesis(String stringCellValue) {
+        if (stringCellValue == null) return null;
+        if (stringCellValue.contains("(")) return stringCellValue.substring(0, stringCellValue.indexOf("("));
+        return stringCellValue;
     }
 
     public boolean isEmpty(Map<String, Object> rowAsArray) {

@@ -38,10 +38,17 @@ public class FlowImportService {
     private static final String FLOW_FORMAT = "Format";
     private static final String FLOW_SWAGGER = "Swagger";
     private static final String FLOW_BLUEPRINT = "Blueprint";
-    private static final String FLOW_BLUEPRINT_STATUS = "Blueprint status";
+    private static final String FLOW_BLUEPRINT_STATUS = "Status Blueprint";
     private static final String FLOW_STATUS_FLOW = "Status flow";
     private static final String FLOW_COMMENT = "Comment";
     private static final String FLOW_ADD_CORRESPONDENT_ID = "ADD correspondent ID";
+    private static final String FLOW_CHECK_COLUMN_1 = "Source Element in application list";
+    private static final String FLOW_CHECK_COLUMN_2 = "Target Element in application list";
+    private static final String FLOW_CHECK_COLUMN_3 = "Integration pattern in pattern list";
+    private static final String FLOW_CHECK_COLUMN_4 = "Status Blueprint in status list";
+    private static final String FLOW_CHECK_COLUMN_5 = "Status flow in status list";
+
+    private final List<String> columnsArray = new ArrayList<String>();
 
     private static final String FLOW_SHEET_NAME = "Message_Flow";
 
@@ -68,12 +75,32 @@ public class FlowImportService {
         this.dataFlowRepository = dataFlowRepository;
         this.ownerRepository = ownerRepository;
         this.landscapeViewRepository = landscapeViewRepository;
+
+        this.columnsArray.add(FLOW_ID_FLOW);
+        this.columnsArray.add(FLOW_ALIAS_FLOW);
+        this.columnsArray.add(FLOW_SOURCE_ELEMENT);
+        this.columnsArray.add(FLOW_TARGET_ELEMENT);
+        this.columnsArray.add(FLOW_DESCRIPTION);
+        this.columnsArray.add(FLOW_INTEGRATION_PATTERN);
+        this.columnsArray.add(FLOW_FREQUENCY);
+        this.columnsArray.add(FLOW_FORMAT);
+        this.columnsArray.add(FLOW_SWAGGER);
+        this.columnsArray.add(FLOW_BLUEPRINT);
+        this.columnsArray.add(FLOW_BLUEPRINT_STATUS);
+        this.columnsArray.add(FLOW_STATUS_FLOW);
+        this.columnsArray.add(FLOW_COMMENT);
+        this.columnsArray.add(FLOW_ADD_CORRESPONDENT_ID);
+        this.columnsArray.add(FLOW_CHECK_COLUMN_1);
+        this.columnsArray.add(FLOW_CHECK_COLUMN_2);
+        this.columnsArray.add(FLOW_CHECK_COLUMN_3);
+        this.columnsArray.add(FLOW_CHECK_COLUMN_4);
+        this.columnsArray.add(FLOW_CHECK_COLUMN_5);
     }
 
     public List<FlowImport> importExcel(MultipartFile file) throws Exception {
         List<FlowImport> result = new ArrayList<FlowImport>();
 
-        ExcelReader excelReader = new ExcelReader(file);
+        ExcelReader excelReader = new ExcelReader(file, this.columnsArray, FLOW_SHEET_NAME);
         List<Map<String, Object>> flowsDF = excelReader.getSheet(FLOW_SHEET_NAME);
 
         String lowerCaseFileName = file.getOriginalFilename().toLowerCase();
@@ -99,14 +126,15 @@ public class FlowImportService {
                 functionalFlow.setLandscape(landscapeView);
                 flowRepository.save(functionalFlow);
             } else {
-                functionalFlow = functionalFlowOption.get();
                 flowImport.setImportFunctionalFlowStatus(ImportStatus.EXISTING);
+                functionalFlow = functionalFlowOption.get();
             }
 
             // FlowInterface
             Optional<FlowInterface> flowInterfaceOption = interfaceRepository.findById(flowImport.getIdFlowFromExcel());
             FlowInterface flowInterface;
             if (!flowInterfaceOption.isPresent()) {
+                flowImport.setImportInterfaceStatus(ImportStatus.NEW);
                 flowInterface = mapToFlowInterface(flowImport);
                 functionalFlow.addInterfaces(flowInterface);
                 Assert.isTrue(
@@ -116,6 +144,7 @@ public class FlowImportService {
                 interfaceRepository.save(flowInterface);
                 flowRepository.save(functionalFlow);
             } else {
+                flowImport.setImportInterfaceStatus(ImportStatus.EXISTING);
                 flowInterface = flowInterfaceOption.get();
                 if (!functionalFlow.getInterfaces().contains(flowInterface)) {
                     System.out.println(functionalFlow.getInterfaces().size());
