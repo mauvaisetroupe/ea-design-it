@@ -1,36 +1,36 @@
-# Excel format
+# Excel format mapping
 
-## Application Excel columns
+## Application Excel columns mapping
 
-| Excel Column Name            | FlowImport setter                       | Object setters
-|------------------------------|-----------------------------------------|----------------|
-| application.id               | applicationImport.setIdFromExcel | application.setId |
-| application.name             | applicationImport.setName | application.setName |
-| application.description      | applicationImport.setDescription | application.setDescription |
-| application.comment          | applicationImport.setComment | application.setComment  |
-| application.type             | applicationImport.setType | application.setType |
+| Excel Column Name            | FlowImport setter | Application setters
+|------------------------------|----------------|-------|
+| application.id               | setIdFromExcel | setId |
+| application.name             | setName        | setName |
+| application.description      | setDescription | setDescription |
+| application.comment          | setComment     | setComment  |
+| application.type             | setType        | setType |
 
 
-## Flow Excel columns
+## Flow Excel columns mapping 
 
-| Excel Column Name            | FlowImport setter                       | Object setters
-|------------------------------|-----------------------------------------|----------------|
-| Id flow                      | flowImport.setIdFlowFromExcel           | flowInterface.setId |
-| Alias flow                   | flowImport.setFlowAlias                 | functionalFlow.setId|
-| Source Element               | flowImport.setSourceElement             | flowInterface.setSource |
-| Target Element               | flowImport.setTargetElement             | flowInterface.setTarget |
-| Description                  | flowImport.setDescription               | functionalFlow.setDescription |
-| Integration pattern          | flowImport.setIntegrationPattern        | flowInterface.setProtocol |
-| Frequency                    | flowImport.setFrequency                 | |
-| Format                       | flowImport.setFormat                    | |
-| Swagger                      | flowImport.setSwagger                   | | 
-| Blueprint From Source        | flowImport.setSourceURLDocumentation    | |
-| Blueprint From Target        | flowImport.setTargetURLDocumentation    | |
-| Status Blueprint From Source | flowImport.setSourceDocumentationStatus | |
-| Status Blueprint From Target | flowImport.setTargetDocumentationStatus | |
-| Status flow                  | flowImport.setFlowStatus                | functionalFlow.setStatus |
-| Comment                      | flowImport.setComment                   | functionalFlow.setComment |
-| ADD correspondent ID         | flowImport.setDocumentName              | #ignored |
+| Excel Column Name            | FlowImport setter            | functionalFlow setter | FlowInterface setters | DataFlow  |
+|------------------------------|------------------------------|-----------------------|-----------------------|-----------|
+| Id flow                      | setIdFlowFromExcel           |                       | setId | |
+| Alias flow                   | setFlowAlias                 | setId                 | | |
+| Source Element               | setSourceElement             |                       | setSource | |
+| Target Element               | setTargetElement             |                       | setTarget | |
+| Description                  | setDescription               | setDescription        | | |
+| Integration pattern          | setIntegrationPattern        |                       | setProtocol | |
+| Frequency                    | setFrequency                 |                       | | |
+| Format                       | setFormat                    |                       | | |
+| Swagger                      | setSwagger                   |                       | | |
+| Blueprint From Source        | setSourceURLDocumentation    |                       | | |
+| Blueprint From Target        | setTargetURLDocumentation    |                       | | |
+| Status Blueprint From Source | setSourceDocumentationStatus |                       | | |
+| Status Blueprint From Target | setTargetDocumentationStatus |                       | | |
+| Status flow                  | setFlowStatus                | setStatus             | | |
+| Comment                      | setComment                   | setComment            | | |
+
 
 | Excel FileName    | FlowImport setter  | Object setters               |
 |-------------------|--------------------|------------------------------|
