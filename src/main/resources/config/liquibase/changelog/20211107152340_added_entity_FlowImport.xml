@@ -41,10 +41,16 @@
             <column name="swagger" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="blueprint" type="varchar(255)">
+            <column name="source_url_documentation" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="blueprint_status" type="varchar(255)">
+            <column name="target_url_documentation" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="source_documentation_status" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="target_documentation_status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="flow_status" type="varchar(255)">
@@ -66,9 +72,6 @@
                 <constraints nullable="true" />
             </column>
             <column name="import_status_message" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="existing_application_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
