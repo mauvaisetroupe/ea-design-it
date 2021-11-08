@@ -22,7 +22,7 @@
         <span>If you want to </span>
         <a class="alert-link" v-on:click="openLogin()">sign in</a
         ><span
-          >, you can try the default accounts:<brv-if ="authenticated" />- Administrator (login="admin" and password="admin") <br />- User
+          >, you can try the default accounts:<br v-if="authenticated" />- Administrator (login="admin" and password="admin") <br />- User
           (login="user" and password="user").</span
         >
       </div>
