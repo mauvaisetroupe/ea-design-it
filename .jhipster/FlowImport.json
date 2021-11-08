@@ -38,11 +38,19 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "blueprint",
+      "fieldName": "sourceURLDocumentation",
       "fieldType": "String"
     },
     {
-      "fieldName": "blueprintStatus",
+      "fieldName": "targetURLDocumentation",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "sourceDocumentationStatus",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "targetDocumentationStatus",
       "fieldType": "String"
     },
     {
@@ -74,10 +82,6 @@
     },
     {
       "fieldName": "importStatusMessage",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "existingApplicationID",
       "fieldType": "String"
     }
   ],
