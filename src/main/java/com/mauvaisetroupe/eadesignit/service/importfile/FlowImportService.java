@@ -13,6 +13,7 @@ import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
+import com.mauvaisetroupe.eadesignit.web.rest.errors.MalformedExcelException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -97,10 +98,16 @@ public class FlowImportService {
         this.columnsArray.add(FLOW_CHECK_COLUMN_3);
     }
 
-    public List<FlowImport> importExcel(MultipartFile file) throws Exception {
+    public List<FlowImport> importExcel(MultipartFile file) throws MalformedExcelException {
         List<FlowImport> result = new ArrayList<FlowImport>();
 
-        ExcelReader excelReader = new ExcelReader(file, this.columnsArray, FLOW_SHEET_NAME);
+        ExcelReader excelReader;
+        try {
+            excelReader = new ExcelReader(file, this.columnsArray, FLOW_SHEET_NAME);
+        } catch (Exception e) {
+            throw new MalformedExcelException(e.getMessage());
+        }
+
         List<Map<String, Object>> flowsDF = excelReader.getSheet(FLOW_SHEET_NAME);
 
         String lowerCaseFileName = file.getOriginalFilename().toLowerCase();
@@ -193,7 +200,7 @@ public class FlowImportService {
         flowImport.setFlowStatus((String) map.get(FLOW_STATUS_FLOW));
         flowImport.setComment((String) map.get(FLOW_COMMENT));
         flowImport.setDocumentName((String) map.get(FLOW_ADD_CORRESPONDENT_ID));
-        Assert.isTrue(flowImport.getIdFlowFromExcel() != null, "Error with map : " + map);
+        Assert.isTrue(flowImport.getIdFlowFromExcel() != null, "No ID found, Error with map : " + map);
         return flowImport;
     }
 
@@ -211,6 +218,13 @@ public class FlowImportService {
     }
 
     private String clean(String value) {
-        return value.replace('/', '_').replace(' ', '_');
+        return value
+            .replace('/', '_')
+            .replace(' ', '_')
+            .replace('(', '_')
+            .replace(')', '_')
+            .replace("__", "_")
+            .replace("__", "_")
+            .replaceAll("(.*)_$", "$1");
     }
 }
