@@ -18,8 +18,10 @@ entity FlowImport(tmp_import_flows) {
   	frequency String
   	format String
 	swagger String
-  	blueprint String
-  	blueprintStatus String
+  	sourceURLDocumentation String
+  	targetURLDocumentation String
+  	sourceDocumentationStatus String
+  	targetDocumentationStatus String
   	flowStatus String
   	comment String
   	documentName String
@@ -27,5 +29,4 @@ entity FlowImport(tmp_import_flows) {
     importFunctionalFlowStatus ImportStatus
 	importDataFlowStatus ImportStatus
 	importStatusMessage String
-    existingApplicationID String // ID of Application when importStatus = EXISINT or UPDATED
 }
