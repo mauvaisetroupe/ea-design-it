@@ -33,4 +33,6 @@ public enum Protocol {
     HTTP_DIRECT,
     HTTP_REDIRECT,
     INDIRECT_THROUGH_CUSTOMER_BROWSER,
+    ETL_ODI,
+    OUTLOOK_WIDGET,
 }
