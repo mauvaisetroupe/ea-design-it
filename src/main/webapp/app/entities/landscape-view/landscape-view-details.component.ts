@@ -10,6 +10,7 @@ export default class LandscapeViewDetails extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
 
   public landscapeView: ILandscapeView = {};
+  public plantUMLImage = '';
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -28,9 +29,24 @@ export default class LandscapeViewDetails extends Vue {
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
       });
+    this.getPlantUML(landscapeViewId);
   }
 
   public previousState() {
     this.$router.go(-1);
+  }
+
+  public getPlantUML(landscapeViewId) {
+    console.log('Entering in method getPlantUML');
+    this.landscapeViewService()
+      .getPlantUML(landscapeViewId)
+      .then(
+        res => {
+          this.plantUMLImage = 'data:image/jpg;base64,' + res.data;
+        },
+        err => {
+          console.log(err);
+        }
+      );
   }
 }

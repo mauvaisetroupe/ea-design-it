@@ -41,6 +41,11 @@
           </button>
         </router-link>
       </div>
+      <br />
+      <h2>PlantUML preview</h2>
+      <div>
+        <img :src="plantUMLImage" alt="Base64 encoded image" />
+      </div>
     </div>
   </div>
 </template>
