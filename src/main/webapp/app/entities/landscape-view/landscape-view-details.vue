@@ -59,11 +59,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="legend in legends" v-bind:key="legend.id">
-            <td>{{ legend.flowAlias }}</td>
-            <td>{{ legend.idFlowFromExcel }}</td>
-            <td>{{ legend.integrationPattern }}</td>
-            <td>{{ legend.description }}</td>
+          <tr v-for="caption in captions" v-bind:key="caption.id">
+            <td>{{ caption.flowAlias }}</td>
+            <td>{{ caption.idFlowFromExcel }}</td>
+            <td>{{ caption.integrationPattern }}</td>
+            <td>{{ caption.description }}</td>
           </tr>
         </tbody>
       </table>
