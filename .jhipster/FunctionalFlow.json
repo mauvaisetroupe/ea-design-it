@@ -4,6 +4,8 @@
     {
       "fieldName": "id",
       "fieldType": "String",
+      "fieldValidateRules": ["pattern"],
+      "fieldValidateRulesPattern": "^[A-Z].[99]{4}$",
       "options": {
         "id": true,
         "autoGenerate": "false"

@@ -4,6 +4,8 @@
     {
       "fieldName": "id",
       "fieldType": "String",
+      "fieldValidateRules": ["pattern"],
+      "fieldValidateRulesPattern": "^HPX\\.CMP\\.[0-9]{8}$",
       "options": {
         "id": true,
         "autoGenerate": "false"

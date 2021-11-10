@@ -11,6 +11,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,7 +65,7 @@ public class ApplicationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/applications")
-    public ResponseEntity<Application> createApplication(@RequestBody Application application) throws URISyntaxException {
+    public ResponseEntity<Application> createApplication(@Valid @RequestBody Application application) throws URISyntaxException {
         log.debug("REST request to save Application : {}", application);
         if (application.getId() != null) {
             throw new BadRequestAlertException("A new application cannot already have an ID", ENTITY_NAME, "idexists");
@@ -88,7 +90,7 @@ public class ApplicationResource {
     @PutMapping("/applications/{id}")
     public ResponseEntity<Application> updateApplication(
         @PathVariable(value = "id", required = false) final String id,
-        @RequestBody Application application
+        @Valid @RequestBody Application application
     ) throws URISyntaxException {
         log.debug("REST request to update Application : {}, {}", id, application);
         if (application.getId() == null) {
@@ -123,7 +125,7 @@ public class ApplicationResource {
     @PatchMapping(value = "/applications/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Application> partialUpdateApplication(
         @PathVariable(value = "id", required = false) final String id,
-        @RequestBody Application application
+        @NotNull @RequestBody Application application
     ) throws URISyntaxException {
         log.debug("REST request to partial update Application partially : {}, {}", id, application);
         if (application.getId() == null) {

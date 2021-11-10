@@ -8,4 +8,6 @@ export enum ApplicationType {
   PACKAGE = 'PACKAGE',
 
   INFRASTRUCTURE = 'INFRASTRUCTURE',
+
+  GINKO = 'GINKO',
 }

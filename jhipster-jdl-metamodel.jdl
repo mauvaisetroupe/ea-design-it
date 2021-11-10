@@ -43,7 +43,7 @@ entity Owner {
 }
 
 entity FunctionalFlow {
-    @id @AutoGenerate(false) id String
+    @id @AutoGenerate(false) id String pattern(/^[A-Z].[99]{4}$/)
     alias String
     description String
     comment String
@@ -51,13 +51,13 @@ entity FunctionalFlow {
 }
 
 entity FlowInterface {
-    @id @AutoGenerate(false) id String
+    @id @AutoGenerate(false) id String pattern(/^[A-Z]{3}-[0-9]{4}$/)
     protocol Protocol
     status String
 }
 
 entity Application {
-	@id @AutoGenerate(false) id String,
+	@id @AutoGenerate(false) id String pattern(/^HPX\.CMP\.[0-9]{8}$/)
 	name String,
     description String 
     type ApplicationType

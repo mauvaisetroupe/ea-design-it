@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -19,6 +20,7 @@ public class FlowInterface implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @Pattern(regexp = "^[A-Z]{3}-[0-9]{4}$")
     @Id
     @Column(name = "id")
     private String id;

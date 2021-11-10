@@ -3,7 +3,6 @@ import axios from 'axios';
 import { ILandscapeView } from '@/shared/model/landscape-view.model';
 
 const baseApiUrl = 'api/landscape-views';
-const basePlantUMLApiUrl = 'api/plantuml/get-image-with-media-type';
 
 export default class LandscapeViewService {
   public find(id: number): Promise<ILandscapeView> {
@@ -12,7 +11,6 @@ export default class LandscapeViewService {
         .get(`${baseApiUrl}/${id}`)
         .then(res => {
           resolve(res.data);
-          console.log(res.data);
         })
         .catch(err => {
           reject(err);
@@ -78,19 +76,6 @@ export default class LandscapeViewService {
         .patch(`${baseApiUrl}/${entity.id}`, entity)
         .then(res => {
           resolve(res.data);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  }
-
-  public getPlantUML(id: number) {
-    return new Promise<any>((resolve, reject) => {
-      axios
-        .get(`${basePlantUMLApiUrl}/${id}`)
-        .then(res => {
-          resolve(res);
         })
         .catch(err => {
           reject(err);
