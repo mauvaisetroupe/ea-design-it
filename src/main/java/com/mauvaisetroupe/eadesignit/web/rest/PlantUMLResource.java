@@ -39,7 +39,16 @@ public class PlantUMLResource {
             String plantUMLSource = "@startuml\n";
             for (FunctionalFlow functionalFlow : landscapeViewOptional.get().getFlows()) {
                 for (FlowInterface flowInterface : functionalFlow.getInterfaces()) {
-                    plantUMLSource += "[" + flowInterface.getSource().getName() + "] --> [" + flowInterface.getTarget().getName() + "]\n\r";
+                    plantUMLSource +=
+                        "[" +
+                        flowInterface.getSource().getName() +
+                        "] --> [" +
+                        flowInterface.getTarget().getName() +
+                        "] : " +
+                        functionalFlow.getAlias() +
+                        " / " +
+                        flowInterface.getId() +
+                        "\n\r";
                 }
             }
             plantUMLSource += "@enduml\n";
