@@ -32,9 +32,9 @@ public class LandscapeView implements Serializable {
     @Column(name = "diagram_name")
     private String diagramName;
 
-    @OneToMany(mappedBy = "landscape")
+    @OneToMany(mappedBy = "landscape", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "interfaces", "landscape", "dataFlows" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "landscape", "dataFlows" }, allowSetters = true)
     private Set<FunctionalFlow> flows = new HashSet<>();
 
     @ManyToOne

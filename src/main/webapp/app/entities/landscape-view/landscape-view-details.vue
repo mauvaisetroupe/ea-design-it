@@ -41,11 +41,32 @@
           </button>
         </router-link>
       </div>
+      <div>
+        <br />
+      </div>
       <br />
       <h2>PlantUML preview</h2>
-      <div>
-        <img :src="plantUMLImage" alt="Base64 encoded image" />
-      </div>
+      <div><img :src="plantUMLImage" alt="Base64 encoded image" /></div>
+      <br />
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="row"><span>Alias</span></th>
+            <th scope="row"><span>ID</span></th>
+            <th scope="row"><span>Protocol</span></th>
+            <th scope="row"><span>Description</span></th>
+            <th scope="row"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="legend in legends" v-bind:key="legend.id">
+            <td>{{ legend.flowAlias }}</td>
+            <td>{{ legend.idFlowFromExcel }}</td>
+            <td>{{ legend.integrationPattern }}</td>
+            <td>{{ legend.description }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>

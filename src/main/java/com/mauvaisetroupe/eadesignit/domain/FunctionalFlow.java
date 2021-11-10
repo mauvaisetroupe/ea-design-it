@@ -42,10 +42,7 @@ public class FunctionalFlow implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "interfaces_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = { "dataFlows", "source", "target", "sourceComponent", "targetComponent", "owner", "functionalFlows" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "dataFlows", "sourceComponent", "targetComponent", "owner", "functionalFlows" }, allowSetters = true)
     private Set<FlowInterface> interfaces = new HashSet<>();
 
     @ManyToOne(optional = false)

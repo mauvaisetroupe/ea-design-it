@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
+import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -183,6 +184,13 @@ public class FunctionalFlowResource {
     @DeleteMapping("/functional-flows/{id}")
     public ResponseEntity<Void> deleteFunctionalFlow(@PathVariable String id) {
         log.debug("REST request to delete FunctionalFlow : {}", id);
+
+        // Avoid EntityNotFoundException when removing from OneToMany collection
+        // When Fetch=EAGER (needed for finding flows then interfaces from landscape)
+        FunctionalFlow functionalFlow = functionalFlowRepository.findById(id).get();
+        LandscapeView landscapeView = functionalFlow.getLandscape();
+        landscapeView.getFlows().remove(functionalFlow);
+
         functionalFlowRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
     }

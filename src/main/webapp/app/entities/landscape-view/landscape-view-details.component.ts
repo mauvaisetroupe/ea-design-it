@@ -3,6 +3,7 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import { ILandscapeView } from '@/shared/model/landscape-view.model';
 import LandscapeViewService from './landscape-view.service';
 import AlertService from '@/shared/alert/alert.service';
+import { FlowImport, IFlowImport } from '@/shared/model/flow-import.model';
 
 @Component
 export default class LandscapeViewDetails extends Vue {
@@ -11,6 +12,7 @@ export default class LandscapeViewDetails extends Vue {
 
   public landscapeView: ILandscapeView = {};
   public plantUMLImage = '';
+  public captions: IFlowImport[] = [];
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -25,11 +27,25 @@ export default class LandscapeViewDetails extends Vue {
       .find(landscapeViewId)
       .then(res => {
         this.landscapeView = res;
+        this.fillCaption();
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
       });
     this.getPlantUML(landscapeViewId);
+  }
+
+  public fillCaption() {
+    this.landscapeView.flows.forEach(flow => {
+      flow.interfaces.forEach(inter => {
+        var caption: FlowImport = new FlowImport();
+        caption.flowAlias = flow.alias;
+        caption.idFlowFromExcel = inter.id;
+        caption.description = flow.description;
+        caption.integrationPattern = inter.protocol;
+        this.captions.push(caption);
+      });
+    });
   }
 
   public previousState() {
