@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-import buildPaginationQueryOpts from '@/shared/sort/sorts';
-
 import { IOwner } from '@/shared/model/owner.model';
 
 const baseApiUrl = 'api/owners';
@@ -20,10 +18,10 @@ export default class OwnerService {
     });
   }
 
-  public retrieve(paginationQuery?: any): Promise<any> {
+  public retrieve(): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios
-        .get(baseApiUrl + `?${buildPaginationQueryOpts(paginationQuery)}`)
+        .get(baseApiUrl)
         .then(res => {
           resolve(res);
         })

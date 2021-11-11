@@ -2,9 +2,6 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
-import com.mauvaisetroupe.eadesignit.service.ApplicationQueryService;
-import com.mauvaisetroupe.eadesignit.service.ApplicationService;
-import com.mauvaisetroupe.eadesignit.service.criteria.ApplicationCriteria;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,15 +13,10 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
-import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
@@ -32,6 +24,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api")
+@Transactional
 public class ApplicationResource {
 
     private final Logger log = LoggerFactory.getLogger(ApplicationResource.class);
@@ -41,20 +34,10 @@ public class ApplicationResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final ApplicationService applicationService;
-
     private final ApplicationRepository applicationRepository;
 
-    private final ApplicationQueryService applicationQueryService;
-
-    public ApplicationResource(
-        ApplicationService applicationService,
-        ApplicationRepository applicationRepository,
-        ApplicationQueryService applicationQueryService
-    ) {
-        this.applicationService = applicationService;
+    public ApplicationResource(ApplicationRepository applicationRepository) {
         this.applicationRepository = applicationRepository;
-        this.applicationQueryService = applicationQueryService;
     }
 
     /**
@@ -70,7 +53,7 @@ public class ApplicationResource {
         if (application.getId() != null) {
             throw new BadRequestAlertException("A new application cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Application result = applicationService.save(application);
+        Application result = applicationRepository.save(application);
         return ResponseEntity
             .created(new URI("/api/applications/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -104,7 +87,7 @@ public class ApplicationResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Application result = applicationService.save(application);
+        Application result = applicationRepository.save(application);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, application.getId().toString()))
@@ -139,7 +122,31 @@ public class ApplicationResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Application> result = applicationService.partialUpdate(application);
+        Optional<Application> result = applicationRepository
+            .findById(application.getId())
+            .map(existingApplication -> {
+                if (application.getAlias() != null) {
+                    existingApplication.setAlias(application.getAlias());
+                }
+                if (application.getName() != null) {
+                    existingApplication.setName(application.getName());
+                }
+                if (application.getDescription() != null) {
+                    existingApplication.setDescription(application.getDescription());
+                }
+                if (application.getType() != null) {
+                    existingApplication.setType(application.getType());
+                }
+                if (application.getTechnology() != null) {
+                    existingApplication.setTechnology(application.getTechnology());
+                }
+                if (application.getComment() != null) {
+                    existingApplication.setComment(application.getComment());
+                }
+
+                return existingApplication;
+            })
+            .map(applicationRepository::save);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -150,28 +157,12 @@ public class ApplicationResource {
     /**
      * {@code GET  /applications} : get all the applications.
      *
-     * @param pageable the pagination information.
-     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of applications in body.
      */
     @GetMapping("/applications")
-    public ResponseEntity<List<Application>> getAllApplications(ApplicationCriteria criteria, Pageable pageable) {
-        log.debug("REST request to get Applications by criteria: {}", criteria);
-        Page<Application> page = applicationQueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
-    /**
-     * {@code GET  /applications/count} : count all the applications.
-     *
-     * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
-     */
-    @GetMapping("/applications/count")
-    public ResponseEntity<Long> countApplications(ApplicationCriteria criteria) {
-        log.debug("REST request to count Applications by criteria: {}", criteria);
-        return ResponseEntity.ok().body(applicationQueryService.countByCriteria(criteria));
+    public List<Application> getAllApplications() {
+        log.debug("REST request to get all Applications");
+        return applicationRepository.findAll();
     }
 
     /**
@@ -183,7 +174,7 @@ public class ApplicationResource {
     @GetMapping("/applications/{id}")
     public ResponseEntity<Application> getApplication(@PathVariable Long id) {
         log.debug("REST request to get Application : {}", id);
-        Optional<Application> application = applicationService.findOne(id);
+        Optional<Application> application = applicationRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(application);
     }
 
@@ -196,7 +187,7 @@ public class ApplicationResource {
     @DeleteMapping("/applications/{id}")
     public ResponseEntity<Void> deleteApplication(@PathVariable Long id) {
         log.debug("REST request to delete Application : {}", id);
-        applicationService.delete(id);
+        applicationRepository.deleteById(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

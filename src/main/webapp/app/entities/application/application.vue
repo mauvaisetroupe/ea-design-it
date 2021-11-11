@@ -27,35 +27,14 @@
       <table class="table table-striped" aria-describedby="applications">
         <thead>
           <tr>
-            <th scope="row" v-on:click="changeOrder('id')">
-              <span>ID</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('alias')">
-              <span>Alias</span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'alias'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('name')">
-              <span>Name</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'name'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('description')">
-              <span>Description</span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'description'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('type')">
-              <span>Type</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'type'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('technology')">
-              <span>Technology</span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'technology'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('comment')">
-              <span>Comment</span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'comment'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('owner.name')">
-              <span>Owner</span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'owner.name'"></jhi-sort-indicator>
-            </th>
+            <th scope="row"><span>ID</span></th>
+            <th scope="row"><span>Alias</span></th>
+            <th scope="row"><span>Name</span></th>
+            <th scope="row"><span>Description</span></th>
+            <th scope="row"><span>Type</span></th>
+            <th scope="row"><span>Technology</span></th>
+            <th scope="row"><span>Comment</span></th>
+            <th scope="row"><span>Owner</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -127,14 +106,6 @@
         </button>
       </div>
     </b-modal>
-    <div v-show="applications && applications.length > 0">
-      <div class="row justify-content-center">
-        <jhi-item-count :page="page" :total="queryCount" :itemsPerPage="itemsPerPage"></jhi-item-count>
-      </div>
-      <div class="row justify-content-center">
-        <b-pagination size="md" :total-rows="totalItems" v-model="page" :per-page="itemsPerPage" :change="loadPage(page)"></b-pagination>
-      </div>
-    </div>
   </div>
 </template>
 

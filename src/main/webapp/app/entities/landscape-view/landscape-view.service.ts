@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ILandscapeView } from '@/shared/model/landscape-view.model';
 
 const baseApiUrl = 'api/landscape-views';
-const basePlantUMLApiUrl = 'api/plantuml/get-image-with-media-type';
+const basePlantUMLApiUrl = 'api/plantuml/landscape-view/get-image-with-media-type';
 
 export default class LandscapeViewService {
   public find(id: number): Promise<ILandscapeView> {

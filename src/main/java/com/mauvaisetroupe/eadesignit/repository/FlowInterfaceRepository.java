@@ -1,7 +1,6 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Long> {
-    Optional<FlowInterface> findByAlias(String idFlowFromExcel);
-}
+public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Long> {}

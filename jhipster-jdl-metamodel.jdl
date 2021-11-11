@@ -154,9 +154,6 @@ enum ApplicationType {
     GINKO
 }
 
-filter Owner, Application
-paginate Owner, Application with pagination
-
 // ADD Helper for import, not part of main model
 
 entity ApplicationImport(tmp_import_application_import) {
