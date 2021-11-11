@@ -211,7 +211,7 @@ public class FlowImportService {
         flowInterface.setId(flowImport.getIdFlowFromExcel());
         flowInterface.setSource(source);
         flowInterface.setTarget(target);
-        if (StringUtils.hasText(flowImport.getIntegrationPattern())) {
+        if (!nullable(flowImport.getIntegrationPattern())) {
             flowInterface.setProtocol(ObjectUtils.caseInsensitiveValueOf(Protocol.values(), clean(flowImport.getIntegrationPattern())));
         }
         return flowInterface;
@@ -226,5 +226,11 @@ public class FlowImportService {
             .replace("__", "_")
             .replace("__", "_")
             .replaceAll("(.*)_$", "$1");
+    }
+
+    private boolean nullable(String value) {
+        if (!StringUtils.hasText(value)) return true;
+        if ("?".equals(value)) return true;
+        return false;
     }
 }
