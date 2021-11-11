@@ -2,14 +2,10 @@
   "name": "Application",
   "fields": [
     {
-      "fieldName": "id",
+      "fieldName": "alias",
       "fieldType": "String",
       "fieldValidateRules": ["pattern"],
-      "fieldValidateRulesPattern": "^HPX\\.CMP\\.[0-9]{8}$",
-      "options": {
-        "id": true,
-        "autoGenerate": "false"
-      }
+      "fieldValidateRulesPattern": "^HPX\\.CMP\\.[0-9]{8}$"
     },
     {
       "fieldName": "name",
@@ -17,7 +13,9 @@
     },
     {
       "fieldName": "description",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1000"
     },
     {
       "fieldName": "type",

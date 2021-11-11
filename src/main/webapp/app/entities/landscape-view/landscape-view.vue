@@ -31,6 +31,7 @@
             <th scope="row"><span>Viewpoint</span></th>
             <th scope="row"><span>Diagram Name</span></th>
             <th scope="row"><span>Owner</span></th>
+            <th scope="row"><span>Flows</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -49,6 +50,14 @@
                   landscapeView.owner.name
                 }}</router-link>
               </div>
+            </td>
+            <td>
+              <span v-for="(flows, i) in landscapeView.flows" :key="flows.id"
+                >{{ i > 0 ? ', ' : '' }}
+                <router-link class="form-control-static" :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flows.id } }">{{
+                  flows.alias
+                }}</router-link>
+              </span>
             </td>
             <td class="text-right">
               <div class="btn-group">

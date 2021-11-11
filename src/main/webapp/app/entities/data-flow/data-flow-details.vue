@@ -53,7 +53,7 @@
             <span v-for="(functionalFlows, i) in dataFlow.functionalFlows" :key="functionalFlows.id"
               >{{ i > 0 ? ', ' : '' }}
               <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlows.id } }">{{
-                functionalFlows.id
+                functionalFlows.alias
               }}</router-link>
             </span>
           </dd>
@@ -63,7 +63,7 @@
           <dd>
             <div v-if="dataFlow.flowInterface">
               <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: dataFlow.flowInterface.id } }">{{
-                dataFlow.flowInterface.id
+                dataFlow.flowInterface.alias
               }}</router-link>
             </div>
           </dd>

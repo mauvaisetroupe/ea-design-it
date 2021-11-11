@@ -9,6 +9,23 @@
             <input type="text" class="form-control" id="id" name="id" v-model="application.id" readonly />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-alias">Alias</label>
+            <input
+              type="text"
+              class="form-control"
+              name="alias"
+              id="application-alias"
+              data-cy="alias"
+              :class="{ valid: !$v.application.alias.$invalid, invalid: $v.application.alias.$invalid }"
+              v-model="$v.application.alias.$model"
+            />
+            <div v-if="$v.application.alias.$anyDirty && $v.application.alias.$invalid">
+              <small class="form-text text-danger" v-if="!$v.application.alias.pattern">
+                This field should follow pattern for "Alias".
+              </small>
+            </div>
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="application-name">Name</label>
             <input
               type="text"
@@ -31,6 +48,11 @@
               :class="{ valid: !$v.application.description.$invalid, invalid: $v.application.description.$invalid }"
               v-model="$v.application.description.$model"
             />
+            <div v-if="$v.application.description.$anyDirty && $v.application.description.$invalid">
+              <small class="form-text text-danger" v-if="!$v.application.description.maxLength">
+                This field cannot be longer than 1000 characters.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="application-type">Type</label>

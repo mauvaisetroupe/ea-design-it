@@ -30,6 +30,10 @@
             <th scope="row" v-on:click="changeOrder('id')">
               <span>ID</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator>
             </th>
+            <th scope="row" v-on:click="changeOrder('alias')">
+              <span>Alias</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'alias'"></jhi-sort-indicator>
+            </th>
             <th scope="row" v-on:click="changeOrder('name')">
               <span>Name</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'name'"></jhi-sort-indicator>
             </th>
@@ -60,6 +64,7 @@
             <td>
               <router-link :to="{ name: 'ApplicationView', params: { applicationId: application.id } }">{{ application.id }}</router-link>
             </td>
+            <td>{{ application.alias }}</td>
             <td>{{ application.name }}</td>
             <td>{{ application.description }}</td>
             <td>{{ application.type }}</td>

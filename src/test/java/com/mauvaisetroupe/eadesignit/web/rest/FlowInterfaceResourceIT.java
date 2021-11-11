@@ -6,11 +6,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
+import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Protocol;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import java.util.List;
-import java.util.UUID;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,9 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class FlowInterfaceResourceIT {
 
+    private static final String DEFAULT_ALIAS = "SWR-574";
+    private static final String UPDATED_ALIAS = "ITI-98";
+
     private static final Protocol DEFAULT_PROTOCOL = Protocol.API;
     private static final Protocol UPDATED_PROTOCOL = Protocol.ESB;
 
@@ -37,6 +42,9 @@ class FlowInterfaceResourceIT {
 
     private static final String ENTITY_API_URL = "/api/flow-interfaces";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
+
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private FlowInterfaceRepository flowInterfaceRepository;
@@ -56,7 +64,19 @@ class FlowInterfaceResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static FlowInterface createEntity(EntityManager em) {
-        FlowInterface flowInterface = new FlowInterface().protocol(DEFAULT_PROTOCOL).status(DEFAULT_STATUS);
+        FlowInterface flowInterface = new FlowInterface().alias(DEFAULT_ALIAS).protocol(DEFAULT_PROTOCOL).status(DEFAULT_STATUS);
+        // Add required entity
+        Application application;
+        if (TestUtil.findAll(em, Application.class).isEmpty()) {
+            application = ApplicationResourceIT.createEntity(em);
+            em.persist(application);
+            em.flush();
+        } else {
+            application = TestUtil.findAll(em, Application.class).get(0);
+        }
+        flowInterface.setSource(application);
+        // Add required entity
+        flowInterface.setTarget(application);
         return flowInterface;
     }
 
@@ -67,7 +87,19 @@ class FlowInterfaceResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static FlowInterface createUpdatedEntity(EntityManager em) {
-        FlowInterface flowInterface = new FlowInterface().protocol(UPDATED_PROTOCOL).status(UPDATED_STATUS);
+        FlowInterface flowInterface = new FlowInterface().alias(UPDATED_ALIAS).protocol(UPDATED_PROTOCOL).status(UPDATED_STATUS);
+        // Add required entity
+        Application application;
+        if (TestUtil.findAll(em, Application.class).isEmpty()) {
+            application = ApplicationResourceIT.createUpdatedEntity(em);
+            em.persist(application);
+            em.flush();
+        } else {
+            application = TestUtil.findAll(em, Application.class).get(0);
+        }
+        flowInterface.setSource(application);
+        // Add required entity
+        flowInterface.setTarget(application);
         return flowInterface;
     }
 
@@ -89,6 +121,7 @@ class FlowInterfaceResourceIT {
         List<FlowInterface> flowInterfaceList = flowInterfaceRepository.findAll();
         assertThat(flowInterfaceList).hasSize(databaseSizeBeforeCreate + 1);
         FlowInterface testFlowInterface = flowInterfaceList.get(flowInterfaceList.size() - 1);
+        assertThat(testFlowInterface.getAlias()).isEqualTo(DEFAULT_ALIAS);
         assertThat(testFlowInterface.getProtocol()).isEqualTo(DEFAULT_PROTOCOL);
         assertThat(testFlowInterface.getStatus()).isEqualTo(DEFAULT_STATUS);
     }
@@ -97,7 +130,7 @@ class FlowInterfaceResourceIT {
     @Transactional
     void createFlowInterfaceWithExistingId() throws Exception {
         // Create the FlowInterface with an existing ID
-        flowInterface.setId("existing_id");
+        flowInterface.setId(1L);
 
         int databaseSizeBeforeCreate = flowInterfaceRepository.findAll().size();
 
@@ -122,7 +155,8 @@ class FlowInterfaceResourceIT {
             .perform(get(ENTITY_API_URL + "?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(flowInterface.getId())))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(flowInterface.getId().intValue())))
+            .andExpect(jsonPath("$.[*].alias").value(hasItem(DEFAULT_ALIAS)))
             .andExpect(jsonPath("$.[*].protocol").value(hasItem(DEFAULT_PROTOCOL.toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
     }
@@ -138,7 +172,8 @@ class FlowInterfaceResourceIT {
             .perform(get(ENTITY_API_URL_ID, flowInterface.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.id").value(flowInterface.getId()))
+            .andExpect(jsonPath("$.id").value(flowInterface.getId().intValue()))
+            .andExpect(jsonPath("$.alias").value(DEFAULT_ALIAS))
             .andExpect(jsonPath("$.protocol").value(DEFAULT_PROTOCOL.toString()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS));
     }
@@ -162,7 +197,7 @@ class FlowInterfaceResourceIT {
         FlowInterface updatedFlowInterface = flowInterfaceRepository.findById(flowInterface.getId()).get();
         // Disconnect from session so that the updates on updatedFlowInterface are not directly saved in db
         em.detach(updatedFlowInterface);
-        updatedFlowInterface.protocol(UPDATED_PROTOCOL).status(UPDATED_STATUS);
+        updatedFlowInterface.alias(UPDATED_ALIAS).protocol(UPDATED_PROTOCOL).status(UPDATED_STATUS);
 
         restFlowInterfaceMockMvc
             .perform(
@@ -176,6 +211,7 @@ class FlowInterfaceResourceIT {
         List<FlowInterface> flowInterfaceList = flowInterfaceRepository.findAll();
         assertThat(flowInterfaceList).hasSize(databaseSizeBeforeUpdate);
         FlowInterface testFlowInterface = flowInterfaceList.get(flowInterfaceList.size() - 1);
+        assertThat(testFlowInterface.getAlias()).isEqualTo(UPDATED_ALIAS);
         assertThat(testFlowInterface.getProtocol()).isEqualTo(UPDATED_PROTOCOL);
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
     }
@@ -184,7 +220,7 @@ class FlowInterfaceResourceIT {
     @Transactional
     void putNonExistingFlowInterface() throws Exception {
         int databaseSizeBeforeUpdate = flowInterfaceRepository.findAll().size();
-        flowInterface.setId(UUID.randomUUID().toString());
+        flowInterface.setId(count.incrementAndGet());
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFlowInterfaceMockMvc
@@ -204,12 +240,12 @@ class FlowInterfaceResourceIT {
     @Transactional
     void putWithIdMismatchFlowInterface() throws Exception {
         int databaseSizeBeforeUpdate = flowInterfaceRepository.findAll().size();
-        flowInterface.setId(UUID.randomUUID().toString());
+        flowInterface.setId(count.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFlowInterfaceMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, UUID.randomUUID().toString())
+                put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtil.convertObjectToJsonBytes(flowInterface))
             )
@@ -224,7 +260,7 @@ class FlowInterfaceResourceIT {
     @Transactional
     void putWithMissingIdPathParamFlowInterface() throws Exception {
         int databaseSizeBeforeUpdate = flowInterfaceRepository.findAll().size();
-        flowInterface.setId(UUID.randomUUID().toString());
+        flowInterface.setId(count.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFlowInterfaceMockMvc
@@ -262,6 +298,7 @@ class FlowInterfaceResourceIT {
         List<FlowInterface> flowInterfaceList = flowInterfaceRepository.findAll();
         assertThat(flowInterfaceList).hasSize(databaseSizeBeforeUpdate);
         FlowInterface testFlowInterface = flowInterfaceList.get(flowInterfaceList.size() - 1);
+        assertThat(testFlowInterface.getAlias()).isEqualTo(DEFAULT_ALIAS);
         assertThat(testFlowInterface.getProtocol()).isEqualTo(UPDATED_PROTOCOL);
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
     }
@@ -278,7 +315,7 @@ class FlowInterfaceResourceIT {
         FlowInterface partialUpdatedFlowInterface = new FlowInterface();
         partialUpdatedFlowInterface.setId(flowInterface.getId());
 
-        partialUpdatedFlowInterface.protocol(UPDATED_PROTOCOL).status(UPDATED_STATUS);
+        partialUpdatedFlowInterface.alias(UPDATED_ALIAS).protocol(UPDATED_PROTOCOL).status(UPDATED_STATUS);
 
         restFlowInterfaceMockMvc
             .perform(
@@ -292,6 +329,7 @@ class FlowInterfaceResourceIT {
         List<FlowInterface> flowInterfaceList = flowInterfaceRepository.findAll();
         assertThat(flowInterfaceList).hasSize(databaseSizeBeforeUpdate);
         FlowInterface testFlowInterface = flowInterfaceList.get(flowInterfaceList.size() - 1);
+        assertThat(testFlowInterface.getAlias()).isEqualTo(UPDATED_ALIAS);
         assertThat(testFlowInterface.getProtocol()).isEqualTo(UPDATED_PROTOCOL);
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
     }
@@ -300,7 +338,7 @@ class FlowInterfaceResourceIT {
     @Transactional
     void patchNonExistingFlowInterface() throws Exception {
         int databaseSizeBeforeUpdate = flowInterfaceRepository.findAll().size();
-        flowInterface.setId(UUID.randomUUID().toString());
+        flowInterface.setId(count.incrementAndGet());
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restFlowInterfaceMockMvc
@@ -320,12 +358,12 @@ class FlowInterfaceResourceIT {
     @Transactional
     void patchWithIdMismatchFlowInterface() throws Exception {
         int databaseSizeBeforeUpdate = flowInterfaceRepository.findAll().size();
-        flowInterface.setId(UUID.randomUUID().toString());
+        flowInterface.setId(count.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFlowInterfaceMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, UUID.randomUUID().toString())
+                patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
                     .content(TestUtil.convertObjectToJsonBytes(flowInterface))
             )
@@ -340,7 +378,7 @@ class FlowInterfaceResourceIT {
     @Transactional
     void patchWithMissingIdPathParamFlowInterface() throws Exception {
         int databaseSizeBeforeUpdate = flowInterfaceRepository.findAll().size();
-        flowInterface.setId(UUID.randomUUID().toString());
+        flowInterface.setId(count.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restFlowInterfaceMockMvc

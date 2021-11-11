@@ -11,6 +11,23 @@
             <input type="text" class="form-control" id="id" name="id" v-model="flowInterface.id" readonly />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="flow-interface-alias">Alias</label>
+            <input
+              type="text"
+              class="form-control"
+              name="alias"
+              id="flow-interface-alias"
+              data-cy="alias"
+              :class="{ valid: !$v.flowInterface.alias.$invalid, invalid: $v.flowInterface.alias.$invalid }"
+              v-model="$v.flowInterface.alias.$model"
+            />
+            <div v-if="$v.flowInterface.alias.$anyDirty && $v.flowInterface.alias.$invalid">
+              <small class="form-text text-danger" v-if="!$v.flowInterface.alias.pattern">
+                This field should follow pattern for "Alias".
+              </small>
+            </div>
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="flow-interface-protocol">Protocol</label>
             <select
               class="form-control"
@@ -37,8 +54,8 @@
           </div>
           <div class="form-group">
             <label class="form-control-label" for="flow-interface-source">Source</label>
-            <select class="form-control" id="flow-interface-source" data-cy="source" name="source" v-model="flowInterface.source">
-              <option v-bind:value="null"></option>
+            <select class="form-control" id="flow-interface-source" data-cy="source" name="source" v-model="flowInterface.source" required>
+              <option v-if="!flowInterface.source" v-bind:value="null" selected></option>
               <option
                 v-bind:value="
                   flowInterface.source && applicationOption.id === flowInterface.source.id ? flowInterface.source : applicationOption
@@ -50,10 +67,13 @@
               </option>
             </select>
           </div>
+          <div v-if="$v.flowInterface.source.$anyDirty && $v.flowInterface.source.$invalid">
+            <small class="form-text text-danger" v-if="!$v.flowInterface.source.required"> This field is required. </small>
+          </div>
           <div class="form-group">
             <label class="form-control-label" for="flow-interface-target">Target</label>
-            <select class="form-control" id="flow-interface-target" data-cy="target" name="target" v-model="flowInterface.target">
-              <option v-bind:value="null"></option>
+            <select class="form-control" id="flow-interface-target" data-cy="target" name="target" v-model="flowInterface.target" required>
+              <option v-if="!flowInterface.target" v-bind:value="null" selected></option>
               <option
                 v-bind:value="
                   flowInterface.target && applicationOption.id === flowInterface.target.id ? flowInterface.target : applicationOption
@@ -64,6 +84,9 @@
                 {{ applicationOption.name }}
               </option>
             </select>
+          </div>
+          <div v-if="$v.flowInterface.target.$anyDirty && $v.flowInterface.target.$invalid">
+            <small class="form-text text-danger" v-if="!$v.flowInterface.target.required"> This field is required. </small>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="flow-interface-sourceComponent">Source Component</label>

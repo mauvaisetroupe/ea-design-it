@@ -20,15 +20,21 @@ public class Application implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Pattern(regexp = "^HPX\\.CMP\\.[0-9]{8}$")
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    private String id;
+    private Long id;
+
+    @Pattern(regexp = "^HPX\\.CMP\\.[0-9]{8}$")
+    @Column(name = "alias")
+    private String alias;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
+    @Size(max = 1000)
+    @Column(name = "description", length = 1000)
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -51,17 +57,30 @@ public class Application implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public String getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public Application id(String id) {
+    public Application id(Long id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAlias() {
+        return this.alias;
+    }
+
+    public Application alias(String alias) {
+        this.setAlias(alias);
+        return this;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public String getName() {
@@ -197,6 +216,7 @@ public class Application implements Serializable {
     public String toString() {
         return "Application{" +
             "id=" + getId() +
+            ", alias='" + getAlias() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", type='" + getType() + "'" +

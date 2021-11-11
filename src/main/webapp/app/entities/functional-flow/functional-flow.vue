@@ -33,7 +33,6 @@
             <th scope="row"><span>Comment</span></th>
             <th scope="row"><span>Status</span></th>
             <th scope="row"><span>Interfaces</span></th>
-            <th scope="row"><span>Landscape</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -52,16 +51,9 @@
               <span v-for="(interfaces, i) in functionalFlow.interfaces" :key="interfaces.id"
                 >{{ i > 0 ? ', ' : '' }}
                 <router-link class="form-control-static" :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: interfaces.id } }">{{
-                  interfaces.id
+                  interfaces.alias
                 }}</router-link>
               </span>
-            </td>
-            <td>
-              <div v-if="functionalFlow.landscape">
-                <router-link :to="{ name: 'LandscapeViewView', params: { landscapeViewId: functionalFlow.landscape.id } }">{{
-                  functionalFlow.landscape.diagramName
-                }}</router-link>
-              </div>
             </td>
             <td class="text-right">
               <div class="btn-group">

@@ -32,13 +32,18 @@ public class LandscapeView implements Serializable {
     @Column(name = "diagram_name")
     private String diagramName;
 
-    @OneToMany(mappedBy = "landscape", fetch = FetchType.EAGER)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "landscape", "dataFlows" }, allowSetters = true)
-    private Set<FunctionalFlow> flows = new HashSet<>();
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Owner owner;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "rel_landscape_view__flows",
+        joinColumns = @JoinColumn(name = "landscape_view_id"),
+        inverseJoinColumns = @JoinColumn(name = "flows_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "landscapes", "dataFlows" }, allowSetters = true)
+    private Set<FunctionalFlow> flows = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -81,37 +86,6 @@ public class LandscapeView implements Serializable {
         this.diagramName = diagramName;
     }
 
-    public Set<FunctionalFlow> getFlows() {
-        return this.flows;
-    }
-
-    public void setFlows(Set<FunctionalFlow> functionalFlows) {
-        if (this.flows != null) {
-            this.flows.forEach(i -> i.setLandscape(null));
-        }
-        if (functionalFlows != null) {
-            functionalFlows.forEach(i -> i.setLandscape(this));
-        }
-        this.flows = functionalFlows;
-    }
-
-    public LandscapeView flows(Set<FunctionalFlow> functionalFlows) {
-        this.setFlows(functionalFlows);
-        return this;
-    }
-
-    public LandscapeView addFlows(FunctionalFlow functionalFlow) {
-        this.flows.add(functionalFlow);
-        functionalFlow.setLandscape(this);
-        return this;
-    }
-
-    public LandscapeView removeFlows(FunctionalFlow functionalFlow) {
-        this.flows.remove(functionalFlow);
-        functionalFlow.setLandscape(null);
-        return this;
-    }
-
     public Owner getOwner() {
         return this.owner;
     }
@@ -122,6 +96,31 @@ public class LandscapeView implements Serializable {
 
     public LandscapeView owner(Owner owner) {
         this.setOwner(owner);
+        return this;
+    }
+
+    public Set<FunctionalFlow> getFlows() {
+        return this.flows;
+    }
+
+    public void setFlows(Set<FunctionalFlow> functionalFlows) {
+        this.flows = functionalFlows;
+    }
+
+    public LandscapeView flows(Set<FunctionalFlow> functionalFlows) {
+        this.setFlows(functionalFlows);
+        return this;
+    }
+
+    public LandscapeView addFlows(FunctionalFlow functionalFlow) {
+        this.flows.add(functionalFlow);
+        functionalFlow.getLandscapes().add(this);
+        return this;
+    }
+
+    public LandscapeView removeFlows(FunctionalFlow functionalFlow) {
+        this.flows.remove(functionalFlow);
+        functionalFlow.getLandscapes().remove(this);
         return this;
     }
 

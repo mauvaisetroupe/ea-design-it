@@ -2,11 +2,11 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import AlertService from '@/shared/alert/alert.service';
 
-import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
-import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
-
 import OwnerService from '@/entities/owner/owner.service';
 import { IOwner } from '@/shared/model/owner.model';
+
+import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
+import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 import { ILandscapeView, LandscapeView } from '@/shared/model/landscape-view.model';
 import LandscapeViewService from './landscape-view.service';
@@ -28,13 +28,13 @@ export default class LandscapeViewUpdate extends Vue {
 
   public landscapeView: ILandscapeView = new LandscapeView();
 
-  @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
-
-  public functionalFlows: IFunctionalFlow[] = [];
-
   @Inject('ownerService') private ownerService: () => OwnerService;
 
   public owners: IOwner[] = [];
+
+  @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
+
+  public functionalFlows: IFunctionalFlow[] = [];
   public viewPointValues: string[] = Object.keys(ViewPoint);
   public isSaving = false;
   public currentLanguage = '';
@@ -56,6 +56,7 @@ export default class LandscapeViewUpdate extends Vue {
         this.currentLanguage = this.$store.getters.currentLanguage;
       }
     );
+    this.landscapeView.flows = [];
   }
 
   public save(): void {
@@ -117,15 +118,26 @@ export default class LandscapeViewUpdate extends Vue {
   }
 
   public initRelationships(): void {
-    this.functionalFlowService()
-      .retrieve()
-      .then(res => {
-        this.functionalFlows = res.data;
-      });
     this.ownerService()
       .retrieve()
       .then(res => {
         this.owners = res.data;
       });
+    this.functionalFlowService()
+      .retrieve()
+      .then(res => {
+        this.functionalFlows = res.data;
+      });
+  }
+
+  public getSelected(selectedVals, option): any {
+    if (selectedVals) {
+      for (let i = 0; i < selectedVals.length; i++) {
+        if (option.id === selectedVals[i].id) {
+          return selectedVals[i];
+        }
+      }
+    }
+    return option;
   }
 }

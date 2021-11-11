@@ -5,7 +5,7 @@ import { IFlowInterface } from '@/shared/model/flow-interface.model';
 const baseApiUrl = 'api/flow-interfaces';
 
 export default class FlowInterfaceService {
-  public find(id: string): Promise<IFlowInterface> {
+  public find(id: number): Promise<IFlowInterface> {
     return new Promise<IFlowInterface>((resolve, reject) => {
       axios
         .get(`${baseApiUrl}/${id}`)
@@ -31,7 +31,7 @@ export default class FlowInterfaceService {
     });
   }
 
-  public delete(id: string): Promise<any> {
+  public delete(id: number): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios
         .delete(`${baseApiUrl}/${id}`)

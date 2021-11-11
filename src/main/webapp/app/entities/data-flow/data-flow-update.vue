@@ -58,6 +58,11 @@
               :class="{ valid: !$v.dataFlow.description.$invalid, invalid: $v.dataFlow.description.$invalid }"
               v-model="$v.dataFlow.description.$model"
             />
+            <div v-if="$v.dataFlow.description.$anyDirty && $v.dataFlow.description.$invalid">
+              <small class="form-text text-danger" v-if="!$v.dataFlow.description.maxLength">
+                This field cannot be longer than 1000 characters.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="data-flow-resourceName">Resource Name</label>
@@ -112,7 +117,7 @@
                 v-for="functionalFlowOption in functionalFlows"
                 :key="functionalFlowOption.id"
               >
-                {{ functionalFlowOption.id }}
+                {{ functionalFlowOption.alias }}
               </option>
             </select>
           </div>
@@ -139,7 +144,7 @@
                 v-for="flowInterfaceOption in flowInterfaces"
                 :key="flowInterfaceOption.id"
               >
-                {{ flowInterfaceOption.id }}
+                {{ flowInterfaceOption.alias }}
               </option>
             </select>
           </div>

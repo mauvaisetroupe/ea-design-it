@@ -83,7 +83,10 @@ public class ApplicationQueryService extends QueryService<Application> {
                 specification = specification.and(distinct(criteria.getDistinct()));
             }
             if (criteria.getId() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getId(), Application_.id));
+                specification = specification.and(buildRangeSpecification(criteria.getId(), Application_.id));
+            }
+            if (criteria.getAlias() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getAlias(), Application_.alias));
             }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), Application_.name));

@@ -28,6 +28,7 @@
         <thead>
           <tr>
             <th scope="row"><span>ID</span></th>
+            <th scope="row"><span>Alias</span></th>
             <th scope="row"><span>Protocol</span></th>
             <th scope="row"><span>Status</span></th>
             <th scope="row"><span>Source</span></th>
@@ -45,6 +46,7 @@
                 flowInterface.id
               }}</router-link>
             </td>
+            <td>{{ flowInterface.alias }}</td>
             <td>{{ flowInterface.protocol }}</td>
             <td>{{ flowInterface.status }}</td>
             <td>

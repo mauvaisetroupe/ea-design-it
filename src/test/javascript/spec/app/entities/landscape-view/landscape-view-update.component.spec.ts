@@ -8,9 +8,9 @@ import LandscapeViewUpdateComponent from '@/entities/landscape-view/landscape-vi
 import LandscapeViewClass from '@/entities/landscape-view/landscape-view-update.component';
 import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
 
-import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
-
 import OwnerService from '@/entities/owner/owner.service';
+
+import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -42,9 +42,9 @@ describe('Component Tests', () => {
           landscapeViewService: () => landscapeViewServiceStub,
           alertService: () => new AlertService(),
 
-          functionalFlowService: () => new FunctionalFlowService(),
-
           ownerService: () => new OwnerService(),
+
+          functionalFlowService: () => new FunctionalFlowService(),
         },
       });
       comp = wrapper.vm;

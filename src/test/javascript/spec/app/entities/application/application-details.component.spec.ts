@@ -39,11 +39,11 @@ describe('Component Tests', () => {
     describe('OnInit', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const foundApplication = { id: 'ABC' };
+        const foundApplication = { id: 123 };
         applicationServiceStub.find.resolves(foundApplication);
 
         // WHEN
-        comp.retrieveApplication('ABC');
+        comp.retrieveApplication(123);
         await comp.$nextTick();
 
         // THEN
@@ -54,11 +54,11 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundApplication = { id: 'ABC' };
+        const foundApplication = { id: 123 };
         applicationServiceStub.find.resolves(foundApplication);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { applicationId: 'ABC' } }, null, cb => cb(comp));
+        comp.beforeRouteEnter({ params: { applicationId: 123 } }, null, cb => cb(comp));
         await comp.$nextTick();
 
         // THEN

@@ -114,31 +114,30 @@ public class FlowImportService {
 
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);
-            Optional<FunctionalFlow> functionalFlowOption = flowRepository.findById(flowImport.getFlowAlias());
+            Optional<FunctionalFlow> functionalFlowOption = flowRepository.findByAlias(flowImport.getFlowAlias());
 
             FunctionalFlow functionalFlow;
 
+            // Landscape
+            LandscapeView landscapeView = landscapeViewRepository.findByDiagramNameIgnoreCase(lowerCaseFileName);
+            if (landscapeView == null) {
+                landscapeView = mapToLandscapeView(lowerCaseFileName);
+                landscapeViewRepository.save(landscapeView);
+            }
+
+            // FunctionalFlow
             if (!functionalFlowOption.isPresent()) {
                 flowImport.setImportFunctionalFlowStatus(ImportStatus.NEW);
-
-                // Landscape
-                LandscapeView landscapeView = landscapeViewRepository.findByDiagramNameIgnoreCase(lowerCaseFileName);
-                if (landscapeView == null) {
-                    landscapeView = mapToLandscapeView(lowerCaseFileName);
-                    landscapeViewRepository.save(landscapeView);
-                }
-
-                // FunctionalFlow
                 functionalFlow = mapToFunctionalFlow(flowImport);
-                functionalFlow.setLandscape(landscapeView);
-                flowRepository.save(functionalFlow);
             } else {
                 flowImport.setImportFunctionalFlowStatus(ImportStatus.EXISTING);
                 functionalFlow = functionalFlowOption.get();
             }
+            functionalFlow.addLandscape(landscapeView);
+            flowRepository.save(functionalFlow);
 
             // FlowInterface
-            Optional<FlowInterface> flowInterfaceOption = interfaceRepository.findById(flowImport.getIdFlowFromExcel());
+            Optional<FlowInterface> flowInterfaceOption = interfaceRepository.findByAlias(flowImport.getIdFlowFromExcel());
             FlowInterface flowInterface;
             if (!flowInterfaceOption.isPresent()) {
                 flowImport.setImportInterfaceStatus(ImportStatus.NEW);
@@ -167,8 +166,6 @@ public class FlowImportService {
 
     private FunctionalFlow mapToFunctionalFlow(FlowImport flowImport) {
         FunctionalFlow functionalFlow = new FunctionalFlow();
-        // use alias as ID
-        functionalFlow.setId(flowImport.getFlowAlias());
         functionalFlow.setAlias(flowImport.getFlowAlias());
         functionalFlow.setDescription(flowImport.getDescription());
         functionalFlow.setComment(flowImport.getComment());
@@ -208,7 +205,7 @@ public class FlowImportService {
         Application source = applicationRepository.findByNameIgnoreCase(flowImport.getSourceElement());
         Application target = applicationRepository.findByNameIgnoreCase(flowImport.getTargetElement());
         FlowInterface flowInterface = new FlowInterface();
-        flowInterface.setId(flowImport.getIdFlowFromExcel());
+        flowInterface.setAlias(flowImport.getIdFlowFromExcel());
         flowInterface.setSource(source);
         flowInterface.setTarget(target);
         if (!nullable(flowImport.getIntegrationPattern())) {

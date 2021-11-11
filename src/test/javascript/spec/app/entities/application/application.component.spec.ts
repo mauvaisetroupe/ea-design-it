@@ -51,7 +51,7 @@ describe('Component Tests', () => {
 
     it('Should call load all on init', async () => {
       // GIVEN
-      applicationServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 'ABC' }] });
+      applicationServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
       // WHEN
       comp.retrieveAllApplications();
@@ -59,12 +59,12 @@ describe('Component Tests', () => {
 
       // THEN
       expect(applicationServiceStub.retrieve.called).toBeTruthy();
-      expect(comp.applications[0]).toEqual(expect.objectContaining({ id: 'ABC' }));
+      expect(comp.applications[0]).toEqual(expect.objectContaining({ id: 123 }));
     });
 
     it('should load a page', async () => {
       // GIVEN
-      applicationServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 'ABC' }] });
+      applicationServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
       comp.previousPage = 1;
 
       // WHEN
@@ -73,7 +73,7 @@ describe('Component Tests', () => {
 
       // THEN
       expect(applicationServiceStub.retrieve.called).toBeTruthy();
-      expect(comp.applications[0]).toEqual(expect.objectContaining({ id: 'ABC' }));
+      expect(comp.applications[0]).toEqual(expect.objectContaining({ id: 123 }));
     });
 
     it('should not load a page if the page is the same as the previous page', () => {
@@ -91,7 +91,7 @@ describe('Component Tests', () => {
     it('should re-initialize the page', async () => {
       // GIVEN
       applicationServiceStub.retrieve.reset();
-      applicationServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 'ABC' }] });
+      applicationServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
       // WHEN
       comp.loadPage(2);
@@ -102,7 +102,7 @@ describe('Component Tests', () => {
       // THEN
       expect(applicationServiceStub.retrieve.callCount).toEqual(3);
       expect(comp.page).toEqual(1);
-      expect(comp.applications[0]).toEqual(expect.objectContaining({ id: 'ABC' }));
+      expect(comp.applications[0]).toEqual(expect.objectContaining({ id: 123 }));
     });
 
     it('should calculate the sort attribute for an id', () => {
@@ -128,7 +128,7 @@ describe('Component Tests', () => {
       applicationServiceStub.delete.resolves({});
 
       // WHEN
-      comp.prepareRemove({ id: 'ABC' });
+      comp.prepareRemove({ id: 123 });
       comp.removeApplication();
       await comp.$nextTick();
 

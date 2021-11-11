@@ -1,7 +1,6 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
-import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -58,7 +57,7 @@ public class FunctionalFlowResource {
         FunctionalFlow result = functionalFlowRepository.save(functionalFlow);
         return ResponseEntity
             .created(new URI("/api/functional-flows/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -74,7 +73,7 @@ public class FunctionalFlowResource {
      */
     @PutMapping("/functional-flows/{id}")
     public ResponseEntity<FunctionalFlow> updateFunctionalFlow(
-        @PathVariable(value = "id", required = false) final String id,
+        @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody FunctionalFlow functionalFlow
     ) throws URISyntaxException {
         log.debug("REST request to update FunctionalFlow : {}, {}", id, functionalFlow);
@@ -92,7 +91,7 @@ public class FunctionalFlowResource {
         FunctionalFlow result = functionalFlowRepository.save(functionalFlow);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, functionalFlow.getId()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, functionalFlow.getId().toString()))
             .body(result);
     }
 
@@ -109,7 +108,7 @@ public class FunctionalFlowResource {
      */
     @PatchMapping(value = "/functional-flows/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<FunctionalFlow> partialUpdateFunctionalFlow(
-        @PathVariable(value = "id", required = false) final String id,
+        @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody FunctionalFlow functionalFlow
     ) throws URISyntaxException {
         log.debug("REST request to partial update FunctionalFlow partially : {}, {}", id, functionalFlow);
@@ -146,7 +145,7 @@ public class FunctionalFlowResource {
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, functionalFlow.getId())
+            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, functionalFlow.getId().toString())
         );
     }
 
@@ -159,7 +158,7 @@ public class FunctionalFlowResource {
     @GetMapping("/functional-flows")
     public List<FunctionalFlow> getAllFunctionalFlows(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all FunctionalFlows");
-        return functionalFlowRepository.findAllWithEagerRelationships();
+        return functionalFlowRepository.findAll();
     }
 
     /**
@@ -169,9 +168,9 @@ public class FunctionalFlowResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the functionalFlow, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/functional-flows/{id}")
-    public ResponseEntity<FunctionalFlow> getFunctionalFlow(@PathVariable String id) {
+    public ResponseEntity<FunctionalFlow> getFunctionalFlow(@PathVariable Long id) {
         log.debug("REST request to get FunctionalFlow : {}", id);
-        Optional<FunctionalFlow> functionalFlow = functionalFlowRepository.findOneWithEagerRelationships(id);
+        Optional<FunctionalFlow> functionalFlow = functionalFlowRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(functionalFlow);
     }
 
@@ -182,16 +181,12 @@ public class FunctionalFlowResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/functional-flows/{id}")
-    public ResponseEntity<Void> deleteFunctionalFlow(@PathVariable String id) {
+    public ResponseEntity<Void> deleteFunctionalFlow(@PathVariable Long id) {
         log.debug("REST request to delete FunctionalFlow : {}", id);
-
-        // Avoid EntityNotFoundException when removing from OneToMany collection
-        // When Fetch=EAGER (needed for finding flows then interfaces from landscape)
-        FunctionalFlow functionalFlow = functionalFlowRepository.findById(id).get();
-        LandscapeView landscapeView = functionalFlow.getLandscape();
-        landscapeView.getFlows().remove(functionalFlow);
-
         functionalFlowRepository.deleteById(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+            .build();
     }
 }

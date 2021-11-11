@@ -3,7 +3,8 @@ import { IApplicationComponent } from '@/shared/model/application-component.mode
 
 import { ApplicationType } from '@/shared/model/enumerations/application-type.model';
 export interface IApplication {
-  id?: string;
+  id?: number;
+  alias?: string | null;
   name?: string | null;
   description?: string | null;
   type?: ApplicationType | null;
@@ -15,7 +16,8 @@ export interface IApplication {
 
 export class Application implements IApplication {
   constructor(
-    public id?: string,
+    public id?: number,
+    public alias?: string | null,
     public name?: string | null,
     public description?: string | null,
     public type?: ApplicationType | null,

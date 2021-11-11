@@ -26,6 +26,15 @@
               }}</router-link>
             </div>
           </dd>
+          <dt>
+            <span>Flows</span>
+          </dt>
+          <dd>
+            <span v-for="(flows, i) in landscapeView.flows" :key="flows.id"
+              >{{ i > 0 ? ', ' : '' }}
+              <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flows.id } }">{{ flows.alias }}</router-link>
+            </span>
+          </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>

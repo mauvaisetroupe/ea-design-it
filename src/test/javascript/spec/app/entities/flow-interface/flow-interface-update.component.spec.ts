@@ -65,7 +65,7 @@ describe('Component Tests', () => {
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const entity = { id: 'ABC' };
+        const entity = { id: 123 };
         comp.flowInterface = entity;
         flowInterfaceServiceStub.update.resolves(entity);
 
@@ -97,12 +97,12 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundFlowInterface = { id: 'ABC' };
+        const foundFlowInterface = { id: 123 };
         flowInterfaceServiceStub.find.resolves(foundFlowInterface);
         flowInterfaceServiceStub.retrieve.resolves([foundFlowInterface]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { flowInterfaceId: 'ABC' } }, null, cb => cb(comp));
+        comp.beforeRouteEnter({ params: { flowInterfaceId: 123 } }, null, cb => cb(comp));
         await comp.$nextTick();
 
         // THEN

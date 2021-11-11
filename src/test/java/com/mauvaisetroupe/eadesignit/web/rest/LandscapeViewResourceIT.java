@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -9,14 +10,20 @@ import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ViewPoint;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link LandscapeViewResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class LandscapeViewResourceIT {
@@ -44,6 +52,9 @@ class LandscapeViewResourceIT {
 
     @Autowired
     private LandscapeViewRepository landscapeViewRepository;
+
+    @Mock
+    private LandscapeViewRepository landscapeViewRepositoryMock;
 
     @Autowired
     private EntityManager em;
@@ -129,6 +140,24 @@ class LandscapeViewResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(landscapeView.getId().intValue())))
             .andExpect(jsonPath("$.[*].viewpoint").value(hasItem(DEFAULT_VIEWPOINT.toString())))
             .andExpect(jsonPath("$.[*].diagramName").value(hasItem(DEFAULT_DIAGRAM_NAME)));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllLandscapeViewsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(landscapeViewRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restLandscapeViewMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(landscapeViewRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllLandscapeViewsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(landscapeViewRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restLandscapeViewMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(landscapeViewRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test

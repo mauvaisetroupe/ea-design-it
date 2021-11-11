@@ -33,6 +33,11 @@
               :class="{ valid: !$v.functionalFlow.description.$invalid, invalid: $v.functionalFlow.description.$invalid }"
               v-model="$v.functionalFlow.description.$model"
             />
+            <div v-if="$v.functionalFlow.description.$anyDirty && $v.functionalFlow.description.$invalid">
+              <small class="form-text text-danger" v-if="!$v.functionalFlow.description.maxLength">
+                This field cannot be longer than 1000 characters.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="functional-flow-comment">Comment</label>
@@ -74,36 +79,12 @@
                 v-for="flowInterfaceOption in flowInterfaces"
                 :key="flowInterfaceOption.id"
               >
-                {{ flowInterfaceOption.id }}
+                {{ flowInterfaceOption.alias }}
               </option>
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-control-label" for="functional-flow-landscape">Landscape</label>
-            <select
-              class="form-control"
-              id="functional-flow-landscape"
-              data-cy="landscape"
-              name="landscape"
-              v-model="functionalFlow.landscape"
-              required
-            >
-              <option v-if="!functionalFlow.landscape" v-bind:value="null" selected></option>
-              <option
-                v-bind:value="
-                  functionalFlow.landscape && landscapeViewOption.id === functionalFlow.landscape.id
-                    ? functionalFlow.landscape
-                    : landscapeViewOption
-                "
-                v-for="landscapeViewOption in landscapeViews"
-                :key="landscapeViewOption.id"
-              >
-                {{ landscapeViewOption.diagramName }}
-              </option>
-            </select>
-          </div>
-          <div v-if="$v.functionalFlow.landscape.$anyDirty && $v.functionalFlow.landscape.$invalid">
-            <small class="form-text text-danger" v-if="!$v.functionalFlow.landscape.required"> This field is required. </small>
+          <div v-if="$v.functionalFlow.landscapes.$anyDirty && $v.functionalFlow.landscapes.$invalid">
+            <small class="form-text text-danger" v-if="!$v.functionalFlow.landscapes.required"> This field is required. </small>
           </div>
         </div>
         <div>

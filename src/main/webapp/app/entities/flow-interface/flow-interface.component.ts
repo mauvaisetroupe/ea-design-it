@@ -14,7 +14,7 @@ export default class FlowInterface extends Vue {
   @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
   @Inject('alertService') private alertService: () => AlertService;
 
-  private removeId: string = null;
+  private removeId: number = null;
 
   public flowInterfaces: IFlowInterface[] = [];
 

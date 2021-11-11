@@ -48,6 +48,9 @@ public class ApplicationService {
         return applicationRepository
             .findById(application.getId())
             .map(existingApplication -> {
+                if (application.getAlias() != null) {
+                    existingApplication.setAlias(application.getAlias());
+                }
                 if (application.getName() != null) {
                     existingApplication.setName(application.getName());
                 }
@@ -88,7 +91,7 @@ public class ApplicationService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<Application> findOne(String id) {
+    public Optional<Application> findOne(Long id) {
         log.debug("Request to get Application : {}", id);
         return applicationRepository.findById(id);
     }
@@ -98,7 +101,7 @@ public class ApplicationService {
      *
      * @param id the id of the entity.
      */
-    public void delete(String id) {
+    public void delete(Long id) {
         log.debug("Request to delete Application : {}", id);
         applicationRepository.deleteById(id);
     }

@@ -18,7 +18,9 @@
     },
     {
       "fieldName": "description",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1000"
     },
     {
       "fieldName": "resourceName",
@@ -42,6 +44,7 @@
       "otherEntityRelationshipName": "dataFlows",
       "relationshipValidateRules": "required",
       "relationshipName": "functionalFlows",
+      "otherEntityField": "alias",
       "ownerSide": true
     },
     {
@@ -49,7 +52,8 @@
       "otherEntityName": "flowInterface",
       "otherEntityRelationshipName": "dataFlows",
       "relationshipValidateRules": "required",
-      "relationshipName": "flowInterface"
+      "relationshipName": "flowInterface",
+      "otherEntityField": "alias"
     }
   ],
   "entityTableName": "data_flow",

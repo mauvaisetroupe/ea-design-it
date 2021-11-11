@@ -13,7 +13,8 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.service.criteria.ApplicationCriteria;
 import java.util.List;
-import java.util.UUID;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,9 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ApplicationResourceIT {
 
+    private static final String DEFAULT_ALIAS = "HPX.CMP.71231711";
+    private static final String UPDATED_ALIAS = "HPX.CMP.48642885";
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
@@ -49,6 +53,9 @@ class ApplicationResourceIT {
 
     private static final String ENTITY_API_URL = "/api/applications";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
+
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private ApplicationRepository applicationRepository;
@@ -69,6 +76,7 @@ class ApplicationResourceIT {
      */
     public static Application createEntity(EntityManager em) {
         Application application = new Application()
+            .alias(DEFAULT_ALIAS)
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .type(DEFAULT_TYPE)
@@ -85,6 +93,7 @@ class ApplicationResourceIT {
      */
     public static Application createUpdatedEntity(EntityManager em) {
         Application application = new Application()
+            .alias(UPDATED_ALIAS)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
@@ -111,6 +120,7 @@ class ApplicationResourceIT {
         List<Application> applicationList = applicationRepository.findAll();
         assertThat(applicationList).hasSize(databaseSizeBeforeCreate + 1);
         Application testApplication = applicationList.get(applicationList.size() - 1);
+        assertThat(testApplication.getAlias()).isEqualTo(DEFAULT_ALIAS);
         assertThat(testApplication.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testApplication.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testApplication.getType()).isEqualTo(DEFAULT_TYPE);
@@ -122,7 +132,7 @@ class ApplicationResourceIT {
     @Transactional
     void createApplicationWithExistingId() throws Exception {
         // Create the Application with an existing ID
-        application.setId("existing_id");
+        application.setId(1L);
 
         int databaseSizeBeforeCreate = applicationRepository.findAll().size();
 
@@ -147,7 +157,8 @@ class ApplicationResourceIT {
             .perform(get(ENTITY_API_URL + "?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(application.getId())))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(application.getId().intValue())))
+            .andExpect(jsonPath("$.[*].alias").value(hasItem(DEFAULT_ALIAS)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
@@ -166,7 +177,8 @@ class ApplicationResourceIT {
             .perform(get(ENTITY_API_URL_ID, application.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.id").value(application.getId()))
+            .andExpect(jsonPath("$.id").value(application.getId().intValue()))
+            .andExpect(jsonPath("$.alias").value(DEFAULT_ALIAS))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
@@ -180,10 +192,94 @@ class ApplicationResourceIT {
         // Initialize the database
         applicationRepository.saveAndFlush(application);
 
-        String id = application.getId();
+        Long id = application.getId();
 
         defaultApplicationShouldBeFound("id.equals=" + id);
         defaultApplicationShouldNotBeFound("id.notEquals=" + id);
+
+        defaultApplicationShouldBeFound("id.greaterThanOrEqual=" + id);
+        defaultApplicationShouldNotBeFound("id.greaterThan=" + id);
+
+        defaultApplicationShouldBeFound("id.lessThanOrEqual=" + id);
+        defaultApplicationShouldNotBeFound("id.lessThan=" + id);
+    }
+
+    @Test
+    @Transactional
+    void getAllApplicationsByAliasIsEqualToSomething() throws Exception {
+        // Initialize the database
+        applicationRepository.saveAndFlush(application);
+
+        // Get all the applicationList where alias equals to DEFAULT_ALIAS
+        defaultApplicationShouldBeFound("alias.equals=" + DEFAULT_ALIAS);
+
+        // Get all the applicationList where alias equals to UPDATED_ALIAS
+        defaultApplicationShouldNotBeFound("alias.equals=" + UPDATED_ALIAS);
+    }
+
+    @Test
+    @Transactional
+    void getAllApplicationsByAliasIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        applicationRepository.saveAndFlush(application);
+
+        // Get all the applicationList where alias not equals to DEFAULT_ALIAS
+        defaultApplicationShouldNotBeFound("alias.notEquals=" + DEFAULT_ALIAS);
+
+        // Get all the applicationList where alias not equals to UPDATED_ALIAS
+        defaultApplicationShouldBeFound("alias.notEquals=" + UPDATED_ALIAS);
+    }
+
+    @Test
+    @Transactional
+    void getAllApplicationsByAliasIsInShouldWork() throws Exception {
+        // Initialize the database
+        applicationRepository.saveAndFlush(application);
+
+        // Get all the applicationList where alias in DEFAULT_ALIAS or UPDATED_ALIAS
+        defaultApplicationShouldBeFound("alias.in=" + DEFAULT_ALIAS + "," + UPDATED_ALIAS);
+
+        // Get all the applicationList where alias equals to UPDATED_ALIAS
+        defaultApplicationShouldNotBeFound("alias.in=" + UPDATED_ALIAS);
+    }
+
+    @Test
+    @Transactional
+    void getAllApplicationsByAliasIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        applicationRepository.saveAndFlush(application);
+
+        // Get all the applicationList where alias is not null
+        defaultApplicationShouldBeFound("alias.specified=true");
+
+        // Get all the applicationList where alias is null
+        defaultApplicationShouldNotBeFound("alias.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllApplicationsByAliasContainsSomething() throws Exception {
+        // Initialize the database
+        applicationRepository.saveAndFlush(application);
+
+        // Get all the applicationList where alias contains DEFAULT_ALIAS
+        defaultApplicationShouldBeFound("alias.contains=" + DEFAULT_ALIAS);
+
+        // Get all the applicationList where alias contains UPDATED_ALIAS
+        defaultApplicationShouldNotBeFound("alias.contains=" + UPDATED_ALIAS);
+    }
+
+    @Test
+    @Transactional
+    void getAllApplicationsByAliasNotContainsSomething() throws Exception {
+        // Initialize the database
+        applicationRepository.saveAndFlush(application);
+
+        // Get all the applicationList where alias does not contain DEFAULT_ALIAS
+        defaultApplicationShouldNotBeFound("alias.doesNotContain=" + DEFAULT_ALIAS);
+
+        // Get all the applicationList where alias does not contain UPDATED_ALIAS
+        defaultApplicationShouldBeFound("alias.doesNotContain=" + UPDATED_ALIAS);
     }
 
     @Test
@@ -610,7 +706,8 @@ class ApplicationResourceIT {
             .perform(get(ENTITY_API_URL + "?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(application.getId())))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(application.getId().intValue())))
+            .andExpect(jsonPath("$.[*].alias").value(hasItem(DEFAULT_ALIAS)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
@@ -664,6 +761,7 @@ class ApplicationResourceIT {
         // Disconnect from session so that the updates on updatedApplication are not directly saved in db
         em.detach(updatedApplication);
         updatedApplication
+            .alias(UPDATED_ALIAS)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
@@ -682,6 +780,7 @@ class ApplicationResourceIT {
         List<Application> applicationList = applicationRepository.findAll();
         assertThat(applicationList).hasSize(databaseSizeBeforeUpdate);
         Application testApplication = applicationList.get(applicationList.size() - 1);
+        assertThat(testApplication.getAlias()).isEqualTo(UPDATED_ALIAS);
         assertThat(testApplication.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testApplication.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testApplication.getType()).isEqualTo(UPDATED_TYPE);
@@ -693,7 +792,7 @@ class ApplicationResourceIT {
     @Transactional
     void putNonExistingApplication() throws Exception {
         int databaseSizeBeforeUpdate = applicationRepository.findAll().size();
-        application.setId(UUID.randomUUID().toString());
+        application.setId(count.incrementAndGet());
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restApplicationMockMvc
@@ -713,12 +812,12 @@ class ApplicationResourceIT {
     @Transactional
     void putWithIdMismatchApplication() throws Exception {
         int databaseSizeBeforeUpdate = applicationRepository.findAll().size();
-        application.setId(UUID.randomUUID().toString());
+        application.setId(count.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restApplicationMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, UUID.randomUUID().toString())
+                put(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtil.convertObjectToJsonBytes(application))
             )
@@ -733,7 +832,7 @@ class ApplicationResourceIT {
     @Transactional
     void putWithMissingIdPathParamApplication() throws Exception {
         int databaseSizeBeforeUpdate = applicationRepository.findAll().size();
-        application.setId(UUID.randomUUID().toString());
+        application.setId(count.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restApplicationMockMvc
@@ -771,6 +870,7 @@ class ApplicationResourceIT {
         List<Application> applicationList = applicationRepository.findAll();
         assertThat(applicationList).hasSize(databaseSizeBeforeUpdate);
         Application testApplication = applicationList.get(applicationList.size() - 1);
+        assertThat(testApplication.getAlias()).isEqualTo(DEFAULT_ALIAS);
         assertThat(testApplication.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testApplication.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testApplication.getType()).isEqualTo(DEFAULT_TYPE);
@@ -791,6 +891,7 @@ class ApplicationResourceIT {
         partialUpdatedApplication.setId(application.getId());
 
         partialUpdatedApplication
+            .alias(UPDATED_ALIAS)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
@@ -809,6 +910,7 @@ class ApplicationResourceIT {
         List<Application> applicationList = applicationRepository.findAll();
         assertThat(applicationList).hasSize(databaseSizeBeforeUpdate);
         Application testApplication = applicationList.get(applicationList.size() - 1);
+        assertThat(testApplication.getAlias()).isEqualTo(UPDATED_ALIAS);
         assertThat(testApplication.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testApplication.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testApplication.getType()).isEqualTo(UPDATED_TYPE);
@@ -820,7 +922,7 @@ class ApplicationResourceIT {
     @Transactional
     void patchNonExistingApplication() throws Exception {
         int databaseSizeBeforeUpdate = applicationRepository.findAll().size();
-        application.setId(UUID.randomUUID().toString());
+        application.setId(count.incrementAndGet());
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restApplicationMockMvc
@@ -840,12 +942,12 @@ class ApplicationResourceIT {
     @Transactional
     void patchWithIdMismatchApplication() throws Exception {
         int databaseSizeBeforeUpdate = applicationRepository.findAll().size();
-        application.setId(UUID.randomUUID().toString());
+        application.setId(count.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restApplicationMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, UUID.randomUUID().toString())
+                patch(ENTITY_API_URL_ID, count.incrementAndGet())
                     .contentType("application/merge-patch+json")
                     .content(TestUtil.convertObjectToJsonBytes(application))
             )
@@ -860,7 +962,7 @@ class ApplicationResourceIT {
     @Transactional
     void patchWithMissingIdPathParamApplication() throws Exception {
         int databaseSizeBeforeUpdate = applicationRepository.findAll().size();
-        application.setId(UUID.randomUUID().toString());
+        application.setId(count.incrementAndGet());
 
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restApplicationMockMvc

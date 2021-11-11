@@ -5,6 +5,12 @@
         <h2 class="jh-entity-heading" data-cy="flowInterfaceDetailsHeading"><span>FlowInterface</span> {{ flowInterface.id }}</h2>
         <dl class="row jh-entity-details">
           <dt>
+            <span>Alias</span>
+          </dt>
+          <dd>
+            <span>{{ flowInterface.alias }}</span>
+          </dd>
+          <dt>
             <span>Protocol</span>
           </dt>
           <dd>

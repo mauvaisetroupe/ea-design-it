@@ -5,7 +5,7 @@ import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 const baseApiUrl = 'api/functional-flows';
 
 export default class FunctionalFlowService {
-  public find(id: string): Promise<IFunctionalFlow> {
+  public find(id: number): Promise<IFunctionalFlow> {
     return new Promise<IFunctionalFlow>((resolve, reject) => {
       axios
         .get(`${baseApiUrl}/${id}`)
@@ -31,7 +31,7 @@ export default class FunctionalFlowService {
     });
   }
 
-  public delete(id: string): Promise<any> {
+  public delete(id: number): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios
         .delete(`${baseApiUrl}/${id}`)

@@ -7,7 +7,7 @@ import { IApplication } from '@/shared/model/application.model';
 const baseApiUrl = 'api/applications';
 
 export default class ApplicationService {
-  public find(id: string): Promise<IApplication> {
+  public find(id: number): Promise<IApplication> {
     return new Promise<IApplication>((resolve, reject) => {
       axios
         .get(`${baseApiUrl}/${id}`)
@@ -33,7 +33,7 @@ export default class ApplicationService {
     });
   }
 
-  public delete(id: string): Promise<any> {
+  public delete(id: number): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios
         .delete(`${baseApiUrl}/${id}`)

@@ -2,22 +2,14 @@
   "name": "FunctionalFlow",
   "fields": [
     {
-      "fieldName": "id",
-      "fieldType": "String",
-      "fieldValidateRules": ["pattern"],
-      "fieldValidateRulesPattern": "^[A-Z].[0-9]{2,3}[A-Z]?$",
-      "options": {
-        "id": true,
-        "autoGenerate": "false"
-      }
-    },
-    {
       "fieldName": "alias",
       "fieldType": "String"
     },
     {
       "fieldName": "description",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1000"
     },
     {
       "fieldName": "comment",
@@ -34,15 +26,17 @@
       "otherEntityName": "flowInterface",
       "otherEntityRelationshipName": "functionalFlows",
       "relationshipName": "interfaces",
+      "otherEntityField": "alias",
       "ownerSide": true
     },
     {
-      "relationshipType": "many-to-one",
+      "relationshipType": "many-to-many",
       "otherEntityName": "landscapeView",
       "otherEntityRelationshipName": "flows",
       "relationshipValidateRules": "required",
       "relationshipName": "landscape",
-      "otherEntityField": "diagramName"
+      "otherEntityField": "diagramName",
+      "ownerSide": false
     },
     {
       "relationshipType": "many-to-many",

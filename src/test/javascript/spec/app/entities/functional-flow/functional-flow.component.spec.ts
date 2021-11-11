@@ -50,7 +50,7 @@ describe('Component Tests', () => {
 
     it('Should call load all on init', async () => {
       // GIVEN
-      functionalFlowServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 'ABC' }] });
+      functionalFlowServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
       // WHEN
       comp.retrieveAllFunctionalFlows();
@@ -58,14 +58,14 @@ describe('Component Tests', () => {
 
       // THEN
       expect(functionalFlowServiceStub.retrieve.called).toBeTruthy();
-      expect(comp.functionalFlows[0]).toEqual(expect.objectContaining({ id: 'ABC' }));
+      expect(comp.functionalFlows[0]).toEqual(expect.objectContaining({ id: 123 }));
     });
     it('Should call delete service on confirmDelete', async () => {
       // GIVEN
       functionalFlowServiceStub.delete.resolves({});
 
       // WHEN
-      comp.prepareRemove({ id: 'ABC' });
+      comp.prepareRemove({ id: 123 });
       comp.removeFunctionalFlow();
       await comp.$nextTick();
 

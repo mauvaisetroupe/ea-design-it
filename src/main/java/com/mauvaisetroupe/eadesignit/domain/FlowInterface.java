@@ -20,10 +20,15 @@ public class FlowInterface implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Pattern(regexp = "^[A-Z]{3}-[0-9]{4}$")
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    private String id;
+    private Long id;
+
+    @Pattern(regexp = "^[A-Z]{3}-[0-9]{2,4}$")
+    @Column(name = "alias")
+    private String alias;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "protocol")
@@ -37,11 +42,13 @@ public class FlowInterface implements Serializable {
     @JsonIgnoreProperties(value = { "functionalFlows", "flowInterface" }, allowSetters = true)
     private Set<DataFlow> dataFlows = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties(value = { "owner", "applicationsLists" }, allowSetters = true)
     private Application source;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties(value = { "owner", "applicationsLists" }, allowSetters = true)
     private Application target;
 
@@ -58,22 +65,35 @@ public class FlowInterface implements Serializable {
 
     @ManyToMany(mappedBy = "interfaces")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "interfaces", "landscape", "dataFlows" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "interfaces", "landscapes", "dataFlows" }, allowSetters = true)
     private Set<FunctionalFlow> functionalFlows = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public String getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public FlowInterface id(String id) {
+    public FlowInterface id(Long id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAlias() {
+        return this.alias;
+    }
+
+    public FlowInterface alias(String alias) {
+        this.setAlias(alias);
+        return this;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public Protocol getProtocol() {
@@ -253,6 +273,7 @@ public class FlowInterface implements Serializable {
     public String toString() {
         return "FlowInterface{" +
             "id=" + getId() +
+            ", alias='" + getAlias() + "'" +
             ", protocol='" + getProtocol() + "'" +
             ", status='" + getStatus() + "'" +
             "}";

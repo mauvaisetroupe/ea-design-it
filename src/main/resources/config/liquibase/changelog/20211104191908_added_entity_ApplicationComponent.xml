@@ -17,7 +17,7 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="description" type="varchar(255)">
+            <column name="description" type="varchar(1000)">
                 <constraints nullable="true" />
             </column>
             <column name="type" type="varchar(255)">
@@ -29,7 +29,7 @@
             <column name="comment" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="application_id" type="varchar(255)">
+            <column name="application_id" type="bigint">
                 <constraints nullable="false" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->

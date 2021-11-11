@@ -39,4 +39,5 @@ public enum Protocol {
     NATIVE,
     FILE,
     NAS,
+    FILE_ZIP_MFT_NAS,
 }

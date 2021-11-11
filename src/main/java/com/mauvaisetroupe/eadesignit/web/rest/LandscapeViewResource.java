@@ -143,10 +143,11 @@ public class LandscapeViewResource {
     /**
      * {@code GET  /landscape-views} : get all the landscapeViews.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of landscapeViews in body.
      */
     @GetMapping("/landscape-views")
-    public List<LandscapeView> getAllLandscapeViews() {
+    public List<LandscapeView> getAllLandscapeViews(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all LandscapeViews");
         return landscapeViewRepository.findAll();
     }

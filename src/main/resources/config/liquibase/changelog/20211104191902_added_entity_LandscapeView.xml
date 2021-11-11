@@ -27,5 +27,19 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="20211104191902-1-relations" author="jhipster">
+
+        <createTable tableName="rel_landscape_view__flows">
+            <column name="flows_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="landscape_view_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="landscape_view_id, flows_id" tableName="rel_landscape_view__flows"/>
+    </changeSet>
+
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 </databaseChangeLog>

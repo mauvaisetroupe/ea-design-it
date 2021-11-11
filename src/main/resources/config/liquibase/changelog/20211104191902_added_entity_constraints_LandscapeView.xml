@@ -13,5 +13,17 @@
                                  constraintName="fk_landscape_view__owner_id"
                                  referencedColumnNames="id"
                                  referencedTableName="owner"/>
+
+        <addForeignKeyConstraint baseColumnNames="landscape_view_id"
+                                 baseTableName="rel_landscape_view__flows"
+                                 constraintName="fk_rel_landscape_view__flows__landscape_view_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landscape_view"/>
+
+        <addForeignKeyConstraint baseColumnNames="flows_id"
+                                 baseTableName="rel_landscape_view__flows"
+                                 constraintName="fk_rel_landscape_view__flows__flows_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="functional_flow"/>
     </changeSet>
 </databaseChangeLog>

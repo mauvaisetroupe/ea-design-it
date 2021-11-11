@@ -33,6 +33,11 @@
               :class="{ valid: !$v.applicationComponent.description.$invalid, invalid: $v.applicationComponent.description.$invalid }"
               v-model="$v.applicationComponent.description.$model"
             />
+            <div v-if="$v.applicationComponent.description.$anyDirty && $v.applicationComponent.description.$invalid">
+              <small class="form-text text-danger" v-if="!$v.applicationComponent.description.maxLength">
+                This field cannot be longer than 1000 characters.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="application-component-type">Type</label>

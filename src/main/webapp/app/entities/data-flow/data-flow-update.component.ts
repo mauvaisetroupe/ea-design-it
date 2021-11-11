@@ -1,6 +1,6 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import { required } from 'vuelidate/lib/validators';
+import { maxLength, required } from 'vuelidate/lib/validators';
 
 import AlertService from '@/shared/alert/alert.service';
 
@@ -21,7 +21,9 @@ const validations: any = {
     frequency: {},
     format: {},
     type: {},
-    description: {},
+    description: {
+      maxLength: maxLength(1000),
+    },
     resourceName: {},
     contractURL: {},
     documentationURL: {},

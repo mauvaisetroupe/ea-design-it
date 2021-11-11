@@ -1,5 +1,7 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
+import { required } from 'vuelidate/lib/validators';
+
 import AlertService from '@/shared/alert/alert.service';
 
 import DataFlowService from '@/entities/data-flow/data-flow.service';
@@ -23,8 +25,15 @@ import { Protocol } from '@/shared/model/enumerations/protocol.model';
 
 const validations: any = {
   flowInterface: {
+    alias: {},
     protocol: {},
     status: {},
+    source: {
+      required,
+    },
+    target: {
+      required,
+    },
   },
 };
 

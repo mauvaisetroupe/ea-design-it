@@ -41,7 +41,8 @@ public class DataFlow implements Serializable {
     @Column(name = "type")
     private FlowType type;
 
-    @Column(name = "description")
+    @Size(max = 1000)
+    @Column(name = "description", length = 1000)
     private String description;
 
     /**
@@ -69,7 +70,7 @@ public class DataFlow implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "functional_flows_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "interfaces", "landscape", "dataFlows" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "interfaces", "landscapes", "dataFlows" }, allowSetters = true)
     private Set<FunctionalFlow> functionalFlows = new HashSet<>();
 
     @ManyToOne(optional = false)

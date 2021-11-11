@@ -34,18 +34,10 @@
           <dd>
             <span v-for="(interfaces, i) in functionalFlow.interfaces" :key="interfaces.id"
               >{{ i > 0 ? ', ' : '' }}
-              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: interfaces.id } }">{{ interfaces.id }}</router-link>
-            </span>
-          </dd>
-          <dt>
-            <span>Landscape</span>
-          </dt>
-          <dd>
-            <div v-if="functionalFlow.landscape">
-              <router-link :to="{ name: 'LandscapeViewView', params: { landscapeViewId: functionalFlow.landscape.id } }">{{
-                functionalFlow.landscape.diagramName
+              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: interfaces.id } }">{{
+                interfaces.alias
               }}</router-link>
-            </div>
+            </span>
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

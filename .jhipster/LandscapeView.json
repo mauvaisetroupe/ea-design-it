@@ -13,17 +13,19 @@
   ],
   "relationships": [
     {
-      "relationshipType": "one-to-many",
-      "otherEntityName": "functionalFlow",
-      "otherEntityRelationshipName": "landscape",
-      "relationshipName": "flows"
-    },
-    {
       "relationshipType": "many-to-one",
       "otherEntityName": "owner",
       "otherEntityRelationshipName": "landscapeView",
       "relationshipName": "owner",
       "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "functionalFlow",
+      "otherEntityRelationshipName": "landscape",
+      "relationshipName": "flows",
+      "otherEntityField": "alias",
+      "ownerSide": true
     }
   ],
   "entityTableName": "landscape_view",

@@ -67,7 +67,7 @@ public class ApplicationImportService {
                 applicationImport.setImportStatus(ImportStatus.EXISTING);
             } else {
                 applicationImport.setImportStatus(ImportStatus.NEW);
-                application.setId(applicationImport.getIdFromExcel());
+                application.setAlias(applicationImport.getIdFromExcel());
             }
             applicationRepository.save(application);
             result.add(applicationImport);
@@ -87,7 +87,7 @@ public class ApplicationImportService {
     }
 
     public Application mapImportToApplication(ApplicationImport applicationImport) {
-        Optional<Application> optional = applicationRepository.findById(applicationImport.getIdFromExcel());
+        Optional<Application> optional = applicationRepository.findByAlias(applicationImport.getIdFromExcel());
         final Application application;
         if (optional.isPresent()) {
             application = optional.get();

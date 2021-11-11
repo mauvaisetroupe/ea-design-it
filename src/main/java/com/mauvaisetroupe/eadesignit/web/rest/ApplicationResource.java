@@ -73,7 +73,7 @@ public class ApplicationResource {
         Application result = applicationService.save(application);
         return ResponseEntity
             .created(new URI("/api/applications/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -89,7 +89,7 @@ public class ApplicationResource {
      */
     @PutMapping("/applications/{id}")
     public ResponseEntity<Application> updateApplication(
-        @PathVariable(value = "id", required = false) final String id,
+        @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody Application application
     ) throws URISyntaxException {
         log.debug("REST request to update Application : {}, {}", id, application);
@@ -107,7 +107,7 @@ public class ApplicationResource {
         Application result = applicationService.save(application);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, application.getId()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, application.getId().toString()))
             .body(result);
     }
 
@@ -124,7 +124,7 @@ public class ApplicationResource {
      */
     @PatchMapping(value = "/applications/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Application> partialUpdateApplication(
-        @PathVariable(value = "id", required = false) final String id,
+        @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody Application application
     ) throws URISyntaxException {
         log.debug("REST request to partial update Application partially : {}, {}", id, application);
@@ -143,7 +143,7 @@ public class ApplicationResource {
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, application.getId())
+            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, application.getId().toString())
         );
     }
 
@@ -181,7 +181,7 @@ public class ApplicationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the application, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/applications/{id}")
-    public ResponseEntity<Application> getApplication(@PathVariable String id) {
+    public ResponseEntity<Application> getApplication(@PathVariable Long id) {
         log.debug("REST request to get Application : {}", id);
         Optional<Application> application = applicationService.findOne(id);
         return ResponseUtil.wrapOrNotFound(application);
@@ -194,9 +194,12 @@ public class ApplicationResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/applications/{id}")
-    public ResponseEntity<Void> deleteApplication(@PathVariable String id) {
+    public ResponseEntity<Void> deleteApplication(@PathVariable Long id) {
         log.debug("REST request to delete Application : {}", id);
         applicationService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+            .build();
     }
 }

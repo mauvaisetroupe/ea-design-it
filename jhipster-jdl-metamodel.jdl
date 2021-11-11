@@ -1,22 +1,22 @@
-relationship OneToMany {
-	LandscapeView{flows} to FunctionalFlow{landscape(diagramName) required}
+relationship ManyToMany {
+	LandscapeView{flows(alias)} to FunctionalFlow{landscape(diagramName) required}
 }
 relationship ManyToMany {
-	FunctionalFlow{interfaces} to FlowInterface{functionalFlows}
+	FunctionalFlow{interfaces(alias)} to FlowInterface{functionalFlows(alias)}
 }
 relationship ManyToOne {
-	FlowInterface{source(name)} to Application
-	FlowInterface{target(name)} to Application
+	FlowInterface{source(name) required} to Application
+	FlowInterface{target(name) required} to Application
 	FlowInterface{sourceComponent(name)} to ApplicationComponent
 	FlowInterface{targetComponent(name)} to ApplicationComponent
 }
 
 relationship OneToMany {
-	FlowInterface{dataFlows} to DataFlow{flowInterface required}
+	FlowInterface{dataFlows} to DataFlow{flowInterface(alias) required}
 }
 
 relationship ManyToMany {
-	DataFlow{functionalFlows required} to FunctionalFlow{dataFlows}
+	DataFlow{functionalFlows(alias) required} to FunctionalFlow{dataFlows}
 }
 
 
@@ -43,23 +43,22 @@ entity Owner {
 }
 
 entity FunctionalFlow {
-    @id @AutoGenerate(false) id String pattern(/^[A-Z].[0-9]{2,3}[A-Z]?$/)
     alias String
-    description String
+    description String maxlength(1000)
     comment String
     status String
 }
 
 entity FlowInterface {
-    @id @AutoGenerate(false) id String pattern(/^[A-Z]{3}-[0-9]{4}$/)
+    alias String pattern(/^[A-Z]{3}-[0-9]{2,4}$/)
     protocol Protocol
     status String
 }
 
 entity Application {
-	@id @AutoGenerate(false) id String pattern(/^HPX\.CMP\.[0-9]{8}$/)
+	alias String pattern(/^HPX\.CMP\.[0-9]{8}$/)
 	name String,
-    description String 
+    description String maxlength(1000)
     type ApplicationType
 	technology String
     comment String 
@@ -69,7 +68,7 @@ entity DataFlow {
     frequency Frequency
     format Format
     type FlowType
-    description String
+    description String maxlength(1000)
     resourceName String /** TOPIC name for event, FileName for Files*/
     contractURL String /** Swagger or XSD URL */
     documentationURL String
@@ -78,7 +77,7 @@ entity DataFlow {
 
 entity ApplicationComponent {
 	name String,
-    description String ,
+    description String maxlength(1000),
     type ApplicationType
     technology String 
     comment String 
@@ -120,6 +119,11 @@ enum Protocol {
   INDIRECT_THROUGH_CUSTOMER_BROWSER
   ETL_ODI
   OUTLOOK_WIDGET
+  BATCH_FILE_THROUGH_IMFT
+  NATIVE
+  FILE
+  NAS  
+  FILE_ZIP_MFT_NAS
 }
 
 enum Frequency {
@@ -151,3 +155,53 @@ enum ApplicationType {
 
 filter Owner, Application
 paginate Owner, Application with pagination
+
+// ADD Helper for import, not part of main model
+
+entity ApplicationImport(tmp_import_application_import) {
+	importId String
+    excelFileName String
+    idFromExcel String,
+	name String,
+    description String 
+    type String
+	technology String
+    comment String 
+    importStatus ImportStatus
+    importStatusMessage String
+    existingApplicationID String // ID of Application when importStatus = EXISINT or UPDATED
+}
+
+
+enum ImportStatus {
+    NEW
+	EXISTING
+    UPDATED
+    ERROR
+}
+
+
+entity FlowImport(tmp_import_flows) {
+    idFlowFromExcel String
+    flowAlias String
+    sourceElement String
+    targetElement String
+    description String
+    integrationPattern String
+  	frequency String
+  	format String
+	swagger String
+  	sourceURLDocumentation String
+  	targetURLDocumentation String
+  	sourceDocumentationStatus String
+  	targetDocumentationStatus String
+  	flowStatus String
+  	comment String
+  	documentName String
+    importInterfaceStatus ImportStatus
+    importFunctionalFlowStatus ImportStatus
+	importDataFlowStatus ImportStatus
+	importStatusMessage String
+}
+
+

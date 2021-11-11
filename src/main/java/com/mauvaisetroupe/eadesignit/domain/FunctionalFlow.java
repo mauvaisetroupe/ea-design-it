@@ -19,15 +19,17 @@ public class FunctionalFlow implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Pattern(regexp = "^[A-Z].[0-9]{2,3}[A-Z]?$")
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
     @Column(name = "id")
-    private String id;
+    private Long id;
 
     @Column(name = "alias")
     private String alias;
 
-    @Column(name = "description")
+    @Size(max = 1000)
+    @Column(name = "description", length = 1000)
     private String description;
 
     @Column(name = "comment")
@@ -43,13 +45,13 @@ public class FunctionalFlow implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "interfaces_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "dataFlows", "sourceComponent", "targetComponent", "owner", "functionalFlows" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "dataFlows", "owner", "functionalFlows" }, allowSetters = true)
     private Set<FlowInterface> interfaces = new HashSet<>();
 
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "flows", "owner" }, allowSetters = true)
-    private LandscapeView landscape;
+    @ManyToMany(mappedBy = "flows")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "owner", "flows" }, allowSetters = true)
+    private Set<LandscapeView> landscapes = new HashSet<>();
 
     @ManyToMany(mappedBy = "functionalFlows")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -58,16 +60,16 @@ public class FunctionalFlow implements Serializable {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public String getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public FunctionalFlow id(String id) {
+    public FunctionalFlow id(Long id) {
         this.setId(id);
         return this;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -148,16 +150,34 @@ public class FunctionalFlow implements Serializable {
         return this;
     }
 
-    public LandscapeView getLandscape() {
-        return this.landscape;
+    public Set<LandscapeView> getLandscapes() {
+        return this.landscapes;
     }
 
-    public void setLandscape(LandscapeView landscapeView) {
-        this.landscape = landscapeView;
+    public void setLandscapes(Set<LandscapeView> landscapeViews) {
+        if (this.landscapes != null) {
+            this.landscapes.forEach(i -> i.removeFlows(this));
+        }
+        if (landscapeViews != null) {
+            landscapeViews.forEach(i -> i.addFlows(this));
+        }
+        this.landscapes = landscapeViews;
     }
 
-    public FunctionalFlow landscape(LandscapeView landscapeView) {
-        this.setLandscape(landscapeView);
+    public FunctionalFlow landscapes(Set<LandscapeView> landscapeViews) {
+        this.setLandscapes(landscapeViews);
+        return this;
+    }
+
+    public FunctionalFlow addLandscape(LandscapeView landscapeView) {
+        this.landscapes.add(landscapeView);
+        landscapeView.getFlows().add(this);
+        return this;
+    }
+
+    public FunctionalFlow removeLandscape(LandscapeView landscapeView) {
+        this.landscapes.remove(landscapeView);
+        landscapeView.getFlows().remove(this);
         return this;
     }
 

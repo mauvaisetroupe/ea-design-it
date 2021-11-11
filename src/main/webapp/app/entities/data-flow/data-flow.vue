@@ -58,14 +58,14 @@
                 <router-link
                   class="form-control-static"
                   :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlows.id } }"
-                  >{{ functionalFlows.id }}</router-link
+                  >{{ functionalFlows.alias }}</router-link
                 >
               </span>
             </td>
             <td>
               <div v-if="dataFlow.flowInterface">
                 <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: dataFlow.flowInterface.id } }">{{
-                  dataFlow.flowInterface.id
+                  dataFlow.flowInterface.alias
                 }}</router-link>
               </div>
             </td>

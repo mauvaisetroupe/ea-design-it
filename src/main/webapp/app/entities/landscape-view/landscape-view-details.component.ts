@@ -40,7 +40,7 @@ export default class LandscapeViewDetails extends Vue {
       flow.interfaces.forEach(inter => {
         var caption: FlowImport = new FlowImport();
         caption.flowAlias = flow.alias;
-        caption.idFlowFromExcel = inter.id;
+        caption.idFlowFromExcel = inter.alias;
         caption.description = flow.description;
         caption.integrationPattern = inter.protocol;
         this.captions.push(caption);

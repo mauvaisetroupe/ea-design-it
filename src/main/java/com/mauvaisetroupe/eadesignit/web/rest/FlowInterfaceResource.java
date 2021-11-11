@@ -56,7 +56,7 @@ public class FlowInterfaceResource {
         FlowInterface result = flowInterfaceRepository.save(flowInterface);
         return ResponseEntity
             .created(new URI("/api/flow-interfaces/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -72,7 +72,7 @@ public class FlowInterfaceResource {
      */
     @PutMapping("/flow-interfaces/{id}")
     public ResponseEntity<FlowInterface> updateFlowInterface(
-        @PathVariable(value = "id", required = false) final String id,
+        @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody FlowInterface flowInterface
     ) throws URISyntaxException {
         log.debug("REST request to update FlowInterface : {}, {}", id, flowInterface);
@@ -90,7 +90,7 @@ public class FlowInterfaceResource {
         FlowInterface result = flowInterfaceRepository.save(flowInterface);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, flowInterface.getId()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, flowInterface.getId().toString()))
             .body(result);
     }
 
@@ -107,7 +107,7 @@ public class FlowInterfaceResource {
      */
     @PatchMapping(value = "/flow-interfaces/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<FlowInterface> partialUpdateFlowInterface(
-        @PathVariable(value = "id", required = false) final String id,
+        @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody FlowInterface flowInterface
     ) throws URISyntaxException {
         log.debug("REST request to partial update FlowInterface partially : {}, {}", id, flowInterface);
@@ -125,6 +125,9 @@ public class FlowInterfaceResource {
         Optional<FlowInterface> result = flowInterfaceRepository
             .findById(flowInterface.getId())
             .map(existingFlowInterface -> {
+                if (flowInterface.getAlias() != null) {
+                    existingFlowInterface.setAlias(flowInterface.getAlias());
+                }
                 if (flowInterface.getProtocol() != null) {
                     existingFlowInterface.setProtocol(flowInterface.getProtocol());
                 }
@@ -138,7 +141,7 @@ public class FlowInterfaceResource {
 
         return ResponseUtil.wrapOrNotFound(
             result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, flowInterface.getId())
+            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, flowInterface.getId().toString())
         );
     }
 
@@ -160,7 +163,7 @@ public class FlowInterfaceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the flowInterface, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/flow-interfaces/{id}")
-    public ResponseEntity<FlowInterface> getFlowInterface(@PathVariable String id) {
+    public ResponseEntity<FlowInterface> getFlowInterface(@PathVariable Long id) {
         log.debug("REST request to get FlowInterface : {}", id);
         Optional<FlowInterface> flowInterface = flowInterfaceRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(flowInterface);
@@ -173,9 +176,12 @@ public class FlowInterfaceResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/flow-interfaces/{id}")
-    public ResponseEntity<Void> deleteFlowInterface(@PathVariable String id) {
+    public ResponseEntity<Void> deleteFlowInterface(@PathVariable Long id) {
         log.debug("REST request to delete FlowInterface : {}", id);
         flowInterfaceRepository.deleteById(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
+            .build();
     }
 }

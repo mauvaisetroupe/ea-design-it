@@ -14,7 +14,7 @@ export default class Application extends Vue {
   @Inject('applicationService') private applicationService: () => ApplicationService;
   @Inject('alertService') private alertService: () => AlertService;
 
-  private removeId: string = null;
+  private removeId: number = null;
   public itemsPerPage = 20;
   public queryCount: number = null;
   public page = 1;

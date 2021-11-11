@@ -11,11 +11,11 @@ class FunctionalFlowTest {
     void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(FunctionalFlow.class);
         FunctionalFlow functionalFlow1 = new FunctionalFlow();
-        functionalFlow1.setId("id1");
+        functionalFlow1.setId(1L);
         FunctionalFlow functionalFlow2 = new FunctionalFlow();
         functionalFlow2.setId(functionalFlow1.getId());
         assertThat(functionalFlow1).isEqualTo(functionalFlow2);
-        functionalFlow2.setId("id2");
+        functionalFlow2.setId(2L);
         assertThat(functionalFlow1).isNotEqualTo(functionalFlow2);
         functionalFlow1.setId(null);
         assertThat(functionalFlow1).isNotEqualTo(functionalFlow2);

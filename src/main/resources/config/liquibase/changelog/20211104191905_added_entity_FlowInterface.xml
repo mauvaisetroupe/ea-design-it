@@ -11,8 +11,11 @@
     -->
     <changeSet id="20211104191905-1" author="jhipster">
         <createTable tableName="flow_interface">
-            <column name="id" type="varchar(255)">
+            <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="alias" type="varchar(255)">
+                <constraints nullable="true" />
             </column>
             <column name="protocol" type="varchar(255)">
                 <constraints nullable="true" />
@@ -20,11 +23,11 @@
             <column name="status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="source_id" type="varchar(255)">
-                <constraints nullable="true" />
+            <column name="source_id" type="bigint">
+                <constraints nullable="false" />
             </column>
-            <column name="target_id" type="varchar(255)">
-                <constraints nullable="true" />
+            <column name="target_id" type="bigint">
+                <constraints nullable="false" />
             </column>
             <column name="source_component_id" type="bigint">
                 <constraints nullable="true" />

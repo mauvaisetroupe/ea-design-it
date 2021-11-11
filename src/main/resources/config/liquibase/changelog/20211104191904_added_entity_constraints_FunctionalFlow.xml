@@ -19,11 +19,5 @@
                                  constraintName="fk_rel_functional_flow__interfaces__interfaces_id"
                                  referencedColumnNames="id"
                                  referencedTableName="flow_interface"/>
-
-        <addForeignKeyConstraint baseColumnNames="landscape_id"
-                                 baseTableName="functional_flow"
-                                 constraintName="fk_functional_flow__landscape_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="landscape_view"/>
     </changeSet>
 </databaseChangeLog>

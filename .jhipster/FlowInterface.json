@@ -2,19 +2,15 @@
   "name": "FlowInterface",
   "fields": [
     {
-      "fieldName": "id",
+      "fieldName": "alias",
       "fieldType": "String",
       "fieldValidateRules": ["pattern"],
-      "fieldValidateRulesPattern": "^[A-Z]{3}-[0-9]{4}$",
-      "options": {
-        "id": true,
-        "autoGenerate": "false"
-      }
+      "fieldValidateRulesPattern": "^[A-Z]{3}-[0-9]{2,4}$"
     },
     {
       "fieldName": "protocol",
       "fieldType": "Protocol",
-      "fieldValues": "API,ESB,BATCH_FILE,BATCH_FILE_MFT,EVENT,O2O_NODS,T24_API,T24_NOTIF,T24_ESB,T24_DATA_SYNC_OUT,T24_DATA_SYNC_IN,T24_FILE_IN,T24_TAP,T24_BATCH_IN,T24_BATCH_OUT,T24_DIRECT_IN,T24_DIRECT_JMS,SOAP,DEEPLINK,MQ,MANUAL,RPA,DIRECT_QUEUE_OVER_MQ,MAIL_FILE,LINK,N_A,HTTP_DIRECT,HTTP_REDIRECT,INDIRECT_THROUGH_CUSTOMER_BROWSER,ETL_ODI,OUTLOOK_WIDGET"
+      "fieldValues": "API,ESB,BATCH_FILE,BATCH_FILE_MFT,EVENT,O2O_NODS,T24_API,T24_NOTIF,T24_ESB,T24_DATA_SYNC_OUT,T24_DATA_SYNC_IN,T24_FILE_IN,T24_TAP,T24_BATCH_IN,T24_BATCH_OUT,T24_DIRECT_IN,T24_DIRECT_JMS,SOAP,DEEPLINK,MQ,MANUAL,RPA,DIRECT_QUEUE_OVER_MQ,MAIL_FILE,LINK,N_A,HTTP_DIRECT,HTTP_REDIRECT,INDIRECT_THROUGH_CUSTOMER_BROWSER,ETL_ODI,OUTLOOK_WIDGET,BATCH_FILE_THROUGH_IMFT,NATIVE,FILE,NAS,FILE_ZIP_MFT_NAS"
     },
     {
       "fieldName": "status",
@@ -32,6 +28,7 @@
       "relationshipType": "many-to-one",
       "otherEntityName": "application",
       "otherEntityRelationshipName": "flowInterface",
+      "relationshipValidateRules": "required",
       "relationshipName": "source",
       "otherEntityField": "name"
     },
@@ -39,6 +36,7 @@
       "relationshipType": "many-to-one",
       "otherEntityName": "application",
       "otherEntityRelationshipName": "flowInterface",
+      "relationshipValidateRules": "required",
       "relationshipName": "target",
       "otherEntityField": "name"
     },
@@ -68,6 +66,7 @@
       "otherEntityName": "functionalFlow",
       "otherEntityRelationshipName": "interfaces",
       "relationshipName": "functionalFlows",
+      "otherEntityField": "alias",
       "ownerSide": false
     }
   ],

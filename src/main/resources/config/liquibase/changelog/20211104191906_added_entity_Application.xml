@@ -11,13 +11,16 @@
     -->
     <changeSet id="20211104191906-1" author="jhipster">
         <createTable tableName="application">
-            <column name="id" type="varchar(255)">
+            <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="alias" type="varchar(255)">
+                <constraints nullable="true" />
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="description" type="varchar(255)">
+            <column name="description" type="varchar(1000)">
                 <constraints nullable="true" />
             </column>
             <column name="type" type="varchar(255)">

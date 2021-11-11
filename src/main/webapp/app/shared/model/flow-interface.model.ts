@@ -6,12 +6,13 @@ import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 import { Protocol } from '@/shared/model/enumerations/protocol.model';
 export interface IFlowInterface {
-  id?: string;
+  id?: number;
+  alias?: string | null;
   protocol?: Protocol | null;
   status?: string | null;
   dataFlows?: IDataFlow[] | null;
-  source?: IApplication | null;
-  target?: IApplication | null;
+  source?: IApplication;
+  target?: IApplication;
   sourceComponent?: IApplicationComponent | null;
   targetComponent?: IApplicationComponent | null;
   owner?: IOwner | null;
@@ -20,12 +21,13 @@ export interface IFlowInterface {
 
 export class FlowInterface implements IFlowInterface {
   constructor(
-    public id?: string,
+    public id?: number,
+    public alias?: string | null,
     public protocol?: Protocol | null,
     public status?: string | null,
     public dataFlows?: IDataFlow[] | null,
-    public source?: IApplication | null,
-    public target?: IApplication | null,
+    public source?: IApplication,
+    public target?: IApplication,
     public sourceComponent?: IApplicationComponent | null,
     public targetComponent?: IApplicationComponent | null,
     public owner?: IOwner | null,

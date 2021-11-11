@@ -42,7 +42,9 @@ public class ApplicationCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
 
-    private StringFilter id;
+    private LongFilter id;
+
+    private StringFilter alias;
 
     private StringFilter name;
 
@@ -64,6 +66,7 @@ public class ApplicationCriteria implements Serializable, Criteria {
 
     public ApplicationCriteria(ApplicationCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.alias = other.alias == null ? null : other.alias.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.type = other.type == null ? null : other.type.copy();
@@ -79,19 +82,34 @@ public class ApplicationCriteria implements Serializable, Criteria {
         return new ApplicationCriteria(this);
     }
 
-    public StringFilter getId() {
+    public LongFilter getId() {
         return id;
     }
 
-    public StringFilter id() {
+    public LongFilter id() {
         if (id == null) {
-            id = new StringFilter();
+            id = new LongFilter();
         }
         return id;
     }
 
-    public void setId(StringFilter id) {
+    public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getAlias() {
+        return alias;
+    }
+
+    public StringFilter alias() {
+        if (alias == null) {
+            alias = new StringFilter();
+        }
+        return alias;
+    }
+
+    public void setAlias(StringFilter alias) {
+        this.alias = alias;
     }
 
     public StringFilter getName() {
@@ -218,6 +236,7 @@ public class ApplicationCriteria implements Serializable, Criteria {
         final ApplicationCriteria that = (ApplicationCriteria) o;
         return (
             Objects.equals(id, that.id) &&
+            Objects.equals(alias, that.alias) &&
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
             Objects.equals(type, that.type) &&
@@ -231,7 +250,7 @@ public class ApplicationCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, type, technology, comment, ownerId, applicationsListId, distinct);
+        return Objects.hash(id, alias, name, description, type, technology, comment, ownerId, applicationsListId, distinct);
     }
 
     // prettier-ignore
@@ -239,6 +258,7 @@ public class ApplicationCriteria implements Serializable, Criteria {
     public String toString() {
         return "ApplicationCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
+            (alias != null ? "alias=" + alias + ", " : "") +
             (name != null ? "name=" + name + ", " : "") +
             (description != null ? "description=" + description + ", " : "") +
             (type != null ? "type=" + type + ", " : "") +
