@@ -54,6 +54,31 @@
           </button>
         </router-link>
       </div>
+
+      <br />
+
+      <h2>PlantUML preview</h2>
+      <div><img :src="plantUMLImage" alt="Base64 encoded image" /></div>
+      <br />
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="row"><span>Alias</span></th>
+            <th scope="row"><span>ID</span></th>
+            <th scope="row"><span>Protocol</span></th>
+            <th scope="row"><span>Description</span></th>
+            <th scope="row"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="caption in captions" v-bind:key="caption.id">
+            <td>{{ caption.flowAlias }}</td>
+            <td>{{ caption.idFlowFromExcel }}</td>
+            <td>{{ caption.integrationPattern }}</td>
+            <td>{{ caption.description }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>

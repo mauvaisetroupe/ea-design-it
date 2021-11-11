@@ -3,6 +3,7 @@ import axios from 'axios';
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 const baseApiUrl = 'api/functional-flows';
+const basePlantUMLApiUrl = 'api/plantuml/functional-flow/get-image-with-media-type';
 
 export default class FunctionalFlowService {
   public find(id: number): Promise<IFunctionalFlow> {
@@ -76,6 +77,19 @@ export default class FunctionalFlowService {
         .patch(`${baseApiUrl}/${entity.id}`, entity)
         .then(res => {
           resolve(res.data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public getPlantUML(id: number) {
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .get(`${basePlantUMLApiUrl}/${id}`)
+        .then(res => {
+          resolve(res);
         })
         .catch(err => {
           reject(err);
