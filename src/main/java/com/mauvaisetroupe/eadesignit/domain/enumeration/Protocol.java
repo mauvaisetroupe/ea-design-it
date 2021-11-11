@@ -36,4 +36,7 @@ public enum Protocol {
     ETL_ODI,
     OUTLOOK_WIDGET,
     BATCH_FILE_THROUGH_IMFT,
+    NATIVE,
+    FILE,
+    NAS,
 }
