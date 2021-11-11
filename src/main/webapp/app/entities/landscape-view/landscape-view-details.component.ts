@@ -43,6 +43,8 @@ export default class LandscapeViewDetails extends Vue {
         caption.idFlowFromExcel = inter.alias;
         caption.description = flow.description;
         caption.integrationPattern = inter.protocol;
+        caption.sourceElement = inter.source.name;
+        caption.targetElement = inter.target.name;
         this.captions.push(caption);
       });
     });

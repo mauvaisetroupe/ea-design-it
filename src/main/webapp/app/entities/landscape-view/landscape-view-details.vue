@@ -60,8 +60,10 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="row"><span>Alias</span></th>
-            <th scope="row"><span>ID</span></th>
+            <th scope="row"><span>Flow</span></th>
+            <th scope="row"><span>Interface</span></th>
+            <th scope="row"><span>Source</span></th>
+            <th scope="row"><span>Target</span></th>
             <th scope="row"><span>Protocol</span></th>
             <th scope="row"><span>Description</span></th>
             <th scope="row"></th>
@@ -71,6 +73,8 @@
           <tr v-for="caption in captions" v-bind:key="caption.id">
             <td>{{ caption.flowAlias }}</td>
             <td>{{ caption.idFlowFromExcel }}</td>
+            <td>{{ caption.sourceElement }}</td>
+            <td>{{ caption.targetElement }}</td>
             <td>{{ caption.integrationPattern }}</td>
             <td>{{ caption.description }}</td>
           </tr>
