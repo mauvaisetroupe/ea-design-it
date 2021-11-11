@@ -8,8 +8,11 @@ import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import io.undertow.util.BadRequestException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.Optional;
+import net.sourceforge.plantuml.FileFormat;
+import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.core.DiagramDescription;
 import org.slf4j.Logger;
@@ -36,8 +39,8 @@ public class PlantUMLResource {
         this.functionalFlowRepository = functionalFlowRepository;
     }
 
-    @GetMapping(value = "plantuml/landscape-view/get-image-with-media-type/{id}")
-    public @ResponseBody byte[] getImageWithMediaType(@PathVariable Long id) throws IOException, BadRequestException {
+    @GetMapping(value = "plantuml/landscape-view/get-svg/{id}")
+    public @ResponseBody String getLandscapeSVG(@PathVariable Long id) throws IOException, BadRequestException {
         Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
         if (landscapeViewOptional.isPresent()) {
             String plantUMLSource = "@startuml\n";
@@ -63,17 +66,17 @@ public class PlantUMLResource {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
             SourceStringReader reader = new SourceStringReader(plantUMLSource);
-            DiagramDescription diagramDescription = reader.outputImage(byteArrayOutputStream);
+            DiagramDescription diagramDescription = reader.outputImage(byteArrayOutputStream, new FileFormatOption(FileFormat.SVG));
+            byteArrayOutputStream.close();
             log.debug(diagramDescription.getDescription());
-            byte[] imageBase64 = Base64.getEncoder().encode(byteArrayOutputStream.toByteArray());
-            return imageBase64;
+            return new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }
     }
 
-    @GetMapping(value = "plantuml/functional-flow/get-image-with-media-type/{id}")
-    public @ResponseBody byte[] getFunctionalFlowImage(@PathVariable Long id) throws IOException, BadRequestException {
+    @GetMapping(value = "plantuml/functional-flow/get-svg/{id}")
+    public @ResponseBody String getFunctionalFlowSVG(@PathVariable Long id) throws IOException, BadRequestException {
         Optional<FunctionalFlow> functionalFlowOptional = functionalFlowRepository.findById(id);
 
         if (functionalFlowOptional.isPresent()) {
@@ -99,10 +102,10 @@ public class PlantUMLResource {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
             SourceStringReader reader = new SourceStringReader(plantUMLSource);
-            DiagramDescription diagramDescription = reader.outputImage(byteArrayOutputStream);
+            DiagramDescription diagramDescription = reader.outputImage(byteArrayOutputStream, new FileFormatOption(FileFormat.SVG));
+            byteArrayOutputStream.close();
             log.debug(diagramDescription.getDescription());
-            byte[] imageBase64 = Base64.getEncoder().encode(byteArrayOutputStream.toByteArray());
-            return imageBase64;
+            return new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }

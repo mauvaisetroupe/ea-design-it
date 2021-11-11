@@ -60,7 +60,7 @@ export default class LandscapeViewDetails extends Vue {
       .getPlantUML(landscapeViewId)
       .then(
         res => {
-          this.plantUMLImage = 'data:image/jpg;base64,' + res.data;
+          this.plantUMLImage = res.data;
         },
         err => {
           console.log(err);

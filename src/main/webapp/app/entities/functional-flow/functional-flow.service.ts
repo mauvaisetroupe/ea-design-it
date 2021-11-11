@@ -3,7 +3,7 @@ import axios from 'axios';
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 const baseApiUrl = 'api/functional-flows';
-const basePlantUMLApiUrl = 'api/plantuml/functional-flow/get-image-with-media-type';
+const basePlantUMLApiUrl = 'api/plantuml/functional-flow/get-svg';
 
 export default class FunctionalFlowService {
   public find(id: number): Promise<IFunctionalFlow> {

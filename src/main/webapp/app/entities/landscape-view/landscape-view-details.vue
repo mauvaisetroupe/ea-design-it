@@ -55,7 +55,7 @@
       </div>
       <br />
       <h2>PlantUML preview</h2>
-      <div><img :src="plantUMLImage" alt="Base64 encoded image" /></div>
+      <div v-html="plantUMLImage"></div>
       <br />
       <table class="table">
         <thead>
