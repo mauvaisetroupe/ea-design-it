@@ -54,6 +54,9 @@
       "ApplicationImport",
       "FlowImport"
     ],
-    "lastLiquibaseTimestamp": 1636298620000
+    "lastLiquibaseTimestamp": 1636298620000,
+    "herokuAppName": "ea-design-it",
+    "herokuDeployType": "git",
+    "herokuJavaVersion": "17"
   }
 }
