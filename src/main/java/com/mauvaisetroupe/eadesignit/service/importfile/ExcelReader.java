@@ -60,11 +60,12 @@ public class ExcelReader {
                         if (this.sheetName != null && this.sheetName.contains(sheet.getSheetName())) {
                             Assert.isTrue(
                                 columnNames.contains(labels[j]),
-                                "Could not find column name '" + labels[j] + "' in Excel File. Authorized valuesc : " + this.columnNames
+                                "Could not find column name '" + labels[j] + "' in Excel File. Authorized values : " + this.columnNames
                             );
                         }
                     } else {
-                        log.error("Ignoring column numer #" + j + ".");
+                        log.error("Ignoring column numer #" + j + ". Stop reading other columns");
+                        break;
                     }
                 }
                 System.out.println(sheet.getSheetName());
