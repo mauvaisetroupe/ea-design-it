@@ -40,4 +40,5 @@ public enum Protocol {
     FILE,
     NAS,
     FILE_ZIP_MFT_NAS,
+    BATCH_FILE_THROUGH_MFT,
 }

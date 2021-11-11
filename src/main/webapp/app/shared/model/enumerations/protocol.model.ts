@@ -70,4 +70,6 @@ export enum Protocol {
   NAS = 'NAS',
 
   FILE_ZIP_MFT_NAS = 'FILE_ZIP_MFT_NAS',
+
+  BATCH_FILE_THROUGH_MFT = 'BATCH_FILE_THROUGH_MFT',
 }
