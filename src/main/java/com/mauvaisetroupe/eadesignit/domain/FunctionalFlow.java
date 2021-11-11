@@ -19,7 +19,7 @@ public class FunctionalFlow implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Pattern(regexp = "^[A-Z].[0-9]{2,3}$")
+    @Pattern(regexp = "^[A-Z].[0-9]{2,3}[A-Z]?$")
     @Id
     @Column(name = "id")
     private String id;
