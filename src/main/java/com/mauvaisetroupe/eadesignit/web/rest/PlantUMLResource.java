@@ -37,6 +37,7 @@ public class PlantUMLResource {
         Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
         if (landscapeViewOptional.isPresent()) {
             String plantUMLSource = "@startuml\n";
+            plantUMLSource += "!pragma layout smetana\n";
             for (FunctionalFlow functionalFlow : landscapeViewOptional.get().getFlows()) {
                 for (FlowInterface flowInterface : functionalFlow.getInterfaces()) {
                     plantUMLSource +=
