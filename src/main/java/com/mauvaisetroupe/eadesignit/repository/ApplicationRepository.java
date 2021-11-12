@@ -1,7 +1,8 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
-import org.springframework.data.jpa.repository.*;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,4 +10,7 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ApplicationRepository extends JpaRepository<Application, Long> {}
+public interface ApplicationRepository extends JpaRepository<Application, Long> {
+    Application findByNameIgnoreCase(String name);
+    Optional<Application> findByAlias(String alias);
+}
