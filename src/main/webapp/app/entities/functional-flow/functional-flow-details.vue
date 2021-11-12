@@ -75,10 +75,14 @@
         <tbody>
           <tr v-for="caption in captions" v-bind:key="caption.id">
             <td>{{ caption.flowAlias }}</td>
-            <td>{{ caption.idFlowFromExcel }}</td>
-            <td>{{ caption.sourceElement }}</td>
-            <td>{{ caption.targetElement }}</td>
-            <td>{{ caption.integrationPattern }}</td>
+            <td>
+              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: caption.interfaceID } }">{{
+                caption.interfaceAlias
+              }}</router-link>
+            </td>
+            <td>{{ caption.source }}</td>
+            <td>{{ caption.target }}</td>
+            <td>{{ caption.protocol }}</td>
             <td>{{ caption.description }}</td>
           </tr>
         </tbody>

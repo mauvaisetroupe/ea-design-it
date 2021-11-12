@@ -12,7 +12,7 @@ export default class LandscapeViewDetails extends Vue {
 
   public landscapeView: ILandscapeView = {};
   public plantUMLImage = '';
-  public captions: IFlowImport[] = [];
+  public captions = [];
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -38,13 +38,16 @@ export default class LandscapeViewDetails extends Vue {
   public fillCaption() {
     this.landscapeView.flows.forEach(flow => {
       flow.interfaces.forEach(inter => {
-        var caption: FlowImport = new FlowImport();
-        caption.flowAlias = flow.alias;
-        caption.idFlowFromExcel = inter.alias;
-        caption.description = flow.description;
-        caption.integrationPattern = inter.protocol;
-        caption.sourceElement = inter.source.name;
-        caption.targetElement = inter.target.name;
+        var caption = {
+          flowAlias: flow.alias,
+          flowID: flow.id,
+          interfaceAlias: inter.alias,
+          interfaceID: inter.id,
+          description: flow.description,
+          protocol: inter.protocol,
+          source: inter.source.name,
+          target: inter.target.name,
+        };
         this.captions.push(caption);
       });
     });

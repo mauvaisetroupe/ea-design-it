@@ -3,7 +3,6 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 import FunctionalFlowService from './functional-flow.service';
 import AlertService from '@/shared/alert/alert.service';
-import { FlowImport, IFlowImport } from '@/shared/model/flow-import.model';
 
 @Component
 export default class FunctionalFlowDetails extends Vue {
@@ -12,7 +11,7 @@ export default class FunctionalFlowDetails extends Vue {
 
   public functionalFlow: IFunctionalFlow = {};
   public plantUMLImage = '';
-  public captions: IFlowImport[] = [];
+  public captions = [];
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -41,13 +40,15 @@ export default class FunctionalFlowDetails extends Vue {
 
   public fillCaption() {
     this.functionalFlow.interfaces.forEach(inter => {
-      var caption: FlowImport = new FlowImport();
-      caption.flowAlias = this.functionalFlow.alias;
-      caption.idFlowFromExcel = inter.alias;
-      caption.description = this.functionalFlow.description;
-      caption.integrationPattern = inter.protocol;
-      caption.sourceElement = inter.source.name;
-      caption.targetElement = inter.target.name;
+      var caption = {
+        flowAlias: this.functionalFlow.alias,
+        interfaceAlias: inter.alias,
+        interfaceID: inter.id,
+        description: this.functionalFlow.description,
+        protocol: inter.protocol,
+        source: inter.source.name,
+        target: inter.target.name,
+      };
       this.captions.push(caption);
     });
   }
