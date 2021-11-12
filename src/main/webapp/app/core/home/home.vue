@@ -5,7 +5,7 @@
     </div>
 
     <div class="col-md-9">
-      <h1 class="display-4">Welcome to EA Deisgn IT</h1>
+      <h1 class="display-4">Welcome to EA Design IT</h1>
 
       <div v-if="authenticated">
         <h1>Import Excel files</h1>
