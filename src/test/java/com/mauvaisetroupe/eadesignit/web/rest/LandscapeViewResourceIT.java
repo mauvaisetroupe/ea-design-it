@@ -28,6 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 /**
  * Integration tests for the {@link LandscapeViewResource} REST controller.
@@ -43,6 +44,12 @@ class LandscapeViewResourceIT {
 
     private static final String DEFAULT_DIAGRAM_NAME = "AAAAAAAAAA";
     private static final String UPDATED_DIAGRAM_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPRESSED_DRAW_XML = "AAAAAAAAAA";
+    private static final String UPDATED_COMPRESSED_DRAW_XML = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COMPRESSED_DRAW_SVG = "AAAAAAAAAA";
+    private static final String UPDATED_COMPRESSED_DRAW_SVG = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/landscape-views";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -71,7 +78,11 @@ class LandscapeViewResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static LandscapeView createEntity(EntityManager em) {
-        LandscapeView landscapeView = new LandscapeView().viewpoint(DEFAULT_VIEWPOINT).diagramName(DEFAULT_DIAGRAM_NAME);
+        LandscapeView landscapeView = new LandscapeView()
+            .viewpoint(DEFAULT_VIEWPOINT)
+            .diagramName(DEFAULT_DIAGRAM_NAME)
+            .compressedDrawXML(DEFAULT_COMPRESSED_DRAW_XML)
+            .compressedDrawSVG(DEFAULT_COMPRESSED_DRAW_SVG);
         return landscapeView;
     }
 
@@ -82,7 +93,11 @@ class LandscapeViewResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static LandscapeView createUpdatedEntity(EntityManager em) {
-        LandscapeView landscapeView = new LandscapeView().viewpoint(UPDATED_VIEWPOINT).diagramName(UPDATED_DIAGRAM_NAME);
+        LandscapeView landscapeView = new LandscapeView()
+            .viewpoint(UPDATED_VIEWPOINT)
+            .diagramName(UPDATED_DIAGRAM_NAME)
+            .compressedDrawXML(UPDATED_COMPRESSED_DRAW_XML)
+            .compressedDrawSVG(UPDATED_COMPRESSED_DRAW_SVG);
         return landscapeView;
     }
 
@@ -106,6 +121,8 @@ class LandscapeViewResourceIT {
         LandscapeView testLandscapeView = landscapeViewList.get(landscapeViewList.size() - 1);
         assertThat(testLandscapeView.getViewpoint()).isEqualTo(DEFAULT_VIEWPOINT);
         assertThat(testLandscapeView.getDiagramName()).isEqualTo(DEFAULT_DIAGRAM_NAME);
+        assertThat(testLandscapeView.getCompressedDrawXML()).isEqualTo(DEFAULT_COMPRESSED_DRAW_XML);
+        assertThat(testLandscapeView.getCompressedDrawSVG()).isEqualTo(DEFAULT_COMPRESSED_DRAW_SVG);
     }
 
     @Test
@@ -139,7 +156,9 @@ class LandscapeViewResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(landscapeView.getId().intValue())))
             .andExpect(jsonPath("$.[*].viewpoint").value(hasItem(DEFAULT_VIEWPOINT.toString())))
-            .andExpect(jsonPath("$.[*].diagramName").value(hasItem(DEFAULT_DIAGRAM_NAME)));
+            .andExpect(jsonPath("$.[*].diagramName").value(hasItem(DEFAULT_DIAGRAM_NAME)))
+            .andExpect(jsonPath("$.[*].compressedDrawXML").value(hasItem(DEFAULT_COMPRESSED_DRAW_XML.toString())))
+            .andExpect(jsonPath("$.[*].compressedDrawSVG").value(hasItem(DEFAULT_COMPRESSED_DRAW_SVG.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -173,7 +192,9 @@ class LandscapeViewResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(landscapeView.getId().intValue()))
             .andExpect(jsonPath("$.viewpoint").value(DEFAULT_VIEWPOINT.toString()))
-            .andExpect(jsonPath("$.diagramName").value(DEFAULT_DIAGRAM_NAME));
+            .andExpect(jsonPath("$.diagramName").value(DEFAULT_DIAGRAM_NAME))
+            .andExpect(jsonPath("$.compressedDrawXML").value(DEFAULT_COMPRESSED_DRAW_XML.toString()))
+            .andExpect(jsonPath("$.compressedDrawSVG").value(DEFAULT_COMPRESSED_DRAW_SVG.toString()));
     }
 
     @Test
@@ -195,7 +216,11 @@ class LandscapeViewResourceIT {
         LandscapeView updatedLandscapeView = landscapeViewRepository.findById(landscapeView.getId()).get();
         // Disconnect from session so that the updates on updatedLandscapeView are not directly saved in db
         em.detach(updatedLandscapeView);
-        updatedLandscapeView.viewpoint(UPDATED_VIEWPOINT).diagramName(UPDATED_DIAGRAM_NAME);
+        updatedLandscapeView
+            .viewpoint(UPDATED_VIEWPOINT)
+            .diagramName(UPDATED_DIAGRAM_NAME)
+            .compressedDrawXML(UPDATED_COMPRESSED_DRAW_XML)
+            .compressedDrawSVG(UPDATED_COMPRESSED_DRAW_SVG);
 
         restLandscapeViewMockMvc
             .perform(
@@ -211,6 +236,8 @@ class LandscapeViewResourceIT {
         LandscapeView testLandscapeView = landscapeViewList.get(landscapeViewList.size() - 1);
         assertThat(testLandscapeView.getViewpoint()).isEqualTo(UPDATED_VIEWPOINT);
         assertThat(testLandscapeView.getDiagramName()).isEqualTo(UPDATED_DIAGRAM_NAME);
+        assertThat(testLandscapeView.getCompressedDrawXML()).isEqualTo(UPDATED_COMPRESSED_DRAW_XML);
+        assertThat(testLandscapeView.getCompressedDrawSVG()).isEqualTo(UPDATED_COMPRESSED_DRAW_SVG);
     }
 
     @Test
@@ -281,7 +308,11 @@ class LandscapeViewResourceIT {
         LandscapeView partialUpdatedLandscapeView = new LandscapeView();
         partialUpdatedLandscapeView.setId(landscapeView.getId());
 
-        partialUpdatedLandscapeView.viewpoint(UPDATED_VIEWPOINT).diagramName(UPDATED_DIAGRAM_NAME);
+        partialUpdatedLandscapeView
+            .viewpoint(UPDATED_VIEWPOINT)
+            .diagramName(UPDATED_DIAGRAM_NAME)
+            .compressedDrawXML(UPDATED_COMPRESSED_DRAW_XML)
+            .compressedDrawSVG(UPDATED_COMPRESSED_DRAW_SVG);
 
         restLandscapeViewMockMvc
             .perform(
@@ -297,6 +328,8 @@ class LandscapeViewResourceIT {
         LandscapeView testLandscapeView = landscapeViewList.get(landscapeViewList.size() - 1);
         assertThat(testLandscapeView.getViewpoint()).isEqualTo(UPDATED_VIEWPOINT);
         assertThat(testLandscapeView.getDiagramName()).isEqualTo(UPDATED_DIAGRAM_NAME);
+        assertThat(testLandscapeView.getCompressedDrawXML()).isEqualTo(UPDATED_COMPRESSED_DRAW_XML);
+        assertThat(testLandscapeView.getCompressedDrawSVG()).isEqualTo(UPDATED_COMPRESSED_DRAW_SVG);
     }
 
     @Test
@@ -311,7 +344,11 @@ class LandscapeViewResourceIT {
         LandscapeView partialUpdatedLandscapeView = new LandscapeView();
         partialUpdatedLandscapeView.setId(landscapeView.getId());
 
-        partialUpdatedLandscapeView.viewpoint(UPDATED_VIEWPOINT).diagramName(UPDATED_DIAGRAM_NAME);
+        partialUpdatedLandscapeView
+            .viewpoint(UPDATED_VIEWPOINT)
+            .diagramName(UPDATED_DIAGRAM_NAME)
+            .compressedDrawXML(UPDATED_COMPRESSED_DRAW_XML)
+            .compressedDrawSVG(UPDATED_COMPRESSED_DRAW_SVG);
 
         restLandscapeViewMockMvc
             .perform(
@@ -327,6 +364,8 @@ class LandscapeViewResourceIT {
         LandscapeView testLandscapeView = landscapeViewList.get(landscapeViewList.size() - 1);
         assertThat(testLandscapeView.getViewpoint()).isEqualTo(UPDATED_VIEWPOINT);
         assertThat(testLandscapeView.getDiagramName()).isEqualTo(UPDATED_DIAGRAM_NAME);
+        assertThat(testLandscapeView.getCompressedDrawXML()).isEqualTo(UPDATED_COMPRESSED_DRAW_XML);
+        assertThat(testLandscapeView.getCompressedDrawSVG()).isEqualTo(UPDATED_COMPRESSED_DRAW_SVG);
     }
 
     @Test

@@ -37,6 +37,8 @@ relationship ManyToOne {
 entity LandscapeView {
     viewpoint ViewPoint
 	diagramName String // Example ADD_Payment_Landscape
+    compressedDrawXML TextBlob
+    compressedDrawSVG TextBlob
 }
 entity Owner {
 	name String

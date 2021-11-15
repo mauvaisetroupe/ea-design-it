@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 
 /**
  * A LandscapeView.
@@ -31,6 +32,16 @@ public class LandscapeView implements Serializable {
 
     @Column(name = "diagram_name")
     private String diagramName;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "compressed_draw_xml")
+    private String compressedDrawXML;
+
+    @Lob
+    @Type(type = "org.hibernate.type.TextType")
+    @Column(name = "compressed_draw_svg")
+    private String compressedDrawSVG;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Owner owner;
@@ -84,6 +95,32 @@ public class LandscapeView implements Serializable {
 
     public void setDiagramName(String diagramName) {
         this.diagramName = diagramName;
+    }
+
+    public String getCompressedDrawXML() {
+        return this.compressedDrawXML;
+    }
+
+    public LandscapeView compressedDrawXML(String compressedDrawXML) {
+        this.setCompressedDrawXML(compressedDrawXML);
+        return this;
+    }
+
+    public void setCompressedDrawXML(String compressedDrawXML) {
+        this.compressedDrawXML = compressedDrawXML;
+    }
+
+    public String getCompressedDrawSVG() {
+        return this.compressedDrawSVG;
+    }
+
+    public LandscapeView compressedDrawSVG(String compressedDrawSVG) {
+        this.setCompressedDrawSVG(compressedDrawSVG);
+        return this;
+    }
+
+    public void setCompressedDrawSVG(String compressedDrawSVG) {
+        this.compressedDrawSVG = compressedDrawSVG;
     }
 
     public Owner getOwner() {
@@ -150,6 +187,8 @@ public class LandscapeView implements Serializable {
             "id=" + getId() +
             ", viewpoint='" + getViewpoint() + "'" +
             ", diagramName='" + getDiagramName() + "'" +
+            ", compressedDrawXML='" + getCompressedDrawXML() + "'" +
+            ", compressedDrawSVG='" + getCompressedDrawSVG() + "'" +
             "}";
     }
 }

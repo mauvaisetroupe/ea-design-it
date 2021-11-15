@@ -20,6 +20,12 @@
             <column name="diagram_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="compressed_draw_xml" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="compressed_draw_svg" type="${clobType}">
+                <constraints nullable="true" />
+            </column>
             <column name="owner_id" type="bigint">
                 <constraints nullable="true" />
             </column>

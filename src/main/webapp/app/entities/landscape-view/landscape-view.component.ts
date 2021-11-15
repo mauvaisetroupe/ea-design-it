@@ -4,13 +4,15 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import { ILandscapeView } from '@/shared/model/landscape-view.model';
 
+import JhiDataUtils from '@/shared/data/data-utils.service';
+
 import LandscapeViewService from './landscape-view.service';
 import AlertService from '@/shared/alert/alert.service';
 
 @Component({
   mixins: [Vue2Filters.mixin],
 })
-export default class LandscapeView extends Vue {
+export default class LandscapeView extends mixins(JhiDataUtils) {
   @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
   @Inject('alertService') private alertService: () => AlertService;
 

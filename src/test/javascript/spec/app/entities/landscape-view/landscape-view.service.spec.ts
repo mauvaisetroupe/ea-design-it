@@ -30,7 +30,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       service = new LandscapeViewService();
-      elemDefault = new LandscapeView(123, ViewPoint.APPLICATION_LANDSCAPE, 'AAAAAAA');
+      elemDefault = new LandscapeView(123, ViewPoint.APPLICATION_LANDSCAPE, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -84,6 +84,8 @@ describe('Service Tests', () => {
           {
             viewpoint: 'BBBBBB',
             diagramName: 'BBBBBB',
+            compressedDrawXML: 'BBBBBB',
+            compressedDrawSVG: 'BBBBBB',
           },
           elemDefault
         );
@@ -108,7 +110,13 @@ describe('Service Tests', () => {
       });
 
       it('should partial update a LandscapeView', async () => {
-        const patchObject = Object.assign({}, new LandscapeView());
+        const patchObject = Object.assign(
+          {
+            compressedDrawXML: 'BBBBBB',
+            compressedDrawSVG: 'BBBBBB',
+          },
+          new LandscapeView()
+        );
         const returnedFromService = Object.assign(patchObject, elemDefault);
 
         const expected = Object.assign({}, returnedFromService);
@@ -135,6 +143,8 @@ describe('Service Tests', () => {
           {
             viewpoint: 'BBBBBB',
             diagramName: 'BBBBBB',
+            compressedDrawXML: 'BBBBBB',
+            compressedDrawSVG: 'BBBBBB',
           },
           elemDefault
         );
