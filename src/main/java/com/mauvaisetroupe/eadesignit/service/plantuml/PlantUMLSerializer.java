@@ -21,6 +21,8 @@ public class PlantUMLSerializer {
         String plantUMLSource = "@startuml\n";
         plantUMLSource += "!pragma layout smetana\n";
         plantUMLSource += "skinparam componentStyle rectangle\n";
+        plantUMLSource += "skinparam hyperlinkColor #000000\n";
+        plantUMLSource += "skinparam hyperlinkUnderline false\n";
         for (FunctionalFlow functionalFlow : landscapeView.getFlows()) {
             for (FlowInterface flowInterface : functionalFlow.getInterfaces()) {
                 plantUMLSource +=
@@ -28,11 +30,11 @@ public class PlantUMLSerializer {
                     flowInterface.getSource().getName() +
                     "] --> [" +
                     flowInterface.getTarget().getName() +
-                    "] : " +
+                    "] : [[/functional-flow/" +
+                    functionalFlow.getId() +
+                    "/view " +
                     functionalFlow.getAlias() +
-                    " / " +
-                    flowInterface.getAlias() +
-                    "\n\r";
+                    "]]\n\r";
             }
         }
         plantUMLSource += "@enduml\n";
@@ -59,8 +61,6 @@ public class PlantUMLSerializer {
                 "] --> [" +
                 flowInterface.getTarget().getName() +
                 "] : " +
-                functionalFlow.getAlias() +
-                " / " +
                 flowInterface.getAlias() +
                 "\n\r";
         }
