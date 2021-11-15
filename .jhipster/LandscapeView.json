@@ -9,6 +9,16 @@
     {
       "fieldName": "diagramName",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "compressedDrawXML",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "compressedDrawSVG",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
     }
   ],
   "relationships": [
