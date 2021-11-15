@@ -10,4 +10,5 @@ public enum ApplicationType {
     PACKAGE,
     INFRASTRUCTURE,
     GINKO,
+    FRONT,
 }
