@@ -1,20 +1,13 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
-import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer;
 import io.undertow.util.BadRequestException;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Base64;
 import java.util.Optional;
-import net.sourceforge.plantuml.FileFormat;
-import net.sourceforge.plantuml.FileFormatOption;
-import net.sourceforge.plantuml.SourceStringReader;
-import net.sourceforge.plantuml.core.DiagramDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,33 +36,8 @@ public class PlantUMLResource {
     public @ResponseBody String getLandscapeSVG(@PathVariable Long id) throws IOException, BadRequestException {
         Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
         if (landscapeViewOptional.isPresent()) {
-            String plantUMLSource = "@startuml\n";
-            plantUMLSource += "!pragma layout smetana\n";
-            for (FunctionalFlow functionalFlow : landscapeViewOptional.get().getFlows()) {
-                for (FlowInterface flowInterface : functionalFlow.getInterfaces()) {
-                    plantUMLSource +=
-                        "[" +
-                        flowInterface.getSource().getName() +
-                        "] --> [" +
-                        flowInterface.getTarget().getName() +
-                        "] : " +
-                        functionalFlow.getAlias() +
-                        " / " +
-                        flowInterface.getAlias() +
-                        "\n\r";
-                }
-            }
-            plantUMLSource += "@enduml\n";
-
-            System.out.println(plantUMLSource);
-
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-            SourceStringReader reader = new SourceStringReader(plantUMLSource);
-            DiagramDescription diagramDescription = reader.outputImage(byteArrayOutputStream, new FileFormatOption(FileFormat.SVG));
-            byteArrayOutputStream.close();
-            log.debug(diagramDescription.getDescription());
-            return new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
+            PlantUMLSerializer plantUMLSerializer = new PlantUMLSerializer();
+            return plantUMLSerializer.getSVG(landscapeViewOptional.get());
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }
@@ -80,32 +48,8 @@ public class PlantUMLResource {
         Optional<FunctionalFlow> functionalFlowOptional = functionalFlowRepository.findById(id);
 
         if (functionalFlowOptional.isPresent()) {
-            FunctionalFlow functionalFlow = functionalFlowOptional.get();
-            String plantUMLSource = "@startuml\n";
-            plantUMLSource += "!pragma layout smetana\n";
-            for (FlowInterface flowInterface : functionalFlow.getInterfaces()) {
-                plantUMLSource +=
-                    "[" +
-                    flowInterface.getSource().getName() +
-                    "] --> [" +
-                    flowInterface.getTarget().getName() +
-                    "] : " +
-                    functionalFlow.getAlias() +
-                    " / " +
-                    flowInterface.getAlias() +
-                    "\n\r";
-            }
-            plantUMLSource += "@enduml\n";
-
-            System.out.println(plantUMLSource);
-
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-            SourceStringReader reader = new SourceStringReader(plantUMLSource);
-            DiagramDescription diagramDescription = reader.outputImage(byteArrayOutputStream, new FileFormatOption(FileFormat.SVG));
-            byteArrayOutputStream.close();
-            log.debug(diagramDescription.getDescription());
-            return new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
+            PlantUMLSerializer plantUMLSerializer = new PlantUMLSerializer();
+            return plantUMLSerializer.getSVG(functionalFlowOptional.get());
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }
