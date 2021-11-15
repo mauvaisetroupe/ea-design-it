@@ -88,8 +88,32 @@
           </tr>
         </tbody>
       </table>
+
+      <div v-if="drawIoSVG && !isEditing" v-html="drawIoSVG" v-on:dblclick="editDiagram()" />
+      <a v-if="!drawIoSVG" v-on:click="editDiagram()">Click to generate DrawIo diagram</a>
+      <div v-if="!isHidden">
+        LCO
+        <iframe
+          :v-if="!isHidden"
+          id="myDiv"
+          frameborder="0"
+          src="https://embed.diagrams.net/?nav=1&edit=_blank&layers=1&highlight=0000ff&embed=1&noSaveBtn=1&libraries=1&proto=json"
+        ></iframe>
+      </div>
     </div>
   </div>
 </template>
+<style>
+iframe {
+  border: 5;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+</style>
 
 <script lang="ts" src="./landscape-view-details.component.ts"></script>

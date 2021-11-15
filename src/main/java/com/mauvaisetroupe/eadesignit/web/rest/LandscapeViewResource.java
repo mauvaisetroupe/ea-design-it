@@ -2,12 +2,14 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.drawio.MXFileSerializer;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.xml.parsers.ParserConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -129,6 +131,12 @@ public class LandscapeViewResource {
                 if (landscapeView.getDiagramName() != null) {
                     existingLandscapeView.setDiagramName(landscapeView.getDiagramName());
                 }
+                if (landscapeView.getCompressedDrawXML() != null) {
+                    existingLandscapeView.setCompressedDrawXML(landscapeView.getCompressedDrawXML());
+                }
+                if (landscapeView.getCompressedDrawSVG() != null) {
+                    existingLandscapeView.setCompressedDrawSVG(landscapeView.getCompressedDrawSVG());
+                }
 
                 return existingLandscapeView;
             })
@@ -162,6 +170,17 @@ public class LandscapeViewResource {
     public ResponseEntity<LandscapeView> getLandscapeView(@PathVariable Long id) {
         log.debug("REST request to get LandscapeView : {}", id);
         Optional<LandscapeView> landscapeView = landscapeViewRepository.findById(id);
+
+        // If no draw.io XML is persisted, create one in order to have a draft to edit
+        if (landscapeView.isPresent() && landscapeView.get().getCompressedDrawXML() == null) {
+            try {
+                MXFileSerializer fileSerializer = new MXFileSerializer(landscapeView.get());
+                landscapeView.get().setCompressedDrawXML(fileSerializer.createMXFileXML());
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            }
+        }
+
         return ResponseUtil.wrapOrNotFound(landscapeView);
     }
 
