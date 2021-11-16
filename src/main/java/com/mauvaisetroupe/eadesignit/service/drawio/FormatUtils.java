@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
@@ -19,7 +21,7 @@ public class FormatUtils {
      *
      */
     public static String inflate(byte[] binary) throws IOException {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         InputStream in = new InflaterInputStream(new ByteArrayInputStream(binary), new Inflater(true));
 
         while (in.available() != 0) {
@@ -46,7 +48,7 @@ public class FormatUtils {
      */
     public static byte[] deflate(String inString) throws IOException {
         Deflater deflater = new Deflater(Deflater.DEFAULT_COMPRESSION, true);
-        byte[] inBytes = inString.getBytes("UTF-8");
+        byte[] inBytes = inString.getBytes(StandardCharsets.UTF_8);
         deflater.setInput(inBytes);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(inBytes.length);
