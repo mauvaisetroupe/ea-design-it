@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 public class ExcelReader {
 
@@ -32,14 +31,10 @@ public class ExcelReader {
     private final List<String> columnNames;
     private final List<String> sheetName;
 
-    public ExcelReader(MultipartFile excel, List<String> columnNames, String... sheetName) throws Exception {
+    public ExcelReader(InputStream excel, List<String> columnNames, String... sheetName) throws EncryptedDocumentException, IOException {
         this.columnNames = columnNames;
         this.excelDF = importExcel(excel);
         this.sheetName = Arrays.asList(sheetName);
-    }
-
-    private Map<String, List<Map<String, Object>>> importExcel(MultipartFile excel) throws Exception {
-        return importExcel(excel.getInputStream());
     }
 
     private Map<String, List<Map<String, Object>>> importExcel(InputStream excel) throws EncryptedDocumentException, IOException {

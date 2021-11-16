@@ -13,18 +13,19 @@ import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
-import com.mauvaisetroupe.eadesignit.web.rest.errors.MalformedExcelException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FlowImportService {
@@ -98,19 +99,12 @@ public class FlowImportService {
         this.columnsArray.add(FLOW_CHECK_COLUMN_3);
     }
 
-    public List<FlowImport> importExcel(MultipartFile file) throws MalformedExcelException {
+    public List<FlowImport> importExcel(InputStream file, String diagramName) throws EncryptedDocumentException, IOException {
         List<FlowImport> result = new ArrayList<FlowImport>();
 
-        ExcelReader excelReader;
-        try {
-            excelReader = new ExcelReader(file, this.columnsArray, FLOW_SHEET_NAME);
-        } catch (Exception e) {
-            throw new MalformedExcelException(e.getMessage());
-        }
+        ExcelReader excelReader = new ExcelReader(file, this.columnsArray, FLOW_SHEET_NAME);
 
         List<Map<String, Object>> flowsDF = excelReader.getSheet(FLOW_SHEET_NAME);
-
-        String lowerCaseFileName = file.getOriginalFilename().toLowerCase();
 
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);
@@ -119,9 +113,9 @@ public class FlowImportService {
             FunctionalFlow functionalFlow;
 
             // Landscape
-            LandscapeView landscapeView = landscapeViewRepository.findByDiagramNameIgnoreCase(lowerCaseFileName);
+            LandscapeView landscapeView = landscapeViewRepository.findByDiagramNameIgnoreCase(diagramName);
             if (landscapeView == null) {
-                landscapeView = mapToLandscapeView(lowerCaseFileName);
+                landscapeView = mapToLandscapeView(diagramName);
                 landscapeViewRepository.save(landscapeView);
             }
 

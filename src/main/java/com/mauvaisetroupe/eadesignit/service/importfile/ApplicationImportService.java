@@ -46,7 +46,7 @@ public class ApplicationImportService {
     }
 
     public List<ApplicationImport> importExcel(MultipartFile file) throws Exception {
-        ExcelReader excelReader = new ExcelReader(file, this.columnsArray, APPLICATION_SHEET_NAME);
+        ExcelReader excelReader = new ExcelReader(file.getInputStream(), this.columnsArray, APPLICATION_SHEET_NAME);
         List<Map<String, Object>> applicationDF = excelReader.getSheet(APPLICATION_SHEET_NAME);
         log.info("Found Excel sheet " + applicationDF);
 

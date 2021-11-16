@@ -37,6 +37,6 @@ public class ImportResource {
 
     @PostMapping("/import/flow/upload-file")
     public List<FlowImport> uploadFlowsFile(@RequestPart MultipartFile file) throws Exception {
-        return flowImportService.importExcel(file);
+        return flowImportService.importExcel(file.getInputStream(), file.getOriginalFilename().toLowerCase());
     }
 }
