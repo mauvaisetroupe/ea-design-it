@@ -1,3 +1,4 @@
 {
-    "java.dependency.packagePresentation": "flat"
+    "java.dependency.packagePresentation": "flat",
+    "maven.view": "hierarchical"
 }

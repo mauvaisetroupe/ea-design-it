@@ -1,5 +1,18 @@
 { "version": "0.2.0", "configurations": [
-
+    {
+      "type": "java",
+      "name": "Launch MXFileSerializer",
+      "request": "launch",
+      "mainClass": "com.mauvaisetroupe.eadesignit.service.drawio.MXFileSerializer",
+      "projectName": "ea-design-it"
+    },
+    {
+      "type": "java",
+      "name": "Launch EaDesignItApp",
+      "request": "launch",
+      "mainClass": "com.mauvaisetroupe.eadesignit.EaDesignItApp",
+      "projectName": "ea-design-it"
+    },
     {
       "type": "java",
       "name": "Debug (Launch)",
@@ -14,4 +27,4 @@
       "hostName": "localhost",
       "port": 5005
     }
-    ] }
+  ] }
