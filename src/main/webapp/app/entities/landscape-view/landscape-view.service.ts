@@ -97,4 +97,17 @@ export default class LandscapeViewService {
         });
     });
   }
+
+  public deleteDrawInformation(id: number): Promise<ILandscapeView> {
+    return new Promise<ILandscapeView>((resolve, reject) => {
+      axios
+        .patch(`${baseApiUrl}/${id}/delete-draw`)
+        .then(res => {
+          resolve(res.data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
 }

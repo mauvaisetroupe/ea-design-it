@@ -199,4 +199,24 @@ public class LandscapeViewResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    @PatchMapping(value = "/landscape-views/{id}/delete-draw")
+    public ResponseEntity<LandscapeView> deleteDrawInformation(@PathVariable(value = "id", required = true) final Long id)
+        throws URISyntaxException {
+        log.debug("REST request to deletete draw information of landscape : {}", id);
+
+        if (!landscapeViewRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+        Optional<LandscapeView> result = landscapeViewRepository
+            .findById(id)
+            .map(existingLandscapeView -> {
+                existingLandscapeView.setCompressedDrawXML(null);
+                existingLandscapeView.setCompressedDrawSVG(null);
+                return existingLandscapeView;
+            })
+            .map(landscapeViewRepository::save);
+
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id.toString()));
+    }
 }

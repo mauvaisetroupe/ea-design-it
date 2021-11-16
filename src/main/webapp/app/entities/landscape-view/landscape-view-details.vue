@@ -88,17 +88,23 @@
           </tr>
         </tbody>
       </table>
-
-      <div v-if="drawIoSVG && !isEditing" v-html="drawIoSVG" v-on:dblclick="editDiagram()" />
-      <a v-if="!drawIoSVG" v-on:click="editDiagram()">Click to generate DrawIo diagram</a>
+      <h2>Draw.io</h2>
+      <div v-if="drawIoSVG && !isEditing">
+        <div v-html="drawIoSVG" />
+        [ <a v-on:click="editDiagram()">Edit diagram</a> ]
+        <span v-if="drawIOToBeSaved">[ <a v-on:click="saveDiagram()">Save diagram</a> ]</span>
+        <span v-if="!drawIOToBeSaved">[ <a v-on:click="deleteDiagram()">Delete diagram</a> ]</span>
+      </div>
+      <div v-if="!drawIoSVG">
+        <div>No preview available, <a v-on:click="editDiagram()">[ Generate and edit diagram ]</a></div>
+        <div>(use Arrange > Layout > Vertical Flow or Arrange > Layout > Organic to distribute the first diagram components)</div>
+      </div>
       <div v-if="!isHidden">
-        LCO
         <iframe
           :v-if="!isHidden"
           id="myDiv"
-          frameborder="0"
           src="https://embed.diagrams.net/?nav=1&edit=_blank&layers=1&highlight=0000ff&embed=1&noSaveBtn=1&libraries=1&proto=json"
-        ></iframe>
+        />
       </div>
     </div>
   </div>

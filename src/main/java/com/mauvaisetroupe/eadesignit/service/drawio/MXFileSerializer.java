@@ -62,8 +62,8 @@ public class MXFileSerializer {
 
     private void createEdge(Element root, FunctionalFlow flow, FlowInterface inter) {
         Element mxCell = createElement(root, "mxCell");
-        mxCell.setAttribute("id", EDGE_ID_PREFIX + flow.getId() + inter.getId());
-        mxCell.setAttribute("value", flow.getAlias() + " / " + inter.getId());
+        mxCell.setAttribute("id", EDGE_ID_PREFIX + flow.getId() + "_" + inter.getId());
+        mxCell.setAttribute("value", flow.getAlias() + " / " + inter.getAlias());
         mxCell.setAttribute("style", "endArrow=classic;html=1;rounded=0;");
         mxCell.setAttribute("parent", "1");
         mxCell.setAttribute("edge", "1");
