@@ -4,18 +4,23 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.drawio.MXFileSerializer;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.xml.sax.SAXException;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -167,16 +172,27 @@ public class LandscapeViewResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the landscapeView, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/landscape-views/{id}")
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public ResponseEntity<LandscapeView> getLandscapeView(@PathVariable Long id) {
         log.debug("REST request to get LandscapeView : {}", id);
         Optional<LandscapeView> landscapeView = landscapeViewRepository.findById(id);
 
-        // If no draw.io XML is persisted, create one in order to have a draft to edit
-        if (landscapeView.isPresent() && landscapeView.get().getCompressedDrawXML() == null) {
+        if (landscapeView.isPresent()) {
             try {
                 MXFileSerializer fileSerializer = new MXFileSerializer(landscapeView.get());
-                landscapeView.get().setCompressedDrawXML(fileSerializer.createMXFileXML());
-            } catch (ParserConfigurationException e) {
+                if (!StringUtils.hasText(landscapeView.get().getCompressedDrawXML())) {
+                    // If no draw.io XML is persisted, create one in order to have a draft to edit
+                    landscapeView.get().setCompressedDrawXML(fileSerializer.createMXFileXML());
+                } else {
+                    // check if drawio is uptodate, if not remove SVG from database
+                    // and send updated xml
+                    String newXML = fileSerializer.updateMXFileXML();
+                    if (newXML != null) {
+                        landscapeView.get().setCompressedDrawSVG(null);
+                        landscapeView.get().setCompressedDrawXML(newXML);
+                    }
+                }
+            } catch (ParserConfigurationException | XPathExpressionException | SAXException | IOException e) {
                 e.printStackTrace();
             }
         }
