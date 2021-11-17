@@ -49,12 +49,14 @@ entity FunctionalFlow {
     description String maxlength(1000)
     comment String
     status String
+    documentationURL String
 }
 
 entity FlowInterface {
     alias String pattern(/^[A-Z]{3}-[0-9]{2,4}$/)
     protocol Protocol
     status String
+    documentationURL String
 }
 
 entity Application {
@@ -64,6 +66,7 @@ entity Application {
     type ApplicationType
 	technology String
     comment String 
+    documentationURL String
 }
 
 entity DataFlow {
@@ -83,6 +86,7 @@ entity ApplicationComponent {
     type ApplicationType
     technology String 
     comment String 
+    documentationURL String
 }
 
 enum ViewPoint {
@@ -154,6 +158,7 @@ enum ApplicationType {
     PACKAGE
     INFRASTRUCTURE
     GINKO
+    FRONT
 }
 
 // ADD Helper for import, not part of main model

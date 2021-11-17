@@ -20,7 +20,7 @@
     {
       "fieldName": "type",
       "fieldType": "ApplicationType",
-      "fieldValues": "MICROSERVICE,EXTERNAL,JAVA,PACKAGE,INFRASTRUCTURE,GINKO"
+      "fieldValues": "MICROSERVICE,EXTERNAL,JAVA,PACKAGE,INFRASTRUCTURE,GINKO,FRONT"
     },
     {
       "fieldName": "technology",
@@ -28,6 +28,10 @@
     },
     {
       "fieldName": "comment",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "documentationURL",
       "fieldType": "String"
     }
   ],

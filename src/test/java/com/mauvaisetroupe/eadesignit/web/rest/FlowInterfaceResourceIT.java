@@ -40,6 +40,9 @@ class FlowInterfaceResourceIT {
     private static final String DEFAULT_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_STATUS = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DOCUMENTATION_URL = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENTATION_URL = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/flow-interfaces";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -64,7 +67,11 @@ class FlowInterfaceResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static FlowInterface createEntity(EntityManager em) {
-        FlowInterface flowInterface = new FlowInterface().alias(DEFAULT_ALIAS).protocol(DEFAULT_PROTOCOL).status(DEFAULT_STATUS);
+        FlowInterface flowInterface = new FlowInterface()
+            .alias(DEFAULT_ALIAS)
+            .protocol(DEFAULT_PROTOCOL)
+            .status(DEFAULT_STATUS)
+            .documentationURL(DEFAULT_DOCUMENTATION_URL);
         // Add required entity
         Application application;
         if (TestUtil.findAll(em, Application.class).isEmpty()) {
@@ -87,7 +94,11 @@ class FlowInterfaceResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static FlowInterface createUpdatedEntity(EntityManager em) {
-        FlowInterface flowInterface = new FlowInterface().alias(UPDATED_ALIAS).protocol(UPDATED_PROTOCOL).status(UPDATED_STATUS);
+        FlowInterface flowInterface = new FlowInterface()
+            .alias(UPDATED_ALIAS)
+            .protocol(UPDATED_PROTOCOL)
+            .status(UPDATED_STATUS)
+            .documentationURL(UPDATED_DOCUMENTATION_URL);
         // Add required entity
         Application application;
         if (TestUtil.findAll(em, Application.class).isEmpty()) {
@@ -124,6 +135,7 @@ class FlowInterfaceResourceIT {
         assertThat(testFlowInterface.getAlias()).isEqualTo(DEFAULT_ALIAS);
         assertThat(testFlowInterface.getProtocol()).isEqualTo(DEFAULT_PROTOCOL);
         assertThat(testFlowInterface.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
     }
 
     @Test
@@ -158,7 +170,8 @@ class FlowInterfaceResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(flowInterface.getId().intValue())))
             .andExpect(jsonPath("$.[*].alias").value(hasItem(DEFAULT_ALIAS)))
             .andExpect(jsonPath("$.[*].protocol").value(hasItem(DEFAULT_PROTOCOL.toString())))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
+            .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)));
     }
 
     @Test
@@ -175,7 +188,8 @@ class FlowInterfaceResourceIT {
             .andExpect(jsonPath("$.id").value(flowInterface.getId().intValue()))
             .andExpect(jsonPath("$.alias").value(DEFAULT_ALIAS))
             .andExpect(jsonPath("$.protocol").value(DEFAULT_PROTOCOL.toString()))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
+            .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL));
     }
 
     @Test
@@ -197,7 +211,11 @@ class FlowInterfaceResourceIT {
         FlowInterface updatedFlowInterface = flowInterfaceRepository.findById(flowInterface.getId()).get();
         // Disconnect from session so that the updates on updatedFlowInterface are not directly saved in db
         em.detach(updatedFlowInterface);
-        updatedFlowInterface.alias(UPDATED_ALIAS).protocol(UPDATED_PROTOCOL).status(UPDATED_STATUS);
+        updatedFlowInterface
+            .alias(UPDATED_ALIAS)
+            .protocol(UPDATED_PROTOCOL)
+            .status(UPDATED_STATUS)
+            .documentationURL(UPDATED_DOCUMENTATION_URL);
 
         restFlowInterfaceMockMvc
             .perform(
@@ -214,6 +232,7 @@ class FlowInterfaceResourceIT {
         assertThat(testFlowInterface.getAlias()).isEqualTo(UPDATED_ALIAS);
         assertThat(testFlowInterface.getProtocol()).isEqualTo(UPDATED_PROTOCOL);
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
     }
 
     @Test
@@ -301,6 +320,7 @@ class FlowInterfaceResourceIT {
         assertThat(testFlowInterface.getAlias()).isEqualTo(DEFAULT_ALIAS);
         assertThat(testFlowInterface.getProtocol()).isEqualTo(UPDATED_PROTOCOL);
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
     }
 
     @Test
@@ -315,7 +335,11 @@ class FlowInterfaceResourceIT {
         FlowInterface partialUpdatedFlowInterface = new FlowInterface();
         partialUpdatedFlowInterface.setId(flowInterface.getId());
 
-        partialUpdatedFlowInterface.alias(UPDATED_ALIAS).protocol(UPDATED_PROTOCOL).status(UPDATED_STATUS);
+        partialUpdatedFlowInterface
+            .alias(UPDATED_ALIAS)
+            .protocol(UPDATED_PROTOCOL)
+            .status(UPDATED_STATUS)
+            .documentationURL(UPDATED_DOCUMENTATION_URL);
 
         restFlowInterfaceMockMvc
             .perform(
@@ -332,6 +356,7 @@ class FlowInterfaceResourceIT {
         assertThat(testFlowInterface.getAlias()).isEqualTo(UPDATED_ALIAS);
         assertThat(testFlowInterface.getProtocol()).isEqualTo(UPDATED_PROTOCOL);
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
     }
 
     @Test

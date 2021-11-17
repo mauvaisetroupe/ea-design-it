@@ -24,6 +24,7 @@ const validations: any = {
     },
     comment: {},
     status: {},
+    documentationURL: {},
     landscapes: {
       required,
     },

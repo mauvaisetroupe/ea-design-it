@@ -10,6 +10,7 @@ export interface IFlowInterface {
   alias?: string | null;
   protocol?: Protocol | null;
   status?: string | null;
+  documentationURL?: string | null;
   dataFlows?: IDataFlow[] | null;
   source?: IApplication;
   target?: IApplication;
@@ -25,6 +26,7 @@ export class FlowInterface implements IFlowInterface {
     public alias?: string | null,
     public protocol?: Protocol | null,
     public status?: string | null,
+    public documentationURL?: string | null,
     public dataFlows?: IDataFlow[] | null,
     public source?: IApplication,
     public target?: IApplication,

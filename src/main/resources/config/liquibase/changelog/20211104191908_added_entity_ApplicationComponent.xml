@@ -29,6 +29,9 @@
             <column name="comment" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="documentation_url" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="application_id" type="bigint">
                 <constraints nullable="false" />
             </column>

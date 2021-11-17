@@ -29,7 +29,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       service = new FunctionalFlowService();
-      elemDefault = new FunctionalFlow(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new FunctionalFlow(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -85,6 +85,7 @@ describe('Service Tests', () => {
             description: 'BBBBBB',
             comment: 'BBBBBB',
             status: 'BBBBBB',
+            documentationURL: 'BBBBBB',
           },
           elemDefault
         );
@@ -112,6 +113,7 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             status: 'BBBBBB',
+            documentationURL: 'BBBBBB',
           },
           new FunctionalFlow()
         );
@@ -143,6 +145,7 @@ describe('Service Tests', () => {
             description: 'BBBBBB',
             comment: 'BBBBBB',
             status: 'BBBBBB',
+            documentationURL: 'BBBBBB',
           },
           elemDefault
         );

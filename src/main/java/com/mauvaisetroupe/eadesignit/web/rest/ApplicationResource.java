@@ -143,6 +143,9 @@ public class ApplicationResource {
                 if (application.getComment() != null) {
                     existingApplication.setComment(application.getComment());
                 }
+                if (application.getDocumentationURL() != null) {
+                    existingApplication.setDocumentationURL(application.getDocumentationURL());
+                }
 
                 return existingApplication;
             })

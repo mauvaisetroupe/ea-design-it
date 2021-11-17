@@ -17,6 +17,18 @@
             <span>{{ landscapeView.diagramName }}</span>
           </dd>
           <dt>
+            <span>Compressed Draw XML</span>
+          </dt>
+          <dd>
+            <span>{{ landscapeView.compressedDrawXML }}</span>
+          </dd>
+          <dt>
+            <span>Compressed Draw SVG</span>
+          </dt>
+          <dd>
+            <span>{{ landscapeView.compressedDrawSVG }}</span>
+          </dd>
+          <dt>
             <span>Owner</span>
           </dt>
           <dd>

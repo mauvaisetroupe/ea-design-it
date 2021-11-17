@@ -141,6 +141,9 @@ public class ApplicationComponentResource {
                 if (applicationComponent.getComment() != null) {
                     existingApplicationComponent.setComment(applicationComponent.getComment());
                 }
+                if (applicationComponent.getDocumentationURL() != null) {
+                    existingApplicationComponent.setDocumentationURL(applicationComponent.getDocumentationURL());
+                }
 
                 return existingApplicationComponent;
             })

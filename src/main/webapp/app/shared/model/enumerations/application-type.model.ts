@@ -10,4 +10,6 @@ export enum ApplicationType {
   INFRASTRUCTURE = 'INFRASTRUCTURE',
 
   GINKO = 'GINKO',
+
+  FRONT = 'FRONT',
 }

@@ -30,7 +30,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       service = new FlowInterfaceService();
-      elemDefault = new FlowInterface(123, 'AAAAAAA', Protocol.API, 'AAAAAAA');
+      elemDefault = new FlowInterface(123, 'AAAAAAA', Protocol.API, 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -85,6 +85,7 @@ describe('Service Tests', () => {
             alias: 'BBBBBB',
             protocol: 'BBBBBB',
             status: 'BBBBBB',
+            documentationURL: 'BBBBBB',
           },
           elemDefault
         );
@@ -143,6 +144,7 @@ describe('Service Tests', () => {
             alias: 'BBBBBB',
             protocol: 'BBBBBB',
             status: 'BBBBBB',
+            documentationURL: 'BBBBBB',
           },
           elemDefault
         );

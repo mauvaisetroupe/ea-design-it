@@ -31,6 +31,7 @@
             <th scope="row"><span>Alias</span></th>
             <th scope="row"><span>Protocol</span></th>
             <th scope="row"><span>Status</span></th>
+            <th scope="row"><span>Documentation URL</span></th>
             <th scope="row"><span>Source</span></th>
             <th scope="row"><span>Target</span></th>
             <th scope="row"><span>Source Component</span></th>
@@ -49,6 +50,7 @@
             <td>{{ flowInterface.alias }}</td>
             <td>{{ flowInterface.protocol }}</td>
             <td>{{ flowInterface.status }}</td>
+            <td>{{ flowInterface.documentationURL }}</td>
             <td>
               <div v-if="flowInterface.source">
                 <router-link :to="{ name: 'ApplicationView', params: { applicationId: flowInterface.source.id } }">{{

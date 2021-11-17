@@ -64,6 +64,18 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="functional-flow-documentationURL">Documentation URL</label>
+            <input
+              type="text"
+              class="form-control"
+              name="documentationURL"
+              id="functional-flow-documentationURL"
+              data-cy="documentationURL"
+              :class="{ valid: !$v.functionalFlow.documentationURL.$invalid, invalid: $v.functionalFlow.documentationURL.$invalid }"
+              v-model="$v.functionalFlow.documentationURL.$model"
+            />
+          </div>
+          <div class="form-group">
             <label for="functional-flow-interfaces">Interfaces</label>
             <select
               class="form-control"

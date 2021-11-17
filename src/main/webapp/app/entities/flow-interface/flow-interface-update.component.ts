@@ -28,6 +28,7 @@ const validations: any = {
     alias: {},
     protocol: {},
     status: {},
+    documentationURL: {},
     source: {
       required,
     },

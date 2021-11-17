@@ -53,6 +53,18 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="flow-interface-documentationURL">Documentation URL</label>
+            <input
+              type="text"
+              class="form-control"
+              name="documentationURL"
+              id="flow-interface-documentationURL"
+              data-cy="documentationURL"
+              :class="{ valid: !$v.flowInterface.documentationURL.$invalid, invalid: $v.flowInterface.documentationURL.$invalid }"
+              v-model="$v.flowInterface.documentationURL.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="flow-interface-source">Source</label>
             <select class="form-control" id="flow-interface-source" data-cy="source" name="source" v-model="flowInterface.source" required>
               <option v-if="!flowInterface.source" v-bind:value="null" selected></option>

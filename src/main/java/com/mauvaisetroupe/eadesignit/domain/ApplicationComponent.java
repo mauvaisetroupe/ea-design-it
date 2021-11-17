@@ -41,6 +41,9 @@ public class ApplicationComponent implements Serializable {
     @Column(name = "comment")
     private String comment;
 
+    @Column(name = "documentation_url")
+    private String documentationURL;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "owner", "applicationsLists" }, allowSetters = true)
@@ -126,6 +129,19 @@ public class ApplicationComponent implements Serializable {
         this.comment = comment;
     }
 
+    public String getDocumentationURL() {
+        return this.documentationURL;
+    }
+
+    public ApplicationComponent documentationURL(String documentationURL) {
+        this.setDocumentationURL(documentationURL);
+        return this;
+    }
+
+    public void setDocumentationURL(String documentationURL) {
+        this.documentationURL = documentationURL;
+    }
+
     public Application getApplication() {
         return this.application;
     }
@@ -168,6 +184,7 @@ public class ApplicationComponent implements Serializable {
             ", type='" + getType() + "'" +
             ", technology='" + getTechnology() + "'" +
             ", comment='" + getComment() + "'" +
+            ", documentationURL='" + getDocumentationURL() + "'" +
             "}";
     }
 }

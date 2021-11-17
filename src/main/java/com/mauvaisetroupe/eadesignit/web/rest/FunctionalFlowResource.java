@@ -138,6 +138,9 @@ public class FunctionalFlowResource {
                 if (functionalFlow.getStatus() != null) {
                     existingFunctionalFlow.setStatus(functionalFlow.getStatus());
                 }
+                if (functionalFlow.getDocumentationURL() != null) {
+                    existingFunctionalFlow.setDocumentationURL(functionalFlow.getDocumentationURL());
+                }
 
                 return existingFunctionalFlow;
             })

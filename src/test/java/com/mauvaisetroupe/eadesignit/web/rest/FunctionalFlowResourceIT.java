@@ -50,6 +50,9 @@ class FunctionalFlowResourceIT {
     private static final String DEFAULT_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_STATUS = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DOCUMENTATION_URL = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENTATION_URL = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/functional-flows";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -81,7 +84,8 @@ class FunctionalFlowResourceIT {
             .alias(DEFAULT_ALIAS)
             .description(DEFAULT_DESCRIPTION)
             .comment(DEFAULT_COMMENT)
-            .status(DEFAULT_STATUS);
+            .status(DEFAULT_STATUS)
+            .documentationURL(DEFAULT_DOCUMENTATION_URL);
         // Add required entity
         LandscapeView landscapeView;
         if (TestUtil.findAll(em, LandscapeView.class).isEmpty()) {
@@ -106,7 +110,8 @@ class FunctionalFlowResourceIT {
             .alias(UPDATED_ALIAS)
             .description(UPDATED_DESCRIPTION)
             .comment(UPDATED_COMMENT)
-            .status(UPDATED_STATUS);
+            .status(UPDATED_STATUS)
+            .documentationURL(UPDATED_DOCUMENTATION_URL);
         // Add required entity
         LandscapeView landscapeView;
         if (TestUtil.findAll(em, LandscapeView.class).isEmpty()) {
@@ -144,6 +149,7 @@ class FunctionalFlowResourceIT {
         assertThat(testFunctionalFlow.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testFunctionalFlow.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testFunctionalFlow.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testFunctionalFlow.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
     }
 
     @Test
@@ -181,7 +187,8 @@ class FunctionalFlowResourceIT {
             .andExpect(jsonPath("$.[*].alias").value(hasItem(DEFAULT_ALIAS)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)));
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
+            .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -217,7 +224,8 @@ class FunctionalFlowResourceIT {
             .andExpect(jsonPath("$.alias").value(DEFAULT_ALIAS))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT))
-            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS));
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
+            .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL));
     }
 
     @Test
@@ -239,7 +247,12 @@ class FunctionalFlowResourceIT {
         FunctionalFlow updatedFunctionalFlow = functionalFlowRepository.findById(functionalFlow.getId()).get();
         // Disconnect from session so that the updates on updatedFunctionalFlow are not directly saved in db
         em.detach(updatedFunctionalFlow);
-        updatedFunctionalFlow.alias(UPDATED_ALIAS).description(UPDATED_DESCRIPTION).comment(UPDATED_COMMENT).status(UPDATED_STATUS);
+        updatedFunctionalFlow
+            .alias(UPDATED_ALIAS)
+            .description(UPDATED_DESCRIPTION)
+            .comment(UPDATED_COMMENT)
+            .status(UPDATED_STATUS)
+            .documentationURL(UPDATED_DOCUMENTATION_URL);
 
         restFunctionalFlowMockMvc
             .perform(
@@ -257,6 +270,7 @@ class FunctionalFlowResourceIT {
         assertThat(testFunctionalFlow.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testFunctionalFlow.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testFunctionalFlow.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testFunctionalFlow.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
     }
 
     @Test
@@ -327,7 +341,7 @@ class FunctionalFlowResourceIT {
         FunctionalFlow partialUpdatedFunctionalFlow = new FunctionalFlow();
         partialUpdatedFunctionalFlow.setId(functionalFlow.getId());
 
-        partialUpdatedFunctionalFlow.alias(UPDATED_ALIAS);
+        partialUpdatedFunctionalFlow.alias(UPDATED_ALIAS).documentationURL(UPDATED_DOCUMENTATION_URL);
 
         restFunctionalFlowMockMvc
             .perform(
@@ -345,6 +359,7 @@ class FunctionalFlowResourceIT {
         assertThat(testFunctionalFlow.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testFunctionalFlow.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testFunctionalFlow.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testFunctionalFlow.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
     }
 
     @Test
@@ -359,7 +374,12 @@ class FunctionalFlowResourceIT {
         FunctionalFlow partialUpdatedFunctionalFlow = new FunctionalFlow();
         partialUpdatedFunctionalFlow.setId(functionalFlow.getId());
 
-        partialUpdatedFunctionalFlow.alias(UPDATED_ALIAS).description(UPDATED_DESCRIPTION).comment(UPDATED_COMMENT).status(UPDATED_STATUS);
+        partialUpdatedFunctionalFlow
+            .alias(UPDATED_ALIAS)
+            .description(UPDATED_DESCRIPTION)
+            .comment(UPDATED_COMMENT)
+            .status(UPDATED_STATUS)
+            .documentationURL(UPDATED_DOCUMENTATION_URL);
 
         restFunctionalFlowMockMvc
             .perform(
@@ -377,6 +397,7 @@ class FunctionalFlowResourceIT {
         assertThat(testFunctionalFlow.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testFunctionalFlow.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testFunctionalFlow.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testFunctionalFlow.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
     }
 
     @Test

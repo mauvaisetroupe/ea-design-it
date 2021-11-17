@@ -18,6 +18,10 @@
     {
       "fieldName": "status",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "documentationURL",
+      "fieldType": "String"
     }
   ],
   "relationships": [

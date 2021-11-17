@@ -37,6 +37,12 @@
             <span>{{ applicationComponent.comment }}</span>
           </dd>
           <dt>
+            <span>Documentation URL</span>
+          </dt>
+          <dd>
+            <span>{{ applicationComponent.documentationURL }}</span>
+          </dd>
+          <dt>
             <span>Application</span>
           </dt>
           <dd>

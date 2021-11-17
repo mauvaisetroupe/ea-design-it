@@ -41,6 +41,12 @@
             <span>{{ application.comment }}</span>
           </dd>
           <dt>
+            <span>Documentation URL</span>
+          </dt>
+          <dd>
+            <span>{{ application.documentationURL }}</span>
+          </dd>
+          <dt>
             <span>Owner</span>
           </dt>
           <dd>

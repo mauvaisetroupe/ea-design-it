@@ -94,6 +94,18 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-documentationURL">Documentation URL</label>
+            <input
+              type="text"
+              class="form-control"
+              name="documentationURL"
+              id="application-documentationURL"
+              data-cy="documentationURL"
+              :class="{ valid: !$v.application.documentationURL.$invalid, invalid: $v.application.documentationURL.$invalid }"
+              v-model="$v.application.documentationURL.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="application-owner">Owner</label>
             <select class="form-control" id="application-owner" data-cy="owner" name="owner" v-model="application.owner">
               <option v-bind:value="null"></option>

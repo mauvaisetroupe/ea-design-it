@@ -8,6 +8,7 @@ export interface IApplicationComponent {
   type?: ApplicationType | null;
   technology?: string | null;
   comment?: string | null;
+  documentationURL?: string | null;
   application?: IApplication;
 }
 
@@ -19,6 +20,7 @@ export class ApplicationComponent implements IApplicationComponent {
     public type?: ApplicationType | null,
     public technology?: string | null,
     public comment?: string | null,
+    public documentationURL?: string | null,
     public application?: IApplication
   ) {}
 }

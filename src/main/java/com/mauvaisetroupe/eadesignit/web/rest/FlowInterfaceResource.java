@@ -134,6 +134,9 @@ public class FlowInterfaceResource {
                 if (flowInterface.getStatus() != null) {
                     existingFlowInterface.setStatus(flowInterface.getStatus());
                 }
+                if (flowInterface.getDocumentationURL() != null) {
+                    existingFlowInterface.setDocumentationURL(flowInterface.getDocumentationURL());
+                }
 
                 return existingFlowInterface;
             })

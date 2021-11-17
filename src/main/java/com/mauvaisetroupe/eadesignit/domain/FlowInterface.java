@@ -37,6 +37,9 @@ public class FlowInterface implements Serializable {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "documentation_url")
+    private String documentationURL;
+
     @OneToMany(mappedBy = "flowInterface")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "functionalFlows", "flowInterface" }, allowSetters = true)
@@ -120,6 +123,19 @@ public class FlowInterface implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDocumentationURL() {
+        return this.documentationURL;
+    }
+
+    public FlowInterface documentationURL(String documentationURL) {
+        this.setDocumentationURL(documentationURL);
+        return this;
+    }
+
+    public void setDocumentationURL(String documentationURL) {
+        this.documentationURL = documentationURL;
     }
 
     public Set<DataFlow> getDataFlows() {
@@ -276,6 +292,7 @@ public class FlowInterface implements Serializable {
             ", alias='" + getAlias() + "'" +
             ", protocol='" + getProtocol() + "'" +
             ", status='" + getStatus() + "'" +
+            ", documentationURL='" + getDocumentationURL() + "'" +
             "}";
     }
 }

@@ -47,6 +47,9 @@ public class Application implements Serializable {
     @Column(name = "comment")
     private String comment;
 
+    @Column(name = "documentation_url")
+    private String documentationURL;
+
     @ManyToOne
     private Owner owner;
 
@@ -148,6 +151,19 @@ public class Application implements Serializable {
         this.comment = comment;
     }
 
+    public String getDocumentationURL() {
+        return this.documentationURL;
+    }
+
+    public Application documentationURL(String documentationURL) {
+        this.setDocumentationURL(documentationURL);
+        return this;
+    }
+
+    public void setDocumentationURL(String documentationURL) {
+        this.documentationURL = documentationURL;
+    }
+
     public Owner getOwner() {
         return this.owner;
     }
@@ -222,6 +238,7 @@ public class Application implements Serializable {
             ", type='" + getType() + "'" +
             ", technology='" + getTechnology() + "'" +
             ", comment='" + getComment() + "'" +
+            ", documentationURL='" + getDocumentationURL() + "'" +
             "}";
     }
 }

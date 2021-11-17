@@ -10,6 +10,7 @@ export interface IApplication {
   type?: ApplicationType | null;
   technology?: string | null;
   comment?: string | null;
+  documentationURL?: string | null;
   owner?: IOwner | null;
   applicationsLists?: IApplicationComponent[] | null;
 }
@@ -23,6 +24,7 @@ export class Application implements IApplication {
     public type?: ApplicationType | null,
     public technology?: string | null,
     public comment?: string | null,
+    public documentationURL?: string | null,
     public owner?: IOwner | null,
     public applicationsLists?: IApplicationComponent[] | null
   ) {}

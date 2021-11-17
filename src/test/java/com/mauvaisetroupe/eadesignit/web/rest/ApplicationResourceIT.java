@@ -48,6 +48,9 @@ class ApplicationResourceIT {
     private static final String DEFAULT_COMMENT = "AAAAAAAAAA";
     private static final String UPDATED_COMMENT = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DOCUMENTATION_URL = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENTATION_URL = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/applications";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -78,7 +81,8 @@ class ApplicationResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .type(DEFAULT_TYPE)
             .technology(DEFAULT_TECHNOLOGY)
-            .comment(DEFAULT_COMMENT);
+            .comment(DEFAULT_COMMENT)
+            .documentationURL(DEFAULT_DOCUMENTATION_URL);
         return application;
     }
 
@@ -95,7 +99,8 @@ class ApplicationResourceIT {
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
             .technology(UPDATED_TECHNOLOGY)
-            .comment(UPDATED_COMMENT);
+            .comment(UPDATED_COMMENT)
+            .documentationURL(UPDATED_DOCUMENTATION_URL);
         return application;
     }
 
@@ -123,6 +128,7 @@ class ApplicationResourceIT {
         assertThat(testApplication.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testApplication.getTechnology()).isEqualTo(DEFAULT_TECHNOLOGY);
         assertThat(testApplication.getComment()).isEqualTo(DEFAULT_COMMENT);
+        assertThat(testApplication.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
     }
 
     @Test
@@ -160,7 +166,8 @@ class ApplicationResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].technology").value(hasItem(DEFAULT_TECHNOLOGY)))
-            .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)));
+            .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)))
+            .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)));
     }
 
     @Test
@@ -180,7 +187,8 @@ class ApplicationResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.technology").value(DEFAULT_TECHNOLOGY))
-            .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT));
+            .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT))
+            .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL));
     }
 
     @Test
@@ -208,7 +216,8 @@ class ApplicationResourceIT {
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
             .technology(UPDATED_TECHNOLOGY)
-            .comment(UPDATED_COMMENT);
+            .comment(UPDATED_COMMENT)
+            .documentationURL(UPDATED_DOCUMENTATION_URL);
 
         restApplicationMockMvc
             .perform(
@@ -228,6 +237,7 @@ class ApplicationResourceIT {
         assertThat(testApplication.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testApplication.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
         assertThat(testApplication.getComment()).isEqualTo(UPDATED_COMMENT);
+        assertThat(testApplication.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
     }
 
     @Test
@@ -298,7 +308,7 @@ class ApplicationResourceIT {
         Application partialUpdatedApplication = new Application();
         partialUpdatedApplication.setId(application.getId());
 
-        partialUpdatedApplication.description(UPDATED_DESCRIPTION);
+        partialUpdatedApplication.description(UPDATED_DESCRIPTION).documentationURL(UPDATED_DOCUMENTATION_URL);
 
         restApplicationMockMvc
             .perform(
@@ -318,6 +328,7 @@ class ApplicationResourceIT {
         assertThat(testApplication.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testApplication.getTechnology()).isEqualTo(DEFAULT_TECHNOLOGY);
         assertThat(testApplication.getComment()).isEqualTo(DEFAULT_COMMENT);
+        assertThat(testApplication.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
     }
 
     @Test
@@ -338,7 +349,8 @@ class ApplicationResourceIT {
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
             .technology(UPDATED_TECHNOLOGY)
-            .comment(UPDATED_COMMENT);
+            .comment(UPDATED_COMMENT)
+            .documentationURL(UPDATED_DOCUMENTATION_URL);
 
         restApplicationMockMvc
             .perform(
@@ -358,6 +370,7 @@ class ApplicationResourceIT {
         assertThat(testApplication.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testApplication.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
         assertThat(testApplication.getComment()).isEqualTo(UPDATED_COMMENT);
+        assertThat(testApplication.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
     }
 
     @Test

@@ -30,7 +30,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       service = new ApplicationComponentService();
-      elemDefault = new ApplicationComponent(123, 'AAAAAAA', 'AAAAAAA', ApplicationType.MICROSERVICE, 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new ApplicationComponent(123, 'AAAAAAA', 'AAAAAAA', ApplicationType.MICROSERVICE, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -87,6 +87,7 @@ describe('Service Tests', () => {
             type: 'BBBBBB',
             technology: 'BBBBBB',
             comment: 'BBBBBB',
+            documentationURL: 'BBBBBB',
           },
           elemDefault
         );
@@ -116,6 +117,7 @@ describe('Service Tests', () => {
             description: 'BBBBBB',
             technology: 'BBBBBB',
             comment: 'BBBBBB',
+            documentationURL: 'BBBBBB',
           },
           new ApplicationComponent()
         );
@@ -148,6 +150,7 @@ describe('Service Tests', () => {
             type: 'BBBBBB',
             technology: 'BBBBBB',
             comment: 'BBBBBB',
+            documentationURL: 'BBBBBB',
           },
           elemDefault
         );

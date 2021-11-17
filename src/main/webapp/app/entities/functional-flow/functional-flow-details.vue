@@ -29,6 +29,12 @@
             <span>{{ functionalFlow.status }}</span>
           </dd>
           <dt>
+            <span>Documentation URL</span>
+          </dt>
+          <dd>
+            <span>{{ functionalFlow.documentationURL }}</span>
+          </dd>
+          <dt>
             <span>Interfaces</span>
           </dt>
           <dd>

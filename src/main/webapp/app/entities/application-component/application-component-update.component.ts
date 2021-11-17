@@ -20,6 +20,7 @@ const validations: any = {
     type: {},
     technology: {},
     comment: {},
+    documentationURL: {},
     application: {
       required,
     },

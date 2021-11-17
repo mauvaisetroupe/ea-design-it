@@ -79,6 +79,21 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-component-documentationURL">Documentation URL</label>
+            <input
+              type="text"
+              class="form-control"
+              name="documentationURL"
+              id="application-component-documentationURL"
+              data-cy="documentationURL"
+              :class="{
+                valid: !$v.applicationComponent.documentationURL.$invalid,
+                invalid: $v.applicationComponent.documentationURL.$invalid,
+              }"
+              v-model="$v.applicationComponent.documentationURL.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="application-component-application">Application</label>
             <select
               class="form-control"

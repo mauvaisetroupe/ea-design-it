@@ -8,6 +8,7 @@ export interface IFunctionalFlow {
   description?: string | null;
   comment?: string | null;
   status?: string | null;
+  documentationURL?: string | null;
   interfaces?: IFlowInterface[] | null;
   landscapes?: ILandscapeView[];
   dataFlows?: IDataFlow[] | null;
@@ -20,6 +21,7 @@ export class FunctionalFlow implements IFunctionalFlow {
     public description?: string | null,
     public comment?: string | null,
     public status?: string | null,
+    public documentationURL?: string | null,
     public interfaces?: IFlowInterface[] | null,
     public landscapes?: ILandscapeView[],
     public dataFlows?: IDataFlow[] | null

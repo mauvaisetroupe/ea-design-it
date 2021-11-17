@@ -38,6 +38,9 @@ public class FunctionalFlow implements Serializable {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "documentation_url")
+    private String documentationURL;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_functional_flow__interfaces",
@@ -123,6 +126,19 @@ public class FunctionalFlow implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDocumentationURL() {
+        return this.documentationURL;
+    }
+
+    public FunctionalFlow documentationURL(String documentationURL) {
+        this.setDocumentationURL(documentationURL);
+        return this;
+    }
+
+    public void setDocumentationURL(String documentationURL) {
+        this.documentationURL = documentationURL;
     }
 
     public Set<FlowInterface> getInterfaces() {
@@ -240,6 +256,7 @@ public class FunctionalFlow implements Serializable {
             ", description='" + getDescription() + "'" +
             ", comment='" + getComment() + "'" +
             ", status='" + getStatus() + "'" +
+            ", documentationURL='" + getDocumentationURL() + "'" +
             "}";
     }
 }

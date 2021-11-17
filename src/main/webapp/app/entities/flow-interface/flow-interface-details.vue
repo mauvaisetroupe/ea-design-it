@@ -23,6 +23,12 @@
             <span>{{ flowInterface.status }}</span>
           </dd>
           <dt>
+            <span>Documentation URL</span>
+          </dt>
+          <dd>
+            <span>{{ flowInterface.documentationURL }}</span>
+          </dd>
+          <dt>
             <span>Source</span>
           </dt>
           <dd>

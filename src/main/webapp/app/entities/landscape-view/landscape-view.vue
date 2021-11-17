@@ -30,6 +30,8 @@
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Viewpoint</span></th>
             <th scope="row"><span>Diagram Name</span></th>
+            <th scope="row"><span>Compressed Draw XML</span></th>
+            <th scope="row"><span>Compressed Draw SVG</span></th>
             <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>Flows</span></th>
             <th scope="row"></th>
@@ -44,6 +46,8 @@
             </td>
             <td>{{ landscapeView.viewpoint }}</td>
             <td>{{ landscapeView.diagramName }}</td>
+            <td>{{ landscapeView.compressedDrawXML }}</td>
+            <td>{{ landscapeView.compressedDrawSVG }}</td>
             <td>
               <div v-if="landscapeView.owner">
                 <router-link :to="{ name: 'OwnerView', params: { ownerId: landscapeView.owner.id } }">{{

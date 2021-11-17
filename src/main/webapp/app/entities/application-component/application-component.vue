@@ -33,6 +33,7 @@
             <th scope="row"><span>Type</span></th>
             <th scope="row"><span>Technology</span></th>
             <th scope="row"><span>Comment</span></th>
+            <th scope="row"><span>Documentation URL</span></th>
             <th scope="row"><span>Application</span></th>
             <th scope="row"></th>
           </tr>
@@ -49,6 +50,7 @@
             <td>{{ applicationComponent.type }}</td>
             <td>{{ applicationComponent.technology }}</td>
             <td>{{ applicationComponent.comment }}</td>
+            <td>{{ applicationComponent.documentationURL }}</td>
             <td>
               <div v-if="applicationComponent.application">
                 <router-link :to="{ name: 'ApplicationView', params: { applicationId: applicationComponent.application.id } }">{{
