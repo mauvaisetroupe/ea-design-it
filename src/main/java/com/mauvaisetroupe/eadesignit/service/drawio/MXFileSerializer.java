@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -30,6 +31,7 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -86,31 +88,104 @@ public class MXFileSerializer {
     public String updateMXFileXML() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         boolean updated = false;
         Document doc = getDecodedExistingXML();
+
+        Set<String> addedApplicationIds = new HashSet<String>();
+        Set<String> deletedApplicationIds = new HashSet<String>();
+        Set<String> adddeEdgeIds = new HashSet<String>();
+        Set<String> deletedEdgeIds = new HashSet<String>();
+        getDifferences(addedApplicationIds, deletedApplicationIds, adddeEdgeIds, deletedEdgeIds, doc, this.landscapeView);
+
         XPathFactory xpathfactory = XPathFactory.newInstance();
         XPath xpath = xpathfactory.newXPath();
         Element root = (Element) xpath.evaluate("//root", doc, XPathConstants.NODE);
         for (Application application : getDistinctApplications(landscapeView)) {
-            Element applicationElement = (Element) xpath
-                .compile("//mxCell[@elementId='" + APP_ID_PREFIX + application.getId() + "']")
-                .evaluate(doc, XPathConstants.NODE);
-            if (applicationElement == null) {
-                createRectangle(doc, root, application.getId().toString(), application.getName());
+            if (addedApplicationIds.contains(APP_ID_PREFIX + application.getId())) {
+                Element elem = createRectangle(doc, root, application.getId().toString(), application.getName());
+                applyStrokeColor(elem, "#00FF00"); // greem
                 updated = true;
             }
         }
 
         for (FunctionalFlow flow : this.landscapeView.getFlows()) {
             for (FlowInterface inter : flow.getInterfaces()) {
-                Element edgeElement = (Element) xpath
-                    .compile("//mxCell[@elementId='" + EDGE_ID_PREFIX + flow.getId() + "_" + inter.getId() + "']")
-                    .evaluate(doc, XPathConstants.NODE);
-                if (edgeElement == null) {
-                    createEdge(doc, root, flow, inter);
+                if (adddeEdgeIds.contains(EDGE_ID_PREFIX + flow.getId() + "_" + inter.getId())) {
+                    Element elem = createEdge(doc, root, flow, inter);
+                    applyStrokeColor(elem, "#00FF00"); // green
                     updated = true;
                 }
             }
         }
+
+        for (String id : deletedApplicationIds) {
+            Element elem = (Element) xpath.evaluate("//mxCell[@id='" + id + "']", doc, XPathConstants.NODE);
+            applyStrokeColor(elem, "#FF0000"); // red
+            updated = true;
+        }
+
+        for (String id : deletedEdgeIds) {
+            Element elem = (Element) xpath.evaluate("//mxCell[@id='" + id + "']", doc, XPathConstants.NODE);
+            applyStrokeColor(elem, "#FF0000"); // red
+            updated = true;
+        }
+
         return updated ? getStringFromDocument(doc) : null;
+    }
+
+    private void getDifferences(
+        Set<String> addedApplicationIds,
+        Set<String> deletedApplicationIds,
+        Set<String> adddeEdgeIds,
+        Set<String> deletedEdgeIds,
+        Document doc,
+        LandscapeView landscapeView2
+    ) throws XPathExpressionException {
+        // application in landscape
+        Set<String> expectedApplicationElementIds = getDistinctApplications(landscapeView)
+            .stream()
+            .map(app -> APP_ID_PREFIX + app.getId())
+            .collect(Collectors.toSet());
+
+        // edge from landscape
+        Set<String> expectedEdgeIds = new HashSet<String>();
+        for (FunctionalFlow flow : this.landscapeView.getFlows()) {
+            for (FlowInterface inter : flow.getInterfaces()) {
+                expectedEdgeIds.add(EDGE_ID_PREFIX + flow.getId() + "_" + inter.getId());
+            }
+        }
+
+        // applications in exisiting XML
+        Set<String> existingApplicationIds = new HashSet<String>();
+        XPathFactory xpathfactory = XPathFactory.newInstance();
+        XPath xpath = xpathfactory.newXPath();
+        NodeList nodeList = (NodeList) xpath.evaluate(
+            "//mxCell[starts-with(@id,'" + MXFileSerializer.APP_ID_PREFIX + "')]",
+            doc,
+            XPathConstants.NODESET
+        );
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            existingApplicationIds.add(((Element) nodeList.item(i)).getAttribute("id"));
+        }
+
+        // applications in exisiting XML
+        Set<String> existingEdgeIds = new HashSet<String>();
+        xpath = xpathfactory.newXPath();
+        nodeList =
+            (NodeList) xpath.evaluate("//mxCell[starts-with(@id,'" + MXFileSerializer.EDGE_ID_PREFIX + "')]", doc, XPathConstants.NODESET);
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            existingEdgeIds.add(((Element) nodeList.item(i)).getAttribute("id"));
+        }
+
+        addedApplicationIds.addAll(expectedApplicationElementIds);
+        addedApplicationIds.removeAll(existingApplicationIds);
+
+        deletedApplicationIds.addAll(existingApplicationIds);
+        deletedApplicationIds.removeAll(expectedApplicationElementIds);
+
+        adddeEdgeIds.addAll(expectedEdgeIds);
+        adddeEdgeIds.removeAll(existingEdgeIds);
+
+        deletedEdgeIds.addAll(existingEdgeIds);
+        deletedEdgeIds.removeAll(expectedEdgeIds);
     }
 
     public Document getDecodedExistingXML()
@@ -199,6 +274,17 @@ public class MXFileSerializer {
         mxPoint2.setAttribute("as", "targetPoint");
 
         return mxCell;
+    }
+
+    private void applyStrokeColor(Element elem, String color) {
+        String styleValue = elem.getAttribute("style");
+        if (!StringUtils.hasText(styleValue)) {
+            elem.setAttribute("style", "strokeColor=" + color + ";");
+        } else if (!styleValue.contains("strokeColor=")) {
+            elem.setAttribute("style", styleValue + "strokeColor=" + color + ";");
+        } else {
+            elem.setAttribute("style", styleValue.replaceAll("strokeColor=.*?;", "strokeColor=" + color + ";"));
+        }
     }
 
     /////////////////
