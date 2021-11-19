@@ -104,6 +104,11 @@
               :class="{ valid: !$v.application.documentationURL.$invalid, invalid: $v.application.documentationURL.$invalid }"
               v-model="$v.application.documentationURL.$model"
             />
+            <div v-if="$v.application.documentationURL.$anyDirty && $v.application.documentationURL.$invalid">
+              <small class="form-text text-danger" v-if="!$v.application.documentationURL.maxLength">
+                This field cannot be longer than 500 characters.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="application-startDate">Start Date</label>

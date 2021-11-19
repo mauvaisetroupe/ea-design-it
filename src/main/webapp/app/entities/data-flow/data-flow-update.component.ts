@@ -29,7 +29,9 @@ const validations: any = {
     },
     resourceName: {},
     contractURL: {},
-    documentationURL: {},
+    documentationURL: {
+      maxLength: maxLength(500),
+    },
     startDate: {},
     endDate: {},
     functionalFlows: {

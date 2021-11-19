@@ -53,8 +53,8 @@ entity FunctionalFlow {
     description String maxlength(1000)
     comment String
     status String
-    documentationURL String
-    documentationURL2 String    
+    documentationURL String maxlength(500)
+    documentationURL2 String maxlength(500)
     startDate LocalDate
     endDate LocalDate
 }
@@ -63,8 +63,8 @@ entity FlowInterface {
     alias String pattern(/^[A-Z]{3}-[0-9]{2,4}$/)
     protocol Protocol
     status String
-    documentationURL String
-    documentationURL2 String
+    documentationURL String maxlength(500)
+    documentationURL2 String maxlength(500)
     startDate LocalDate
     endDate LocalDate
 }
@@ -76,7 +76,7 @@ entity Application {
     type ApplicationType
 	technology String
     comment String 
-    documentationURL String
+    documentationURL String maxlength(500)
     startDate LocalDate
     endDate LocalDate
 }
@@ -88,7 +88,7 @@ entity DataFlow {
     description String maxlength(1000)
     resourceName String /** TOPIC name for event, FileName for Files*/
     contractURL String /** Swagger or XSD URL */
-    documentationURL String
+    documentationURL String maxlength(500)
     startDate LocalDate
     endDate LocalDate    
 }
@@ -96,10 +96,11 @@ entity DataFlow {
 entity EventData {
     name String
     contractURL String
-    documentationURL String
+    documentationURL String maxlength(500)
     startDate LocalDate
     endDate LocalDate
 }
+
 
 entity ApplicationComponent {
 	name String,
@@ -107,7 +108,7 @@ entity ApplicationComponent {
     type ApplicationType
     technology String 
     comment String 
-    documentationURL String
+    documentationURL String maxlength(500)
     startDate LocalDate
     endDate LocalDate
 }

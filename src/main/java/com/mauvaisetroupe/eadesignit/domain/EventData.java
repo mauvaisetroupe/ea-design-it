@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -29,7 +30,8 @@ public class EventData implements Serializable {
     @Column(name = "contract_url")
     private String contractURL;
 
-    @Column(name = "documentation_url")
+    @Size(max = 500)
+    @Column(name = "documentation_url", length = 500)
     private String documentationURL;
 
     @Column(name = "start_date")

@@ -99,6 +99,11 @@
               :class="{ valid: !$v.dataFlow.documentationURL.$invalid, invalid: $v.dataFlow.documentationURL.$invalid }"
               v-model="$v.dataFlow.documentationURL.$model"
             />
+            <div v-if="$v.dataFlow.documentationURL.$anyDirty && $v.dataFlow.documentationURL.$invalid">
+              <small class="form-text text-danger" v-if="!$v.dataFlow.documentationURL.maxLength">
+                This field cannot be longer than 500 characters.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="data-flow-startDate">Start Date</label>

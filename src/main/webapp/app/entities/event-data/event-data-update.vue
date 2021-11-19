@@ -43,6 +43,11 @@
               :class="{ valid: !$v.eventData.documentationURL.$invalid, invalid: $v.eventData.documentationURL.$invalid }"
               v-model="$v.eventData.documentationURL.$model"
             />
+            <div v-if="$v.eventData.documentationURL.$anyDirty && $v.eventData.documentationURL.$invalid">
+              <small class="form-text text-danger" v-if="!$v.eventData.documentationURL.maxLength">
+                This field cannot be longer than 500 characters.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="event-data-startDate">Start Date</label>

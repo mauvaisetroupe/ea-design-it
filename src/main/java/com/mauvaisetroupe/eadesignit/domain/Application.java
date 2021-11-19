@@ -48,7 +48,8 @@ public class Application implements Serializable {
     @Column(name = "comment")
     private String comment;
 
-    @Column(name = "documentation_url")
+    @Size(max = 500)
+    @Column(name = "documentation_url", length = 500)
     private String documentationURL;
 
     @Column(name = "start_date")

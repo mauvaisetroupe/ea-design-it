@@ -24,8 +24,12 @@ const validations: any = {
     },
     comment: {},
     status: {},
-    documentationURL: {},
-    documentationURL2: {},
+    documentationURL: {
+      maxLength: maxLength(500),
+    },
+    documentationURL2: {
+      maxLength: maxLength(500),
+    },
     startDate: {},
     endDate: {},
     landscapes: {},

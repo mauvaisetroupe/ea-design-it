@@ -51,8 +51,8 @@
             <td>{{ functionalFlow.description }}</td>
             <td>{{ functionalFlow.comment }}</td>
             <td>{{ functionalFlow.status }}</td>
-            <td>{{ functionalFlow.documentationURL }}</td>
-            <td>{{ functionalFlow.documentationURL2 }}</td>
+            <td>{{ functionalFlow.documentationURL | truncate(20) }}</td>
+            <td>{{ functionalFlow.documentationURL2 | truncate(20) }}</td>
             <td>{{ functionalFlow.startDate }}</td>
             <td>{{ functionalFlow.endDate }}</td>
             <td>

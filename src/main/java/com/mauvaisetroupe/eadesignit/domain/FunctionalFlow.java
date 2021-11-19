@@ -39,10 +39,12 @@ public class FunctionalFlow implements Serializable {
     @Column(name = "status")
     private String status;
 
-    @Column(name = "documentation_url")
+    @Size(max = 500)
+    @Column(name = "documentation_url", length = 500)
     private String documentationURL;
 
-    @Column(name = "documentation_url_2")
+    @Size(max = 500)
+    @Column(name = "documentation_url_2", length = 500)
     private String documentationURL2;
 
     @Column(name = "start_date")

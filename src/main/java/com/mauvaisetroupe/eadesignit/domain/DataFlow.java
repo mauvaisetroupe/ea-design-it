@@ -60,7 +60,8 @@ public class DataFlow implements Serializable {
     @Column(name = "contract_url")
     private String contractURL;
 
-    @Column(name = "documentation_url")
+    @Size(max = 500)
+    @Column(name = "documentation_url", length = 500)
     private String documentationURL;
 
     @Column(name = "start_date")

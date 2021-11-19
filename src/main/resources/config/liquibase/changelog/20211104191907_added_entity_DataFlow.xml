@@ -32,7 +32,7 @@
             <column name="contract_url" type="varchar(255)" remarks="Swagger or XSD URL">
                 <constraints nullable="true" />
             </column>
-            <column name="documentation_url" type="varchar(255)">
+            <column name="documentation_url" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="start_date" type="date">

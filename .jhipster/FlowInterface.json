@@ -18,11 +18,15 @@
     },
     {
       "fieldName": "documentationURL",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
     },
     {
       "fieldName": "documentationURL2",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
     },
     {
       "fieldName": "startDate",

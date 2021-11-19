@@ -1,5 +1,7 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
+import { maxLength } from 'vuelidate/lib/validators';
+
 import AlertService from '@/shared/alert/alert.service';
 
 import DataFlowService from '@/entities/data-flow/data-flow.service';
@@ -12,7 +14,9 @@ const validations: any = {
   eventData: {
     name: {},
     contractURL: {},
-    documentationURL: {},
+    documentationURL: {
+      maxLength: maxLength(500),
+    },
     startDate: {},
     endDate: {},
   },

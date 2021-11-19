@@ -1,6 +1,6 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import { required } from 'vuelidate/lib/validators';
+import { maxLength, required } from 'vuelidate/lib/validators';
 
 import AlertService from '@/shared/alert/alert.service';
 
@@ -28,8 +28,12 @@ const validations: any = {
     alias: {},
     protocol: {},
     status: {},
-    documentationURL: {},
-    documentationURL2: {},
+    documentationURL: {
+      maxLength: maxLength(500),
+    },
+    documentationURL2: {
+      maxLength: maxLength(500),
+    },
     startDate: {},
     endDate: {},
     source: {

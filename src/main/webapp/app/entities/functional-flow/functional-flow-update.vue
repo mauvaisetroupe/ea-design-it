@@ -74,6 +74,11 @@
               :class="{ valid: !$v.functionalFlow.documentationURL.$invalid, invalid: $v.functionalFlow.documentationURL.$invalid }"
               v-model="$v.functionalFlow.documentationURL.$model"
             />
+            <div v-if="$v.functionalFlow.documentationURL.$anyDirty && $v.functionalFlow.documentationURL.$invalid">
+              <small class="form-text text-danger" v-if="!$v.functionalFlow.documentationURL.maxLength">
+                This field cannot be longer than 500 characters.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="functional-flow-documentationURL2">Documentation URL 2</label>
@@ -86,6 +91,11 @@
               :class="{ valid: !$v.functionalFlow.documentationURL2.$invalid, invalid: $v.functionalFlow.documentationURL2.$invalid }"
               v-model="$v.functionalFlow.documentationURL2.$model"
             />
+            <div v-if="$v.functionalFlow.documentationURL2.$anyDirty && $v.functionalFlow.documentationURL2.$invalid">
+              <small class="form-text text-danger" v-if="!$v.functionalFlow.documentationURL2.maxLength">
+                This field cannot be longer than 500 characters.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="functional-flow-startDate">Start Date</label>

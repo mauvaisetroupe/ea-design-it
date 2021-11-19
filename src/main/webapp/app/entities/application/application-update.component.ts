@@ -24,7 +24,9 @@ const validations: any = {
     type: {},
     technology: {},
     comment: {},
-    documentationURL: {},
+    documentationURL: {
+      maxLength: maxLength(500),
+    },
     startDate: {},
     endDate: {},
   },
