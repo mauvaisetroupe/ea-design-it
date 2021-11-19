@@ -10,6 +10,31 @@ import AlertService from '@/shared/alert/alert.service';
 @Component({
   mixins: [Vue2Filters.mixin],
 })
+@Component({
+  computed: {
+    filteredRows() {
+      return this.flowInterfaces.filter(row => {
+        const id = row.id.toString().toLowerCase();
+        const description = row.description ? row.description.toString().toLowerCase() : '';
+        const alias = row.alias.toString().toLowerCase();
+        const source = row.source.name.toString().toLowerCase();
+        const target = row.target.name.toString().toLowerCase();
+        const proto = row.protocol ? row.protocol.toString().toLowerCase() : '';
+
+        const searchTerm = this.filter.toLowerCase();
+
+        return (
+          id.includes(searchTerm) ||
+          description.includes(searchTerm) ||
+          source.includes(searchTerm) ||
+          target.includes(searchTerm) ||
+          proto.includes(searchTerm) ||
+          alias.includes(searchTerm)
+        );
+      });
+    },
+  },
+})
 export default class FlowInterface extends Vue {
   @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
   @Inject('alertService') private alertService: () => AlertService;
@@ -19,6 +44,8 @@ export default class FlowInterface extends Vue {
   public flowInterfaces: IFlowInterface[] = [];
 
   public isFetching = false;
+
+  public filter = '';
 
   public mounted(): void {
     this.retrieveAllFlowInterfaces();
