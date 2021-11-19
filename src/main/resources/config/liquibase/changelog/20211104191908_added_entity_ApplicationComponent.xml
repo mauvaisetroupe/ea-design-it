@@ -32,6 +32,12 @@
             <column name="documentation_url" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="start_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="end_date" type="date">
+                <constraints nullable="true" />
+            </column>
             <column name="application_id" type="bigint">
                 <constraints nullable="false" />
             </column>

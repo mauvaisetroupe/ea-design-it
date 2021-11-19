@@ -47,6 +47,18 @@
             <span>{{ application.documentationURL }}</span>
           </dd>
           <dt>
+            <span>Start Date</span>
+          </dt>
+          <dd>
+            <span>{{ application.startDate }}</span>
+          </dd>
+          <dt>
+            <span>End Date</span>
+          </dt>
+          <dd>
+            <span>{{ application.endDate }}</span>
+          </dd>
+          <dt>
             <span>Owner</span>
           </dt>
           <dd>

@@ -33,6 +33,10 @@ relationship ManyToOne {
     Application{owner(name)} to Owner
 }
 
+relationship OneToMany {
+	DataFlow{events} to EventData{dataFlow}
+}
+
 
 entity LandscapeView {
     viewpoint ViewPoint
@@ -50,6 +54,9 @@ entity FunctionalFlow {
     comment String
     status String
     documentationURL String
+    documentationURL2 String    
+    startDate LocalDate
+    endDate LocalDate
 }
 
 entity FlowInterface {
@@ -57,6 +64,9 @@ entity FlowInterface {
     protocol Protocol
     status String
     documentationURL String
+    documentationURL2 String
+    startDate LocalDate
+    endDate LocalDate
 }
 
 entity Application {
@@ -67,6 +77,8 @@ entity Application {
 	technology String
     comment String 
     documentationURL String
+    startDate LocalDate
+    endDate LocalDate
 }
 
 entity DataFlow {
@@ -77,8 +89,17 @@ entity DataFlow {
     resourceName String /** TOPIC name for event, FileName for Files*/
     contractURL String /** Swagger or XSD URL */
     documentationURL String
+    startDate LocalDate
+    endDate LocalDate    
 }
 
+entity EventData {
+    name String
+    contractURL String
+    documentationURL String
+    startDate LocalDate
+    endDate LocalDate
+}
 
 entity ApplicationComponent {
 	name String,
@@ -87,6 +108,8 @@ entity ApplicationComponent {
     technology String 
     comment String 
     documentationURL String
+    startDate LocalDate
+    endDate LocalDate
 }
 
 enum ViewPoint {

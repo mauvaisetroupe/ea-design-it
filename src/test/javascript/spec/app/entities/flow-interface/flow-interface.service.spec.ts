@@ -1,7 +1,9 @@
 /* tslint:disable max-line-length */
 import axios from 'axios';
 import sinon from 'sinon';
+import dayjs from 'dayjs';
 
+import { DATE_FORMAT } from '@/shared/date/filters';
 import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
 import { FlowInterface } from '@/shared/model/flow-interface.model';
 import { Protocol } from '@/shared/model/enumerations/protocol.model';
@@ -27,15 +29,23 @@ describe('Service Tests', () => {
   describe('FlowInterface Service', () => {
     let service: FlowInterfaceService;
     let elemDefault;
+    let currentDate: Date;
 
     beforeEach(() => {
       service = new FlowInterfaceService();
-      elemDefault = new FlowInterface(123, 'AAAAAAA', Protocol.API, 'AAAAAAA', 'AAAAAAA');
+      currentDate = new Date();
+      elemDefault = new FlowInterface(123, 'AAAAAAA', Protocol.API, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
     });
 
     describe('Service methods', () => {
       it('should find an element', async () => {
-        const returnedFromService = Object.assign({}, elemDefault);
+        const returnedFromService = Object.assign(
+          {
+            startDate: dayjs(currentDate).format(DATE_FORMAT),
+            endDate: dayjs(currentDate).format(DATE_FORMAT),
+          },
+          elemDefault
+        );
         axiosStub.get.resolves({ data: returnedFromService });
 
         return service.find(123).then(res => {
@@ -57,10 +67,18 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 123,
+            startDate: dayjs(currentDate).format(DATE_FORMAT),
+            endDate: dayjs(currentDate).format(DATE_FORMAT),
           },
           elemDefault
         );
-        const expected = Object.assign({}, returnedFromService);
+        const expected = Object.assign(
+          {
+            startDate: currentDate,
+            endDate: currentDate,
+          },
+          returnedFromService
+        );
 
         axiosStub.post.resolves({ data: returnedFromService });
         return service.create({}).then(res => {
@@ -86,11 +104,20 @@ describe('Service Tests', () => {
             protocol: 'BBBBBB',
             status: 'BBBBBB',
             documentationURL: 'BBBBBB',
+            documentationURL2: 'BBBBBB',
+            startDate: dayjs(currentDate).format(DATE_FORMAT),
+            endDate: dayjs(currentDate).format(DATE_FORMAT),
           },
           elemDefault
         );
 
-        const expected = Object.assign({}, returnedFromService);
+        const expected = Object.assign(
+          {
+            startDate: currentDate,
+            endDate: currentDate,
+          },
+          returnedFromService
+        );
         axiosStub.put.resolves({ data: returnedFromService });
 
         return service.update(expected).then(res => {
@@ -119,7 +146,13 @@ describe('Service Tests', () => {
         );
         const returnedFromService = Object.assign(patchObject, elemDefault);
 
-        const expected = Object.assign({}, returnedFromService);
+        const expected = Object.assign(
+          {
+            startDate: currentDate,
+            endDate: currentDate,
+          },
+          returnedFromService
+        );
         axiosStub.patch.resolves({ data: returnedFromService });
 
         return service.partialUpdate(patchObject).then(res => {
@@ -145,10 +178,19 @@ describe('Service Tests', () => {
             protocol: 'BBBBBB',
             status: 'BBBBBB',
             documentationURL: 'BBBBBB',
+            documentationURL2: 'BBBBBB',
+            startDate: dayjs(currentDate).format(DATE_FORMAT),
+            endDate: dayjs(currentDate).format(DATE_FORMAT),
           },
           elemDefault
         );
-        const expected = Object.assign({}, returnedFromService);
+        const expected = Object.assign(
+          {
+            startDate: currentDate,
+            endDate: currentDate,
+          },
+          returnedFromService
+        );
         axiosStub.get.resolves([returnedFromService]);
         return service.retrieve().then(res => {
           expect(res).toContainEqual(expected);

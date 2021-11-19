@@ -29,6 +29,9 @@ const validations: any = {
     protocol: {},
     status: {},
     documentationURL: {},
+    documentationURL2: {},
+    startDate: {},
+    endDate: {},
     source: {
       required,
     },

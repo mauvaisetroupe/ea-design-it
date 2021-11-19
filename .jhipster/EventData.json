@@ -1,0 +1,43 @@
+{
+  "name": "EventData",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "contractURL",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "documentationURL",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "startDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "dataFlow",
+      "otherEntityRelationshipName": "events",
+      "relationshipName": "dataFlow"
+    }
+  ],
+  "entityTableName": "event_data",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211119150555"
+}

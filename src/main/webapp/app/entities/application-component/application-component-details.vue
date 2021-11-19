@@ -43,6 +43,18 @@
             <span>{{ applicationComponent.documentationURL }}</span>
           </dd>
           <dt>
+            <span>Start Date</span>
+          </dt>
+          <dd>
+            <span>{{ applicationComponent.startDate }}</span>
+          </dd>
+          <dt>
+            <span>End Date</span>
+          </dt>
+          <dd>
+            <span>{{ applicationComponent.endDate }}</span>
+          </dd>
+          <dt>
             <span>Application</span>
           </dt>
           <dd>

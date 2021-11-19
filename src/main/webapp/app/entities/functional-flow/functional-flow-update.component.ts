@@ -25,6 +25,9 @@ const validations: any = {
     comment: {},
     status: {},
     documentationURL: {},
+    documentationURL2: {},
+    startDate: {},
+    endDate: {},
     landscapes: {
       required,
     },

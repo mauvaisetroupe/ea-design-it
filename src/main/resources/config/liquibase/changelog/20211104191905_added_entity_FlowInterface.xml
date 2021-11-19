@@ -26,6 +26,15 @@
             <column name="documentation_url" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="documentation_url_2" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="start_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="end_date" type="date">
+                <constraints nullable="true" />
+            </column>
             <column name="source_id" type="bigint">
                 <constraints nullable="false" />
             </column>

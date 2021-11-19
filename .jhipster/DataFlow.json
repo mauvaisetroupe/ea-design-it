@@ -35,9 +35,23 @@
     {
       "fieldName": "documentationURL",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "startDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "LocalDate"
     }
   ],
   "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "eventData",
+      "otherEntityRelationshipName": "dataFlow",
+      "relationshipName": "events"
+    },
     {
       "relationshipType": "many-to-many",
       "otherEntityName": "functionalFlow",

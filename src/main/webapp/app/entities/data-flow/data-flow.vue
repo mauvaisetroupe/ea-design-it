@@ -35,6 +35,8 @@
             <th scope="row"><span>Resource Name</span></th>
             <th scope="row"><span>Contract URL</span></th>
             <th scope="row"><span>Documentation URL</span></th>
+            <th scope="row"><span>Start Date</span></th>
+            <th scope="row"><span>End Date</span></th>
             <th scope="row"><span>Functional Flows</span></th>
             <th scope="row"><span>Flow Interface</span></th>
             <th scope="row"></th>
@@ -52,6 +54,8 @@
             <td>{{ dataFlow.resourceName }}</td>
             <td>{{ dataFlow.contractURL }}</td>
             <td>{{ dataFlow.documentationURL }}</td>
+            <td>{{ dataFlow.startDate }}</td>
+            <td>{{ dataFlow.endDate }}</td>
             <td>
               <span v-for="(functionalFlows, i) in dataFlow.functionalFlows" :key="functionalFlows.id"
                 >{{ i > 0 ? ', ' : '' }}

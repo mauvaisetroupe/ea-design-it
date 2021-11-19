@@ -14,6 +14,8 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.FlowType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Format;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -63,6 +65,12 @@ class DataFlowResourceIT {
     private static final String DEFAULT_DOCUMENTATION_URL = "AAAAAAAAAA";
     private static final String UPDATED_DOCUMENTATION_URL = "BBBBBBBBBB";
 
+    private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
+
+    private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
+
     private static final String ENTITY_API_URL = "/api/data-flows";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -97,7 +105,9 @@ class DataFlowResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .resourceName(DEFAULT_RESOURCE_NAME)
             .contractURL(DEFAULT_CONTRACT_URL)
-            .documentationURL(DEFAULT_DOCUMENTATION_URL);
+            .documentationURL(DEFAULT_DOCUMENTATION_URL)
+            .startDate(DEFAULT_START_DATE)
+            .endDate(DEFAULT_END_DATE);
         // Add required entity
         FunctionalFlow functionalFlow;
         if (TestUtil.findAll(em, FunctionalFlow.class).isEmpty()) {
@@ -135,7 +145,9 @@ class DataFlowResourceIT {
             .description(UPDATED_DESCRIPTION)
             .resourceName(UPDATED_RESOURCE_NAME)
             .contractURL(UPDATED_CONTRACT_URL)
-            .documentationURL(UPDATED_DOCUMENTATION_URL);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
         // Add required entity
         FunctionalFlow functionalFlow;
         if (TestUtil.findAll(em, FunctionalFlow.class).isEmpty()) {
@@ -184,6 +196,8 @@ class DataFlowResourceIT {
         assertThat(testDataFlow.getResourceName()).isEqualTo(DEFAULT_RESOURCE_NAME);
         assertThat(testDataFlow.getContractURL()).isEqualTo(DEFAULT_CONTRACT_URL);
         assertThat(testDataFlow.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
+        assertThat(testDataFlow.getStartDate()).isEqualTo(DEFAULT_START_DATE);
+        assertThat(testDataFlow.getEndDate()).isEqualTo(DEFAULT_END_DATE);
     }
 
     @Test
@@ -222,7 +236,9 @@ class DataFlowResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].resourceName").value(hasItem(DEFAULT_RESOURCE_NAME)))
             .andExpect(jsonPath("$.[*].contractURL").value(hasItem(DEFAULT_CONTRACT_URL)))
-            .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)));
+            .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)))
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -261,7 +277,9 @@ class DataFlowResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.resourceName").value(DEFAULT_RESOURCE_NAME))
             .andExpect(jsonPath("$.contractURL").value(DEFAULT_CONTRACT_URL))
-            .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL));
+            .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL))
+            .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
+            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
     }
 
     @Test
@@ -290,7 +308,9 @@ class DataFlowResourceIT {
             .description(UPDATED_DESCRIPTION)
             .resourceName(UPDATED_RESOURCE_NAME)
             .contractURL(UPDATED_CONTRACT_URL)
-            .documentationURL(UPDATED_DOCUMENTATION_URL);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
 
         restDataFlowMockMvc
             .perform(
@@ -311,6 +331,8 @@ class DataFlowResourceIT {
         assertThat(testDataFlow.getResourceName()).isEqualTo(UPDATED_RESOURCE_NAME);
         assertThat(testDataFlow.getContractURL()).isEqualTo(UPDATED_CONTRACT_URL);
         assertThat(testDataFlow.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
+        assertThat(testDataFlow.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testDataFlow.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 
     @Test
@@ -385,7 +407,8 @@ class DataFlowResourceIT {
             .format(UPDATED_FORMAT)
             .type(UPDATED_TYPE)
             .description(UPDATED_DESCRIPTION)
-            .resourceName(UPDATED_RESOURCE_NAME);
+            .resourceName(UPDATED_RESOURCE_NAME)
+            .startDate(UPDATED_START_DATE);
 
         restDataFlowMockMvc
             .perform(
@@ -406,6 +429,8 @@ class DataFlowResourceIT {
         assertThat(testDataFlow.getResourceName()).isEqualTo(UPDATED_RESOURCE_NAME);
         assertThat(testDataFlow.getContractURL()).isEqualTo(DEFAULT_CONTRACT_URL);
         assertThat(testDataFlow.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
+        assertThat(testDataFlow.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testDataFlow.getEndDate()).isEqualTo(DEFAULT_END_DATE);
     }
 
     @Test
@@ -427,7 +452,9 @@ class DataFlowResourceIT {
             .description(UPDATED_DESCRIPTION)
             .resourceName(UPDATED_RESOURCE_NAME)
             .contractURL(UPDATED_CONTRACT_URL)
-            .documentationURL(UPDATED_DOCUMENTATION_URL);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
 
         restDataFlowMockMvc
             .perform(
@@ -448,6 +475,8 @@ class DataFlowResourceIT {
         assertThat(testDataFlow.getResourceName()).isEqualTo(UPDATED_RESOURCE_NAME);
         assertThat(testDataFlow.getContractURL()).isEqualTo(UPDATED_CONTRACT_URL);
         assertThat(testDataFlow.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
+        assertThat(testDataFlow.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testDataFlow.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 
     @Test

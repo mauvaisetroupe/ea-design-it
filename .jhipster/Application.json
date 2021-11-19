@@ -33,6 +33,14 @@
     {
       "fieldName": "documentationURL",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "startDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "LocalDate"
     }
   ],
   "relationships": [

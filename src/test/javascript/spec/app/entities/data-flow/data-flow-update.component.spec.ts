@@ -8,6 +8,8 @@ import DataFlowUpdateComponent from '@/entities/data-flow/data-flow-update.vue';
 import DataFlowClass from '@/entities/data-flow/data-flow-update.component';
 import DataFlowService from '@/entities/data-flow/data-flow.service';
 
+import EventDataService from '@/entities/event-data/event-data.service';
+
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 
 import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
@@ -41,6 +43,8 @@ describe('Component Tests', () => {
         provide: {
           dataFlowService: () => dataFlowServiceStub,
           alertService: () => new AlertService(),
+
+          eventDataService: () => new EventDataService(),
 
           functionalFlowService: () => new FunctionalFlowService(),
 

@@ -35,6 +35,24 @@
             <span>{{ functionalFlow.documentationURL }}</span>
           </dd>
           <dt>
+            <span>Documentation URL 2</span>
+          </dt>
+          <dd>
+            <span>{{ functionalFlow.documentationURL2 }}</span>
+          </dd>
+          <dt>
+            <span>Start Date</span>
+          </dt>
+          <dd>
+            <span>{{ functionalFlow.startDate }}</span>
+          </dd>
+          <dt>
+            <span>End Date</span>
+          </dt>
+          <dd>
+            <span>{{ functionalFlow.endDate }}</span>
+          </dd>
+          <dt>
             <span>Interfaces</span>
           </dt>
           <dd>

@@ -10,6 +10,8 @@ import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -53,6 +55,15 @@ class FunctionalFlowResourceIT {
     private static final String DEFAULT_DOCUMENTATION_URL = "AAAAAAAAAA";
     private static final String UPDATED_DOCUMENTATION_URL = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DOCUMENTATION_URL_2 = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENTATION_URL_2 = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
+
+    private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
+
     private static final String ENTITY_API_URL = "/api/functional-flows";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -85,7 +96,10 @@ class FunctionalFlowResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .comment(DEFAULT_COMMENT)
             .status(DEFAULT_STATUS)
-            .documentationURL(DEFAULT_DOCUMENTATION_URL);
+            .documentationURL(DEFAULT_DOCUMENTATION_URL)
+            .documentationURL2(DEFAULT_DOCUMENTATION_URL_2)
+            .startDate(DEFAULT_START_DATE)
+            .endDate(DEFAULT_END_DATE);
         // Add required entity
         LandscapeView landscapeView;
         if (TestUtil.findAll(em, LandscapeView.class).isEmpty()) {
@@ -111,7 +125,10 @@ class FunctionalFlowResourceIT {
             .description(UPDATED_DESCRIPTION)
             .comment(UPDATED_COMMENT)
             .status(UPDATED_STATUS)
-            .documentationURL(UPDATED_DOCUMENTATION_URL);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
         // Add required entity
         LandscapeView landscapeView;
         if (TestUtil.findAll(em, LandscapeView.class).isEmpty()) {
@@ -150,6 +167,9 @@ class FunctionalFlowResourceIT {
         assertThat(testFunctionalFlow.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testFunctionalFlow.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testFunctionalFlow.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
+        assertThat(testFunctionalFlow.getDocumentationURL2()).isEqualTo(DEFAULT_DOCUMENTATION_URL_2);
+        assertThat(testFunctionalFlow.getStartDate()).isEqualTo(DEFAULT_START_DATE);
+        assertThat(testFunctionalFlow.getEndDate()).isEqualTo(DEFAULT_END_DATE);
     }
 
     @Test
@@ -188,7 +208,10 @@ class FunctionalFlowResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
-            .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)));
+            .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)))
+            .andExpect(jsonPath("$.[*].documentationURL2").value(hasItem(DEFAULT_DOCUMENTATION_URL_2)))
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -225,7 +248,10 @@ class FunctionalFlowResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
-            .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL));
+            .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL))
+            .andExpect(jsonPath("$.documentationURL2").value(DEFAULT_DOCUMENTATION_URL_2))
+            .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
+            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
     }
 
     @Test
@@ -252,7 +278,10 @@ class FunctionalFlowResourceIT {
             .description(UPDATED_DESCRIPTION)
             .comment(UPDATED_COMMENT)
             .status(UPDATED_STATUS)
-            .documentationURL(UPDATED_DOCUMENTATION_URL);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
 
         restFunctionalFlowMockMvc
             .perform(
@@ -271,6 +300,9 @@ class FunctionalFlowResourceIT {
         assertThat(testFunctionalFlow.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testFunctionalFlow.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testFunctionalFlow.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
+        assertThat(testFunctionalFlow.getDocumentationURL2()).isEqualTo(UPDATED_DOCUMENTATION_URL_2);
+        assertThat(testFunctionalFlow.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testFunctionalFlow.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 
     @Test
@@ -341,7 +373,12 @@ class FunctionalFlowResourceIT {
         FunctionalFlow partialUpdatedFunctionalFlow = new FunctionalFlow();
         partialUpdatedFunctionalFlow.setId(functionalFlow.getId());
 
-        partialUpdatedFunctionalFlow.alias(UPDATED_ALIAS).documentationURL(UPDATED_DOCUMENTATION_URL);
+        partialUpdatedFunctionalFlow
+            .alias(UPDATED_ALIAS)
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
 
         restFunctionalFlowMockMvc
             .perform(
@@ -360,6 +397,9 @@ class FunctionalFlowResourceIT {
         assertThat(testFunctionalFlow.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testFunctionalFlow.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testFunctionalFlow.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
+        assertThat(testFunctionalFlow.getDocumentationURL2()).isEqualTo(UPDATED_DOCUMENTATION_URL_2);
+        assertThat(testFunctionalFlow.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testFunctionalFlow.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 
     @Test
@@ -379,7 +419,10 @@ class FunctionalFlowResourceIT {
             .description(UPDATED_DESCRIPTION)
             .comment(UPDATED_COMMENT)
             .status(UPDATED_STATUS)
-            .documentationURL(UPDATED_DOCUMENTATION_URL);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
 
         restFunctionalFlowMockMvc
             .perform(
@@ -398,6 +441,9 @@ class FunctionalFlowResourceIT {
         assertThat(testFunctionalFlow.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testFunctionalFlow.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testFunctionalFlow.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
+        assertThat(testFunctionalFlow.getDocumentationURL2()).isEqualTo(UPDATED_DOCUMENTATION_URL_2);
+        assertThat(testFunctionalFlow.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testFunctionalFlow.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 
     @Test

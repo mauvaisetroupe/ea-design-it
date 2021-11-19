@@ -9,6 +9,8 @@ import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -51,6 +53,12 @@ class ApplicationResourceIT {
     private static final String DEFAULT_DOCUMENTATION_URL = "AAAAAAAAAA";
     private static final String UPDATED_DOCUMENTATION_URL = "BBBBBBBBBB";
 
+    private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
+
+    private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
+
     private static final String ENTITY_API_URL = "/api/applications";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -82,7 +90,9 @@ class ApplicationResourceIT {
             .type(DEFAULT_TYPE)
             .technology(DEFAULT_TECHNOLOGY)
             .comment(DEFAULT_COMMENT)
-            .documentationURL(DEFAULT_DOCUMENTATION_URL);
+            .documentationURL(DEFAULT_DOCUMENTATION_URL)
+            .startDate(DEFAULT_START_DATE)
+            .endDate(DEFAULT_END_DATE);
         return application;
     }
 
@@ -100,7 +110,9 @@ class ApplicationResourceIT {
             .type(UPDATED_TYPE)
             .technology(UPDATED_TECHNOLOGY)
             .comment(UPDATED_COMMENT)
-            .documentationURL(UPDATED_DOCUMENTATION_URL);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
         return application;
     }
 
@@ -129,6 +141,8 @@ class ApplicationResourceIT {
         assertThat(testApplication.getTechnology()).isEqualTo(DEFAULT_TECHNOLOGY);
         assertThat(testApplication.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testApplication.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
+        assertThat(testApplication.getStartDate()).isEqualTo(DEFAULT_START_DATE);
+        assertThat(testApplication.getEndDate()).isEqualTo(DEFAULT_END_DATE);
     }
 
     @Test
@@ -167,7 +181,9 @@ class ApplicationResourceIT {
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].technology").value(hasItem(DEFAULT_TECHNOLOGY)))
             .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)))
-            .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)));
+            .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)))
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
     }
 
     @Test
@@ -188,7 +204,9 @@ class ApplicationResourceIT {
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.technology").value(DEFAULT_TECHNOLOGY))
             .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT))
-            .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL));
+            .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL))
+            .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
+            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
     }
 
     @Test
@@ -217,7 +235,9 @@ class ApplicationResourceIT {
             .type(UPDATED_TYPE)
             .technology(UPDATED_TECHNOLOGY)
             .comment(UPDATED_COMMENT)
-            .documentationURL(UPDATED_DOCUMENTATION_URL);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
 
         restApplicationMockMvc
             .perform(
@@ -238,6 +258,8 @@ class ApplicationResourceIT {
         assertThat(testApplication.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
         assertThat(testApplication.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testApplication.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
+        assertThat(testApplication.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testApplication.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 
     @Test
@@ -329,6 +351,8 @@ class ApplicationResourceIT {
         assertThat(testApplication.getTechnology()).isEqualTo(DEFAULT_TECHNOLOGY);
         assertThat(testApplication.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testApplication.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
+        assertThat(testApplication.getStartDate()).isEqualTo(DEFAULT_START_DATE);
+        assertThat(testApplication.getEndDate()).isEqualTo(DEFAULT_END_DATE);
     }
 
     @Test
@@ -350,7 +374,9 @@ class ApplicationResourceIT {
             .type(UPDATED_TYPE)
             .technology(UPDATED_TECHNOLOGY)
             .comment(UPDATED_COMMENT)
-            .documentationURL(UPDATED_DOCUMENTATION_URL);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
 
         restApplicationMockMvc
             .perform(
@@ -371,6 +397,8 @@ class ApplicationResourceIT {
         assertThat(testApplication.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
         assertThat(testApplication.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testApplication.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
+        assertThat(testApplication.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testApplication.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 
     @Test

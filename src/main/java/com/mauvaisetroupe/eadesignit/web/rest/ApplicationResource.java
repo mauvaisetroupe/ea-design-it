@@ -146,6 +146,12 @@ public class ApplicationResource {
                 if (application.getDocumentationURL() != null) {
                     existingApplication.setDocumentationURL(application.getDocumentationURL());
                 }
+                if (application.getStartDate() != null) {
+                    existingApplication.setStartDate(application.getStartDate());
+                }
+                if (application.getEndDate() != null) {
+                    existingApplication.setEndDate(application.getEndDate());
+                }
 
                 return existingApplication;
             })

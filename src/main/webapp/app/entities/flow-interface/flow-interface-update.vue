@@ -65,6 +65,74 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="flow-interface-documentationURL2">Documentation URL 2</label>
+            <input
+              type="text"
+              class="form-control"
+              name="documentationURL2"
+              id="flow-interface-documentationURL2"
+              data-cy="documentationURL2"
+              :class="{ valid: !$v.flowInterface.documentationURL2.$invalid, invalid: $v.flowInterface.documentationURL2.$invalid }"
+              v-model="$v.flowInterface.documentationURL2.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="flow-interface-startDate">Start Date</label>
+            <b-input-group class="mb-3">
+              <b-input-group-prepend>
+                <b-form-datepicker
+                  aria-controls="flow-interface-startDate"
+                  v-model="$v.flowInterface.startDate.$model"
+                  name="startDate"
+                  class="form-control"
+                  :locale="currentLanguage"
+                  button-only
+                  today-button
+                  reset-button
+                  close-button
+                >
+                </b-form-datepicker>
+              </b-input-group-prepend>
+              <b-form-input
+                id="flow-interface-startDate"
+                data-cy="startDate"
+                type="text"
+                class="form-control"
+                name="startDate"
+                :class="{ valid: !$v.flowInterface.startDate.$invalid, invalid: $v.flowInterface.startDate.$invalid }"
+                v-model="$v.flowInterface.startDate.$model"
+              />
+            </b-input-group>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="flow-interface-endDate">End Date</label>
+            <b-input-group class="mb-3">
+              <b-input-group-prepend>
+                <b-form-datepicker
+                  aria-controls="flow-interface-endDate"
+                  v-model="$v.flowInterface.endDate.$model"
+                  name="endDate"
+                  class="form-control"
+                  :locale="currentLanguage"
+                  button-only
+                  today-button
+                  reset-button
+                  close-button
+                >
+                </b-form-datepicker>
+              </b-input-group-prepend>
+              <b-form-input
+                id="flow-interface-endDate"
+                data-cy="endDate"
+                type="text"
+                class="form-control"
+                name="endDate"
+                :class="{ valid: !$v.flowInterface.endDate.$invalid, invalid: $v.flowInterface.endDate.$invalid }"
+                v-model="$v.flowInterface.endDate.$model"
+              />
+            </b-input-group>
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="flow-interface-source">Source</label>
             <select class="form-control" id="flow-interface-source" data-cy="source" name="source" v-model="flowInterface.source" required>
               <option v-if="!flowInterface.source" v-bind:value="null" selected></option>

@@ -146,6 +146,12 @@ public class DataFlowResource {
                 if (dataFlow.getDocumentationURL() != null) {
                     existingDataFlow.setDocumentationURL(dataFlow.getDocumentationURL());
                 }
+                if (dataFlow.getStartDate() != null) {
+                    existingDataFlow.setStartDate(dataFlow.getStartDate());
+                }
+                if (dataFlow.getEndDate() != null) {
+                    existingDataFlow.setEndDate(dataFlow.getEndDate());
+                }
 
                 return existingDataFlow;
             })

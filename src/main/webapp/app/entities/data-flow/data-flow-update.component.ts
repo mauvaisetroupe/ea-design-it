@@ -4,6 +4,9 @@ import { maxLength, required } from 'vuelidate/lib/validators';
 
 import AlertService from '@/shared/alert/alert.service';
 
+import EventDataService from '@/entities/event-data/event-data.service';
+import { IEventData } from '@/shared/model/event-data.model';
+
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
@@ -27,6 +30,8 @@ const validations: any = {
     resourceName: {},
     contractURL: {},
     documentationURL: {},
+    startDate: {},
+    endDate: {},
     functionalFlows: {
       required,
     },
@@ -44,6 +49,10 @@ export default class DataFlowUpdate extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
 
   public dataFlow: IDataFlow = new DataFlow();
+
+  @Inject('eventDataService') private eventDataService: () => EventDataService;
+
+  public eventData: IEventData[] = [];
 
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
 
@@ -137,6 +146,11 @@ export default class DataFlowUpdate extends Vue {
   }
 
   public initRelationships(): void {
+    this.eventDataService()
+      .retrieve()
+      .then(res => {
+        this.eventData = res.data;
+      });
     this.functionalFlowService()
       .retrieve()
       .then(res => {

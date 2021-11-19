@@ -94,6 +94,62 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-component-startDate">Start Date</label>
+            <b-input-group class="mb-3">
+              <b-input-group-prepend>
+                <b-form-datepicker
+                  aria-controls="application-component-startDate"
+                  v-model="$v.applicationComponent.startDate.$model"
+                  name="startDate"
+                  class="form-control"
+                  :locale="currentLanguage"
+                  button-only
+                  today-button
+                  reset-button
+                  close-button
+                >
+                </b-form-datepicker>
+              </b-input-group-prepend>
+              <b-form-input
+                id="application-component-startDate"
+                data-cy="startDate"
+                type="text"
+                class="form-control"
+                name="startDate"
+                :class="{ valid: !$v.applicationComponent.startDate.$invalid, invalid: $v.applicationComponent.startDate.$invalid }"
+                v-model="$v.applicationComponent.startDate.$model"
+              />
+            </b-input-group>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="application-component-endDate">End Date</label>
+            <b-input-group class="mb-3">
+              <b-input-group-prepend>
+                <b-form-datepicker
+                  aria-controls="application-component-endDate"
+                  v-model="$v.applicationComponent.endDate.$model"
+                  name="endDate"
+                  class="form-control"
+                  :locale="currentLanguage"
+                  button-only
+                  today-button
+                  reset-button
+                  close-button
+                >
+                </b-form-datepicker>
+              </b-input-group-prepend>
+              <b-form-input
+                id="application-component-endDate"
+                data-cy="endDate"
+                type="text"
+                class="form-control"
+                name="endDate"
+                :class="{ valid: !$v.applicationComponent.endDate.$invalid, invalid: $v.applicationComponent.endDate.$invalid }"
+                v-model="$v.applicationComponent.endDate.$model"
+              />
+            </b-input-group>
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="application-component-application">Application</label>
             <select
               class="form-control"

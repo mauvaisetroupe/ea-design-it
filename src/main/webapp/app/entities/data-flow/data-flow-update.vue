@@ -101,6 +101,62 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="data-flow-startDate">Start Date</label>
+            <b-input-group class="mb-3">
+              <b-input-group-prepend>
+                <b-form-datepicker
+                  aria-controls="data-flow-startDate"
+                  v-model="$v.dataFlow.startDate.$model"
+                  name="startDate"
+                  class="form-control"
+                  :locale="currentLanguage"
+                  button-only
+                  today-button
+                  reset-button
+                  close-button
+                >
+                </b-form-datepicker>
+              </b-input-group-prepend>
+              <b-form-input
+                id="data-flow-startDate"
+                data-cy="startDate"
+                type="text"
+                class="form-control"
+                name="startDate"
+                :class="{ valid: !$v.dataFlow.startDate.$invalid, invalid: $v.dataFlow.startDate.$invalid }"
+                v-model="$v.dataFlow.startDate.$model"
+              />
+            </b-input-group>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="data-flow-endDate">End Date</label>
+            <b-input-group class="mb-3">
+              <b-input-group-prepend>
+                <b-form-datepicker
+                  aria-controls="data-flow-endDate"
+                  v-model="$v.dataFlow.endDate.$model"
+                  name="endDate"
+                  class="form-control"
+                  :locale="currentLanguage"
+                  button-only
+                  today-button
+                  reset-button
+                  close-button
+                >
+                </b-form-datepicker>
+              </b-input-group-prepend>
+              <b-form-input
+                id="data-flow-endDate"
+                data-cy="endDate"
+                type="text"
+                class="form-control"
+                name="endDate"
+                :class="{ valid: !$v.dataFlow.endDate.$invalid, invalid: $v.dataFlow.endDate.$invalid }"
+                v-model="$v.dataFlow.endDate.$model"
+              />
+            </b-input-group>
+          </div>
+          <div class="form-group">
             <label for="data-flow-functionalFlows">Functional Flows</label>
             <select
               class="form-control"

@@ -25,6 +25,8 @@ const validations: any = {
     technology: {},
     comment: {},
     documentationURL: {},
+    startDate: {},
+    endDate: {},
   },
 };
 

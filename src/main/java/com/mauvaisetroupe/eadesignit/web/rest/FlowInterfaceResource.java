@@ -137,6 +137,15 @@ public class FlowInterfaceResource {
                 if (flowInterface.getDocumentationURL() != null) {
                     existingFlowInterface.setDocumentationURL(flowInterface.getDocumentationURL());
                 }
+                if (flowInterface.getDocumentationURL2() != null) {
+                    existingFlowInterface.setDocumentationURL2(flowInterface.getDocumentationURL2());
+                }
+                if (flowInterface.getStartDate() != null) {
+                    existingFlowInterface.setStartDate(flowInterface.getStartDate());
+                }
+                if (flowInterface.getEndDate() != null) {
+                    existingFlowInterface.setEndDate(flowInterface.getEndDate());
+                }
 
                 return existingFlowInterface;
             })

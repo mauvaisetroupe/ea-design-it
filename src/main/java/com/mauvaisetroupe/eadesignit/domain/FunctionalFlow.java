@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -40,6 +41,15 @@ public class FunctionalFlow implements Serializable {
 
     @Column(name = "documentation_url")
     private String documentationURL;
+
+    @Column(name = "documentation_url_2")
+    private String documentationURL2;
+
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -139,6 +149,45 @@ public class FunctionalFlow implements Serializable {
 
     public void setDocumentationURL(String documentationURL) {
         this.documentationURL = documentationURL;
+    }
+
+    public String getDocumentationURL2() {
+        return this.documentationURL2;
+    }
+
+    public FunctionalFlow documentationURL2(String documentationURL2) {
+        this.setDocumentationURL2(documentationURL2);
+        return this;
+    }
+
+    public void setDocumentationURL2(String documentationURL2) {
+        this.documentationURL2 = documentationURL2;
+    }
+
+    public LocalDate getStartDate() {
+        return this.startDate;
+    }
+
+    public FunctionalFlow startDate(LocalDate startDate) {
+        this.setStartDate(startDate);
+        return this;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return this.endDate;
+    }
+
+    public FunctionalFlow endDate(LocalDate endDate) {
+        this.setEndDate(endDate);
+        return this;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public Set<FlowInterface> getInterfaces() {
@@ -257,6 +306,9 @@ public class FunctionalFlow implements Serializable {
             ", comment='" + getComment() + "'" +
             ", status='" + getStatus() + "'" +
             ", documentationURL='" + getDocumentationURL() + "'" +
+            ", documentationURL2='" + getDocumentationURL2() + "'" +
+            ", startDate='" + getStartDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
             "}";
     }
 }

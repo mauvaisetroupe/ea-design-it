@@ -9,6 +9,8 @@ export interface IApplicationComponent {
   technology?: string | null;
   comment?: string | null;
   documentationURL?: string | null;
+  startDate?: Date | null;
+  endDate?: Date | null;
   application?: IApplication;
 }
 
@@ -21,6 +23,8 @@ export class ApplicationComponent implements IApplicationComponent {
     public technology?: string | null,
     public comment?: string | null,
     public documentationURL?: string | null,
+    public startDate?: Date | null,
+    public endDate?: Date | null,
     public application?: IApplication
   ) {}
 }

@@ -56,6 +56,12 @@ const FlowImport = () => import('@/entities/flow-import/flow-import.vue');
 const FlowImportUpdate = () => import('@/entities/flow-import/flow-import-update.vue');
 // prettier-ignore
 const FlowImportDetails = () => import('@/entities/flow-import/flow-import-details.vue');
+// prettier-ignore
+const EventData = () => import('@/entities/event-data/event-data.vue');
+// prettier-ignore
+const EventDataUpdate = () => import('@/entities/event-data/event-data-update.vue');
+// prettier-ignore
+const EventDataDetails = () => import('@/entities/event-data/event-data-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default [
@@ -273,6 +279,30 @@ export default [
     path: '/flow-import/:flowImportId/view',
     name: 'FlowImportView',
     component: FlowImportDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/event-data',
+    name: 'EventData',
+    component: EventData,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/event-data/new',
+    name: 'EventDataCreate',
+    component: EventDataUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/event-data/:eventDataId/edit',
+    name: 'EventDataEdit',
+    component: EventDataUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/event-data/:eventDataId/view',
+    name: 'EventDataView',
+    component: EventDataDetails,
     meta: { authorities: [Authority.USER] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

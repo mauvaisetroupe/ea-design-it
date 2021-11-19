@@ -11,6 +11,8 @@ export interface IApplication {
   technology?: string | null;
   comment?: string | null;
   documentationURL?: string | null;
+  startDate?: Date | null;
+  endDate?: Date | null;
   owner?: IOwner | null;
   applicationsLists?: IApplicationComponent[] | null;
 }
@@ -25,6 +27,8 @@ export class Application implements IApplication {
     public technology?: string | null,
     public comment?: string | null,
     public documentationURL?: string | null,
+    public startDate?: Date | null,
+    public endDate?: Date | null,
     public owner?: IOwner | null,
     public applicationsLists?: IApplicationComponent[] | null
   ) {}

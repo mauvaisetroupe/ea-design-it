@@ -144,6 +144,12 @@ public class ApplicationComponentResource {
                 if (applicationComponent.getDocumentationURL() != null) {
                     existingApplicationComponent.setDocumentationURL(applicationComponent.getDocumentationURL());
                 }
+                if (applicationComponent.getStartDate() != null) {
+                    existingApplicationComponent.setStartDate(applicationComponent.getStartDate());
+                }
+                if (applicationComponent.getEndDate() != null) {
+                    existingApplicationComponent.setEndDate(applicationComponent.getEndDate());
+                }
 
                 return existingApplicationComponent;
             })

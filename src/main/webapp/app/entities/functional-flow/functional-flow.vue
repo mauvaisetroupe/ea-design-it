@@ -33,6 +33,9 @@
             <th scope="row"><span>Comment</span></th>
             <th scope="row"><span>Status</span></th>
             <th scope="row"><span>Documentation URL</span></th>
+            <th scope="row"><span>Documentation URL 2</span></th>
+            <th scope="row"><span>Start Date</span></th>
+            <th scope="row"><span>End Date</span></th>
             <th scope="row"><span>Interfaces</span></th>
             <th scope="row"></th>
           </tr>
@@ -49,6 +52,9 @@
             <td>{{ functionalFlow.comment }}</td>
             <td>{{ functionalFlow.status }}</td>
             <td>{{ functionalFlow.documentationURL }}</td>
+            <td>{{ functionalFlow.documentationURL2 }}</td>
+            <td>{{ functionalFlow.startDate }}</td>
+            <td>{{ functionalFlow.endDate }}</td>
             <td>
               <span v-for="(interfaces, i) in functionalFlow.interfaces" :key="interfaces.id"
                 >{{ i > 0 ? ', ' : '' }}

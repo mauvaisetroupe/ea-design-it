@@ -19,6 +19,18 @@
     {
       "fieldName": "documentationURL",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "documentationURL2",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "startDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "LocalDate"
     }
   ],
   "relationships": [

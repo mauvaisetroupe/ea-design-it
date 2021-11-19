@@ -36,6 +36,7 @@ import DataFlowService from '@/entities/data-flow/data-flow.service';
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
 import ApplicationImportService from '@/entities/application-import/application-import.service';
 import FlowImportService from '@/entities/flow-import/flow-import.service';
+import EventDataService from '@/entities/event-data/event-data.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
@@ -100,6 +101,7 @@ new Vue({
     applicationComponentService: () => new ApplicationComponentService(),
     applicationImportService: () => new ApplicationImportService(),
     flowImportService: () => new FlowImportService(),
+    eventDataService: () => new EventDataService(),
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService,
     alertService: () => new AlertService(),

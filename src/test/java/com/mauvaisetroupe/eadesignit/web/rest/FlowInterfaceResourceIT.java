@@ -10,6 +10,8 @@ import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Protocol;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -43,6 +45,15 @@ class FlowInterfaceResourceIT {
     private static final String DEFAULT_DOCUMENTATION_URL = "AAAAAAAAAA";
     private static final String UPDATED_DOCUMENTATION_URL = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DOCUMENTATION_URL_2 = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENTATION_URL_2 = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
+
+    private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
+
     private static final String ENTITY_API_URL = "/api/flow-interfaces";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -71,7 +82,10 @@ class FlowInterfaceResourceIT {
             .alias(DEFAULT_ALIAS)
             .protocol(DEFAULT_PROTOCOL)
             .status(DEFAULT_STATUS)
-            .documentationURL(DEFAULT_DOCUMENTATION_URL);
+            .documentationURL(DEFAULT_DOCUMENTATION_URL)
+            .documentationURL2(DEFAULT_DOCUMENTATION_URL_2)
+            .startDate(DEFAULT_START_DATE)
+            .endDate(DEFAULT_END_DATE);
         // Add required entity
         Application application;
         if (TestUtil.findAll(em, Application.class).isEmpty()) {
@@ -98,7 +112,10 @@ class FlowInterfaceResourceIT {
             .alias(UPDATED_ALIAS)
             .protocol(UPDATED_PROTOCOL)
             .status(UPDATED_STATUS)
-            .documentationURL(UPDATED_DOCUMENTATION_URL);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
         // Add required entity
         Application application;
         if (TestUtil.findAll(em, Application.class).isEmpty()) {
@@ -136,6 +153,9 @@ class FlowInterfaceResourceIT {
         assertThat(testFlowInterface.getProtocol()).isEqualTo(DEFAULT_PROTOCOL);
         assertThat(testFlowInterface.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
+        assertThat(testFlowInterface.getDocumentationURL2()).isEqualTo(DEFAULT_DOCUMENTATION_URL_2);
+        assertThat(testFlowInterface.getStartDate()).isEqualTo(DEFAULT_START_DATE);
+        assertThat(testFlowInterface.getEndDate()).isEqualTo(DEFAULT_END_DATE);
     }
 
     @Test
@@ -171,7 +191,10 @@ class FlowInterfaceResourceIT {
             .andExpect(jsonPath("$.[*].alias").value(hasItem(DEFAULT_ALIAS)))
             .andExpect(jsonPath("$.[*].protocol").value(hasItem(DEFAULT_PROTOCOL.toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
-            .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)));
+            .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)))
+            .andExpect(jsonPath("$.[*].documentationURL2").value(hasItem(DEFAULT_DOCUMENTATION_URL_2)))
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
     }
 
     @Test
@@ -189,7 +212,10 @@ class FlowInterfaceResourceIT {
             .andExpect(jsonPath("$.alias").value(DEFAULT_ALIAS))
             .andExpect(jsonPath("$.protocol").value(DEFAULT_PROTOCOL.toString()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
-            .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL));
+            .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL))
+            .andExpect(jsonPath("$.documentationURL2").value(DEFAULT_DOCUMENTATION_URL_2))
+            .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
+            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
     }
 
     @Test
@@ -215,7 +241,10 @@ class FlowInterfaceResourceIT {
             .alias(UPDATED_ALIAS)
             .protocol(UPDATED_PROTOCOL)
             .status(UPDATED_STATUS)
-            .documentationURL(UPDATED_DOCUMENTATION_URL);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
 
         restFlowInterfaceMockMvc
             .perform(
@@ -233,6 +262,9 @@ class FlowInterfaceResourceIT {
         assertThat(testFlowInterface.getProtocol()).isEqualTo(UPDATED_PROTOCOL);
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
+        assertThat(testFlowInterface.getDocumentationURL2()).isEqualTo(UPDATED_DOCUMENTATION_URL_2);
+        assertThat(testFlowInterface.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testFlowInterface.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 
     @Test
@@ -303,7 +335,11 @@ class FlowInterfaceResourceIT {
         FlowInterface partialUpdatedFlowInterface = new FlowInterface();
         partialUpdatedFlowInterface.setId(flowInterface.getId());
 
-        partialUpdatedFlowInterface.protocol(UPDATED_PROTOCOL).status(UPDATED_STATUS);
+        partialUpdatedFlowInterface
+            .protocol(UPDATED_PROTOCOL)
+            .status(UPDATED_STATUS)
+            .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
+            .startDate(UPDATED_START_DATE);
 
         restFlowInterfaceMockMvc
             .perform(
@@ -321,6 +357,9 @@ class FlowInterfaceResourceIT {
         assertThat(testFlowInterface.getProtocol()).isEqualTo(UPDATED_PROTOCOL);
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
+        assertThat(testFlowInterface.getDocumentationURL2()).isEqualTo(UPDATED_DOCUMENTATION_URL_2);
+        assertThat(testFlowInterface.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testFlowInterface.getEndDate()).isEqualTo(DEFAULT_END_DATE);
     }
 
     @Test
@@ -339,7 +378,10 @@ class FlowInterfaceResourceIT {
             .alias(UPDATED_ALIAS)
             .protocol(UPDATED_PROTOCOL)
             .status(UPDATED_STATUS)
-            .documentationURL(UPDATED_DOCUMENTATION_URL);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
 
         restFlowInterfaceMockMvc
             .perform(
@@ -357,6 +399,9 @@ class FlowInterfaceResourceIT {
         assertThat(testFlowInterface.getProtocol()).isEqualTo(UPDATED_PROTOCOL);
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
+        assertThat(testFlowInterface.getDocumentationURL2()).isEqualTo(UPDATED_DOCUMENTATION_URL_2);
+        assertThat(testFlowInterface.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testFlowInterface.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 
     @Test

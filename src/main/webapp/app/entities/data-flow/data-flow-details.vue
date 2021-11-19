@@ -47,6 +47,18 @@
             <span>{{ dataFlow.documentationURL }}</span>
           </dd>
           <dt>
+            <span>Start Date</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlow.startDate }}</span>
+          </dd>
+          <dt>
+            <span>End Date</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlow.endDate }}</span>
+          </dd>
+          <dt>
             <span>Functional Flows</span>
           </dt>
           <dd>
