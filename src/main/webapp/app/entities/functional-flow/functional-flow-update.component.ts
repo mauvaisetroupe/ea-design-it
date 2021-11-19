@@ -28,9 +28,7 @@ const validations: any = {
     documentationURL2: {},
     startDate: {},
     endDate: {},
-    landscapes: {
-      required,
-    },
+    landscapes: {},
   },
 };
 
