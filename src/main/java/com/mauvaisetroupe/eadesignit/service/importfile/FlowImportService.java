@@ -108,18 +108,40 @@ public class FlowImportService {
 
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);
-            Optional<FunctionalFlow> functionalFlowOption = flowRepository.findByAlias(flowImport.getFlowAlias());
 
-            FunctionalFlow functionalFlow;
-
-            // Landscape
-            LandscapeView landscapeView = landscapeViewRepository.findByDiagramNameIgnoreCase(diagramName);
-            if (landscapeView == null) {
-                landscapeView = mapToLandscapeView(diagramName);
-                landscapeViewRepository.save(landscapeView);
+            LandscapeView landscapeView = findOrCreateLandscape(diagramName);
+            landscapeViewRepository.save(landscapeView);
+            FunctionalFlow functionalFlow = findOrCreateFunctionalFlow(flowImport);
+            if (functionalFlow != null) {
+                functionalFlow.addLandscape(landscapeView);
+                flowRepository.save(functionalFlow);
             }
+            FlowInterface flowInterface = findOrCreateInterface(flowImport);
+            if (flowInterface != null) {
+                if (!functionalFlow.getInterfaces().contains(flowInterface)) {
+                    functionalFlow.addInterfaces(flowInterface);
+                    interfaceRepository.save(flowInterface);
+                    flowRepository.save(functionalFlow);
+                }
+            }
+            result.add(flowImport);
+        }
+        return result;
+    }
 
-            // FunctionalFlow
+    private LandscapeView findOrCreateLandscape(String diagramName) {
+        LandscapeView landscapeView = landscapeViewRepository.findByDiagramNameIgnoreCase(diagramName);
+        if (landscapeView == null) {
+            landscapeView = mapToLandscapeView(diagramName);
+            landscapeViewRepository.save(landscapeView);
+        }
+        return landscapeView;
+    }
+
+    private FunctionalFlow findOrCreateFunctionalFlow(FlowImport flowImport) {
+        Optional<FunctionalFlow> functionalFlowOption = flowRepository.findByAlias(flowImport.getFlowAlias());
+        FunctionalFlow functionalFlow = null;
+        try {
             if (!functionalFlowOption.isPresent()) {
                 flowImport.setImportFunctionalFlowStatus(ImportStatus.NEW);
                 functionalFlow = mapToFunctionalFlow(flowImport);
@@ -127,35 +149,38 @@ public class FlowImportService {
                 flowImport.setImportFunctionalFlowStatus(ImportStatus.EXISTING);
                 functionalFlow = functionalFlowOption.get();
             }
-            functionalFlow.addLandscape(landscapeView);
             flowRepository.save(functionalFlow);
+        } catch (Exception e) {
+            log.error("Error with row " + flowImport, e);
+            flowImport.setImportFunctionalFlowStatus(ImportStatus.ERROR);
+            flowImport.setImportStatusMessage(e.getMessage());
+            functionalFlow = null;
+        }
+        return functionalFlow;
+    }
 
-            // FlowInterface
-            Optional<FlowInterface> flowInterfaceOption = interfaceRepository.findByAlias(flowImport.getIdFlowFromExcel());
-            FlowInterface flowInterface;
+    private FlowInterface findOrCreateInterface(FlowImport flowImport) {
+        Optional<FlowInterface> flowInterfaceOption = interfaceRepository.findByAlias(flowImport.getIdFlowFromExcel());
+        FlowInterface flowInterface = null;
+        try {
             if (!flowInterfaceOption.isPresent()) {
                 flowImport.setImportInterfaceStatus(ImportStatus.NEW);
                 flowInterface = mapToFlowInterface(flowImport);
-                functionalFlow.addInterfaces(flowInterface);
                 Assert.isTrue(
                     flowInterface.getSource() != null && flowInterface.getTarget() != null,
                     "Flow need a source and a target, pb with " + flowImport
                 );
-                interfaceRepository.save(flowInterface);
-                flowRepository.save(functionalFlow);
             } else {
                 flowImport.setImportInterfaceStatus(ImportStatus.EXISTING);
                 flowInterface = flowInterfaceOption.get();
-                if (!functionalFlow.getInterfaces().contains(flowInterface)) {
-                    System.out.println(functionalFlow.getInterfaces().size());
-                    functionalFlow.addInterfaces(flowInterface);
-                    flowRepository.save(functionalFlow);
-                }
             }
-
-            result.add(flowImport);
+        } catch (Exception e) {
+            log.error("Error with row " + flowImport, e);
+            flowInterface = null;
+            flowImport.setImportInterfaceStatus(ImportStatus.ERROR);
+            flowImport.setImportStatusMessage(e.getMessage());
         }
-        return result;
+        return flowInterface;
     }
 
     private FunctionalFlow mapToFunctionalFlow(FlowImport flowImport) {

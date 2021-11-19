@@ -66,10 +66,26 @@
             <td>{{ flowImport.flowStatus }}</td>
             <td>{{ flowImport.comment }}</td>
             <td>{{ flowImport.documentName }}</td>
-            <td>{{ flowImport.importInterfaceStatus }}</td>
-            <td>{{ flowImport.importFunctionalFlowStatus }}</td>
-            <td>{{ flowImport.importDataFlowStatus }}</td>
-            <td>{{ flowImport.importStatusMessage }}</td>
+            <td>
+              <span v-bind:class="[flowImport.importInterfaceStatus === 'ERROR' ? 'rederror' : '']">
+                {{ flowImport.importInterfaceStatus }}</span
+              >
+            </td>
+            <td>
+              <span v-bind:class="[flowImport.importFunctionalFlowStatus === 'ERROR' ? 'rederror' : '']">{{
+                flowImport.importFunctionalFlowStatus
+              }}</span>
+            </td>
+            <td>
+              <span v-bind:class="[flowImport.importDataFlowStatus === 'ERROR' ? 'rederror' : '']">{{
+                flowImport.importDataFlowStatus
+              }}</span>
+            </td>
+            <td>
+              <span v-bind:class="[flowImport.importStatusMessage === 'ERROR' ? 'rederror' : '']">{{
+                flowImport.importStatusMessage
+              }}</span>
+            </td>
             <td>{{ flowImport.existingApplicationID }}</td>
             <td class="text-right">
               <div class="btn-group">
@@ -125,3 +141,9 @@
 </template>
 
 <script lang="ts" src="./flow-import-upload-file.component.ts"></script>
+<style>
+.rederror {
+  background-color: red;
+  color: white;
+}
+</style>
