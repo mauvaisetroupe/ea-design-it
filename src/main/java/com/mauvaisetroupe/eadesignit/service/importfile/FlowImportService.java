@@ -154,6 +154,7 @@ public class FlowImportService {
                 flowImport.setImportFunctionalFlowStatus(ImportStatus.EXISTING);
                 functionalFlow = functionalFlowOption.get();
             }
+            setDocumentation(flowImport, functionalFlow);
             flowRepository.save(functionalFlow);
         } catch (Exception e) {
             log.error("Error with row " + flowImport, e);
@@ -162,6 +163,19 @@ public class FlowImportService {
             functionalFlow = null;
         }
         return functionalFlow;
+    }
+
+    private void setDocumentation(FlowImport flowImport, FunctionalFlow functionalFlow) {
+        if (StringUtils.hasText(flowImport.getSourceURLDocumentation())) {
+            functionalFlow.setDocumentationURL(flowImport.getSourceURLDocumentation());
+            if (StringUtils.hasText(flowImport.getTargetURLDocumentation())) {
+                functionalFlow.setDocumentationURL2(flowImport.getSourceURLDocumentation());
+            }
+        } else {
+            if (StringUtils.hasText(flowImport.getTargetURLDocumentation())) {
+                functionalFlow.setDocumentationURL(flowImport.getSourceURLDocumentation());
+            }
+        }
     }
 
     private FlowInterface findOrCreateInterface(FlowImport flowImport) {
