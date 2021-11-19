@@ -177,23 +177,25 @@ public class FlowImportService {
                 flowImport.setImportInterfaceStatus(ImportStatus.EXISTING);
                 flowInterface = flowInterfaceOption.get();
                 Assert.isTrue(
-                    flowInterface.getSource().getName().equals(flowImport.getSourceElement()),
-                    "Source of interface doesn't match for interface Id=" +
+                    flowInterface.getSource().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase()),
+                    "Source of interface doesn't match for interface Id='" +
                     flowInterface.getId() +
-                    ", source= " +
+                    "', source= [" +
                     flowInterface.getSource().getName() +
-                    ", source=" +
-                    flowImport.getSourceElement()
+                    "], source=[" +
+                    flowImport.getSourceElement() +
+                    "]"
                 );
 
                 Assert.isTrue(
-                    flowInterface.getTarget().getName().equals(flowImport.getTargetElement()),
-                    "Target of interface doesn't match for interface Id=" +
+                    flowInterface.getTarget().getName().toLowerCase().equals(flowImport.getTargetElement().toLowerCase()),
+                    "Target of interface doesn't match for interface Id='" +
                     flowInterface.getId() +
-                    ", source= " +
+                    "', target= [" +
                     flowInterface.getTarget().getName() +
-                    ", source=" +
-                    flowImport.getTargetElement()
+                    "], target=[" +
+                    flowImport.getTargetElement() +
+                    "]"
                 );
             }
         } catch (Exception e) {
