@@ -94,9 +94,9 @@ public class FlowImportService {
         this.columnsArray.add(FLOW_STATUS_FLOW);
         this.columnsArray.add(FLOW_COMMENT);
         this.columnsArray.add(FLOW_ADD_CORRESPONDENT_ID);
-        this.columnsArray.add(FLOW_CHECK_COLUMN_1);
-        this.columnsArray.add(FLOW_CHECK_COLUMN_2);
-        this.columnsArray.add(FLOW_CHECK_COLUMN_3);
+        //      this.columnsArray.add(FLOW_CHECK_COLUMN_1);
+        //      this.columnsArray.add(FLOW_CHECK_COLUMN_2);
+        //      this.columnsArray.add(FLOW_CHECK_COLUMN_3);
     }
 
     public List<FlowImport> importExcel(InputStream file, String diagramName) throws EncryptedDocumentException, IOException {
@@ -134,6 +134,11 @@ public class FlowImportService {
         if (landscapeView == null) {
             landscapeView = mapToLandscapeView(diagramName);
             landscapeViewRepository.save(landscapeView);
+        } else {
+            Assert.isTrue(
+                diagramName.equals(landscapeView.getDiagramName()),
+                "Diagram exist with a different name : " + diagramName + " / " + landscapeView.getDiagramName()
+            );
         }
         return landscapeView;
     }
@@ -166,13 +171,30 @@ public class FlowImportService {
             if (!flowInterfaceOption.isPresent()) {
                 flowImport.setImportInterfaceStatus(ImportStatus.NEW);
                 flowInterface = mapToFlowInterface(flowImport);
-                Assert.isTrue(
-                    flowInterface.getSource() != null && flowInterface.getTarget() != null,
-                    "Flow need a source and a target, pb with " + flowImport
-                );
+                Assert.isTrue(flowInterface.getSource() != null, "Source doesn't exist, pb with:" + flowImport.getSourceElement());
+                Assert.isTrue(flowInterface.getTarget() != null, "Target doesn't exist, pb with:" + flowImport.getTargetElement());
             } else {
                 flowImport.setImportInterfaceStatus(ImportStatus.EXISTING);
                 flowInterface = flowInterfaceOption.get();
+                Assert.isTrue(
+                    flowInterface.getSource().getName().equals(flowImport.getSourceElement()),
+                    "Source of interface doesn't match for interface Id=" +
+                    flowInterface.getId() +
+                    ", source= " +
+                    flowInterface.getSource().getName() +
+                    ", source=" +
+                    flowImport.getSourceElement()
+                );
+
+                Assert.isTrue(
+                    flowInterface.getTarget().getName().equals(flowImport.getTargetElement()),
+                    "Target of interface doesn't match for interface Id=" +
+                    flowInterface.getId() +
+                    ", source= " +
+                    flowInterface.getTarget().getName() +
+                    ", source=" +
+                    flowImport.getTargetElement()
+                );
             }
         } catch (Exception e) {
             log.error("Error with row " + flowImport, e);

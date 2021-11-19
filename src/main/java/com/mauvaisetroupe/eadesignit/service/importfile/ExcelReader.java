@@ -48,7 +48,7 @@ public class ExcelReader {
             if (firstRow != null) {
                 String[] labels = new String[firstRow.getLastCellNum()];
 
-                for (int j = 0; j < firstRow.getLastCellNum(); j++) {
+                for (int j = 0; j < Math.min(columnNames.size(), firstRow.getLastCellNum()); j++) {
                     String cellVal = CellUtil.getCell(firstRow, j).getStringCellValue();
                     if (StringUtils.hasText(cellVal)) {
                         labels[j] = removeParenthesis(CellUtil.getCell(firstRow, j).getStringCellValue());
@@ -68,14 +68,15 @@ public class ExcelReader {
                 for (int rownum = 1; rownum <= sheet.getLastRowNum(); rownum++) {
                     Map<String, Object> rowAsArray = new HashMap<>();
                     Row row = sheet.getRow(rownum);
-                    // System.out.println(rownum);
-                    for (int colnum = 0; colnum < labels.length; colnum++) {
-                        Cell cell = row.getCell(colnum);
-                        Object value = null;
-                        if (cell != null) {
-                            value = getCellValue(cell);
+                    if (row != null) {
+                        for (int colnum = 0; colnum < Math.min(row.getLastCellNum(), labels.length); colnum++) {
+                            Cell cell = row.getCell(colnum);
+                            Object value = null;
+                            if (cell != null) {
+                                value = getCellValue(cell);
+                            }
+                            rowAsArray.put(labels[colnum], value);
                         }
-                        rowAsArray.put(labels[colnum], value);
                     }
                     // System.out.println("Row as Array : " + rowAsArray );
                     if (!isEmpty(rowAsArray)) rowAsArrayList.add(rowAsArray);
