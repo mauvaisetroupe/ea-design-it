@@ -65,7 +65,7 @@ public class ExcelReader {
                 }
                 System.out.println(sheet.getSheetName());
                 List<Map<String, Object>> rowAsArrayList = new ArrayList<>();
-                for (int rownum = 1; rownum <= sheet.getLastRowNum(); rownum++) {
+                for (int rownum = 1; rownum <= Math.min(sheet.getLastRowNum(), this.columnNames.size()); rownum++) {
                     Map<String, Object> rowAsArray = new HashMap<>();
                     Row row = sheet.getRow(rownum);
                     if (row != null) {
