@@ -10,6 +10,25 @@ import AlertService from '@/shared/alert/alert.service';
 @Component({
   mixins: [Vue2Filters.mixin],
 })
+@Component({
+  computed: {
+    filteredRows() {
+      return this.functionalFlows.filter(row => {
+        const alias = row.alias.toString().toLowerCase();
+        const id = row.id.toString().toLowerCase();
+        const description = row.description ? row.description.toString().toLowerCase() : '';
+        const inFFF = row.interfaces
+          .map(i => i.alias)
+          .join(' ')
+          .toString()
+          .toLowerCase();
+        const searchTerm = this.filter.toLowerCase();
+
+        return alias.includes(searchTerm) || id.includes(searchTerm) || inFFF.includes(searchTerm) || description.includes(searchTerm);
+      });
+    },
+  },
+})
 export default class FunctionalFlow extends Vue {
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
   @Inject('alertService') private alertService: () => AlertService;
@@ -19,6 +38,8 @@ export default class FunctionalFlow extends Vue {
   public functionalFlows: IFunctionalFlow[] = [];
 
   public isFetching = false;
+
+  public filter = '';
 
   public mounted(): void {
     this.retrieveAllFunctionalFlows();

@@ -23,6 +23,11 @@
     <div class="alert alert-warning" v-if="!isFetching && functionalFlows && functionalFlows.length === 0">
       <span>No functionalFlows found</span>
     </div>
+
+    <div>
+      <input type="text" placeholder="Filter by text" v-model="filter" />
+    </div>
+
     <div class="table-responsive" v-if="functionalFlows && functionalFlows.length > 0">
       <table class="table table-striped" aria-describedby="functionalFlows">
         <thead>
@@ -41,7 +46,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="functionalFlow in functionalFlows" :key="functionalFlow.id" data-cy="entityTable">
+          <tr v-for="functionalFlow in filteredRows" :key="functionalFlow.id" data-cy="entityTable">
             <td>
               <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }">{{
                 functionalFlow.id
