@@ -3,6 +3,7 @@ package com.mauvaisetroupe.eadesignit.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -49,6 +50,12 @@ public class Application implements Serializable {
 
     @Column(name = "documentation_url")
     private String documentationURL;
+
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     @ManyToOne
     private Owner owner;
@@ -164,6 +171,32 @@ public class Application implements Serializable {
         this.documentationURL = documentationURL;
     }
 
+    public LocalDate getStartDate() {
+        return this.startDate;
+    }
+
+    public Application startDate(LocalDate startDate) {
+        this.setStartDate(startDate);
+        return this;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return this.endDate;
+    }
+
+    public Application endDate(LocalDate endDate) {
+        this.setEndDate(endDate);
+        return this;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
     public Owner getOwner() {
         return this.owner;
     }
@@ -239,6 +272,8 @@ public class Application implements Serializable {
             ", technology='" + getTechnology() + "'" +
             ", comment='" + getComment() + "'" +
             ", documentationURL='" + getDocumentationURL() + "'" +
+            ", startDate='" + getStartDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
             "}";
     }
 }

@@ -6,6 +6,7 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.Format;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -61,6 +62,17 @@ public class DataFlow implements Serializable {
 
     @Column(name = "documentation_url")
     private String documentationURL;
+
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
+    @OneToMany(mappedBy = "dataFlow")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "dataFlow" }, allowSetters = true)
+    private Set<EventData> events = new HashSet<>();
 
     @ManyToMany
     @NotNull
@@ -187,6 +199,63 @@ public class DataFlow implements Serializable {
         this.documentationURL = documentationURL;
     }
 
+    public LocalDate getStartDate() {
+        return this.startDate;
+    }
+
+    public DataFlow startDate(LocalDate startDate) {
+        this.setStartDate(startDate);
+        return this;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return this.endDate;
+    }
+
+    public DataFlow endDate(LocalDate endDate) {
+        this.setEndDate(endDate);
+        return this;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public Set<EventData> getEvents() {
+        return this.events;
+    }
+
+    public void setEvents(Set<EventData> eventData) {
+        if (this.events != null) {
+            this.events.forEach(i -> i.setDataFlow(null));
+        }
+        if (eventData != null) {
+            eventData.forEach(i -> i.setDataFlow(this));
+        }
+        this.events = eventData;
+    }
+
+    public DataFlow events(Set<EventData> eventData) {
+        this.setEvents(eventData);
+        return this;
+    }
+
+    public DataFlow addEvents(EventData eventData) {
+        this.events.add(eventData);
+        eventData.setDataFlow(this);
+        return this;
+    }
+
+    public DataFlow removeEvents(EventData eventData) {
+        this.events.remove(eventData);
+        eventData.setDataFlow(null);
+        return this;
+    }
+
     public Set<FunctionalFlow> getFunctionalFlows() {
         return this.functionalFlows;
     }
@@ -256,6 +325,8 @@ public class DataFlow implements Serializable {
             ", resourceName='" + getResourceName() + "'" +
             ", contractURL='" + getContractURL() + "'" +
             ", documentationURL='" + getDocumentationURL() + "'" +
+            ", startDate='" + getStartDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
             "}";
     }
 }

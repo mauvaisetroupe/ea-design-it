@@ -141,6 +141,9 @@ public class FunctionalFlowResource {
                 if (functionalFlow.getDocumentationURL() != null) {
                     existingFunctionalFlow.setDocumentationURL(functionalFlow.getDocumentationURL());
                 }
+                if (functionalFlow.getDocumentationURL2() != null) {
+                    existingFunctionalFlow.setDocumentationURL2(functionalFlow.getDocumentationURL2());
+                }
                 if (functionalFlow.getStartDate() != null) {
                     existingFunctionalFlow.setStartDate(functionalFlow.getStartDate());
                 }

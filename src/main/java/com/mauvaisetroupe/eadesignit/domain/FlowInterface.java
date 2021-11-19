@@ -3,6 +3,7 @@ package com.mauvaisetroupe.eadesignit.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Protocol;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -40,9 +41,18 @@ public class FlowInterface implements Serializable {
     @Column(name = "documentation_url")
     private String documentationURL;
 
+    @Column(name = "documentation_url_2")
+    private String documentationURL2;
+
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
     @OneToMany(mappedBy = "flowInterface")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "functionalFlows", "flowInterface" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "events", "functionalFlows", "flowInterface" }, allowSetters = true)
     private Set<DataFlow> dataFlows = new HashSet<>();
 
     @ManyToOne(optional = false)
@@ -136,6 +146,45 @@ public class FlowInterface implements Serializable {
 
     public void setDocumentationURL(String documentationURL) {
         this.documentationURL = documentationURL;
+    }
+
+    public String getDocumentationURL2() {
+        return this.documentationURL2;
+    }
+
+    public FlowInterface documentationURL2(String documentationURL2) {
+        this.setDocumentationURL2(documentationURL2);
+        return this;
+    }
+
+    public void setDocumentationURL2(String documentationURL2) {
+        this.documentationURL2 = documentationURL2;
+    }
+
+    public LocalDate getStartDate() {
+        return this.startDate;
+    }
+
+    public FlowInterface startDate(LocalDate startDate) {
+        this.setStartDate(startDate);
+        return this;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return this.endDate;
+    }
+
+    public FlowInterface endDate(LocalDate endDate) {
+        this.setEndDate(endDate);
+        return this;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public Set<DataFlow> getDataFlows() {
@@ -293,6 +342,9 @@ public class FlowInterface implements Serializable {
             ", protocol='" + getProtocol() + "'" +
             ", status='" + getStatus() + "'" +
             ", documentationURL='" + getDocumentationURL() + "'" +
+            ", documentationURL2='" + getDocumentationURL2() + "'" +
+            ", startDate='" + getStartDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
             "}";
     }
 }
