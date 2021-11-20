@@ -88,26 +88,39 @@
         <thead>
           <tr>
             <th scope="row"><span>Flow</span></th>
+            <th scope="row"><span>Description</span></th>
             <th scope="row"><span>Interface</span></th>
             <th scope="row"><span>Source</span></th>
             <th scope="row"><span>Target</span></th>
             <th scope="row"><span>Protocol</span></th>
             <th scope="row"><span>Data Flows</span></th>
-            <th scope="row"><span>Description</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="caption in captions" v-bind:key="caption.id">
             <td>{{ caption.flowAlias }}</td>
+            <td>{{ caption.description }}</td>
             <td>
               <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: caption.interfaceID } }">{{
                 caption.interfaceAlias
               }}</router-link>
             </td>
-            <td>{{ caption.source }}</td>
-            <td>{{ caption.target }}</td>
-            <td>{{ caption.protocol.name }}</td>
+            <td>
+              <router-link :to="{ name: 'ApplicationView', params: { applicationId: caption.source.id } }">
+                {{ caption.source.name }}
+              </router-link>
+            </td>
+            <td>
+              <router-link :to="{ name: 'ApplicationView', params: { applicationId: caption.target.id } }">
+                {{ caption.target.name }}
+              </router-link>
+            </td>
+            <td>
+              <router-link :to="{ name: 'ProtocolView', params: { protocolId: caption.protocol.id } }">
+                {{ caption.protocol.name }}
+              </router-link>
+            </td>
             <td>
               <span v-for="dataflow in caption.dataFlows" :key="dataflow.id">
                 <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataflow.id } }">
@@ -115,7 +128,6 @@
                 </router-link>
               </span>
             </td>
-            <td>{{ caption.description }}</td>
           </tr>
         </tbody>
       </table>
