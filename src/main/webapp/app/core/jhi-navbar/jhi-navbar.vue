@@ -65,10 +65,6 @@
             <font-awesome-icon icon="asterisk" />
             <span>Flow Import</span>
           </b-dropdown-item>
-          <b-dropdown-item to="/event-data">
-            <font-awesome-icon icon="asterisk" />
-            <span>Event Data</span>
-          </b-dropdown-item>
           <b-dropdown-item to="/protocol">
             <font-awesome-icon icon="asterisk" />
             <span>Protocol</span>
