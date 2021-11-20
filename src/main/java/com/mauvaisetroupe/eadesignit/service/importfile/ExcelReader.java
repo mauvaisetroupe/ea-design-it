@@ -65,7 +65,7 @@ public class ExcelReader {
                 }
                 System.out.println(sheet.getSheetName());
                 List<Map<String, Object>> rowAsArrayList = new ArrayList<>();
-                for (int rownum = 1; rownum <= Math.min(sheet.getLastRowNum(), this.columnNames.size()); rownum++) {
+                for (int rownum = 1; rownum <= sheet.getLastRowNum(); rownum++) {
                     Map<String, Object> rowAsArray = new HashMap<>();
                     Row row = sheet.getRow(rownum);
                     if (row != null) {
@@ -96,8 +96,13 @@ public class ExcelReader {
     }
 
     public boolean isEmpty(Map<String, Object> rowAsArray) {
+        int index = 1;
         for (Object cell : rowAsArray.values()) {
             if (!ObjectUtils.isEmpty(cell)) return false;
+            index++;
+            if (index > this.columnNames.size()) {
+                return true;
+            }
         }
         return true;
     }

@@ -11,4 +11,5 @@ public enum ApplicationType {
     INFRASTRUCTURE,
     GINKO,
     FRONT,
+    PARTNER,
 }

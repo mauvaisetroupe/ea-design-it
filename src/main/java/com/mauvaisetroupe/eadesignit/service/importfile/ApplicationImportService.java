@@ -22,11 +22,14 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ApplicationImportService {
 
-    private static final String APPLICATION_TYPE = "application.type";
-    private static final String APPLICATION_COMMENT = "application.comment";
-    private static final String APPLICATION_DESCRIPTION = "application.description";
-    private static final String APPLICATION_NAME = "application.name";
     private static final String APPLICATION_ID = "application.id";
+    private static final String APPLICATION_NAME = "application.name";
+    private static final String APPLICATION_DESCRIPTION = "application.description";
+    private static final String APPLICATION_COMMENT = "application.comment";
+    private static final String APPLICATION_TYPE = "application.type";
+    private static final String APPLICATION_TECHNOLOGY = "application.technology";
+    private static final String APPLICATION_OWNER = "application.owner";
+
     private final List<String> columnsArray = new ArrayList<String>();
 
     private static final String APPLICATION_SHEET_NAME = "Application";
@@ -38,11 +41,13 @@ public class ApplicationImportService {
     public ApplicationImportService(ApplicationRepository applicationRepository) {
         this.applicationRepository = applicationRepository;
 
-        this.columnsArray.add(APPLICATION_TYPE);
-        this.columnsArray.add(APPLICATION_COMMENT);
-        this.columnsArray.add(APPLICATION_DESCRIPTION);
-        this.columnsArray.add(APPLICATION_NAME);
         this.columnsArray.add(APPLICATION_ID);
+        this.columnsArray.add(APPLICATION_NAME);
+        this.columnsArray.add(APPLICATION_DESCRIPTION);
+        this.columnsArray.add(APPLICATION_COMMENT);
+        this.columnsArray.add(APPLICATION_TYPE);
+        this.columnsArray.add(APPLICATION_TECHNOLOGY);
+        this.columnsArray.add(APPLICATION_OWNER);
     }
 
     public List<ApplicationImport> importExcel(MultipartFile file) throws Exception {
@@ -83,6 +88,7 @@ public class ApplicationImportService {
         applicationImport.setDescription((String) map.get(APPLICATION_DESCRIPTION));
         applicationImport.setComment((String) map.get(APPLICATION_COMMENT));
         applicationImport.setType((String) map.get(APPLICATION_TYPE));
+        applicationImport.setTechnology((String) map.get(APPLICATION_TECHNOLOGY));
         return applicationImport;
     }
 
@@ -109,6 +115,8 @@ public class ApplicationImportService {
         if (StringUtils.hasText(applicationImport.getType())) {
             application.setType(ObjectUtils.caseInsensitiveValueOf(ApplicationType.values(), applicationImport.getType()));
         }
+        application.setTechnology(applicationImport.getTechnology());
+
         return application;
     }
 }
