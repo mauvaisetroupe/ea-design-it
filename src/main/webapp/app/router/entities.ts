@@ -62,6 +62,12 @@ const EventData = () => import('@/entities/event-data/event-data.vue');
 const EventDataUpdate = () => import('@/entities/event-data/event-data-update.vue');
 // prettier-ignore
 const EventDataDetails = () => import('@/entities/event-data/event-data-details.vue');
+// prettier-ignore
+const Protocol = () => import('@/entities/protocol/protocol.vue');
+// prettier-ignore
+const ProtocolUpdate = () => import('@/entities/protocol/protocol-update.vue');
+// prettier-ignore
+const ProtocolDetails = () => import('@/entities/protocol/protocol-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default [
@@ -303,6 +309,30 @@ export default [
     path: '/event-data/:eventDataId/view',
     name: 'EventDataView',
     component: EventDataDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/protocol',
+    name: 'Protocol',
+    component: Protocol,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/protocol/new',
+    name: 'ProtocolCreate',
+    component: ProtocolUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/protocol/:protocolId/edit',
+    name: 'ProtocolEdit',
+    component: ProtocolUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/protocol/:protocolId/view',
+    name: 'ProtocolView',
+    component: ProtocolDetails,
     meta: { authorities: [Authority.USER] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

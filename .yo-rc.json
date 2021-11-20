@@ -53,9 +53,10 @@
       "ApplicationComponent",
       "ApplicationImport",
       "FlowImport",
-      "EventData"
+      "EventData",
+      "Protocol"
     ],
-    "lastLiquibaseTimestamp": 1637334355000,
+    "lastLiquibaseTimestamp": 1637397706000,
     "herokuAppName": "ea-design-it",
     "herokuDeployType": "git",
     "herokuJavaVersion": "17"

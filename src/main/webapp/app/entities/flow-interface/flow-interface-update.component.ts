@@ -13,6 +13,9 @@ import { IApplication } from '@/shared/model/application.model';
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
 import { IApplicationComponent } from '@/shared/model/application-component.model';
 
+import ProtocolService from '@/entities/protocol/protocol.service';
+import { IProtocol } from '@/shared/model/protocol.model';
+
 import OwnerService from '@/entities/owner/owner.service';
 import { IOwner } from '@/shared/model/owner.model';
 
@@ -21,12 +24,10 @@ import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 import { IFlowInterface, FlowInterface } from '@/shared/model/flow-interface.model';
 import FlowInterfaceService from './flow-interface.service';
-import { Protocol } from '@/shared/model/enumerations/protocol.model';
 
 const validations: any = {
   flowInterface: {
     alias: {},
-    protocol: {},
     status: {},
     documentationURL: {
       maxLength: maxLength(500),
@@ -66,6 +67,10 @@ export default class FlowInterfaceUpdate extends Vue {
 
   public applicationComponents: IApplicationComponent[] = [];
 
+  @Inject('protocolService') private protocolService: () => ProtocolService;
+
+  public protocols: IProtocol[] = [];
+
   @Inject('ownerService') private ownerService: () => OwnerService;
 
   public owners: IOwner[] = [];
@@ -73,7 +78,6 @@ export default class FlowInterfaceUpdate extends Vue {
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
 
   public functionalFlows: IFunctionalFlow[] = [];
-  public protocolValues: string[] = Object.keys(Protocol);
   public isSaving = false;
   public currentLanguage = '';
 
@@ -169,6 +173,11 @@ export default class FlowInterfaceUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.applicationComponents = res.data;
+      });
+    this.protocolService()
+      .retrieve()
+      .then(res => {
+        this.protocols = res.data;
       });
     this.ownerService()
       .retrieve()

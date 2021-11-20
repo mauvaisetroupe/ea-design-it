@@ -89,7 +89,7 @@ public class DataFlow implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "dataFlows", "source", "target", "sourceComponent", "targetComponent", "owner", "functionalFlows" },
+        value = { "dataFlows", "source", "target", "sourceComponent", "targetComponent", "protocol", "owner", "functionalFlows" },
         allowSetters = true
     )
     private FlowInterface flowInterface;

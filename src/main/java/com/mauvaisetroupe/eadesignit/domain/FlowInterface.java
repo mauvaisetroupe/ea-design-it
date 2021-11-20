@@ -1,7 +1,6 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mauvaisetroupe.eadesignit.domain.enumeration.Protocol;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -30,10 +29,6 @@ public class FlowInterface implements Serializable {
     @Pattern(regexp = "^[A-Z]{3}-[0-9]{2,4}$")
     @Column(name = "alias")
     private String alias;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "protocol")
-    private Protocol protocol;
 
     @Column(name = "status")
     private String status;
@@ -76,6 +71,9 @@ public class FlowInterface implements Serializable {
     private ApplicationComponent targetComponent;
 
     @ManyToOne
+    private Protocol protocol;
+
+    @ManyToOne
     private Owner owner;
 
     @ManyToMany(mappedBy = "interfaces")
@@ -109,19 +107,6 @@ public class FlowInterface implements Serializable {
 
     public void setAlias(String alias) {
         this.alias = alias;
-    }
-
-    public Protocol getProtocol() {
-        return this.protocol;
-    }
-
-    public FlowInterface protocol(Protocol protocol) {
-        this.setProtocol(protocol);
-        return this;
-    }
-
-    public void setProtocol(Protocol protocol) {
-        this.protocol = protocol;
     }
 
     public String getStatus() {
@@ -272,6 +257,19 @@ public class FlowInterface implements Serializable {
         return this;
     }
 
+    public Protocol getProtocol() {
+        return this.protocol;
+    }
+
+    public void setProtocol(Protocol protocol) {
+        this.protocol = protocol;
+    }
+
+    public FlowInterface protocol(Protocol protocol) {
+        this.setProtocol(protocol);
+        return this;
+    }
+
     public Owner getOwner() {
         return this.owner;
     }
@@ -341,7 +339,6 @@ public class FlowInterface implements Serializable {
         return "FlowInterface{" +
             "id=" + getId() +
             ", alias='" + getAlias() + "'" +
-            ", protocol='" + getProtocol() + "'" +
             ", status='" + getStatus() + "'" +
             ", documentationURL='" + getDocumentationURL() + "'" +
             ", documentationURL2='" + getDocumentationURL2() + "'" +

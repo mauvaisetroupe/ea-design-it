@@ -23,18 +23,12 @@
     <div class="alert alert-warning" v-if="!isFetching && flowInterfaces && flowInterfaces.length === 0">
       <span>No flowInterfaces found</span>
     </div>
-
-    <div>
-      <input type="text" placeholder="Filter by text" v-model="filter" />
-    </div>
-
     <div class="table-responsive" v-if="flowInterfaces && flowInterfaces.length > 0">
       <table class="table table-striped" aria-describedby="flowInterfaces">
         <thead>
           <tr>
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Alias</span></th>
-            <th scope="row"><span>Protocol</span></th>
             <th scope="row"><span>Status</span></th>
             <th scope="row"><span>Documentation URL</span></th>
             <th scope="row"><span>Documentation URL 2</span></th>
@@ -44,19 +38,19 @@
             <th scope="row"><span>Target</span></th>
             <th scope="row"><span>Source Component</span></th>
             <th scope="row"><span>Target Component</span></th>
+            <th scope="row"><span>Protocol</span></th>
             <th scope="row"><span>Owner</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="flowInterface in filteredRows" :key="flowInterface.id" data-cy="entityTable">
+          <tr v-for="flowInterface in flowInterfaces" :key="flowInterface.id" data-cy="entityTable">
             <td>
               <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: flowInterface.id } }">{{
                 flowInterface.id
               }}</router-link>
             </td>
             <td>{{ flowInterface.alias }}</td>
-            <td>{{ flowInterface.protocol }}</td>
             <td>{{ flowInterface.status }}</td>
             <td>{{ flowInterface.documentationURL }}</td>
             <td>{{ flowInterface.documentationURL2 }}</td>
@@ -90,6 +84,13 @@
                   :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: flowInterface.targetComponent.id } }"
                   >{{ flowInterface.targetComponent.name }}</router-link
                 >
+              </div>
+            </td>
+            <td>
+              <div v-if="flowInterface.protocol">
+                <router-link :to="{ name: 'ProtocolView', params: { protocolId: flowInterface.protocol.id } }">{{
+                  flowInterface.protocol.name
+                }}</router-link>
               </div>
             </td>
             <td>

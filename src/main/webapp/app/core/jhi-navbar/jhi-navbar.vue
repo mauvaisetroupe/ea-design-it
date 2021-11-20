@@ -69,6 +69,10 @@
             <font-awesome-icon icon="asterisk" />
             <span>Event Data</span>
           </b-dropdown-item>
+          <b-dropdown-item to="/protocol">
+            <font-awesome-icon icon="asterisk" />
+            <span>Protocol</span>
+          </b-dropdown-item>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </b-nav-item-dropdown>
         <b-nav-item-dropdown

@@ -2,39 +2,39 @@ import { mixins } from 'vue-class-component';
 
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
-import { IFlowInterface } from '@/shared/model/flow-interface.model';
+import { IProtocol } from '@/shared/model/protocol.model';
 
-import FlowInterfaceService from './flow-interface.service';
+import ProtocolService from './protocol.service';
 import AlertService from '@/shared/alert/alert.service';
 
 @Component({
   mixins: [Vue2Filters.mixin],
 })
-export default class FlowInterface extends Vue {
-  @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
+export default class Protocol extends Vue {
+  @Inject('protocolService') private protocolService: () => ProtocolService;
   @Inject('alertService') private alertService: () => AlertService;
 
   private removeId: number = null;
 
-  public flowInterfaces: IFlowInterface[] = [];
+  public protocols: IProtocol[] = [];
 
   public isFetching = false;
 
   public mounted(): void {
-    this.retrieveAllFlowInterfaces();
+    this.retrieveAllProtocols();
   }
 
   public clear(): void {
-    this.retrieveAllFlowInterfaces();
+    this.retrieveAllProtocols();
   }
 
-  public retrieveAllFlowInterfaces(): void {
+  public retrieveAllProtocols(): void {
     this.isFetching = true;
-    this.flowInterfaceService()
+    this.protocolService()
       .retrieve()
       .then(
         res => {
-          this.flowInterfaces = res.data;
+          this.protocols = res.data;
           this.isFetching = false;
         },
         err => {
@@ -48,18 +48,18 @@ export default class FlowInterface extends Vue {
     this.clear();
   }
 
-  public prepareRemove(instance: IFlowInterface): void {
+  public prepareRemove(instance: IProtocol): void {
     this.removeId = instance.id;
     if (<any>this.$refs.removeEntity) {
       (<any>this.$refs.removeEntity).show();
     }
   }
 
-  public removeFlowInterface(): void {
-    this.flowInterfaceService()
+  public removeProtocol(): void {
+    this.protocolService()
       .delete(this.removeId)
       .then(() => {
-        const message = 'A FlowInterface is deleted with identifier ' + this.removeId;
+        const message = 'A Protocol is deleted with identifier ' + this.removeId;
         this.$bvToast.toast(message.toString(), {
           toaster: 'b-toaster-top-center',
           title: 'Info',
@@ -68,7 +68,7 @@ export default class FlowInterface extends Vue {
           autoHideDelay: 5000,
         });
         this.removeId = null;
-        this.retrieveAllFlowInterfaces();
+        this.retrieveAllProtocols();
         this.closeDialog();
       })
       .catch(error => {

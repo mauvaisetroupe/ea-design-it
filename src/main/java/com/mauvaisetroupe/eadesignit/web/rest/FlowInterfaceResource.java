@@ -128,9 +128,6 @@ public class FlowInterfaceResource {
                 if (flowInterface.getAlias() != null) {
                     existingFlowInterface.setAlias(flowInterface.getAlias());
                 }
-                if (flowInterface.getProtocol() != null) {
-                    existingFlowInterface.setProtocol(flowInterface.getProtocol());
-                }
                 if (flowInterface.getStatus() != null) {
                     existingFlowInterface.setStatus(flowInterface.getStatus());
                 }

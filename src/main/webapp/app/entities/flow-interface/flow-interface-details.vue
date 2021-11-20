@@ -11,12 +11,6 @@
             <span>{{ flowInterface.alias }}</span>
           </dd>
           <dt>
-            <span>Protocol</span>
-          </dt>
-          <dd>
-            <span>{{ flowInterface.protocol }}</span>
-          </dd>
-          <dt>
             <span>Status</span>
           </dt>
           <dd>
@@ -86,6 +80,16 @@
                 :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: flowInterface.targetComponent.id } }"
                 >{{ flowInterface.targetComponent.name }}</router-link
               >
+            </div>
+          </dd>
+          <dt>
+            <span>Protocol</span>
+          </dt>
+          <dd>
+            <div v-if="flowInterface.protocol">
+              <router-link :to="{ name: 'ProtocolView', params: { protocolId: flowInterface.protocol.id } }">{{
+                flowInterface.protocol.name
+              }}</router-link>
             </div>
           </dd>
           <dt>

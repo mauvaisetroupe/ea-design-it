@@ -17,9 +17,6 @@
             <column name="alias" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="protocol" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -45,6 +42,9 @@
                 <constraints nullable="true" />
             </column>
             <column name="target_component_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="protocol_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="owner_id" type="bigint">

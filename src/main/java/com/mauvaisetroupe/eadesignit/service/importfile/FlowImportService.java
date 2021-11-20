@@ -5,14 +5,15 @@ import com.mauvaisetroupe.eadesignit.domain.FlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.domain.Protocol;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
-import com.mauvaisetroupe.eadesignit.domain.enumeration.Protocol;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
+import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class FlowImportService {
     private final DataFlowRepository dataFlowRepository;
     private final OwnerRepository ownerRepository;
     private final LandscapeViewRepository landscapeViewRepository;
+    private final ProtocolRepository protocolRepository;
 
     public FlowImportService(
         FunctionalFlowRepository flowRepository,
@@ -69,7 +71,8 @@ public class FlowImportService {
         ApplicationRepository applicationRepository,
         DataFlowRepository dataFlowRepository,
         OwnerRepository ownerRepository,
-        LandscapeViewRepository landscapeViewRepository
+        LandscapeViewRepository landscapeViewRepository,
+        ProtocolRepository protocolRepository
     ) {
         this.flowRepository = flowRepository;
         this.interfaceRepository = interfaceRepository;
@@ -77,6 +80,7 @@ public class FlowImportService {
         this.dataFlowRepository = dataFlowRepository;
         this.ownerRepository = ownerRepository;
         this.landscapeViewRepository = landscapeViewRepository;
+        this.protocolRepository = protocolRepository;
 
         this.columnsArray.add(FLOW_ID_FLOW);
         this.columnsArray.add(FLOW_ALIAS_FLOW);
@@ -266,20 +270,12 @@ public class FlowImportService {
         flowInterface.setSource(source);
         flowInterface.setTarget(target);
         if (!nullable(flowImport.getIntegrationPattern())) {
-            flowInterface.setProtocol(ObjectUtils.caseInsensitiveValueOf(Protocol.values(), clean(flowImport.getIntegrationPattern())));
+            Protocol protocol = protocolRepository.findByNameIgnoreCase(flowImport.getIntegrationPattern());
+            if (protocol != null) {
+                flowInterface.setProtocol(protocol);
+            }
         }
         return flowInterface;
-    }
-
-    private String clean(String value) {
-        return value
-            .replace('/', '_')
-            .replace(' ', '_')
-            .replace('(', '_')
-            .replace(')', '_')
-            .replace("__", "_")
-            .replace("__", "_")
-            .replaceAll("(.*)_$", "$1");
     }
 
     private boolean nullable(String value) {

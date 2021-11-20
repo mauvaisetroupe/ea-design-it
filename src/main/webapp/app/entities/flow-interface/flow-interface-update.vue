@@ -28,19 +28,6 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="flow-interface-protocol">Protocol</label>
-            <select
-              class="form-control"
-              name="protocol"
-              :class="{ valid: !$v.flowInterface.protocol.$invalid, invalid: $v.flowInterface.protocol.$invalid }"
-              v-model="$v.flowInterface.protocol.$model"
-              id="flow-interface-protocol"
-              data-cy="protocol"
-            >
-              <option v-for="protocol in protocolValues" :key="protocol" v-bind:value="protocol">{{ protocol }}</option>
-            </select>
-          </div>
-          <div class="form-group">
             <label class="form-control-label" for="flow-interface-status">Status</label>
             <input
               type="text"
@@ -221,6 +208,21 @@
                 :key="applicationComponentOption.id"
               >
                 {{ applicationComponentOption.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="flow-interface-protocol">Protocol</label>
+            <select class="form-control" id="flow-interface-protocol" data-cy="protocol" name="protocol" v-model="flowInterface.protocol">
+              <option v-bind:value="null"></option>
+              <option
+                v-bind:value="
+                  flowInterface.protocol && protocolOption.id === flowInterface.protocol.id ? flowInterface.protocol : protocolOption
+                "
+                v-for="protocolOption in protocols"
+                :key="protocolOption.id"
+              >
+                {{ protocolOption.name }}
               </option>
             </select>
           </div>

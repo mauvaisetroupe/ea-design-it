@@ -14,6 +14,8 @@ import ApplicationService from '@/entities/application/application.service';
 
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
 
+import ProtocolService from '@/entities/protocol/protocol.service';
+
 import OwnerService from '@/entities/owner/owner.service';
 
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
@@ -53,6 +55,8 @@ describe('Component Tests', () => {
           applicationService: () => new ApplicationService(),
 
           applicationComponentService: () => new ApplicationComponentService(),
+
+          protocolService: () => new ProtocolService(),
 
           ownerService: () => new OwnerService(),
 

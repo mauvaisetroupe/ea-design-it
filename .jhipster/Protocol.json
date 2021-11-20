@@ -1,0 +1,35 @@
+{
+  "name": "Protocol",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "ProtocolType",
+      "fieldValues": "API,ESB,EVENT,FILE,MESSAGING,SOAP,ETL,DB,FRONT,OTHER"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1000"
+    },
+    {
+      "fieldName": "scope",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "protocol",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211120084146"
+}

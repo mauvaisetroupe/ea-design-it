@@ -32,6 +32,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="application_component"/>
 
+        <addForeignKeyConstraint baseColumnNames="protocol_id"
+                                 baseTableName="flow_interface"
+                                 constraintName="fk_flow_interface__protocol_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="protocol"/>
+
         <addForeignKeyConstraint baseColumnNames="owner_id"
                                  baseTableName="flow_interface"
                                  constraintName="fk_flow_interface__owner_id"
