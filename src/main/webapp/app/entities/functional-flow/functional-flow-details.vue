@@ -106,7 +106,7 @@
             </td>
             <td>{{ caption.source }}</td>
             <td>{{ caption.target }}</td>
-            <td>{{ caption.protocol }}</td>
+            <td>{{ caption.protocol.name }}</td>
             <td>{{ caption.description }}</td>
           </tr>
         </tbody>
