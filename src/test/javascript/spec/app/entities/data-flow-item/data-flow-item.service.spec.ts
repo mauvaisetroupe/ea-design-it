@@ -4,10 +4,8 @@ import sinon from 'sinon';
 import dayjs from 'dayjs';
 
 import { DATE_FORMAT } from '@/shared/date/filters';
-import DataFlowService from '@/entities/data-flow/data-flow.service';
-import { DataFlow } from '@/shared/model/data-flow.model';
-import { Frequency } from '@/shared/model/enumerations/frequency.model';
-import { Format } from '@/shared/model/enumerations/format.model';
+import DataFlowItemService from '@/entities/data-flow-item/data-flow-item.service';
+import { DataFlowItem } from '@/shared/model/data-flow-item.model';
 
 const error = {
   response: {
@@ -27,15 +25,15 @@ const axiosStub = {
 };
 
 describe('Service Tests', () => {
-  describe('DataFlow Service', () => {
-    let service: DataFlowService;
+  describe('DataFlowItem Service', () => {
+    let service: DataFlowItemService;
     let elemDefault;
     let currentDate: Date;
 
     beforeEach(() => {
-      service = new DataFlowService();
+      service = new DataFlowItemService();
       currentDate = new Date();
-      elemDefault = new DataFlow(123, 'AAAAAAA', 'AAAAAAA', Frequency.DAILY, Format.XML, 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
+      elemDefault = new DataFlowItem(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
     });
 
     describe('Service methods', () => {
@@ -64,7 +62,7 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should create a DataFlow', async () => {
+      it('should create a DataFlowItem', async () => {
         const returnedFromService = Object.assign(
           {
             id: 123,
@@ -87,7 +85,7 @@ describe('Service Tests', () => {
         });
       });
 
-      it('should not create a DataFlow', async () => {
+      it('should not create a DataFlowItem', async () => {
         axiosStub.post.rejects(error);
 
         return service
@@ -98,13 +96,11 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should update a DataFlow', async () => {
+      it('should update a DataFlowItem', async () => {
         const returnedFromService = Object.assign(
           {
             resourceName: 'BBBBBB',
             description: 'BBBBBB',
-            frequency: 'BBBBBB',
-            format: 'BBBBBB',
             contractURL: 'BBBBBB',
             documentationURL: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),
@@ -127,7 +123,7 @@ describe('Service Tests', () => {
         });
       });
 
-      it('should not update a DataFlow', async () => {
+      it('should not update a DataFlowItem', async () => {
         axiosStub.put.rejects(error);
 
         return service
@@ -138,15 +134,12 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should partial update a DataFlow', async () => {
+      it('should partial update a DataFlowItem', async () => {
         const patchObject = Object.assign(
           {
             description: 'BBBBBB',
-            frequency: 'BBBBBB',
-            format: 'BBBBBB',
-            documentationURL: 'BBBBBB',
           },
-          new DataFlow()
+          new DataFlowItem()
         );
         const returnedFromService = Object.assign(patchObject, elemDefault);
 
@@ -164,7 +157,7 @@ describe('Service Tests', () => {
         });
       });
 
-      it('should not partial update a DataFlow', async () => {
+      it('should not partial update a DataFlowItem', async () => {
         axiosStub.patch.rejects(error);
 
         return service
@@ -175,13 +168,11 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should return a list of DataFlow', async () => {
+      it('should return a list of DataFlowItem', async () => {
         const returnedFromService = Object.assign(
           {
             resourceName: 'BBBBBB',
             description: 'BBBBBB',
-            frequency: 'BBBBBB',
-            format: 'BBBBBB',
             contractURL: 'BBBBBB',
             documentationURL: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),
@@ -202,7 +193,7 @@ describe('Service Tests', () => {
         });
       });
 
-      it('should not return a list of DataFlow', async () => {
+      it('should not return a list of DataFlowItem', async () => {
         axiosStub.get.rejects(error);
 
         return service
@@ -213,14 +204,14 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should delete a DataFlow', async () => {
+      it('should delete a DataFlowItem', async () => {
         axiosStub.delete.resolves({ ok: true });
         return service.delete(123).then(res => {
           expect(res.ok).toBeTruthy();
         });
       });
 
-      it('should not delete a DataFlow', async () => {
+      it('should not delete a DataFlowItem', async () => {
         axiosStub.delete.rejects(error);
 
         return service

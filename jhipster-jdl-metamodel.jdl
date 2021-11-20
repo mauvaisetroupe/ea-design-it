@@ -38,7 +38,7 @@ relationship ManyToOne {
 }
 
 relationship OneToMany {
-	DataFlow{events} to EventData{dataFlow}
+	DataFlow{items} to DataFlowItem{dataFlow}
 }
 
 
@@ -92,20 +92,32 @@ entity Protocol {
     scope String
 }
 
+/**
+ * DataFlow represents 
+ * - A file when Protocol=FILE
+ * - A topic when Protocol=Event
+ * - A Swagger when Protocol=API
+ * - A WSDL when Protocol=SOAP
+ * - An XSD when Protocol=ESB, MESSAGING
+ */
 entity DataFlow {
+    resourceName String /** TOPIC name for event, FileName for Files*/
+    description String maxlength(1000)
     frequency Frequency
     format Format
-    type FlowType
-    description String maxlength(1000)
-    resourceName String /** TOPIC name for event, FileName for Files*/
     contractURL String /** Swagger or XSD URL */
     documentationURL String maxlength(500)
     startDate LocalDate
     endDate LocalDate    
 }
 
-entity EventData {
-    name String
+/**
+ * DataFlow represents 
+ * - A Event when DataFlow.Protocol=Event
+ */
+entity DataFlowItem {
+    resourceName String
+    description String maxlength(1000)  
     contractURL String
     documentationURL String maxlength(500)
     startDate LocalDate
@@ -153,12 +165,6 @@ enum Format {
     CSV
 }
 
-enum FlowType {
-	FILE
-    EVENT
-    API
-}
-
 enum ApplicationType {
 	MICROSERVICE
     EXTERNAL
@@ -167,6 +173,8 @@ enum ApplicationType {
     INFRASTRUCTURE
     GINKO
     FRONT
+    PARTNER
+    MIDDLEWARE
 }
 
 // ADD Helper for import, not part of main model

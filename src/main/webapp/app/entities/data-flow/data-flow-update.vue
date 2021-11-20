@@ -9,6 +9,35 @@
             <input type="text" class="form-control" id="id" name="id" v-model="dataFlow.id" readonly />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="data-flow-resourceName">Resource Name</label>
+            <input
+              type="text"
+              class="form-control"
+              name="resourceName"
+              id="data-flow-resourceName"
+              data-cy="resourceName"
+              :class="{ valid: !$v.dataFlow.resourceName.$invalid, invalid: $v.dataFlow.resourceName.$invalid }"
+              v-model="$v.dataFlow.resourceName.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="data-flow-description">Description</label>
+            <input
+              type="text"
+              class="form-control"
+              name="description"
+              id="data-flow-description"
+              data-cy="description"
+              :class="{ valid: !$v.dataFlow.description.$invalid, invalid: $v.dataFlow.description.$invalid }"
+              v-model="$v.dataFlow.description.$model"
+            />
+            <div v-if="$v.dataFlow.description.$anyDirty && $v.dataFlow.description.$invalid">
+              <small class="form-text text-danger" v-if="!$v.dataFlow.description.maxLength">
+                This field cannot be longer than 1000 characters.
+              </small>
+            </div>
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="data-flow-frequency">Frequency</label>
             <select
               class="form-control"
@@ -33,48 +62,6 @@
             >
               <option v-for="format in formatValues" :key="format" v-bind:value="format">{{ format }}</option>
             </select>
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="data-flow-type">Type</label>
-            <select
-              class="form-control"
-              name="type"
-              :class="{ valid: !$v.dataFlow.type.$invalid, invalid: $v.dataFlow.type.$invalid }"
-              v-model="$v.dataFlow.type.$model"
-              id="data-flow-type"
-              data-cy="type"
-            >
-              <option v-for="flowType in flowTypeValues" :key="flowType" v-bind:value="flowType">{{ flowType }}</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="data-flow-description">Description</label>
-            <input
-              type="text"
-              class="form-control"
-              name="description"
-              id="data-flow-description"
-              data-cy="description"
-              :class="{ valid: !$v.dataFlow.description.$invalid, invalid: $v.dataFlow.description.$invalid }"
-              v-model="$v.dataFlow.description.$model"
-            />
-            <div v-if="$v.dataFlow.description.$anyDirty && $v.dataFlow.description.$invalid">
-              <small class="form-text text-danger" v-if="!$v.dataFlow.description.maxLength">
-                This field cannot be longer than 1000 characters.
-              </small>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="data-flow-resourceName">Resource Name</label>
-            <input
-              type="text"
-              class="form-control"
-              name="resourceName"
-              id="data-flow-resourceName"
-              data-cy="resourceName"
-              :class="{ valid: !$v.dataFlow.resourceName.$invalid, invalid: $v.dataFlow.resourceName.$invalid }"
-              v-model="$v.dataFlow.resourceName.$model"
-            />
           </div>
           <div class="form-group">
             <label class="form-control-label" for="data-flow-contractURL">Contract URL</label>

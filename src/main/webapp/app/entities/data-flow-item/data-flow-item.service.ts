@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-import { IEventData } from '@/shared/model/event-data.model';
+import { IDataFlowItem } from '@/shared/model/data-flow-item.model';
 
-const baseApiUrl = 'api/event-data';
+const baseApiUrl = 'api/data-flow-items';
 
-export default class EventDataService {
-  public find(id: number): Promise<IEventData> {
-    return new Promise<IEventData>((resolve, reject) => {
+export default class DataFlowItemService {
+  public find(id: number): Promise<IDataFlowItem> {
+    return new Promise<IDataFlowItem>((resolve, reject) => {
       axios
         .get(`${baseApiUrl}/${id}`)
         .then(res => {
@@ -44,8 +44,8 @@ export default class EventDataService {
     });
   }
 
-  public create(entity: IEventData): Promise<IEventData> {
-    return new Promise<IEventData>((resolve, reject) => {
+  public create(entity: IDataFlowItem): Promise<IDataFlowItem> {
+    return new Promise<IDataFlowItem>((resolve, reject) => {
       axios
         .post(`${baseApiUrl}`, entity)
         .then(res => {
@@ -57,8 +57,8 @@ export default class EventDataService {
     });
   }
 
-  public update(entity: IEventData): Promise<IEventData> {
-    return new Promise<IEventData>((resolve, reject) => {
+  public update(entity: IDataFlowItem): Promise<IDataFlowItem> {
+    return new Promise<IDataFlowItem>((resolve, reject) => {
       axios
         .put(`${baseApiUrl}/${entity.id}`, entity)
         .then(res => {
@@ -70,8 +70,8 @@ export default class EventDataService {
     });
   }
 
-  public partialUpdate(entity: IEventData): Promise<IEventData> {
-    return new Promise<IEventData>((resolve, reject) => {
+  public partialUpdate(entity: IDataFlowItem): Promise<IDataFlowItem> {
+    return new Promise<IDataFlowItem>((resolve, reject) => {
       axios
         .patch(`${baseApiUrl}/${entity.id}`, entity)
         .then(res => {

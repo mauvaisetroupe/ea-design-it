@@ -1,9 +1,15 @@
 {
-  "name": "EventData",
+  "name": "DataFlowItem",
   "fields": [
     {
-      "fieldName": "name",
+      "fieldName": "resourceName",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1000"
     },
     {
       "fieldName": "contractURL",
@@ -28,11 +34,12 @@
     {
       "relationshipType": "many-to-one",
       "otherEntityName": "dataFlow",
-      "otherEntityRelationshipName": "events",
+      "otherEntityRelationshipName": "items",
       "relationshipName": "dataFlow"
     }
   ],
-  "entityTableName": "event_data",
+  "javadoc": "DataFlow represents\\n- A Event when DataFlow.Protocol=Event",
+  "entityTableName": "data_flow_item",
   "dto": "no",
   "pagination": "no",
   "service": "no",
@@ -41,5 +48,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": "*",
-  "changelogDate": "20211119150555"
+  "changelogDate": "20211120191107"
 }

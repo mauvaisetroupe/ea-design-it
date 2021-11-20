@@ -14,7 +14,7 @@
     {
       "fieldName": "type",
       "fieldType": "ApplicationType",
-      "fieldValues": "MICROSERVICE,EXTERNAL,JAVA,PACKAGE,INFRASTRUCTURE,GINKO,FRONT"
+      "fieldValues": "MICROSERVICE,EXTERNAL,JAVA,PACKAGE,INFRASTRUCTURE,GINKO,FRONT,PARTNER,MIDDLEWARE"
     },
     {
       "fieldName": "technology",

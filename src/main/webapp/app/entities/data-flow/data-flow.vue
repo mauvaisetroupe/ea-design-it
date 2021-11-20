@@ -28,11 +28,10 @@
         <thead>
           <tr>
             <th scope="row"><span>ID</span></th>
+            <th scope="row"><span>Resource Name</span></th>
+            <th scope="row"><span>Description</span></th>
             <th scope="row"><span>Frequency</span></th>
             <th scope="row"><span>Format</span></th>
-            <th scope="row"><span>Type</span></th>
-            <th scope="row"><span>Description</span></th>
-            <th scope="row"><span>Resource Name</span></th>
             <th scope="row"><span>Contract URL</span></th>
             <th scope="row"><span>Documentation URL</span></th>
             <th scope="row"><span>Start Date</span></th>
@@ -47,11 +46,10 @@
             <td>
               <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }">{{ dataFlow.id }}</router-link>
             </td>
+            <td>{{ dataFlow.resourceName }}</td>
+            <td>{{ dataFlow.description }}</td>
             <td>{{ dataFlow.frequency }}</td>
             <td>{{ dataFlow.format }}</td>
-            <td>{{ dataFlow.type }}</td>
-            <td>{{ dataFlow.description }}</td>
-            <td>{{ dataFlow.resourceName }}</td>
             <td>{{ dataFlow.contractURL }}</td>
             <td>{{ dataFlow.documentationURL }}</td>
             <td>{{ dataFlow.startDate }}</td>

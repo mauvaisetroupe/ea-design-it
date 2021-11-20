@@ -125,20 +125,17 @@ public class DataFlowResource {
         Optional<DataFlow> result = dataFlowRepository
             .findById(dataFlow.getId())
             .map(existingDataFlow -> {
+                if (dataFlow.getResourceName() != null) {
+                    existingDataFlow.setResourceName(dataFlow.getResourceName());
+                }
+                if (dataFlow.getDescription() != null) {
+                    existingDataFlow.setDescription(dataFlow.getDescription());
+                }
                 if (dataFlow.getFrequency() != null) {
                     existingDataFlow.setFrequency(dataFlow.getFrequency());
                 }
                 if (dataFlow.getFormat() != null) {
                     existingDataFlow.setFormat(dataFlow.getFormat());
-                }
-                if (dataFlow.getType() != null) {
-                    existingDataFlow.setType(dataFlow.getType());
-                }
-                if (dataFlow.getDescription() != null) {
-                    existingDataFlow.setDescription(dataFlow.getDescription());
-                }
-                if (dataFlow.getResourceName() != null) {
-                    existingDataFlow.setResourceName(dataFlow.getResourceName());
                 }
                 if (dataFlow.getContractURL() != null) {
                     existingDataFlow.setContractURL(dataFlow.getContractURL());

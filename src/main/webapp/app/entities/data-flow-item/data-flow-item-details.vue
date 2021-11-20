@@ -1,46 +1,52 @@
 <template>
   <div class="row justify-content-center">
     <div class="col-8">
-      <div v-if="eventData">
-        <h2 class="jh-entity-heading" data-cy="eventDataDetailsHeading"><span>EventData</span> {{ eventData.id }}</h2>
+      <div v-if="dataFlowItem">
+        <h2 class="jh-entity-heading" data-cy="dataFlowItemDetailsHeading"><span>DataFlowItem</span> {{ dataFlowItem.id }}</h2>
         <dl class="row jh-entity-details">
           <dt>
-            <span>Name</span>
+            <span>Resource Name</span>
           </dt>
           <dd>
-            <span>{{ eventData.name }}</span>
+            <span>{{ dataFlowItem.resourceName }}</span>
+          </dd>
+          <dt>
+            <span>Description</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlowItem.description }}</span>
           </dd>
           <dt>
             <span>Contract URL</span>
           </dt>
           <dd>
-            <span>{{ eventData.contractURL }}</span>
+            <span>{{ dataFlowItem.contractURL }}</span>
           </dd>
           <dt>
             <span>Documentation URL</span>
           </dt>
           <dd>
-            <span>{{ eventData.documentationURL }}</span>
+            <span>{{ dataFlowItem.documentationURL }}</span>
           </dd>
           <dt>
             <span>Start Date</span>
           </dt>
           <dd>
-            <span>{{ eventData.startDate }}</span>
+            <span>{{ dataFlowItem.startDate }}</span>
           </dd>
           <dt>
             <span>End Date</span>
           </dt>
           <dd>
-            <span>{{ eventData.endDate }}</span>
+            <span>{{ dataFlowItem.endDate }}</span>
           </dd>
           <dt>
             <span>Data Flow</span>
           </dt>
           <dd>
-            <div v-if="eventData.dataFlow">
-              <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: eventData.dataFlow.id } }">{{
-                eventData.dataFlow.id
+            <div v-if="dataFlowItem.dataFlow">
+              <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlowItem.dataFlow.id } }">{{
+                dataFlowItem.dataFlow.id
               }}</router-link>
             </div>
           </dd>
@@ -49,8 +55,8 @@
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
         </button>
         <router-link
-          v-if="eventData.id"
-          :to="{ name: 'EventDataEdit', params: { eventDataId: eventData.id } }"
+          v-if="dataFlowItem.id"
+          :to="{ name: 'DataFlowItemEdit', params: { dataFlowItemId: dataFlowItem.id } }"
           custom
           v-slot="{ navigate }"
         >
@@ -63,4 +69,4 @@
   </div>
 </template>
 
-<script lang="ts" src="./event-data-details.component.ts"></script>
+<script lang="ts" src="./data-flow-item-details.component.ts"></script>

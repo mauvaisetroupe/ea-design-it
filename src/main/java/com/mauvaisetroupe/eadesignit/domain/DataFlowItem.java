@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.*;
@@ -9,12 +10,13 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A EventData.
+ * DataFlow represents\n- A Event when DataFlow.Protocol=Event
  */
+@ApiModel(description = "DataFlow represents\n- A Event when DataFlow.Protocol=Event")
 @Entity
-@Table(name = "event_data")
+@Table(name = "data_flow_item")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class EventData implements Serializable {
+public class DataFlowItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,8 +26,12 @@ public class EventData implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "resource_name")
+    private String resourceName;
+
+    @Size(max = 1000)
+    @Column(name = "description", length = 1000)
+    private String description;
 
     @Column(name = "contract_url")
     private String contractURL;
@@ -41,7 +47,7 @@ public class EventData implements Serializable {
     private LocalDate endDate;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "events", "functionalFlows", "flowInterface" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "items", "functionalFlows", "flowInterface" }, allowSetters = true)
     private DataFlow dataFlow;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -50,7 +56,7 @@ public class EventData implements Serializable {
         return this.id;
     }
 
-    public EventData id(Long id) {
+    public DataFlowItem id(Long id) {
         this.setId(id);
         return this;
     }
@@ -59,24 +65,37 @@ public class EventData implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return this.name;
+    public String getResourceName() {
+        return this.resourceName;
     }
 
-    public EventData name(String name) {
-        this.setName(name);
+    public DataFlowItem resourceName(String resourceName) {
+        this.setResourceName(resourceName);
         return this;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public DataFlowItem description(String description) {
+        this.setDescription(description);
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getContractURL() {
         return this.contractURL;
     }
 
-    public EventData contractURL(String contractURL) {
+    public DataFlowItem contractURL(String contractURL) {
         this.setContractURL(contractURL);
         return this;
     }
@@ -89,7 +108,7 @@ public class EventData implements Serializable {
         return this.documentationURL;
     }
 
-    public EventData documentationURL(String documentationURL) {
+    public DataFlowItem documentationURL(String documentationURL) {
         this.setDocumentationURL(documentationURL);
         return this;
     }
@@ -102,7 +121,7 @@ public class EventData implements Serializable {
         return this.startDate;
     }
 
-    public EventData startDate(LocalDate startDate) {
+    public DataFlowItem startDate(LocalDate startDate) {
         this.setStartDate(startDate);
         return this;
     }
@@ -115,7 +134,7 @@ public class EventData implements Serializable {
         return this.endDate;
     }
 
-    public EventData endDate(LocalDate endDate) {
+    public DataFlowItem endDate(LocalDate endDate) {
         this.setEndDate(endDate);
         return this;
     }
@@ -132,7 +151,7 @@ public class EventData implements Serializable {
         this.dataFlow = dataFlow;
     }
 
-    public EventData dataFlow(DataFlow dataFlow) {
+    public DataFlowItem dataFlow(DataFlow dataFlow) {
         this.setDataFlow(dataFlow);
         return this;
     }
@@ -144,10 +163,10 @@ public class EventData implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof EventData)) {
+        if (!(o instanceof DataFlowItem)) {
             return false;
         }
-        return id != null && id.equals(((EventData) o).id);
+        return id != null && id.equals(((DataFlowItem) o).id);
     }
 
     @Override
@@ -159,9 +178,10 @@ public class EventData implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "EventData{" +
+        return "DataFlowItem{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
+            ", resourceName='" + getResourceName() + "'" +
+            ", description='" + getDescription() + "'" +
             ", contractURL='" + getContractURL() + "'" +
             ", documentationURL='" + getDocumentationURL() + "'" +
             ", startDate='" + getStartDate() + "'" +

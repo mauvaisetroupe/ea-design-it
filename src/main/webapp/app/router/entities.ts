@@ -57,17 +57,17 @@ const FlowImportUpdate = () => import('@/entities/flow-import/flow-import-update
 // prettier-ignore
 const FlowImportDetails = () => import('@/entities/flow-import/flow-import-details.vue');
 // prettier-ignore
-const EventData = () => import('@/entities/event-data/event-data.vue');
-// prettier-ignore
-const EventDataUpdate = () => import('@/entities/event-data/event-data-update.vue');
-// prettier-ignore
-const EventDataDetails = () => import('@/entities/event-data/event-data-details.vue');
-// prettier-ignore
 const Protocol = () => import('@/entities/protocol/protocol.vue');
 // prettier-ignore
 const ProtocolUpdate = () => import('@/entities/protocol/protocol-update.vue');
 // prettier-ignore
 const ProtocolDetails = () => import('@/entities/protocol/protocol-details.vue');
+// prettier-ignore
+const DataFlowItem = () => import('@/entities/data-flow-item/data-flow-item.vue');
+// prettier-ignore
+const DataFlowItemUpdate = () => import('@/entities/data-flow-item/data-flow-item-update.vue');
+// prettier-ignore
+const DataFlowItemDetails = () => import('@/entities/data-flow-item/data-flow-item-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default [
@@ -288,30 +288,6 @@ export default [
     meta: { authorities: [Authority.USER] },
   },
   {
-    path: '/event-data',
-    name: 'EventData',
-    component: EventData,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
-    path: '/event-data/new',
-    name: 'EventDataCreate',
-    component: EventDataUpdate,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
-    path: '/event-data/:eventDataId/edit',
-    name: 'EventDataEdit',
-    component: EventDataUpdate,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
-    path: '/event-data/:eventDataId/view',
-    name: 'EventDataView',
-    component: EventDataDetails,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
     path: '/protocol',
     name: 'Protocol',
     component: Protocol,
@@ -333,6 +309,30 @@ export default [
     path: '/protocol/:protocolId/view',
     name: 'ProtocolView',
     component: ProtocolDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/data-flow-item',
+    name: 'DataFlowItem',
+    component: DataFlowItem,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/data-flow-item/new',
+    name: 'DataFlowItemCreate',
+    component: DataFlowItemUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/data-flow-item/:dataFlowItemId/edit',
+    name: 'DataFlowItemEdit',
+    component: DataFlowItemUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/data-flow-item/:dataFlowItemId/view',
+    name: 'DataFlowItemView',
+    component: DataFlowItemDetails,
     meta: { authorities: [Authority.USER] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

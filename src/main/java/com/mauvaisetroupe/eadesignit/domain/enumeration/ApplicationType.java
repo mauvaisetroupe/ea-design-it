@@ -12,4 +12,5 @@ public enum ApplicationType {
     GINKO,
     FRONT,
     PARTNER,
+    MIDDLEWARE,
 }

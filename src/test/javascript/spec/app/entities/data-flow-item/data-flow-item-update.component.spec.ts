@@ -4,15 +4,11 @@ import sinon, { SinonStubbedInstance } from 'sinon';
 import Router from 'vue-router';
 
 import * as config from '@/shared/config/config';
-import DataFlowUpdateComponent from '@/entities/data-flow/data-flow-update.vue';
-import DataFlowClass from '@/entities/data-flow/data-flow-update.component';
-import DataFlowService from '@/entities/data-flow/data-flow.service';
-
+import DataFlowItemUpdateComponent from '@/entities/data-flow-item/data-flow-item-update.vue';
+import DataFlowItemClass from '@/entities/data-flow-item/data-flow-item-update.component';
 import DataFlowItemService from '@/entities/data-flow-item/data-flow-item.service';
 
-import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
-
-import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
+import DataFlowService from '@/entities/data-flow/data-flow.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -28,27 +24,23 @@ localVue.component('b-form-datepicker', {});
 localVue.component('b-form-input', {});
 
 describe('Component Tests', () => {
-  describe('DataFlow Management Update Component', () => {
-    let wrapper: Wrapper<DataFlowClass>;
-    let comp: DataFlowClass;
-    let dataFlowServiceStub: SinonStubbedInstance<DataFlowService>;
+  describe('DataFlowItem Management Update Component', () => {
+    let wrapper: Wrapper<DataFlowItemClass>;
+    let comp: DataFlowItemClass;
+    let dataFlowItemServiceStub: SinonStubbedInstance<DataFlowItemService>;
 
     beforeEach(() => {
-      dataFlowServiceStub = sinon.createStubInstance<DataFlowService>(DataFlowService);
+      dataFlowItemServiceStub = sinon.createStubInstance<DataFlowItemService>(DataFlowItemService);
 
-      wrapper = shallowMount<DataFlowClass>(DataFlowUpdateComponent, {
+      wrapper = shallowMount<DataFlowItemClass>(DataFlowItemUpdateComponent, {
         store,
         localVue,
         router,
         provide: {
-          dataFlowService: () => dataFlowServiceStub,
+          dataFlowItemService: () => dataFlowItemServiceStub,
           alertService: () => new AlertService(),
 
-          dataFlowItemService: () => new DataFlowItemService(),
-
-          functionalFlowService: () => new FunctionalFlowService(),
-
-          flowInterfaceService: () => new FlowInterfaceService(),
+          dataFlowService: () => new DataFlowService(),
         },
       });
       comp = wrapper.vm;
@@ -58,30 +50,30 @@ describe('Component Tests', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
         const entity = { id: 123 };
-        comp.dataFlow = entity;
-        dataFlowServiceStub.update.resolves(entity);
+        comp.dataFlowItem = entity;
+        dataFlowItemServiceStub.update.resolves(entity);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(dataFlowServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(dataFlowItemServiceStub.update.calledWith(entity)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        comp.dataFlow = entity;
-        dataFlowServiceStub.create.resolves(entity);
+        comp.dataFlowItem = entity;
+        dataFlowItemServiceStub.create.resolves(entity);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(dataFlowServiceStub.create.calledWith(entity)).toBeTruthy();
+        expect(dataFlowItemServiceStub.create.calledWith(entity)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
     });
@@ -89,16 +81,16 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundDataFlow = { id: 123 };
-        dataFlowServiceStub.find.resolves(foundDataFlow);
-        dataFlowServiceStub.retrieve.resolves([foundDataFlow]);
+        const foundDataFlowItem = { id: 123 };
+        dataFlowItemServiceStub.find.resolves(foundDataFlowItem);
+        dataFlowItemServiceStub.retrieve.resolves([foundDataFlowItem]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { dataFlowId: 123 } }, null, cb => cb(comp));
+        comp.beforeRouteEnter({ params: { dataFlowItemId: 123 } }, null, cb => cb(comp));
         await comp.$nextTick();
 
         // THEN
-        expect(comp.dataFlow).toBe(foundDataFlow);
+        expect(comp.dataFlowItem).toBe(foundDataFlowItem);
       });
     });
 

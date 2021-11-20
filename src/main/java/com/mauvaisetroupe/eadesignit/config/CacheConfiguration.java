@@ -66,8 +66,9 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.FlowImport.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.FunctionalFlow.class.getName() + ".landscapes");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataFlow.class.getName() + ".events");
-            createCache(cm, com.mauvaisetroupe.eadesignit.domain.EventData.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Protocol.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataFlow.class.getName() + ".items");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataFlowItem.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

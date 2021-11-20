@@ -1,8 +1,9 @@
 import { IDataFlow } from '@/shared/model/data-flow.model';
 
-export interface IEventData {
+export interface IDataFlowItem {
   id?: number;
-  name?: string | null;
+  resourceName?: string | null;
+  description?: string | null;
   contractURL?: string | null;
   documentationURL?: string | null;
   startDate?: Date | null;
@@ -10,10 +11,11 @@ export interface IEventData {
   dataFlow?: IDataFlow | null;
 }
 
-export class EventData implements IEventData {
+export class DataFlowItem implements IDataFlowItem {
   constructor(
     public id?: number,
-    public name?: string | null,
+    public resourceName?: string | null,
+    public description?: string | null,
     public contractURL?: string | null,
     public documentationURL?: string | null,
     public startDate?: Date | null,

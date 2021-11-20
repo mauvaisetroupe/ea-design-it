@@ -2,19 +2,9 @@
   "name": "DataFlow",
   "fields": [
     {
-      "fieldName": "frequency",
-      "fieldType": "Frequency",
-      "fieldValues": "DAILY,WEEKLY,ON_DEMAND"
-    },
-    {
-      "fieldName": "format",
-      "fieldType": "Format",
-      "fieldValues": "XML,JSON,CSV"
-    },
-    {
-      "fieldName": "type",
-      "fieldType": "FlowType",
-      "fieldValues": "FILE,EVENT,API"
+      "fieldName": "resourceName",
+      "fieldType": "String",
+      "javadoc": "TOPIC name for event, FileName for Files"
     },
     {
       "fieldName": "description",
@@ -23,9 +13,14 @@
       "fieldValidateRulesMaxlength": "1000"
     },
     {
-      "fieldName": "resourceName",
-      "fieldType": "String",
-      "javadoc": "TOPIC name for event, FileName for Files"
+      "fieldName": "frequency",
+      "fieldType": "Frequency",
+      "fieldValues": "DAILY,WEEKLY,ON_DEMAND"
+    },
+    {
+      "fieldName": "format",
+      "fieldType": "Format",
+      "fieldValues": "XML,JSON,CSV"
     },
     {
       "fieldName": "contractURL",
@@ -50,9 +45,9 @@
   "relationships": [
     {
       "relationshipType": "one-to-many",
-      "otherEntityName": "eventData",
+      "otherEntityName": "dataFlowItem",
       "otherEntityRelationshipName": "dataFlow",
-      "relationshipName": "events"
+      "relationshipName": "items"
     },
     {
       "relationshipType": "many-to-many",
@@ -81,5 +76,6 @@
   "readOnly": false,
   "embedded": false,
   "applications": "*",
-  "changelogDate": "20211104191907"
+  "changelogDate": "20211104191907",
+  "javadoc": "DataFlow represents\\n- A file when Protocol=FILE\\n- A topic when Protocol=Event\\n- A Swagger when Protocol=API\\n- A WSDL when Protocol=SOAP\\n- An XSD when Protocol=ESB, MESSAGING"
 }

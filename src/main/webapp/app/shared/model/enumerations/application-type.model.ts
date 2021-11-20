@@ -12,4 +12,8 @@ export enum ApplicationType {
   GINKO = 'GINKO',
 
   FRONT = 'FRONT',
+
+  PARTNER = 'PARTNER',
+
+  MIDDLEWARE = 'MIDDLEWARE',
 }

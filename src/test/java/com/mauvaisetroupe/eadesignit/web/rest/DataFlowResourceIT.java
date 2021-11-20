@@ -10,7 +10,6 @@ import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
-import com.mauvaisetroupe.eadesignit.domain.enumeration.FlowType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Format;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
@@ -44,20 +43,17 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class DataFlowResourceIT {
 
+    private static final String DEFAULT_RESOURCE_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_RESOURCE_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
     private static final Frequency DEFAULT_FREQUENCY = Frequency.DAILY;
     private static final Frequency UPDATED_FREQUENCY = Frequency.WEEKLY;
 
     private static final Format DEFAULT_FORMAT = Format.XML;
     private static final Format UPDATED_FORMAT = Format.JSON;
-
-    private static final FlowType DEFAULT_TYPE = FlowType.FILE;
-    private static final FlowType UPDATED_TYPE = FlowType.EVENT;
-
-    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
-    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
-
-    private static final String DEFAULT_RESOURCE_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_RESOURCE_NAME = "BBBBBBBBBB";
 
     private static final String DEFAULT_CONTRACT_URL = "AAAAAAAAAA";
     private static final String UPDATED_CONTRACT_URL = "BBBBBBBBBB";
@@ -99,11 +95,10 @@ class DataFlowResourceIT {
      */
     public static DataFlow createEntity(EntityManager em) {
         DataFlow dataFlow = new DataFlow()
+            .resourceName(DEFAULT_RESOURCE_NAME)
+            .description(DEFAULT_DESCRIPTION)
             .frequency(DEFAULT_FREQUENCY)
             .format(DEFAULT_FORMAT)
-            .type(DEFAULT_TYPE)
-            .description(DEFAULT_DESCRIPTION)
-            .resourceName(DEFAULT_RESOURCE_NAME)
             .contractURL(DEFAULT_CONTRACT_URL)
             .documentationURL(DEFAULT_DOCUMENTATION_URL)
             .startDate(DEFAULT_START_DATE)
@@ -139,11 +134,10 @@ class DataFlowResourceIT {
      */
     public static DataFlow createUpdatedEntity(EntityManager em) {
         DataFlow dataFlow = new DataFlow()
+            .resourceName(UPDATED_RESOURCE_NAME)
+            .description(UPDATED_DESCRIPTION)
             .frequency(UPDATED_FREQUENCY)
             .format(UPDATED_FORMAT)
-            .type(UPDATED_TYPE)
-            .description(UPDATED_DESCRIPTION)
-            .resourceName(UPDATED_RESOURCE_NAME)
             .contractURL(UPDATED_CONTRACT_URL)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .startDate(UPDATED_START_DATE)
@@ -189,11 +183,10 @@ class DataFlowResourceIT {
         List<DataFlow> dataFlowList = dataFlowRepository.findAll();
         assertThat(dataFlowList).hasSize(databaseSizeBeforeCreate + 1);
         DataFlow testDataFlow = dataFlowList.get(dataFlowList.size() - 1);
+        assertThat(testDataFlow.getResourceName()).isEqualTo(DEFAULT_RESOURCE_NAME);
+        assertThat(testDataFlow.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testDataFlow.getFrequency()).isEqualTo(DEFAULT_FREQUENCY);
         assertThat(testDataFlow.getFormat()).isEqualTo(DEFAULT_FORMAT);
-        assertThat(testDataFlow.getType()).isEqualTo(DEFAULT_TYPE);
-        assertThat(testDataFlow.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testDataFlow.getResourceName()).isEqualTo(DEFAULT_RESOURCE_NAME);
         assertThat(testDataFlow.getContractURL()).isEqualTo(DEFAULT_CONTRACT_URL);
         assertThat(testDataFlow.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
         assertThat(testDataFlow.getStartDate()).isEqualTo(DEFAULT_START_DATE);
@@ -230,11 +223,10 @@ class DataFlowResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(dataFlow.getId().intValue())))
+            .andExpect(jsonPath("$.[*].resourceName").value(hasItem(DEFAULT_RESOURCE_NAME)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].frequency").value(hasItem(DEFAULT_FREQUENCY.toString())))
             .andExpect(jsonPath("$.[*].format").value(hasItem(DEFAULT_FORMAT.toString())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].resourceName").value(hasItem(DEFAULT_RESOURCE_NAME)))
             .andExpect(jsonPath("$.[*].contractURL").value(hasItem(DEFAULT_CONTRACT_URL)))
             .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
@@ -271,11 +263,10 @@ class DataFlowResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(dataFlow.getId().intValue()))
+            .andExpect(jsonPath("$.resourceName").value(DEFAULT_RESOURCE_NAME))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.frequency").value(DEFAULT_FREQUENCY.toString()))
             .andExpect(jsonPath("$.format").value(DEFAULT_FORMAT.toString()))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.resourceName").value(DEFAULT_RESOURCE_NAME))
             .andExpect(jsonPath("$.contractURL").value(DEFAULT_CONTRACT_URL))
             .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
@@ -302,11 +293,10 @@ class DataFlowResourceIT {
         // Disconnect from session so that the updates on updatedDataFlow are not directly saved in db
         em.detach(updatedDataFlow);
         updatedDataFlow
+            .resourceName(UPDATED_RESOURCE_NAME)
+            .description(UPDATED_DESCRIPTION)
             .frequency(UPDATED_FREQUENCY)
             .format(UPDATED_FORMAT)
-            .type(UPDATED_TYPE)
-            .description(UPDATED_DESCRIPTION)
-            .resourceName(UPDATED_RESOURCE_NAME)
             .contractURL(UPDATED_CONTRACT_URL)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .startDate(UPDATED_START_DATE)
@@ -324,11 +314,10 @@ class DataFlowResourceIT {
         List<DataFlow> dataFlowList = dataFlowRepository.findAll();
         assertThat(dataFlowList).hasSize(databaseSizeBeforeUpdate);
         DataFlow testDataFlow = dataFlowList.get(dataFlowList.size() - 1);
+        assertThat(testDataFlow.getResourceName()).isEqualTo(UPDATED_RESOURCE_NAME);
+        assertThat(testDataFlow.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testDataFlow.getFrequency()).isEqualTo(UPDATED_FREQUENCY);
         assertThat(testDataFlow.getFormat()).isEqualTo(UPDATED_FORMAT);
-        assertThat(testDataFlow.getType()).isEqualTo(UPDATED_TYPE);
-        assertThat(testDataFlow.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testDataFlow.getResourceName()).isEqualTo(UPDATED_RESOURCE_NAME);
         assertThat(testDataFlow.getContractURL()).isEqualTo(UPDATED_CONTRACT_URL);
         assertThat(testDataFlow.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
         assertThat(testDataFlow.getStartDate()).isEqualTo(UPDATED_START_DATE);
@@ -404,11 +393,11 @@ class DataFlowResourceIT {
         partialUpdatedDataFlow.setId(dataFlow.getId());
 
         partialUpdatedDataFlow
-            .format(UPDATED_FORMAT)
-            .type(UPDATED_TYPE)
             .description(UPDATED_DESCRIPTION)
-            .resourceName(UPDATED_RESOURCE_NAME)
-            .startDate(UPDATED_START_DATE);
+            .frequency(UPDATED_FREQUENCY)
+            .format(UPDATED_FORMAT)
+            .contractURL(UPDATED_CONTRACT_URL)
+            .endDate(UPDATED_END_DATE);
 
         restDataFlowMockMvc
             .perform(
@@ -422,15 +411,14 @@ class DataFlowResourceIT {
         List<DataFlow> dataFlowList = dataFlowRepository.findAll();
         assertThat(dataFlowList).hasSize(databaseSizeBeforeUpdate);
         DataFlow testDataFlow = dataFlowList.get(dataFlowList.size() - 1);
-        assertThat(testDataFlow.getFrequency()).isEqualTo(DEFAULT_FREQUENCY);
-        assertThat(testDataFlow.getFormat()).isEqualTo(UPDATED_FORMAT);
-        assertThat(testDataFlow.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testDataFlow.getResourceName()).isEqualTo(DEFAULT_RESOURCE_NAME);
         assertThat(testDataFlow.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testDataFlow.getResourceName()).isEqualTo(UPDATED_RESOURCE_NAME);
-        assertThat(testDataFlow.getContractURL()).isEqualTo(DEFAULT_CONTRACT_URL);
+        assertThat(testDataFlow.getFrequency()).isEqualTo(UPDATED_FREQUENCY);
+        assertThat(testDataFlow.getFormat()).isEqualTo(UPDATED_FORMAT);
+        assertThat(testDataFlow.getContractURL()).isEqualTo(UPDATED_CONTRACT_URL);
         assertThat(testDataFlow.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
-        assertThat(testDataFlow.getStartDate()).isEqualTo(UPDATED_START_DATE);
-        assertThat(testDataFlow.getEndDate()).isEqualTo(DEFAULT_END_DATE);
+        assertThat(testDataFlow.getStartDate()).isEqualTo(DEFAULT_START_DATE);
+        assertThat(testDataFlow.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 
     @Test
@@ -446,11 +434,10 @@ class DataFlowResourceIT {
         partialUpdatedDataFlow.setId(dataFlow.getId());
 
         partialUpdatedDataFlow
+            .resourceName(UPDATED_RESOURCE_NAME)
+            .description(UPDATED_DESCRIPTION)
             .frequency(UPDATED_FREQUENCY)
             .format(UPDATED_FORMAT)
-            .type(UPDATED_TYPE)
-            .description(UPDATED_DESCRIPTION)
-            .resourceName(UPDATED_RESOURCE_NAME)
             .contractURL(UPDATED_CONTRACT_URL)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .startDate(UPDATED_START_DATE)
@@ -468,11 +455,10 @@ class DataFlowResourceIT {
         List<DataFlow> dataFlowList = dataFlowRepository.findAll();
         assertThat(dataFlowList).hasSize(databaseSizeBeforeUpdate);
         DataFlow testDataFlow = dataFlowList.get(dataFlowList.size() - 1);
+        assertThat(testDataFlow.getResourceName()).isEqualTo(UPDATED_RESOURCE_NAME);
+        assertThat(testDataFlow.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testDataFlow.getFrequency()).isEqualTo(UPDATED_FREQUENCY);
         assertThat(testDataFlow.getFormat()).isEqualTo(UPDATED_FORMAT);
-        assertThat(testDataFlow.getType()).isEqualTo(UPDATED_TYPE);
-        assertThat(testDataFlow.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testDataFlow.getResourceName()).isEqualTo(UPDATED_RESOURCE_NAME);
         assertThat(testDataFlow.getContractURL()).isEqualTo(UPDATED_CONTRACT_URL);
         assertThat(testDataFlow.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
         assertThat(testDataFlow.getStartDate()).isEqualTo(UPDATED_START_DATE);

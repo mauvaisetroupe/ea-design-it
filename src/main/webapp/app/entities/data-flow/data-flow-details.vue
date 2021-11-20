@@ -5,6 +5,18 @@
         <h2 class="jh-entity-heading" data-cy="dataFlowDetailsHeading"><span>DataFlow</span> {{ dataFlow.id }}</h2>
         <dl class="row jh-entity-details">
           <dt>
+            <span>Resource Name</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlow.resourceName }}</span>
+          </dd>
+          <dt>
+            <span>Description</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlow.description }}</span>
+          </dd>
+          <dt>
             <span>Frequency</span>
           </dt>
           <dd>
@@ -15,24 +27,6 @@
           </dt>
           <dd>
             <span>{{ dataFlow.format }}</span>
-          </dd>
-          <dt>
-            <span>Type</span>
-          </dt>
-          <dd>
-            <span>{{ dataFlow.type }}</span>
-          </dd>
-          <dt>
-            <span>Description</span>
-          </dt>
-          <dd>
-            <span>{{ dataFlow.description }}</span>
-          </dd>
-          <dt>
-            <span>Resource Name</span>
-          </dt>
-          <dd>
-            <span>{{ dataFlow.resourceName }}</span>
           </dd>
           <dt>
             <span>Contract URL</span>

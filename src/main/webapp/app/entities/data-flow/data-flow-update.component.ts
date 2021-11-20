@@ -4,8 +4,8 @@ import { maxLength, required } from 'vuelidate/lib/validators';
 
 import AlertService from '@/shared/alert/alert.service';
 
-import EventDataService from '@/entities/event-data/event-data.service';
-import { IEventData } from '@/shared/model/event-data.model';
+import DataFlowItemService from '@/entities/data-flow-item/data-flow-item.service';
+import { IDataFlowItem } from '@/shared/model/data-flow-item.model';
 
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
@@ -17,17 +17,15 @@ import { IDataFlow, DataFlow } from '@/shared/model/data-flow.model';
 import DataFlowService from './data-flow.service';
 import { Frequency } from '@/shared/model/enumerations/frequency.model';
 import { Format } from '@/shared/model/enumerations/format.model';
-import { FlowType } from '@/shared/model/enumerations/flow-type.model';
 
 const validations: any = {
   dataFlow: {
-    frequency: {},
-    format: {},
-    type: {},
+    resourceName: {},
     description: {
       maxLength: maxLength(1000),
     },
-    resourceName: {},
+    frequency: {},
+    format: {},
     contractURL: {},
     documentationURL: {
       maxLength: maxLength(500),
@@ -52,9 +50,9 @@ export default class DataFlowUpdate extends Vue {
 
   public dataFlow: IDataFlow = new DataFlow();
 
-  @Inject('eventDataService') private eventDataService: () => EventDataService;
+  @Inject('dataFlowItemService') private dataFlowItemService: () => DataFlowItemService;
 
-  public eventData: IEventData[] = [];
+  public dataFlowItems: IDataFlowItem[] = [];
 
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
 
@@ -65,7 +63,6 @@ export default class DataFlowUpdate extends Vue {
   public flowInterfaces: IFlowInterface[] = [];
   public frequencyValues: string[] = Object.keys(Frequency);
   public formatValues: string[] = Object.keys(Format);
-  public flowTypeValues: string[] = Object.keys(FlowType);
   public isSaving = false;
   public currentLanguage = '';
 
@@ -148,10 +145,10 @@ export default class DataFlowUpdate extends Vue {
   }
 
   public initRelationships(): void {
-    this.eventDataService()
+    this.dataFlowItemService()
       .retrieve()
       .then(res => {
-        this.eventData = res.data;
+        this.dataFlowItems = res.data;
       });
     this.functionalFlowService()
       .retrieve()

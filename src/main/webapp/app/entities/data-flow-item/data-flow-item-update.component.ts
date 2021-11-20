@@ -7,12 +7,15 @@ import AlertService from '@/shared/alert/alert.service';
 import DataFlowService from '@/entities/data-flow/data-flow.service';
 import { IDataFlow } from '@/shared/model/data-flow.model';
 
-import { IEventData, EventData } from '@/shared/model/event-data.model';
-import EventDataService from './event-data.service';
+import { IDataFlowItem, DataFlowItem } from '@/shared/model/data-flow-item.model';
+import DataFlowItemService from './data-flow-item.service';
 
 const validations: any = {
-  eventData: {
-    name: {},
+  dataFlowItem: {
+    resourceName: {},
+    description: {
+      maxLength: maxLength(1000),
+    },
     contractURL: {},
     documentationURL: {
       maxLength: maxLength(500),
@@ -25,11 +28,11 @@ const validations: any = {
 @Component({
   validations,
 })
-export default class EventDataUpdate extends Vue {
-  @Inject('eventDataService') private eventDataService: () => EventDataService;
+export default class DataFlowItemUpdate extends Vue {
+  @Inject('dataFlowItemService') private dataFlowItemService: () => DataFlowItemService;
   @Inject('alertService') private alertService: () => AlertService;
 
-  public eventData: IEventData = new EventData();
+  public dataFlowItem: IDataFlowItem = new DataFlowItem();
 
   @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
 
@@ -39,8 +42,8 @@ export default class EventDataUpdate extends Vue {
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      if (to.params.eventDataId) {
-        vm.retrieveEventData(to.params.eventDataId);
+      if (to.params.dataFlowItemId) {
+        vm.retrieveDataFlowItem(to.params.dataFlowItemId);
       }
       vm.initRelationships();
     });
@@ -58,13 +61,13 @@ export default class EventDataUpdate extends Vue {
 
   public save(): void {
     this.isSaving = true;
-    if (this.eventData.id) {
-      this.eventDataService()
-        .update(this.eventData)
+    if (this.dataFlowItem.id) {
+      this.dataFlowItemService()
+        .update(this.dataFlowItem)
         .then(param => {
           this.isSaving = false;
           this.$router.go(-1);
-          const message = 'A EventData is updated with identifier ' + param.id;
+          const message = 'A DataFlowItem is updated with identifier ' + param.id;
           return this.$root.$bvToast.toast(message.toString(), {
             toaster: 'b-toaster-top-center',
             title: 'Info',
@@ -78,12 +81,12 @@ export default class EventDataUpdate extends Vue {
           this.alertService().showHttpError(this, error.response);
         });
     } else {
-      this.eventDataService()
-        .create(this.eventData)
+      this.dataFlowItemService()
+        .create(this.dataFlowItem)
         .then(param => {
           this.isSaving = false;
           this.$router.go(-1);
-          const message = 'A EventData is created with identifier ' + param.id;
+          const message = 'A DataFlowItem is created with identifier ' + param.id;
           this.$root.$bvToast.toast(message.toString(), {
             toaster: 'b-toaster-top-center',
             title: 'Success',
@@ -99,11 +102,11 @@ export default class EventDataUpdate extends Vue {
     }
   }
 
-  public retrieveEventData(eventDataId): void {
-    this.eventDataService()
-      .find(eventDataId)
+  public retrieveDataFlowItem(dataFlowItemId): void {
+    this.dataFlowItemService()
+      .find(dataFlowItemId)
       .then(res => {
-        this.eventData = res;
+        this.dataFlowItem = res;
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);

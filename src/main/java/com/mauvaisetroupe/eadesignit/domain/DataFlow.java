@@ -1,9 +1,9 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mauvaisetroupe.eadesignit.domain.enumeration.FlowType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Format;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -15,8 +15,11 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A DataFlow.
+ * DataFlow represents\n- A file when Protocol=FILE\n- A topic when Protocol=Event\n- A Swagger when Protocol=API\n- A WSDL when Protocol=SOAP\n- An XSD when Protocol=ESB, MESSAGING
  */
+@ApiModel(
+    description = "DataFlow represents\n- A file when Protocol=FILE\n- A topic when Protocol=Event\n- A Swagger when Protocol=API\n- A WSDL when Protocol=SOAP\n- An XSD when Protocol=ESB, MESSAGING"
+)
 @Entity
 @Table(name = "data_flow")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -30,6 +33,17 @@ public class DataFlow implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    /**
+     * TOPIC name for event, FileName for Files
+     */
+    @ApiModelProperty(value = "TOPIC name for event, FileName for Files")
+    @Column(name = "resource_name")
+    private String resourceName;
+
+    @Size(max = 1000)
+    @Column(name = "description", length = 1000)
+    private String description;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "frequency")
     private Frequency frequency;
@@ -37,21 +51,6 @@ public class DataFlow implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "format")
     private Format format;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type")
-    private FlowType type;
-
-    @Size(max = 1000)
-    @Column(name = "description", length = 1000)
-    private String description;
-
-    /**
-     * TOPIC name for event, FileName for Files
-     */
-    @ApiModelProperty(value = "TOPIC name for event, FileName for Files")
-    @Column(name = "resource_name")
-    private String resourceName;
 
     /**
      * Swagger or XSD URL
@@ -73,7 +72,7 @@ public class DataFlow implements Serializable {
     @OneToMany(mappedBy = "dataFlow")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "dataFlow" }, allowSetters = true)
-    private Set<EventData> events = new HashSet<>();
+    private Set<DataFlowItem> items = new HashSet<>();
 
     @ManyToMany
     @NotNull
@@ -109,6 +108,32 @@ public class DataFlow implements Serializable {
         this.id = id;
     }
 
+    public String getResourceName() {
+        return this.resourceName;
+    }
+
+    public DataFlow resourceName(String resourceName) {
+        this.setResourceName(resourceName);
+        return this;
+    }
+
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public DataFlow description(String description) {
+        this.setDescription(description);
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Frequency getFrequency() {
         return this.frequency;
     }
@@ -133,45 +158,6 @@ public class DataFlow implements Serializable {
 
     public void setFormat(Format format) {
         this.format = format;
-    }
-
-    public FlowType getType() {
-        return this.type;
-    }
-
-    public DataFlow type(FlowType type) {
-        this.setType(type);
-        return this;
-    }
-
-    public void setType(FlowType type) {
-        this.type = type;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public DataFlow description(String description) {
-        this.setDescription(description);
-        return this;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getResourceName() {
-        return this.resourceName;
-    }
-
-    public DataFlow resourceName(String resourceName) {
-        this.setResourceName(resourceName);
-        return this;
-    }
-
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
     }
 
     public String getContractURL() {
@@ -226,34 +212,34 @@ public class DataFlow implements Serializable {
         this.endDate = endDate;
     }
 
-    public Set<EventData> getEvents() {
-        return this.events;
+    public Set<DataFlowItem> getItems() {
+        return this.items;
     }
 
-    public void setEvents(Set<EventData> eventData) {
-        if (this.events != null) {
-            this.events.forEach(i -> i.setDataFlow(null));
+    public void setItems(Set<DataFlowItem> dataFlowItems) {
+        if (this.items != null) {
+            this.items.forEach(i -> i.setDataFlow(null));
         }
-        if (eventData != null) {
-            eventData.forEach(i -> i.setDataFlow(this));
+        if (dataFlowItems != null) {
+            dataFlowItems.forEach(i -> i.setDataFlow(this));
         }
-        this.events = eventData;
+        this.items = dataFlowItems;
     }
 
-    public DataFlow events(Set<EventData> eventData) {
-        this.setEvents(eventData);
+    public DataFlow items(Set<DataFlowItem> dataFlowItems) {
+        this.setItems(dataFlowItems);
         return this;
     }
 
-    public DataFlow addEvents(EventData eventData) {
-        this.events.add(eventData);
-        eventData.setDataFlow(this);
+    public DataFlow addItems(DataFlowItem dataFlowItem) {
+        this.items.add(dataFlowItem);
+        dataFlowItem.setDataFlow(this);
         return this;
     }
 
-    public DataFlow removeEvents(EventData eventData) {
-        this.events.remove(eventData);
-        eventData.setDataFlow(null);
+    public DataFlow removeItems(DataFlowItem dataFlowItem) {
+        this.items.remove(dataFlowItem);
+        dataFlowItem.setDataFlow(null);
         return this;
     }
 
@@ -319,11 +305,10 @@ public class DataFlow implements Serializable {
     public String toString() {
         return "DataFlow{" +
             "id=" + getId() +
+            ", resourceName='" + getResourceName() + "'" +
+            ", description='" + getDescription() + "'" +
             ", frequency='" + getFrequency() + "'" +
             ", format='" + getFormat() + "'" +
-            ", type='" + getType() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", resourceName='" + getResourceName() + "'" +
             ", contractURL='" + getContractURL() + "'" +
             ", documentationURL='" + getDocumentationURL() + "'" +
             ", startDate='" + getStartDate() + "'" +
