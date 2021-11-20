@@ -1,12 +1,16 @@
 package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
+import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.Format;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
@@ -122,11 +126,19 @@ public class FlowImportService {
             }
             FlowInterface flowInterface = findOrCreateInterface(flowImport);
             if (flowInterface != null) {
-                if (!functionalFlow.getInterfaces().contains(flowInterface)) {
-                    functionalFlow.addInterfaces(flowInterface);
-                    interfaceRepository.save(flowInterface);
-                    flowRepository.save(functionalFlow);
-                }
+                // Set, so could add even if already associated
+                functionalFlow.addInterfaces(flowInterface);
+                interfaceRepository.save(flowInterface);
+                flowRepository.save(functionalFlow);
+            }
+
+            DataFlow dataFlow = findOrCreateDataFlow(flowImport);
+            if (dataFlow != null) {
+                functionalFlow.addDataFlows(dataFlow);
+                flowInterface.addDataFlows(dataFlow);
+                dataFlowRepository.save(dataFlow);
+                interfaceRepository.save(flowInterface);
+                flowRepository.save(functionalFlow);
             }
             result.add(flowImport);
         }
@@ -216,6 +228,13 @@ public class FlowImportService {
                     "]"
                 );
             }
+            if (StringUtils.hasText(flowImport.getIntegrationPattern())) {
+                Protocol protocol = protocolRepository.findByNameIgnoreCase(flowImport.getIntegrationPattern());
+                if (protocol == null) {
+                    throw new Exception("Cannot find protocol:" + flowImport.getIntegrationPattern());
+                }
+                flowInterface.setProtocol(protocol);
+            }
         } catch (Exception e) {
             log.error("Error with row " + flowImport, e);
             flowInterface = null;
@@ -223,6 +242,43 @@ public class FlowImportService {
             flowImport.setImportStatusMessage(e.getMessage());
         }
         return flowInterface;
+    }
+
+    private DataFlow findOrCreateDataFlow(FlowImport flowImport) {
+        DataFlow dataFlow = null;
+        try {
+            dataFlow =
+                dataFlowRepository.findByFlowInterface_AliasAndFunctionalFlows_Alias(
+                    flowImport.getIdFlowFromExcel(),
+                    flowImport.getFlowAlias()
+                );
+            if (dataFlow == null) {
+                dataFlow = new DataFlow();
+                flowImport.setImportDataFlowStatus(ImportStatus.NEW);
+            } else {
+                flowImport.setImportDataFlowStatus(ImportStatus.EXISTING);
+            }
+            if (StringUtils.hasText(flowImport.getFrequency())) {
+                dataFlow.setFrequency(Frequency.valueOf(clean(flowImport.getFrequency())));
+            }
+            if (StringUtils.hasText(flowImport.getFormat())) {
+                dataFlow.setFormat(Format.valueOf(clean(flowImport.getFormat())));
+            }
+            if (StringUtils.hasText(flowImport.getIntegrationPattern())) {
+                Protocol protocol = protocolRepository.findByNameIgnoreCase(flowImport.getIntegrationPattern());
+                if (protocol != null) {
+                    if (protocol.getType().equals(ProtocolType.API)) {
+                        dataFlow.setContractURL(flowImport.getSwagger());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error with row " + flowImport, e);
+            dataFlow = null;
+            flowImport.setImportDataFlowStatus(ImportStatus.ERROR);
+            flowImport.setImportStatusMessage(e.getMessage());
+        }
+        return dataFlow;
     }
 
     private FunctionalFlow mapToFunctionalFlow(FlowImport flowImport) {
@@ -276,6 +332,17 @@ public class FlowImportService {
             }
         }
         return flowInterface;
+    }
+
+    private String clean(String value) {
+        return value
+            .replace('/', '_')
+            .replace(' ', '_')
+            .replace('(', '_')
+            .replace(')', '_')
+            .replace("__", "_")
+            .replace("__", "_")
+            .replaceAll("(.*)_$", "$1");
     }
 
     private boolean nullable(String value) {

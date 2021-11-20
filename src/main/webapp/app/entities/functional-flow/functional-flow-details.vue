@@ -92,6 +92,7 @@
             <th scope="row"><span>Source</span></th>
             <th scope="row"><span>Target</span></th>
             <th scope="row"><span>Protocol</span></th>
+            <th scope="row"><span>Data Flows</span></th>
             <th scope="row"><span>Description</span></th>
             <th scope="row"></th>
           </tr>
@@ -107,6 +108,13 @@
             <td>{{ caption.source }}</td>
             <td>{{ caption.target }}</td>
             <td>{{ caption.protocol.name }}</td>
+            <td>
+              <span v-for="dataflow in caption.dataFlows" :key="dataflow.id">
+                <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataflow.id } }">
+                  {{ dataflow.id }}
+                </router-link>
+              </span>
+            </td>
             <td>{{ caption.description }}</td>
           </tr>
         </tbody>

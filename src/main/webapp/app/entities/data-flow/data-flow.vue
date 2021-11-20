@@ -50,8 +50,8 @@
             <td>{{ dataFlow.description }}</td>
             <td>{{ dataFlow.frequency }}</td>
             <td>{{ dataFlow.format }}</td>
-            <td>{{ dataFlow.contractURL }}</td>
-            <td>{{ dataFlow.documentationURL }}</td>
+            <td>{{ dataFlow.contractURL | truncate(20) }}</td>
+            <td>{{ dataFlow.documentationURL | truncate(20) }}</td>
             <td>{{ dataFlow.startDate }}</td>
             <td>{{ dataFlow.endDate }}</td>
             <td>

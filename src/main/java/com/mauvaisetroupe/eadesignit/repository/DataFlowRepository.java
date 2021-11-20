@@ -25,4 +25,6 @@ public interface DataFlowRepository extends JpaRepository<DataFlow, Long> {
 
     @Query("select dataFlow from DataFlow dataFlow left join fetch dataFlow.functionalFlows where dataFlow.id =:id")
     Optional<DataFlow> findOneWithEagerRelationships(@Param("id") Long id);
+
+    DataFlow findByFlowInterface_AliasAndFunctionalFlows_Alias(String flowAlias, String idFlowFromExcel);
 }

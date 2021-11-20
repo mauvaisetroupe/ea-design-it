@@ -48,6 +48,7 @@ export default class FunctionalFlowDetails extends Vue {
         protocol: inter.protocol,
         source: inter.source.name,
         target: inter.target.name,
+        dataFlows: inter.dataFlows,
       };
       this.captions.push(caption);
     });
