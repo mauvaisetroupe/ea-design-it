@@ -10,6 +10,7 @@ export default class ApplicationDetails extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
 
   public application: IApplication = {};
+  public plantUMLImage = '';
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -28,9 +29,23 @@ export default class ApplicationDetails extends Vue {
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
       });
+    this.getPlantUML(applicationId);
   }
 
   public previousState() {
     this.$router.go(-1);
+  }
+
+  public getPlantUML(applicationId) {
+    this.applicationService()
+      .getPlantUML(applicationId)
+      .then(
+        res => {
+          this.plantUMLImage = res.data;
+        },
+        err => {
+          console.log(err);
+        }
+      );
   }
 }

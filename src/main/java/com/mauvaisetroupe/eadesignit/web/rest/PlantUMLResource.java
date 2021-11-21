@@ -1,13 +1,18 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
+import com.mauvaisetroupe.eadesignit.domain.Application;
+import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer;
 import io.undertow.util.BadRequestException;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +29,21 @@ public class PlantUMLResource {
 
     private final LandscapeViewRepository landscapeViewRepository;
     private final FunctionalFlowRepository functionalFlowRepository;
+    private final FlowInterfaceRepository flowInterfaceRepository;
+    private final ApplicationRepository applicationRepository;
 
     private final Logger log = LoggerFactory.getLogger(PlantUMLResource.class);
 
-    public PlantUMLResource(LandscapeViewRepository landscapeViewRepository, FunctionalFlowRepository functionalFlowRepository) {
+    public PlantUMLResource(
+        LandscapeViewRepository landscapeViewRepository,
+        FunctionalFlowRepository functionalFlowRepository,
+        ApplicationRepository applicationRepository,
+        FlowInterfaceRepository flowInterfaceRepository
+    ) {
         this.landscapeViewRepository = landscapeViewRepository;
         this.functionalFlowRepository = functionalFlowRepository;
+        this.applicationRepository = applicationRepository;
+        this.flowInterfaceRepository = flowInterfaceRepository;
     }
 
     @GetMapping(value = "plantuml/landscape-view/get-svg/{id}")
@@ -50,6 +64,22 @@ public class PlantUMLResource {
         if (functionalFlowOptional.isPresent()) {
             PlantUMLSerializer plantUMLSerializer = new PlantUMLSerializer();
             return plantUMLSerializer.getSVG(functionalFlowOptional.get());
+        } else {
+            throw new BadRequestException("Cannot find landscape View");
+        }
+    }
+
+    @GetMapping(value = "plantuml/application/get-svg/{id}")
+    public @ResponseBody String getApplicationSVG(@PathVariable Long id) throws IOException, BadRequestException {
+        Optional<Application> optional = applicationRepository.findById(id);
+
+        if (optional.isPresent()) {
+            PlantUMLSerializer plantUMLSerializer = new PlantUMLSerializer();
+            Set<FlowInterface> interfaces = flowInterfaceRepository.findBySource_NameOrTargetName(
+                optional.get().getName(),
+                optional.get().getName()
+            );
+            return plantUMLSerializer.getSVG(interfaces);
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }

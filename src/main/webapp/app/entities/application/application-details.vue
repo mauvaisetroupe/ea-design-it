@@ -81,6 +81,10 @@
           </button>
         </router-link>
       </div>
+      <br />
+      <h2>PlantUML preview</h2>
+      <div v-html="plantUMLImage"></div>
+      <br />
     </div>
   </div>
 </template>

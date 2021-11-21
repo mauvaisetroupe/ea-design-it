@@ -6,6 +6,7 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Set;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
@@ -51,10 +52,14 @@ public class PlantUMLSerializer {
     }
 
     public String getSVG(FunctionalFlow functionalFlow) throws IOException {
+        return getSVG(functionalFlow.getInterfaces());
+    }
+
+    public String getSVG(Set<FlowInterface> interfaces) throws IOException {
         String plantUMLSource = "@startuml\n";
         plantUMLSource += "!pragma layout smetana\n";
         plantUMLSource += "skinparam componentStyle rectangle\n";
-        for (FlowInterface flowInterface : functionalFlow.getInterfaces()) {
+        for (FlowInterface flowInterface : interfaces) {
             plantUMLSource +=
                 "[" +
                 flowInterface.getSource().getName() +

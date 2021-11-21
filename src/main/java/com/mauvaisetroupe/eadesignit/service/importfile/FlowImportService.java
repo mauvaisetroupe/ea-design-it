@@ -130,15 +130,15 @@ public class FlowImportService {
                 functionalFlow.addInterfaces(flowInterface);
                 interfaceRepository.save(flowInterface);
                 flowRepository.save(functionalFlow);
-            }
 
-            DataFlow dataFlow = findOrCreateDataFlow(flowImport);
-            if (dataFlow != null) {
-                functionalFlow.addDataFlows(dataFlow);
-                flowInterface.addDataFlows(dataFlow);
-                dataFlowRepository.save(dataFlow);
-                interfaceRepository.save(flowInterface);
-                flowRepository.save(functionalFlow);
+                DataFlow dataFlow = findOrCreateDataFlow(flowImport);
+                if (dataFlow != null) {
+                    functionalFlow.addDataFlows(dataFlow);
+                    flowInterface.addDataFlows(dataFlow);
+                    dataFlowRepository.save(dataFlow);
+                    interfaceRepository.save(flowInterface);
+                    flowRepository.save(functionalFlow);
+                }
             }
             result.add(flowImport);
         }
