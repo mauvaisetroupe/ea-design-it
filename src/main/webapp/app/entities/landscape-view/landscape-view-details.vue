@@ -81,9 +81,21 @@
                 caption.interfaceAlias
               }}</router-link>
             </td>
-            <td>{{ caption.source }}</td>
-            <td>{{ caption.target }}</td>
-            <td>{{ caption.protocol }}</td>
+            <td>
+              <router-link :to="{ name: 'ApplicationView', params: { applicationId: caption.source.id } }">
+                {{ caption.source.name }}
+              </router-link>
+            </td>
+            <td>
+              <router-link :to="{ name: 'ApplicationView', params: { applicationId: caption.target.id } }">
+                {{ caption.target.name }}
+              </router-link>
+            </td>
+            <td>
+              <router-link v-if="caption.protocol" :to="{ name: 'ProtocolView', params: { protocolId: caption.protocol.id } }">
+                {{ caption.protocol.name }}
+              </router-link>
+            </td>
             <td>{{ caption.description }}</td>
           </tr>
         </tbody>

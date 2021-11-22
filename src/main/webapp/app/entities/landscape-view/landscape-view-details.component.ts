@@ -62,8 +62,8 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
           interfaceID: inter.id,
           description: flow.description,
           protocol: inter.protocol,
-          source: inter.source.name,
-          target: inter.target.name,
+          source: inter.source,
+          target: inter.target,
         };
         this.captions.push(caption);
         firstLine = false;
