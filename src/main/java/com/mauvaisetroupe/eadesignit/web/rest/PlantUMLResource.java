@@ -8,6 +8,7 @@ import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.dto.PlantumlDTO;
 import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer;
 import io.undertow.util.BadRequestException;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,7 +72,7 @@ public class PlantUMLResource {
     }
 
     @GetMapping(value = "plantuml/application/get-svg/{id}")
-    public @ResponseBody String getApplicationSVG(@PathVariable Long id) throws IOException, BadRequestException {
+    public @ResponseBody PlantumlDTO getApplicationSVG(@PathVariable Long id) throws IOException, BadRequestException {
         Optional<Application> optional = applicationRepository.findById(id);
 
         if (optional.isPresent()) {
@@ -79,7 +81,7 @@ public class PlantUMLResource {
                 optional.get().getName(),
                 optional.get().getName()
             );
-            return plantUMLSerializer.getSVG(interfaces);
+            return new PlantumlDTO(plantUMLSerializer.getSVG(interfaces), interfaces);
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }
