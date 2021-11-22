@@ -27,6 +27,28 @@
         <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="th-list" />
+            <span class="no-bold">EADesignIt</span>
+          </span>
+          <b-dropdown-item to="/landscape-view">
+            <font-awesome-icon icon="asterisk" />
+            <span>Landscape View</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/functional-flow">
+            <font-awesome-icon icon="asterisk" />
+            <span>Functional Flow</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/flow-interface">
+            <font-awesome-icon icon="asterisk" />
+            <span>Flow Interface</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/application">
+            <font-awesome-icon icon="asterisk" />
+            <span>Application</span>
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
+        <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
+          <span slot="button-content" class="navbar-dropdown-menu">
+            <font-awesome-icon icon="th-list" />
             <span class="no-bold">Entities</span>
           </span>
           <b-dropdown-item to="/landscape-view">
