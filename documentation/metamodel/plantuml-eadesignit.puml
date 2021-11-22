@@ -15,7 +15,7 @@ Interface "n" o-- "1" ApplicationComponent : target
 
 Application "1" o-- "n" ApplicationComponent : module
 
-DataFlow "1" o-- "n" EventData
+DataFlow "1" o-- "n" DataFlowItem
 
 
 
@@ -100,8 +100,8 @@ Class DataFlow {
 note left of DataFlow
   Exchange data, is modeled by a <b>Data Flow</b>.
   A Data flow is implemented :
-   - through a specific <b>Interface</b>, 
-   - in the context of one or more <b>Functional Flow</b>
+   - through <u>one</u> specific <b>Interface</b>, 
+   - in the context of <u>one or more</u> <b>Functional Flow</b>
   
   DataFlow is a <b>File</b>, an <b>Event-Topic</b> or an <b>API</b>
 
@@ -109,12 +109,12 @@ note left of DataFlow
 end note 
 
 
-Class EventData {
+Class DataFlowItem {
    String name
    String xsdURL
 }
 
-note left of EventData
+note left of DataFlowItem
    When DataFlow is of type Event-Topic, 
    we need a additional object to model a 
    specific Event in a Topic

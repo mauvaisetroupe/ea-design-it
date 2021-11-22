@@ -87,7 +87,29 @@ Concretly, DataFlow is one of the following artifact:
 
 A dataflow if implemented through an Interface, hence dataflow ownership is define by Interface owner.
 
+## DataFlowItem
+
+DataFlowItem is used for model a more fined-grained data exchange
+We could follow for example the following convention :
+
+| Protocol               | DataFlow                             | DataFlowItem
+|------------------------|--------------------------------------|-------------
+| API                    | A service exposed through a Swagger  | An operation of the service
+| File                   | A fhysical File                      | A substructure in the File
+| Event                  | A topic                              | An Event in the topic
+
+
+> FunctionalFlow createCustomer is implemented with 
+> Interfcace between MicroSercie and BackEnd
+> - DataFlow is of type Event, and it's a topic (typically Kafka topic), named for exampe /EVT/TOPIC/CUSTOMER
+> - In the topic, we have 2 Events (CUST_CORE and CUST_ADDRESS)
+> 
+> ![dataflow view](png/plantuml-dataflowitem/plantuml-dataflowitem.png)
+
+
 # Meta-Model
+
+Here is the meta-model used in the tool.
 
 ![meta model](png/plantuml-eadesignit/plantuml-eadesignit.png)
 
