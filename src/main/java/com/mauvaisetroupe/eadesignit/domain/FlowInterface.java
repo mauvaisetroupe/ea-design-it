@@ -16,7 +16,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "flow_interface")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class FlowInterface implements Serializable {
+public class FlowInterface implements Serializable, Comparable<FlowInterface> {
 
     private static final long serialVersionUID = 1L;
 
@@ -345,5 +345,11 @@ public class FlowInterface implements Serializable {
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
             "}";
+    }
+
+    @Override
+    public int compareTo(FlowInterface arg0) {
+        if (arg0 == null) return 0;
+        return this.getAlias().compareTo(arg0.getAlias());
     }
 }

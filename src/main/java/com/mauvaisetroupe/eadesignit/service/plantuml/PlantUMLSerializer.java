@@ -3,52 +3,42 @@ package com.mauvaisetroupe.eadesignit.service.plantuml;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
-import net.sourceforge.plantuml.FileFormat;
-import net.sourceforge.plantuml.FileFormatOption;
-import net.sourceforge.plantuml.SourceStringReader;
-import net.sourceforge.plantuml.core.DiagramDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PlantUMLSerializer {
 
     private final Logger log = LoggerFactory.getLogger(PlantUMLSerializer.class);
 
+    @Autowired
+    private PlantUMLBuilder plantUMLBuilder;
+
     public String getSVG(LandscapeView landscapeView) throws IOException {
-        String plantUMLSource = "@startuml\n";
-        plantUMLSource += "!pragma layout smetana\n";
-        plantUMLSource += "skinparam componentStyle rectangle\n";
-        plantUMLSource += "skinparam hyperlinkColor #000000\n";
-        plantUMLSource += "skinparam hyperlinkUnderline false\n";
-        for (FunctionalFlow functionalFlow : landscapeView.getFlows()) {
-            for (FlowInterface flowInterface : functionalFlow.getInterfaces()) {
-                plantUMLSource +=
-                    "[" +
-                    flowInterface.getSource().getName() +
-                    "] --> [" +
-                    flowInterface.getTarget().getName() +
-                    "] : [[/functional-flow/" +
-                    functionalFlow.getId() +
-                    "/view " +
-                    functionalFlow.getAlias() +
-                    "]]\n\r";
+        String plantUMLSource = plantUMLBuilder.getPlantumlHeader();
+        for (FunctionalFlow functionalFlow : sortFlow(landscapeView.getFlows())) {
+            for (FlowInterface flowInterface : sortInterface(functionalFlow.getInterfaces())) {
+                String url = "/functional-flow/" + functionalFlow.getId() + "/view";
+                String label = functionalFlow.getAlias();
+                plantUMLSource =
+                    plantUMLBuilder.getPlantumlRelationShip(
+                        plantUMLSource,
+                        flowInterface.getSource().getName(),
+                        flowInterface.getTarget().getName(),
+                        label,
+                        url
+                    );
             }
         }
-        plantUMLSource += "@enduml\n";
-
-        System.out.println(plantUMLSource);
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-        SourceStringReader reader = new SourceStringReader(plantUMLSource);
-        DiagramDescription diagramDescription = reader.outputImage(byteArrayOutputStream, new FileFormatOption(FileFormat.SVG));
-        byteArrayOutputStream.close();
-        log.debug(diagramDescription.getDescription());
-        return new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
+        plantUMLSource = plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        return plantUMLBuilder.getSVGFromSource(plantUMLSource);
     }
 
     public String getSVG(FunctionalFlow functionalFlow) throws IOException {
@@ -56,29 +46,31 @@ public class PlantUMLSerializer {
     }
 
     public String getSVG(Set<FlowInterface> interfaces) throws IOException {
-        String plantUMLSource = "@startuml\n";
-        plantUMLSource += "!pragma layout smetana\n";
-        plantUMLSource += "skinparam componentStyle rectangle\n";
-        for (FlowInterface flowInterface : interfaces) {
-            plantUMLSource +=
-                "[" +
-                flowInterface.getSource().getName() +
-                "] --> [" +
-                flowInterface.getTarget().getName() +
-                "] : " +
-                flowInterface.getAlias() +
-                "\n\r";
+        String plantUMLSource = plantUMLBuilder.getPlantumlHeader();
+        for (FlowInterface flowInterface : sortInterface(interfaces)) {
+            String url = "/flow-interface/" + flowInterface.getId() + "/view";
+            plantUMLSource =
+                plantUMLBuilder.getPlantumlRelationShip(
+                    plantUMLSource,
+                    flowInterface.getSource().getName(),
+                    flowInterface.getTarget().getName(),
+                    flowInterface.getAlias(),
+                    url
+                );
         }
-        plantUMLSource += "@enduml\n";
+        plantUMLSource = plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        return plantUMLBuilder.getSVGFromSource(plantUMLSource);
+    }
 
-        System.out.println(plantUMLSource);
+    private List<FlowInterface> sortInterface(Set<FlowInterface> interfaces) {
+        List<FlowInterface> sortedList = new ArrayList<>(interfaces);
+        Collections.sort(sortedList);
+        return sortedList;
+    }
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-        SourceStringReader reader = new SourceStringReader(plantUMLSource);
-        DiagramDescription diagramDescription = reader.outputImage(byteArrayOutputStream, new FileFormatOption(FileFormat.SVG));
-        byteArrayOutputStream.close();
-        log.debug(diagramDescription.getDescription());
-        return new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
+    private List<FunctionalFlow> sortFlow(Set<FunctionalFlow> flows) {
+        List<FunctionalFlow> sortedList = new ArrayList<>(flows);
+        Collections.sort(sortedList);
+        return sortedList;
     }
 }

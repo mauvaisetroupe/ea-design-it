@@ -33,6 +33,7 @@ public class PlantUMLResource {
     private final FunctionalFlowRepository functionalFlowRepository;
     private final FlowInterfaceRepository flowInterfaceRepository;
     private final ApplicationRepository applicationRepository;
+    private final PlantUMLSerializer plantUMLSerializer;
 
     private final Logger log = LoggerFactory.getLogger(PlantUMLResource.class);
 
@@ -40,20 +41,21 @@ public class PlantUMLResource {
         LandscapeViewRepository landscapeViewRepository,
         FunctionalFlowRepository functionalFlowRepository,
         ApplicationRepository applicationRepository,
-        FlowInterfaceRepository flowInterfaceRepository
+        FlowInterfaceRepository flowInterfaceRepository,
+        PlantUMLSerializer plantUMLSerializer
     ) {
         this.landscapeViewRepository = landscapeViewRepository;
         this.functionalFlowRepository = functionalFlowRepository;
         this.applicationRepository = applicationRepository;
         this.flowInterfaceRepository = flowInterfaceRepository;
+        this.plantUMLSerializer = plantUMLSerializer;
     }
 
     @GetMapping(value = "plantuml/landscape-view/get-svg/{id}")
     public @ResponseBody String getLandscapeSVG(@PathVariable Long id) throws IOException, BadRequestException {
         Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
         if (landscapeViewOptional.isPresent()) {
-            PlantUMLSerializer plantUMLSerializer = new PlantUMLSerializer();
-            return plantUMLSerializer.getSVG(landscapeViewOptional.get());
+            return this.plantUMLSerializer.getSVG(landscapeViewOptional.get());
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }
@@ -64,8 +66,7 @@ public class PlantUMLResource {
         Optional<FunctionalFlow> functionalFlowOptional = functionalFlowRepository.findById(id);
 
         if (functionalFlowOptional.isPresent()) {
-            PlantUMLSerializer plantUMLSerializer = new PlantUMLSerializer();
-            return plantUMLSerializer.getSVG(functionalFlowOptional.get());
+            return this.plantUMLSerializer.getSVG(functionalFlowOptional.get());
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }
@@ -76,12 +77,11 @@ public class PlantUMLResource {
         Optional<Application> optional = applicationRepository.findById(id);
 
         if (optional.isPresent()) {
-            PlantUMLSerializer plantUMLSerializer = new PlantUMLSerializer();
             Set<FlowInterface> interfaces = flowInterfaceRepository.findBySource_NameOrTargetName(
                 optional.get().getName(),
                 optional.get().getName()
             );
-            return new PlantumlDTO(plantUMLSerializer.getSVG(interfaces), interfaces);
+            return new PlantumlDTO(this.plantUMLSerializer.getSVG(interfaces), interfaces);
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }

@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -16,7 +18,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "functional_flow")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class FunctionalFlow implements Serializable {
+public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,6 +56,7 @@ public class FunctionalFlow implements Serializable {
     private LocalDate endDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @OrderBy
     @JoinTable(
         name = "rel_functional_flow__interfaces",
         joinColumns = @JoinColumn(name = "functional_flow_id"),
@@ -61,7 +64,7 @@ public class FunctionalFlow implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "owner", "functionalFlows" }, allowSetters = true)
-    private Set<FlowInterface> interfaces = new HashSet<>();
+    private SortedSet<FlowInterface> interfaces = new TreeSet<>();
 
     @ManyToMany(mappedBy = "flows")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -196,11 +199,11 @@ public class FunctionalFlow implements Serializable {
         return this.interfaces;
     }
 
-    public void setInterfaces(Set<FlowInterface> flowInterfaces) {
+    public void setInterfaces(SortedSet<FlowInterface> flowInterfaces) {
         this.interfaces = flowInterfaces;
     }
 
-    public FunctionalFlow interfaces(Set<FlowInterface> flowInterfaces) {
+    public FunctionalFlow interfaces(SortedSet<FlowInterface> flowInterfaces) {
         this.setInterfaces(flowInterfaces);
         return this;
     }
@@ -312,5 +315,10 @@ public class FunctionalFlow implements Serializable {
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
             "}";
+    }
+
+    @Override
+    public int compareTo(FunctionalFlow arg0) {
+        return this.getAlias().compareTo(arg0.getAlias());
     }
 }
