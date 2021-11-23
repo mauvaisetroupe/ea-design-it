@@ -54,9 +54,12 @@
             <td>
               <span v-for="(flows, i) in landscapeView.flows" :key="flows.id"
                 >{{ i > 0 ? ', ' : '' }}
-                <router-link class="form-control-static" :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flows.id } }">{{
-                  flows.alias
-                }}</router-link>
+                <router-link
+                  :title="flows.description"
+                  class="form-control-static"
+                  :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flows.id } }"
+                  >{{ flows.alias }}</router-link
+                >
               </span>
             </td>
             <td class="text-right">

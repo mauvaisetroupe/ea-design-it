@@ -32,7 +32,9 @@
           <dd>
             <span v-for="(flows, i) in landscapeView.flows" :key="flows.id"
               >{{ i > 0 ? ', ' : '' }}
-              <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flows.id } }">{{ flows.alias }}</router-link>
+              <router-link :title="flows.description" :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flows.id } }">{{
+                flows.alias
+              }}</router-link>
             </span>
           </dd>
         </dl>
