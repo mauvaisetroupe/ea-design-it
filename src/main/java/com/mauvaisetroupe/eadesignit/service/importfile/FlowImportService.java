@@ -128,14 +128,14 @@ public class FlowImportService {
                 // Set<>, so could add even if already associated
                 functionalFlow.addLandscape(landscapeView);
                 functionalFlow.addInterfaces(flowInterface);
+                interfaceRepository.save(flowInterface);
+                flowRepository.save(functionalFlow);
+                landscapeViewRepository.save(landscapeView);
                 if (dataFlow != null) {
                     functionalFlow.addDataFlows(dataFlow);
                     flowInterface.addDataFlows(dataFlow);
                     dataFlowRepository.save(dataFlow);
                 }
-                interfaceRepository.save(flowInterface);
-                flowRepository.save(functionalFlow);
-                landscapeViewRepository.save(landscapeView);
             }
             result.add(flowImport);
         }
