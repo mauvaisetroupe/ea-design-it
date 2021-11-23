@@ -2,7 +2,9 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="landscapeView">
-        <h2 class="jh-entity-heading" data-cy="landscapeViewDetailsHeading"><span>LandscapeView</span> {{ landscapeView.id }}</h2>
+        <h2 class="jh-entity-heading" data-cy="landscapeViewDetailsHeading">
+          <span>Landscape - {{ landscapeView.diagramName }}</span>
+        </h2>
         <dl class="row jh-entity-details">
           <dt>
             <span>Viewpoint</span>

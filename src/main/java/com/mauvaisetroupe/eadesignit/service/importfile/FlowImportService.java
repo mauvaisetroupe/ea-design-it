@@ -11,6 +11,7 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.Format;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.ViewPoint;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
@@ -107,12 +108,13 @@ public class FlowImportService {
         //      this.columnsArray.add(FLOW_CHECK_COLUMN_3);
     }
 
-    public List<FlowImport> importExcel(InputStream file, String diagramName) throws EncryptedDocumentException, IOException {
+    public List<FlowImport> importExcel(InputStream file, String filename) throws EncryptedDocumentException, IOException {
         List<FlowImport> result = new ArrayList<FlowImport>();
 
         ExcelReader excelReader = new ExcelReader(file, this.columnsArray, FLOW_SHEET_NAME);
 
         List<Map<String, Object>> flowsDF = excelReader.getSheet(FLOW_SHEET_NAME);
+        String diagramName = filename.substring(0, filename.lastIndexOf(".")).replace("_", " ").replace("-", " ");
 
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);
@@ -144,6 +146,7 @@ public class FlowImportService {
         LandscapeView landscapeView = landscapeViewRepository.findByDiagramNameIgnoreCase(diagramName);
         if (landscapeView == null) {
             landscapeView = mapToLandscapeView(diagramName);
+            landscapeView.setViewpoint(ViewPoint.APPLICATION_LANDSCAPE);
             landscapeViewRepository.save(landscapeView);
         } else {
             Assert.isTrue(
@@ -231,7 +234,7 @@ public class FlowImportService {
                 flowInterface.setProtocol(protocol);
             }
         } catch (Exception e) {
-            log.error("Error with row " + flowImport, e);
+            log.error("Error with row " + flowImport);
             flowInterface = null;
             flowImport.setImportInterfaceStatus(ImportStatus.ERROR);
             addError(flowImport, e);
@@ -273,7 +276,7 @@ public class FlowImportService {
                 }
             }
         } catch (Exception e) {
-            log.error("Error with row " + flowImport, e);
+            log.error("Error with row " + flowImport);
             dataFlow = null;
             flowImport.setImportDataFlowStatus(ImportStatus.ERROR);
             addError(flowImport, e);
