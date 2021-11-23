@@ -118,27 +118,22 @@ public class FlowImportService {
             FlowImport flowImport = mapArrayToFlowImport(map);
 
             LandscapeView landscapeView = findOrCreateLandscape(diagramName);
-            landscapeViewRepository.save(landscapeView);
             FunctionalFlow functionalFlow = findOrCreateFunctionalFlow(flowImport);
-            if (functionalFlow != null) {
-                functionalFlow.addLandscape(landscapeView);
-                flowRepository.save(functionalFlow);
-            }
             FlowInterface flowInterface = findOrCreateInterface(flowImport);
-            if (flowInterface != null) {
-                // Set, so could add even if already associated
-                functionalFlow.addInterfaces(flowInterface);
-                interfaceRepository.save(flowInterface);
-                flowRepository.save(functionalFlow);
+            DataFlow dataFlow = findOrCreateDataFlow(flowImport);
 
-                DataFlow dataFlow = findOrCreateDataFlow(flowImport);
+            if (landscapeView != null && functionalFlow != null && flowInterface != null) {
+                // Set<>, so could add even if already associated
+                functionalFlow.addLandscape(landscapeView);
+                functionalFlow.addInterfaces(flowInterface);
                 if (dataFlow != null) {
                     functionalFlow.addDataFlows(dataFlow);
                     flowInterface.addDataFlows(dataFlow);
                     dataFlowRepository.save(dataFlow);
-                    interfaceRepository.save(flowInterface);
-                    flowRepository.save(functionalFlow);
                 }
+                interfaceRepository.save(flowInterface);
+                flowRepository.save(functionalFlow);
+                landscapeViewRepository.save(landscapeView);
             }
             result.add(flowImport);
         }
@@ -175,7 +170,7 @@ public class FlowImportService {
         } catch (Exception e) {
             log.error("Error with row " + flowImport, e);
             flowImport.setImportFunctionalFlowStatus(ImportStatus.ERROR);
-            flowImport.setImportStatusMessage(e.getMessage());
+            addError(flowImport, e);
             functionalFlow = null;
         }
         return functionalFlow;
@@ -239,9 +234,14 @@ public class FlowImportService {
             log.error("Error with row " + flowImport, e);
             flowInterface = null;
             flowImport.setImportInterfaceStatus(ImportStatus.ERROR);
-            flowImport.setImportStatusMessage(e.getMessage());
+            addError(flowImport, e);
         }
         return flowInterface;
+    }
+
+    private void addError(FlowImport flowImport, Exception e) {
+        String previous = flowImport.getImportStatusMessage() == null ? flowImport.getImportStatusMessage() : "";
+        flowImport.setImportStatusMessage(previous + e.getMessage() + "  \n");
     }
 
     private DataFlow findOrCreateDataFlow(FlowImport flowImport) {
@@ -276,7 +276,7 @@ public class FlowImportService {
             log.error("Error with row " + flowImport, e);
             dataFlow = null;
             flowImport.setImportDataFlowStatus(ImportStatus.ERROR);
-            flowImport.setImportStatusMessage(e.getMessage());
+            addError(flowImport, e);
         }
         return dataFlow;
     }
