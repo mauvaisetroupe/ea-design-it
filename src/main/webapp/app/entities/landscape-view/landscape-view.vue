@@ -28,7 +28,6 @@
         <thead>
           <tr>
             <th scope="row"><span>ID</span></th>
-            <th scope="row"><span>Viewpoint</span></th>
             <th scope="row"><span>Diagram Name</span></th>
             <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>Flows</span></th>
@@ -42,7 +41,6 @@
                 landscapeView.id
               }}</router-link>
             </td>
-            <td>{{ landscapeView.viewpoint }}</td>
             <td>{{ landscapeView.diagramName }}</td>
             <td>
               <div v-if="landscapeView.owner">
