@@ -118,7 +118,7 @@ entity DataFlow {
 entity DataFlowItem {
     resourceName String
     description String maxlength(1000)  
-    contractURL String
+    contractURL String maxlength(500)
     documentationURL String maxlength(500)
     startDate LocalDate
     endDate LocalDate

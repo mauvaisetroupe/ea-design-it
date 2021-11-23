@@ -33,7 +33,8 @@ public class DataFlowItem implements Serializable {
     @Column(name = "description", length = 1000)
     private String description;
 
-    @Column(name = "contract_url")
+    @Size(max = 500)
+    @Column(name = "contract_url", length = 500)
     private String contractURL;
 
     @Size(max = 500)

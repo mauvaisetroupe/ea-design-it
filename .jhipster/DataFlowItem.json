@@ -13,7 +13,9 @@
     },
     {
       "fieldName": "contractURL",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
     },
     {
       "fieldName": "documentationURL",

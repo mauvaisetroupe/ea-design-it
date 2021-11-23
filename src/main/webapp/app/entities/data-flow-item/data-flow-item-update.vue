@@ -50,6 +50,11 @@
               :class="{ valid: !$v.dataFlowItem.contractURL.$invalid, invalid: $v.dataFlowItem.contractURL.$invalid }"
               v-model="$v.dataFlowItem.contractURL.$model"
             />
+            <div v-if="$v.dataFlowItem.contractURL.$anyDirty && $v.dataFlowItem.contractURL.$invalid">
+              <small class="form-text text-danger" v-if="!$v.dataFlowItem.contractURL.maxLength">
+                This field cannot be longer than 500 characters.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="data-flow-item-documentationURL">Documentation URL</label>
