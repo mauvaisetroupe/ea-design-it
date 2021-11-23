@@ -26,7 +26,9 @@
             <span>Documentation URL</span>
           </dt>
           <dd>
-            <span>{{ dataFlowItem.documentationURL }}</span>
+            <span
+              ><a v-bind:href="dataFlowItem.documentationURL">{{ dataFlowItem.documentationURL }}</a></span
+            >
           </dd>
           <dt>
             <span>Start Date</span>

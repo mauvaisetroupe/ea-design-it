@@ -51,16 +51,18 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
       var firstLine = true;
       flow.interfaces.forEach(inter => {
         if (firstLine) {
-          var xxx = flow.alias;
+          var aliasLabel = flow.alias;
+          var aliasDescription = flow.description;
         } else {
-          xxx = '|';
+          aliasLabel = '|';
+          aliasDescription = '|';
         }
         var caption = {
-          flowAlias: xxx,
+          flowAlias: aliasLabel,
           flowID: flow.id,
           interfaceAlias: inter.alias,
           interfaceID: inter.id,
-          description: flow.description,
+          description: aliasDescription,
           protocol: inter.protocol,
           source: inter.source,
           target: inter.target,

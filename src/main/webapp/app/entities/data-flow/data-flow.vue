@@ -51,7 +51,9 @@
             <td>{{ dataFlow.frequency }}</td>
             <td>{{ dataFlow.format }}</td>
             <td>{{ dataFlow.contractURL | truncate(20) }}</td>
-            <td>{{ dataFlow.documentationURL | truncate(20) }}</td>
+            <td>
+              <a v-bind:href="dataflow.documentationURL">{{ dataFlow.documentationURL | truncate(20) }}</a>
+            </td>
             <td>{{ dataFlow.startDate }}</td>
             <td>{{ dataFlow.endDate }}</td>
             <td>

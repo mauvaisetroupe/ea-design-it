@@ -32,13 +32,17 @@
             <span>Documentation URL</span>
           </dt>
           <dd>
-            <span>{{ functionalFlow.documentationURL }}</span>
+            <span
+              ><a v-bind:href="functionalFlow.documentationURL">{{ functionalFlow.documentationURL }}</a></span
+            >
           </dd>
           <dt>
             <span>Documentation URL 2</span>
           </dt>
           <dd>
-            <span>{{ functionalFlow.documentationURL2 }}</span>
+            <span
+              ><a v-bind:href="functionalFlow.documentationURL2">{{ functionalFlow.documentationURL2 }}</a></span
+            >
           </dd>
           <dt>
             <span>Start Date</span>

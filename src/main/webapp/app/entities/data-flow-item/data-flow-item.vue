@@ -48,7 +48,9 @@
             <td>{{ dataFlowItem.resourceName }}</td>
             <td>{{ dataFlowItem.description }}</td>
             <td>{{ dataFlowItem.contractURL }}</td>
-            <td>{{ dataFlowItem.documentationURL }}</td>
+            <td>
+              <a v-bind:href="dataFlowItem.documentationURL">{{ dataFlowItem.documentationURL }}</a>
+            </td>
             <td>{{ dataFlowItem.startDate }}</td>
             <td>{{ dataFlowItem.endDate }}</td>
             <td>

@@ -57,8 +57,12 @@
             </td>
             <td>{{ flowInterface.alias }}</td>
             <td>{{ flowInterface.status }}</td>
-            <td>{{ flowInterface.documentationURL }}</td>
-            <td>{{ flowInterface.documentationURL2 }}</td>
+            <td>
+              <a v-bind:href="flowInterface.documentationURL">{{ flowInterface.documentationURL }}</a>
+            </td>
+            <td>
+              <a v-bind:href="flowInterface.documentationURL2">{{ flowInterface.documentationURL2 }}</a>
+            </td>
             <td>{{ flowInterface.startDate }}</td>
             <td>{{ flowInterface.endDate }}</td>
             <td>

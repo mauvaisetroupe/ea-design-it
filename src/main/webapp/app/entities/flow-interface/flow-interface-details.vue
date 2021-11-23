@@ -20,13 +20,17 @@
             <span>Documentation URL</span>
           </dt>
           <dd>
-            <span>{{ flowInterface.documentationURL }}</span>
+            <span
+              ><a v-bind:href="flowInterface.documentationURL">{{ flowInterface.documentationURL }}</a></span
+            >
           </dd>
           <dt>
             <span>Documentation URL 2</span>
           </dt>
           <dd>
-            <span>{{ flowInterface.documentationURL2 }}</span>
+            <span
+              ><a v-bind:href="flowInterface.documentationURL2">{{ flowInterface.documentationURL2 }}</a></span
+            >
           </dd>
           <dt>
             <span>Start Date</span>

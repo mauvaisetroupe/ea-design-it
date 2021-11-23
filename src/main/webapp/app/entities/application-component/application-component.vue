@@ -52,7 +52,9 @@
             <td>{{ applicationComponent.type }}</td>
             <td>{{ applicationComponent.technology }}</td>
             <td>{{ applicationComponent.comment }}</td>
-            <td>{{ applicationComponent.documentationURL }}</td>
+            <td>
+              <a v-bind:href="applicationComponent.documentationURL">{{ applicationComponent.documentationURL }}</a>
+            </td>
             <td>{{ applicationComponent.startDate }}</td>
             <td>{{ applicationComponent.endDate }}</td>
             <td>

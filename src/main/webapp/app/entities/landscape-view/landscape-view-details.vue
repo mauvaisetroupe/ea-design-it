@@ -63,11 +63,11 @@
         <thead>
           <tr>
             <th scope="row"><span>Flow</span></th>
+            <th scope="row"><span>Description</span></th>
             <th scope="row"><span>Interface</span></th>
             <th scope="row"><span>Source</span></th>
             <th scope="row"><span>Target</span></th>
             <th scope="row"><span>Protocol</span></th>
-            <th scope="row"><span>Description</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -78,6 +78,7 @@
                 caption.flowAlias
               }}</router-link>
             </td>
+            <td>{{ caption.description }}</td>
             <td>
               <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: caption.interfaceID } }">{{
                 caption.interfaceAlias
@@ -98,7 +99,6 @@
                 {{ caption.protocol.name }}
               </router-link>
             </td>
-            <td>{{ caption.description }}</td>
           </tr>
         </tbody>
       </table>

@@ -56,16 +56,30 @@
             <td>{{ functionalFlow.description }}</td>
             <td>{{ functionalFlow.comment }}</td>
             <td>{{ functionalFlow.status }}</td>
-            <td>{{ functionalFlow.documentationURL | truncate(20) }}</td>
-            <td>{{ functionalFlow.documentationURL2 | truncate(20) }}</td>
+            <td>
+              <a :href="functionalFlow.documentationURL">{{ functionalFlow.documentationURL | truncate(20) }}</a>
+            </td>
+            <td>
+              <a :href="functionalFlow.documentationURL2">{{ functionalFlow.documentationURL2 | truncate(20) }}</a>
+            </td>
             <td>{{ functionalFlow.startDate }}</td>
             <td>{{ functionalFlow.endDate }}</td>
             <td>
               <span v-for="(interfaces, i) in functionalFlow.interfaces" :key="interfaces.id"
                 >{{ i > 0 ? ', ' : '' }}
-                <router-link class="form-control-static" :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: interfaces.id } }">{{
-                  interfaces.alias
-                }}</router-link>
+                <router-link
+                  :title="
+                    '[ ' +
+                    interfaces.source.name +
+                    ' / ' +
+                    interfaces.target.name +
+                    ' ]' +
+                    (interfaces.protocol ? ' (' + interfaces.protocol.type + ') ' : '')
+                  "
+                  class="form-control-static"
+                  :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: interfaces.id } }"
+                  >{{ interfaces.alias }}</router-link
+                >
               </span>
             </td>
             <td class="text-right">
