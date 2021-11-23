@@ -64,14 +64,14 @@ public class MXFileSerializer {
         cell1.setAttribute("id", "1");
         cell1.setAttribute("parent", "0");
 
-        for (Application application : getDistinctApplications(landscapeView)) {
-            createRectangle(doc, root, application.getId().toString(), application.getName());
-        }
-
         for (FunctionalFlow flow : this.landscapeView.getFlows()) {
             for (FlowInterface inter : flow.getInterfaces()) {
                 createEdge(doc, root, flow, inter);
             }
+        }
+
+        for (Application application : getDistinctApplications(landscapeView)) {
+            createRectangle(doc, root, application.getId().toString(), application.getName());
         }
 
         return getStringFromDocument(doc);
