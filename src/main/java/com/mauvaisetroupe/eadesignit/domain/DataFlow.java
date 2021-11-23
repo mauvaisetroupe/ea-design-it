@@ -56,7 +56,8 @@ public class DataFlow implements Serializable {
      * Swagger or XSD URL
      */
     @ApiModelProperty(value = "Swagger or XSD URL")
-    @Column(name = "contract_url")
+    @Size(max = 500)
+    @Column(name = "contract_url", length = 500)
     private String contractURL;
 
     @Size(max = 500)

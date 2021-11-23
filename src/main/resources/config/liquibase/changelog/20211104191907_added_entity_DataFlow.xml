@@ -26,7 +26,7 @@
             <column name="format" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="contract_url" type="varchar(255)" remarks="Swagger or XSD URL">
+            <column name="contract_url" type="varchar(500)" remarks="Swagger or XSD URL">
                 <constraints nullable="true" />
             </column>
             <column name="documentation_url" type="varchar(500)">

@@ -26,7 +26,9 @@ const validations: any = {
     },
     frequency: {},
     format: {},
-    contractURL: {},
+    contractURL: {
+      maxLength: maxLength(500),
+    },
     documentationURL: {
       maxLength: maxLength(500),
     },

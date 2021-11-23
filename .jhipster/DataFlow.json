@@ -25,7 +25,9 @@
     {
       "fieldName": "contractURL",
       "fieldType": "String",
-      "javadoc": "Swagger or XSD URL"
+      "javadoc": "Swagger or XSD URL",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
     },
     {
       "fieldName": "documentationURL",

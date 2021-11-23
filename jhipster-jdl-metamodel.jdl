@@ -105,7 +105,7 @@ entity DataFlow {
     description String maxlength(1000)
     frequency Frequency
     format Format
-    contractURL String /** Swagger or XSD URL */
+    contractURL String maxlength(500) /** Swagger or XSD URL */
     documentationURL String maxlength(500)
     startDate LocalDate
     endDate LocalDate    
