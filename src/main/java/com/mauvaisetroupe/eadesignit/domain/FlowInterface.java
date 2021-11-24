@@ -76,7 +76,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface> {
     @ManyToOne
     private Owner owner;
 
-    @ManyToMany(mappedBy = "interfaces")
+    @ManyToMany(mappedBy = "interfaces", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "interfaces", "landscapes", "dataFlows" }, allowSetters = true)
     private Set<FunctionalFlow> functionalFlows = new HashSet<>();
@@ -350,6 +350,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface> {
     @Override
     public int compareTo(FlowInterface arg0) {
         if (arg0 == null) return 0;
+        if (this.getAlias() == null) return 0;
         return this.getAlias().compareTo(arg0.getAlias());
     }
 }

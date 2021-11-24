@@ -77,7 +77,7 @@ public class PlantUMLResource {
         Optional<Application> optional = applicationRepository.findById(id);
 
         if (optional.isPresent()) {
-            Set<FlowInterface> interfaces = flowInterfaceRepository.findBySource_NameOrTargetName(
+            Set<FlowInterface> interfaces = flowInterfaceRepository.findBySource_NameOrTarget_Name(
                 optional.get().getName(),
                 optional.get().getName()
             );
