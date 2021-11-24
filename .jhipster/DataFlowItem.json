@@ -6,6 +6,10 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "resourceType",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "description",
       "fieldType": "String",
       "fieldValidateRules": ["maxlength"],

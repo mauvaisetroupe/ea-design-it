@@ -19,12 +19,6 @@
             <span>{{ applicationComponent.description }}</span>
           </dd>
           <dt>
-            <span>Type</span>
-          </dt>
-          <dd>
-            <span>{{ applicationComponent.type }}</span>
-          </dd>
-          <dt>
             <span>Technology</span>
           </dt>
           <dd>
@@ -57,12 +51,34 @@
             <span>{{ applicationComponent.endDate }}</span>
           </dd>
           <dt>
+            <span>Application Type</span>
+          </dt>
+          <dd>
+            <span>{{ applicationComponent.applicationType }}</span>
+          </dd>
+          <dt>
+            <span>Software Type</span>
+          </dt>
+          <dd>
+            <span>{{ applicationComponent.softwareType }}</span>
+          </dd>
+          <dt>
             <span>Application</span>
           </dt>
           <dd>
             <div v-if="applicationComponent.application">
               <router-link :to="{ name: 'ApplicationView', params: { applicationId: applicationComponent.application.id } }">{{
                 applicationComponent.application.name
+              }}</router-link>
+            </div>
+          </dd>
+          <dt>
+            <span>Category</span>
+          </dt>
+          <dd>
+            <div v-if="applicationComponent.category">
+              <router-link :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: applicationComponent.category.id } }">{{
+                applicationComponent.category.name
               }}</router-link>
             </div>
           </dd>

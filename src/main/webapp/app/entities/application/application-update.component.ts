@@ -7,12 +7,16 @@ import AlertService from '@/shared/alert/alert.service';
 import OwnerService from '@/entities/owner/owner.service';
 import { IOwner } from '@/shared/model/owner.model';
 
+import ApplicationCategoryService from '@/entities/application-category/application-category.service';
+import { IApplicationCategory } from '@/shared/model/application-category.model';
+
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
 import { IApplicationComponent } from '@/shared/model/application-component.model';
 
 import { IApplication, Application } from '@/shared/model/application.model';
 import ApplicationService from './application.service';
 import { ApplicationType } from '@/shared/model/enumerations/application-type.model';
+import { SoftwareType } from '@/shared/model/enumerations/software-type.model';
 
 const validations: any = {
   application: {
@@ -21,7 +25,6 @@ const validations: any = {
     description: {
       maxLength: maxLength(1000),
     },
-    type: {},
     technology: {},
     comment: {},
     documentationURL: {
@@ -29,6 +32,8 @@ const validations: any = {
     },
     startDate: {},
     endDate: {},
+    applicationType: {},
+    softwareType: {},
   },
 };
 
@@ -45,10 +50,15 @@ export default class ApplicationUpdate extends Vue {
 
   public owners: IOwner[] = [];
 
+  @Inject('applicationCategoryService') private applicationCategoryService: () => ApplicationCategoryService;
+
+  public applicationCategories: IApplicationCategory[] = [];
+
   @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
 
   public applicationComponents: IApplicationComponent[] = [];
   public applicationTypeValues: string[] = Object.keys(ApplicationType);
+  public softwareTypeValues: string[] = Object.keys(SoftwareType);
   public isSaving = false;
   public currentLanguage = '';
 
@@ -134,6 +144,11 @@ export default class ApplicationUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.owners = res.data;
+      });
+    this.applicationCategoryService()
+      .retrieve()
+      .then(res => {
+        this.applicationCategories = res.data;
       });
     this.applicationComponentService()
       .retrieve()

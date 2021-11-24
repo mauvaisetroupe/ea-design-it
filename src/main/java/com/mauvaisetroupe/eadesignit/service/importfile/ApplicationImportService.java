@@ -1,9 +1,10 @@
 package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
+import com.mauvaisetroupe.eadesignit.domain.ApplicationCategory;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
-import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
+import com.mauvaisetroupe.eadesignit.repository.ApplicationCategoryRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,9 +37,14 @@ public class ApplicationImportService {
     private final Logger log = LoggerFactory.getLogger(ApplicationImportService.class);
 
     private final ApplicationRepository applicationRepository;
+    private final ApplicationCategoryRepository applicationCategoryRepository;
 
-    public ApplicationImportService(ApplicationRepository applicationRepository) {
+    public ApplicationImportService(
+        ApplicationRepository applicationRepository,
+        ApplicationCategoryRepository applicationCategoryRepository
+    ) {
         this.applicationRepository = applicationRepository;
+        this.applicationCategoryRepository = applicationCategoryRepository;
 
         this.columnsArray.add(APPLICATION_ID);
         this.columnsArray.add(APPLICATION_NAME);
@@ -113,7 +118,13 @@ public class ApplicationImportService {
         application.setName(applicationImport.getName());
         application.setTechnology(applicationImport.getTechnology());
         if (StringUtils.hasText(applicationImport.getType())) {
-            application.setType(ObjectUtils.caseInsensitiveValueOf(ApplicationType.values(), applicationImport.getType()));
+            ApplicationCategory applicationCategory = applicationCategoryRepository.findByNameIgnoreCase(applicationImport.getType());
+            if (applicationCategory == null) {
+                applicationCategory = new ApplicationCategory();
+                applicationCategory.setName(applicationImport.getType());
+                applicationCategoryRepository.save(applicationCategory);
+            }
+            application.setCategory(applicationCategory);
         }
         application.setTechnology(applicationImport.getTechnology());
 

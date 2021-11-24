@@ -33,7 +33,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new DataFlowItemService();
       currentDate = new Date();
-      elemDefault = new DataFlowItem(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
+      elemDefault = new DataFlowItem(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
     });
 
     describe('Service methods', () => {
@@ -100,6 +100,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             resourceName: 'BBBBBB',
+            resourceType: 'BBBBBB',
             description: 'BBBBBB',
             contractURL: 'BBBBBB',
             documentationURL: 'BBBBBB',
@@ -137,7 +138,7 @@ describe('Service Tests', () => {
       it('should partial update a DataFlowItem', async () => {
         const patchObject = Object.assign(
           {
-            description: 'BBBBBB',
+            resourceType: 'BBBBBB',
           },
           new DataFlowItem()
         );
@@ -172,6 +173,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             resourceName: 'BBBBBB',
+            resourceType: 'BBBBBB',
             description: 'BBBBBB',
             contractURL: 'BBBBBB',
             documentationURL: 'BBBBBB',

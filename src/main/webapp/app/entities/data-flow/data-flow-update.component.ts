@@ -7,6 +7,9 @@ import AlertService from '@/shared/alert/alert.service';
 import DataFlowItemService from '@/entities/data-flow-item/data-flow-item.service';
 import { IDataFlowItem } from '@/shared/model/data-flow-item.model';
 
+import DataFormatService from '@/entities/data-format/data-format.service';
+import { IDataFormat } from '@/shared/model/data-format.model';
+
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
@@ -16,16 +19,15 @@ import { IFlowInterface } from '@/shared/model/flow-interface.model';
 import { IDataFlow, DataFlow } from '@/shared/model/data-flow.model';
 import DataFlowService from './data-flow.service';
 import { Frequency } from '@/shared/model/enumerations/frequency.model';
-import { Format } from '@/shared/model/enumerations/format.model';
 
 const validations: any = {
   dataFlow: {
     resourceName: {},
+    resourceType: {},
     description: {
       maxLength: maxLength(1000),
     },
     frequency: {},
-    format: {},
     contractURL: {
       maxLength: maxLength(500),
     },
@@ -56,6 +58,10 @@ export default class DataFlowUpdate extends Vue {
 
   public dataFlowItems: IDataFlowItem[] = [];
 
+  @Inject('dataFormatService') private dataFormatService: () => DataFormatService;
+
+  public dataFormats: IDataFormat[] = [];
+
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
 
   public functionalFlows: IFunctionalFlow[] = [];
@@ -64,7 +70,6 @@ export default class DataFlowUpdate extends Vue {
 
   public flowInterfaces: IFlowInterface[] = [];
   public frequencyValues: string[] = Object.keys(Frequency);
-  public formatValues: string[] = Object.keys(Format);
   public isSaving = false;
   public currentLanguage = '';
 
@@ -151,6 +156,11 @@ export default class DataFlowUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.dataFlowItems = res.data;
+      });
+    this.dataFormatService()
+      .retrieve()
+      .then(res => {
+        this.dataFormats = res.data;
       });
     this.functionalFlowService()
       .retrieve()

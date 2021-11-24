@@ -10,6 +10,8 @@ import DataFlowService from '@/entities/data-flow/data-flow.service';
 
 import DataFlowItemService from '@/entities/data-flow-item/data-flow-item.service';
 
+import DataFormatService from '@/entities/data-format/data-format.service';
+
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 
 import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
@@ -45,6 +47,8 @@ describe('Component Tests', () => {
           alertService: () => new AlertService(),
 
           dataFlowItemService: () => new DataFlowItemService(),
+
+          dataFormatService: () => new DataFormatService(),
 
           functionalFlowService: () => new FunctionalFlowService(),
 

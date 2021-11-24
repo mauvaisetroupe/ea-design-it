@@ -11,6 +11,12 @@
             <span>{{ dataFlow.resourceName }}</span>
           </dd>
           <dt>
+            <span>Resource Type</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlow.resourceType }}</span>
+          </dd>
+          <dt>
             <span>Description</span>
           </dt>
           <dd>
@@ -21,12 +27,6 @@
           </dt>
           <dd>
             <span>{{ dataFlow.frequency }}</span>
-          </dd>
-          <dt>
-            <span>Format</span>
-          </dt>
-          <dd>
-            <span>{{ dataFlow.format }}</span>
           </dd>
           <dt>
             <span>Contract URL</span>
@@ -53,6 +53,16 @@
           </dt>
           <dd>
             <span>{{ dataFlow.endDate }}</span>
+          </dd>
+          <dt>
+            <span>Format</span>
+          </dt>
+          <dd>
+            <div v-if="dataFlow.format">
+              <router-link :to="{ name: 'DataFormatView', params: { dataFormatId: dataFlow.format.id } }">{{
+                dataFlow.format.name
+              }}</router-link>
+            </div>
           </dd>
           <dt>
             <span>Functional Flows</span>

@@ -30,13 +30,15 @@
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Name</span></th>
             <th scope="row"><span>Description</span></th>
-            <th scope="row"><span>Type</span></th>
             <th scope="row"><span>Technology</span></th>
             <th scope="row"><span>Comment</span></th>
             <th scope="row"><span>Documentation URL</span></th>
             <th scope="row"><span>Start Date</span></th>
             <th scope="row"><span>End Date</span></th>
+            <th scope="row"><span>Application Type</span></th>
+            <th scope="row"><span>Software Type</span></th>
             <th scope="row"><span>Application</span></th>
+            <th scope="row"><span>Category</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -49,7 +51,6 @@
             </td>
             <td>{{ applicationComponent.name }}</td>
             <td>{{ applicationComponent.description }}</td>
-            <td>{{ applicationComponent.type }}</td>
             <td>{{ applicationComponent.technology }}</td>
             <td>{{ applicationComponent.comment }}</td>
             <td>
@@ -57,11 +58,21 @@
             </td>
             <td>{{ applicationComponent.startDate }}</td>
             <td>{{ applicationComponent.endDate }}</td>
+            <td>{{ applicationComponent.applicationType }}</td>
+            <td>{{ applicationComponent.softwareType }}</td>
             <td>
               <div v-if="applicationComponent.application">
                 <router-link :to="{ name: 'ApplicationView', params: { applicationId: applicationComponent.application.id } }">{{
                   applicationComponent.application.name
                 }}</router-link>
+              </div>
+            </td>
+            <td>
+              <div v-if="applicationComponent.category">
+                <router-link
+                  :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: applicationComponent.category.id } }"
+                  >{{ applicationComponent.category.name }}</router-link
+                >
               </div>
             </td>
             <td class="text-right">

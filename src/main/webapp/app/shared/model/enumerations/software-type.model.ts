@@ -1,0 +1,9 @@
+export enum SoftwareType {
+  ONPREMISE_COTS = 'ONPREMISE_COTS',
+
+  ONPREMISE_CUSTOM = 'ONPREMISE_CUSTOM',
+
+  CUSTOM_CLOUD = 'CUSTOM_CLOUD',
+
+  SAAS = 'SAAS',
+}

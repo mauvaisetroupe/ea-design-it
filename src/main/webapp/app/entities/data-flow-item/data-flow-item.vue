@@ -29,6 +29,7 @@
           <tr>
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Resource Name</span></th>
+            <th scope="row"><span>Resource Type</span></th>
             <th scope="row"><span>Description</span></th>
             <th scope="row"><span>Contract URL</span></th>
             <th scope="row"><span>Documentation URL</span></th>
@@ -46,6 +47,7 @@
               }}</router-link>
             </td>
             <td>{{ dataFlowItem.resourceName }}</td>
+            <td>{{ dataFlowItem.resourceType }}</td>
             <td>{{ dataFlowItem.description }}</td>
             <td>{{ dataFlowItem.contractURL }}</td>
             <td>

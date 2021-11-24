@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.*;
@@ -32,10 +33,6 @@ public class ApplicationComponent implements Serializable {
     @Column(name = "description", length = 1000)
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type")
-    private ApplicationType type;
-
     @Column(name = "technology")
     private String technology;
 
@@ -52,10 +49,21 @@ public class ApplicationComponent implements Serializable {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "application_type")
+    private ApplicationType applicationType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "software_type")
+    private SoftwareType softwareType;
+
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "owner", "applicationsLists" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "owner", "category", "applicationsLists" }, allowSetters = true)
     private Application application;
+
+    @ManyToOne
+    private ApplicationCategory category;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -96,19 +104,6 @@ public class ApplicationComponent implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public ApplicationType getType() {
-        return this.type;
-    }
-
-    public ApplicationComponent type(ApplicationType type) {
-        this.setType(type);
-        return this;
-    }
-
-    public void setType(ApplicationType type) {
-        this.type = type;
     }
 
     public String getTechnology() {
@@ -176,6 +171,32 @@ public class ApplicationComponent implements Serializable {
         this.endDate = endDate;
     }
 
+    public ApplicationType getApplicationType() {
+        return this.applicationType;
+    }
+
+    public ApplicationComponent applicationType(ApplicationType applicationType) {
+        this.setApplicationType(applicationType);
+        return this;
+    }
+
+    public void setApplicationType(ApplicationType applicationType) {
+        this.applicationType = applicationType;
+    }
+
+    public SoftwareType getSoftwareType() {
+        return this.softwareType;
+    }
+
+    public ApplicationComponent softwareType(SoftwareType softwareType) {
+        this.setSoftwareType(softwareType);
+        return this;
+    }
+
+    public void setSoftwareType(SoftwareType softwareType) {
+        this.softwareType = softwareType;
+    }
+
     public Application getApplication() {
         return this.application;
     }
@@ -186,6 +207,19 @@ public class ApplicationComponent implements Serializable {
 
     public ApplicationComponent application(Application application) {
         this.setApplication(application);
+        return this;
+    }
+
+    public ApplicationCategory getCategory() {
+        return this.category;
+    }
+
+    public void setCategory(ApplicationCategory applicationCategory) {
+        this.category = applicationCategory;
+    }
+
+    public ApplicationComponent category(ApplicationCategory applicationCategory) {
+        this.setCategory(applicationCategory);
         return this;
     }
 
@@ -215,12 +249,13 @@ public class ApplicationComponent implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
-            ", type='" + getType() + "'" +
             ", technology='" + getTechnology() + "'" +
             ", comment='" + getComment() + "'" +
             ", documentationURL='" + getDocumentationURL() + "'" +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
+            ", applicationType='" + getApplicationType() + "'" +
+            ", softwareType='" + getSoftwareType() + "'" +
             "}";
     }
 }

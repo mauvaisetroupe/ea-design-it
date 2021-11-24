@@ -18,11 +18,6 @@
       "fieldValidateRulesMaxlength": "1000"
     },
     {
-      "fieldName": "type",
-      "fieldType": "ApplicationType",
-      "fieldValues": "MICROSERVICE,EXTERNAL,JAVA,PACKAGE,INFRASTRUCTURE,GINKO,FRONT,PARTNER,MIDDLEWARE"
-    },
-    {
       "fieldName": "technology",
       "fieldType": "String"
     },
@@ -43,6 +38,16 @@
     {
       "fieldName": "endDate",
       "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "applicationType",
+      "fieldType": "ApplicationType",
+      "fieldValues": "SOFTWARE,MIDDLEWARE,HARDWARE,PARTNER,OTHER"
+    },
+    {
+      "fieldName": "softwareType",
+      "fieldType": "SoftwareType",
+      "fieldValues": "ONPREMISE_COTS,ONPREMISE_CUSTOM,CUSTOM_CLOUD,SAAS"
     }
   ],
   "relationships": [
@@ -51,6 +56,13 @@
       "otherEntityName": "owner",
       "otherEntityRelationshipName": "application",
       "relationshipName": "owner",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "applicationCategory",
+      "otherEntityRelationshipName": "application",
+      "relationshipName": "category",
       "otherEntityField": "name"
     },
     {

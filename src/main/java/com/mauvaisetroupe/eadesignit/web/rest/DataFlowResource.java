@@ -128,14 +128,14 @@ public class DataFlowResource {
                 if (dataFlow.getResourceName() != null) {
                     existingDataFlow.setResourceName(dataFlow.getResourceName());
                 }
+                if (dataFlow.getResourceType() != null) {
+                    existingDataFlow.setResourceType(dataFlow.getResourceType());
+                }
                 if (dataFlow.getDescription() != null) {
                     existingDataFlow.setDescription(dataFlow.getDescription());
                 }
                 if (dataFlow.getFrequency() != null) {
                     existingDataFlow.setFrequency(dataFlow.getFrequency());
-                }
-                if (dataFlow.getFormat() != null) {
-                    existingDataFlow.setFormat(dataFlow.getFormat());
                 }
                 if (dataFlow.getContractURL() != null) {
                     existingDataFlow.setContractURL(dataFlow.getContractURL());

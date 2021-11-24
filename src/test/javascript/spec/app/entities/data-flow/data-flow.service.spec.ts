@@ -7,7 +7,6 @@ import { DATE_FORMAT } from '@/shared/date/filters';
 import DataFlowService from '@/entities/data-flow/data-flow.service';
 import { DataFlow } from '@/shared/model/data-flow.model';
 import { Frequency } from '@/shared/model/enumerations/frequency.model';
-import { Format } from '@/shared/model/enumerations/format.model';
 
 const error = {
   response: {
@@ -35,7 +34,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new DataFlowService();
       currentDate = new Date();
-      elemDefault = new DataFlow(123, 'AAAAAAA', 'AAAAAAA', Frequency.DAILY, Format.XML, 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
+      elemDefault = new DataFlow(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', Frequency.DAILY, 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
     });
 
     describe('Service methods', () => {
@@ -102,9 +101,9 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             resourceName: 'BBBBBB',
+            resourceType: 'BBBBBB',
             description: 'BBBBBB',
             frequency: 'BBBBBB',
-            format: 'BBBBBB',
             contractURL: 'BBBBBB',
             documentationURL: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),
@@ -141,9 +140,9 @@ describe('Service Tests', () => {
       it('should partial update a DataFlow', async () => {
         const patchObject = Object.assign(
           {
+            resourceType: 'BBBBBB',
             description: 'BBBBBB',
             frequency: 'BBBBBB',
-            format: 'BBBBBB',
             documentationURL: 'BBBBBB',
           },
           new DataFlow()
@@ -179,9 +178,9 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             resourceName: 'BBBBBB',
+            resourceType: 'BBBBBB',
             description: 'BBBBBB',
             frequency: 'BBBBBB',
-            format: 'BBBBBB',
             contractURL: 'BBBBBB',
             documentationURL: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),

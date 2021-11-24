@@ -40,21 +40,6 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="application-component-type">Type</label>
-            <select
-              class="form-control"
-              name="type"
-              :class="{ valid: !$v.applicationComponent.type.$invalid, invalid: $v.applicationComponent.type.$invalid }"
-              v-model="$v.applicationComponent.type.$model"
-              id="application-component-type"
-              data-cy="type"
-            >
-              <option v-for="applicationType in applicationTypeValues" :key="applicationType" v-bind:value="applicationType">
-                {{ applicationType }}
-              </option>
-            </select>
-          </div>
-          <div class="form-group">
             <label class="form-control-label" for="application-component-technology">Technology</label>
             <input
               type="text"
@@ -155,6 +140,37 @@
             </b-input-group>
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-component-applicationType">Application Type</label>
+            <select
+              class="form-control"
+              name="applicationType"
+              :class="{
+                valid: !$v.applicationComponent.applicationType.$invalid,
+                invalid: $v.applicationComponent.applicationType.$invalid,
+              }"
+              v-model="$v.applicationComponent.applicationType.$model"
+              id="application-component-applicationType"
+              data-cy="applicationType"
+            >
+              <option v-for="applicationType in applicationTypeValues" :key="applicationType" v-bind:value="applicationType">
+                {{ applicationType }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="application-component-softwareType">Software Type</label>
+            <select
+              class="form-control"
+              name="softwareType"
+              :class="{ valid: !$v.applicationComponent.softwareType.$invalid, invalid: $v.applicationComponent.softwareType.$invalid }"
+              v-model="$v.applicationComponent.softwareType.$model"
+              id="application-component-softwareType"
+              data-cy="softwareType"
+            >
+              <option v-for="softwareType in softwareTypeValues" :key="softwareType" v-bind:value="softwareType">{{ softwareType }}</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="application-component-application">Application</label>
             <select
               class="form-control"
@@ -180,6 +196,29 @@
           </div>
           <div v-if="$v.applicationComponent.application.$anyDirty && $v.applicationComponent.application.$invalid">
             <small class="form-text text-danger" v-if="!$v.applicationComponent.application.required"> This field is required. </small>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="application-component-category">Category</label>
+            <select
+              class="form-control"
+              id="application-component-category"
+              data-cy="category"
+              name="category"
+              v-model="applicationComponent.category"
+            >
+              <option v-bind:value="null"></option>
+              <option
+                v-bind:value="
+                  applicationComponent.category && applicationCategoryOption.id === applicationComponent.category.id
+                    ? applicationComponent.category
+                    : applicationCategoryOption
+                "
+                v-for="applicationCategoryOption in applicationCategories"
+                :key="applicationCategoryOption.id"
+              >
+                {{ applicationCategoryOption.name }}
+              </option>
+            </select>
           </div>
         </div>
         <div>

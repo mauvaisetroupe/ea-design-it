@@ -41,6 +41,14 @@ relationship OneToMany {
 	DataFlow{items} to DataFlowItem{dataFlow}
 }
 
+relationship ManyToOne {
+	Application{category(name)} to ApplicationCategory
+	ApplicationComponent{category(name)} to ApplicationCategory
+}
+
+relationship ManyToOne {
+	DataFlow{format(name)} to DataFormat
+}
 
 entity LandscapeView {
     viewpoint ViewPoint
@@ -77,12 +85,14 @@ entity Application {
 	alias String pattern(/^HPX\.CMP\.[0-9]{8}$/)
 	name String,
     description String maxlength(1000)
-    type ApplicationType
 	technology String
     comment String 
     documentationURL String maxlength(500)
     startDate LocalDate
     endDate LocalDate
+    applicationType ApplicationType
+	softwareType SoftwareType
+
 }
 
 entity Protocol {
@@ -102,9 +112,9 @@ entity Protocol {
  */
 entity DataFlow {
     resourceName String /** TOPIC name for event, FileName for Files*/
+    resourceType String
     description String maxlength(1000)
     frequency Frequency
-    format Format
     contractURL String maxlength(500) /** Swagger or XSD URL */
     documentationURL String maxlength(500)
     startDate LocalDate
@@ -117,6 +127,7 @@ entity DataFlow {
  */
 entity DataFlowItem {
     resourceName String
+    resourceType String
     description String maxlength(1000)  
     contractURL String maxlength(500)
     documentationURL String maxlength(500)
@@ -128,12 +139,13 @@ entity DataFlowItem {
 entity ApplicationComponent {
 	name String,
     description String maxlength(1000),
-    type ApplicationType
     technology String 
     comment String 
     documentationURL String maxlength(500)
     startDate LocalDate
     endDate LocalDate
+	applicationType ApplicationType
+	softwareType SoftwareType    
 }
 
 enum ViewPoint {
@@ -159,23 +171,32 @@ enum Frequency {
     ON_DEMAND
 }
 
-enum Format {
-	XML
-    JSON
-    CSV
+entity DataFormat {
+	name String
+}
+
+entity ApplicationCategory {
+    name String
+    description String
 }
 
 enum ApplicationType {
-	MICROSERVICE
-    EXTERNAL
-    JAVA
-    PACKAGE
-    INFRASTRUCTURE
-    GINKO
-    FRONT
-    PARTNER
+	SOFTWARE
     MIDDLEWARE
+	HARDWARE
+	PARTNER
+	OTHER
 }
+
+enum SoftwareType {
+	ONPREMISE_COTS
+    ONPREMISE_CUSTOM
+    CUSTOM_CLOUD
+    SAAS
+}
+
+
+
 
 // ADD Helper for import, not part of main model
 
@@ -225,4 +246,20 @@ entity FlowImport(tmp_import_flows) {
 	importStatusMessage String
 }
 
+entity DataFlowImport(tmp_import_dataflows) {
+    dataResourceName String 
+	dataResourceType String 
+    dataDescription String 
+    dataDocumentationURL String
+	dataItemResourceName String 
+    dataItemResourceType String 
+    dataItemDescription String 
+    dataItemDocumentationURL String
+	frequency String
+    format String
+    contractURL String 
+    importDataFlowStatus ImportStatus
+    importDataFlowItemStatus ImportStatus
+	importStatusMessage String
+}
 

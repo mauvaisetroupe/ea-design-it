@@ -13,5 +13,11 @@
                                  constraintName="fk_application__owner_id"
                                  referencedColumnNames="id"
                                  referencedTableName="owner"/>
+
+        <addForeignKeyConstraint baseColumnNames="category_id"
+                                 baseTableName="application"
+                                 constraintName="fk_application__category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_category"/>
     </changeSet>
 </databaseChangeLog>

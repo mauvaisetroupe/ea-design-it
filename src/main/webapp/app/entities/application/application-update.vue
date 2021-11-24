@@ -55,21 +55,6 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="application-type">Type</label>
-            <select
-              class="form-control"
-              name="type"
-              :class="{ valid: !$v.application.type.$invalid, invalid: $v.application.type.$invalid }"
-              v-model="$v.application.type.$model"
-              id="application-type"
-              data-cy="type"
-            >
-              <option v-for="applicationType in applicationTypeValues" :key="applicationType" v-bind:value="applicationType">
-                {{ applicationType }}
-              </option>
-            </select>
-          </div>
-          <div class="form-group">
             <label class="form-control-label" for="application-technology">Technology</label>
             <input
               type="text"
@@ -167,6 +152,34 @@
             </b-input-group>
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-applicationType">Application Type</label>
+            <select
+              class="form-control"
+              name="applicationType"
+              :class="{ valid: !$v.application.applicationType.$invalid, invalid: $v.application.applicationType.$invalid }"
+              v-model="$v.application.applicationType.$model"
+              id="application-applicationType"
+              data-cy="applicationType"
+            >
+              <option v-for="applicationType in applicationTypeValues" :key="applicationType" v-bind:value="applicationType">
+                {{ applicationType }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="application-softwareType">Software Type</label>
+            <select
+              class="form-control"
+              name="softwareType"
+              :class="{ valid: !$v.application.softwareType.$invalid, invalid: $v.application.softwareType.$invalid }"
+              v-model="$v.application.softwareType.$model"
+              id="application-softwareType"
+              data-cy="softwareType"
+            >
+              <option v-for="softwareType in softwareTypeValues" :key="softwareType" v-bind:value="softwareType">{{ softwareType }}</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="application-owner">Owner</label>
             <select class="form-control" id="application-owner" data-cy="owner" name="owner" v-model="application.owner">
               <option v-bind:value="null"></option>
@@ -176,6 +189,23 @@
                 :key="ownerOption.id"
               >
                 {{ ownerOption.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="application-category">Category</label>
+            <select class="form-control" id="application-category" data-cy="category" name="category" v-model="application.category">
+              <option v-bind:value="null"></option>
+              <option
+                v-bind:value="
+                  application.category && applicationCategoryOption.id === application.category.id
+                    ? application.category
+                    : applicationCategoryOption
+                "
+                v-for="applicationCategoryOption in applicationCategories"
+                :key="applicationCategoryOption.id"
+              >
+                {{ applicationCategoryOption.name }}
               </option>
             </select>
           </div>

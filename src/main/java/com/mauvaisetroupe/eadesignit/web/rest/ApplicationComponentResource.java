@@ -132,9 +132,6 @@ public class ApplicationComponentResource {
                 if (applicationComponent.getDescription() != null) {
                     existingApplicationComponent.setDescription(applicationComponent.getDescription());
                 }
-                if (applicationComponent.getType() != null) {
-                    existingApplicationComponent.setType(applicationComponent.getType());
-                }
                 if (applicationComponent.getTechnology() != null) {
                     existingApplicationComponent.setTechnology(applicationComponent.getTechnology());
                 }
@@ -149,6 +146,12 @@ public class ApplicationComponentResource {
                 }
                 if (applicationComponent.getEndDate() != null) {
                     existingApplicationComponent.setEndDate(applicationComponent.getEndDate());
+                }
+                if (applicationComponent.getApplicationType() != null) {
+                    existingApplicationComponent.setApplicationType(applicationComponent.getApplicationType());
+                }
+                if (applicationComponent.getSoftwareType() != null) {
+                    existingApplicationComponent.setSoftwareType(applicationComponent.getSoftwareType());
                 }
 
                 return existingApplicationComponent;

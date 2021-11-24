@@ -7,6 +7,7 @@ import { DATE_FORMAT } from '@/shared/date/filters';
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
 import { ApplicationComponent } from '@/shared/model/application-component.model';
 import { ApplicationType } from '@/shared/model/enumerations/application-type.model';
+import { SoftwareType } from '@/shared/model/enumerations/software-type.model';
 
 const error = {
   response: {
@@ -38,12 +39,13 @@ describe('Service Tests', () => {
         123,
         'AAAAAAA',
         'AAAAAAA',
-        ApplicationType.MICROSERVICE,
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
         currentDate,
-        currentDate
+        currentDate,
+        ApplicationType.SOFTWARE,
+        SoftwareType.ONPREMISE_COTS
       );
     });
 
@@ -112,12 +114,13 @@ describe('Service Tests', () => {
           {
             name: 'BBBBBB',
             description: 'BBBBBB',
-            type: 'BBBBBB',
             technology: 'BBBBBB',
             comment: 'BBBBBB',
             documentationURL: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),
             endDate: dayjs(currentDate).format(DATE_FORMAT),
+            applicationType: 'BBBBBB',
+            softwareType: 'BBBBBB',
           },
           elemDefault
         );
@@ -151,9 +154,9 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             description: 'BBBBBB',
-            technology: 'BBBBBB',
             comment: 'BBBBBB',
             documentationURL: 'BBBBBB',
+            startDate: dayjs(currentDate).format(DATE_FORMAT),
           },
           new ApplicationComponent()
         );
@@ -189,12 +192,13 @@ describe('Service Tests', () => {
           {
             name: 'BBBBBB',
             description: 'BBBBBB',
-            type: 'BBBBBB',
             technology: 'BBBBBB',
             comment: 'BBBBBB',
             documentationURL: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),
             endDate: dayjs(currentDate).format(DATE_FORMAT),
+            applicationType: 'BBBBBB',
+            softwareType: 'BBBBBB',
           },
           elemDefault
         );

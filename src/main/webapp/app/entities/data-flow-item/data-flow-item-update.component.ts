@@ -13,6 +13,7 @@ import DataFlowItemService from './data-flow-item.service';
 const validations: any = {
   dataFlowItem: {
     resourceName: {},
+    resourceType: {},
     description: {
       maxLength: maxLength(1000),
     },

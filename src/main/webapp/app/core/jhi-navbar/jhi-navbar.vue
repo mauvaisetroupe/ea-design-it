@@ -95,6 +95,18 @@
             <font-awesome-icon icon="asterisk" />
             <span>Data Flow Item</span>
           </b-dropdown-item>
+          <b-dropdown-item to="/data-format">
+            <font-awesome-icon icon="asterisk" />
+            <span>Data Format</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/application-category">
+            <font-awesome-icon icon="asterisk" />
+            <span>Application Category</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/data-flow-import">
+            <font-awesome-icon icon="asterisk" />
+            <span>Data Flow Import</span>
+          </b-dropdown-item>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </b-nav-item-dropdown>
         <b-nav-item-dropdown

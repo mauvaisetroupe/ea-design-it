@@ -29,13 +29,14 @@
           <tr>
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Resource Name</span></th>
+            <th scope="row"><span>Resource Type</span></th>
             <th scope="row"><span>Description</span></th>
             <th scope="row"><span>Frequency</span></th>
-            <th scope="row"><span>Format</span></th>
             <th scope="row"><span>Contract URL</span></th>
             <th scope="row"><span>Documentation URL</span></th>
             <th scope="row"><span>Start Date</span></th>
             <th scope="row"><span>End Date</span></th>
+            <th scope="row"><span>Format</span></th>
             <th scope="row"><span>Functional Flows</span></th>
             <th scope="row"><span>Flow Interface</span></th>
             <th scope="row"><span>Interface Protocol</span></th>
@@ -48,9 +49,9 @@
               <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }">{{ dataFlow.id }}</router-link>
             </td>
             <td>{{ dataFlow.resourceName }}</td>
+            <td>{{ dataFlow.resourceType }}</td>
             <td>{{ dataFlow.description }}</td>
             <td>{{ dataFlow.frequency }}</td>
-            <td>{{ dataFlow.format }}</td>
             <td>
               <a v-if="dataFlow.contractURL" v-bind:href="dataFlow.contractURL">{{ dataFlow.contractURL | truncate(20) }}</a>
             </td>
@@ -59,6 +60,13 @@
             </td>
             <td>{{ dataFlow.startDate }}</td>
             <td>{{ dataFlow.endDate }}</td>
+            <td>
+              <div v-if="dataFlow.format">
+                <router-link :to="{ name: 'DataFormatView', params: { dataFormatId: dataFlow.format.id } }">{{
+                  dataFlow.format.name
+                }}</router-link>
+              </div>
+            </td>
             <td>
               <span v-for="(functionalFlows, i) in dataFlow.functionalFlows" :key="functionalFlows.id"
                 >{{ i > 0 ? ', ' : '' }}

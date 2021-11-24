@@ -29,6 +29,9 @@ public class DataFlowItem implements Serializable {
     @Column(name = "resource_name")
     private String resourceName;
 
+    @Column(name = "resource_type")
+    private String resourceType;
+
     @Size(max = 1000)
     @Column(name = "description", length = 1000)
     private String description;
@@ -48,7 +51,7 @@ public class DataFlowItem implements Serializable {
     private LocalDate endDate;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "items", "functionalFlows", "flowInterface" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "items", "format", "functionalFlows", "flowInterface" }, allowSetters = true)
     private DataFlow dataFlow;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -77,6 +80,19 @@ public class DataFlowItem implements Serializable {
 
     public void setResourceName(String resourceName) {
         this.resourceName = resourceName;
+    }
+
+    public String getResourceType() {
+        return this.resourceType;
+    }
+
+    public DataFlowItem resourceType(String resourceType) {
+        this.setResourceType(resourceType);
+        return this;
+    }
+
+    public void setResourceType(String resourceType) {
+        this.resourceType = resourceType;
     }
 
     public String getDescription() {
@@ -182,6 +198,7 @@ public class DataFlowItem implements Serializable {
         return "DataFlowItem{" +
             "id=" + getId() +
             ", resourceName='" + getResourceName() + "'" +
+            ", resourceType='" + getResourceType() + "'" +
             ", description='" + getDescription() + "'" +
             ", contractURL='" + getContractURL() + "'" +
             ", documentationURL='" + getDocumentationURL() + "'" +

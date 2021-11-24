@@ -23,11 +23,6 @@
     <div class="alert alert-warning" v-if="!isFetching && applications && applications.length === 0">
       <span>No applications found</span>
     </div>
-
-    <div>
-      <input type="text" placeholder="Filter by text" v-model="filter" />
-    </div>
-
     <div class="table-responsive" v-if="applications && applications.length > 0">
       <table class="table table-striped" aria-describedby="applications">
         <thead>
@@ -36,25 +31,26 @@
             <th scope="row"><span>Alias</span></th>
             <th scope="row"><span>Name</span></th>
             <th scope="row"><span>Description</span></th>
-            <th scope="row"><span>Type</span></th>
             <th scope="row"><span>Technology</span></th>
             <th scope="row"><span>Comment</span></th>
             <th scope="row"><span>Documentation URL</span></th>
             <th scope="row"><span>Start Date</span></th>
             <th scope="row"><span>End Date</span></th>
+            <th scope="row"><span>Application Type</span></th>
+            <th scope="row"><span>Software Type</span></th>
             <th scope="row"><span>Owner</span></th>
+            <th scope="row"><span>Category</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="application in filteredRows" :key="application.id" data-cy="entityTable">
+          <tr v-for="application in applications" :key="application.id" data-cy="entityTable">
             <td>
               <router-link :to="{ name: 'ApplicationView', params: { applicationId: application.id } }">{{ application.id }}</router-link>
             </td>
             <td>{{ application.alias }}</td>
             <td>{{ application.name }}</td>
             <td>{{ application.description }}</td>
-            <td>{{ application.type }}</td>
             <td>{{ application.technology }}</td>
             <td>{{ application.comment }}</td>
             <td>
@@ -62,10 +58,19 @@
             </td>
             <td>{{ application.startDate }}</td>
             <td>{{ application.endDate }}</td>
+            <td>{{ application.applicationType }}</td>
+            <td>{{ application.softwareType }}</td>
             <td>
               <div v-if="application.owner">
                 <router-link :to="{ name: 'OwnerView', params: { ownerId: application.owner.id } }">{{
                   application.owner.name
+                }}</router-link>
+              </div>
+            </td>
+            <td>
+              <div v-if="application.category">
+                <router-link :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: application.category.id } }">{{
+                  application.category.name
                 }}</router-link>
               </div>
             </td>

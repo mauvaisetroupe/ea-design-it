@@ -1,0 +1,74 @@
+{
+  "name": "DataFlowImport",
+  "fields": [
+    {
+      "fieldName": "dataResourceName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dataResourceType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dataDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dataDocumentationURL",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dataItemResourceName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dataItemResourceType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dataItemDescription",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dataItemDocumentationURL",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "frequency",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "format",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "contractURL",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "importDataFlowStatus",
+      "fieldType": "ImportStatus",
+      "fieldValues": "NEW,EXISTING,UPDATED,ERROR"
+    },
+    {
+      "fieldName": "importDataFlowItemStatus",
+      "fieldType": "ImportStatus",
+      "fieldValues": "NEW,EXISTING,UPDATED,ERROR"
+    },
+    {
+      "fieldName": "importStatusMessage",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [],
+  "entityTableName": "tmp_import_dataflows",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211124203302"
+}

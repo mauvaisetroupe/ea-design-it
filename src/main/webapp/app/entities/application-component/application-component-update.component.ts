@@ -7,9 +7,13 @@ import AlertService from '@/shared/alert/alert.service';
 import ApplicationService from '@/entities/application/application.service';
 import { IApplication } from '@/shared/model/application.model';
 
+import ApplicationCategoryService from '@/entities/application-category/application-category.service';
+import { IApplicationCategory } from '@/shared/model/application-category.model';
+
 import { IApplicationComponent, ApplicationComponent } from '@/shared/model/application-component.model';
 import ApplicationComponentService from './application-component.service';
 import { ApplicationType } from '@/shared/model/enumerations/application-type.model';
+import { SoftwareType } from '@/shared/model/enumerations/software-type.model';
 
 const validations: any = {
   applicationComponent: {
@@ -17,7 +21,6 @@ const validations: any = {
     description: {
       maxLength: maxLength(1000),
     },
-    type: {},
     technology: {},
     comment: {},
     documentationURL: {
@@ -25,6 +28,8 @@ const validations: any = {
     },
     startDate: {},
     endDate: {},
+    applicationType: {},
+    softwareType: {},
     application: {
       required,
     },
@@ -43,7 +48,12 @@ export default class ApplicationComponentUpdate extends Vue {
   @Inject('applicationService') private applicationService: () => ApplicationService;
 
   public applications: IApplication[] = [];
+
+  @Inject('applicationCategoryService') private applicationCategoryService: () => ApplicationCategoryService;
+
+  public applicationCategories: IApplicationCategory[] = [];
   public applicationTypeValues: string[] = Object.keys(ApplicationType);
+  public softwareTypeValues: string[] = Object.keys(SoftwareType);
   public isSaving = false;
   public currentLanguage = '';
 
@@ -129,6 +139,11 @@ export default class ApplicationComponentUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.applications = res.data;
+      });
+    this.applicationCategoryService()
+      .retrieve()
+      .then(res => {
+        this.applicationCategories = res.data;
       });
   }
 }

@@ -1,7 +1,6 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mauvaisetroupe.eadesignit.domain.enumeration.Format;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -40,6 +39,9 @@ public class DataFlow implements Serializable {
     @Column(name = "resource_name")
     private String resourceName;
 
+    @Column(name = "resource_type")
+    private String resourceType;
+
     @Size(max = 1000)
     @Column(name = "description", length = 1000)
     private String description;
@@ -47,10 +49,6 @@ public class DataFlow implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "frequency")
     private Frequency frequency;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "format")
-    private Format format;
 
     /**
      * Swagger or XSD URL
@@ -74,6 +72,9 @@ public class DataFlow implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "dataFlow" }, allowSetters = true)
     private Set<DataFlowItem> items = new HashSet<>();
+
+    @ManyToOne
+    private DataFormat format;
 
     @ManyToMany
     @NotNull
@@ -122,6 +123,19 @@ public class DataFlow implements Serializable {
         this.resourceName = resourceName;
     }
 
+    public String getResourceType() {
+        return this.resourceType;
+    }
+
+    public DataFlow resourceType(String resourceType) {
+        this.setResourceType(resourceType);
+        return this;
+    }
+
+    public void setResourceType(String resourceType) {
+        this.resourceType = resourceType;
+    }
+
     public String getDescription() {
         return this.description;
     }
@@ -146,19 +160,6 @@ public class DataFlow implements Serializable {
 
     public void setFrequency(Frequency frequency) {
         this.frequency = frequency;
-    }
-
-    public Format getFormat() {
-        return this.format;
-    }
-
-    public DataFlow format(Format format) {
-        this.setFormat(format);
-        return this;
-    }
-
-    public void setFormat(Format format) {
-        this.format = format;
     }
 
     public String getContractURL() {
@@ -244,6 +245,19 @@ public class DataFlow implements Serializable {
         return this;
     }
 
+    public DataFormat getFormat() {
+        return this.format;
+    }
+
+    public void setFormat(DataFormat dataFormat) {
+        this.format = dataFormat;
+    }
+
+    public DataFlow format(DataFormat dataFormat) {
+        this.setFormat(dataFormat);
+        return this;
+    }
+
     public Set<FunctionalFlow> getFunctionalFlows() {
         return this.functionalFlows;
     }
@@ -307,9 +321,9 @@ public class DataFlow implements Serializable {
         return "DataFlow{" +
             "id=" + getId() +
             ", resourceName='" + getResourceName() + "'" +
+            ", resourceType='" + getResourceType() + "'" +
             ", description='" + getDescription() + "'" +
             ", frequency='" + getFrequency() + "'" +
-            ", format='" + getFormat() + "'" +
             ", contractURL='" + getContractURL() + "'" +
             ", documentationURL='" + getDocumentationURL() + "'" +
             ", startDate='" + getStartDate() + "'" +

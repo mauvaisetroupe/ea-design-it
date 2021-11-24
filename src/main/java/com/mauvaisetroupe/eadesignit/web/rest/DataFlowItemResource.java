@@ -128,6 +128,9 @@ public class DataFlowItemResource {
                 if (dataFlowItem.getResourceName() != null) {
                     existingDataFlowItem.setResourceName(dataFlowItem.getResourceName());
                 }
+                if (dataFlowItem.getResourceType() != null) {
+                    existingDataFlowItem.setResourceType(dataFlowItem.getResourceType());
+                }
                 if (dataFlowItem.getDescription() != null) {
                     existingDataFlowItem.setDescription(dataFlowItem.getDescription());
                 }

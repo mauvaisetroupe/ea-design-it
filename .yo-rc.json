@@ -54,9 +54,12 @@
       "ApplicationImport",
       "FlowImport",
       "Protocol",
-      "DataFlowItem"
+      "DataFlowItem",
+      "DataFormat",
+      "ApplicationCategory",
+      "DataFlowImport"
     ],
-    "lastLiquibaseTimestamp": 1637435467000,
+    "lastLiquibaseTimestamp": 1637785982000,
     "herokuAppName": "ea-design-it",
     "herokuDeployType": "git",
     "herokuJavaVersion": "17"

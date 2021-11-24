@@ -134,9 +134,6 @@ public class ApplicationResource {
                 if (application.getDescription() != null) {
                     existingApplication.setDescription(application.getDescription());
                 }
-                if (application.getType() != null) {
-                    existingApplication.setType(application.getType());
-                }
                 if (application.getTechnology() != null) {
                     existingApplication.setTechnology(application.getTechnology());
                 }
@@ -151,6 +148,12 @@ public class ApplicationResource {
                 }
                 if (application.getEndDate() != null) {
                     existingApplication.setEndDate(application.getEndDate());
+                }
+                if (application.getApplicationType() != null) {
+                    existingApplication.setApplicationType(application.getApplicationType());
+                }
+                if (application.getSoftwareType() != null) {
+                    existingApplication.setSoftwareType(application.getSoftwareType());
                 }
 
                 return existingApplication;

@@ -24,6 +24,10 @@
       <table class="table table-striped" aria-describedby="flowImports">
         <thead>
           <tr>
+            <th scope="row"><span>Import Interface Status</span></th>
+            <th scope="row"><span>Import Functional Flow Status</span></th>
+            <th scope="row"><span>Import Data Flow Status</span></th>
+            <th scope="row"><span>Import Status Message</span></th>
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Id Flow From Excel</span></th>
             <th scope="row"><span>Flow Alias</span></th>
@@ -39,33 +43,12 @@
             <th scope="row"><span>Flow Status</span></th>
             <th scope="row"><span>Comment</span></th>
             <th scope="row"><span>Document Name</span></th>
-            <th scope="row"><span>Import Interface Status</span></th>
-            <th scope="row"><span>Import Functional Flow Status</span></th>
-            <th scope="row"><span>Import Data Flow Status</span></th>
-            <th scope="row"><span>Import Status Message</span></th>
             <th scope="row"><span>Existing Application ID</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="flowImport in flowImports" :key="flowImport.id" data-cy="entityTable">
-            <td>
-              <router-link :to="{ name: 'FlowImportView', params: { flowImportId: flowImport.id } }">{{ flowImport.id }}</router-link>
-            </td>
-            <td>{{ flowImport.idFlowFromExcel }}</td>
-            <td>{{ flowImport.flowAlias }}</td>
-            <td>{{ flowImport.sourceElement }}</td>
-            <td>{{ flowImport.targetElement }}</td>
-            <td>{{ flowImport.description }}</td>
-            <td>{{ flowImport.integrationPattern }}</td>
-            <td>{{ flowImport.frequency }}</td>
-            <td>{{ flowImport.format }}</td>
-            <td>{{ flowImport.swagger }}</td>
-            <td>{{ flowImport.blueprint }}</td>
-            <td>{{ flowImport.blueprintStatus }}</td>
-            <td>{{ flowImport.flowStatus }}</td>
-            <td>{{ flowImport.comment }}</td>
-            <td>{{ flowImport.documentName }}</td>
             <td>
               <span v-bind:class="[flowImport.importInterfaceStatus === 'ERROR' ? 'rederror' : '']">
                 {{ flowImport.importInterfaceStatus }}</span
@@ -86,6 +69,23 @@
                 flowImport.importStatusMessage
               }}</span>
             </td>
+            <td>
+              <router-link :to="{ name: 'FlowImportView', params: { flowImportId: flowImport.id } }">{{ flowImport.id }}</router-link>
+            </td>
+            <td>{{ flowImport.idFlowFromExcel }}</td>
+            <td>{{ flowImport.flowAlias }}</td>
+            <td>{{ flowImport.sourceElement }}</td>
+            <td>{{ flowImport.targetElement }}</td>
+            <td>{{ flowImport.description }}</td>
+            <td>{{ flowImport.integrationPattern }}</td>
+            <td>{{ flowImport.frequency }}</td>
+            <td>{{ flowImport.format }}</td>
+            <td>{{ flowImport.swagger }}</td>
+            <td>{{ flowImport.blueprint }}</td>
+            <td>{{ flowImport.blueprintStatus }}</td>
+            <td>{{ flowImport.flowStatus }}</td>
+            <td>{{ flowImport.comment }}</td>
+            <td>{{ flowImport.documentName }}</td>
             <td>{{ flowImport.existingApplicationID }}</td>
             <td class="text-right">
               <div class="btn-group">

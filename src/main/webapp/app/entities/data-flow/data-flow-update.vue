@@ -21,6 +21,18 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="data-flow-resourceType">Resource Type</label>
+            <input
+              type="text"
+              class="form-control"
+              name="resourceType"
+              id="data-flow-resourceType"
+              data-cy="resourceType"
+              :class="{ valid: !$v.dataFlow.resourceType.$invalid, invalid: $v.dataFlow.resourceType.$invalid }"
+              v-model="$v.dataFlow.resourceType.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="data-flow-description">Description</label>
             <input
               type="text"
@@ -48,19 +60,6 @@
               data-cy="frequency"
             >
               <option v-for="frequency in frequencyValues" :key="frequency" v-bind:value="frequency">{{ frequency }}</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="data-flow-format">Format</label>
-            <select
-              class="form-control"
-              name="format"
-              :class="{ valid: !$v.dataFlow.format.$invalid, invalid: $v.dataFlow.format.$invalid }"
-              v-model="$v.dataFlow.format.$model"
-              id="data-flow-format"
-              data-cy="format"
-            >
-              <option v-for="format in formatValues" :key="format" v-bind:value="format">{{ format }}</option>
             </select>
           </div>
           <div class="form-group">
@@ -152,6 +151,19 @@
                 v-model="$v.dataFlow.endDate.$model"
               />
             </b-input-group>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="data-flow-format">Format</label>
+            <select class="form-control" id="data-flow-format" data-cy="format" name="format" v-model="dataFlow.format">
+              <option v-bind:value="null"></option>
+              <option
+                v-bind:value="dataFlow.format && dataFormatOption.id === dataFlow.format.id ? dataFlow.format : dataFormatOption"
+                v-for="dataFormatOption in dataFormats"
+                :key="dataFormatOption.id"
+              >
+                {{ dataFormatOption.name }}
+              </option>
+            </select>
           </div>
           <div class="form-group">
             <label for="data-flow-functionalFlows">Functional Flows</label>

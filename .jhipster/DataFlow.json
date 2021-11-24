@@ -7,6 +7,10 @@
       "javadoc": "TOPIC name for event, FileName for Files"
     },
     {
+      "fieldName": "resourceType",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "description",
       "fieldType": "String",
       "fieldValidateRules": ["maxlength"],
@@ -16,11 +20,6 @@
       "fieldName": "frequency",
       "fieldType": "Frequency",
       "fieldValues": "DAILY,WEEKLY,ON_DEMAND"
-    },
-    {
-      "fieldName": "format",
-      "fieldType": "Format",
-      "fieldValues": "XML,JSON,CSV"
     },
     {
       "fieldName": "contractURL",
@@ -50,6 +49,13 @@
       "otherEntityName": "dataFlowItem",
       "otherEntityRelationshipName": "dataFlow",
       "relationshipName": "items"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "dataFormat",
+      "otherEntityRelationshipName": "dataFlow",
+      "relationshipName": "format",
+      "otherEntityField": "name"
     },
     {
       "relationshipType": "many-to-many",

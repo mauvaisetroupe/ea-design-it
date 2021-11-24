@@ -17,13 +17,13 @@
             <column name="resource_name" type="varchar(255)" remarks="TOPIC name for event, FileName for Files">
                 <constraints nullable="true" />
             </column>
+            <column name="resource_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="description" type="varchar(1000)">
                 <constraints nullable="true" />
             </column>
             <column name="frequency" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="format" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="contract_url" type="varchar(500)" remarks="Swagger or XSD URL">
@@ -36,6 +36,9 @@
                 <constraints nullable="true" />
             </column>
             <column name="end_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="format_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="flow_interface_id" type="bigint">

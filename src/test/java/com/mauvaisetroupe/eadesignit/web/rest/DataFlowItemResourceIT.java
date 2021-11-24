@@ -34,6 +34,9 @@ class DataFlowItemResourceIT {
     private static final String DEFAULT_RESOURCE_NAME = "AAAAAAAAAA";
     private static final String UPDATED_RESOURCE_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_RESOURCE_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_RESOURCE_TYPE = "BBBBBBBBBB";
+
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
@@ -75,6 +78,7 @@ class DataFlowItemResourceIT {
     public static DataFlowItem createEntity(EntityManager em) {
         DataFlowItem dataFlowItem = new DataFlowItem()
             .resourceName(DEFAULT_RESOURCE_NAME)
+            .resourceType(DEFAULT_RESOURCE_TYPE)
             .description(DEFAULT_DESCRIPTION)
             .contractURL(DEFAULT_CONTRACT_URL)
             .documentationURL(DEFAULT_DOCUMENTATION_URL)
@@ -92,6 +96,7 @@ class DataFlowItemResourceIT {
     public static DataFlowItem createUpdatedEntity(EntityManager em) {
         DataFlowItem dataFlowItem = new DataFlowItem()
             .resourceName(UPDATED_RESOURCE_NAME)
+            .resourceType(UPDATED_RESOURCE_TYPE)
             .description(UPDATED_DESCRIPTION)
             .contractURL(UPDATED_CONTRACT_URL)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
@@ -119,6 +124,7 @@ class DataFlowItemResourceIT {
         assertThat(dataFlowItemList).hasSize(databaseSizeBeforeCreate + 1);
         DataFlowItem testDataFlowItem = dataFlowItemList.get(dataFlowItemList.size() - 1);
         assertThat(testDataFlowItem.getResourceName()).isEqualTo(DEFAULT_RESOURCE_NAME);
+        assertThat(testDataFlowItem.getResourceType()).isEqualTo(DEFAULT_RESOURCE_TYPE);
         assertThat(testDataFlowItem.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testDataFlowItem.getContractURL()).isEqualTo(DEFAULT_CONTRACT_URL);
         assertThat(testDataFlowItem.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
@@ -157,6 +163,7 @@ class DataFlowItemResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(dataFlowItem.getId().intValue())))
             .andExpect(jsonPath("$.[*].resourceName").value(hasItem(DEFAULT_RESOURCE_NAME)))
+            .andExpect(jsonPath("$.[*].resourceType").value(hasItem(DEFAULT_RESOURCE_TYPE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].contractURL").value(hasItem(DEFAULT_CONTRACT_URL)))
             .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)))
@@ -177,6 +184,7 @@ class DataFlowItemResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(dataFlowItem.getId().intValue()))
             .andExpect(jsonPath("$.resourceName").value(DEFAULT_RESOURCE_NAME))
+            .andExpect(jsonPath("$.resourceType").value(DEFAULT_RESOURCE_TYPE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.contractURL").value(DEFAULT_CONTRACT_URL))
             .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL))
@@ -205,6 +213,7 @@ class DataFlowItemResourceIT {
         em.detach(updatedDataFlowItem);
         updatedDataFlowItem
             .resourceName(UPDATED_RESOURCE_NAME)
+            .resourceType(UPDATED_RESOURCE_TYPE)
             .description(UPDATED_DESCRIPTION)
             .contractURL(UPDATED_CONTRACT_URL)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
@@ -224,6 +233,7 @@ class DataFlowItemResourceIT {
         assertThat(dataFlowItemList).hasSize(databaseSizeBeforeUpdate);
         DataFlowItem testDataFlowItem = dataFlowItemList.get(dataFlowItemList.size() - 1);
         assertThat(testDataFlowItem.getResourceName()).isEqualTo(UPDATED_RESOURCE_NAME);
+        assertThat(testDataFlowItem.getResourceType()).isEqualTo(UPDATED_RESOURCE_TYPE);
         assertThat(testDataFlowItem.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testDataFlowItem.getContractURL()).isEqualTo(UPDATED_CONTRACT_URL);
         assertThat(testDataFlowItem.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
@@ -301,9 +311,9 @@ class DataFlowItemResourceIT {
 
         partialUpdatedDataFlowItem
             .resourceName(UPDATED_RESOURCE_NAME)
+            .resourceType(UPDATED_RESOURCE_TYPE)
             .description(UPDATED_DESCRIPTION)
-            .contractURL(UPDATED_CONTRACT_URL)
-            .endDate(UPDATED_END_DATE);
+            .startDate(UPDATED_START_DATE);
 
         restDataFlowItemMockMvc
             .perform(
@@ -318,11 +328,12 @@ class DataFlowItemResourceIT {
         assertThat(dataFlowItemList).hasSize(databaseSizeBeforeUpdate);
         DataFlowItem testDataFlowItem = dataFlowItemList.get(dataFlowItemList.size() - 1);
         assertThat(testDataFlowItem.getResourceName()).isEqualTo(UPDATED_RESOURCE_NAME);
+        assertThat(testDataFlowItem.getResourceType()).isEqualTo(UPDATED_RESOURCE_TYPE);
         assertThat(testDataFlowItem.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testDataFlowItem.getContractURL()).isEqualTo(UPDATED_CONTRACT_URL);
+        assertThat(testDataFlowItem.getContractURL()).isEqualTo(DEFAULT_CONTRACT_URL);
         assertThat(testDataFlowItem.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
-        assertThat(testDataFlowItem.getStartDate()).isEqualTo(DEFAULT_START_DATE);
-        assertThat(testDataFlowItem.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testDataFlowItem.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testDataFlowItem.getEndDate()).isEqualTo(DEFAULT_END_DATE);
     }
 
     @Test
@@ -339,6 +350,7 @@ class DataFlowItemResourceIT {
 
         partialUpdatedDataFlowItem
             .resourceName(UPDATED_RESOURCE_NAME)
+            .resourceType(UPDATED_RESOURCE_TYPE)
             .description(UPDATED_DESCRIPTION)
             .contractURL(UPDATED_CONTRACT_URL)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
@@ -358,6 +370,7 @@ class DataFlowItemResourceIT {
         assertThat(dataFlowItemList).hasSize(databaseSizeBeforeUpdate);
         DataFlowItem testDataFlowItem = dataFlowItemList.get(dataFlowItemList.size() - 1);
         assertThat(testDataFlowItem.getResourceName()).isEqualTo(UPDATED_RESOURCE_NAME);
+        assertThat(testDataFlowItem.getResourceType()).isEqualTo(UPDATED_RESOURCE_TYPE);
         assertThat(testDataFlowItem.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testDataFlowItem.getContractURL()).isEqualTo(UPDATED_CONTRACT_URL);
         assertThat(testDataFlowItem.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);

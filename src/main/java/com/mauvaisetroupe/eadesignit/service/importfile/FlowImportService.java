@@ -2,18 +2,19 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
+import com.mauvaisetroupe.eadesignit.domain.DataFormat;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
-import com.mauvaisetroupe.eadesignit.domain.enumeration.Format;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ViewPoint;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
+import com.mauvaisetroupe.eadesignit.repository.DataFormatRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
@@ -30,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -69,6 +69,7 @@ public class FlowImportService {
     private final OwnerRepository ownerRepository;
     private final LandscapeViewRepository landscapeViewRepository;
     private final ProtocolRepository protocolRepository;
+    private final DataFormatRepository dataFormatRepository;
 
     public FlowImportService(
         FunctionalFlowRepository flowRepository,
@@ -77,7 +78,8 @@ public class FlowImportService {
         DataFlowRepository dataFlowRepository,
         OwnerRepository ownerRepository,
         LandscapeViewRepository landscapeViewRepository,
-        ProtocolRepository protocolRepository
+        ProtocolRepository protocolRepository,
+        DataFormatRepository dataFormatRepository
     ) {
         this.flowRepository = flowRepository;
         this.interfaceRepository = interfaceRepository;
@@ -86,6 +88,7 @@ public class FlowImportService {
         this.ownerRepository = ownerRepository;
         this.landscapeViewRepository = landscapeViewRepository;
         this.protocolRepository = protocolRepository;
+        this.dataFormatRepository = dataFormatRepository;
 
         this.columnsArray.add(FLOW_ID_FLOW);
         this.columnsArray.add(FLOW_ALIAS_FLOW);
@@ -122,7 +125,8 @@ public class FlowImportService {
             LandscapeView landscapeView = findOrCreateLandscape(diagramName);
             FunctionalFlow functionalFlow = findOrCreateFunctionalFlow(flowImport);
             FlowInterface flowInterface = findOrCreateInterface(flowImport);
-            DataFlow dataFlow = findOrCreateDataFlow(flowImport);
+            Protocol protocol = findOrCreateProtocol(flowImport);
+            DataFlow dataFlow = findOrCreateDataFlow(flowImport, protocol);
 
             if (landscapeView != null && functionalFlow != null && flowInterface != null) {
                 // Set<>, so could add even if already associated
@@ -226,13 +230,6 @@ public class FlowImportService {
                     "]"
                 );
             }
-            if (StringUtils.hasText(flowImport.getIntegrationPattern())) {
-                Protocol protocol = protocolRepository.findByNameIgnoreCase(flowImport.getIntegrationPattern());
-                if (protocol == null) {
-                    throw new Exception("Cannot find protocol:" + flowImport.getIntegrationPattern());
-                }
-                flowInterface.setProtocol(protocol);
-            }
         } catch (Exception e) {
             log.error("Error with row " + flowImport);
             flowInterface = null;
@@ -242,12 +239,26 @@ public class FlowImportService {
         return flowInterface;
     }
 
+    private Protocol findOrCreateProtocol(FlowImport flowImport) {
+        Protocol protocol = null;
+        if (StringUtils.hasText(flowImport.getIntegrationPattern())) {
+            protocol = protocolRepository.findByNameIgnoreCase(flowImport.getIntegrationPattern());
+            if (protocol == null) {
+                protocol = new Protocol();
+                protocol.setName(flowImport.getIntegrationPattern());
+                protocol.setType(ProtocolType.OTHER);
+                protocolRepository.save(protocol);
+            }
+        }
+        return protocol;
+    }
+
     private void addError(FlowImport flowImport, Exception e) {
-        String previous = flowImport.getImportStatusMessage() == null ? flowImport.getImportStatusMessage() : "";
+        String previous = flowImport.getImportStatusMessage() != null ? flowImport.getImportStatusMessage() : "";
         flowImport.setImportStatusMessage(previous + e.getMessage() + "  \n");
     }
 
-    private DataFlow findOrCreateDataFlow(FlowImport flowImport) {
+    private DataFlow findOrCreateDataFlow(FlowImport flowImport, Protocol protocol) {
         DataFlow dataFlow = null;
         try {
             dataFlow =
@@ -265,14 +276,17 @@ public class FlowImportService {
                 dataFlow.setFrequency(Frequency.valueOf(clean(flowImport.getFrequency())));
             }
             if (StringUtils.hasText(flowImport.getFormat())) {
-                dataFlow.setFormat(Format.valueOf(clean(flowImport.getFormat())));
+                DataFormat dataFormat = dataFormatRepository.findByNameIgnoreCase(flowImport.getFormat());
+                if (dataFormat == null) {
+                    dataFormat = new DataFormat();
+                    dataFormat.setName(flowImport.getFormat());
+                    dataFormatRepository.save(dataFormat);
+                }
+                dataFlow.setFormat(dataFormat);
             }
-            if (StringUtils.hasText(flowImport.getIntegrationPattern())) {
-                Protocol protocol = protocolRepository.findByNameIgnoreCase(flowImport.getIntegrationPattern());
-                if (protocol != null) {
-                    if (protocol.getType().equals(ProtocolType.API)) {
-                        dataFlow.setContractURL(flowImport.getSwagger());
-                    }
+            if (protocol != null) {
+                if (protocol.getType().equals(ProtocolType.API)) {
+                    dataFlow.setContractURL(flowImport.getSwagger());
                 }
             }
         } catch (Exception e) {
@@ -351,6 +365,7 @@ public class FlowImportService {
     private boolean nullable(String value) {
         if (!StringUtils.hasText(value)) return true;
         if ("?".equals(value)) return true;
+        if ("n/a".equals(value.toLowerCase())) return true;
         return false;
     }
 }

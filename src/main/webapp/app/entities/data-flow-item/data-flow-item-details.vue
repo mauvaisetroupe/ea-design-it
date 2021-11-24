@@ -11,6 +11,12 @@
             <span>{{ dataFlowItem.resourceName }}</span>
           </dd>
           <dt>
+            <span>Resource Type</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlowItem.resourceType }}</span>
+          </dd>
+          <dt>
             <span>Description</span>
           </dt>
           <dd>

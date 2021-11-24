@@ -68,6 +68,24 @@ const DataFlowItem = () => import('@/entities/data-flow-item/data-flow-item.vue'
 const DataFlowItemUpdate = () => import('@/entities/data-flow-item/data-flow-item-update.vue');
 // prettier-ignore
 const DataFlowItemDetails = () => import('@/entities/data-flow-item/data-flow-item-details.vue');
+// prettier-ignore
+const DataFormat = () => import('@/entities/data-format/data-format.vue');
+// prettier-ignore
+const DataFormatUpdate = () => import('@/entities/data-format/data-format-update.vue');
+// prettier-ignore
+const DataFormatDetails = () => import('@/entities/data-format/data-format-details.vue');
+// prettier-ignore
+const ApplicationCategory = () => import('@/entities/application-category/application-category.vue');
+// prettier-ignore
+const ApplicationCategoryUpdate = () => import('@/entities/application-category/application-category-update.vue');
+// prettier-ignore
+const ApplicationCategoryDetails = () => import('@/entities/application-category/application-category-details.vue');
+// prettier-ignore
+const DataFlowImport = () => import('@/entities/data-flow-import/data-flow-import.vue');
+// prettier-ignore
+const DataFlowImportUpdate = () => import('@/entities/data-flow-import/data-flow-import-update.vue');
+// prettier-ignore
+const DataFlowImportDetails = () => import('@/entities/data-flow-import/data-flow-import-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default [
@@ -333,6 +351,78 @@ export default [
     path: '/data-flow-item/:dataFlowItemId/view',
     name: 'DataFlowItemView',
     component: DataFlowItemDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/data-format',
+    name: 'DataFormat',
+    component: DataFormat,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/data-format/new',
+    name: 'DataFormatCreate',
+    component: DataFormatUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/data-format/:dataFormatId/edit',
+    name: 'DataFormatEdit',
+    component: DataFormatUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/data-format/:dataFormatId/view',
+    name: 'DataFormatView',
+    component: DataFormatDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/application-category',
+    name: 'ApplicationCategory',
+    component: ApplicationCategory,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/application-category/new',
+    name: 'ApplicationCategoryCreate',
+    component: ApplicationCategoryUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/application-category/:applicationCategoryId/edit',
+    name: 'ApplicationCategoryEdit',
+    component: ApplicationCategoryUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/application-category/:applicationCategoryId/view',
+    name: 'ApplicationCategoryView',
+    component: ApplicationCategoryDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/data-flow-import',
+    name: 'DataFlowImport',
+    component: DataFlowImport,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/data-flow-import/new',
+    name: 'DataFlowImportCreate',
+    component: DataFlowImportUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/data-flow-import/:dataFlowImportId/edit',
+    name: 'DataFlowImportEdit',
+    component: DataFlowImportUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/data-flow-import/:dataFlowImportId/view',
+    name: 'DataFlowImportView',
+    component: DataFlowImportDetails,
     meta: { authorities: [Authority.USER] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

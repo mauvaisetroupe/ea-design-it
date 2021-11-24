@@ -23,12 +23,6 @@
             <span>{{ application.description }}</span>
           </dd>
           <dt>
-            <span>Type</span>
-          </dt>
-          <dd>
-            <span>{{ application.type }}</span>
-          </dd>
-          <dt>
             <span>Technology</span>
           </dt>
           <dd>
@@ -61,11 +55,33 @@
             <span>{{ application.endDate }}</span>
           </dd>
           <dt>
+            <span>Application Type</span>
+          </dt>
+          <dd>
+            <span>{{ application.applicationType }}</span>
+          </dd>
+          <dt>
+            <span>Software Type</span>
+          </dt>
+          <dd>
+            <span>{{ application.softwareType }}</span>
+          </dd>
+          <dt>
             <span>Owner</span>
           </dt>
           <dd>
             <div v-if="application.owner">
               <router-link :to="{ name: 'OwnerView', params: { ownerId: application.owner.id } }">{{ application.owner.name }}</router-link>
+            </div>
+          </dd>
+          <dt>
+            <span>Category</span>
+          </dt>
+          <dd>
+            <div v-if="application.category">
+              <router-link :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: application.category.id } }">{{
+                application.category.name
+              }}</router-link>
             </div>
           </dd>
         </dl>

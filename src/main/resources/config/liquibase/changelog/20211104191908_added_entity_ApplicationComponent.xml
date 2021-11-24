@@ -20,9 +20,6 @@
             <column name="description" type="varchar(1000)">
                 <constraints nullable="true" />
             </column>
-            <column name="type" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="technology" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -38,8 +35,17 @@
             <column name="end_date" type="date">
                 <constraints nullable="true" />
             </column>
+            <column name="application_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="software_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="application_id" type="bigint">
                 <constraints nullable="false" />
+            </column>
+            <column name="category_id" type="bigint">
+                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>

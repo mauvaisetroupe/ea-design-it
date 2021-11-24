@@ -23,6 +23,18 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="data-flow-item-resourceType">Resource Type</label>
+            <input
+              type="text"
+              class="form-control"
+              name="resourceType"
+              id="data-flow-item-resourceType"
+              data-cy="resourceType"
+              :class="{ valid: !$v.dataFlowItem.resourceType.$invalid, invalid: $v.dataFlowItem.resourceType.$invalid }"
+              v-model="$v.dataFlowItem.resourceType.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="data-flow-item-description">Description</label>
             <input
               type="text"

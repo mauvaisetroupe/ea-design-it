@@ -10,6 +10,8 @@ import ApplicationService from '@/entities/application/application.service';
 
 import OwnerService from '@/entities/owner/owner.service';
 
+import ApplicationCategoryService from '@/entities/application-category/application-category.service';
+
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
 import AlertService from '@/shared/alert/alert.service';
 
@@ -43,6 +45,8 @@ describe('Component Tests', () => {
           alertService: () => new AlertService(),
 
           ownerService: () => new OwnerService(),
+
+          applicationCategoryService: () => new ApplicationCategoryService(),
 
           applicationComponentService: () => new ApplicationComponentService(),
         },
