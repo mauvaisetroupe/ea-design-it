@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.service.plantuml;
 
+import com.mauvaisetroupe.eadesignit.domain.Application;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -27,8 +28,12 @@ public class PlantUMLBuilder {
         return plantUMLSource;
     }
 
-    public String getPlantumlRelationShip(String plantUMLSource, String source, String target, String label, String URL) {
-        plantUMLSource += "[" + source + "] --> [" + target + "] :";
+    public String getPlantumlRelationShip(String plantUMLSource, Application source, Application target, String label, String URL) {
+        plantUMLSource += "component [" + source.getName() + "] as C" + source.getId() + "\n";
+        plantUMLSource += "url of C" + source.getId() + " is [[/application/" + source.getId() + "/view]]\n";
+        plantUMLSource += "component [" + target.getName() + "] as C" + target.getId() + "\n";
+        plantUMLSource += "url of C" + target.getId() + " is [[/application/" + target.getId() + "/view]]\n";
+        plantUMLSource += "C" + source.getId() + " --> C" + target.getId() + " :";
         if (URL == null) return plantUMLSource += " " + label + "\n"; else return plantUMLSource += "[[ " + URL + " " + label + " ]]\n";
     }
 
@@ -38,8 +43,6 @@ public class PlantUMLBuilder {
 
     @Cacheable(cacheNames = PLANTUML_SVG_CACHE)
     public String getSVGFromSource(String plantUMLSource) throws IOException {
-        System.out.println(plantUMLSource);
-        System.out.println("XXXXX" + plantUMLSource.hashCode() + "YYYY");
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         SourceStringReader reader = new SourceStringReader(plantUMLSource);
         DiagramDescription diagramDescription = reader.outputImage(byteArrayOutputStream, new FileFormatOption(FileFormat.SVG));

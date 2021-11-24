@@ -30,8 +30,8 @@ public class PlantUMLSerializer {
                 plantUMLSource =
                     plantUMLBuilder.getPlantumlRelationShip(
                         plantUMLSource,
-                        flowInterface.getSource().getName(),
-                        flowInterface.getTarget().getName(),
+                        flowInterface.getSource(),
+                        flowInterface.getTarget(),
                         label,
                         url
                     );
@@ -52,8 +52,8 @@ public class PlantUMLSerializer {
             plantUMLSource =
                 plantUMLBuilder.getPlantumlRelationShip(
                     plantUMLSource,
-                    flowInterface.getSource().getName(),
-                    flowInterface.getTarget().getName(),
+                    flowInterface.getSource(),
+                    flowInterface.getTarget(),
                     flowInterface.getAlias(),
                     url
                 );
