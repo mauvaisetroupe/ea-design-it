@@ -273,11 +273,11 @@ public class FlowImportService {
             } else {
                 flowImport.setImportDataFlowStatus(ImportStatus.EXISTING);
             }
-            if (StringUtils.hasText(flowImport.getFrequency())) {
+            if (nullable(flowImport.getFrequency())) {
                 dataFlow.setFrequency(Frequency.valueOf(clean(flowImport.getFrequency())));
                 dataFlowToCreate = true;
             }
-            if (StringUtils.hasText(flowImport.getFormat())) {
+            if (!nullable(flowImport.getFormat())) {
                 DataFormat dataFormat = dataFormatRepository.findByNameIgnoreCase(flowImport.getFormat());
                 if (dataFormat == null) {
                     dataFormat = new DataFormat();
@@ -370,9 +370,9 @@ public class FlowImportService {
             .replaceAll("(.*)_$", "$1");
     }
 
-    private boolean nullable(String value) {
+    protected boolean nullable(String value) {
         if (!StringUtils.hasText(value)) return true;
-        value.replace("?", "");
+        value = value.replace("?", "");
         if (!StringUtils.hasText(value)) return true;
         return false;
     }
