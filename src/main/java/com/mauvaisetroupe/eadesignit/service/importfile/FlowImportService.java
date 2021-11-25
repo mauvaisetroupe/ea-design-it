@@ -246,7 +246,7 @@ public class FlowImportService {
             if (protocol == null) {
                 protocol = new Protocol();
                 protocol.setName(flowImport.getIntegrationPattern());
-                protocol.setType(ProtocolType.OTHER);
+                protocol.setType(guessPtotocolType(flowImport.getIntegrationPattern()));
                 protocolRepository.save(protocol);
             }
         }
@@ -260,6 +260,7 @@ public class FlowImportService {
 
     private DataFlow findOrCreateDataFlow(FlowImport flowImport, Protocol protocol) {
         DataFlow dataFlow = null;
+        boolean dataFlowToCreate = false;
         try {
             dataFlow =
                 dataFlowRepository.findByFlowInterface_AliasAndFunctionalFlows_Alias(
@@ -274,6 +275,7 @@ public class FlowImportService {
             }
             if (StringUtils.hasText(flowImport.getFrequency())) {
                 dataFlow.setFrequency(Frequency.valueOf(clean(flowImport.getFrequency())));
+                dataFlowToCreate = true;
             }
             if (StringUtils.hasText(flowImport.getFormat())) {
                 DataFormat dataFormat = dataFormatRepository.findByNameIgnoreCase(flowImport.getFormat());
@@ -283,11 +285,17 @@ public class FlowImportService {
                     dataFormatRepository.save(dataFormat);
                 }
                 dataFlow.setFormat(dataFormat);
+                dataFlowToCreate = true;
             }
             if (protocol != null) {
                 if (protocol.getType().equals(ProtocolType.API)) {
                     dataFlow.setContractURL(flowImport.getSwagger());
                 }
+                dataFlowToCreate = true;
+            }
+            if (!dataFlowToCreate) {
+                dataFlow = null;
+                flowImport.setImportDataFlowStatus(null);
             }
         } catch (Exception e) {
             log.error("Error with row " + flowImport);
@@ -364,8 +372,16 @@ public class FlowImportService {
 
     private boolean nullable(String value) {
         if (!StringUtils.hasText(value)) return true;
-        if ("?".equals(value)) return true;
-        if ("n/a".equals(value.toLowerCase())) return true;
+        value.replace("?", "");
+        if (!StringUtils.hasText(value)) return true;
         return false;
+    }
+
+    private ProtocolType guessPtotocolType(String protocolName) {
+        if (!StringUtils.hasText(protocolName)) return null;
+        if (protocolName.toLowerCase().contains("file")) return ProtocolType.FILE;
+        if (protocolName.toLowerCase().contains("nas")) return ProtocolType.FILE;
+        if (protocolName.toLowerCase().contains("queue")) return ProtocolType.MESSAGING;
+        return ProtocolType.OTHER;
     }
 }
