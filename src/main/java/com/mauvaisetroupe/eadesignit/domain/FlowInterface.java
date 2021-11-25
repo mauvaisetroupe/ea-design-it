@@ -26,7 +26,6 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface> {
     @Column(name = "id")
     private Long id;
 
-    @Pattern(regexp = "^[A-Z]{3}-[0-9]{2,4}$")
     @Column(name = "alias")
     private String alias;
 

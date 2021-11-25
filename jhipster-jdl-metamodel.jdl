@@ -73,7 +73,7 @@ entity FunctionalFlow {
 }
 
 entity FlowInterface {
-    alias String pattern(/^[A-Z]{3}-[0-9]{2,4}$/)
+    alias String
     status String
     documentationURL String maxlength(500)
     documentationURL2 String maxlength(500)
