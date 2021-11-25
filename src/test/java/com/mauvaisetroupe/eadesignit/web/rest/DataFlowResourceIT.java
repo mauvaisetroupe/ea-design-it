@@ -51,8 +51,8 @@ class DataFlowResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final Frequency DEFAULT_FREQUENCY = Frequency.DAILY;
-    private static final Frequency UPDATED_FREQUENCY = Frequency.WEEKLY;
+    private static final Frequency DEFAULT_FREQUENCY = Frequency.HOURLY;
+    private static final Frequency UPDATED_FREQUENCY = Frequency.DAILY;
 
     private static final String DEFAULT_CONTRACT_URL = "AAAAAAAAAA";
     private static final String UPDATED_CONTRACT_URL = "BBBBBBBBBB";

@@ -34,7 +34,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new DataFlowService();
       currentDate = new Date();
-      elemDefault = new DataFlow(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', Frequency.DAILY, 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
+      elemDefault = new DataFlow(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', Frequency.HOURLY, 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
     });
 
     describe('Service methods', () => {

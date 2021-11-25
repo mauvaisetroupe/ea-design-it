@@ -19,7 +19,7 @@
     {
       "fieldName": "frequency",
       "fieldType": "Frequency",
-      "fieldValues": "DAILY,WEEKLY,ON_DEMAND"
+      "fieldValues": "HOURLY,DAILY,WEEKLY,MONTHLY,YEARLY,ON_DEMAND,NRT,ON_USER_ACTION"
     },
     {
       "fieldName": "contractURL",
