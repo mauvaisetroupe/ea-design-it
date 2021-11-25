@@ -23,6 +23,11 @@
     <div class="alert alert-warning" v-if="!isFetching && applications && applications.length === 0">
       <span>No applications found</span>
     </div>
+
+    <div>
+      <input type="text" placeholder="Filter by text" v-model="filter" />
+    </div>
+
     <div class="table-responsive" v-if="applications && applications.length > 0">
       <table class="table table-striped" aria-describedby="applications">
         <thead>
@@ -44,7 +49,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="application in applications" :key="application.id" data-cy="entityTable">
+          <tr v-for="application in filteredRows" :key="application.id" data-cy="entityTable">
             <td>
               <router-link :to="{ name: 'ApplicationView', params: { applicationId: application.id } }">{{ application.id }}</router-link>
             </td>

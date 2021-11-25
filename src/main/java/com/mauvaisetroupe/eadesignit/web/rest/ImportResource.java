@@ -4,8 +4,10 @@ import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.FlowImportService;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.FlowImportDTO;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,8 +37,13 @@ public class ImportResource {
         return importService.importExcel(file);
     }
 
-    @PostMapping("/import/flow/upload-file")
-    public List<FlowImport> uploadFlowsFile(@RequestPart MultipartFile file) throws Exception {
-        return flowImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+    @PostMapping("/import/flow/upload-files")
+    public List<FlowImportDTO> uploadFlowsFile(@RequestPart MultipartFile[] files) throws Exception {
+        List<FlowImportDTO> dtos = new ArrayList<>();
+        for (MultipartFile file : files) {
+            List<FlowImport> flowImports = flowImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+            dtos.add(new FlowImportDTO(file.getOriginalFilename(), flowImports));
+        }
+        return dtos;
     }
 }

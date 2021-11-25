@@ -273,7 +273,7 @@ public class FlowImportService {
             } else {
                 flowImport.setImportDataFlowStatus(ImportStatus.EXISTING);
             }
-            if (nullable(flowImport.getFrequency())) {
+            if (!nullable(flowImport.getFrequency())) {
                 dataFlow.setFrequency(Frequency.valueOf(clean(flowImport.getFrequency())));
                 dataFlowToCreate = true;
             }

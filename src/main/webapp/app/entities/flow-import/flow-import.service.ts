@@ -83,12 +83,13 @@ export default class FlowImportService {
         });
     });
   }
-  public uploadFile(file: File): Promise<any> {
+  public uploadFile(files: File[]): Promise<any> {
     const formData: FormData = new FormData();
-    formData.append('file', file);
+
+    files.forEach(file => formData.append('files', file));
     return new Promise<any>((resolve, reject) => {
       axios
-        .post(`${apiForImportUrl}/flow/upload-file`, formData)
+        .post(`${apiForImportUrl}/flow/upload-files`, formData)
         .then(res => {
           console.log(res);
           resolve(res);

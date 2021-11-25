@@ -14,36 +14,95 @@ export default class FlowImport extends Vue {
   @Inject('flowImportService') private flowImportService: () => FlowImportService;
   @Inject('alertService') private alertService: () => AlertService;
 
-  public flowImports: IFlowImport[] = [];
-  public excelFile: File = null;
+  //public flowImports: IFlowImport[] = [];
+  public excelFiles: File[] = null;
   public isFetching = false;
   public fileSubmited = false;
   public rowsLoaded = false;
-  public excelFileName = 'Browse File';
+  public excelFileNames = 'Browse File';
+  public dtos = null;
+  public notFilteredDtos = null;
 
   public handleFileUpload(event): void {
-    this.excelFile = event.target.files[0];
-    this.excelFileName = this.excelFile.name;
+    console.log(event);
+    this.excelFiles = Array.from(event.target.files);
+    this.excelFileNames = this.excelFiles.map(f => f.name).join(', ');
   }
 
   public submitFile(): void {
     this.isFetching = true;
     this.fileSubmited = true;
-    console.log('PPPPPPPPPPPPPPPPPPPPPPPPPP');
     this.flowImportService()
-      .uploadFile(this.excelFile)
+      .uploadFile(this.excelFiles)
       .then(
         res => {
-          console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-          this.flowImports = res.data;
+          this.dtos = res.data;
+          this.notFilteredDtos = res.data;
           this.isFetching = false;
           this.rowsLoaded = true;
         },
         err => {
-          console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
           this.isFetching = false;
           this.alertService().showHttpError(this, err.response);
         }
       );
+  }
+
+  public filterErrors() {
+    this.dtos = [];
+    this.notFilteredDtos.forEach(dto => {
+      var newdto = {};
+      var newimport = [];
+      dto.flowImports.forEach(elem => {
+        var flowImport = elem as IFlowImport;
+        if (
+          flowImport.importFunctionalFlowStatus === 'ERROR' ||
+          flowImport.importInterfaceStatus === 'ERROR' ||
+          flowImport.importDataFlowStatus === 'ERROR'
+        ) {
+          newimport.push(flowImport);
+        }
+      });
+      newdto = {
+        excelFileName: dto.excelFileName,
+        flowImports: newimport,
+      };
+      this.dtos.push(newdto);
+    });
+  }
+
+  public getErrors() {
+    var errors = [];
+    this.notFilteredDtos.forEach(dto => {
+      dto.flowImports.forEach(elem => {
+        var flowImport = elem as IFlowImport;
+        if (
+          flowImport.importFunctionalFlowStatus === 'ERROR' ||
+          flowImport.importInterfaceStatus === 'ERROR' ||
+          flowImport.importDataFlowStatus === 'ERROR'
+        ) {
+          flowImport.id = dto.excelFileName;
+          var errorRow = {
+            ...flowImport,
+          };
+          errors.push(errorRow);
+          console.log(errorRow);
+        }
+      });
+    });
+    return errors;
+  }
+
+  public exportErrors() {
+    var errors = this.getErrors();
+    let csvContent = 'data:text/csv;charset=utf-8,';
+    csvContent += [Object.keys(errors[0]).join(';'), ...errors.map(row => Object.values(row).join(';').replace(/\n/gm, ''))]
+      .join('\n')
+      .replace(/(^\[)|(\]$)/gm, '');
+    const data = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', 'export.csv');
+    link.click();
   }
 }
