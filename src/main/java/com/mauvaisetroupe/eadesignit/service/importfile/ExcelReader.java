@@ -26,67 +26,60 @@ import org.springframework.util.StringUtils;
 
 public class ExcelReader {
 
+    private static final int IGNORE_ROW_AFTER_N_EMPTY_CELL = 4;
     private final Logger log = LoggerFactory.getLogger(ExcelReader.class);
-    private final Map<String, List<Map<String, Object>>> excelDF;
-    private final List<String> columnNames;
-    private final List<String> sheetName;
+    private List<Map<String, Object>> excelDF = new ArrayList<>();
 
-    public ExcelReader(InputStream excel, List<String> columnNames, String... sheetName) throws EncryptedDocumentException, IOException {
-        this.columnNames = columnNames;
-        this.excelDF = importExcel(excel);
-        this.sheetName = Arrays.asList(sheetName);
+    public List<Map<String, Object>> getExcelDF() {
+        return excelDF;
     }
 
-    private Map<String, List<Map<String, Object>>> importExcel(InputStream excel) throws EncryptedDocumentException, IOException {
+    public ExcelReader(InputStream excel, String sheetName) throws EncryptedDocumentException, IOException {
+        if (excel != null && sheetName != null) this.excelDF = importExcel(excel, sheetName);
+    }
+
+    private List<Map<String, Object>> importExcel(InputStream excel, String sheetName) throws EncryptedDocumentException, IOException {
         Workbook workbook = WorkbookFactory.create(excel);
-        Map<String, List<Map<String, Object>>> sheetAsMapOfArray = new LinkedHashMap<>();
-        for (int sheetnum = 0; sheetnum < workbook.getNumberOfSheets(); sheetnum++) {
-            Sheet sheet = workbook.getSheetAt(sheetnum);
-            // System.out.println("Sheet : " + workbook.getSheetName(sheetnum));
-            // First row is header
-            Row firstRow = sheet.getRow(0);
-            if (firstRow != null) {
-                String[] labels = new String[firstRow.getLastCellNum()];
+        Sheet sheet = workbook.getSheet(sheetName);
+        List<Map<String, Object>> rowAsArrayList = new ArrayList<>();
+        // First row is header
+        Row firstRow = sheet.getRow(0);
+        if (firstRow != null) {
+            String[] labels = new String[firstRow.getLastCellNum()];
 
-                for (int j = 0; j < Math.min(columnNames.size(), firstRow.getLastCellNum()); j++) {
-                    String cellVal = CellUtil.getCell(firstRow, j).getStringCellValue();
-                    if (StringUtils.hasText(cellVal)) {
-                        labels[j] = removeParenthesis(CellUtil.getCell(firstRow, j).getStringCellValue());
-                        if (this.sheetName != null && this.sheetName.contains(sheet.getSheetName())) {
-                            Assert.isTrue(
-                                columnNames.contains(labels[j]),
-                                "Could not find column name '" + labels[j] + "' in Excel File. Authorized values : " + this.columnNames
-                            );
-                        }
-                    } else {
-                        log.error("Ignoring column numer #" + j + ". Stop reading other columns");
-                        break;
-                    }
+            for (int j = 0; j < firstRow.getLastCellNum(); j++) {
+                String cellVal = CellUtil.getCell(firstRow, j).getStringCellValue();
+                if (StringUtils.hasText(cellVal)) {
+                    labels[j] = removeParenthesis(CellUtil.getCell(firstRow, j).getStringCellValue());
                 }
-                System.out.println(sheet.getSheetName());
-                List<Map<String, Object>> rowAsArrayList = new ArrayList<>();
-                for (int rownum = 1; rownum <= sheet.getLastRowNum(); rownum++) {
-                    Map<String, Object> rowAsArray = new HashMap<>();
-                    Row row = sheet.getRow(rownum);
-                    if (row != null) {
-                        for (int colnum = 0; colnum < Math.min(row.getLastCellNum(), labels.length); colnum++) {
-                            Cell cell = row.getCell(colnum);
-                            Object value = null;
-                            if (cell != null) {
-                                value = getCellValue(cell);
-                            }
-                            rowAsArray.put(labels[colnum], value);
-                        }
-                    }
-                    // System.out.println("Row as Array : " + rowAsArray );
-                    if (!isEmpty(rowAsArray)) rowAsArrayList.add(rowAsArray);
-                }
-                sheetAsMapOfArray.put(workbook.getSheetName(sheetnum), rowAsArrayList);
-                // System.out.println("Excel Util : " + rowAsArrayList);
             }
+            System.out.println(sheet.getSheetName());
+            for (int rownum = 1; rownum <= sheet.getLastRowNum(); rownum++) {
+                Row row = sheet.getRow(rownum);
+                Map<String, Object> rowAsArray = new HashMap<>();
+                if (row != null) {
+                    boolean isEmpty = true;
+                    for (int colnum = 0; colnum < Math.min(row.getLastCellNum(), labels.length); colnum++) {
+                        Cell cell = row.getCell(colnum);
+                        Object value = null;
+                        if (cell != null) {
+                            value = getCellValue(cell);
+                            if (value instanceof String) {
+                                if (isNull((String) value)) {
+                                    value = null;
+                                }
+                            }
+                            // if 3 first cells are empty, do not consider the line
+                            if (colnum < IGNORE_ROW_AFTER_N_EMPTY_CELL && !ObjectUtils.isEmpty(value)) isEmpty = false;
+                        }
+                        rowAsArray.put(labels[colnum], value);
+                    }
+                    if (!isEmpty) rowAsArrayList.add(rowAsArray);
+                }
+            }
+            // System.out.println("Excel Util : " + rowAsArrayList);
         }
-
-        return sheetAsMapOfArray;
+        return rowAsArrayList;
     }
 
     private String removeParenthesis(String stringCellValue) {
@@ -95,16 +88,11 @@ public class ExcelReader {
         return stringCellValue;
     }
 
-    public boolean isEmpty(Map<String, Object> rowAsArray) {
-        int index = 1;
-        for (Object cell : rowAsArray.values()) {
-            if (!ObjectUtils.isEmpty(cell)) return false;
-            index++;
-            if (index > this.columnNames.size()) {
-                return true;
-            }
-        }
-        return true;
+    protected boolean isNull(String value) {
+        if (!StringUtils.hasText(value)) return true;
+        value = value.replace("?", "");
+        if (!StringUtils.hasText(value)) return true;
+        return false;
     }
 
     public Object getCellValue(Cell cell) {
@@ -126,13 +114,5 @@ public class ExcelReader {
             default:
                 return cell.getStringCellValue();
         }
-    }
-
-    public List<Map<String, Object>> getSheetAt(int i) {
-        return this.excelDF.entrySet().iterator().next().getValue();
-    }
-
-    public List<Map<String, Object>> getSheet(String sheetname) {
-        return this.excelDF.get(sheetname);
     }
 }

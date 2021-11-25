@@ -319,6 +319,9 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
 
     @Override
     public int compareTo(FunctionalFlow arg0) {
+        if (arg0 == null) return 0;
+        if (arg0.getAlias() == null) return 0;
+        if (this.getAlias() == null) return 0;
         return this.getAlias().compareTo(arg0.getAlias());
     }
 }

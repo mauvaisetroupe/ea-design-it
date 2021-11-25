@@ -106,41 +106,45 @@ public class FlowImportService {
         this.columnsArray.add(FLOW_STATUS_FLOW);
         this.columnsArray.add(FLOW_COMMENT);
         this.columnsArray.add(FLOW_ADD_CORRESPONDENT_ID);
-        //      this.columnsArray.add(FLOW_CHECK_COLUMN_1);
-        //      this.columnsArray.add(FLOW_CHECK_COLUMN_2);
-        //      this.columnsArray.add(FLOW_CHECK_COLUMN_3);
     }
 
     public List<FlowImport> importExcel(InputStream file, String filename) throws EncryptedDocumentException, IOException {
         List<FlowImport> result = new ArrayList<FlowImport>();
 
-        ExcelReader excelReader = new ExcelReader(file, this.columnsArray, FLOW_SHEET_NAME);
-
-        List<Map<String, Object>> flowsDF = excelReader.getSheet(FLOW_SHEET_NAME);
+        ExcelReader excelReader = new ExcelReader(file, FLOW_SHEET_NAME);
+        List<Map<String, Object>> flowsDF = excelReader.getExcelDF();
         String diagramName = filename.substring(0, filename.lastIndexOf(".")).replace("_", " ").replace("-", " ");
 
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);
 
-            LandscapeView landscapeView = findOrCreateLandscape(diagramName);
-            FunctionalFlow functionalFlow = findOrCreateFunctionalFlow(flowImport);
-            FlowInterface flowInterface = findOrCreateInterface(flowImport);
-            Protocol protocol = findOrCreateProtocol(flowImport);
-            DataFlow dataFlow = findOrCreateDataFlow(flowImport, protocol);
+            if (flowImport.getIdFlowFromExcel() != null && flowImport.getFlowAlias() != null) {
+                LandscapeView landscapeView = findOrCreateLandscape(diagramName);
+                FunctionalFlow functionalFlow = findOrCreateFunctionalFlow(flowImport);
+                FlowInterface flowInterface = findOrCreateInterface(flowImport);
+                Protocol protocol = findOrCreateProtocol(flowImport);
+                DataFlow dataFlow = findOrCreateDataFlow(flowImport, protocol);
 
-            if (landscapeView != null && functionalFlow != null && flowInterface != null) {
-                // Set<>, so could add even if already associated
-                functionalFlow.addLandscape(landscapeView);
-                functionalFlow.addInterfaces(flowInterface);
-                interfaceRepository.save(flowInterface);
-                flowRepository.save(functionalFlow);
-                landscapeViewRepository.save(landscapeView);
-                if (dataFlow != null) {
-                    functionalFlow.addDataFlows(dataFlow);
-                    flowInterface.addDataFlows(dataFlow);
-                    dataFlowRepository.save(dataFlow);
+                if (landscapeView != null && functionalFlow != null && flowInterface != null) {
+                    // Set<>, so could add even if already associated
+                    functionalFlow.addLandscape(landscapeView);
+                    functionalFlow.addInterfaces(flowInterface);
+                    interfaceRepository.save(flowInterface);
+                    flowRepository.save(functionalFlow);
+                    landscapeViewRepository.save(landscapeView);
+                    if (dataFlow != null) {
+                        functionalFlow.addDataFlows(dataFlow);
+                        flowInterface.addDataFlows(dataFlow);
+                        dataFlowRepository.save(dataFlow);
+                    }
                 }
+            } else {
+                flowImport.setImportFunctionalFlowStatus(ImportStatus.ERROR);
+                flowImport.setImportInterfaceStatus(ImportStatus.ERROR);
+                flowImport.setImportDataFlowStatus(ImportStatus.ERROR);
+                flowImport.setImportStatusMessage("IdFlow & Alias should not be null");
             }
+
             result.add(flowImport);
         }
         return result;
@@ -273,11 +277,11 @@ public class FlowImportService {
             } else {
                 flowImport.setImportDataFlowStatus(ImportStatus.EXISTING);
             }
-            if (!nullable(flowImport.getFrequency())) {
+            if (StringUtils.hasText(flowImport.getFrequency())) {
                 dataFlow.setFrequency(Frequency.valueOf(clean(flowImport.getFrequency())));
                 dataFlowToCreate = true;
             }
-            if (!nullable(flowImport.getFormat())) {
+            if (StringUtils.hasText(flowImport.getFormat())) {
                 DataFormat dataFormat = dataFormatRepository.findByNameIgnoreCase(flowImport.getFormat());
                 if (dataFormat == null) {
                     dataFormat = new DataFormat();
@@ -339,7 +343,6 @@ public class FlowImportService {
         flowImport.setFlowStatus((String) map.get(FLOW_STATUS_FLOW));
         flowImport.setComment((String) map.get(FLOW_COMMENT));
         flowImport.setDocumentName((String) map.get(FLOW_ADD_CORRESPONDENT_ID));
-        Assert.isTrue(flowImport.getIdFlowFromExcel() != null, "No ID found, Error with map : " + map);
         return flowImport;
     }
 
@@ -350,7 +353,7 @@ public class FlowImportService {
         flowInterface.setAlias(flowImport.getIdFlowFromExcel());
         flowInterface.setSource(source);
         flowInterface.setTarget(target);
-        if (!nullable(flowImport.getIntegrationPattern())) {
+        if (StringUtils.hasText(flowImport.getIntegrationPattern())) {
             Protocol protocol = protocolRepository.findByNameIgnoreCase(flowImport.getIntegrationPattern());
             if (protocol != null) {
                 flowInterface.setProtocol(protocol);
@@ -368,13 +371,6 @@ public class FlowImportService {
             .replace("__", "_")
             .replace("__", "_")
             .replaceAll("(.*)_$", "$1");
-    }
-
-    protected boolean nullable(String value) {
-        if (!StringUtils.hasText(value)) return true;
-        value = value.replace("?", "");
-        if (!StringUtils.hasText(value)) return true;
-        return false;
     }
 
     private ProtocolType guessPtotocolType(String protocolName) {
