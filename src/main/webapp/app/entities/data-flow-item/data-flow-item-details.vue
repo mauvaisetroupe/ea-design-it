@@ -26,7 +26,9 @@
             <span>Contract URL</span>
           </dt>
           <dd>
-            <span>{{ dataFlowItem.contractURL }}</span>
+            <span
+              ><a v-bind:href="dataFlowItem.contractURL">{{ dataFlowItem.contractURL }}</a></span
+            >
           </dd>
           <dt>
             <span>Documentation URL</span>

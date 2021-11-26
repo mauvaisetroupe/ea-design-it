@@ -120,6 +120,35 @@
             <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
           </button>
         </router-link>
+
+        <div class="table-responsive" v-if="flowInterface.dataFlows && flowInterface.dataFlows.length > 0">
+          <br />
+          <br />
+          <h2>Data Flows</h2>
+          <table class="table table-striped" aria-describedby="dataFlows">
+            <thead>
+              <tr>
+                <th scope="row"><span>ID</span></th>
+                <th scope="row"><span>Resource Name</span></th>
+                <th scope="row"><span>Resource Type</span></th>
+                <th scope="row"><span>Description</span></th>
+
+                <th scope="row"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="dataFlow in flowInterface.dataFlows" :key="dataFlow.id" data-cy="entityTable">
+                <td>
+                  <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }">{{ dataFlow.id }}</router-link>
+                </td>
+                <td>{{ dataFlow.resourceName }}</td>
+                <td>{{ dataFlow.resourceType }}</td>
+                <td>{{ dataFlow.description }}</td>
+                <td>{{ dataFlow.frequency }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

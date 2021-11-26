@@ -95,6 +95,34 @@
           </button>
         </router-link>
       </div>
+
+      <div class="table-responsive" v-if="dataFlow.items && dataFlow.items.length > 0">
+        <br />
+        <br />
+        <h2>DataFlow Items :</h2>
+        <table class="table table-striped" aria-describedby="dataFlowItems">
+          <thead>
+            <tr>
+              <th scope="row"><span>ID</span></th>
+              <th scope="row"><span>Resource Name</span></th>
+              <th scope="row"><span>Resource Type</span></th>
+              <th scope="row"><span>Description</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="dataFlowItem in dataFlow.items" :key="dataFlowItem.id" data-cy="entityTable">
+              <td>
+                <router-link :to="{ name: 'DataFlowItemView', params: { dataFlowItemId: dataFlowItem.id } }">{{
+                  dataFlowItem.id
+                }}</router-link>
+              </td>
+              <td>{{ dataFlowItem.resourceName }}</td>
+              <td>{{ dataFlowItem.resourceType }}</td>
+              <td>{{ dataFlowItem.description }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
