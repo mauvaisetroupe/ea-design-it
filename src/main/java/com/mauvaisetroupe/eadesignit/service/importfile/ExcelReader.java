@@ -112,6 +112,11 @@ public class ExcelReader {
                 return cell.getStringCellValue();
             } else if (cell.getCachedFormulaResultType() == cellType.BOOLEAN) {
                 return cell.getBooleanCellValue();
+            } else if (cell.getCachedFormulaResultType() == cellType.ERROR) {
+                return null; //check formula
+            } else {
+                log.error("Ignoring cell " + cell);
+                return null;
             }
         }
         return cell.getStringCellValue();
