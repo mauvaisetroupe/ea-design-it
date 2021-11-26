@@ -36,6 +36,10 @@ import org.springframework.util.StringUtils;
 @Service
 public class FlowImportService {
 
+    private static final String GENERIC_DATA_FLOW = "GENERIC DATAFLOW from ADD";
+    private static final String GENERIC_FILE_FROM_ADD = "GENERIC FILE from ADD";
+    private static final String GENERIC_EVENT_FROM_ADD = "GENERIC EVENT from ADD";
+
     private static final String FLOW_ID_FLOW = "Id flow";
     private static final String FLOW_ALIAS_FLOW = "Alias flow";
     private static final String FLOW_SOURCE_ELEMENT = "Source Element";
@@ -294,6 +298,13 @@ public class FlowImportService {
             if (protocol != null) {
                 if (protocol.getType().equals(ProtocolType.API)) {
                     dataFlow.setContractURL(flowImport.getSwagger());
+                    dataFlow.setResourceName("REST API Call " + flowImport.getSourceElement() + " / " + flowImport.getTargetElement());
+                } else if (protocol.getType().equals(ProtocolType.EVENT)) {
+                    dataFlow.setResourceName(GENERIC_EVENT_FROM_ADD);
+                } else if (protocol.getType().equals(ProtocolType.FILE)) {
+                    dataFlow.setResourceName(GENERIC_FILE_FROM_ADD);
+                } else {
+                    dataFlow.setResourceName(GENERIC_DATA_FLOW + " - " + protocol.getType());
                 }
                 dataFlowToCreate = true;
             }
