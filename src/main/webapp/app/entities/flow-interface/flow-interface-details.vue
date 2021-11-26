@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="flowInterface">
-        <h2 class="jh-entity-heading" data-cy="flowInterfaceDetailsHeading"><span>FlowInterface</span> {{ flowInterface.id }}</h2>
+        <h2 class="jh-entity-heading" data-cy="flowInterfaceDetailsHeading"><span>Interface</span> {{ flowInterface.alias }}</h2>
         <dl class="row jh-entity-details">
           <dt>
             <span>Alias</span>
@@ -124,7 +124,7 @@
         <div class="table-responsive" v-if="flowInterface.dataFlows && flowInterface.dataFlows.length > 0">
           <br />
           <br />
-          <h2>Data Flows</h2>
+          <h3>Data Flows declared for interface {{ flowInterface.alias }}</h3>
           <table class="table table-striped" aria-describedby="dataFlows">
             <thead>
               <tr>
@@ -144,7 +144,33 @@
                 <td>{{ dataFlow.resourceName }}</td>
                 <td>{{ dataFlow.resourceType }}</td>
                 <td>{{ dataFlow.description }}</td>
-                <td>{{ dataFlow.frequency }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-responsive" v-if="flowInterface.functionalFlows && flowInterface.functionalFlows.length > 0">
+          <br />
+          <br />
+          <h3>Functional Flows using interface {{ flowInterface.alias }}</h3>
+          <table class="table table-striped" aria-describedby="functionalFlows">
+            <thead>
+              <tr>
+                <th scope="row"><span>ID</span></th>
+                <th scope="row"><span>Alias</span></th>
+                <th scope="row"><span>Description</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="functionalFlow in flowInterface.functionalFlows" :key="functionalFlow.id" data-cy="entityTable">
+                <td>
+                  <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }">{{
+                    functionalFlow.id
+                  }}</router-link>
+                </td>
+                <td>{{ functionalFlow.alias }}</td>
+                <td>{{ functionalFlow.description }}</td>
+                <td>{{ functionalFlow.comment }}</td>
               </tr>
             </tbody>
           </table>

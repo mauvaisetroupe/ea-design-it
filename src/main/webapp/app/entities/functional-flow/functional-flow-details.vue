@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="functionalFlow">
-        <h2 class="jh-entity-heading" data-cy="functionalFlowDetailsHeading"><span>FunctionalFlow</span> {{ functionalFlow.id }}</h2>
+        <h2 class="jh-entity-heading" data-cy="functionalFlowDetailsHeading"><span>Functional Flow</span> {{ functionalFlow.alias }}</h2>
         <dl class="row jh-entity-details">
           <dt>
             <span>Alias</span>
