@@ -3,6 +3,7 @@ import axios from 'axios';
 import { IDataFlowImport } from '@/shared/model/data-flow-import.model';
 
 const baseApiUrl = 'api/data-flow-imports';
+const apiForImportUrl = 'api/import';
 
 export default class DataFlowImportService {
   public find(id: number): Promise<IDataFlowImport> {
@@ -78,6 +79,23 @@ export default class DataFlowImportService {
           resolve(res.data);
         })
         .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public uploadFile(file: File): Promise<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .post(`${apiForImportUrl}/data-flow/upload-file`, formData)
+        .then(res => {
+          console.log(res);
+          resolve(res);
+        })
+        .catch(err => {
+          console.log(err);
           reject(err);
         });
     });

@@ -1,12 +1,12 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
+import com.mauvaisetroupe.eadesignit.domain.DataFlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationImportService;
+import com.mauvaisetroupe.eadesignit.service.importfile.DataFlowImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.FlowImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.FlowImportDTO;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -24,17 +24,23 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 public class ImportResource {
 
-    private final ApplicationImportService importService;
+    private final ApplicationImportService applicationImportService;
     private final FlowImportService flowImportService;
+    private final DataFlowImportService dataFlowImportService;
 
-    public ImportResource(ApplicationImportService importService, FlowImportService flowImportService) {
-        this.importService = importService;
+    public ImportResource(
+        ApplicationImportService importService,
+        FlowImportService flowImportService,
+        DataFlowImportService dataFlowImportService
+    ) {
+        this.applicationImportService = importService;
         this.flowImportService = flowImportService;
+        this.dataFlowImportService = dataFlowImportService;
     }
 
     @PostMapping("/import/application/upload-file")
     public List<ApplicationImport> uploadFile(@RequestPart MultipartFile file) throws Exception {
-        return importService.importExcel(file);
+        return applicationImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
     }
 
     @PostMapping("/import/flow/upload-files")
@@ -45,5 +51,10 @@ public class ImportResource {
             dtos.add(new FlowImportDTO(file.getOriginalFilename(), flowImports));
         }
         return dtos;
+    }
+
+    @PostMapping("/import/data-flow/upload-file")
+    public List<DataFlowImport> uploadDataFlowFile(@RequestPart MultipartFile file) throws Exception {
+        return dataFlowImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
     }
 }

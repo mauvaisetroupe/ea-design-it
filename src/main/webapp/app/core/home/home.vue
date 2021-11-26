@@ -10,8 +10,9 @@
       <div v-if="authenticated">
         <h1>Import Excel files</h1>
         <ul>
-          <li><a href="/application-import-upload-file">Import Excel applications file</a></li>
-          <li><a href="/flow-import-upload-file">Import Excel flows file</a></li>
+          <li>Import Excel <a href="/application-import-upload-file">applications</a> file</li>
+          <li>Import Excel <a href="/flow-import-upload-file">flows</a> file</li>
+          <li>Import Excel <a href="/event-import-upload-file">event</a> file</li>
         </ul>
         <div class="alert alert-success">
           <span v-if="username">You are logged in as user "{{ username }}"</span>
