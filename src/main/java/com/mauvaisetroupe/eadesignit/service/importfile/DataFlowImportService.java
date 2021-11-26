@@ -171,7 +171,7 @@ public class DataFlowImportService {
         dataFlow.setResourceType(dataImport.getDataResourceType());
         dataFlow.setDescription(dataImport.getDataDescription());
         dataFlow.setContractURL(dataImport.getDataContractURL());
-        dataFlow.setDocumentationURL(dataImport.getDataContractURL());
+        dataFlow.setDocumentationURL(dataImport.getDataDocumentationURL());
 
         return dataFlow;
     }
@@ -188,7 +188,7 @@ public class DataFlowImportService {
         dataFlow.setResourceType(dataImport.getDataResourceType());
         dataFlow.setDescription(dataImport.getDataDescription());
         dataFlow.setContractURL(dataImport.getDataContractURL());
-        dataFlow.setDocumentationURL(dataImport.getDataContractURL());
+        dataFlow.setDocumentationURL(dataImport.getDataDocumentationURL());
         return dataFlow;
     }
 }
