@@ -3,6 +3,7 @@ package com.mauvaisetroupe.eadesignit.repository;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -28,5 +29,5 @@ public interface DataFlowRepository extends JpaRepository<DataFlow, Long> {
 
     DataFlow findByFlowInterface_AliasAndFunctionalFlows_Alias(String flowAlias, String idFlowFromExcel);
 
-    DataFlow findByResourceNameIgnoreCase(String dataResourceName);
+    Set<DataFlow> findByResourceNameIgnoreCase(String dataResourceName);
 }

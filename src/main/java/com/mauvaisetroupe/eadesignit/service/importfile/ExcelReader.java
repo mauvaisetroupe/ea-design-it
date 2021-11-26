@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.print.DocFlavor.STRING;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -78,8 +79,10 @@ public class ExcelReader {
 
     private String removeParenthesis(String stringCellValue) {
         if (stringCellValue == null) return null;
-        if (stringCellValue.contains("(")) return stringCellValue.substring(0, stringCellValue.indexOf("("));
-        return stringCellValue;
+        if (stringCellValue.contains("(")) {
+            stringCellValue = stringCellValue.substring(0, stringCellValue.indexOf("("));
+        }
+        return stringCellValue.trim();
     }
 
     protected boolean isNull(String value) {
@@ -92,21 +95,25 @@ public class ExcelReader {
     public Object getCellValue(Cell cell) {
         if (cell == null) return null;
         CellType cellType = cell.getCellType();
-        switch (cellType) {
-            case NUMERIC:
-                if (DateUtil.isCellDateFormatted(cell)) {
-                    Date date = cell.getDateCellValue();
-                    return date;
-                } else {
-                    Double d = cell.getNumericCellValue();
-                    return d;
-                }
-            case BOOLEAN:
-                return cell.getBooleanCellValue();
-            case FORMULA:
-                return cell.getCellFormula();
-            default:
+        if (cellType == CellType.NUMERIC) {
+            if (DateUtil.isCellDateFormatted(cell)) {
+                Date date = cell.getDateCellValue();
+                return date;
+            } else {
+                Double d = cell.getNumericCellValue();
+                return d;
+            }
+        } else if (cellType == CellType.BOOLEAN) {
+            return cell.getBooleanCellValue();
+        } else if (cellType == CellType.FORMULA) {
+            if (cell.getCachedFormulaResultType() == cellType.NUMERIC) {
+                return cell.getNumericCellValue();
+            } else if (cell.getCachedFormulaResultType() == cellType.STRING) {
                 return cell.getStringCellValue();
+            } else if (cell.getCachedFormulaResultType() == cellType.BOOLEAN) {
+                return cell.getBooleanCellValue();
+            }
         }
+        return cell.getStringCellValue();
     }
 }

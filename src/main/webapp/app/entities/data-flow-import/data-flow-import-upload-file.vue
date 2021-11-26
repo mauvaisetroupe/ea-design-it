@@ -2,20 +2,13 @@
   <div>
     <h2 id="page-heading" data-cy="FlowImportHeading">
       <span id="flow-import-heading">Data & Data Item Imports</span>
-      <div class="d-flex justify-content-end" v-if="rowsLoaded || isFetching">
-        <button class="btn btn-info mr-2" v-on:click="filterErrors" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Filter Errors</span>
-        </button>
-        <button class="btn btn-info mr-2" v-on:click="exportErrors" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Export Errors Report</span>
-        </button>
-      </div>
+      <div class="d-flex justify-content-end" v-if="rowsLoaded || isFetching"></div>
     </h2>
 
     <div v-if="!rowsLoaded">
       <div class="form-group">
         <div class="custom-file">
-          <input type="file" id="customFile" @change="handleFileUpload($event)" />
+          <input type="file" id="customFile" @change="handleFileUpload($event)" multiple />
           <label class="custom-file-label" for="customFile">{{ excelFileName }}</label>
         </div>
       </div>
@@ -77,43 +70,17 @@
             <td>{{ dataFlowImport.dataDocumentationURL }}</td>
             <td>{{ dataFlowImport.source }}</td>
             <td>{{ dataFlowImport.target }}</td>
-            <td>{{ dataFlowImport.importDataStatus }}</td>
-            <td>{{ dataFlowImport.importDataItemStatus }}</td>
-            <td>{{ dataFlowImport.importStatusMessage }}</td>
-            <td class="text-right">
-              <div class="btn-group">
-                <router-link
-                  :to="{ name: 'DataFlowImportView', params: { dataFlowImportId: dataFlowImport.id } }"
-                  custom
-                  v-slot="{ navigate }"
-                >
-                  <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
-                    <font-awesome-icon icon="eye"></font-awesome-icon>
-                    <span class="d-none d-md-inline">View</span>
-                  </button>
-                </router-link>
-                <router-link
-                  :to="{ name: 'DataFlowImportEdit', params: { dataFlowImportId: dataFlowImport.id } }"
-                  custom
-                  v-slot="{ navigate }"
-                >
-                  <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
-                    <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                    <span class="d-none d-md-inline">Edit</span>
-                  </button>
-                </router-link>
-                <b-button
-                  v-on:click="prepareRemove(dataFlowImport)"
-                  variant="danger"
-                  class="btn btn-sm"
-                  data-cy="entityDeleteButton"
-                  v-b-modal.removeEntity
-                >
-                  <font-awesome-icon icon="times"></font-awesome-icon>
-                  <span class="d-none d-md-inline">Delete</span>
-                </b-button>
-              </div>
+            <td>
+              <span v-bind:class="[dataFlowImport.importDataStatus === 'ERROR' ? 'rederror' : '']">{{
+                dataFlowImport.importDataStatus
+              }}</span>
             </td>
+            <td>
+              <span v-bind:class="[dataFlowImport.importDataItemStatuss === 'ERROR' ? 'rederror' : '']">{{
+                dataFlowImport.importDataItemStatus
+              }}</span>
+            </td>
+            <td>{{ dataFlowImport.importStatusMessage }}</td>
           </tr>
         </tbody>
       </table>
