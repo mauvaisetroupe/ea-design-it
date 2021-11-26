@@ -45,6 +45,14 @@
             <font-awesome-icon icon="asterisk" />
             <span>Application</span>
           </b-dropdown-item>
+          <b-dropdown-item to="/data-flow">
+            <font-awesome-icon icon="asterisk" />
+            <span>Data Flow : Event topics, Files, Swagger</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/data-flow-item">
+            <font-awesome-icon icon="asterisk" />
+            <span>Data Flow Item : Events </span>
+          </b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
           <span slot="button-content" class="navbar-dropdown-menu">
