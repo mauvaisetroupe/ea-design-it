@@ -16,7 +16,7 @@ export interface IDataFlow {
   endDate?: Date | null;
   items?: IDataFlowItem[] | null;
   format?: IDataFormat | null;
-  functionalFlows?: IFunctionalFlow[];
+  functionalFlows?: IFunctionalFlow[] | null;
   flowInterface?: IFlowInterface;
 }
 
@@ -33,7 +33,7 @@ export class DataFlow implements IDataFlow {
     public endDate?: Date | null,
     public items?: IDataFlowItem[] | null,
     public format?: IDataFormat | null,
-    public functionalFlows?: IFunctionalFlow[],
+    public functionalFlows?: IFunctionalFlow[] | null,
     public flowInterface?: IFlowInterface
   ) {}
 }

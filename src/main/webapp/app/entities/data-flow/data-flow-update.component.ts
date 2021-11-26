@@ -36,9 +36,6 @@ const validations: any = {
     },
     startDate: {},
     endDate: {},
-    functionalFlows: {
-      required,
-    },
     flowInterface: {
       required,
     },

@@ -77,7 +77,6 @@ public class DataFlow implements Serializable {
     private DataFormat format;
 
     @ManyToMany
-    @NotNull
     @JoinTable(
         name = "rel_data_flow__functional_flows",
         joinColumns = @JoinColumn(name = "data_flow_id"),

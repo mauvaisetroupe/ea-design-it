@@ -61,7 +61,6 @@
       "relationshipType": "many-to-many",
       "otherEntityName": "functionalFlow",
       "otherEntityRelationshipName": "dataFlows",
-      "relationshipValidateRules": "required",
       "relationshipName": "functionalFlows",
       "otherEntityField": "alias",
       "ownerSide": true

@@ -20,7 +20,7 @@ relationship ManyToOne {
 }
 
 relationship ManyToMany {
-	DataFlow{functionalFlows(alias) required} to FunctionalFlow{dataFlows}
+	DataFlow{functionalFlows(alias)} to FunctionalFlow{dataFlows}
 }
 
 

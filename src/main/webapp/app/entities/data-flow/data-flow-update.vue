@@ -175,7 +175,6 @@
               name="functionalFlows"
               v-if="dataFlow.functionalFlows !== undefined"
               v-model="dataFlow.functionalFlows"
-              required
             >
               <option
                 v-bind:value="getSelected(dataFlow.functionalFlows, functionalFlowOption)"
@@ -185,9 +184,6 @@
                 {{ functionalFlowOption.alias }}
               </option>
             </select>
-          </div>
-          <div v-if="$v.dataFlow.functionalFlows.$anyDirty && $v.dataFlow.functionalFlows.$invalid">
-            <small class="form-text text-danger" v-if="!$v.dataFlow.functionalFlows.required"> This field is required. </small>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="data-flow-flowInterface">Flow Interface</label>
