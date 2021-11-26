@@ -27,4 +27,6 @@ public interface DataFlowRepository extends JpaRepository<DataFlow, Long> {
     Optional<DataFlow> findOneWithEagerRelationships(@Param("id") Long id);
 
     DataFlow findByFlowInterface_AliasAndFunctionalFlows_Alias(String flowAlias, String idFlowFromExcel);
+
+    DataFlow findByResourceNameIgnoreCase(String dataResourceName);
 }

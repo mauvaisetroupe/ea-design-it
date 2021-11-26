@@ -31,6 +31,24 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class DataFlowImportResourceIT {
 
+    private static final String DEFAULT_DATA_ID = "AAAAAAAAAA";
+    private static final String UPDATED_DATA_ID = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DATA_PARENT_ID = "AAAAAAAAAA";
+    private static final String UPDATED_DATA_PARENT_ID = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DATA_PARENT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_DATA_PARENT_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_FUNCTIONAL_FLOW_ID = "AAAAAAAAAA";
+    private static final String UPDATED_FUNCTIONAL_FLOW_ID = "BBBBBBBBBB";
+
+    private static final String DEFAULT_FLOW_INTERFACE_ID = "AAAAAAAAAA";
+    private static final String UPDATED_FLOW_INTERFACE_ID = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DATA_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_DATA_TYPE = "BBBBBBBBBB";
+
     private static final String DEFAULT_DATA_RESOURCE_NAME = "AAAAAAAAAA";
     private static final String UPDATED_DATA_RESOURCE_NAME = "BBBBBBBBBB";
 
@@ -40,35 +58,29 @@ class DataFlowImportResourceIT {
     private static final String DEFAULT_DATA_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DATA_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DATA_FREQUENCY = "AAAAAAAAAA";
+    private static final String UPDATED_DATA_FREQUENCY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DATA_FORMAT = "AAAAAAAAAA";
+    private static final String UPDATED_DATA_FORMAT = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DATA_CONTRACT_URL = "AAAAAAAAAA";
+    private static final String UPDATED_DATA_CONTRACT_URL = "BBBBBBBBBB";
+
     private static final String DEFAULT_DATA_DOCUMENTATION_URL = "AAAAAAAAAA";
     private static final String UPDATED_DATA_DOCUMENTATION_URL = "BBBBBBBBBB";
 
-    private static final String DEFAULT_DATA_ITEM_RESOURCE_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_DATA_ITEM_RESOURCE_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_SOURCE = "AAAAAAAAAA";
+    private static final String UPDATED_SOURCE = "BBBBBBBBBB";
 
-    private static final String DEFAULT_DATA_ITEM_RESOURCE_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_DATA_ITEM_RESOURCE_TYPE = "BBBBBBBBBB";
+    private static final String DEFAULT_TARGET = "AAAAAAAAAA";
+    private static final String UPDATED_TARGET = "BBBBBBBBBB";
 
-    private static final String DEFAULT_DATA_ITEM_DESCRIPTION = "AAAAAAAAAA";
-    private static final String UPDATED_DATA_ITEM_DESCRIPTION = "BBBBBBBBBB";
+    private static final ImportStatus DEFAULT_IMPORT_DATA_STATUS = ImportStatus.NEW;
+    private static final ImportStatus UPDATED_IMPORT_DATA_STATUS = ImportStatus.EXISTING;
 
-    private static final String DEFAULT_DATA_ITEM_DOCUMENTATION_URL = "AAAAAAAAAA";
-    private static final String UPDATED_DATA_ITEM_DOCUMENTATION_URL = "BBBBBBBBBB";
-
-    private static final String DEFAULT_FREQUENCY = "AAAAAAAAAA";
-    private static final String UPDATED_FREQUENCY = "BBBBBBBBBB";
-
-    private static final String DEFAULT_FORMAT = "AAAAAAAAAA";
-    private static final String UPDATED_FORMAT = "BBBBBBBBBB";
-
-    private static final String DEFAULT_CONTRACT_URL = "AAAAAAAAAA";
-    private static final String UPDATED_CONTRACT_URL = "BBBBBBBBBB";
-
-    private static final ImportStatus DEFAULT_IMPORT_DATA_FLOW_STATUS = ImportStatus.NEW;
-    private static final ImportStatus UPDATED_IMPORT_DATA_FLOW_STATUS = ImportStatus.EXISTING;
-
-    private static final ImportStatus DEFAULT_IMPORT_DATA_FLOW_ITEM_STATUS = ImportStatus.NEW;
-    private static final ImportStatus UPDATED_IMPORT_DATA_FLOW_ITEM_STATUS = ImportStatus.EXISTING;
+    private static final ImportStatus DEFAULT_IMPORT_DATA_ITEM_STATUS = ImportStatus.NEW;
+    private static final ImportStatus UPDATED_IMPORT_DATA_ITEM_STATUS = ImportStatus.EXISTING;
 
     private static final String DEFAULT_IMPORT_STATUS_MESSAGE = "AAAAAAAAAA";
     private static final String UPDATED_IMPORT_STATUS_MESSAGE = "BBBBBBBBBB";
@@ -98,19 +110,23 @@ class DataFlowImportResourceIT {
      */
     public static DataFlowImport createEntity(EntityManager em) {
         DataFlowImport dataFlowImport = new DataFlowImport()
+            .dataId(DEFAULT_DATA_ID)
+            .dataParentId(DEFAULT_DATA_PARENT_ID)
+            .dataParentName(DEFAULT_DATA_PARENT_NAME)
+            .functionalFlowId(DEFAULT_FUNCTIONAL_FLOW_ID)
+            .flowInterfaceId(DEFAULT_FLOW_INTERFACE_ID)
+            .dataType(DEFAULT_DATA_TYPE)
             .dataResourceName(DEFAULT_DATA_RESOURCE_NAME)
             .dataResourceType(DEFAULT_DATA_RESOURCE_TYPE)
             .dataDescription(DEFAULT_DATA_DESCRIPTION)
+            .dataFrequency(DEFAULT_DATA_FREQUENCY)
+            .dataFormat(DEFAULT_DATA_FORMAT)
+            .dataContractURL(DEFAULT_DATA_CONTRACT_URL)
             .dataDocumentationURL(DEFAULT_DATA_DOCUMENTATION_URL)
-            .dataItemResourceName(DEFAULT_DATA_ITEM_RESOURCE_NAME)
-            .dataItemResourceType(DEFAULT_DATA_ITEM_RESOURCE_TYPE)
-            .dataItemDescription(DEFAULT_DATA_ITEM_DESCRIPTION)
-            .dataItemDocumentationURL(DEFAULT_DATA_ITEM_DOCUMENTATION_URL)
-            .frequency(DEFAULT_FREQUENCY)
-            .format(DEFAULT_FORMAT)
-            .contractURL(DEFAULT_CONTRACT_URL)
-            .importDataFlowStatus(DEFAULT_IMPORT_DATA_FLOW_STATUS)
-            .importDataFlowItemStatus(DEFAULT_IMPORT_DATA_FLOW_ITEM_STATUS)
+            .source(DEFAULT_SOURCE)
+            .target(DEFAULT_TARGET)
+            .importDataStatus(DEFAULT_IMPORT_DATA_STATUS)
+            .importDataItemStatus(DEFAULT_IMPORT_DATA_ITEM_STATUS)
             .importStatusMessage(DEFAULT_IMPORT_STATUS_MESSAGE);
         return dataFlowImport;
     }
@@ -123,19 +139,23 @@ class DataFlowImportResourceIT {
      */
     public static DataFlowImport createUpdatedEntity(EntityManager em) {
         DataFlowImport dataFlowImport = new DataFlowImport()
+            .dataId(UPDATED_DATA_ID)
+            .dataParentId(UPDATED_DATA_PARENT_ID)
+            .dataParentName(UPDATED_DATA_PARENT_NAME)
+            .functionalFlowId(UPDATED_FUNCTIONAL_FLOW_ID)
+            .flowInterfaceId(UPDATED_FLOW_INTERFACE_ID)
+            .dataType(UPDATED_DATA_TYPE)
             .dataResourceName(UPDATED_DATA_RESOURCE_NAME)
             .dataResourceType(UPDATED_DATA_RESOURCE_TYPE)
             .dataDescription(UPDATED_DATA_DESCRIPTION)
+            .dataFrequency(UPDATED_DATA_FREQUENCY)
+            .dataFormat(UPDATED_DATA_FORMAT)
+            .dataContractURL(UPDATED_DATA_CONTRACT_URL)
             .dataDocumentationURL(UPDATED_DATA_DOCUMENTATION_URL)
-            .dataItemResourceName(UPDATED_DATA_ITEM_RESOURCE_NAME)
-            .dataItemResourceType(UPDATED_DATA_ITEM_RESOURCE_TYPE)
-            .dataItemDescription(UPDATED_DATA_ITEM_DESCRIPTION)
-            .dataItemDocumentationURL(UPDATED_DATA_ITEM_DOCUMENTATION_URL)
-            .frequency(UPDATED_FREQUENCY)
-            .format(UPDATED_FORMAT)
-            .contractURL(UPDATED_CONTRACT_URL)
-            .importDataFlowStatus(UPDATED_IMPORT_DATA_FLOW_STATUS)
-            .importDataFlowItemStatus(UPDATED_IMPORT_DATA_FLOW_ITEM_STATUS)
+            .source(UPDATED_SOURCE)
+            .target(UPDATED_TARGET)
+            .importDataStatus(UPDATED_IMPORT_DATA_STATUS)
+            .importDataItemStatus(UPDATED_IMPORT_DATA_ITEM_STATUS)
             .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE);
         return dataFlowImport;
     }
@@ -160,19 +180,23 @@ class DataFlowImportResourceIT {
         List<DataFlowImport> dataFlowImportList = dataFlowImportRepository.findAll();
         assertThat(dataFlowImportList).hasSize(databaseSizeBeforeCreate + 1);
         DataFlowImport testDataFlowImport = dataFlowImportList.get(dataFlowImportList.size() - 1);
+        assertThat(testDataFlowImport.getDataId()).isEqualTo(DEFAULT_DATA_ID);
+        assertThat(testDataFlowImport.getDataParentId()).isEqualTo(DEFAULT_DATA_PARENT_ID);
+        assertThat(testDataFlowImport.getDataParentName()).isEqualTo(DEFAULT_DATA_PARENT_NAME);
+        assertThat(testDataFlowImport.getFunctionalFlowId()).isEqualTo(DEFAULT_FUNCTIONAL_FLOW_ID);
+        assertThat(testDataFlowImport.getFlowInterfaceId()).isEqualTo(DEFAULT_FLOW_INTERFACE_ID);
+        assertThat(testDataFlowImport.getDataType()).isEqualTo(DEFAULT_DATA_TYPE);
         assertThat(testDataFlowImport.getDataResourceName()).isEqualTo(DEFAULT_DATA_RESOURCE_NAME);
         assertThat(testDataFlowImport.getDataResourceType()).isEqualTo(DEFAULT_DATA_RESOURCE_TYPE);
         assertThat(testDataFlowImport.getDataDescription()).isEqualTo(DEFAULT_DATA_DESCRIPTION);
+        assertThat(testDataFlowImport.getDataFrequency()).isEqualTo(DEFAULT_DATA_FREQUENCY);
+        assertThat(testDataFlowImport.getDataFormat()).isEqualTo(DEFAULT_DATA_FORMAT);
+        assertThat(testDataFlowImport.getDataContractURL()).isEqualTo(DEFAULT_DATA_CONTRACT_URL);
         assertThat(testDataFlowImport.getDataDocumentationURL()).isEqualTo(DEFAULT_DATA_DOCUMENTATION_URL);
-        assertThat(testDataFlowImport.getDataItemResourceName()).isEqualTo(DEFAULT_DATA_ITEM_RESOURCE_NAME);
-        assertThat(testDataFlowImport.getDataItemResourceType()).isEqualTo(DEFAULT_DATA_ITEM_RESOURCE_TYPE);
-        assertThat(testDataFlowImport.getDataItemDescription()).isEqualTo(DEFAULT_DATA_ITEM_DESCRIPTION);
-        assertThat(testDataFlowImport.getDataItemDocumentationURL()).isEqualTo(DEFAULT_DATA_ITEM_DOCUMENTATION_URL);
-        assertThat(testDataFlowImport.getFrequency()).isEqualTo(DEFAULT_FREQUENCY);
-        assertThat(testDataFlowImport.getFormat()).isEqualTo(DEFAULT_FORMAT);
-        assertThat(testDataFlowImport.getContractURL()).isEqualTo(DEFAULT_CONTRACT_URL);
-        assertThat(testDataFlowImport.getImportDataFlowStatus()).isEqualTo(DEFAULT_IMPORT_DATA_FLOW_STATUS);
-        assertThat(testDataFlowImport.getImportDataFlowItemStatus()).isEqualTo(DEFAULT_IMPORT_DATA_FLOW_ITEM_STATUS);
+        assertThat(testDataFlowImport.getSource()).isEqualTo(DEFAULT_SOURCE);
+        assertThat(testDataFlowImport.getTarget()).isEqualTo(DEFAULT_TARGET);
+        assertThat(testDataFlowImport.getImportDataStatus()).isEqualTo(DEFAULT_IMPORT_DATA_STATUS);
+        assertThat(testDataFlowImport.getImportDataItemStatus()).isEqualTo(DEFAULT_IMPORT_DATA_ITEM_STATUS);
         assertThat(testDataFlowImport.getImportStatusMessage()).isEqualTo(DEFAULT_IMPORT_STATUS_MESSAGE);
     }
 
@@ -208,19 +232,23 @@ class DataFlowImportResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(dataFlowImport.getId().intValue())))
+            .andExpect(jsonPath("$.[*].dataId").value(hasItem(DEFAULT_DATA_ID)))
+            .andExpect(jsonPath("$.[*].dataParentId").value(hasItem(DEFAULT_DATA_PARENT_ID)))
+            .andExpect(jsonPath("$.[*].dataParentName").value(hasItem(DEFAULT_DATA_PARENT_NAME)))
+            .andExpect(jsonPath("$.[*].functionalFlowId").value(hasItem(DEFAULT_FUNCTIONAL_FLOW_ID)))
+            .andExpect(jsonPath("$.[*].flowInterfaceId").value(hasItem(DEFAULT_FLOW_INTERFACE_ID)))
+            .andExpect(jsonPath("$.[*].dataType").value(hasItem(DEFAULT_DATA_TYPE)))
             .andExpect(jsonPath("$.[*].dataResourceName").value(hasItem(DEFAULT_DATA_RESOURCE_NAME)))
             .andExpect(jsonPath("$.[*].dataResourceType").value(hasItem(DEFAULT_DATA_RESOURCE_TYPE)))
             .andExpect(jsonPath("$.[*].dataDescription").value(hasItem(DEFAULT_DATA_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].dataFrequency").value(hasItem(DEFAULT_DATA_FREQUENCY)))
+            .andExpect(jsonPath("$.[*].dataFormat").value(hasItem(DEFAULT_DATA_FORMAT)))
+            .andExpect(jsonPath("$.[*].dataContractURL").value(hasItem(DEFAULT_DATA_CONTRACT_URL)))
             .andExpect(jsonPath("$.[*].dataDocumentationURL").value(hasItem(DEFAULT_DATA_DOCUMENTATION_URL)))
-            .andExpect(jsonPath("$.[*].dataItemResourceName").value(hasItem(DEFAULT_DATA_ITEM_RESOURCE_NAME)))
-            .andExpect(jsonPath("$.[*].dataItemResourceType").value(hasItem(DEFAULT_DATA_ITEM_RESOURCE_TYPE)))
-            .andExpect(jsonPath("$.[*].dataItemDescription").value(hasItem(DEFAULT_DATA_ITEM_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].dataItemDocumentationURL").value(hasItem(DEFAULT_DATA_ITEM_DOCUMENTATION_URL)))
-            .andExpect(jsonPath("$.[*].frequency").value(hasItem(DEFAULT_FREQUENCY)))
-            .andExpect(jsonPath("$.[*].format").value(hasItem(DEFAULT_FORMAT)))
-            .andExpect(jsonPath("$.[*].contractURL").value(hasItem(DEFAULT_CONTRACT_URL)))
-            .andExpect(jsonPath("$.[*].importDataFlowStatus").value(hasItem(DEFAULT_IMPORT_DATA_FLOW_STATUS.toString())))
-            .andExpect(jsonPath("$.[*].importDataFlowItemStatus").value(hasItem(DEFAULT_IMPORT_DATA_FLOW_ITEM_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].source").value(hasItem(DEFAULT_SOURCE)))
+            .andExpect(jsonPath("$.[*].target").value(hasItem(DEFAULT_TARGET)))
+            .andExpect(jsonPath("$.[*].importDataStatus").value(hasItem(DEFAULT_IMPORT_DATA_STATUS.toString())))
+            .andExpect(jsonPath("$.[*].importDataItemStatus").value(hasItem(DEFAULT_IMPORT_DATA_ITEM_STATUS.toString())))
             .andExpect(jsonPath("$.[*].importStatusMessage").value(hasItem(DEFAULT_IMPORT_STATUS_MESSAGE)));
     }
 
@@ -236,19 +264,23 @@ class DataFlowImportResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(dataFlowImport.getId().intValue()))
+            .andExpect(jsonPath("$.dataId").value(DEFAULT_DATA_ID))
+            .andExpect(jsonPath("$.dataParentId").value(DEFAULT_DATA_PARENT_ID))
+            .andExpect(jsonPath("$.dataParentName").value(DEFAULT_DATA_PARENT_NAME))
+            .andExpect(jsonPath("$.functionalFlowId").value(DEFAULT_FUNCTIONAL_FLOW_ID))
+            .andExpect(jsonPath("$.flowInterfaceId").value(DEFAULT_FLOW_INTERFACE_ID))
+            .andExpect(jsonPath("$.dataType").value(DEFAULT_DATA_TYPE))
             .andExpect(jsonPath("$.dataResourceName").value(DEFAULT_DATA_RESOURCE_NAME))
             .andExpect(jsonPath("$.dataResourceType").value(DEFAULT_DATA_RESOURCE_TYPE))
             .andExpect(jsonPath("$.dataDescription").value(DEFAULT_DATA_DESCRIPTION))
+            .andExpect(jsonPath("$.dataFrequency").value(DEFAULT_DATA_FREQUENCY))
+            .andExpect(jsonPath("$.dataFormat").value(DEFAULT_DATA_FORMAT))
+            .andExpect(jsonPath("$.dataContractURL").value(DEFAULT_DATA_CONTRACT_URL))
             .andExpect(jsonPath("$.dataDocumentationURL").value(DEFAULT_DATA_DOCUMENTATION_URL))
-            .andExpect(jsonPath("$.dataItemResourceName").value(DEFAULT_DATA_ITEM_RESOURCE_NAME))
-            .andExpect(jsonPath("$.dataItemResourceType").value(DEFAULT_DATA_ITEM_RESOURCE_TYPE))
-            .andExpect(jsonPath("$.dataItemDescription").value(DEFAULT_DATA_ITEM_DESCRIPTION))
-            .andExpect(jsonPath("$.dataItemDocumentationURL").value(DEFAULT_DATA_ITEM_DOCUMENTATION_URL))
-            .andExpect(jsonPath("$.frequency").value(DEFAULT_FREQUENCY))
-            .andExpect(jsonPath("$.format").value(DEFAULT_FORMAT))
-            .andExpect(jsonPath("$.contractURL").value(DEFAULT_CONTRACT_URL))
-            .andExpect(jsonPath("$.importDataFlowStatus").value(DEFAULT_IMPORT_DATA_FLOW_STATUS.toString()))
-            .andExpect(jsonPath("$.importDataFlowItemStatus").value(DEFAULT_IMPORT_DATA_FLOW_ITEM_STATUS.toString()))
+            .andExpect(jsonPath("$.source").value(DEFAULT_SOURCE))
+            .andExpect(jsonPath("$.target").value(DEFAULT_TARGET))
+            .andExpect(jsonPath("$.importDataStatus").value(DEFAULT_IMPORT_DATA_STATUS.toString()))
+            .andExpect(jsonPath("$.importDataItemStatus").value(DEFAULT_IMPORT_DATA_ITEM_STATUS.toString()))
             .andExpect(jsonPath("$.importStatusMessage").value(DEFAULT_IMPORT_STATUS_MESSAGE));
     }
 
@@ -272,19 +304,23 @@ class DataFlowImportResourceIT {
         // Disconnect from session so that the updates on updatedDataFlowImport are not directly saved in db
         em.detach(updatedDataFlowImport);
         updatedDataFlowImport
+            .dataId(UPDATED_DATA_ID)
+            .dataParentId(UPDATED_DATA_PARENT_ID)
+            .dataParentName(UPDATED_DATA_PARENT_NAME)
+            .functionalFlowId(UPDATED_FUNCTIONAL_FLOW_ID)
+            .flowInterfaceId(UPDATED_FLOW_INTERFACE_ID)
+            .dataType(UPDATED_DATA_TYPE)
             .dataResourceName(UPDATED_DATA_RESOURCE_NAME)
             .dataResourceType(UPDATED_DATA_RESOURCE_TYPE)
             .dataDescription(UPDATED_DATA_DESCRIPTION)
+            .dataFrequency(UPDATED_DATA_FREQUENCY)
+            .dataFormat(UPDATED_DATA_FORMAT)
+            .dataContractURL(UPDATED_DATA_CONTRACT_URL)
             .dataDocumentationURL(UPDATED_DATA_DOCUMENTATION_URL)
-            .dataItemResourceName(UPDATED_DATA_ITEM_RESOURCE_NAME)
-            .dataItemResourceType(UPDATED_DATA_ITEM_RESOURCE_TYPE)
-            .dataItemDescription(UPDATED_DATA_ITEM_DESCRIPTION)
-            .dataItemDocumentationURL(UPDATED_DATA_ITEM_DOCUMENTATION_URL)
-            .frequency(UPDATED_FREQUENCY)
-            .format(UPDATED_FORMAT)
-            .contractURL(UPDATED_CONTRACT_URL)
-            .importDataFlowStatus(UPDATED_IMPORT_DATA_FLOW_STATUS)
-            .importDataFlowItemStatus(UPDATED_IMPORT_DATA_FLOW_ITEM_STATUS)
+            .source(UPDATED_SOURCE)
+            .target(UPDATED_TARGET)
+            .importDataStatus(UPDATED_IMPORT_DATA_STATUS)
+            .importDataItemStatus(UPDATED_IMPORT_DATA_ITEM_STATUS)
             .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE);
 
         restDataFlowImportMockMvc
@@ -299,19 +335,23 @@ class DataFlowImportResourceIT {
         List<DataFlowImport> dataFlowImportList = dataFlowImportRepository.findAll();
         assertThat(dataFlowImportList).hasSize(databaseSizeBeforeUpdate);
         DataFlowImport testDataFlowImport = dataFlowImportList.get(dataFlowImportList.size() - 1);
+        assertThat(testDataFlowImport.getDataId()).isEqualTo(UPDATED_DATA_ID);
+        assertThat(testDataFlowImport.getDataParentId()).isEqualTo(UPDATED_DATA_PARENT_ID);
+        assertThat(testDataFlowImport.getDataParentName()).isEqualTo(UPDATED_DATA_PARENT_NAME);
+        assertThat(testDataFlowImport.getFunctionalFlowId()).isEqualTo(UPDATED_FUNCTIONAL_FLOW_ID);
+        assertThat(testDataFlowImport.getFlowInterfaceId()).isEqualTo(UPDATED_FLOW_INTERFACE_ID);
+        assertThat(testDataFlowImport.getDataType()).isEqualTo(UPDATED_DATA_TYPE);
         assertThat(testDataFlowImport.getDataResourceName()).isEqualTo(UPDATED_DATA_RESOURCE_NAME);
         assertThat(testDataFlowImport.getDataResourceType()).isEqualTo(UPDATED_DATA_RESOURCE_TYPE);
         assertThat(testDataFlowImport.getDataDescription()).isEqualTo(UPDATED_DATA_DESCRIPTION);
+        assertThat(testDataFlowImport.getDataFrequency()).isEqualTo(UPDATED_DATA_FREQUENCY);
+        assertThat(testDataFlowImport.getDataFormat()).isEqualTo(UPDATED_DATA_FORMAT);
+        assertThat(testDataFlowImport.getDataContractURL()).isEqualTo(UPDATED_DATA_CONTRACT_URL);
         assertThat(testDataFlowImport.getDataDocumentationURL()).isEqualTo(UPDATED_DATA_DOCUMENTATION_URL);
-        assertThat(testDataFlowImport.getDataItemResourceName()).isEqualTo(UPDATED_DATA_ITEM_RESOURCE_NAME);
-        assertThat(testDataFlowImport.getDataItemResourceType()).isEqualTo(UPDATED_DATA_ITEM_RESOURCE_TYPE);
-        assertThat(testDataFlowImport.getDataItemDescription()).isEqualTo(UPDATED_DATA_ITEM_DESCRIPTION);
-        assertThat(testDataFlowImport.getDataItemDocumentationURL()).isEqualTo(UPDATED_DATA_ITEM_DOCUMENTATION_URL);
-        assertThat(testDataFlowImport.getFrequency()).isEqualTo(UPDATED_FREQUENCY);
-        assertThat(testDataFlowImport.getFormat()).isEqualTo(UPDATED_FORMAT);
-        assertThat(testDataFlowImport.getContractURL()).isEqualTo(UPDATED_CONTRACT_URL);
-        assertThat(testDataFlowImport.getImportDataFlowStatus()).isEqualTo(UPDATED_IMPORT_DATA_FLOW_STATUS);
-        assertThat(testDataFlowImport.getImportDataFlowItemStatus()).isEqualTo(UPDATED_IMPORT_DATA_FLOW_ITEM_STATUS);
+        assertThat(testDataFlowImport.getSource()).isEqualTo(UPDATED_SOURCE);
+        assertThat(testDataFlowImport.getTarget()).isEqualTo(UPDATED_TARGET);
+        assertThat(testDataFlowImport.getImportDataStatus()).isEqualTo(UPDATED_IMPORT_DATA_STATUS);
+        assertThat(testDataFlowImport.getImportDataItemStatus()).isEqualTo(UPDATED_IMPORT_DATA_ITEM_STATUS);
         assertThat(testDataFlowImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
     }
 
@@ -384,16 +424,17 @@ class DataFlowImportResourceIT {
         partialUpdatedDataFlowImport.setId(dataFlowImport.getId());
 
         partialUpdatedDataFlowImport
+            .dataId(UPDATED_DATA_ID)
+            .dataParentId(UPDATED_DATA_PARENT_ID)
+            .functionalFlowId(UPDATED_FUNCTIONAL_FLOW_ID)
+            .flowInterfaceId(UPDATED_FLOW_INTERFACE_ID)
+            .dataType(UPDATED_DATA_TYPE)
             .dataResourceName(UPDATED_DATA_RESOURCE_NAME)
             .dataResourceType(UPDATED_DATA_RESOURCE_TYPE)
+            .dataDescription(UPDATED_DATA_DESCRIPTION)
+            .dataFormat(UPDATED_DATA_FORMAT)
             .dataDocumentationURL(UPDATED_DATA_DOCUMENTATION_URL)
-            .dataItemResourceName(UPDATED_DATA_ITEM_RESOURCE_NAME)
-            .dataItemResourceType(UPDATED_DATA_ITEM_RESOURCE_TYPE)
-            .dataItemDescription(UPDATED_DATA_ITEM_DESCRIPTION)
-            .dataItemDocumentationURL(UPDATED_DATA_ITEM_DOCUMENTATION_URL)
-            .frequency(UPDATED_FREQUENCY)
-            .contractURL(UPDATED_CONTRACT_URL)
-            .importDataFlowItemStatus(UPDATED_IMPORT_DATA_FLOW_ITEM_STATUS)
+            .source(UPDATED_SOURCE)
             .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE);
 
         restDataFlowImportMockMvc
@@ -408,19 +449,23 @@ class DataFlowImportResourceIT {
         List<DataFlowImport> dataFlowImportList = dataFlowImportRepository.findAll();
         assertThat(dataFlowImportList).hasSize(databaseSizeBeforeUpdate);
         DataFlowImport testDataFlowImport = dataFlowImportList.get(dataFlowImportList.size() - 1);
+        assertThat(testDataFlowImport.getDataId()).isEqualTo(UPDATED_DATA_ID);
+        assertThat(testDataFlowImport.getDataParentId()).isEqualTo(UPDATED_DATA_PARENT_ID);
+        assertThat(testDataFlowImport.getDataParentName()).isEqualTo(DEFAULT_DATA_PARENT_NAME);
+        assertThat(testDataFlowImport.getFunctionalFlowId()).isEqualTo(UPDATED_FUNCTIONAL_FLOW_ID);
+        assertThat(testDataFlowImport.getFlowInterfaceId()).isEqualTo(UPDATED_FLOW_INTERFACE_ID);
+        assertThat(testDataFlowImport.getDataType()).isEqualTo(UPDATED_DATA_TYPE);
         assertThat(testDataFlowImport.getDataResourceName()).isEqualTo(UPDATED_DATA_RESOURCE_NAME);
         assertThat(testDataFlowImport.getDataResourceType()).isEqualTo(UPDATED_DATA_RESOURCE_TYPE);
-        assertThat(testDataFlowImport.getDataDescription()).isEqualTo(DEFAULT_DATA_DESCRIPTION);
+        assertThat(testDataFlowImport.getDataDescription()).isEqualTo(UPDATED_DATA_DESCRIPTION);
+        assertThat(testDataFlowImport.getDataFrequency()).isEqualTo(DEFAULT_DATA_FREQUENCY);
+        assertThat(testDataFlowImport.getDataFormat()).isEqualTo(UPDATED_DATA_FORMAT);
+        assertThat(testDataFlowImport.getDataContractURL()).isEqualTo(DEFAULT_DATA_CONTRACT_URL);
         assertThat(testDataFlowImport.getDataDocumentationURL()).isEqualTo(UPDATED_DATA_DOCUMENTATION_URL);
-        assertThat(testDataFlowImport.getDataItemResourceName()).isEqualTo(UPDATED_DATA_ITEM_RESOURCE_NAME);
-        assertThat(testDataFlowImport.getDataItemResourceType()).isEqualTo(UPDATED_DATA_ITEM_RESOURCE_TYPE);
-        assertThat(testDataFlowImport.getDataItemDescription()).isEqualTo(UPDATED_DATA_ITEM_DESCRIPTION);
-        assertThat(testDataFlowImport.getDataItemDocumentationURL()).isEqualTo(UPDATED_DATA_ITEM_DOCUMENTATION_URL);
-        assertThat(testDataFlowImport.getFrequency()).isEqualTo(UPDATED_FREQUENCY);
-        assertThat(testDataFlowImport.getFormat()).isEqualTo(DEFAULT_FORMAT);
-        assertThat(testDataFlowImport.getContractURL()).isEqualTo(UPDATED_CONTRACT_URL);
-        assertThat(testDataFlowImport.getImportDataFlowStatus()).isEqualTo(DEFAULT_IMPORT_DATA_FLOW_STATUS);
-        assertThat(testDataFlowImport.getImportDataFlowItemStatus()).isEqualTo(UPDATED_IMPORT_DATA_FLOW_ITEM_STATUS);
+        assertThat(testDataFlowImport.getSource()).isEqualTo(UPDATED_SOURCE);
+        assertThat(testDataFlowImport.getTarget()).isEqualTo(DEFAULT_TARGET);
+        assertThat(testDataFlowImport.getImportDataStatus()).isEqualTo(DEFAULT_IMPORT_DATA_STATUS);
+        assertThat(testDataFlowImport.getImportDataItemStatus()).isEqualTo(DEFAULT_IMPORT_DATA_ITEM_STATUS);
         assertThat(testDataFlowImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
     }
 
@@ -437,19 +482,23 @@ class DataFlowImportResourceIT {
         partialUpdatedDataFlowImport.setId(dataFlowImport.getId());
 
         partialUpdatedDataFlowImport
+            .dataId(UPDATED_DATA_ID)
+            .dataParentId(UPDATED_DATA_PARENT_ID)
+            .dataParentName(UPDATED_DATA_PARENT_NAME)
+            .functionalFlowId(UPDATED_FUNCTIONAL_FLOW_ID)
+            .flowInterfaceId(UPDATED_FLOW_INTERFACE_ID)
+            .dataType(UPDATED_DATA_TYPE)
             .dataResourceName(UPDATED_DATA_RESOURCE_NAME)
             .dataResourceType(UPDATED_DATA_RESOURCE_TYPE)
             .dataDescription(UPDATED_DATA_DESCRIPTION)
+            .dataFrequency(UPDATED_DATA_FREQUENCY)
+            .dataFormat(UPDATED_DATA_FORMAT)
+            .dataContractURL(UPDATED_DATA_CONTRACT_URL)
             .dataDocumentationURL(UPDATED_DATA_DOCUMENTATION_URL)
-            .dataItemResourceName(UPDATED_DATA_ITEM_RESOURCE_NAME)
-            .dataItemResourceType(UPDATED_DATA_ITEM_RESOURCE_TYPE)
-            .dataItemDescription(UPDATED_DATA_ITEM_DESCRIPTION)
-            .dataItemDocumentationURL(UPDATED_DATA_ITEM_DOCUMENTATION_URL)
-            .frequency(UPDATED_FREQUENCY)
-            .format(UPDATED_FORMAT)
-            .contractURL(UPDATED_CONTRACT_URL)
-            .importDataFlowStatus(UPDATED_IMPORT_DATA_FLOW_STATUS)
-            .importDataFlowItemStatus(UPDATED_IMPORT_DATA_FLOW_ITEM_STATUS)
+            .source(UPDATED_SOURCE)
+            .target(UPDATED_TARGET)
+            .importDataStatus(UPDATED_IMPORT_DATA_STATUS)
+            .importDataItemStatus(UPDATED_IMPORT_DATA_ITEM_STATUS)
             .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE);
 
         restDataFlowImportMockMvc
@@ -464,19 +513,23 @@ class DataFlowImportResourceIT {
         List<DataFlowImport> dataFlowImportList = dataFlowImportRepository.findAll();
         assertThat(dataFlowImportList).hasSize(databaseSizeBeforeUpdate);
         DataFlowImport testDataFlowImport = dataFlowImportList.get(dataFlowImportList.size() - 1);
+        assertThat(testDataFlowImport.getDataId()).isEqualTo(UPDATED_DATA_ID);
+        assertThat(testDataFlowImport.getDataParentId()).isEqualTo(UPDATED_DATA_PARENT_ID);
+        assertThat(testDataFlowImport.getDataParentName()).isEqualTo(UPDATED_DATA_PARENT_NAME);
+        assertThat(testDataFlowImport.getFunctionalFlowId()).isEqualTo(UPDATED_FUNCTIONAL_FLOW_ID);
+        assertThat(testDataFlowImport.getFlowInterfaceId()).isEqualTo(UPDATED_FLOW_INTERFACE_ID);
+        assertThat(testDataFlowImport.getDataType()).isEqualTo(UPDATED_DATA_TYPE);
         assertThat(testDataFlowImport.getDataResourceName()).isEqualTo(UPDATED_DATA_RESOURCE_NAME);
         assertThat(testDataFlowImport.getDataResourceType()).isEqualTo(UPDATED_DATA_RESOURCE_TYPE);
         assertThat(testDataFlowImport.getDataDescription()).isEqualTo(UPDATED_DATA_DESCRIPTION);
+        assertThat(testDataFlowImport.getDataFrequency()).isEqualTo(UPDATED_DATA_FREQUENCY);
+        assertThat(testDataFlowImport.getDataFormat()).isEqualTo(UPDATED_DATA_FORMAT);
+        assertThat(testDataFlowImport.getDataContractURL()).isEqualTo(UPDATED_DATA_CONTRACT_URL);
         assertThat(testDataFlowImport.getDataDocumentationURL()).isEqualTo(UPDATED_DATA_DOCUMENTATION_URL);
-        assertThat(testDataFlowImport.getDataItemResourceName()).isEqualTo(UPDATED_DATA_ITEM_RESOURCE_NAME);
-        assertThat(testDataFlowImport.getDataItemResourceType()).isEqualTo(UPDATED_DATA_ITEM_RESOURCE_TYPE);
-        assertThat(testDataFlowImport.getDataItemDescription()).isEqualTo(UPDATED_DATA_ITEM_DESCRIPTION);
-        assertThat(testDataFlowImport.getDataItemDocumentationURL()).isEqualTo(UPDATED_DATA_ITEM_DOCUMENTATION_URL);
-        assertThat(testDataFlowImport.getFrequency()).isEqualTo(UPDATED_FREQUENCY);
-        assertThat(testDataFlowImport.getFormat()).isEqualTo(UPDATED_FORMAT);
-        assertThat(testDataFlowImport.getContractURL()).isEqualTo(UPDATED_CONTRACT_URL);
-        assertThat(testDataFlowImport.getImportDataFlowStatus()).isEqualTo(UPDATED_IMPORT_DATA_FLOW_STATUS);
-        assertThat(testDataFlowImport.getImportDataFlowItemStatus()).isEqualTo(UPDATED_IMPORT_DATA_FLOW_ITEM_STATUS);
+        assertThat(testDataFlowImport.getSource()).isEqualTo(UPDATED_SOURCE);
+        assertThat(testDataFlowImport.getTarget()).isEqualTo(UPDATED_TARGET);
+        assertThat(testDataFlowImport.getImportDataStatus()).isEqualTo(UPDATED_IMPORT_DATA_STATUS);
+        assertThat(testDataFlowImport.getImportDataItemStatus()).isEqualTo(UPDATED_IMPORT_DATA_ITEM_STATUS);
         assertThat(testDataFlowImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
     }
 

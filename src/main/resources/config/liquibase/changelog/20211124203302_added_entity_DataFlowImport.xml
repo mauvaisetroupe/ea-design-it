@@ -14,6 +14,24 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="data_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_parent_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_parent_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="functional_flow_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="flow_interface_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="data_resource_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -23,34 +41,28 @@
             <column name="data_description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="data_frequency" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_format" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_contract_url" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="data_documentation_url" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="data_item_resource_name" type="varchar(255)">
+            <column name="source" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="data_item_resource_type" type="varchar(255)">
+            <column name="target" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="data_item_description" type="varchar(255)">
+            <column name="import_data_status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="data_item_documentation_url" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="frequency" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="format" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="contract_url" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="import_data_flow_status" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="import_data_flow_item_status" type="varchar(255)">
+            <column name="import_data_item_status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="import_status_message" type="varchar(255)">

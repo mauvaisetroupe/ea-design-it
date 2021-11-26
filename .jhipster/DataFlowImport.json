@@ -2,6 +2,30 @@
   "name": "DataFlowImport",
   "fields": [
     {
+      "fieldName": "dataId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dataParentId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dataParentName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "functionalFlowId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "flowInterfaceId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dataType",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "dataResourceName",
       "fieldType": "String"
     },
@@ -14,44 +38,36 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "dataFrequency",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dataFormat",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dataContractURL",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "dataDocumentationURL",
       "fieldType": "String"
     },
     {
-      "fieldName": "dataItemResourceName",
+      "fieldName": "source",
       "fieldType": "String"
     },
     {
-      "fieldName": "dataItemResourceType",
+      "fieldName": "target",
       "fieldType": "String"
     },
     {
-      "fieldName": "dataItemDescription",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "dataItemDocumentationURL",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "frequency",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "format",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "contractURL",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "importDataFlowStatus",
+      "fieldName": "importDataStatus",
       "fieldType": "ImportStatus",
       "fieldValues": "NEW,EXISTING,UPDATED,ERROR"
     },
     {
-      "fieldName": "importDataFlowItemStatus",
+      "fieldName": "importDataItemStatus",
       "fieldType": "ImportStatus",
       "fieldValues": "NEW,EXISTING,UPDATED,ERROR"
     },

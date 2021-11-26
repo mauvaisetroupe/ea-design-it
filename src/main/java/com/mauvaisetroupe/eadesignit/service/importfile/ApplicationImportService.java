@@ -59,8 +59,8 @@ public class ApplicationImportService {
 
     public List<ApplicationImport> importExcel(InputStream inputStream, String originalFilename)
         throws EncryptedDocumentException, IOException {
-        ExcelReader excelReader = new ExcelReader(inputStream, APPLICATION_SHEET_NAME);
-        List<Map<String, Object>> applicationDF = excelReader.getExcelDF();
+        ExcelReader excelReader = new ExcelReader(inputStream);
+        List<Map<String, Object>> applicationDF = excelReader.getSheet(APPLICATION_SHEET_NAME);
         log.info("Found Excel sheet " + applicationDF);
 
         String importID = (new SimpleDateFormat("YYYYMMddhhmmss")).format(new Date());

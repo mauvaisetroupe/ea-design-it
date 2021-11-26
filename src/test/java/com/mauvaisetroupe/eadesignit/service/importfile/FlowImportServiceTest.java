@@ -10,7 +10,7 @@ public class FlowImportServiceTest {
 
     @Test
     void testNullable() throws EncryptedDocumentException, IOException {
-        ExcelReader flowImportService = new ExcelReader(null, null);
+        ExcelReader flowImportService = new ExcelReader(null);
         assertTrue(flowImportService.isNull("?"), "should be null");
         assertTrue(flowImportService.isNull("??"), "should be null");
         assertTrue(flowImportService.isNull("???"), "should be null");

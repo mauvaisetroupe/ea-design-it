@@ -32,8 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class FlowInterfaceResourceIT {
 
-    private static final String DEFAULT_ALIAS = "SWR-574";
-    private static final String UPDATED_ALIAS = "ITI-98";
+    private static final String DEFAULT_ALIAS = "AAAAAAAAAA";
+    private static final String UPDATED_ALIAS = "BBBBBBBBBB";
 
     private static final String DEFAULT_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_STATUS = "BBBBBBBBBB";
@@ -325,8 +325,10 @@ class FlowInterfaceResourceIT {
         partialUpdatedFlowInterface.setId(flowInterface.getId());
 
         partialUpdatedFlowInterface
+            .alias(UPDATED_ALIAS)
             .status(UPDATED_STATUS)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE);
 
@@ -342,10 +344,10 @@ class FlowInterfaceResourceIT {
         List<FlowInterface> flowInterfaceList = flowInterfaceRepository.findAll();
         assertThat(flowInterfaceList).hasSize(databaseSizeBeforeUpdate);
         FlowInterface testFlowInterface = flowInterfaceList.get(flowInterfaceList.size() - 1);
-        assertThat(testFlowInterface.getAlias()).isEqualTo(DEFAULT_ALIAS);
+        assertThat(testFlowInterface.getAlias()).isEqualTo(UPDATED_ALIAS);
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
-        assertThat(testFlowInterface.getDocumentationURL2()).isEqualTo(DEFAULT_DOCUMENTATION_URL_2);
+        assertThat(testFlowInterface.getDocumentationURL2()).isEqualTo(UPDATED_DOCUMENTATION_URL_2);
         assertThat(testFlowInterface.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testFlowInterface.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }

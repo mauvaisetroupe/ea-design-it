@@ -123,6 +123,24 @@ public class DataFlowImportResource {
         Optional<DataFlowImport> result = dataFlowImportRepository
             .findById(dataFlowImport.getId())
             .map(existingDataFlowImport -> {
+                if (dataFlowImport.getDataId() != null) {
+                    existingDataFlowImport.setDataId(dataFlowImport.getDataId());
+                }
+                if (dataFlowImport.getDataParentId() != null) {
+                    existingDataFlowImport.setDataParentId(dataFlowImport.getDataParentId());
+                }
+                if (dataFlowImport.getDataParentName() != null) {
+                    existingDataFlowImport.setDataParentName(dataFlowImport.getDataParentName());
+                }
+                if (dataFlowImport.getFunctionalFlowId() != null) {
+                    existingDataFlowImport.setFunctionalFlowId(dataFlowImport.getFunctionalFlowId());
+                }
+                if (dataFlowImport.getFlowInterfaceId() != null) {
+                    existingDataFlowImport.setFlowInterfaceId(dataFlowImport.getFlowInterfaceId());
+                }
+                if (dataFlowImport.getDataType() != null) {
+                    existingDataFlowImport.setDataType(dataFlowImport.getDataType());
+                }
                 if (dataFlowImport.getDataResourceName() != null) {
                     existingDataFlowImport.setDataResourceName(dataFlowImport.getDataResourceName());
                 }
@@ -132,35 +150,29 @@ public class DataFlowImportResource {
                 if (dataFlowImport.getDataDescription() != null) {
                     existingDataFlowImport.setDataDescription(dataFlowImport.getDataDescription());
                 }
+                if (dataFlowImport.getDataFrequency() != null) {
+                    existingDataFlowImport.setDataFrequency(dataFlowImport.getDataFrequency());
+                }
+                if (dataFlowImport.getDataFormat() != null) {
+                    existingDataFlowImport.setDataFormat(dataFlowImport.getDataFormat());
+                }
+                if (dataFlowImport.getDataContractURL() != null) {
+                    existingDataFlowImport.setDataContractURL(dataFlowImport.getDataContractURL());
+                }
                 if (dataFlowImport.getDataDocumentationURL() != null) {
                     existingDataFlowImport.setDataDocumentationURL(dataFlowImport.getDataDocumentationURL());
                 }
-                if (dataFlowImport.getDataItemResourceName() != null) {
-                    existingDataFlowImport.setDataItemResourceName(dataFlowImport.getDataItemResourceName());
+                if (dataFlowImport.getSource() != null) {
+                    existingDataFlowImport.setSource(dataFlowImport.getSource());
                 }
-                if (dataFlowImport.getDataItemResourceType() != null) {
-                    existingDataFlowImport.setDataItemResourceType(dataFlowImport.getDataItemResourceType());
+                if (dataFlowImport.getTarget() != null) {
+                    existingDataFlowImport.setTarget(dataFlowImport.getTarget());
                 }
-                if (dataFlowImport.getDataItemDescription() != null) {
-                    existingDataFlowImport.setDataItemDescription(dataFlowImport.getDataItemDescription());
+                if (dataFlowImport.getImportDataStatus() != null) {
+                    existingDataFlowImport.setImportDataStatus(dataFlowImport.getImportDataStatus());
                 }
-                if (dataFlowImport.getDataItemDocumentationURL() != null) {
-                    existingDataFlowImport.setDataItemDocumentationURL(dataFlowImport.getDataItemDocumentationURL());
-                }
-                if (dataFlowImport.getFrequency() != null) {
-                    existingDataFlowImport.setFrequency(dataFlowImport.getFrequency());
-                }
-                if (dataFlowImport.getFormat() != null) {
-                    existingDataFlowImport.setFormat(dataFlowImport.getFormat());
-                }
-                if (dataFlowImport.getContractURL() != null) {
-                    existingDataFlowImport.setContractURL(dataFlowImport.getContractURL());
-                }
-                if (dataFlowImport.getImportDataFlowStatus() != null) {
-                    existingDataFlowImport.setImportDataFlowStatus(dataFlowImport.getImportDataFlowStatus());
-                }
-                if (dataFlowImport.getImportDataFlowItemStatus() != null) {
-                    existingDataFlowImport.setImportDataFlowItemStatus(dataFlowImport.getImportDataFlowItemStatus());
+                if (dataFlowImport.getImportDataItemStatus() != null) {
+                    existingDataFlowImport.setImportDataItemStatus(dataFlowImport.getImportDataItemStatus());
                 }
                 if (dataFlowImport.getImportStatusMessage() != null) {
                     existingDataFlowImport.setImportStatusMessage(dataFlowImport.getImportStatusMessage());

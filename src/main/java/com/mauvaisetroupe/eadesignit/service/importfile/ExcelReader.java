@@ -20,7 +20,6 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -28,18 +27,13 @@ public class ExcelReader {
 
     private static final int IGNORE_ROW_AFTER_N_EMPTY_CELL = 4;
     private final Logger log = LoggerFactory.getLogger(ExcelReader.class);
-    private List<Map<String, Object>> excelDF = new ArrayList<>();
+    Workbook workbook = null;
 
-    public List<Map<String, Object>> getExcelDF() {
-        return excelDF;
+    public ExcelReader(InputStream excel) throws EncryptedDocumentException, IOException {
+        this.workbook = WorkbookFactory.create(excel);
     }
 
-    public ExcelReader(InputStream excel, String sheetName) throws EncryptedDocumentException, IOException {
-        if (excel != null && sheetName != null) this.excelDF = importExcel(excel, sheetName);
-    }
-
-    private List<Map<String, Object>> importExcel(InputStream excel, String sheetName) throws EncryptedDocumentException, IOException {
-        Workbook workbook = WorkbookFactory.create(excel);
+    public List<Map<String, Object>> getSheet(String sheetName) {
         Sheet sheet = workbook.getSheet(sheetName);
         List<Map<String, Object>> rowAsArrayList = new ArrayList<>();
         // First row is header

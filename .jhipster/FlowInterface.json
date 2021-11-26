@@ -3,8 +3,7 @@
   "fields": [
     {
       "fieldName": "alias",
-      "fieldType": "String",
-      "fieldValidateRules": ["pattern"],
+      "fieldType": "String"
     },
     {
       "fieldName": "status",

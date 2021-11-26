@@ -5,6 +5,42 @@
         <h2 class="jh-entity-heading" data-cy="dataFlowImportDetailsHeading"><span>DataFlowImport</span> {{ dataFlowImport.id }}</h2>
         <dl class="row jh-entity-details">
           <dt>
+            <span>Data Id</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlowImport.dataId }}</span>
+          </dd>
+          <dt>
+            <span>Data Parent Id</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlowImport.dataParentId }}</span>
+          </dd>
+          <dt>
+            <span>Data Parent Name</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlowImport.dataParentName }}</span>
+          </dd>
+          <dt>
+            <span>Functional Flow Id</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlowImport.functionalFlowId }}</span>
+          </dd>
+          <dt>
+            <span>Flow Interface Id</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlowImport.flowInterfaceId }}</span>
+          </dd>
+          <dt>
+            <span>Data Type</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlowImport.dataType }}</span>
+          </dd>
+          <dt>
             <span>Data Resource Name</span>
           </dt>
           <dd>
@@ -23,64 +59,52 @@
             <span>{{ dataFlowImport.dataDescription }}</span>
           </dd>
           <dt>
+            <span>Data Frequency</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlowImport.dataFrequency }}</span>
+          </dd>
+          <dt>
+            <span>Data Format</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlowImport.dataFormat }}</span>
+          </dd>
+          <dt>
+            <span>Data Contract URL</span>
+          </dt>
+          <dd>
+            <span>{{ dataFlowImport.dataContractURL }}</span>
+          </dd>
+          <dt>
             <span>Data Documentation URL</span>
           </dt>
           <dd>
             <span>{{ dataFlowImport.dataDocumentationURL }}</span>
           </dd>
           <dt>
-            <span>Data Item Resource Name</span>
+            <span>Source</span>
           </dt>
           <dd>
-            <span>{{ dataFlowImport.dataItemResourceName }}</span>
+            <span>{{ dataFlowImport.source }}</span>
           </dd>
           <dt>
-            <span>Data Item Resource Type</span>
+            <span>Target</span>
           </dt>
           <dd>
-            <span>{{ dataFlowImport.dataItemResourceType }}</span>
+            <span>{{ dataFlowImport.target }}</span>
           </dd>
           <dt>
-            <span>Data Item Description</span>
+            <span>Import Data Status</span>
           </dt>
           <dd>
-            <span>{{ dataFlowImport.dataItemDescription }}</span>
+            <span>{{ dataFlowImport.importDataStatus }}</span>
           </dd>
           <dt>
-            <span>Data Item Documentation URL</span>
+            <span>Import Data Item Status</span>
           </dt>
           <dd>
-            <span>{{ dataFlowImport.dataItemDocumentationURL }}</span>
-          </dd>
-          <dt>
-            <span>Frequency</span>
-          </dt>
-          <dd>
-            <span>{{ dataFlowImport.frequency }}</span>
-          </dd>
-          <dt>
-            <span>Format</span>
-          </dt>
-          <dd>
-            <span>{{ dataFlowImport.format }}</span>
-          </dd>
-          <dt>
-            <span>Contract URL</span>
-          </dt>
-          <dd>
-            <span>{{ dataFlowImport.contractURL }}</span>
-          </dd>
-          <dt>
-            <span>Import Data Flow Status</span>
-          </dt>
-          <dd>
-            <span>{{ dataFlowImport.importDataFlowStatus }}</span>
-          </dd>
-          <dt>
-            <span>Import Data Flow Item Status</span>
-          </dt>
-          <dd>
-            <span>{{ dataFlowImport.importDataFlowItemStatus }}</span>
+            <span>{{ dataFlowImport.importDataItemStatus }}</span>
           </dd>
           <dt>
             <span>Import Status Message</span>

@@ -22,6 +22,24 @@ public class DataFlowImport implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "data_id")
+    private String dataId;
+
+    @Column(name = "data_parent_id")
+    private String dataParentId;
+
+    @Column(name = "data_parent_name")
+    private String dataParentName;
+
+    @Column(name = "functional_flow_id")
+    private String functionalFlowId;
+
+    @Column(name = "flow_interface_id")
+    private String flowInterfaceId;
+
+    @Column(name = "data_type")
+    private String dataType;
+
     @Column(name = "data_resource_name")
     private String dataResourceName;
 
@@ -31,37 +49,31 @@ public class DataFlowImport implements Serializable {
     @Column(name = "data_description")
     private String dataDescription;
 
+    @Column(name = "data_frequency")
+    private String dataFrequency;
+
+    @Column(name = "data_format")
+    private String dataFormat;
+
+    @Column(name = "data_contract_url")
+    private String dataContractURL;
+
     @Column(name = "data_documentation_url")
     private String dataDocumentationURL;
 
-    @Column(name = "data_item_resource_name")
-    private String dataItemResourceName;
+    @Column(name = "source")
+    private String source;
 
-    @Column(name = "data_item_resource_type")
-    private String dataItemResourceType;
-
-    @Column(name = "data_item_description")
-    private String dataItemDescription;
-
-    @Column(name = "data_item_documentation_url")
-    private String dataItemDocumentationURL;
-
-    @Column(name = "frequency")
-    private String frequency;
-
-    @Column(name = "format")
-    private String format;
-
-    @Column(name = "contract_url")
-    private String contractURL;
+    @Column(name = "target")
+    private String target;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "import_data_flow_status")
-    private ImportStatus importDataFlowStatus;
+    @Column(name = "import_data_status")
+    private ImportStatus importDataStatus;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "import_data_flow_item_status")
-    private ImportStatus importDataFlowItemStatus;
+    @Column(name = "import_data_item_status")
+    private ImportStatus importDataItemStatus;
 
     @Column(name = "import_status_message")
     private String importStatusMessage;
@@ -79,6 +91,84 @@ public class DataFlowImport implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDataId() {
+        return this.dataId;
+    }
+
+    public DataFlowImport dataId(String dataId) {
+        this.setDataId(dataId);
+        return this;
+    }
+
+    public void setDataId(String dataId) {
+        this.dataId = dataId;
+    }
+
+    public String getDataParentId() {
+        return this.dataParentId;
+    }
+
+    public DataFlowImport dataParentId(String dataParentId) {
+        this.setDataParentId(dataParentId);
+        return this;
+    }
+
+    public void setDataParentId(String dataParentId) {
+        this.dataParentId = dataParentId;
+    }
+
+    public String getDataParentName() {
+        return this.dataParentName;
+    }
+
+    public DataFlowImport dataParentName(String dataParentName) {
+        this.setDataParentName(dataParentName);
+        return this;
+    }
+
+    public void setDataParentName(String dataParentName) {
+        this.dataParentName = dataParentName;
+    }
+
+    public String getFunctionalFlowId() {
+        return this.functionalFlowId;
+    }
+
+    public DataFlowImport functionalFlowId(String functionalFlowId) {
+        this.setFunctionalFlowId(functionalFlowId);
+        return this;
+    }
+
+    public void setFunctionalFlowId(String functionalFlowId) {
+        this.functionalFlowId = functionalFlowId;
+    }
+
+    public String getFlowInterfaceId() {
+        return this.flowInterfaceId;
+    }
+
+    public DataFlowImport flowInterfaceId(String flowInterfaceId) {
+        this.setFlowInterfaceId(flowInterfaceId);
+        return this;
+    }
+
+    public void setFlowInterfaceId(String flowInterfaceId) {
+        this.flowInterfaceId = flowInterfaceId;
+    }
+
+    public String getDataType() {
+        return this.dataType;
+    }
+
+    public DataFlowImport dataType(String dataType) {
+        this.setDataType(dataType);
+        return this;
+    }
+
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
     }
 
     public String getDataResourceName() {
@@ -120,6 +210,45 @@ public class DataFlowImport implements Serializable {
         this.dataDescription = dataDescription;
     }
 
+    public String getDataFrequency() {
+        return this.dataFrequency;
+    }
+
+    public DataFlowImport dataFrequency(String dataFrequency) {
+        this.setDataFrequency(dataFrequency);
+        return this;
+    }
+
+    public void setDataFrequency(String dataFrequency) {
+        this.dataFrequency = dataFrequency;
+    }
+
+    public String getDataFormat() {
+        return this.dataFormat;
+    }
+
+    public DataFlowImport dataFormat(String dataFormat) {
+        this.setDataFormat(dataFormat);
+        return this;
+    }
+
+    public void setDataFormat(String dataFormat) {
+        this.dataFormat = dataFormat;
+    }
+
+    public String getDataContractURL() {
+        return this.dataContractURL;
+    }
+
+    public DataFlowImport dataContractURL(String dataContractURL) {
+        this.setDataContractURL(dataContractURL);
+        return this;
+    }
+
+    public void setDataContractURL(String dataContractURL) {
+        this.dataContractURL = dataContractURL;
+    }
+
     public String getDataDocumentationURL() {
         return this.dataDocumentationURL;
     }
@@ -133,121 +262,56 @@ public class DataFlowImport implements Serializable {
         this.dataDocumentationURL = dataDocumentationURL;
     }
 
-    public String getDataItemResourceName() {
-        return this.dataItemResourceName;
+    public String getSource() {
+        return this.source;
     }
 
-    public DataFlowImport dataItemResourceName(String dataItemResourceName) {
-        this.setDataItemResourceName(dataItemResourceName);
+    public DataFlowImport source(String source) {
+        this.setSource(source);
         return this;
     }
 
-    public void setDataItemResourceName(String dataItemResourceName) {
-        this.dataItemResourceName = dataItemResourceName;
+    public void setSource(String source) {
+        this.source = source;
     }
 
-    public String getDataItemResourceType() {
-        return this.dataItemResourceType;
+    public String getTarget() {
+        return this.target;
     }
 
-    public DataFlowImport dataItemResourceType(String dataItemResourceType) {
-        this.setDataItemResourceType(dataItemResourceType);
+    public DataFlowImport target(String target) {
+        this.setTarget(target);
         return this;
     }
 
-    public void setDataItemResourceType(String dataItemResourceType) {
-        this.dataItemResourceType = dataItemResourceType;
+    public void setTarget(String target) {
+        this.target = target;
     }
 
-    public String getDataItemDescription() {
-        return this.dataItemDescription;
+    public ImportStatus getImportDataStatus() {
+        return this.importDataStatus;
     }
 
-    public DataFlowImport dataItemDescription(String dataItemDescription) {
-        this.setDataItemDescription(dataItemDescription);
+    public DataFlowImport importDataStatus(ImportStatus importDataStatus) {
+        this.setImportDataStatus(importDataStatus);
         return this;
     }
 
-    public void setDataItemDescription(String dataItemDescription) {
-        this.dataItemDescription = dataItemDescription;
+    public void setImportDataStatus(ImportStatus importDataStatus) {
+        this.importDataStatus = importDataStatus;
     }
 
-    public String getDataItemDocumentationURL() {
-        return this.dataItemDocumentationURL;
+    public ImportStatus getImportDataItemStatus() {
+        return this.importDataItemStatus;
     }
 
-    public DataFlowImport dataItemDocumentationURL(String dataItemDocumentationURL) {
-        this.setDataItemDocumentationURL(dataItemDocumentationURL);
+    public DataFlowImport importDataItemStatus(ImportStatus importDataItemStatus) {
+        this.setImportDataItemStatus(importDataItemStatus);
         return this;
     }
 
-    public void setDataItemDocumentationURL(String dataItemDocumentationURL) {
-        this.dataItemDocumentationURL = dataItemDocumentationURL;
-    }
-
-    public String getFrequency() {
-        return this.frequency;
-    }
-
-    public DataFlowImport frequency(String frequency) {
-        this.setFrequency(frequency);
-        return this;
-    }
-
-    public void setFrequency(String frequency) {
-        this.frequency = frequency;
-    }
-
-    public String getFormat() {
-        return this.format;
-    }
-
-    public DataFlowImport format(String format) {
-        this.setFormat(format);
-        return this;
-    }
-
-    public void setFormat(String format) {
-        this.format = format;
-    }
-
-    public String getContractURL() {
-        return this.contractURL;
-    }
-
-    public DataFlowImport contractURL(String contractURL) {
-        this.setContractURL(contractURL);
-        return this;
-    }
-
-    public void setContractURL(String contractURL) {
-        this.contractURL = contractURL;
-    }
-
-    public ImportStatus getImportDataFlowStatus() {
-        return this.importDataFlowStatus;
-    }
-
-    public DataFlowImport importDataFlowStatus(ImportStatus importDataFlowStatus) {
-        this.setImportDataFlowStatus(importDataFlowStatus);
-        return this;
-    }
-
-    public void setImportDataFlowStatus(ImportStatus importDataFlowStatus) {
-        this.importDataFlowStatus = importDataFlowStatus;
-    }
-
-    public ImportStatus getImportDataFlowItemStatus() {
-        return this.importDataFlowItemStatus;
-    }
-
-    public DataFlowImport importDataFlowItemStatus(ImportStatus importDataFlowItemStatus) {
-        this.setImportDataFlowItemStatus(importDataFlowItemStatus);
-        return this;
-    }
-
-    public void setImportDataFlowItemStatus(ImportStatus importDataFlowItemStatus) {
-        this.importDataFlowItemStatus = importDataFlowItemStatus;
+    public void setImportDataItemStatus(ImportStatus importDataItemStatus) {
+        this.importDataItemStatus = importDataItemStatus;
     }
 
     public String getImportStatusMessage() {
@@ -287,19 +351,23 @@ public class DataFlowImport implements Serializable {
     public String toString() {
         return "DataFlowImport{" +
             "id=" + getId() +
+            ", dataId='" + getDataId() + "'" +
+            ", dataParentId='" + getDataParentId() + "'" +
+            ", dataParentName='" + getDataParentName() + "'" +
+            ", functionalFlowId='" + getFunctionalFlowId() + "'" +
+            ", flowInterfaceId='" + getFlowInterfaceId() + "'" +
+            ", dataType='" + getDataType() + "'" +
             ", dataResourceName='" + getDataResourceName() + "'" +
             ", dataResourceType='" + getDataResourceType() + "'" +
             ", dataDescription='" + getDataDescription() + "'" +
+            ", dataFrequency='" + getDataFrequency() + "'" +
+            ", dataFormat='" + getDataFormat() + "'" +
+            ", dataContractURL='" + getDataContractURL() + "'" +
             ", dataDocumentationURL='" + getDataDocumentationURL() + "'" +
-            ", dataItemResourceName='" + getDataItemResourceName() + "'" +
-            ", dataItemResourceType='" + getDataItemResourceType() + "'" +
-            ", dataItemDescription='" + getDataItemDescription() + "'" +
-            ", dataItemDocumentationURL='" + getDataItemDocumentationURL() + "'" +
-            ", frequency='" + getFrequency() + "'" +
-            ", format='" + getFormat() + "'" +
-            ", contractURL='" + getContractURL() + "'" +
-            ", importDataFlowStatus='" + getImportDataFlowStatus() + "'" +
-            ", importDataFlowItemStatus='" + getImportDataFlowItemStatus() + "'" +
+            ", source='" + getSource() + "'" +
+            ", target='" + getTarget() + "'" +
+            ", importDataStatus='" + getImportDataStatus() + "'" +
+            ", importDataItemStatus='" + getImportDataItemStatus() + "'" +
             ", importStatusMessage='" + getImportStatusMessage() + "'" +
             "}";
     }

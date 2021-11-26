@@ -252,19 +252,24 @@ entity FlowImport(tmp_import_flows) {
 }
 
 entity DataFlowImport(tmp_import_dataflows) {
+    dataId String
+    dataParentId String
+    dataParentName String
+    functionalFlowId String
+    flowInterfaceId String
+	dataType String
     dataResourceName String 
 	dataResourceType String 
     dataDescription String 
+	dataFrequency String
+    dataFormat String
+    dataContractURL String 
     dataDocumentationURL String
-	dataItemResourceName String 
-    dataItemResourceType String 
-    dataItemDescription String 
-    dataItemDocumentationURL String
-	frequency String
-    format String
-    contractURL String 
-    importDataFlowStatus ImportStatus
-    importDataFlowItemStatus ImportStatus
+    source String
+    target String
+	importDataStatus ImportStatus
+    importDataItemStatus ImportStatus
 	importStatusMessage String
+    
 }
 

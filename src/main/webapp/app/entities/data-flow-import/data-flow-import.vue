@@ -28,19 +28,23 @@
         <thead>
           <tr>
             <th scope="row"><span>ID</span></th>
+            <th scope="row"><span>Data Id</span></th>
+            <th scope="row"><span>Data Parent Id</span></th>
+            <th scope="row"><span>Data Parent Name</span></th>
+            <th scope="row"><span>Functional Flow Id</span></th>
+            <th scope="row"><span>Flow Interface Id</span></th>
+            <th scope="row"><span>Data Type</span></th>
             <th scope="row"><span>Data Resource Name</span></th>
             <th scope="row"><span>Data Resource Type</span></th>
             <th scope="row"><span>Data Description</span></th>
+            <th scope="row"><span>Data Frequency</span></th>
+            <th scope="row"><span>Data Format</span></th>
+            <th scope="row"><span>Data Contract URL</span></th>
             <th scope="row"><span>Data Documentation URL</span></th>
-            <th scope="row"><span>Data Item Resource Name</span></th>
-            <th scope="row"><span>Data Item Resource Type</span></th>
-            <th scope="row"><span>Data Item Description</span></th>
-            <th scope="row"><span>Data Item Documentation URL</span></th>
-            <th scope="row"><span>Frequency</span></th>
-            <th scope="row"><span>Format</span></th>
-            <th scope="row"><span>Contract URL</span></th>
-            <th scope="row"><span>Import Data Flow Status</span></th>
-            <th scope="row"><span>Import Data Flow Item Status</span></th>
+            <th scope="row"><span>Source</span></th>
+            <th scope="row"><span>Target</span></th>
+            <th scope="row"><span>Import Data Status</span></th>
+            <th scope="row"><span>Import Data Item Status</span></th>
             <th scope="row"><span>Import Status Message</span></th>
             <th scope="row"></th>
           </tr>
@@ -52,19 +56,23 @@
                 dataFlowImport.id
               }}</router-link>
             </td>
+            <td>{{ dataFlowImport.dataId }}</td>
+            <td>{{ dataFlowImport.dataParentId }}</td>
+            <td>{{ dataFlowImport.dataParentName }}</td>
+            <td>{{ dataFlowImport.functionalFlowId }}</td>
+            <td>{{ dataFlowImport.flowInterfaceId }}</td>
+            <td>{{ dataFlowImport.dataType }}</td>
             <td>{{ dataFlowImport.dataResourceName }}</td>
             <td>{{ dataFlowImport.dataResourceType }}</td>
             <td>{{ dataFlowImport.dataDescription }}</td>
+            <td>{{ dataFlowImport.dataFrequency }}</td>
+            <td>{{ dataFlowImport.dataFormat }}</td>
+            <td>{{ dataFlowImport.dataContractURL }}</td>
             <td>{{ dataFlowImport.dataDocumentationURL }}</td>
-            <td>{{ dataFlowImport.dataItemResourceName }}</td>
-            <td>{{ dataFlowImport.dataItemResourceType }}</td>
-            <td>{{ dataFlowImport.dataItemDescription }}</td>
-            <td>{{ dataFlowImport.dataItemDocumentationURL }}</td>
-            <td>{{ dataFlowImport.frequency }}</td>
-            <td>{{ dataFlowImport.format }}</td>
-            <td>{{ dataFlowImport.contractURL }}</td>
-            <td>{{ dataFlowImport.importDataFlowStatus }}</td>
-            <td>{{ dataFlowImport.importDataFlowItemStatus }}</td>
+            <td>{{ dataFlowImport.source }}</td>
+            <td>{{ dataFlowImport.target }}</td>
+            <td>{{ dataFlowImport.importDataStatus }}</td>
+            <td>{{ dataFlowImport.importDataItemStatus }}</td>
             <td>{{ dataFlowImport.importStatusMessage }}</td>
             <td class="text-right">
               <div class="btn-group">

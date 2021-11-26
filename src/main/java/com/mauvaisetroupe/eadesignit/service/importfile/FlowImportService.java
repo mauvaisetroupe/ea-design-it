@@ -111,8 +111,8 @@ public class FlowImportService {
     public List<FlowImport> importExcel(InputStream file, String filename) throws EncryptedDocumentException, IOException {
         List<FlowImport> result = new ArrayList<FlowImport>();
 
-        ExcelReader excelReader = new ExcelReader(file, FLOW_SHEET_NAME);
-        List<Map<String, Object>> flowsDF = excelReader.getExcelDF();
+        ExcelReader excelReader = new ExcelReader(file);
+        List<Map<String, Object>> flowsDF = excelReader.getSheet(FLOW_SHEET_NAME);
         String diagramName = filename.substring(0, filename.lastIndexOf(".")).replace("_", " ").replace("-", " ");
 
         for (Map<String, Object> map : flowsDF) {

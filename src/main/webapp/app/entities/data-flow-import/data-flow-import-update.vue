@@ -11,6 +11,78 @@
             <input type="text" class="form-control" id="id" name="id" v-model="dataFlowImport.id" readonly />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="data-flow-import-dataId">Data Id</label>
+            <input
+              type="text"
+              class="form-control"
+              name="dataId"
+              id="data-flow-import-dataId"
+              data-cy="dataId"
+              :class="{ valid: !$v.dataFlowImport.dataId.$invalid, invalid: $v.dataFlowImport.dataId.$invalid }"
+              v-model="$v.dataFlowImport.dataId.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="data-flow-import-dataParentId">Data Parent Id</label>
+            <input
+              type="text"
+              class="form-control"
+              name="dataParentId"
+              id="data-flow-import-dataParentId"
+              data-cy="dataParentId"
+              :class="{ valid: !$v.dataFlowImport.dataParentId.$invalid, invalid: $v.dataFlowImport.dataParentId.$invalid }"
+              v-model="$v.dataFlowImport.dataParentId.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="data-flow-import-dataParentName">Data Parent Name</label>
+            <input
+              type="text"
+              class="form-control"
+              name="dataParentName"
+              id="data-flow-import-dataParentName"
+              data-cy="dataParentName"
+              :class="{ valid: !$v.dataFlowImport.dataParentName.$invalid, invalid: $v.dataFlowImport.dataParentName.$invalid }"
+              v-model="$v.dataFlowImport.dataParentName.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="data-flow-import-functionalFlowId">Functional Flow Id</label>
+            <input
+              type="text"
+              class="form-control"
+              name="functionalFlowId"
+              id="data-flow-import-functionalFlowId"
+              data-cy="functionalFlowId"
+              :class="{ valid: !$v.dataFlowImport.functionalFlowId.$invalid, invalid: $v.dataFlowImport.functionalFlowId.$invalid }"
+              v-model="$v.dataFlowImport.functionalFlowId.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="data-flow-import-flowInterfaceId">Flow Interface Id</label>
+            <input
+              type="text"
+              class="form-control"
+              name="flowInterfaceId"
+              id="data-flow-import-flowInterfaceId"
+              data-cy="flowInterfaceId"
+              :class="{ valid: !$v.dataFlowImport.flowInterfaceId.$invalid, invalid: $v.dataFlowImport.flowInterfaceId.$invalid }"
+              v-model="$v.dataFlowImport.flowInterfaceId.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="data-flow-import-dataType">Data Type</label>
+            <input
+              type="text"
+              class="form-control"
+              name="dataType"
+              id="data-flow-import-dataType"
+              data-cy="dataType"
+              :class="{ valid: !$v.dataFlowImport.dataType.$invalid, invalid: $v.dataFlowImport.dataType.$invalid }"
+              v-model="$v.dataFlowImport.dataType.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="data-flow-import-dataResourceName">Data Resource Name</label>
             <input
               type="text"
@@ -47,6 +119,42 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="data-flow-import-dataFrequency">Data Frequency</label>
+            <input
+              type="text"
+              class="form-control"
+              name="dataFrequency"
+              id="data-flow-import-dataFrequency"
+              data-cy="dataFrequency"
+              :class="{ valid: !$v.dataFlowImport.dataFrequency.$invalid, invalid: $v.dataFlowImport.dataFrequency.$invalid }"
+              v-model="$v.dataFlowImport.dataFrequency.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="data-flow-import-dataFormat">Data Format</label>
+            <input
+              type="text"
+              class="form-control"
+              name="dataFormat"
+              id="data-flow-import-dataFormat"
+              data-cy="dataFormat"
+              :class="{ valid: !$v.dataFlowImport.dataFormat.$invalid, invalid: $v.dataFlowImport.dataFormat.$invalid }"
+              v-model="$v.dataFlowImport.dataFormat.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="data-flow-import-dataContractURL">Data Contract URL</label>
+            <input
+              type="text"
+              class="form-control"
+              name="dataContractURL"
+              id="data-flow-import-dataContractURL"
+              data-cy="dataContractURL"
+              :class="{ valid: !$v.dataFlowImport.dataContractURL.$invalid, invalid: $v.dataFlowImport.dataContractURL.$invalid }"
+              v-model="$v.dataFlowImport.dataContractURL.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="data-flow-import-dataDocumentationURL">Data Documentation URL</label>
             <input
               type="text"
@@ -59,117 +167,51 @@
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="data-flow-import-dataItemResourceName">Data Item Resource Name</label>
+            <label class="form-control-label" for="data-flow-import-source">Source</label>
             <input
               type="text"
               class="form-control"
-              name="dataItemResourceName"
-              id="data-flow-import-dataItemResourceName"
-              data-cy="dataItemResourceName"
-              :class="{ valid: !$v.dataFlowImport.dataItemResourceName.$invalid, invalid: $v.dataFlowImport.dataItemResourceName.$invalid }"
-              v-model="$v.dataFlowImport.dataItemResourceName.$model"
+              name="source"
+              id="data-flow-import-source"
+              data-cy="source"
+              :class="{ valid: !$v.dataFlowImport.source.$invalid, invalid: $v.dataFlowImport.source.$invalid }"
+              v-model="$v.dataFlowImport.source.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="data-flow-import-dataItemResourceType">Data Item Resource Type</label>
+            <label class="form-control-label" for="data-flow-import-target">Target</label>
             <input
               type="text"
               class="form-control"
-              name="dataItemResourceType"
-              id="data-flow-import-dataItemResourceType"
-              data-cy="dataItemResourceType"
-              :class="{ valid: !$v.dataFlowImport.dataItemResourceType.$invalid, invalid: $v.dataFlowImport.dataItemResourceType.$invalid }"
-              v-model="$v.dataFlowImport.dataItemResourceType.$model"
+              name="target"
+              id="data-flow-import-target"
+              data-cy="target"
+              :class="{ valid: !$v.dataFlowImport.target.$invalid, invalid: $v.dataFlowImport.target.$invalid }"
+              v-model="$v.dataFlowImport.target.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="data-flow-import-dataItemDescription">Data Item Description</label>
-            <input
-              type="text"
-              class="form-control"
-              name="dataItemDescription"
-              id="data-flow-import-dataItemDescription"
-              data-cy="dataItemDescription"
-              :class="{ valid: !$v.dataFlowImport.dataItemDescription.$invalid, invalid: $v.dataFlowImport.dataItemDescription.$invalid }"
-              v-model="$v.dataFlowImport.dataItemDescription.$model"
-            />
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="data-flow-import-dataItemDocumentationURL">Data Item Documentation URL</label>
-            <input
-              type="text"
-              class="form-control"
-              name="dataItemDocumentationURL"
-              id="data-flow-import-dataItemDocumentationURL"
-              data-cy="dataItemDocumentationURL"
-              :class="{
-                valid: !$v.dataFlowImport.dataItemDocumentationURL.$invalid,
-                invalid: $v.dataFlowImport.dataItemDocumentationURL.$invalid,
-              }"
-              v-model="$v.dataFlowImport.dataItemDocumentationURL.$model"
-            />
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="data-flow-import-frequency">Frequency</label>
-            <input
-              type="text"
-              class="form-control"
-              name="frequency"
-              id="data-flow-import-frequency"
-              data-cy="frequency"
-              :class="{ valid: !$v.dataFlowImport.frequency.$invalid, invalid: $v.dataFlowImport.frequency.$invalid }"
-              v-model="$v.dataFlowImport.frequency.$model"
-            />
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="data-flow-import-format">Format</label>
-            <input
-              type="text"
-              class="form-control"
-              name="format"
-              id="data-flow-import-format"
-              data-cy="format"
-              :class="{ valid: !$v.dataFlowImport.format.$invalid, invalid: $v.dataFlowImport.format.$invalid }"
-              v-model="$v.dataFlowImport.format.$model"
-            />
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="data-flow-import-contractURL">Contract URL</label>
-            <input
-              type="text"
-              class="form-control"
-              name="contractURL"
-              id="data-flow-import-contractURL"
-              data-cy="contractURL"
-              :class="{ valid: !$v.dataFlowImport.contractURL.$invalid, invalid: $v.dataFlowImport.contractURL.$invalid }"
-              v-model="$v.dataFlowImport.contractURL.$model"
-            />
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="data-flow-import-importDataFlowStatus">Import Data Flow Status</label>
+            <label class="form-control-label" for="data-flow-import-importDataStatus">Import Data Status</label>
             <select
               class="form-control"
-              name="importDataFlowStatus"
-              :class="{ valid: !$v.dataFlowImport.importDataFlowStatus.$invalid, invalid: $v.dataFlowImport.importDataFlowStatus.$invalid }"
-              v-model="$v.dataFlowImport.importDataFlowStatus.$model"
-              id="data-flow-import-importDataFlowStatus"
-              data-cy="importDataFlowStatus"
+              name="importDataStatus"
+              :class="{ valid: !$v.dataFlowImport.importDataStatus.$invalid, invalid: $v.dataFlowImport.importDataStatus.$invalid }"
+              v-model="$v.dataFlowImport.importDataStatus.$model"
+              id="data-flow-import-importDataStatus"
+              data-cy="importDataStatus"
             >
               <option v-for="importStatus in importStatusValues" :key="importStatus" v-bind:value="importStatus">{{ importStatus }}</option>
             </select>
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="data-flow-import-importDataFlowItemStatus">Import Data Flow Item Status</label>
+            <label class="form-control-label" for="data-flow-import-importDataItemStatus">Import Data Item Status</label>
             <select
               class="form-control"
-              name="importDataFlowItemStatus"
-              :class="{
-                valid: !$v.dataFlowImport.importDataFlowItemStatus.$invalid,
-                invalid: $v.dataFlowImport.importDataFlowItemStatus.$invalid,
-              }"
-              v-model="$v.dataFlowImport.importDataFlowItemStatus.$model"
-              id="data-flow-import-importDataFlowItemStatus"
-              data-cy="importDataFlowItemStatus"
+              name="importDataItemStatus"
+              :class="{ valid: !$v.dataFlowImport.importDataItemStatus.$invalid, invalid: $v.dataFlowImport.importDataItemStatus.$invalid }"
+              v-model="$v.dataFlowImport.importDataItemStatus.$model"
+              id="data-flow-import-importDataItemStatus"
+              data-cy="importDataItemStatus"
             >
               <option v-for="importStatus in importStatusValues" :key="importStatus" v-bind:value="importStatus">{{ importStatus }}</option>
             </select>
