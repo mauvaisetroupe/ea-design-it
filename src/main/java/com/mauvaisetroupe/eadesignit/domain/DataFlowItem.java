@@ -51,7 +51,7 @@ public class DataFlowItem implements Serializable {
     private LocalDate endDate;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "items", "format", "functionalFlows", "flowInterface" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "items", "format", "functionalFlows" }, allowSetters = true)
     private DataFlow dataFlow;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

@@ -31,7 +31,7 @@
           </span>
           <b-dropdown-item to="/landscape-view">
             <font-awesome-icon icon="asterisk" />
-            <span>Landscape View</span>
+            <span>Landscape</span>
           </b-dropdown-item>
           <b-dropdown-item to="/functional-flow">
             <font-awesome-icon icon="asterisk" />
@@ -39,7 +39,7 @@
           </b-dropdown-item>
           <b-dropdown-item to="/flow-interface">
             <font-awesome-icon icon="asterisk" />
-            <span>Flow Interface</span>
+            <span>Interface</span>
           </b-dropdown-item>
           <b-dropdown-item to="/application">
             <font-awesome-icon icon="asterisk" />

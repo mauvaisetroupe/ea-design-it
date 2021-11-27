@@ -80,9 +80,10 @@
           </dt>
           <dd>
             <div v-if="dataFlow.flowInterface">
-              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: dataFlow.flowInterface.id } }">{{
-                dataFlow.flowInterface.alias
-              }}</router-link>
+              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: dataFlow.flowInterface.id } }">
+                {{ dataFlow.flowInterface.alias }}</router-link
+              >
+              ({{ dataFlow.flowInterface.protocol ? dataFlow.flowInterface.protocol.type : 'Unknown' }})
             </div>
           </dd>
         </dl>

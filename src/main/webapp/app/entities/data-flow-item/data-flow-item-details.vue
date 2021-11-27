@@ -55,9 +55,10 @@
           </dt>
           <dd>
             <div v-if="dataFlowItem.dataFlow">
-              <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlowItem.dataFlow.id } }">{{
-                dataFlowItem.dataFlow.id
-              }}</router-link>
+              <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlowItem.dataFlow.id } }">
+                {{ dataFlowItem.dataFlow.id }}
+              </router-link>
+              ({{ dataFlowItem.dataFlow.flowInterface.protocol ? dataFlowItem.dataFlow.flowInterface.protocol.type : 'Unknown' }})
             </div>
           </dd>
         </dl>
