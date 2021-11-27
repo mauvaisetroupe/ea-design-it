@@ -13,7 +13,7 @@ import account from '@/router/account';
 import admin from '@/router/admin';
 import entities from '@/router/entities';
 import pages from '@/router/pages';
-import importuploadfile from '@/router/import-upload-file';
+import importuploadfile from '@/router/eadeisgnit-cusom';
 
 Vue.use(Router);
 

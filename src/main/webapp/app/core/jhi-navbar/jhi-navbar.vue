@@ -57,6 +57,16 @@
         <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="th-list" />
+            <span class="no-bold">EADesignit Report</span>
+          </span>
+          <b-dropdown-item to="/reporting/flow-interface">
+            <font-awesome-icon icon="asterisk" />
+            <span>Interface</span>
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
+        <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
+          <span slot="button-content" class="navbar-dropdown-menu">
+            <font-awesome-icon icon="th-list" />
             <span class="no-bold">Entities</span>
           </span>
           <b-dropdown-item to="/landscape-view">

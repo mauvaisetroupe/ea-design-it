@@ -1,13 +1,14 @@
 import { Authority } from '@/shared/security/authority';
 /* tslint:disable */
-// prettier-ignore
 
+// prettier-ignore
 const ApplicationImportUploadFile = () => import('@/entities/application-import/application-import-upload-file.vue');
 // prettier-ignore
 const FlowImportUploadFile = () => import('@/entities/flow-import/flow-import-upload-file.vue');
 // prettier-ignore
 const EventImportUploadFile = () => import('@/entities/data-flow-import/data-flow-import-upload-file.vue');
 // prettier-ignore
+const FlowReporting = () => import('@/entities/flow-interface/reporting-flow-interface.vue');
 
 export default [
   {
@@ -27,5 +28,11 @@ export default [
     name: 'EventImportUploadFile',
     component: EventImportUploadFile,
     meta: { authorities: [Authority.USER] },
-  },  
+  },
+  {
+    path: '/reporting/flow-interface',
+    name: 'FlowReporting',
+    component: FlowReporting,
+    meta: { authorities: [Authority.USER] },
+  },
 ];

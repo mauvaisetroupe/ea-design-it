@@ -43,6 +43,8 @@ import ApplicationCategoryService from '@/entities/application-category/applicat
 import DataFlowImportService from '@/entities/data-flow-import/data-flow-import.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
+import ReportingService from '@/eadesignit/reporting.service';
+
 /* tslint:enable */
 Vue.config.productionTip = false;
 config.initVueApp(Vue);
@@ -113,6 +115,8 @@ new Vue({
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService,
     alertService: () => new AlertService(),
+
+    reportingService: () => new ReportingService(),
   },
   store,
 });
