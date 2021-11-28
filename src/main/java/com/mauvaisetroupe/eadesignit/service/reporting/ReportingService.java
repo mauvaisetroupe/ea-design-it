@@ -91,7 +91,12 @@ public class ReportingService {
         }
 
         for (FlowInterface inter : toDelete) {
-            flowInterfaceRepository.delete(inter);
+            if (!inter.equals(toKeep)) {
+                log.debug("Delete " + inter);
+                flowInterfaceRepository.delete(inter);
+            } else {
+                log.debug("Won't delete " + inter);
+            }
         }
     }
 }
