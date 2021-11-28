@@ -45,7 +45,7 @@ public class DataFlowComparator {
         return true;
     }
 
-    public boolean areEqivalent(FlowImport flowImport, DataFlow potentiaDataFlow) {
+    public boolean areEquivalent(FlowImport flowImport, DataFlow potentiaDataFlow) {
         // in import excel process, just insert frequency, format and contract if API
         if (!checkEqual(clean(flowImport.getFrequency()), potentiaDataFlow.getFrequency())) return false;
         if (!checkEqual(flowImport.getFormat(), potentiaDataFlow.getFormat())) return false;

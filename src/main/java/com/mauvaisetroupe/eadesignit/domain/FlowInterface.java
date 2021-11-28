@@ -335,15 +335,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface> {
     // prettier-ignore
     @Override
     public String toString() {
-        return "FlowInterface{" +
-            "id=" + getId() +
-            ", alias='" + getAlias() + "'" +
-            ", status='" + getStatus() + "'" +
-            ", documentationURL='" + getDocumentationURL() + "'" +
-            ", documentationURL2='" + getDocumentationURL2() + "'" +
-            ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
-            "}";
+        return getAlias();
     }
 
     @Override

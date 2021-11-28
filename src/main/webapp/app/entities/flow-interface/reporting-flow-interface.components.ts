@@ -12,31 +12,6 @@ import { DataFlow } from '@/shared/model/data-flow.model';
 @Component({
   mixins: [Vue2Filters.mixin],
 })
-@Component({
-  computed: {
-    filteredRows() {
-      return this.flowInterfaces.filter(row => {
-        const id = row.id.toString().toLowerCase();
-        const description = row.description ? row.description.toString().toLowerCase() : '';
-        const alias = row.alias.toString().toLowerCase();
-        const source = row.source.name.toString().toLowerCase();
-        const target = row.target.name.toString().toLowerCase();
-        const proto = row.protocol ? row.protocol.name.toString().toLowerCase() : '';
-
-        const searchTerm = this.filter.toLowerCase();
-
-        return (
-          id.includes(searchTerm) ||
-          description.includes(searchTerm) ||
-          alias.includes(searchTerm) ||
-          source.includes(searchTerm) ||
-          target.includes(searchTerm) ||
-          proto.includes(searchTerm)
-        );
-      });
-    },
-  },
-})
 export default class FlowInterface extends Vue {
   @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
   @Inject('alertService') private alertService: () => AlertService;
@@ -50,8 +25,6 @@ export default class FlowInterface extends Vue {
   public flowInterfaces: IFlowInterface[] = [];
 
   public isFetching = false;
-
-  public filter = '';
 
   public mounted(): void {
     this.retrieveAllFlowInterfaces();
@@ -108,17 +81,28 @@ export default class FlowInterface extends Vue {
     this.dataFlowsToMerge = [];
     this.checkToMerge = [];
 
-    this.flowInterfaces.forEach(element => {
-      if (aliasToMerge.indexOf(element.alias) > -1) {
-        this.interfacesToMerge.push(element);
-        if (element.id != this.interfaceToKeep.id) {
-          this.checkToMerge.push(element.alias);
+    this.flowInterfaces.forEach(inter => {
+      if (aliasToMerge.indexOf(inter.alias) > -1) {
+        this.interfacesToMerge.push(inter);
+        if (inter.id != this.interfaceToKeep.id) {
+          this.checkToMerge.push(inter.alias);
         }
-        element.dataFlows.forEach(df => {
+        inter.dataFlows.forEach(df => {
           if (df.flowInterface == null) {
             df.flowInterface = {};
           }
-          df.flowInterface.alias = element.alias;
+          df.flowInterface.alias = inter.alias;
+
+          if (df.flowInterface.functionalFlows == null) {
+            df.flowInterface.functionalFlows = [];
+          }
+          inter.functionalFlows.forEach(element => {
+            var funct = {
+              alias: element.alias,
+            };
+            df.flowInterface.functionalFlows.push(funct);
+          });
+
           this.dataFlowsToMerge.push(df);
         });
       }
@@ -143,6 +127,8 @@ export default class FlowInterface extends Vue {
         });
         this.interfaceToKeep = null;
         this.interfacesToMerge = null;
+        this.dataFlowsToMerge = null;
+        this.checkToMerge = [];
         this.retrieveAllFlowInterfaces();
         this.closeMergeDialog();
       })

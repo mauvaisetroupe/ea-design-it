@@ -287,7 +287,7 @@ public class FlowImportService {
                 Set<DataFlow> potentialDataFlows = dataFlowRepository.findByFlowInterface_Alias(flowImport.getIdFlowFromExcel());
                 for (DataFlow potentiaDataFlow : potentialDataFlows) {
                     log.debug("Testing dataFlow : " + potentiaDataFlow.getId());
-                    if (comparator.areEqivalent(flowImport, potentiaDataFlow)) {
+                    if (comparator.areEquivalent(flowImport, potentiaDataFlow)) {
                         dataFlow = potentiaDataFlow;
                         flowImport.setImportDataFlowStatus(ImportStatus.EXISTING);
                         break;

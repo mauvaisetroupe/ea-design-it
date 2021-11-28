@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.EntityResult;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.SqlResultSetMappings;
+import javax.validation.constraints.NotNull;
 import org.apache.xmlbeans.impl.xb.xmlconfig.Extensionconfig.Interface;
 import org.hibernate.query.NativeQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Repository;
 public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Long> {
     Optional<FlowInterface> findByAlias(String idFlowFromExcel);
     Set<FlowInterface> findBySource_NameOrTarget_Name(String sourceName, String targetName);
+    Set<FlowInterface> findByAliasIn(@NotNull List<String> aliasToMerge);
 
     @Query(
         value = "select i1.id from FLOW_INTERFACE i1 " +

@@ -23,17 +23,12 @@
     <div class="alert alert-warning" v-if="!isFetching && flowInterfaces && flowInterfaces.length === 0">
       <span>No flowInterfaces found</span>
     </div>
-
-    <div>
-      <input type="text" placeholder="Filter by text" v-model="filter" />
-    </div>
-
     <div class="table-responsive" v-if="flowInterfaces && flowInterfaces.length > 0">
       <table class="table" aria-describedby="flowInterfaces">
         <thead>
           <tr>
-            <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Alias</span></th>
+            <th scope="row"><span>Flows</span></th>
             <th scope="row"><span>Status</span></th>
             <th scope="row"><span>Documentation URL</span></th>
             <th scope="row"><span>Documentation URL 2</span></th>
@@ -50,14 +45,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="flowInterface in filteredRows" :key="flowInterface.id" data-cy="entityTable" :class="flowInterface.colored">
+          <tr v-for="flowInterface in flowInterfaces" :key="flowInterface.id" data-cy="entityTable" :class="flowInterface.colored">
             <td>
               <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: flowInterface.id } }">{{
-                flowInterface.id
+                flowInterface.alias
               }}</router-link>
             </td>
-            <td>{{ flowInterface.alias }}</td>
-            <td>{{ flowInterface.status }} {{ flowInterface.toto }}</td>
+            <td>
+              <span v-for="(functionalFlow, i) in flowInterface.functionalFlows" :key="functionalFlow.id">
+                {{ i > 0 ? ', ' : '' }}
+                <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }">{{
+                  functionalFlow.alias
+                }}</router-link>
+              </span>
+            </td>
+            <td>{{ flowInterface.status }}</td>
             <td>
               <a v-bind:href="flowInterface.documentationURL">{{ flowInterface.documentationURL }}</a>
             </td>
@@ -153,6 +155,7 @@
             <thead>
               <tr>
                 <th></th>
+                <th scope="row"><span>Flows</span></th>
                 <th scope="row"><span>Inter.</span></th>
                 <th scope="row"><span>ID</span></th>
                 <th scope="row"><span>Resource Name</span></th>
@@ -170,6 +173,12 @@
                   v-model="checkToMerge"
                 />
               </td>
+              <td>
+                <span v-for="(flow, i) in dataFlowToMerge.flowInterface.functionalFlows" :key="flow.id">
+                  {{ i > 0 ? ', ' : '' }}
+                  {{ flow.alias }}
+                </span>
+              </td>
               <td>{{ dataFlowToMerge.flowInterface.alias }}</td>
               <td>{{ dataFlowToMerge.id }}</td>
               <td>{{ dataFlowToMerge.resourceName }}</td>
@@ -182,7 +191,6 @@
               <td>{{ dataFlowToMerge.startDate }}</td>
               <td>{{ dataFlowToMerge.endDate }}</td>
               <td>{{ dataFlowToMerge.description }}</td>
-              <td>Done</td>
             </tr>
           </table>
         </div>
