@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -268,57 +269,105 @@ public class FlowImportService {
 
     private DataFlow findOrCreateDataFlow(FlowImport flowImport, Protocol protocol) {
         DataFlow dataFlow = null;
-        boolean dataFlowToCreate = false;
         try {
             dataFlow =
                 dataFlowRepository.findByFlowInterface_AliasAndFunctionalFlows_Alias(
                     flowImport.getIdFlowFromExcel(),
                     flowImport.getFlowAlias()
                 );
-            if (dataFlow == null) {
-                dataFlow = new DataFlow();
-                flowImport.setImportDataFlowStatus(ImportStatus.NEW);
-            } else {
+
+            // try to find an existing dataflow
+            if (dataFlow != null) {
                 flowImport.setImportDataFlowStatus(ImportStatus.EXISTING);
-            }
-            if (StringUtils.hasText(flowImport.getFrequency())) {
-                dataFlow.setFrequency(Frequency.valueOf(clean(flowImport.getFrequency())));
-                dataFlowToCreate = true;
-            }
-            if (StringUtils.hasText(flowImport.getFormat())) {
-                DataFormat dataFormat = dataFormatRepository.findByNameIgnoreCase(flowImport.getFormat());
-                if (dataFormat == null) {
-                    dataFormat = new DataFormat();
-                    dataFormat.setName(flowImport.getFormat());
-                    dataFormatRepository.save(dataFormat);
+            } else {
+                // if a dataflow exist for same interface, with same characteristics,
+                // then use it adding reference to this functional flow
+                log.debug("Testing interface : " + flowImport.getIdFlowFromExcel());
+                Set<DataFlow> potentialDataFlows = dataFlowRepository.findByFlowInterface_Alias(flowImport.getIdFlowFromExcel());
+                for (DataFlow potentiaDataFlow : potentialDataFlows) {
+                    log.debug("Testing dataFlow : " + potentiaDataFlow.getId());
+                    if (areEquals(flowImport, potentiaDataFlow)) {
+                        dataFlow = potentiaDataFlow;
+                        flowImport.setImportDataFlowStatus(ImportStatus.EXISTING);
+                        break;
+                    }
                 }
-                dataFlow.setFormat(dataFormat);
-                dataFlowToCreate = true;
             }
-            if (protocol != null) {
-                if (protocol.getType().equals(ProtocolType.API)) {
-                    dataFlow.setContractURL(flowImport.getSwagger());
-                    dataFlow.setResourceName("REST API Call " + flowImport.getSourceElement() + " / " + flowImport.getTargetElement());
-                } else if (protocol.getType().equals(ProtocolType.EVENT)) {
-                    dataFlow.setResourceName(GENERIC_EVENT_FROM_ADD);
-                } else if (protocol.getType().equals(ProtocolType.FILE)) {
-                    dataFlow.setResourceName(GENERIC_FILE_FROM_ADD);
+            // Nothing found, than create a new one if necessary (frequency, format or protocol to store)
+            if (dataFlow == null) {
+                boolean dataFlowToCreate = false;
+                dataFlow = new DataFlow();
+                if (StringUtils.hasText(flowImport.getFrequency())) {
+                    dataFlow.setFrequency(Frequency.valueOf(clean(flowImport.getFrequency())));
+                    dataFlowToCreate = true;
+                }
+                if (StringUtils.hasText(flowImport.getFormat())) {
+                    DataFormat dataFormat = dataFormatRepository.findByNameIgnoreCase(flowImport.getFormat());
+                    if (dataFormat == null) {
+                        dataFormat = new DataFormat();
+                        dataFormat.setName(flowImport.getFormat());
+                        dataFormatRepository.save(dataFormat);
+                    }
+                    dataFlow.setFormat(dataFormat);
+                    dataFlowToCreate = true;
+                }
+                if (protocol != null) {
+                    if (protocol.getType().equals(ProtocolType.API)) {
+                        dataFlow.setContractURL(flowImport.getSwagger());
+                        dataFlow.setResourceName("REST API Call " + flowImport.getSourceElement() + " / " + flowImport.getTargetElement());
+                    } else if (protocol.getType().equals(ProtocolType.EVENT)) {
+                        dataFlow.setResourceName(GENERIC_EVENT_FROM_ADD);
+                    } else if (protocol.getType().equals(ProtocolType.FILE)) {
+                        dataFlow.setResourceName(GENERIC_FILE_FROM_ADD);
+                    } else {
+                        dataFlow.setResourceName(GENERIC_DATA_FLOW + " - " + protocol.getType());
+                    }
+                    dataFlowToCreate = true;
+                }
+                if (dataFlowToCreate) {
+                    flowImport.setImportDataFlowStatus(ImportStatus.NEW);
                 } else {
-                    dataFlow.setResourceName(GENERIC_DATA_FLOW + " - " + protocol.getType());
+                    dataFlow = null;
+                    flowImport.setImportDataFlowStatus(null);
                 }
-                dataFlowToCreate = true;
-            }
-            if (!dataFlowToCreate) {
-                dataFlow = null;
-                flowImport.setImportDataFlowStatus(null);
             }
         } catch (Exception e) {
-            log.error("Error with row " + flowImport);
+            log.error("Error with row " + flowImport, e);
             dataFlow = null;
             flowImport.setImportDataFlowStatus(ImportStatus.ERROR);
             addError(flowImport, e);
         }
         return dataFlow;
+    }
+
+    private boolean areEquals(FlowImport flowImport, DataFlow potentiaDataFlow) {
+        // in import excel process, just insert frequency, format and contract if API
+        if (!checkEqual(clean(flowImport.getFrequency()), potentiaDataFlow.getFrequency())) return false;
+        if (!checkEqual(flowImport.getFormat(), potentiaDataFlow.getFormat())) return false;
+        Protocol protocol = potentiaDataFlow.getFlowInterface().getProtocol();
+        if (protocol != null && protocol.getType().equals(ProtocolType.API)) {
+            if (!checkEqual(flowImport.getSwagger(), potentiaDataFlow.getContractURL())) return false;
+        }
+        return true;
+    }
+
+    private boolean checkEqual(String string1, String string2) {
+        if (string1 == null && string2 == null) return true;
+        if (string1 == null || string2 == null) return false;
+        return (string2.equals(string1));
+    }
+
+    private boolean checkEqual(String string, DataFormat dataformat) {
+        if (dataformat == null && string == null) return true;
+        if (dataformat == null || string == null) return false;
+        return (string.equals(dataformat.getName()));
+    }
+
+    private boolean checkEqual(String string, Frequency frequency) {
+        if (frequency == null && string == null) return true;
+        if (frequency == null || string == null) return false;
+        log.debug("comparae : " + string + " and " + frequency.name());
+        return (string.toLowerCase().equals(frequency.name().toLowerCase()));
     }
 
     private FunctionalFlow mapToFunctionalFlow(FlowImport flowImport) {
@@ -374,6 +423,7 @@ public class FlowImportService {
     }
 
     private String clean(String value) {
+        if (value == null) return null;
         return value
             .replace('/', '_')
             .replace(' ', '_')

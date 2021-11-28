@@ -30,4 +30,6 @@ public interface DataFlowRepository extends JpaRepository<DataFlow, Long> {
     DataFlow findByFlowInterface_AliasAndFunctionalFlows_Alias(String flowAlias, String idFlowFromExcel);
 
     Set<DataFlow> findByResourceNameIgnoreCase(String dataResourceName);
+
+    Set<DataFlow> findByFlowInterface_Alias(String idFlowFromExcel);
 }
