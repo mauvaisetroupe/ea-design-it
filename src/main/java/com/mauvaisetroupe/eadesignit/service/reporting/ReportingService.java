@@ -6,6 +6,7 @@ import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.util.DataFlowComparator;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
+import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +24,9 @@ public class ReportingService {
     private FlowInterfaceRepository flowInterfaceRepository;
 
     @Autowired
+    private FunctionalFlowRepository functionalFlowRepository;
+
+    @Autowired
     private DataFlowRepository dataFlowRepository;
 
     private final Logger log = LoggerFactory.getLogger(ReportingService.class);
@@ -32,6 +36,7 @@ public class ReportingService {
         Set<FlowInterface> interfacesToMerge = flowInterfaceRepository.findByAliasIn(aliasToMerge);
 
         DataFlowComparator comparator = new DataFlowComparator();
+        Set<FlowInterface> toDelete = new HashSet<>();
         for (FlowInterface toMerge : interfacesToMerge) {
             log.debug("About to merge interface :" + toMerge.getAlias());
             //application
@@ -74,13 +79,19 @@ public class ReportingService {
             flowsToModify.addAll(toMerge.getFunctionalFlows());
 
             for (FunctionalFlow functionalFlow : flowsToModify) {
-                log.debug("Adding to Flow : " + functionalFlow + " interface " + toKeep);
-                functionalFlow.addInterfaces(toKeep);
+                if (!functionalFlow.getInterfaces().contains(toKeep)) {
+                    log.debug("Adding to Flow : " + functionalFlow + " interface " + toKeep);
+                    functionalFlow.addInterfaces(toKeep);
+                }
                 log.debug("Removing from Flow : " + functionalFlow + " interface " + toMerge);
                 functionalFlow.removeInterfaces(toMerge);
+                functionalFlowRepository.save(functionalFlow);
             }
+            toDelete.add(toMerge);
+        }
 
-            flowInterfaceRepository.delete(toMerge);
+        for (FlowInterface inter : toDelete) {
+            flowInterfaceRepository.delete(inter);
         }
     }
 }
