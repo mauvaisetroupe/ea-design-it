@@ -7,6 +7,7 @@ import { IFlowInterface } from '@/shared/model/flow-interface.model';
 import FlowInterfaceService from './flow-interface.service';
 import AlertService from '@/shared/alert/alert.service';
 import ReportingService from '@/eadesignit/reporting.service';
+import { DataFlow } from '@/shared/model/data-flow.model';
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -41,8 +42,10 @@ export default class FlowInterface extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('reportingService') private reportingService: () => ReportingService;
 
-  private removeId: number = null;
-  private interfaceToMerge: IFlowInterface = null;
+  private interfaceToKeep: IFlowInterface = null;
+  private interfacesToMerge: IFlowInterface[] = null;
+  private dataFlowsToMerge: DataFlow[] = null;
+  private checkToMerge = [];
 
   public flowInterfaces: IFlowInterface[] = [];
 
@@ -96,47 +99,41 @@ export default class FlowInterface extends Vue {
     this.clear();
   }
 
-  public prepareRemove(instance: IFlowInterface): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
   public prepareMerge(instance: IFlowInterface): void {
-    this.interfaceToMerge = instance;
+    this.interfaceToKeep = instance;
+    var aliasToMerge = (this.interfaceToKeep as any).mergeList as String[];
+    console.log(aliasToMerge);
+
+    this.interfacesToMerge = [];
+    this.dataFlowsToMerge = [];
+    this.checkToMerge = [];
+
+    this.flowInterfaces.forEach(element => {
+      if (aliasToMerge.indexOf(element.alias) > -1) {
+        this.interfacesToMerge.push(element);
+        if (element.id != this.interfaceToKeep.id) {
+          this.checkToMerge.push(element.alias);
+        }
+        element.dataFlows.forEach(df => {
+          if (df.flowInterface == null) {
+            df.flowInterface = {};
+          }
+          df.flowInterface.alias = element.alias;
+          this.dataFlowsToMerge.push(df);
+        });
+      }
+    });
+
     if (<any>this.$refs.mergeEntity) {
       (<any>this.$refs.mergeEntity).show();
     }
   }
 
-  public removeFlowInterface(): void {
-    this.flowInterfaceService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A FlowInterface is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllFlowInterfaces();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
   public mergeFlowInterface(): void {
     this.reportingService()
-      .mergeInterfaces(this.interfaceToMerge)
+      .mergeInterfaces(this.interfaceToKeep, this.checkToMerge)
       .then(() => {
-        const message =
-          'FlowInterfaces ' + (this.interfaceToMerge as any).mergeList + ' have been merged and replaced by ' + this.interfaceToMerge.alias;
+        const message = 'FlowInterfaces ' + this.checkToMerge + ' have been merged and replaced by ' + this.interfaceToKeep.alias;
         this.$bvToast.toast(message.toString(), {
           toaster: 'b-toaster-top-center',
           title: 'Info',
@@ -144,7 +141,8 @@ export default class FlowInterface extends Vue {
           solid: true,
           autoHideDelay: 5000,
         });
-        this.interfaceToMerge = null;
+        this.interfaceToKeep = null;
+        this.interfacesToMerge = null;
         this.retrieveAllFlowInterfaces();
         this.closeMergeDialog();
       })

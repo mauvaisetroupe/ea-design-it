@@ -8,10 +8,10 @@ import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
-import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ViewPoint;
+import com.mauvaisetroupe.eadesignit.domain.util.DataFlowComparator;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFormatRepository;
@@ -269,6 +269,7 @@ public class FlowImportService {
 
     private DataFlow findOrCreateDataFlow(FlowImport flowImport, Protocol protocol) {
         DataFlow dataFlow = null;
+        DataFlowComparator comparator = new DataFlowComparator();
         try {
             dataFlow =
                 dataFlowRepository.findByFlowInterface_AliasAndFunctionalFlows_Alias(
@@ -286,7 +287,7 @@ public class FlowImportService {
                 Set<DataFlow> potentialDataFlows = dataFlowRepository.findByFlowInterface_Alias(flowImport.getIdFlowFromExcel());
                 for (DataFlow potentiaDataFlow : potentialDataFlows) {
                     log.debug("Testing dataFlow : " + potentiaDataFlow.getId());
-                    if (areEquals(flowImport, potentiaDataFlow)) {
+                    if (comparator.areEqivalent(flowImport, potentiaDataFlow)) {
                         dataFlow = potentiaDataFlow;
                         flowImport.setImportDataFlowStatus(ImportStatus.EXISTING);
                         break;
@@ -298,7 +299,7 @@ public class FlowImportService {
                 boolean dataFlowToCreate = false;
                 dataFlow = new DataFlow();
                 if (StringUtils.hasText(flowImport.getFrequency())) {
-                    dataFlow.setFrequency(Frequency.valueOf(clean(flowImport.getFrequency())));
+                    dataFlow.setFrequency(comparator.getFrequency(flowImport.getFrequency()));
                     dataFlowToCreate = true;
                 }
                 if (StringUtils.hasText(flowImport.getFormat())) {
@@ -338,36 +339,6 @@ public class FlowImportService {
             addError(flowImport, e);
         }
         return dataFlow;
-    }
-
-    private boolean areEquals(FlowImport flowImport, DataFlow potentiaDataFlow) {
-        // in import excel process, just insert frequency, format and contract if API
-        if (!checkEqual(clean(flowImport.getFrequency()), potentiaDataFlow.getFrequency())) return false;
-        if (!checkEqual(flowImport.getFormat(), potentiaDataFlow.getFormat())) return false;
-        Protocol protocol = potentiaDataFlow.getFlowInterface().getProtocol();
-        if (protocol != null && protocol.getType().equals(ProtocolType.API)) {
-            if (!checkEqual(flowImport.getSwagger(), potentiaDataFlow.getContractURL())) return false;
-        }
-        return true;
-    }
-
-    private boolean checkEqual(String string1, String string2) {
-        if (string1 == null && string2 == null) return true;
-        if (string1 == null || string2 == null) return false;
-        return (string2.equals(string1));
-    }
-
-    private boolean checkEqual(String string, DataFormat dataformat) {
-        if (dataformat == null && string == null) return true;
-        if (dataformat == null || string == null) return false;
-        return (string.equals(dataformat.getName()));
-    }
-
-    private boolean checkEqual(String string, Frequency frequency) {
-        if (frequency == null && string == null) return true;
-        if (frequency == null || string == null) return false;
-        log.debug("comparae : " + string + " and " + frequency.name());
-        return (string.toLowerCase().equals(frequency.name().toLowerCase()));
     }
 
     private FunctionalFlow mapToFunctionalFlow(FlowImport flowImport) {
@@ -420,18 +391,6 @@ public class FlowImportService {
             }
         }
         return flowInterface;
-    }
-
-    private String clean(String value) {
-        if (value == null) return null;
-        return value
-            .replace('/', '_')
-            .replace(' ', '_')
-            .replace('(', '_')
-            .replace(')', '_')
-            .replace("__", "_")
-            .replace("__", "_")
-            .replaceAll("(.*)_$", "$1");
     }
 
     private ProtocolType guessPtotocolType(String protocolName) {

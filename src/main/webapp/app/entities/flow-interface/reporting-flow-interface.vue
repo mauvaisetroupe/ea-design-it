@@ -120,37 +120,6 @@
             </td>
             <td class="text-right">
               <div class="btn-group">
-                <router-link
-                  :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: flowInterface.id } }"
-                  custom
-                  v-slot="{ navigate }"
-                >
-                  <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
-                    <font-awesome-icon icon="eye"></font-awesome-icon>
-                    <span class="d-none d-md-inline">View</span>
-                  </button>
-                </router-link>
-                <router-link
-                  :to="{ name: 'FlowInterfaceEdit', params: { flowInterfaceId: flowInterface.id } }"
-                  custom
-                  v-slot="{ navigate }"
-                >
-                  <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
-                    <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                    <span class="d-none d-md-inline">Edit</span>
-                  </button>
-                </router-link>
-                <b-button
-                  v-on:click="prepareRemove(flowInterface)"
-                  variant="danger"
-                  class="btn btn-sm"
-                  data-cy="entityDeleteButton"
-                  v-b-modal.removeEntity
-                >
-                  <font-awesome-icon icon="times"></font-awesome-icon>
-                  <span class="d-none d-md-inline">Delete</span>
-                </b-button>
-
                 <b-button
                   v-on:click="prepareMerge(flowInterface)"
                   variant="warning"
@@ -167,17 +136,60 @@
         </tbody>
       </table>
     </div>
-    <b-modal ref="mergeEntity" id="mergeEntity">
+    <b-modal ref="mergeEntity" id="mergeEntity" class="mymodalclass">
       <span slot="modal-title"
         ><span id="eaDesignItApp.flowInterface.delete.question" data-cy="flowInterfaceDeleteDialogHeading"
           >Confirm merge operation</span
         ></span
       >
       <div class="modal-body">
-        <p id="jhi-delete-flowInterface-heading" v-if="interfaceToMerge">
-          Are you sure you want to merge flows Interface {{ interfaceToMerge.mergeList }} ?
+        <p id="jhi-delete-flowInterface-heading" v-if="interfaceToKeep">
+          Are you sure you want to merge flows Interface {{ checkToMerge }} between <strong>{{ interfaceToKeep.source.name }}</strong> and
+          <strong>{{ interfaceToKeep.target.name }}</strong> ?
         </p>
-        <p id="jhi-delete-flowInterface-heading" v-if="interfaceToMerge">Interface {{ interfaceToMerge.alias }} will replace all others?</p>
+        <strong>Data Flow Comparison</strong>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th></th>
+                <th scope="row"><span>Inter.</span></th>
+                <th scope="row"><span>ID</span></th>
+                <th scope="row"><span>Resource Name</span></th>
+                <th scope="row"><span>Frequency</span></th>
+                <th scope="row"><span>Format</span></th>
+              </tr>
+            </thead>
+            <tr v-for="dataFlowToMerge in dataFlowsToMerge" :key="dataFlowToMerge.id">
+              <td>
+                <input
+                  v-if="dataFlowToMerge.flowInterface.alias != interfaceToKeep.alias"
+                  type="checkbox"
+                  :id="dataFlowToMerge.flowInterface.alias"
+                  :value="dataFlowToMerge.flowInterface.alias"
+                  v-model="checkToMerge"
+                />
+              </td>
+              <td>{{ dataFlowToMerge.flowInterface.alias }}</td>
+              <td>{{ dataFlowToMerge.id }}</td>
+              <td>{{ dataFlowToMerge.resourceName }}</td>
+              <td>{{ dataFlowToMerge.frequency }}</td>
+              <td>{{ dataFlowToMerge.format ? dataFlowToMerge.format.name : '' }}</td>
+              <td>{{ dataFlowToMerge.resourceType }}</td>
+              <td>{{ dataFlowToMerge.contractURL | truncate 50 }}</td>
+              <td>{{ dataFlowToMerge.documentationURL | truncate 50 }}</td>
+              <td>{{ dataFlowToMerge.documentationURL2 | truncate 50 }}</td>
+              <td>{{ dataFlowToMerge.startDate }}</td>
+              <td>{{ dataFlowToMerge.endDate }}</td>
+              <td>{{ dataFlowToMerge.description }}</td>
+              <td>Done</td>
+            </tr>
+          </table>
+        </div>
+
+        <p id="jhi-delete-flowInterface-heading" v-if="interfaceToKeep">
+          Interface <strong>{{ interfaceToKeep.alias }}</strong> will replace all others?
+        </p>
       </div>
       <div slot="modal-footer">
         <button type="button" class="btn btn-secondary" v-on:click="closeMergeDialog()">Cancel</button>
@@ -192,29 +204,6 @@
         </button>
       </div>
     </b-modal>
-
-    <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.flowInterface.delete.question" data-cy="flowInterfaceDeleteDialogHeading"
-          >Confirm delete operation</span
-        ></span
-      >
-      <div class="modal-body">
-        <p id="jhi-delete-flowInterface-heading">Are you sure you want to delete this Flow Interface?</p>
-      </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-flowInterface"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeFlowInterface()"
-        >
-          Delete
-        </button>
-      </div>
-    </b-modal>
   </div>
 </template>
 
@@ -223,5 +212,11 @@
 <style>
 .mycolor {
   background-color: rgba(0, 0, 0, 0.1);
+}
+.mymodalclass {
+  max-width: 1000px;
+}
+.modal-dialog {
+  max-width: 80%;
 }
 </style>
