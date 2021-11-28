@@ -9,11 +9,10 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
 
 public class DataFlowComparator {
 
-    public boolean areEquivalent(DataFlow obj, DataFlow obj2) {
-        if (obj2 == obj) return true;
-        if (obj == null && obj2 != null) return false;
-        if (obj != null && obj2 == null) return false;
-        DataFlow other = (DataFlow) obj;
+    public boolean areEquivalent(DataFlow obj, DataFlow other) {
+        if (obj == null && other == null) return true;
+        if (obj == null && other != null) return false;
+        if (obj != null && other == null) return false;
 
         if (obj.getContractURL() == null) {
             if (other.getContractURL() != null) return false;
