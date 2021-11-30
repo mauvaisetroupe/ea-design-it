@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -64,7 +63,7 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "owner", "functionalFlows" }, allowSetters = true)
-    private SortedSet<FlowInterface> interfaces = new TreeSet<>();
+    private Set<FlowInterface> interfaces = new TreeSet<>();
 
     @ManyToMany(mappedBy = "flows")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -199,11 +198,11 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
         return this.interfaces;
     }
 
-    public void setInterfaces(SortedSet<FlowInterface> flowInterfaces) {
+    public void setInterfaces(Set<FlowInterface> flowInterfaces) {
         this.interfaces = flowInterfaces;
     }
 
-    public FunctionalFlow interfaces(SortedSet<FlowInterface> flowInterfaces) {
+    public FunctionalFlow interfaces(Set<FlowInterface> flowInterfaces) {
         this.setInterfaces(flowInterfaces);
         return this;
     }
@@ -305,23 +304,26 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     @Override
     public String toString() {
         return "FunctionalFlow{" +
-            "id=" + getId() +
             ", alias='" + getAlias() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", comment='" + getComment() + "'" +
-            ", status='" + getStatus() + "'" +
-            ", documentationURL='" + getDocumentationURL() + "'" +
-            ", documentationURL2='" + getDocumentationURL2() + "'" +
-            ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
             "}";
     }
 
     @Override
     public int compareTo(FunctionalFlow arg0) {
-        if (arg0 == null) return 0;
-        if (arg0.getAlias() == null) return 0;
-        if (this.getAlias() == null) return 0;
-        return this.getAlias().compareTo(arg0.getAlias());
+        int result = -1;
+        if (arg0 == null) {
+            result = -1;
+        } else if (arg0 == this) {
+            result = 0;
+        } else if (arg0.getId() != null && arg0.getId() == this.getId()) {
+            result = 0;
+        } else if (arg0.getAlias() == null) {
+            result = -1;
+        } else if (this.getAlias() == null) {
+            result = 1;
+        } else {
+            result = this.getAlias().compareTo(arg0.getAlias());
+        }
+        return result;
     }
 }

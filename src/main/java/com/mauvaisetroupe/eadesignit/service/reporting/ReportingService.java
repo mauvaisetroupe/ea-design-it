@@ -32,71 +32,139 @@ public class ReportingService {
     private final Logger log = LoggerFactory.getLogger(ReportingService.class);
 
     public void mergeInterfaces(Long id, @NotNull List<String> aliasToMerge) {
-        FlowInterface toKeep = flowInterfaceRepository.findById(id).get();
+        DataFlowComparator comparator = new DataFlowComparator();
+
+        // INPUTS
+        FlowInterface interfaceToKeep = flowInterfaceRepository.findById(id).get();
         Set<FlowInterface> interfacesToMerge = flowInterfaceRepository.findByAliasIn(aliasToMerge);
 
-        DataFlowComparator comparator = new DataFlowComparator();
-        Set<FlowInterface> toDelete = new HashSet<>();
-        for (FlowInterface toMerge : interfacesToMerge) {
-            log.debug("About to merge interface :" + toMerge.getAlias());
+        // Check functional flows (because I have a bug!!!)
+        for (FunctionalFlow ff : interfaceToKeep.getFunctionalFlows()) {
+            log.debug(" ### Functional Flow {} has Interfaces {} ... retrieve from {}", ff, ff.getInterfaces(), interfaceToKeep.getAlias());
+            FunctionalFlow functionalFlow2 = functionalFlowRepository.findById(ff.getId()).get();
+            log.debug(
+                " ### Functional Flow {} has Interfaces {} ... retrieve in DB ",
+                functionalFlow2.getAlias(),
+                functionalFlow2.getInterfaces()
+            );
+        }
+        for (FlowInterface intt : interfacesToMerge) {
+            for (FunctionalFlow ff : intt.getFunctionalFlows()) {
+                log.debug(
+                    " ### Functional Flow {} has Interfaces {} ... retrieve from {}",
+                    intt.getFunctionalFlows(),
+                    ff.getInterfaces(),
+                    intt.getAlias()
+                );
+                FunctionalFlow functionalFlow2 = functionalFlowRepository.findById(ff.getId()).get();
+                log.debug(
+                    " ### Functional Flow {} has Interfaces {} ... retrieve in DB ",
+                    functionalFlow2.getAlias(),
+                    functionalFlow2.getInterfaces()
+                );
+            }
+        }
+        // ENd check
+
+        for (FlowInterface interfaceToMerge : interfacesToMerge) {
+            log.debug(" ### ### ### About to merge interface :" + interfaceToMerge.getAlias());
+
             //application
             Assert.isTrue(
-                toMerge.getSource().equals(toKeep.getSource()) && toMerge.getTarget().equals(toKeep.getTarget()),
+                interfaceToMerge.getSource().equals(interfaceToKeep.getSource()) &&
+                interfaceToMerge.getTarget().equals(interfaceToKeep.getTarget()),
                 "Should have same source & taget"
             );
 
             //application component
-            Assert.isNull(toMerge.getSourceComponent(), "Not implemented");
-            Assert.isNull(toMerge.getTargetComponent(), "Not implemented");
+            Assert.isNull(interfaceToMerge.getSourceComponent(), "Not implemented");
+            Assert.isNull(interfaceToMerge.getTargetComponent(), "Not implemented");
 
             //protocol
-            Assert.isTrue(toMerge.getProtocol().equals(toKeep.getProtocol()), "Not implemented");
+            Assert.isTrue(interfaceToMerge.getProtocol().equals(interfaceToKeep.getProtocol()), "Not implemented");
 
             //owner not check, could potentially be different
 
             //dataflow
-            for (DataFlow dataFlowToMerge : toMerge.getDataFlows()) {
-                log.debug("Examining DataFlow :" + dataFlowToMerge);
+            // make copy to avoid concurrent modification exception
+            Set<DataFlow> dataFlowToprocess = new HashSet<>();
+            dataFlowToprocess.addAll(interfaceToMerge.getDataFlows());
+
+            for (DataFlow dataFlowToMerge : dataFlowToprocess) {
+                log.debug(" ### ### Examining DataFlow :" + dataFlowToMerge.getId());
+
+                // remove dataSet from interface
+                log.debug(" ###  Detach DataFlow {} from interface {} ", dataFlowToMerge.getId(), interfaceToMerge.getAlias());
+                interfaceToMerge.removeDataFlows(dataFlowToMerge);
+                log.debug(" ### Save DataFlow : " + dataFlowToMerge.getId());
+                dataFlowRepository.save(dataFlowToMerge);
+                log.debug(" ### Save Interface : " + interfaceToMerge.getAlias());
+                flowInterfaceRepository.save(interfaceToMerge);
+
+                // Check if need to keep or delete (other dataflow equivalent?)
                 boolean shouldKeepDataFlow = true;
-                for (DataFlow dataFlowToKeep : toKeep.getDataFlows()) {
-                    log.debug("Comparing with DataFlow :" + dataFlowToKeep);
+                for (DataFlow dataFlowToKeep : interfaceToKeep.getDataFlows()) {
+                    log.debug(" ### Comparing with DataFlow :" + dataFlowToKeep.getId());
                     if (comparator.areEquivalent(dataFlowToMerge, dataFlowToKeep)) {
                         shouldKeepDataFlow = false;
-                        log.debug("Equality between DataFlow, should not keep");
+                        log.debug(" ### Equality with existing DataFlow {}.", dataFlowToKeep.getId());
+                        log.debug(" ### Delete DataFlow : " + dataFlowToMerge.getId());
+                        dataFlowRepository.delete(dataFlowToMerge);
+                        break;
                     }
                 }
                 if (shouldKeepDataFlow) {
-                    log.debug("Adding to interface : " + toKeep + " DataFlow :  " + dataFlowToMerge);
-                    toKeep.addDataFlows(dataFlowToMerge);
-                } else {
-                    log.debug("Delete DataFlow : " + dataFlowToMerge);
-                    dataFlowRepository.delete(dataFlowToMerge);
+                    if (!interfaceToKeep.getDataFlows().contains(dataFlowToMerge)) {
+                        // Move if necessary
+                        log.debug(" ### Adding to interface : " + interfaceToKeep.getAlias() + " DataFlow :  " + dataFlowToMerge.getId());
+                        interfaceToKeep.addDataFlows(dataFlowToMerge);
+                        log.debug(" ### Save DataFlow : " + dataFlowToMerge.getId());
+                        dataFlowRepository.save(dataFlowToMerge);
+                        log.debug(" ### Save Interface : " + interfaceToKeep.getAlias());
+                        flowInterfaceRepository.save(interfaceToKeep);
+                    } else {
+                        log.debug(
+                            "### DataFlow :  " + dataFlowToMerge.getId() + " already in " + interfaceToKeep.getAlias() + " (not added)"
+                        );
+                    }
                 }
             }
 
             // Functional Flows to move (avoid ConcurrentMofificationException)
             Set<FunctionalFlow> flowsToModify = new HashSet<>();
-            flowsToModify.addAll(toMerge.getFunctionalFlows());
+            flowsToModify.addAll(interfaceToMerge.getFunctionalFlows());
 
             for (FunctionalFlow functionalFlow : flowsToModify) {
-                if (!functionalFlow.getInterfaces().contains(toKeep)) {
-                    log.debug("Adding to Flow : " + functionalFlow + " interface " + toKeep);
-                    functionalFlow.addInterfaces(toKeep);
-                }
-                log.debug("Removing from Flow : " + functionalFlow + " interface " + toMerge);
-                functionalFlow.removeInterfaces(toMerge);
-                functionalFlowRepository.save(functionalFlow);
-            }
-            toDelete.add(toMerge);
-        }
+                log.debug(" ### ### Examining Functional Flow :" + functionalFlow.getId());
+                log.debug(" ### Functional Flow {} has Interfaces {}", functionalFlow.getAlias(), functionalFlow.getInterfaces());
+                FunctionalFlow functionalFlow2 = functionalFlowRepository.findById(functionalFlow.getId()).get();
+                log.debug(" ### Functional Flow {} has Interfaces {}", functionalFlow2.getAlias(), functionalFlow2.getInterfaces());
 
-        for (FlowInterface inter : toDelete) {
-            if (!inter.equals(toKeep)) {
-                log.debug("Delete " + inter);
-                flowInterfaceRepository.delete(inter);
-            } else {
-                log.debug("Won't delete " + inter);
+                log.debug(
+                    " ### Removing interface " + interfaceToMerge.getAlias() + " from Functional Flow : " + functionalFlow.getAlias()
+                );
+                functionalFlow.removeInterfaces(interfaceToMerge);
+                functionalFlowRepository.save(functionalFlow);
+                flowInterfaceRepository.save(interfaceToMerge);
+
+                if (!functionalFlow.getInterfaces().contains(interfaceToKeep)) {
+                    //if (!functionalFlow2.getInterfaces().contains(interfaceToKeep)) {
+                    log.debug(" ### Adding interface " + interfaceToKeep.getAlias() + " to Functional Flow : " + functionalFlow.getAlias());
+                    functionalFlow.addInterfaces(interfaceToKeep);
+                    log.debug(" ### Save Functional Flow : " + functionalFlow.getAlias());
+                    functionalFlowRepository.save(functionalFlow);
+                    log.debug(" ### Save Interface : " + interfaceToKeep.getAlias());
+                    flowInterfaceRepository.save(interfaceToKeep);
+                } else {
+                    log.debug(
+                        " ### Interface :  " + interfaceToKeep.getAlias() + " already in " + functionalFlow.getAlias() + " (not added)"
+                    );
+                }
+                log.debug(" ### Functional Flow {} has now Interfaces {}", functionalFlow.getAlias(), functionalFlow.getInterfaces());
             }
+            // Delete interface
+            log.debug(" ### ### Delete " + interfaceToMerge.getAlias());
+            flowInterfaceRepository.delete(interfaceToMerge);
         }
     }
 }

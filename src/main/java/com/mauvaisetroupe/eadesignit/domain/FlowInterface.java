@@ -340,9 +340,20 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface> {
 
     @Override
     public int compareTo(FlowInterface arg0) {
-        if (arg0 == null) return 0;
-        if (arg0.getAlias() == null) return 0;
-        if (this.getAlias() == null) return 0;
-        return this.getAlias().compareTo(arg0.getAlias());
+        int result = -1;
+        if (arg0 == null) {
+            result = -1;
+        } else if (arg0 == this) {
+            result = 0;
+        } else if (arg0.getId() != null && arg0.getId() == this.getId()) {
+            result = 0;
+        } else if (arg0.getAlias() == null) {
+            result = -1;
+        } else if (this.getAlias() == null) {
+            result = 1;
+        } else {
+            result = this.getAlias().compareTo(arg0.getAlias());
+        }
+        return result;
     }
 }
