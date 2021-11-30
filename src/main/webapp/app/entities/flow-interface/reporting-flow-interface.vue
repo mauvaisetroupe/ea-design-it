@@ -185,9 +185,9 @@
               <td>{{ dataFlowToMerge.frequency }}</td>
               <td>{{ dataFlowToMerge.format ? dataFlowToMerge.format.name : '' }}</td>
               <td>{{ dataFlowToMerge.resourceType }}</td>
-              <td>{{ dataFlowToMerge.contractURL | truncate 50 }}</td>
-              <td>{{ dataFlowToMerge.documentationURL | truncate 50 }}</td>
-              <td>{{ dataFlowToMerge.documentationURL2 | truncate 50 }}</td>
+              <td>{{ dataFlowToMerge.contractURL }}</td>
+              <td>{{ dataFlowToMerge.documentationURL }}</td>
+              <td>{{ dataFlowToMerge.documentationURL2 }}</td>
               <td>{{ dataFlowToMerge.startDate }}</td>
               <td>{{ dataFlowToMerge.endDate }}</td>
               <td>{{ dataFlowToMerge.description }}</td>
@@ -204,7 +204,8 @@
         <button
           type="button"
           class="btn btn-primary"
-          id="jhi-confirm-delete-flowInterface"
+          id="mergeflowInterfaceButtonID"
+          ref="mergeflowInterfaceButtonRef"
           data-cy="entityConfirmDeleteButton"
           v-on:click="mergeFlowInterface()"
         >

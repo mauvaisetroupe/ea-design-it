@@ -57,10 +57,14 @@
             <td>{{ functionalFlow.comment }}</td>
             <td>{{ functionalFlow.status }}</td>
             <td>
-              <a :href="functionalFlow.documentationURL">{{ functionalFlow.documentationURL | truncate(20) }}</a>
+              <a :href="functionalFlow.documentationURL">{{
+                functionalFlow.documentationURL ? functionalFlow.documentationURL.substring(0, 20) : ''
+              }}</a>
             </td>
             <td>
-              <a :href="functionalFlow.documentationURL2">{{ functionalFlow.documentationURL2 | truncate(20) }}</a>
+              <a :href="functionalFlow.documentationURL2">{{
+                functionalFlow.documentationURL2 ? functionalFlow.documentationURL2.substring(0, 20) : ''
+              }}</a>
             </td>
             <td>{{ functionalFlow.startDate }}</td>
             <td>{{ functionalFlow.endDate }}</td>
