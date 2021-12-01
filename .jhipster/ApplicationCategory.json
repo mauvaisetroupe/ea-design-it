@@ -6,11 +6,32 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "type",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "description",
       "fieldType": "String"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "application",
+      "otherEntityRelationshipName": "categories",
+      "relationshipName": "applications",
+      "otherEntityField": "name",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "applicationComponent",
+      "otherEntityRelationshipName": "categories",
+      "relationshipName": "components",
+      "otherEntityField": "name",
+      "ownerSide": false
+    }
+  ],
   "entityTableName": "application_category",
   "dto": "no",
   "pagination": "no",

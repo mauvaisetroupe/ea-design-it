@@ -8,6 +8,9 @@ import ApplicationCategoryUpdateComponent from '@/entities/application-category/
 import ApplicationCategoryClass from '@/entities/application-category/application-category-update.component';
 import ApplicationCategoryService from '@/entities/application-category/application-category.service';
 
+import ApplicationService from '@/entities/application/application.service';
+
+import ApplicationComponentService from '@/entities/application-component/application-component.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -38,6 +41,10 @@ describe('Component Tests', () => {
         provide: {
           applicationCategoryService: () => applicationCategoryServiceStub,
           alertService: () => new AlertService(),
+
+          applicationService: () => new ApplicationService(),
+
+          applicationComponentService: () => new ApplicationComponentService(),
         },
       });
       comp = wrapper.vm;

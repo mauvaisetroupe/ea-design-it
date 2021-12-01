@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="application">
-        <h2 class="jh-entity-heading" data-cy="applicationDetailsHeading"><span>Application</span> {{ application.name }}</h2>
+        <h2 class="jh-entity-heading" data-cy="applicationDetailsHeading"><span>Application</span> {{ application.id }}</h2>
         <dl class="row jh-entity-details">
           <dt>
             <span>Alias</span>
@@ -21,12 +21,6 @@
           </dt>
           <dd>
             <span>{{ application.description }}</span>
-          </dd>
-          <dt>
-            <span>Technology</span>
-          </dt>
-          <dd>
-            <span>{{ application.technology }}</span>
           </dd>
           <dt>
             <span>Comment</span>
@@ -75,14 +69,24 @@
             </div>
           </dd>
           <dt>
-            <span>Category</span>
+            <span>Categories</span>
           </dt>
           <dd>
-            <div v-if="application.category">
-              <router-link :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: application.category.id } }">{{
-                application.category.name
+            <span v-for="(categories, i) in application.categories" :key="categories.id"
+              >{{ i > 0 ? ', ' : '' }}
+              <router-link :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: categories.id } }">{{
+                categories.name
               }}</router-link>
-            </div>
+            </span>
+          </dd>
+          <dt>
+            <span>Technologies</span>
+          </dt>
+          <dd>
+            <span v-for="(technologies, i) in application.technologies" :key="technologies.id"
+              >{{ i > 0 ? ', ' : '' }}
+              <router-link :to="{ name: 'TechnologyView', params: { technologyId: technologies.id } }">{{ technologies.name }}</router-link>
+            </span>
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

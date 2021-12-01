@@ -5,6 +5,8 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -33,9 +35,6 @@ public class ApplicationComponent implements Serializable {
     @Column(name = "description", length = 1000)
     private String description;
 
-    @Column(name = "technology")
-    private String technology;
-
     @Column(name = "comment")
     private String comment;
 
@@ -59,11 +58,28 @@ public class ApplicationComponent implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "owner", "category", "applicationsLists" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "owner", "categories", "technologies", "applicationsLists" }, allowSetters = true)
     private Application application;
 
-    @ManyToOne
-    private ApplicationCategory category;
+    @ManyToMany
+    @JoinTable(
+        name = "rel_application_component__categories",
+        joinColumns = @JoinColumn(name = "application_component_id"),
+        inverseJoinColumns = @JoinColumn(name = "categories_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "applications", "components" }, allowSetters = true)
+    private Set<ApplicationCategory> categories = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_application_component__technologies",
+        joinColumns = @JoinColumn(name = "application_component_id"),
+        inverseJoinColumns = @JoinColumn(name = "technologies_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "applications", "components" }, allowSetters = true)
+    private Set<Technology> technologies = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -104,19 +120,6 @@ public class ApplicationComponent implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getTechnology() {
-        return this.technology;
-    }
-
-    public ApplicationComponent technology(String technology) {
-        this.setTechnology(technology);
-        return this;
-    }
-
-    public void setTechnology(String technology) {
-        this.technology = technology;
     }
 
     public String getComment() {
@@ -210,16 +213,53 @@ public class ApplicationComponent implements Serializable {
         return this;
     }
 
-    public ApplicationCategory getCategory() {
-        return this.category;
+    public Set<ApplicationCategory> getCategories() {
+        return this.categories;
     }
 
-    public void setCategory(ApplicationCategory applicationCategory) {
-        this.category = applicationCategory;
+    public void setCategories(Set<ApplicationCategory> applicationCategories) {
+        this.categories = applicationCategories;
     }
 
-    public ApplicationComponent category(ApplicationCategory applicationCategory) {
-        this.setCategory(applicationCategory);
+    public ApplicationComponent categories(Set<ApplicationCategory> applicationCategories) {
+        this.setCategories(applicationCategories);
+        return this;
+    }
+
+    public ApplicationComponent addCategories(ApplicationCategory applicationCategory) {
+        this.categories.add(applicationCategory);
+        applicationCategory.getComponents().add(this);
+        return this;
+    }
+
+    public ApplicationComponent removeCategories(ApplicationCategory applicationCategory) {
+        this.categories.remove(applicationCategory);
+        applicationCategory.getComponents().remove(this);
+        return this;
+    }
+
+    public Set<Technology> getTechnologies() {
+        return this.technologies;
+    }
+
+    public void setTechnologies(Set<Technology> technologies) {
+        this.technologies = technologies;
+    }
+
+    public ApplicationComponent technologies(Set<Technology> technologies) {
+        this.setTechnologies(technologies);
+        return this;
+    }
+
+    public ApplicationComponent addTechnologies(Technology technology) {
+        this.technologies.add(technology);
+        technology.getComponents().add(this);
+        return this;
+    }
+
+    public ApplicationComponent removeTechnologies(Technology technology) {
+        this.technologies.remove(technology);
+        technology.getComponents().remove(this);
         return this;
     }
 
@@ -249,7 +289,6 @@ public class ApplicationComponent implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
-            ", technology='" + getTechnology() + "'" +
             ", comment='" + getComment() + "'" +
             ", documentationURL='" + getDocumentationURL() + "'" +
             ", startDate='" + getStartDate() + "'" +

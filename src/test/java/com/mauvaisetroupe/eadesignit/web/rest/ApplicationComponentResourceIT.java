@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -13,14 +14,20 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationComponentRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link ApplicationComponentResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class ApplicationComponentResourceIT {
@@ -39,9 +47,6 @@ class ApplicationComponentResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TECHNOLOGY = "AAAAAAAAAA";
-    private static final String UPDATED_TECHNOLOGY = "BBBBBBBBBB";
 
     private static final String DEFAULT_COMMENT = "AAAAAAAAAA";
     private static final String UPDATED_COMMENT = "BBBBBBBBBB";
@@ -70,6 +75,9 @@ class ApplicationComponentResourceIT {
     @Autowired
     private ApplicationComponentRepository applicationComponentRepository;
 
+    @Mock
+    private ApplicationComponentRepository applicationComponentRepositoryMock;
+
     @Autowired
     private EntityManager em;
 
@@ -88,7 +96,6 @@ class ApplicationComponentResourceIT {
         ApplicationComponent applicationComponent = new ApplicationComponent()
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
-            .technology(DEFAULT_TECHNOLOGY)
             .comment(DEFAULT_COMMENT)
             .documentationURL(DEFAULT_DOCUMENTATION_URL)
             .startDate(DEFAULT_START_DATE)
@@ -118,7 +125,6 @@ class ApplicationComponentResourceIT {
         ApplicationComponent applicationComponent = new ApplicationComponent()
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .technology(UPDATED_TECHNOLOGY)
             .comment(UPDATED_COMMENT)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .startDate(UPDATED_START_DATE)
@@ -162,7 +168,6 @@ class ApplicationComponentResourceIT {
         ApplicationComponent testApplicationComponent = applicationComponentList.get(applicationComponentList.size() - 1);
         assertThat(testApplicationComponent.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testApplicationComponent.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testApplicationComponent.getTechnology()).isEqualTo(DEFAULT_TECHNOLOGY);
         assertThat(testApplicationComponent.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testApplicationComponent.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
         assertThat(testApplicationComponent.getStartDate()).isEqualTo(DEFAULT_START_DATE);
@@ -207,13 +212,30 @@ class ApplicationComponentResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(applicationComponent.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].technology").value(hasItem(DEFAULT_TECHNOLOGY)))
             .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)))
             .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].applicationType").value(hasItem(DEFAULT_APPLICATION_TYPE.toString())))
             .andExpect(jsonPath("$.[*].softwareType").value(hasItem(DEFAULT_SOFTWARE_TYPE.toString())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllApplicationComponentsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(applicationComponentRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restApplicationComponentMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(applicationComponentRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllApplicationComponentsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(applicationComponentRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restApplicationComponentMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(applicationComponentRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -230,7 +252,6 @@ class ApplicationComponentResourceIT {
             .andExpect(jsonPath("$.id").value(applicationComponent.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.technology").value(DEFAULT_TECHNOLOGY))
             .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT))
             .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
@@ -261,7 +282,6 @@ class ApplicationComponentResourceIT {
         updatedApplicationComponent
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .technology(UPDATED_TECHNOLOGY)
             .comment(UPDATED_COMMENT)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .startDate(UPDATED_START_DATE)
@@ -283,7 +303,6 @@ class ApplicationComponentResourceIT {
         ApplicationComponent testApplicationComponent = applicationComponentList.get(applicationComponentList.size() - 1);
         assertThat(testApplicationComponent.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testApplicationComponent.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testApplicationComponent.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
         assertThat(testApplicationComponent.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testApplicationComponent.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
         assertThat(testApplicationComponent.getStartDate()).isEqualTo(UPDATED_START_DATE);
@@ -363,10 +382,9 @@ class ApplicationComponentResourceIT {
         partialUpdatedApplicationComponent.setId(applicationComponent.getId());
 
         partialUpdatedApplicationComponent
-            .technology(UPDATED_TECHNOLOGY)
             .comment(UPDATED_COMMENT)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
-            .softwareType(UPDATED_SOFTWARE_TYPE);
+            .startDate(UPDATED_START_DATE);
 
         restApplicationComponentMockMvc
             .perform(
@@ -382,13 +400,12 @@ class ApplicationComponentResourceIT {
         ApplicationComponent testApplicationComponent = applicationComponentList.get(applicationComponentList.size() - 1);
         assertThat(testApplicationComponent.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testApplicationComponent.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testApplicationComponent.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
         assertThat(testApplicationComponent.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testApplicationComponent.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
-        assertThat(testApplicationComponent.getStartDate()).isEqualTo(DEFAULT_START_DATE);
+        assertThat(testApplicationComponent.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testApplicationComponent.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testApplicationComponent.getApplicationType()).isEqualTo(DEFAULT_APPLICATION_TYPE);
-        assertThat(testApplicationComponent.getSoftwareType()).isEqualTo(UPDATED_SOFTWARE_TYPE);
+        assertThat(testApplicationComponent.getSoftwareType()).isEqualTo(DEFAULT_SOFTWARE_TYPE);
     }
 
     @Test
@@ -406,7 +423,6 @@ class ApplicationComponentResourceIT {
         partialUpdatedApplicationComponent
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .technology(UPDATED_TECHNOLOGY)
             .comment(UPDATED_COMMENT)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .startDate(UPDATED_START_DATE)
@@ -428,7 +444,6 @@ class ApplicationComponentResourceIT {
         ApplicationComponent testApplicationComponent = applicationComponentList.get(applicationComponentList.size() - 1);
         assertThat(testApplicationComponent.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testApplicationComponent.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testApplicationComponent.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
         assertThat(testApplicationComponent.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testApplicationComponent.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
         assertThat(testApplicationComponent.getStartDate()).isEqualTo(UPDATED_START_DATE);

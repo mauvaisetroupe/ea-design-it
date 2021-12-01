@@ -29,7 +29,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       service = new ApplicationCategoryService();
-      elemDefault = new ApplicationCategory(123, 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new ApplicationCategory(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -82,6 +82,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             name: 'BBBBBB',
+            type: 'BBBBBB',
             description: 'BBBBBB',
           },
           elemDefault
@@ -109,6 +110,7 @@ describe('Service Tests', () => {
       it('should partial update a ApplicationCategory', async () => {
         const patchObject = Object.assign(
           {
+            type: 'BBBBBB',
             description: 'BBBBBB',
           },
           new ApplicationCategory()
@@ -138,6 +140,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             name: 'BBBBBB',
+            type: 'BBBBBB',
             description: 'BBBBBB',
           },
           elemDefault

@@ -40,18 +40,6 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="application-component-technology">Technology</label>
-            <input
-              type="text"
-              class="form-control"
-              name="technology"
-              id="application-component-technology"
-              data-cy="technology"
-              :class="{ valid: !$v.applicationComponent.technology.$invalid, invalid: $v.applicationComponent.technology.$invalid }"
-              v-model="$v.applicationComponent.technology.$model"
-            />
-          </div>
-          <div class="form-group">
             <label class="form-control-label" for="application-component-comment">Comment</label>
             <input
               type="text"
@@ -198,25 +186,42 @@
             <small class="form-text text-danger" v-if="!$v.applicationComponent.application.required"> This field is required. </small>
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="application-component-category">Category</label>
+            <label for="application-component-categories">Categories</label>
             <select
               class="form-control"
-              id="application-component-category"
-              data-cy="category"
-              name="category"
-              v-model="applicationComponent.category"
+              id="application-component-categories"
+              data-cy="categories"
+              multiple
+              name="categories"
+              v-if="applicationComponent.categories !== undefined"
+              v-model="applicationComponent.categories"
             >
-              <option v-bind:value="null"></option>
               <option
-                v-bind:value="
-                  applicationComponent.category && applicationCategoryOption.id === applicationComponent.category.id
-                    ? applicationComponent.category
-                    : applicationCategoryOption
-                "
+                v-bind:value="getSelected(applicationComponent.categories, applicationCategoryOption)"
                 v-for="applicationCategoryOption in applicationCategories"
                 :key="applicationCategoryOption.id"
               >
                 {{ applicationCategoryOption.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="application-component-technologies">Technologies</label>
+            <select
+              class="form-control"
+              id="application-component-technologies"
+              data-cy="technologies"
+              multiple
+              name="technologies"
+              v-if="applicationComponent.technologies !== undefined"
+              v-model="applicationComponent.technologies"
+            >
+              <option
+                v-bind:value="getSelected(applicationComponent.technologies, technologyOption)"
+                v-for="technologyOption in technologies"
+                :key="technologyOption.id"
+              >
+                {{ technologyOption.name }}
               </option>
             </select>
           </div>

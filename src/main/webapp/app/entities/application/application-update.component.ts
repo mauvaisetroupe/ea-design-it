@@ -10,6 +10,9 @@ import { IOwner } from '@/shared/model/owner.model';
 import ApplicationCategoryService from '@/entities/application-category/application-category.service';
 import { IApplicationCategory } from '@/shared/model/application-category.model';
 
+import TechnologyService from '@/entities/technology/technology.service';
+import { ITechnology } from '@/shared/model/technology.model';
+
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
 import { IApplicationComponent } from '@/shared/model/application-component.model';
 
@@ -25,7 +28,6 @@ const validations: any = {
     description: {
       maxLength: maxLength(1000),
     },
-    technology: {},
     comment: {},
     documentationURL: {
       maxLength: maxLength(500),
@@ -54,6 +56,10 @@ export default class ApplicationUpdate extends Vue {
 
   public applicationCategories: IApplicationCategory[] = [];
 
+  @Inject('technologyService') private technologyService: () => TechnologyService;
+
+  public technologies: ITechnology[] = [];
+
   @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
 
   public applicationComponents: IApplicationComponent[] = [];
@@ -79,6 +85,8 @@ export default class ApplicationUpdate extends Vue {
         this.currentLanguage = this.$store.getters.currentLanguage;
       }
     );
+    this.application.categories = [];
+    this.application.technologies = [];
   }
 
   public save(): void {
@@ -150,10 +158,26 @@ export default class ApplicationUpdate extends Vue {
       .then(res => {
         this.applicationCategories = res.data;
       });
+    this.technologyService()
+      .retrieve()
+      .then(res => {
+        this.technologies = res.data;
+      });
     this.applicationComponentService()
       .retrieve()
       .then(res => {
         this.applicationComponents = res.data;
       });
+  }
+
+  public getSelected(selectedVals, option): any {
+    if (selectedVals) {
+      for (let i = 0; i < selectedVals.length; i++) {
+        if (option.id === selectedVals[i].id) {
+          return selectedVals[i];
+        }
+      }
+    }
+    return option;
   }
 }

@@ -132,9 +132,6 @@ public class ApplicationComponentResource {
                 if (applicationComponent.getDescription() != null) {
                     existingApplicationComponent.setDescription(applicationComponent.getDescription());
                 }
-                if (applicationComponent.getTechnology() != null) {
-                    existingApplicationComponent.setTechnology(applicationComponent.getTechnology());
-                }
                 if (applicationComponent.getComment() != null) {
                     existingApplicationComponent.setComment(applicationComponent.getComment());
                 }
@@ -167,12 +164,15 @@ public class ApplicationComponentResource {
     /**
      * {@code GET  /application-components} : get all the applicationComponents.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of applicationComponents in body.
      */
     @GetMapping("/application-components")
-    public List<ApplicationComponent> getAllApplicationComponents() {
+    public List<ApplicationComponent> getAllApplicationComponents(
+        @RequestParam(required = false, defaultValue = "false") boolean eagerload
+    ) {
         log.debug("REST request to get all ApplicationComponents");
-        return applicationComponentRepository.findAll();
+        return applicationComponentRepository.findAllWithEagerRelationships();
     }
 
     /**
@@ -184,7 +184,7 @@ public class ApplicationComponentResource {
     @GetMapping("/application-components/{id}")
     public ResponseEntity<ApplicationComponent> getApplicationComponent(@PathVariable Long id) {
         log.debug("REST request to get ApplicationComponent : {}", id);
-        Optional<ApplicationComponent> applicationComponent = applicationComponentRepository.findById(id);
+        Optional<ApplicationComponent> applicationComponent = applicationComponentRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(applicationComponent);
     }
 

@@ -20,9 +20,6 @@
             <column name="description" type="varchar(1000)">
                 <constraints nullable="true" />
             </column>
-            <column name="technology" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="comment" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -44,11 +41,33 @@
             <column name="application_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="category_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
+    </changeSet>
+
+    <changeSet id="20211104191908-1-relations" author="jhipster">
+
+        <createTable tableName="rel_application_component__categories">
+            <column name="categories_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="application_component_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="application_component_id, categories_id" tableName="rel_application_component__categories"/>
+
+        <createTable tableName="rel_application_component__technologies">
+            <column name="technologies_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="application_component_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="application_component_id, technologies_id" tableName="rel_application_component__technologies"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

@@ -41,9 +41,11 @@ relationship OneToMany {
 	DataFlow{items} to DataFlowItem{dataFlow}
 }
 
-relationship ManyToOne {
-	Application{category(name)} to ApplicationCategory
-	ApplicationComponent{category(name)} to ApplicationCategory
+relationship ManyToMany {
+	Application{categories(name)} to ApplicationCategory{applications(name)}
+	ApplicationComponent{categories(name)} to ApplicationCategory{components(name)}
+	Application{technologies(name)} to Technology{applications(name)}
+	ApplicationComponent{technologies(name)} to Technology{components(name)}
 }
 
 relationship ManyToOne {
@@ -85,7 +87,6 @@ entity Application {
 	alias String pattern(/^HPX\.CMP\.[0-9]{8}$/)
 	name String,
     description String maxlength(1000)
-	technology String
     comment String 
     documentationURL String maxlength(500)
     startDate LocalDate
@@ -139,7 +140,6 @@ entity DataFlowItem {
 entity ApplicationComponent {
 	name String,
     description String maxlength(1000),
-    technology String 
     comment String 
     documentationURL String maxlength(500)
     startDate LocalDate
@@ -182,8 +182,16 @@ entity DataFormat {
 
 entity ApplicationCategory {
     name String
+    type String
+    description String    
+}
+
+entity Technology {
+    name String
+    type String
     description String
 }
+
 
 enum ApplicationType {
 	SOFTWARE
@@ -196,8 +204,8 @@ enum ApplicationType {
 enum SoftwareType {
 	ONPREMISE_COTS
     ONPREMISE_CUSTOM
-    CUSTOM_CLOUD
-    SAAS
+    CLOUD_CUSTOM
+    CLOUD_SAAS
 }
 
 

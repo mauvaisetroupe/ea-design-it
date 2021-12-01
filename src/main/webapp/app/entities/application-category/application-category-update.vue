@@ -23,6 +23,18 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-category-type">Type</label>
+            <input
+              type="text"
+              class="form-control"
+              name="type"
+              id="application-category-type"
+              data-cy="type"
+              :class="{ valid: !$v.applicationCategory.type.$invalid, invalid: $v.applicationCategory.type.$invalid }"
+              v-model="$v.applicationCategory.type.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="application-category-description">Description</label>
             <input
               type="text"

@@ -12,10 +12,6 @@
       "fieldValidateRulesMaxlength": "1000"
     },
     {
-      "fieldName": "technology",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "comment",
       "fieldType": "String"
     },
@@ -41,7 +37,7 @@
     {
       "fieldName": "softwareType",
       "fieldType": "SoftwareType",
-      "fieldValues": "ONPREMISE_COTS,ONPREMISE_CUSTOM,CUSTOM_CLOUD,SAAS"
+      "fieldValues": "ONPREMISE_COTS,ONPREMISE_CUSTOM,CLOUD_CUSTOM,CLOUD_SAAS"
     }
   ],
   "relationships": [
@@ -54,11 +50,20 @@
       "otherEntityField": "name"
     },
     {
-      "relationshipType": "many-to-one",
+      "relationshipType": "many-to-many",
       "otherEntityName": "applicationCategory",
-      "otherEntityRelationshipName": "applicationComponent",
-      "relationshipName": "category",
-      "otherEntityField": "name"
+      "otherEntityRelationshipName": "components",
+      "relationshipName": "categories",
+      "otherEntityField": "name",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "technology",
+      "otherEntityRelationshipName": "components",
+      "relationshipName": "technologies",
+      "otherEntityField": "name",
+      "ownerSide": true
     }
   ],
   "entityTableName": "application_component",

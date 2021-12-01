@@ -42,7 +42,6 @@ describe('Service Tests', () => {
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
-        'AAAAAAA',
         currentDate,
         currentDate,
         ApplicationType.SOFTWARE,
@@ -116,7 +115,6 @@ describe('Service Tests', () => {
             alias: 'BBBBBB',
             name: 'BBBBBB',
             description: 'BBBBBB',
-            technology: 'BBBBBB',
             comment: 'BBBBBB',
             documentationURL: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),
@@ -155,8 +153,8 @@ describe('Service Tests', () => {
       it('should partial update a Application', async () => {
         const patchObject = Object.assign(
           {
-            documentationURL: 'BBBBBB',
-            applicationType: 'BBBBBB',
+            startDate: dayjs(currentDate).format(DATE_FORMAT),
+            softwareType: 'BBBBBB',
           },
           new Application()
         );
@@ -193,7 +191,6 @@ describe('Service Tests', () => {
             alias: 'BBBBBB',
             name: 'BBBBBB',
             description: 'BBBBBB',
-            technology: 'BBBBBB',
             comment: 'BBBBBB',
             documentationURL: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),

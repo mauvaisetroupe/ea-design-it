@@ -11,6 +11,8 @@ import ApplicationComponentService from '@/entities/application-component/applic
 import ApplicationService from '@/entities/application/application.service';
 
 import ApplicationCategoryService from '@/entities/application-category/application-category.service';
+
+import TechnologyService from '@/entities/technology/technology.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -45,6 +47,8 @@ describe('Component Tests', () => {
           applicationService: () => new ApplicationService(),
 
           applicationCategoryService: () => new ApplicationCategoryService(),
+
+          technologyService: () => new TechnologyService(),
         },
       });
       comp = wrapper.vm;

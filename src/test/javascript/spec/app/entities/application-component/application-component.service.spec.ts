@@ -41,7 +41,6 @@ describe('Service Tests', () => {
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
-        'AAAAAAA',
         currentDate,
         currentDate,
         ApplicationType.SOFTWARE,
@@ -114,7 +113,6 @@ describe('Service Tests', () => {
           {
             name: 'BBBBBB',
             description: 'BBBBBB',
-            technology: 'BBBBBB',
             comment: 'BBBBBB',
             documentationURL: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),
@@ -154,9 +152,9 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             description: 'BBBBBB',
-            comment: 'BBBBBB',
             documentationURL: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),
+            endDate: dayjs(currentDate).format(DATE_FORMAT),
           },
           new ApplicationComponent()
         );
@@ -192,7 +190,6 @@ describe('Service Tests', () => {
           {
             name: 'BBBBBB',
             description: 'BBBBBB',
-            technology: 'BBBBBB',
             comment: 'BBBBBB',
             documentationURL: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),

@@ -134,9 +134,6 @@ public class ApplicationResource {
                 if (application.getDescription() != null) {
                     existingApplication.setDescription(application.getDescription());
                 }
-                if (application.getTechnology() != null) {
-                    existingApplication.setTechnology(application.getTechnology());
-                }
                 if (application.getComment() != null) {
                     existingApplication.setComment(application.getComment());
                 }
@@ -169,12 +166,13 @@ public class ApplicationResource {
     /**
      * {@code GET  /applications} : get all the applications.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of applications in body.
      */
     @GetMapping("/applications")
-    public List<Application> getAllApplications() {
+    public List<Application> getAllApplications(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Applications");
-        return applicationRepository.findAll();
+        return applicationRepository.findAllWithEagerRelationships();
     }
 
     /**
@@ -186,7 +184,7 @@ public class ApplicationResource {
     @GetMapping("/applications/{id}")
     public ResponseEntity<Application> getApplication(@PathVariable Long id) {
         log.debug("REST request to get Application : {}", id);
-        Optional<Application> application = applicationRepository.findById(id);
+        Optional<Application> application = applicationRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(application);
     }
 

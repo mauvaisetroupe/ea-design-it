@@ -86,6 +86,12 @@ const DataFlowImport = () => import('@/entities/data-flow-import/data-flow-impor
 const DataFlowImportUpdate = () => import('@/entities/data-flow-import/data-flow-import-update.vue');
 // prettier-ignore
 const DataFlowImportDetails = () => import('@/entities/data-flow-import/data-flow-import-details.vue');
+// prettier-ignore
+const Technology = () => import('@/entities/technology/technology.vue');
+// prettier-ignore
+const TechnologyUpdate = () => import('@/entities/technology/technology-update.vue');
+// prettier-ignore
+const TechnologyDetails = () => import('@/entities/technology/technology-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default [
@@ -423,6 +429,30 @@ export default [
     path: '/data-flow-import/:dataFlowImportId/view',
     name: 'DataFlowImportView',
     component: DataFlowImportDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/technology',
+    name: 'Technology',
+    component: Technology,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/technology/new',
+    name: 'TechnologyCreate',
+    component: TechnologyUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/technology/:technologyId/edit',
+    name: 'TechnologyEdit',
+    component: TechnologyUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/technology/:technologyId/view',
+    name: 'TechnologyView',
+    component: TechnologyDetails,
     meta: { authorities: [Authority.USER] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

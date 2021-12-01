@@ -13,6 +13,12 @@
             <span>{{ applicationCategory.name }}</span>
           </dd>
           <dt>
+            <span>Type</span>
+          </dt>
+          <dd>
+            <span>{{ applicationCategory.type }}</span>
+          </dd>
+          <dt>
             <span>Description</span>
           </dt>
           <dd>

@@ -30,7 +30,6 @@
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Name</span></th>
             <th scope="row"><span>Description</span></th>
-            <th scope="row"><span>Technology</span></th>
             <th scope="row"><span>Comment</span></th>
             <th scope="row"><span>Documentation URL</span></th>
             <th scope="row"><span>Start Date</span></th>
@@ -38,7 +37,8 @@
             <th scope="row"><span>Application Type</span></th>
             <th scope="row"><span>Software Type</span></th>
             <th scope="row"><span>Application</span></th>
-            <th scope="row"><span>Category</span></th>
+            <th scope="row"><span>Categories</span></th>
+            <th scope="row"><span>Technologies</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -51,7 +51,6 @@
             </td>
             <td>{{ applicationComponent.name }}</td>
             <td>{{ applicationComponent.description }}</td>
-            <td>{{ applicationComponent.technology }}</td>
             <td>{{ applicationComponent.comment }}</td>
             <td>
               <a v-bind:href="applicationComponent.documentationURL">{{ applicationComponent.documentationURL }}</a>
@@ -68,12 +67,22 @@
               </div>
             </td>
             <td>
-              <div v-if="applicationComponent.category">
+              <span v-for="(categories, i) in applicationComponent.categories" :key="categories.id"
+                >{{ i > 0 ? ', ' : '' }}
                 <router-link
-                  :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: applicationComponent.category.id } }"
-                  >{{ applicationComponent.category.name }}</router-link
+                  class="form-control-static"
+                  :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: categories.id } }"
+                  >{{ categories.name }}</router-link
                 >
-              </div>
+              </span>
+            </td>
+            <td>
+              <span v-for="(technologies, i) in applicationComponent.technologies" :key="technologies.id"
+                >{{ i > 0 ? ', ' : '' }}
+                <router-link class="form-control-static" :to="{ name: 'TechnologyView', params: { technologyId: technologies.id } }">{{
+                  technologies.name
+                }}</router-link>
+              </span>
             </td>
             <td class="text-right">
               <div class="btn-group">

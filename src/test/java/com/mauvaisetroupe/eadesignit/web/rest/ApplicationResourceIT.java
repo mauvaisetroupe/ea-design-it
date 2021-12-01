@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -12,14 +13,20 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link ApplicationResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class ApplicationResourceIT {
@@ -41,9 +49,6 @@ class ApplicationResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TECHNOLOGY = "AAAAAAAAAA";
-    private static final String UPDATED_TECHNOLOGY = "BBBBBBBBBB";
 
     private static final String DEFAULT_COMMENT = "AAAAAAAAAA";
     private static final String UPDATED_COMMENT = "BBBBBBBBBB";
@@ -72,6 +77,9 @@ class ApplicationResourceIT {
     @Autowired
     private ApplicationRepository applicationRepository;
 
+    @Mock
+    private ApplicationRepository applicationRepositoryMock;
+
     @Autowired
     private EntityManager em;
 
@@ -91,7 +99,6 @@ class ApplicationResourceIT {
             .alias(DEFAULT_ALIAS)
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
-            .technology(DEFAULT_TECHNOLOGY)
             .comment(DEFAULT_COMMENT)
             .documentationURL(DEFAULT_DOCUMENTATION_URL)
             .startDate(DEFAULT_START_DATE)
@@ -112,7 +119,6 @@ class ApplicationResourceIT {
             .alias(UPDATED_ALIAS)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .technology(UPDATED_TECHNOLOGY)
             .comment(UPDATED_COMMENT)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .startDate(UPDATED_START_DATE)
@@ -143,7 +149,6 @@ class ApplicationResourceIT {
         assertThat(testApplication.getAlias()).isEqualTo(DEFAULT_ALIAS);
         assertThat(testApplication.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testApplication.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testApplication.getTechnology()).isEqualTo(DEFAULT_TECHNOLOGY);
         assertThat(testApplication.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testApplication.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
         assertThat(testApplication.getStartDate()).isEqualTo(DEFAULT_START_DATE);
@@ -185,13 +190,30 @@ class ApplicationResourceIT {
             .andExpect(jsonPath("$.[*].alias").value(hasItem(DEFAULT_ALIAS)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].technology").value(hasItem(DEFAULT_TECHNOLOGY)))
             .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)))
             .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].applicationType").value(hasItem(DEFAULT_APPLICATION_TYPE.toString())))
             .andExpect(jsonPath("$.[*].softwareType").value(hasItem(DEFAULT_SOFTWARE_TYPE.toString())));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllApplicationsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(applicationRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restApplicationMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(applicationRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllApplicationsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(applicationRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restApplicationMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(applicationRepositoryMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @Test
@@ -209,7 +231,6 @@ class ApplicationResourceIT {
             .andExpect(jsonPath("$.alias").value(DEFAULT_ALIAS))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.technology").value(DEFAULT_TECHNOLOGY))
             .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT))
             .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
@@ -241,7 +262,6 @@ class ApplicationResourceIT {
             .alias(UPDATED_ALIAS)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .technology(UPDATED_TECHNOLOGY)
             .comment(UPDATED_COMMENT)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .startDate(UPDATED_START_DATE)
@@ -264,7 +284,6 @@ class ApplicationResourceIT {
         assertThat(testApplication.getAlias()).isEqualTo(UPDATED_ALIAS);
         assertThat(testApplication.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testApplication.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testApplication.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
         assertThat(testApplication.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testApplication.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
         assertThat(testApplication.getStartDate()).isEqualTo(UPDATED_START_DATE);
@@ -341,7 +360,7 @@ class ApplicationResourceIT {
         Application partialUpdatedApplication = new Application();
         partialUpdatedApplication.setId(application.getId());
 
-        partialUpdatedApplication.description(UPDATED_DESCRIPTION).startDate(UPDATED_START_DATE);
+        partialUpdatedApplication.description(UPDATED_DESCRIPTION).endDate(UPDATED_END_DATE);
 
         restApplicationMockMvc
             .perform(
@@ -358,11 +377,10 @@ class ApplicationResourceIT {
         assertThat(testApplication.getAlias()).isEqualTo(DEFAULT_ALIAS);
         assertThat(testApplication.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testApplication.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testApplication.getTechnology()).isEqualTo(DEFAULT_TECHNOLOGY);
         assertThat(testApplication.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testApplication.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
-        assertThat(testApplication.getStartDate()).isEqualTo(UPDATED_START_DATE);
-        assertThat(testApplication.getEndDate()).isEqualTo(DEFAULT_END_DATE);
+        assertThat(testApplication.getStartDate()).isEqualTo(DEFAULT_START_DATE);
+        assertThat(testApplication.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testApplication.getApplicationType()).isEqualTo(DEFAULT_APPLICATION_TYPE);
         assertThat(testApplication.getSoftwareType()).isEqualTo(DEFAULT_SOFTWARE_TYPE);
     }
@@ -383,7 +401,6 @@ class ApplicationResourceIT {
             .alias(UPDATED_ALIAS)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .technology(UPDATED_TECHNOLOGY)
             .comment(UPDATED_COMMENT)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .startDate(UPDATED_START_DATE)
@@ -406,7 +423,6 @@ class ApplicationResourceIT {
         assertThat(testApplication.getAlias()).isEqualTo(UPDATED_ALIAS);
         assertThat(testApplication.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testApplication.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testApplication.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
         assertThat(testApplication.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testApplication.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
         assertThat(testApplication.getStartDate()).isEqualTo(UPDATED_START_DATE);

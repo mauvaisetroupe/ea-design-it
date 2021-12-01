@@ -6,6 +6,6 @@ package com.mauvaisetroupe.eadesignit.domain.enumeration;
 public enum SoftwareType {
     ONPREMISE_COTS,
     ONPREMISE_CUSTOM,
-    CUSTOM_CLOUD,
-    SAAS,
+    CLOUD_CUSTOM,
+    CLOUD_SAAS,
 }

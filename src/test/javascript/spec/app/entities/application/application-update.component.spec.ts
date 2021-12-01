@@ -12,6 +12,8 @@ import OwnerService from '@/entities/owner/owner.service';
 
 import ApplicationCategoryService from '@/entities/application-category/application-category.service';
 
+import TechnologyService from '@/entities/technology/technology.service';
+
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
 import AlertService from '@/shared/alert/alert.service';
 
@@ -47,6 +49,8 @@ describe('Component Tests', () => {
           ownerService: () => new OwnerService(),
 
           applicationCategoryService: () => new ApplicationCategoryService(),
+
+          technologyService: () => new TechnologyService(),
 
           applicationComponentService: () => new ApplicationComponentService(),
         },

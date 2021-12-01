@@ -41,6 +41,7 @@ import DataFlowItemService from '@/entities/data-flow-item/data-flow-item.servic
 import DataFormatService from '@/entities/data-format/data-format.service';
 import ApplicationCategoryService from '@/entities/application-category/application-category.service';
 import DataFlowImportService from '@/entities/data-flow-import/data-flow-import.service';
+import TechnologyService from '@/entities/technology/technology.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 import ReportingService from '@/eadesignit/reporting.service';
@@ -112,6 +113,7 @@ new Vue({
     dataFormatService: () => new DataFormatService(),
     applicationCategoryService: () => new ApplicationCategoryService(),
     dataFlowImportService: () => new DataFlowImportService(),
+    technologyService: () => new TechnologyService(),
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService,
     alertService: () => new AlertService(),

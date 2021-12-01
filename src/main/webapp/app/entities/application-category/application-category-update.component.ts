@@ -2,12 +2,19 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import AlertService from '@/shared/alert/alert.service';
 
+import ApplicationService from '@/entities/application/application.service';
+import { IApplication } from '@/shared/model/application.model';
+
+import ApplicationComponentService from '@/entities/application-component/application-component.service';
+import { IApplicationComponent } from '@/shared/model/application-component.model';
+
 import { IApplicationCategory, ApplicationCategory } from '@/shared/model/application-category.model';
 import ApplicationCategoryService from './application-category.service';
 
 const validations: any = {
   applicationCategory: {
     name: {},
+    type: {},
     description: {},
   },
 };
@@ -20,6 +27,14 @@ export default class ApplicationCategoryUpdate extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
 
   public applicationCategory: IApplicationCategory = new ApplicationCategory();
+
+  @Inject('applicationService') private applicationService: () => ApplicationService;
+
+  public applications: IApplication[] = [];
+
+  @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
+
+  public applicationComponents: IApplicationComponent[] = [];
   public isSaving = false;
   public currentLanguage = '';
 
@@ -28,6 +43,7 @@ export default class ApplicationCategoryUpdate extends Vue {
       if (to.params.applicationCategoryId) {
         vm.retrieveApplicationCategory(to.params.applicationCategoryId);
       }
+      vm.initRelationships();
     });
   }
 
@@ -99,5 +115,16 @@ export default class ApplicationCategoryUpdate extends Vue {
     this.$router.go(-1);
   }
 
-  public initRelationships(): void {}
+  public initRelationships(): void {
+    this.applicationService()
+      .retrieve()
+      .then(res => {
+        this.applications = res.data;
+      });
+    this.applicationComponentService()
+      .retrieve()
+      .then(res => {
+        this.applicationComponents = res.data;
+      });
+  }
 }

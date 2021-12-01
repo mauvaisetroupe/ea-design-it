@@ -32,6 +32,9 @@ class ApplicationCategoryResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_TYPE = "BBBBBBBBBB";
+
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
@@ -59,7 +62,10 @@ class ApplicationCategoryResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static ApplicationCategory createEntity(EntityManager em) {
-        ApplicationCategory applicationCategory = new ApplicationCategory().name(DEFAULT_NAME).description(DEFAULT_DESCRIPTION);
+        ApplicationCategory applicationCategory = new ApplicationCategory()
+            .name(DEFAULT_NAME)
+            .type(DEFAULT_TYPE)
+            .description(DEFAULT_DESCRIPTION);
         return applicationCategory;
     }
 
@@ -70,7 +76,10 @@ class ApplicationCategoryResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static ApplicationCategory createUpdatedEntity(EntityManager em) {
-        ApplicationCategory applicationCategory = new ApplicationCategory().name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
+        ApplicationCategory applicationCategory = new ApplicationCategory()
+            .name(UPDATED_NAME)
+            .type(UPDATED_TYPE)
+            .description(UPDATED_DESCRIPTION);
         return applicationCategory;
     }
 
@@ -95,6 +104,7 @@ class ApplicationCategoryResourceIT {
         assertThat(applicationCategoryList).hasSize(databaseSizeBeforeCreate + 1);
         ApplicationCategory testApplicationCategory = applicationCategoryList.get(applicationCategoryList.size() - 1);
         assertThat(testApplicationCategory.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testApplicationCategory.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testApplicationCategory.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
 
@@ -131,6 +141,7 @@ class ApplicationCategoryResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(applicationCategory.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
 
@@ -147,6 +158,7 @@ class ApplicationCategoryResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(applicationCategory.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
     }
 
@@ -169,7 +181,7 @@ class ApplicationCategoryResourceIT {
         ApplicationCategory updatedApplicationCategory = applicationCategoryRepository.findById(applicationCategory.getId()).get();
         // Disconnect from session so that the updates on updatedApplicationCategory are not directly saved in db
         em.detach(updatedApplicationCategory);
-        updatedApplicationCategory.name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
+        updatedApplicationCategory.name(UPDATED_NAME).type(UPDATED_TYPE).description(UPDATED_DESCRIPTION);
 
         restApplicationCategoryMockMvc
             .perform(
@@ -184,6 +196,7 @@ class ApplicationCategoryResourceIT {
         assertThat(applicationCategoryList).hasSize(databaseSizeBeforeUpdate);
         ApplicationCategory testApplicationCategory = applicationCategoryList.get(applicationCategoryList.size() - 1);
         assertThat(testApplicationCategory.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testApplicationCategory.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testApplicationCategory.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 
@@ -257,7 +270,7 @@ class ApplicationCategoryResourceIT {
         ApplicationCategory partialUpdatedApplicationCategory = new ApplicationCategory();
         partialUpdatedApplicationCategory.setId(applicationCategory.getId());
 
-        partialUpdatedApplicationCategory.description(UPDATED_DESCRIPTION);
+        partialUpdatedApplicationCategory.type(UPDATED_TYPE).description(UPDATED_DESCRIPTION);
 
         restApplicationCategoryMockMvc
             .perform(
@@ -272,6 +285,7 @@ class ApplicationCategoryResourceIT {
         assertThat(applicationCategoryList).hasSize(databaseSizeBeforeUpdate);
         ApplicationCategory testApplicationCategory = applicationCategoryList.get(applicationCategoryList.size() - 1);
         assertThat(testApplicationCategory.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testApplicationCategory.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testApplicationCategory.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 
@@ -287,7 +301,7 @@ class ApplicationCategoryResourceIT {
         ApplicationCategory partialUpdatedApplicationCategory = new ApplicationCategory();
         partialUpdatedApplicationCategory.setId(applicationCategory.getId());
 
-        partialUpdatedApplicationCategory.name(UPDATED_NAME).description(UPDATED_DESCRIPTION);
+        partialUpdatedApplicationCategory.name(UPDATED_NAME).type(UPDATED_TYPE).description(UPDATED_DESCRIPTION);
 
         restApplicationCategoryMockMvc
             .perform(
@@ -302,6 +316,7 @@ class ApplicationCategoryResourceIT {
         assertThat(applicationCategoryList).hasSize(databaseSizeBeforeUpdate);
         ApplicationCategory testApplicationCategory = applicationCategoryList.get(applicationCategoryList.size() - 1);
         assertThat(testApplicationCategory.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testApplicationCategory.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testApplicationCategory.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 

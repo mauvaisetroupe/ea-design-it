@@ -3,9 +3,11 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationCategory;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
+import com.mauvaisetroupe.eadesignit.domain.Technology;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationCategoryRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.repository.TechnologyRepository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -40,13 +42,16 @@ public class ApplicationImportService {
 
     private final ApplicationRepository applicationRepository;
     private final ApplicationCategoryRepository applicationCategoryRepository;
+    private final TechnologyRepository technologyRepository;
 
     public ApplicationImportService(
         ApplicationRepository applicationRepository,
-        ApplicationCategoryRepository applicationCategoryRepository
+        ApplicationCategoryRepository applicationCategoryRepository,
+        TechnologyRepository technologyRepository
     ) {
         this.applicationRepository = applicationRepository;
         this.applicationCategoryRepository = applicationCategoryRepository;
+        this.technologyRepository = technologyRepository;
 
         this.columnsArray.add(APPLICATION_ID);
         this.columnsArray.add(APPLICATION_NAME);
@@ -118,7 +123,17 @@ public class ApplicationImportService {
         application.setComment(applicationImport.getComment());
         application.setDescription(applicationImport.getDescription());
         application.setName(applicationImport.getName());
-        application.setTechnology(applicationImport.getTechnology());
+
+        if (StringUtils.hasText(applicationImport.getTechnology())) {
+            Technology technology = technologyRepository.findByNameIgnoreCase(applicationImport.getTechnology());
+            if (technology == null) {
+                technology = new Technology();
+                technology.setName(applicationImport.getTechnology());
+                technologyRepository.save(technology);
+            }
+            application.addTechnologies(technology);
+        }
+
         if (StringUtils.hasText(applicationImport.getType())) {
             ApplicationCategory applicationCategory = applicationCategoryRepository.findByNameIgnoreCase(applicationImport.getType());
             if (applicationCategory == null) {
@@ -126,9 +141,8 @@ public class ApplicationImportService {
                 applicationCategory.setName(applicationImport.getType());
                 applicationCategoryRepository.save(applicationCategory);
             }
-            application.setCategory(applicationCategory);
+            application.addCategories(applicationCategory);
         }
-        application.setTechnology(applicationImport.getTechnology());
 
         return application;
     }

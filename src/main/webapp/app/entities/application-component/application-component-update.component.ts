@@ -10,6 +10,9 @@ import { IApplication } from '@/shared/model/application.model';
 import ApplicationCategoryService from '@/entities/application-category/application-category.service';
 import { IApplicationCategory } from '@/shared/model/application-category.model';
 
+import TechnologyService from '@/entities/technology/technology.service';
+import { ITechnology } from '@/shared/model/technology.model';
+
 import { IApplicationComponent, ApplicationComponent } from '@/shared/model/application-component.model';
 import ApplicationComponentService from './application-component.service';
 import { ApplicationType } from '@/shared/model/enumerations/application-type.model';
@@ -21,7 +24,6 @@ const validations: any = {
     description: {
       maxLength: maxLength(1000),
     },
-    technology: {},
     comment: {},
     documentationURL: {
       maxLength: maxLength(500),
@@ -52,6 +54,10 @@ export default class ApplicationComponentUpdate extends Vue {
   @Inject('applicationCategoryService') private applicationCategoryService: () => ApplicationCategoryService;
 
   public applicationCategories: IApplicationCategory[] = [];
+
+  @Inject('technologyService') private technologyService: () => TechnologyService;
+
+  public technologies: ITechnology[] = [];
   public applicationTypeValues: string[] = Object.keys(ApplicationType);
   public softwareTypeValues: string[] = Object.keys(SoftwareType);
   public isSaving = false;
@@ -74,6 +80,8 @@ export default class ApplicationComponentUpdate extends Vue {
         this.currentLanguage = this.$store.getters.currentLanguage;
       }
     );
+    this.applicationComponent.categories = [];
+    this.applicationComponent.technologies = [];
   }
 
   public save(): void {
@@ -145,5 +153,21 @@ export default class ApplicationComponentUpdate extends Vue {
       .then(res => {
         this.applicationCategories = res.data;
       });
+    this.technologyService()
+      .retrieve()
+      .then(res => {
+        this.technologies = res.data;
+      });
+  }
+
+  public getSelected(selectedVals, option): any {
+    if (selectedVals) {
+      for (let i = 0; i < selectedVals.length; i++) {
+        if (option.id === selectedVals[i].id) {
+          return selectedVals[i];
+        }
+      }
+    }
+    return option;
   }
 }

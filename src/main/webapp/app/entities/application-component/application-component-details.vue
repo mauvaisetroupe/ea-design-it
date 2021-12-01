@@ -19,12 +19,6 @@
             <span>{{ applicationComponent.description }}</span>
           </dd>
           <dt>
-            <span>Technology</span>
-          </dt>
-          <dd>
-            <span>{{ applicationComponent.technology }}</span>
-          </dd>
-          <dt>
             <span>Comment</span>
           </dt>
           <dd>
@@ -73,14 +67,24 @@
             </div>
           </dd>
           <dt>
-            <span>Category</span>
+            <span>Categories</span>
           </dt>
           <dd>
-            <div v-if="applicationComponent.category">
-              <router-link :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: applicationComponent.category.id } }">{{
-                applicationComponent.category.name
+            <span v-for="(categories, i) in applicationComponent.categories" :key="categories.id"
+              >{{ i > 0 ? ', ' : '' }}
+              <router-link :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: categories.id } }">{{
+                categories.name
               }}</router-link>
-            </div>
+            </span>
+          </dd>
+          <dt>
+            <span>Technologies</span>
+          </dt>
+          <dd>
+            <span v-for="(technologies, i) in applicationComponent.technologies" :key="technologies.id"
+              >{{ i > 0 ? ', ' : '' }}
+              <router-link :to="{ name: 'TechnologyView', params: { technologyId: technologies.id } }">{{ technologies.name }}</router-link>
+            </span>
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

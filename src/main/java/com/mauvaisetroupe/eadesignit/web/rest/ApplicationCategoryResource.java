@@ -127,6 +127,9 @@ public class ApplicationCategoryResource {
                 if (applicationCategory.getName() != null) {
                     existingApplicationCategory.setName(applicationCategory.getName());
                 }
+                if (applicationCategory.getType() != null) {
+                    existingApplicationCategory.setType(applicationCategory.getType());
+                }
                 if (applicationCategory.getDescription() != null) {
                     existingApplicationCategory.setDescription(applicationCategory.getDescription());
                 }

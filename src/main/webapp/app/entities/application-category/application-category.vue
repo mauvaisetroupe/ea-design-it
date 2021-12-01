@@ -29,6 +29,7 @@
           <tr>
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Name</span></th>
+            <th scope="row"><span>Type</span></th>
             <th scope="row"><span>Description</span></th>
             <th scope="row"></th>
           </tr>
@@ -41,6 +42,7 @@
               }}</router-link>
             </td>
             <td>{{ applicationCategory.name }}</td>
+            <td>{{ applicationCategory.type }}</td>
             <td>{{ applicationCategory.description }}</td>
             <td class="text-right">
               <div class="btn-group">

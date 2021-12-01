@@ -30,6 +30,7 @@
     <include file="config/liquibase/changelog/20211124203300_added_entity_DataFormat.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20211124203301_added_entity_ApplicationCategory.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20211124203302_added_entity_DataFlowImport.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20211201195304_added_entity_Technology.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20211104191902_added_entity_constraints_LandscapeView.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20211104191904_added_entity_constraints_FunctionalFlow.xml" relativeToChangelogFile="false"/>

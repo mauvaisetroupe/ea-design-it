@@ -1,5 +1,6 @@
 import { IOwner } from '@/shared/model/owner.model';
 import { IApplicationCategory } from '@/shared/model/application-category.model';
+import { ITechnology } from '@/shared/model/technology.model';
 import { IApplicationComponent } from '@/shared/model/application-component.model';
 
 import { ApplicationType } from '@/shared/model/enumerations/application-type.model';
@@ -9,7 +10,6 @@ export interface IApplication {
   alias?: string | null;
   name?: string | null;
   description?: string | null;
-  technology?: string | null;
   comment?: string | null;
   documentationURL?: string | null;
   startDate?: Date | null;
@@ -17,7 +17,8 @@ export interface IApplication {
   applicationType?: ApplicationType | null;
   softwareType?: SoftwareType | null;
   owner?: IOwner | null;
-  category?: IApplicationCategory | null;
+  categories?: IApplicationCategory[] | null;
+  technologies?: ITechnology[] | null;
   applicationsLists?: IApplicationComponent[] | null;
 }
 
@@ -27,7 +28,6 @@ export class Application implements IApplication {
     public alias?: string | null,
     public name?: string | null,
     public description?: string | null,
-    public technology?: string | null,
     public comment?: string | null,
     public documentationURL?: string | null,
     public startDate?: Date | null,
@@ -35,7 +35,8 @@ export class Application implements IApplication {
     public applicationType?: ApplicationType | null,
     public softwareType?: SoftwareType | null,
     public owner?: IOwner | null,
-    public category?: IApplicationCategory | null,
+    public categories?: IApplicationCategory[] | null,
+    public technologies?: ITechnology[] | null,
     public applicationsLists?: IApplicationComponent[] | null
   ) {}
 }
