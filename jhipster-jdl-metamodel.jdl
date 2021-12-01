@@ -1,56 +1,39 @@
 relationship ManyToMany {
 	LandscapeView{flows(alias)} to FunctionalFlow{landscape(diagramName) required}
+	
+    FunctionalFlow{interfaces(alias)} to FlowInterface{functionalFlows(alias)}
+	
+    DataFlow{functionalFlows(alias)} to FunctionalFlow{dataFlows}
+	
+    Application{categories(name)} to ApplicationCategory{applications(name)}
+	ApplicationComponent{categories(name)} to ApplicationCategory{components(name)}
+	
+    Application{technologies(name)} to Technology{applications(name)}
+	ApplicationComponent{technologies(name)} to Technology{components(name)}
 }
-relationship ManyToMany {
-	FunctionalFlow{interfaces(alias)} to FlowInterface{functionalFlows(alias)}
-}
+
 relationship ManyToOne {
 	FlowInterface{source(name) required} to Application
 	FlowInterface{target(name) required} to Application
 	FlowInterface{sourceComponent(name)} to ApplicationComponent
 	FlowInterface{targetComponent(name)} to ApplicationComponent
+    
+	FlowInterface{protocol(name)} to Protocol
+
+	ApplicationComponent{application(name) required} to Application{applicationsList(name)}
+	
+    LandscapeView{owner(name)} to Owner
+	FlowInterface{owner(name)} to Owner
+    Application{owner(name)} to Owner
+	
+    DataFlow{format(name)} to DataFormat
 }
 
 relationship OneToMany {
 	FlowInterface{dataFlows} to DataFlow{flowInterface(alias) required}
-}
-
-relationship ManyToOne {
-	FlowInterface{protocol(name)} to Protocol
-}
-
-relationship ManyToMany {
-	DataFlow{functionalFlows(alias)} to FunctionalFlow{dataFlows}
-}
-
-
-relationship ManyToOne {
-	ApplicationComponent{application(name) required} to Application{applicationsList(name)}
-}
-
-
-// Ownership for Lanscape && Interfaces
-// Functional Flows ownership inheried from LanscapeView
-relationship ManyToOne {
-	LandscapeView{owner(name)} to Owner
-	FlowInterface{owner(name)} to Owner
-    Application{owner(name)} to Owner
-}
-
-relationship OneToMany {
 	DataFlow{items} to DataFlowItem{dataFlow}
 }
 
-relationship ManyToMany {
-	Application{categories(name)} to ApplicationCategory{applications(name)}
-	ApplicationComponent{categories(name)} to ApplicationCategory{components(name)}
-	Application{technologies(name)} to Technology{applications(name)}
-	ApplicationComponent{technologies(name)} to Technology{components(name)}
-}
-
-relationship ManyToOne {
-	DataFlow{format(name)} to DataFormat
-}
 
 entity LandscapeView {
     viewpoint ViewPoint
@@ -148,6 +131,22 @@ entity ApplicationComponent {
 	softwareType SoftwareType    
 }
 
+entity DataFormat {
+	name String
+}
+
+entity ApplicationCategory {
+    name String
+    type String
+    description String    
+}
+
+entity Technology {
+    name String
+    type String
+    description String
+}
+
 enum ViewPoint {
   APPLICATION_LANDSCAPE
 }
@@ -175,23 +174,6 @@ enum Frequency {
     NRT
     ON_USER_ACTION
 }
-
-entity DataFormat {
-	name String
-}
-
-entity ApplicationCategory {
-    name String
-    type String
-    description String    
-}
-
-entity Technology {
-    name String
-    type String
-    description String
-}
-
 
 enum ApplicationType {
 	SOFTWARE
