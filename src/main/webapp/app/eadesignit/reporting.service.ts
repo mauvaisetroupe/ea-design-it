@@ -18,7 +18,7 @@ export default class ReportingService {
   }
 
   //     @PostMapping(value = "reporting/merge-duplicate-interface/{id}")
-  public mergeInterfaces(flowInterfaceVar: IFlowInterface, aliasToMerge: String[]): Promise<any> {
+  public mergeInterfaces(flowInterfaceVar: IFlowInterface, aliasToMerge: string[]): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios
         .post(`${baseApiUrl}/merge-duplicate-interface/${flowInterfaceVar.id}`, aliasToMerge)

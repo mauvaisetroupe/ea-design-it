@@ -51,10 +51,10 @@ export default class FlowImport extends Vue {
   public filterErrors() {
     this.dtos = [];
     this.notFilteredDtos.forEach(dto => {
-      var newdto = {};
-      var newimport = [];
+      let newdto = {};
+      const newimport = [];
       dto.flowImports.forEach(elem => {
-        var flowImport = elem as IFlowImport;
+        const flowImport = elem as IFlowImport;
         if (
           flowImport.importFunctionalFlowStatus === 'ERROR' ||
           flowImport.importInterfaceStatus === 'ERROR' ||
@@ -72,17 +72,17 @@ export default class FlowImport extends Vue {
   }
 
   public getErrors() {
-    var errors = [];
+    const errors = [];
     this.notFilteredDtos.forEach(dto => {
       dto.flowImports.forEach(elem => {
-        var flowImport = elem as IFlowImport;
+        const flowImport = elem as IFlowImport;
         if (
           flowImport.importFunctionalFlowStatus === 'ERROR' ||
           flowImport.importInterfaceStatus === 'ERROR' ||
           flowImport.importDataFlowStatus === 'ERROR'
         ) {
           flowImport.id = dto.excelFileName;
-          var errorRow = {
+          const errorRow = {
             ...flowImport,
           };
           errors.push(errorRow);
@@ -94,7 +94,7 @@ export default class FlowImport extends Vue {
   }
 
   public exportErrors() {
-    var errors = this.getErrors();
+    const errors = this.getErrors();
     let csvContent = 'data:text/csv;charset=utf-8,';
     csvContent += [Object.keys(errors[0]).join(';'), ...errors.map(row => Object.values(row).join(';').replace(/\n/gm, ''))]
       .join('\n')

@@ -43,12 +43,12 @@ export default class FlowInterface extends Vue {
           this.flowInterfaces = res.data;
           this.isFetching = false;
 
-          var mycolor = 'mycolor';
-          var previousTuple = '';
-          var mergeList = new Array();
+          let mycolor = 'mycolor';
+          let previousTuple = '';
+          let mergeList = [];
           this.flowInterfaces.forEach(element => {
             if (previousTuple !== element.source.name + element.target.name + element.protocol.id) {
-              mergeList = new Array();
+              mergeList = [];
               if (mycolor === 'mycolor') {
                 mycolor = '';
               } else {
@@ -74,7 +74,7 @@ export default class FlowInterface extends Vue {
 
   public prepareMerge(instance: IFlowInterface): void {
     this.interfaceToKeep = instance;
-    var aliasToMerge = (this.interfaceToKeep as any).mergeList as String[];
+    const aliasToMerge = (this.interfaceToKeep as any).mergeList as string[];
     console.log(aliasToMerge);
 
     this.interfacesToMerge = [];
@@ -97,7 +97,7 @@ export default class FlowInterface extends Vue {
             df.flowInterface.functionalFlows = [];
           }
           inter.functionalFlows.forEach(element => {
-            var funct = {
+            const funct = {
               alias: element.alias,
             };
             df.flowInterface.functionalFlows.push(funct);

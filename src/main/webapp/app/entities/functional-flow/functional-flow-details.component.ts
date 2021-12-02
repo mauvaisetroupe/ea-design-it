@@ -40,7 +40,7 @@ export default class FunctionalFlowDetails extends Vue {
 
   public fillCaption() {
     this.functionalFlow.interfaces.forEach(inter => {
-      var caption = {
+      const caption = {
         flowAlias: this.functionalFlow.alias,
         interfaceAlias: inter.alias,
         interfaceID: inter.id,
