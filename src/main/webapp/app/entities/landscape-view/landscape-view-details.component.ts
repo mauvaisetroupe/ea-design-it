@@ -47,8 +47,14 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   }
 
   public fillCaption() {
+    let mycolor = 'mycolor';
     this.landscapeView.flows.forEach(flow => {
       let firstLine = true;
+      if (mycolor === 'mycolor') {
+        mycolor = '';
+      } else {
+        mycolor = 'mycolor';
+      }
       flow.interfaces.forEach(inter => {
         let aliasLabel = '|';
         let aliasDescription = '|';
@@ -66,6 +72,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
           protocol: inter.protocol,
           source: inter.source,
           target: inter.target,
+          colored: mycolor,
         };
         this.captions.push(caption);
         firstLine = false;

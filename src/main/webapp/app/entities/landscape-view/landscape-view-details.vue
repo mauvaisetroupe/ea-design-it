@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-12">
       <div v-if="landscapeView">
         <h2 class="jh-entity-heading" data-cy="landscapeViewDetailsHeading">
           <span>Landscape - {{ landscapeView.diagramName }}</span>
@@ -28,6 +28,7 @@
               }}</router-link>
             </div>
           </dd>
+          <!--
           <dt>
             <span>Flows</span>
           </dt>
@@ -39,7 +40,7 @@
               }}</router-link>
             </span>
           </dd>
-        </dl>
+        --></dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
         </button>
@@ -59,7 +60,7 @@
       </div>
       <br />
       <h2>PlantUML preview</h2>
-      <div v-html="plantUMLImage"></div>
+      <div v-html="plantUMLImage" class="table-responsive"></div>
       <br />
       <table class="table">
         <thead>
@@ -74,7 +75,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="caption in captions" v-bind:key="caption.id">
+          <tr v-for="caption in captions" v-bind:key="caption.id" :class="caption.colored">
             <td>
               <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: caption.flowID } }">{{
                 caption.flowAlias
@@ -135,6 +136,9 @@ iframe {
   bottom: 0;
   width: 100%;
   height: 100%;
+}
+.mycolor {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 </style>
 
