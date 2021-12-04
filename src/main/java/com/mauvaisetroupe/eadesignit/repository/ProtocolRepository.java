@@ -9,6 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ProtocolRepository extends JpaRepository<Protocol, Long> {
-    Protocol findByNameIgnoreCase(String name);
-}
+public interface ProtocolRepository extends JpaRepository<Protocol, Long> {}

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { IApplication } from '@/shared/model/application.model';
 
 const baseApiUrl = 'api/applications';
-const basePlantUMLApiUrl = 'api/plantuml/application/get-svg';
 
 export default class ApplicationService {
   public find(id: number): Promise<IApplication> {
@@ -77,19 +76,6 @@ export default class ApplicationService {
         .patch(`${baseApiUrl}/${entity.id}`, entity)
         .then(res => {
           resolve(res.data);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  }
-
-  public getPlantUML(id: number) {
-    return new Promise<any>((resolve, reject) => {
-      axios
-        .get(`${basePlantUMLApiUrl}/${id}`)
-        .then(res => {
-          resolve(res);
         })
         .catch(err => {
           reject(err);

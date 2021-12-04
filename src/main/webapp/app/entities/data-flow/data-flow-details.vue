@@ -38,9 +38,7 @@
             <span>Documentation URL</span>
           </dt>
           <dd>
-            <span
-              ><a v-bind:href="dataFlow.documentationURL">{{ dataFlow.documentationURL }}</a></span
-            >
+            <span>{{ dataFlow.documentationURL }}</span>
           </dd>
           <dt>
             <span>Start Date</span>
@@ -80,10 +78,9 @@
           </dt>
           <dd>
             <div v-if="dataFlow.flowInterface">
-              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: dataFlow.flowInterface.id } }">
-                {{ dataFlow.flowInterface.alias }}</router-link
-              >
-              ({{ dataFlow.flowInterface.protocol ? dataFlow.flowInterface.protocol.type : 'Unknown' }})
+              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: dataFlow.flowInterface.id } }">{{
+                dataFlow.flowInterface.alias
+              }}</router-link>
             </div>
           </dd>
         </dl>
@@ -95,34 +92,6 @@
             <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
           </button>
         </router-link>
-      </div>
-
-      <div class="table-responsive" v-if="dataFlow.items && dataFlow.items.length > 0">
-        <br />
-        <br />
-        <h2>DataFlow Items :</h2>
-        <table class="table table-striped" aria-describedby="dataFlowItems">
-          <thead>
-            <tr>
-              <th scope="row"><span>ID</span></th>
-              <th scope="row"><span>Resource Name</span></th>
-              <th scope="row"><span>Resource Type</span></th>
-              <th scope="row"><span>Description</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="dataFlowItem in dataFlow.items" :key="dataFlowItem.id" data-cy="entityTable">
-              <td>
-                <router-link :to="{ name: 'DataFlowItemView', params: { dataFlowItemId: dataFlowItem.id } }">{{
-                  dataFlowItem.id
-                }}</router-link>
-              </td>
-              <td>{{ dataFlowItem.resourceName }}</td>
-              <td>{{ dataFlowItem.resourceType }}</td>
-              <td>{{ dataFlowItem.description }}</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     </div>
   </div>

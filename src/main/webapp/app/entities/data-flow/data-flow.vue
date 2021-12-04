@@ -39,7 +39,6 @@
             <th scope="row"><span>Format</span></th>
             <th scope="row"><span>Functional Flows</span></th>
             <th scope="row"><span>Flow Interface</span></th>
-            <th scope="row"><span>Interface Protocol</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -52,16 +51,8 @@
             <td>{{ dataFlow.resourceType }}</td>
             <td>{{ dataFlow.description }}</td>
             <td>{{ dataFlow.frequency }}</td>
-            <td>
-              <a v-if="dataFlow.contractURL" v-bind:href="dataFlow.contractURL">{{
-                dataFlow.contractURL ? dataFlow.contractURL.substring(0, 50) : ''
-              }}</a>
-            </td>
-            <td>
-              <a v-if="dataFlow.documentationURL" v-bind:href="dataFlow.documentationURL">{{
-                dataFlow.documentationURL ? dataFlow.documentationURL.subbstring(0, 50) : ''
-              }}</a>
-            </td>
+            <td>{{ dataFlow.contractURL }}</td>
+            <td>{{ dataFlow.documentationURL }}</td>
             <td>{{ dataFlow.startDate }}</td>
             <td>{{ dataFlow.endDate }}</td>
             <td>
@@ -76,7 +67,6 @@
                 >{{ i > 0 ? ', ' : '' }}
                 <router-link
                   class="form-control-static"
-                  :title="functionalFlows.description"
                   :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlows.id } }"
                   >{{ functionalFlows.alias }}</router-link
                 >
@@ -84,14 +74,11 @@
             </td>
             <td>
               <div v-if="dataFlow.flowInterface">
-                <router-link
-                  :title="dataFlow.flowInterface.protocol ? dataFlow.flowInterface.protocol.name : ''"
-                  :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: dataFlow.flowInterface.id } }"
-                  >{{ dataFlow.flowInterface.alias }}</router-link
-                >
+                <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: dataFlow.flowInterface.id } }">{{
+                  dataFlow.flowInterface.alias
+                }}</router-link>
               </div>
             </td>
-            <td>{{ dataFlow.flowInterface.protocol ? dataFlow.flowInterface.protocol.name : '' }}</td>
             <td class="text-right">
               <div class="btn-group">
                 <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }" custom v-slot="{ navigate }">

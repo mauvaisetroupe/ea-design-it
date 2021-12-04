@@ -16,7 +16,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "flow_interface")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class FlowInterface implements Serializable, Comparable<FlowInterface> {
+public class FlowInterface implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,27 +46,27 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface> {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "flowInterface", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "flowInterface")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "items", "functionalFlows", "flowInterface" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "items", "format", "functionalFlows", "flowInterface" }, allowSetters = true)
     private Set<DataFlow> dataFlows = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "owner", "applicationsLists" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "owner", "categories", "technologies", "applicationsLists" }, allowSetters = true)
     private Application source;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "owner", "applicationsLists" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "owner", "categories", "technologies", "applicationsLists" }, allowSetters = true)
     private Application target;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "application" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "application", "categories", "technologies" }, allowSetters = true)
     private ApplicationComponent sourceComponent;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "application" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "application", "categories", "technologies" }, allowSetters = true)
     private ApplicationComponent targetComponent;
 
     @ManyToOne
@@ -75,7 +75,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface> {
     @ManyToOne
     private Owner owner;
 
-    @ManyToMany(mappedBy = "interfaces", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "interfaces")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "interfaces", "landscapes", "dataFlows" }, allowSetters = true)
     private Set<FunctionalFlow> functionalFlows = new HashSet<>();
@@ -335,25 +335,14 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface> {
     // prettier-ignore
     @Override
     public String toString() {
-        return getAlias();
-    }
-
-    @Override
-    public int compareTo(FlowInterface arg0) {
-        int result = -1;
-        if (arg0 == null) {
-            result = -1;
-        } else if (arg0 == this) {
-            result = 0;
-        } else if (arg0.getId() != null && arg0.getId() == this.getId()) {
-            result = 0;
-        } else if (arg0.getAlias() == null) {
-            result = -1;
-        } else if (this.getAlias() == null) {
-            result = 1;
-        } else {
-            result = this.getAlias().compareTo(arg0.getAlias());
-        }
-        return result;
+        return "FlowInterface{" +
+            "id=" + getId() +
+            ", alias='" + getAlias() + "'" +
+            ", status='" + getStatus() + "'" +
+            ", documentationURL='" + getDocumentationURL() + "'" +
+            ", documentationURL2='" + getDocumentationURL2() + "'" +
+            ", startDate='" + getStartDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
+            "}";
     }
 }

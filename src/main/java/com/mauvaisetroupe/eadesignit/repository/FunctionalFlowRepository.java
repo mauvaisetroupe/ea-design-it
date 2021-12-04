@@ -3,7 +3,6 @@ package com.mauvaisetroupe.eadesignit.repository;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -28,8 +27,4 @@ public interface FunctionalFlowRepository extends JpaRepository<FunctionalFlow, 
         "select functionalFlow from FunctionalFlow functionalFlow left join fetch functionalFlow.interfaces where functionalFlow.id =:id"
     )
     Optional<FunctionalFlow> findOneWithEagerRelationships(@Param("id") Long id);
-
-    Optional<FunctionalFlow> findByAlias(String flowAlias);
-
-    Set<FunctionalFlow> findByInterfaces_alias(String interfaceName);
 }

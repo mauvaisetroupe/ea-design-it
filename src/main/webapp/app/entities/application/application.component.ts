@@ -10,33 +10,6 @@ import AlertService from '@/shared/alert/alert.service';
 @Component({
   mixins: [Vue2Filters.mixin],
 })
-@Component({
-  computed: {
-    filteredRows() {
-      return this.applications.filter(row => {
-        const name = row.name.toString().toLowerCase();
-        const app_id = row.id.toString().toLowerCase();
-        const technology = row.technology ? row.technology.toString().toLowerCase() : '';
-        const description = row.description ? row.description.toString().toLowerCase() : '';
-        const type = row.type ? row.type.toString().toLowerCase() : '';
-        const comment = row.comment ? row.comment.toString().toLowerCase() : '';
-        const owner = row.owner ? row.owner.toString().toLowerCase() : '';
-
-        const searchTerm = this.filter.toLowerCase();
-
-        return (
-          name.includes(searchTerm) ||
-          app_id.includes(searchTerm) ||
-          technology.includes(searchTerm) ||
-          description.includes(searchTerm) ||
-          type.includes(searchTerm) ||
-          comment.includes(searchTerm) ||
-          owner.includes(searchTerm)
-        );
-      });
-    },
-  },
-})
 export default class Application extends Vue {
   @Inject('applicationService') private applicationService: () => ApplicationService;
   @Inject('alertService') private alertService: () => AlertService;
@@ -46,8 +19,6 @@ export default class Application extends Vue {
   public applications: IApplication[] = [];
 
   public isFetching = false;
-
-  public filter = '';
 
   public mounted(): void {
     this.retrieveAllApplications();

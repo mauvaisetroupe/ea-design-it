@@ -23,11 +23,6 @@
     <div class="alert alert-warning" v-if="!isFetching && functionalFlows && functionalFlows.length === 0">
       <span>No functionalFlows found</span>
     </div>
-
-    <div>
-      <input type="text" placeholder="Filter by text" v-model="filter" />
-    </div>
-
     <div class="table-responsive" v-if="functionalFlows && functionalFlows.length > 0">
       <table class="table table-striped" aria-describedby="functionalFlows">
         <thead>
@@ -46,7 +41,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="functionalFlow in filteredRows" :key="functionalFlow.id" data-cy="entityTable">
+          <tr v-for="functionalFlow in functionalFlows" :key="functionalFlow.id" data-cy="entityTable">
             <td>
               <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }">{{
                 functionalFlow.id
@@ -56,34 +51,16 @@
             <td>{{ functionalFlow.description }}</td>
             <td>{{ functionalFlow.comment }}</td>
             <td>{{ functionalFlow.status }}</td>
-            <td>
-              <a :href="functionalFlow.documentationURL">{{
-                functionalFlow.documentationURL ? functionalFlow.documentationURL.substring(0, 20) : ''
-              }}</a>
-            </td>
-            <td>
-              <a :href="functionalFlow.documentationURL2">{{
-                functionalFlow.documentationURL2 ? functionalFlow.documentationURL2.substring(0, 20) : ''
-              }}</a>
-            </td>
+            <td>{{ functionalFlow.documentationURL }}</td>
+            <td>{{ functionalFlow.documentationURL2 }}</td>
             <td>{{ functionalFlow.startDate }}</td>
             <td>{{ functionalFlow.endDate }}</td>
             <td>
               <span v-for="(interfaces, i) in functionalFlow.interfaces" :key="interfaces.id"
                 >{{ i > 0 ? ', ' : '' }}
-                <router-link
-                  :title="
-                    '[ ' +
-                    interfaces.source.name +
-                    ' / ' +
-                    interfaces.target.name +
-                    ' ]' +
-                    (interfaces.protocol ? ' (' + interfaces.protocol.type + ') ' : '')
-                  "
-                  class="form-control-static"
-                  :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: interfaces.id } }"
-                  >{{ interfaces.alias }}</router-link
-                >
+                <router-link class="form-control-static" :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: interfaces.id } }">{{
+                  interfaces.alias
+                }}</router-link>
               </span>
             </td>
             <td class="text-right">

@@ -170,7 +170,7 @@ public class FunctionalFlowResource {
     @GetMapping("/functional-flows")
     public List<FunctionalFlow> getAllFunctionalFlows(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all FunctionalFlows");
-        return functionalFlowRepository.findAll();
+        return functionalFlowRepository.findAllWithEagerRelationships();
     }
 
     /**
@@ -182,7 +182,7 @@ public class FunctionalFlowResource {
     @GetMapping("/functional-flows/{id}")
     public ResponseEntity<FunctionalFlow> getFunctionalFlow(@PathVariable Long id) {
         log.debug("REST request to get FunctionalFlow : {}", id);
-        Optional<FunctionalFlow> functionalFlow = functionalFlowRepository.findById(id);
+        Optional<FunctionalFlow> functionalFlow = functionalFlowRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(functionalFlow);
     }
 

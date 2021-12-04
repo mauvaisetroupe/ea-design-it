@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="flowInterface">
-        <h2 class="jh-entity-heading" data-cy="flowInterfaceDetailsHeading"><span>Interface</span> {{ flowInterface.alias }}</h2>
+        <h2 class="jh-entity-heading" data-cy="flowInterfaceDetailsHeading"><span>FlowInterface</span> {{ flowInterface.id }}</h2>
         <dl class="row jh-entity-details">
           <dt>
             <span>Alias</span>
@@ -20,17 +20,13 @@
             <span>Documentation URL</span>
           </dt>
           <dd>
-            <span
-              ><a v-bind:href="flowInterface.documentationURL">{{ flowInterface.documentationURL }}</a></span
-            >
+            <span>{{ flowInterface.documentationURL }}</span>
           </dd>
           <dt>
             <span>Documentation URL 2</span>
           </dt>
           <dd>
-            <span
-              ><a v-bind:href="flowInterface.documentationURL2">{{ flowInterface.documentationURL2 }}</a></span
-            >
+            <span>{{ flowInterface.documentationURL2 }}</span>
           </dd>
           <dt>
             <span>Start Date</span>
@@ -120,61 +116,6 @@
             <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
           </button>
         </router-link>
-
-        <div class="table-responsive" v-if="flowInterface.dataFlows && flowInterface.dataFlows.length > 0">
-          <br />
-          <br />
-          <h3>Data Flows declared for interface {{ flowInterface.alias }}</h3>
-          <table class="table table-striped" aria-describedby="dataFlows">
-            <thead>
-              <tr>
-                <th scope="row"><span>ID</span></th>
-                <th scope="row"><span>Resource Name</span></th>
-                <th scope="row"><span>Resource Type</span></th>
-                <th scope="row"><span>Description</span></th>
-
-                <th scope="row"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="dataFlow in flowInterface.dataFlows" :key="dataFlow.id" data-cy="entityTable">
-                <td>
-                  <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }">{{ dataFlow.id }}</router-link>
-                </td>
-                <td>{{ dataFlow.resourceName }}</td>
-                <td>{{ dataFlow.resourceType }}</td>
-                <td>{{ dataFlow.description }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="table-responsive" v-if="flowInterface.functionalFlows && flowInterface.functionalFlows.length > 0">
-          <br />
-          <br />
-          <h3>Functional Flows using interface {{ flowInterface.alias }}</h3>
-          <table class="table table-striped" aria-describedby="functionalFlows">
-            <thead>
-              <tr>
-                <th scope="row"><span>ID</span></th>
-                <th scope="row"><span>Alias</span></th>
-                <th scope="row"><span>Description</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="functionalFlow in flowInterface.functionalFlows" :key="functionalFlow.id" data-cy="entityTable">
-                <td>
-                  <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }">{{
-                    functionalFlow.id
-                  }}</router-link>
-                </td>
-                <td>{{ functionalFlow.alias }}</td>
-                <td>{{ functionalFlow.description }}</td>
-                <td>{{ functionalFlow.comment }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   </div>

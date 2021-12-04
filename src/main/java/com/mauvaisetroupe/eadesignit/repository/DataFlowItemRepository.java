@@ -9,6 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DataFlowItemRepository extends JpaRepository<DataFlowItem, Long> {
-    DataFlowItem findByResourceNameIgnoreCase(String dataResourceName);
-}
+public interface DataFlowItemRepository extends JpaRepository<DataFlowItem, Long> {}

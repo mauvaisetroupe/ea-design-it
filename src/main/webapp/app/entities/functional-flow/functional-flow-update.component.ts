@@ -32,7 +32,9 @@ const validations: any = {
     },
     startDate: {},
     endDate: {},
-    landscapes: {},
+    landscapes: {
+      required,
+    },
   },
 };
 

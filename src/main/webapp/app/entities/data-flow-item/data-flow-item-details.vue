@@ -26,17 +26,13 @@
             <span>Contract URL</span>
           </dt>
           <dd>
-            <span
-              ><a v-bind:href="dataFlowItem.contractURL">{{ dataFlowItem.contractURL }}</a></span
-            >
+            <span>{{ dataFlowItem.contractURL }}</span>
           </dd>
           <dt>
             <span>Documentation URL</span>
           </dt>
           <dd>
-            <span
-              ><a v-bind:href="dataFlowItem.documentationURL">{{ dataFlowItem.documentationURL }}</a></span
-            >
+            <span>{{ dataFlowItem.documentationURL }}</span>
           </dd>
           <dt>
             <span>Start Date</span>
@@ -55,10 +51,9 @@
           </dt>
           <dd>
             <div v-if="dataFlowItem.dataFlow">
-              <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlowItem.dataFlow.id } }">
-                {{ dataFlowItem.dataFlow.id }}
-              </router-link>
-              ({{ dataFlowItem.dataFlow.flowInterface.protocol ? dataFlowItem.dataFlow.flowInterface.protocol.type : 'Unknown' }})
+              <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlowItem.dataFlow.id } }">{{
+                dataFlowItem.dataFlow.id
+              }}</router-link>
             </div>
           </dd>
         </dl>

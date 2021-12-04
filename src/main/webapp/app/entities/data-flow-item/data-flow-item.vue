@@ -36,8 +36,6 @@
             <th scope="row"><span>Start Date</span></th>
             <th scope="row"><span>End Date</span></th>
             <th scope="row"><span>Data Flow</span></th>
-            <th scope="row"><span>Flow Interface</span></th>
-            <th scope="row"><span>Interface Protocol</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -51,14 +49,8 @@
             <td>{{ dataFlowItem.resourceName }}</td>
             <td>{{ dataFlowItem.resourceType }}</td>
             <td>{{ dataFlowItem.description }}</td>
-            <td>
-              <a v-bind:href="dataFlowItem.contractURL">{{ dataFlowItem.contractURL ? dataFlowItem.contractURL.substring(0, 20) : '' }}</a>
-            </td>
-            <td>
-              <a v-bind:href="dataFlowItem.documentationURL">{{
-                dataFlowItem.documentationURL ? dataFlowItem.documentationURL.substring(0, 20) : ''
-              }}</a>
-            </td>
+            <td>{{ dataFlowItem.contractURL }}</td>
+            <td>{{ dataFlowItem.documentationURL }}</td>
             <td>{{ dataFlowItem.startDate }}</td>
             <td>{{ dataFlowItem.endDate }}</td>
             <td>
@@ -68,18 +60,6 @@
                 }}</router-link>
               </div>
             </td>
-
-            <td>
-              <div v-if="dataFlowItem.dataFlow.flowInterface">
-                <router-link
-                  :title="dataFlowItem.dataFlow.flowInterface.protocol ? dataFlowItem.dataFlow.flowInterface.protocol.name : ''"
-                  :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: dataFlowItem.dataFlow.flowInterface.id } }"
-                  >{{ dataFlowItem.dataFlow.flowInterface.alias }}</router-link
-                >
-              </div>
-            </td>
-            <td>{{ dataFlowItem.dataFlow.flowInterface.protocol ? dataFlowItem.dataFlow.flowInterface.protocol.name : '' }}</td>
-
             <td class="text-right">
               <div class="btn-group">
                 <router-link :to="{ name: 'DataFlowItemView', params: { dataFlowItemId: dataFlowItem.id } }" custom v-slot="{ navigate }">

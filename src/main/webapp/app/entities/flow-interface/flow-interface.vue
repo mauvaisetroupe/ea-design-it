@@ -23,11 +23,6 @@
     <div class="alert alert-warning" v-if="!isFetching && flowInterfaces && flowInterfaces.length === 0">
       <span>No flowInterfaces found</span>
     </div>
-
-    <div>
-      <input type="text" placeholder="Filter by text" v-model="filter" />
-    </div>
-
     <div class="table-responsive" v-if="flowInterfaces && flowInterfaces.length > 0">
       <table class="table table-striped" aria-describedby="flowInterfaces">
         <thead>
@@ -49,7 +44,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="flowInterface in filteredRows" :key="flowInterface.id" data-cy="entityTable">
+          <tr v-for="flowInterface in flowInterfaces" :key="flowInterface.id" data-cy="entityTable">
             <td>
               <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: flowInterface.id } }">{{
                 flowInterface.id
@@ -57,12 +52,8 @@
             </td>
             <td>{{ flowInterface.alias }}</td>
             <td>{{ flowInterface.status }}</td>
-            <td>
-              <a v-bind:href="flowInterface.documentationURL">{{ flowInterface.documentationURL }}</a>
-            </td>
-            <td>
-              <a v-bind:href="flowInterface.documentationURL2">{{ flowInterface.documentationURL2 }}</a>
-            </td>
+            <td>{{ flowInterface.documentationURL }}</td>
+            <td>{{ flowInterface.documentationURL2 }}</td>
             <td>{{ flowInterface.startDate }}</td>
             <td>{{ flowInterface.endDate }}</td>
             <td>

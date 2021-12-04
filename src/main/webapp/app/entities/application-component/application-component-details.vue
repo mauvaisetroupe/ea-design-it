@@ -28,9 +28,7 @@
             <span>Documentation URL</span>
           </dt>
           <dd>
-            <span
-              ><a v-bind:href="applicationComponent.documentationURL">{{ applicationComponent.documentationURL }}</a></span
-            >
+            <span>{{ applicationComponent.documentationURL }}</span>
           </dd>
           <dt>
             <span>Start Date</span>

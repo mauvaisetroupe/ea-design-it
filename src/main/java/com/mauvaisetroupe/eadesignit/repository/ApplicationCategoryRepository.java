@@ -9,6 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ApplicationCategoryRepository extends JpaRepository<ApplicationCategory, Long> {
-    ApplicationCategory findByNameIgnoreCase(String type);
-}
+public interface ApplicationCategoryRepository extends JpaRepository<ApplicationCategory, Long> {}

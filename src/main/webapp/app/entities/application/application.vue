@@ -44,7 +44,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="application in filteredRows" :key="application.id" data-cy="entityTable">
+          <tr v-for="application in applications" :key="application.id" data-cy="entityTable">
             <td>
               <router-link :to="{ name: 'ApplicationView', params: { applicationId: application.id } }">{{ application.id }}</router-link>
             </td>
@@ -52,9 +52,7 @@
             <td>{{ application.name }}</td>
             <td>{{ application.description }}</td>
             <td>{{ application.comment }}</td>
-            <td>
-              <a v-bind:href="application.documentationURL"> {{ application.documentationURL }}</a>
-            </td>
+            <td>{{ application.documentationURL }}</td>
             <td>{{ application.startDate }}</td>
             <td>{{ application.endDate }}</td>
             <td>{{ application.applicationType }}</td>

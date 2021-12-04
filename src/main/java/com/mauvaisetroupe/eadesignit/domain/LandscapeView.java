@@ -3,9 +3,8 @@ package com.mauvaisetroupe.eadesignit.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ViewPoint;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -44,19 +43,18 @@ public class LandscapeView implements Serializable {
     @Column(name = "compressed_draw_svg")
     private String compressedDrawSVG;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Owner owner;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @OrderBy
+    @ManyToMany
     @JoinTable(
         name = "rel_landscape_view__flows",
         joinColumns = @JoinColumn(name = "landscape_view_id"),
         inverseJoinColumns = @JoinColumn(name = "flows_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "landscapes", "dataFlows" }, allowSetters = true)
-    private SortedSet<FunctionalFlow> flows = new TreeSet<>();
+    @JsonIgnoreProperties(value = { "interfaces", "landscapes", "dataFlows" }, allowSetters = true)
+    private Set<FunctionalFlow> flows = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -142,11 +140,11 @@ public class LandscapeView implements Serializable {
         return this.flows;
     }
 
-    public void setFlows(SortedSet<FunctionalFlow> functionalFlows) {
+    public void setFlows(Set<FunctionalFlow> functionalFlows) {
         this.flows = functionalFlows;
     }
 
-    public LandscapeView flows(SortedSet<FunctionalFlow> functionalFlows) {
+    public LandscapeView flows(Set<FunctionalFlow> functionalFlows) {
         this.setFlows(functionalFlows);
         return this;
     }

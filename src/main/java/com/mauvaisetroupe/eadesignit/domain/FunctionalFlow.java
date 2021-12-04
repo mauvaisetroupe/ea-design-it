@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -17,7 +16,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "functional_flow")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> {
+public class FunctionalFlow implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,16 +53,18 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @OrderBy
+    @ManyToMany
     @JoinTable(
         name = "rel_functional_flow__interfaces",
         joinColumns = @JoinColumn(name = "functional_flow_id"),
         inverseJoinColumns = @JoinColumn(name = "interfaces_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "owner", "functionalFlows" }, allowSetters = true)
-    private Set<FlowInterface> interfaces = new TreeSet<>();
+    @JsonIgnoreProperties(
+        value = { "dataFlows", "source", "target", "sourceComponent", "targetComponent", "protocol", "owner", "functionalFlows" },
+        allowSetters = true
+    )
+    private Set<FlowInterface> interfaces = new HashSet<>();
 
     @ManyToMany(mappedBy = "flows")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -72,7 +73,7 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
 
     @ManyToMany(mappedBy = "functionalFlows")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "events", "functionalFlows", "flowInterface" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "items", "format", "functionalFlows", "flowInterface" }, allowSetters = true)
     private Set<DataFlow> dataFlows = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -304,26 +305,15 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     @Override
     public String toString() {
         return "FunctionalFlow{" +
+            "id=" + getId() +
             ", alias='" + getAlias() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", comment='" + getComment() + "'" +
+            ", status='" + getStatus() + "'" +
+            ", documentationURL='" + getDocumentationURL() + "'" +
+            ", documentationURL2='" + getDocumentationURL2() + "'" +
+            ", startDate='" + getStartDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
             "}";
-    }
-
-    @Override
-    public int compareTo(FunctionalFlow arg0) {
-        int result = -1;
-        if (arg0 == null) {
-            result = -1;
-        } else if (arg0 == this) {
-            result = 0;
-        } else if (arg0.getId() != null && arg0.getId() == this.getId()) {
-            result = 0;
-        } else if (arg0.getAlias() == null) {
-            result = -1;
-        } else if (this.getAlias() == null) {
-            result = 1;
-        } else {
-            result = this.getAlias().compareTo(arg0.getAlias());
-        }
-        return result;
     }
 }

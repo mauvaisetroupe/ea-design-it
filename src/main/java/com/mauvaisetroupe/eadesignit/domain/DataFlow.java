@@ -68,7 +68,7 @@ public class DataFlow implements Serializable {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "dataFlow", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "dataFlow")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "dataFlow" }, allowSetters = true)
     private Set<DataFlowItem> items = new HashSet<>();
@@ -89,7 +89,7 @@ public class DataFlow implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "dataFlows", "source", "target", "sourceComponent", "targetComponent", "owner", "functionalFlows" },
+        value = { "dataFlows", "source", "target", "sourceComponent", "targetComponent", "protocol", "owner", "functionalFlows" },
         allowSetters = true
     )
     private FlowInterface flowInterface;

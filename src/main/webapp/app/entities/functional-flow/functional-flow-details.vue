@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="functionalFlow">
-        <h2 class="jh-entity-heading" data-cy="functionalFlowDetailsHeading"><span>Functional Flow</span> {{ functionalFlow.alias }}</h2>
+        <h2 class="jh-entity-heading" data-cy="functionalFlowDetailsHeading"><span>FunctionalFlow</span> {{ functionalFlow.id }}</h2>
         <dl class="row jh-entity-details">
           <dt>
             <span>Alias</span>
@@ -32,17 +32,13 @@
             <span>Documentation URL</span>
           </dt>
           <dd>
-            <span
-              ><a v-bind:href="functionalFlow.documentationURL">{{ functionalFlow.documentationURL }}</a></span
-            >
+            <span>{{ functionalFlow.documentationURL }}</span>
           </dd>
           <dt>
             <span>Documentation URL 2</span>
           </dt>
           <dd>
-            <span
-              ><a v-bind:href="functionalFlow.documentationURL2">{{ functionalFlow.documentationURL2 }}</a></span
-            >
+            <span>{{ functionalFlow.documentationURL2 }}</span>
           </dd>
           <dt>
             <span>Start Date</span>
@@ -82,55 +78,6 @@
           </button>
         </router-link>
       </div>
-
-      <br />
-
-      <h2>PlantUML preview</h2>
-      <div v-html="plantUMLImage"></div>
-      <br />
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="row"><span>Interface</span></th>
-            <th scope="row"><span>Source</span></th>
-            <th scope="row"><span>Target</span></th>
-            <th scope="row"><span>Protocol</span></th>
-            <th scope="row"><span>Data Flows</span></th>
-            <th scope="row"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="caption in captions" v-bind:key="caption.id">
-            <td>
-              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: caption.interfaceID } }">{{
-                caption.interfaceAlias
-              }}</router-link>
-            </td>
-            <td>
-              <router-link :to="{ name: 'ApplicationView', params: { applicationId: caption.source.id } }">
-                {{ caption.source.name }}
-              </router-link>
-            </td>
-            <td>
-              <router-link :to="{ name: 'ApplicationView', params: { applicationId: caption.target.id } }">
-                {{ caption.target.name }}
-              </router-link>
-            </td>
-            <td>
-              <router-link v-if="caption.protocol" :to="{ name: 'ProtocolView', params: { protocolId: caption.protocol.id } }">
-                {{ caption.protocol.name }}
-              </router-link>
-            </td>
-            <td>
-              <span v-for="dataflow in caption.dataFlows" :key="dataflow.id">
-                <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataflow.id } }">
-                  {{ dataflow.id }}
-                </router-link>
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </template>

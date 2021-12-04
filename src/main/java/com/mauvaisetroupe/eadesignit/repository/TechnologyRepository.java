@@ -9,6 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface TechnologyRepository extends JpaRepository<Technology, Long> {
-    Technology findByNameIgnoreCase(String technology);
-}
+public interface TechnologyRepository extends JpaRepository<Technology, Long> {}

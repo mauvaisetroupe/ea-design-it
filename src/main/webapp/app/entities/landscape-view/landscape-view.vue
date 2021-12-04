@@ -28,7 +28,10 @@
         <thead>
           <tr>
             <th scope="row"><span>ID</span></th>
+            <th scope="row"><span>Viewpoint</span></th>
             <th scope="row"><span>Diagram Name</span></th>
+            <th scope="row"><span>Compressed Draw XML</span></th>
+            <th scope="row"><span>Compressed Draw SVG</span></th>
             <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>Flows</span></th>
             <th scope="row"></th>
@@ -41,7 +44,10 @@
                 landscapeView.id
               }}</router-link>
             </td>
+            <td>{{ landscapeView.viewpoint }}</td>
             <td>{{ landscapeView.diagramName }}</td>
+            <td>{{ landscapeView.compressedDrawXML }}</td>
+            <td>{{ landscapeView.compressedDrawSVG }}</td>
             <td>
               <div v-if="landscapeView.owner">
                 <router-link :to="{ name: 'OwnerView', params: { ownerId: landscapeView.owner.id } }">{{
@@ -52,12 +58,9 @@
             <td>
               <span v-for="(flows, i) in landscapeView.flows" :key="flows.id"
                 >{{ i > 0 ? ', ' : '' }}
-                <router-link
-                  :title="flows.description"
-                  class="form-control-static"
-                  :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flows.id } }"
-                  >{{ flows.alias }}</router-link
-                >
+                <router-link class="form-control-static" :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flows.id } }">{{
+                  flows.alias
+                }}</router-link>
               </span>
             </td>
             <td class="text-right">

@@ -21,11 +21,6 @@
               :class="{ valid: !$v.flowInterface.alias.$invalid, invalid: $v.flowInterface.alias.$invalid }"
               v-model="$v.flowInterface.alias.$model"
             />
-            <div v-if="$v.flowInterface.alias.$anyDirty && $v.flowInterface.alias.$invalid">
-              <small class="form-text text-danger" v-if="!$v.flowInterface.alias.pattern">
-                This field should follow pattern for "Alias".
-              </small>
-            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="flow-interface-status">Status</label>

@@ -29,7 +29,4 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
         "select application from Application application left join fetch application.categories left join fetch application.technologies where application.id =:id"
     )
     Optional<Application> findOneWithEagerRelationships(@Param("id") Long id);
-
-    Application findByNameIgnoreCase(String name);
-    Optional<Application> findByAlias(String alias);
 }

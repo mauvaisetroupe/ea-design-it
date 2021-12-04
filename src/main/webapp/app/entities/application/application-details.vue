@@ -32,9 +32,7 @@
             <span>Documentation URL</span>
           </dt>
           <dd>
-            <span
-              ><a v-bind:href="application.documentationURL">{{ application.documentationURL }}</a></span
-            >
+            <span>{{ application.documentationURL }}</span>
           </dd>
           <dt>
             <span>Start Date</span>
@@ -103,57 +101,6 @@
           </button>
         </router-link>
       </div>
-      <br />
-      <h2>PlantUML preview</h2>
-      <div v-html="plantUMLImage"></div>
-      <br />
-      <h3>Interfaces for {{ application.name }}</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="row"><span>Flow</span></th>
-            <th scope="row"><span>Interface</span></th>
-            <th scope="row"><span>Source</span></th>
-            <th scope="row"><span>Target</span></th>
-            <th scope="row"><span>Protocol</span></th>
-            <th scope="row"><span>Data Flows</span></th>
-            <th scope="row"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="caption in interfaces" v-bind:key="caption.id">
-            <td>
-              <span v-for="(flows, i) in caption.functionalFlows" :key="flows.id"
-                >{{ i > 0 ? ', ' : '' }}
-                <router-link :title="flows.description" :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flows.id } }">{{
-                  flows.alias
-                }}</router-link>
-              </span>
-            </td>
-            <td>
-              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: caption.id } }">{{ caption.alias }}</router-link>
-            </td>
-            <td>
-              <a v-on:click="retrieveApplication(caption.source.id)">{{ caption.source.name }}</a>
-            </td>
-            <td>
-              <a v-on:click="retrieveApplication(caption.target.id)">{{ caption.target.name }}</a>
-            </td>
-            <td>
-              <router-link v-if="caption.protocol" :to="{ name: 'ProtocolView', params: { protocolId: caption.protocol.id } }">
-                {{ caption.protocol.name }}
-              </router-link>
-            </td>
-            <td>
-              <span v-for="dataflow in caption.dataFlows" :key="dataflow.id">
-                <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataflow.id } }">
-                  {{ dataflow.id }}
-                </router-link>
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </template>

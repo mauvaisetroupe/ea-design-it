@@ -3,7 +3,6 @@ package com.mauvaisetroupe.eadesignit.repository;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -26,10 +25,4 @@ public interface DataFlowRepository extends JpaRepository<DataFlow, Long> {
 
     @Query("select dataFlow from DataFlow dataFlow left join fetch dataFlow.functionalFlows where dataFlow.id =:id")
     Optional<DataFlow> findOneWithEagerRelationships(@Param("id") Long id);
-
-    DataFlow findByFlowInterface_AliasAndFunctionalFlows_Alias(String flowAlias, String idFlowFromExcel);
-
-    Set<DataFlow> findByResourceNameIgnoreCase(String dataResourceName);
-
-    Set<DataFlow> findByFlowInterface_Alias(String idFlowFromExcel);
 }

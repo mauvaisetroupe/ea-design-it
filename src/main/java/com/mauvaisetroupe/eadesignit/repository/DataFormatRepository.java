@@ -9,6 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DataFormatRepository extends JpaRepository<DataFormat, Long> {
-    DataFormat findByNameIgnoreCase(String format);
-}
+public interface DataFormatRepository extends JpaRepository<DataFormat, Long> {}
