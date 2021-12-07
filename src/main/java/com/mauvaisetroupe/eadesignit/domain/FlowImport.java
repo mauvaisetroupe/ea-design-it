@@ -64,7 +64,7 @@ public class FlowImport implements Serializable {
     @Column(name = "flow_status")
     private String flowStatus;
 
-    @Column(name = "comment")
+    @Column(name = "jhi_comment")
     private String comment;
 
     @Column(name = "document_name")

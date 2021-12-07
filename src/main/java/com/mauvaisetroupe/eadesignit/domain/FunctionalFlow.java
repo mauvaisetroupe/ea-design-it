@@ -14,7 +14,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * A FunctionalFlow.
  */
 @Entity
-@Table(name = "functional_flow")
+@Table(name = "flow")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class FunctionalFlow implements Serializable {
 
@@ -34,7 +34,7 @@ public class FunctionalFlow implements Serializable {
     private String description;
 
     @Size(max = 1000)
-    @Column(name = "comment", length = 1000)
+    @Column(name = "jhi_comment", length = 1000)
     private String comment;
 
     @Column(name = "status")
@@ -56,8 +56,8 @@ public class FunctionalFlow implements Serializable {
 
     @ManyToMany
     @JoinTable(
-        name = "rel_functional_flow__interfaces",
-        joinColumns = @JoinColumn(name = "functional_flow_id"),
+        name = "rel_flow__interfaces",
+        joinColumns = @JoinColumn(name = "flow_id"),
         inverseJoinColumns = @JoinColumn(name = "interfaces_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

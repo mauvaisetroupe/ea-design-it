@@ -90,7 +90,7 @@
       "ownerSide": false
     }
   ],
-  "entityTableName": "flow_interface",
+  "entityTableName": "interface",
   "dto": "no",
   "pagination": "no",
   "service": "no",

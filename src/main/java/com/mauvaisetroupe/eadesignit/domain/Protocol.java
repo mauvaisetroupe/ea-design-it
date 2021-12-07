@@ -27,14 +27,14 @@ public class Protocol implements Serializable {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "type")
+    @Column(name = "jhi_type")
     private ProtocolType type;
 
     @Size(max = 1000)
     @Column(name = "description", length = 1000)
     private String description;
 
-    @Column(name = "scope")
+    @Column(name = "jhi_scope")
     private String scope;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

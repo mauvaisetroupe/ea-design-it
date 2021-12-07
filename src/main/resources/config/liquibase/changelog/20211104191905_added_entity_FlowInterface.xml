@@ -10,7 +10,7 @@
         Added the entity FlowInterface.
     -->
     <changeSet id="20211104191905-1" author="jhipster">
-        <createTable tableName="flow_interface">
+        <createTable tableName="interface">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>

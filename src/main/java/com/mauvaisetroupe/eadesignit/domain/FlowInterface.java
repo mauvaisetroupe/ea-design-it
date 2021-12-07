@@ -14,7 +14,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * A FlowInterface.
  */
 @Entity
-@Table(name = "flow_interface")
+@Table(name = "interface")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class FlowInterface implements Serializable {
 

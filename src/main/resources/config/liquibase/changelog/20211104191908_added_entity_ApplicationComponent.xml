@@ -10,7 +10,7 @@
         Added the entity ApplicationComponent.
     -->
     <changeSet id="20211104191908-1" author="jhipster">
-        <createTable tableName="application_component">
+        <createTable tableName="component">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -20,7 +20,7 @@
             <column name="description" type="varchar(1000)">
                 <constraints nullable="true" />
             </column>
-            <column name="comment" type="varchar(500)">
+            <column name="jhi_comment" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="documentation_url" type="varchar(500)">
@@ -47,27 +47,27 @@
 
     <changeSet id="20211104191908-1-relations" author="jhipster">
 
-        <createTable tableName="rel_application_component__categories">
+        <createTable tableName="rel_component__categories">
             <column name="categories_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="application_component_id" type="bigint">
+            <column name="component_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="application_component_id, categories_id" tableName="rel_application_component__categories"/>
+        <addPrimaryKey columnNames="component_id, categories_id" tableName="rel_component__categories"/>
 
-        <createTable tableName="rel_application_component__technologies">
+        <createTable tableName="rel_component__technologies">
             <column name="technologies_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="application_component_id" type="bigint">
+            <column name="component_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="application_component_id, technologies_id" tableName="rel_application_component__technologies"/>
+        <addPrimaryKey columnNames="component_id, technologies_id" tableName="rel_component__technologies"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

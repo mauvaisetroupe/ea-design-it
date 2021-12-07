@@ -74,7 +74,7 @@
       "otherEntityField": "alias"
     }
   ],
-  "entityTableName": "data_flow",
+  "entityTableName": "dataflow",
   "dto": "no",
   "pagination": "no",
   "service": "no",

@@ -8,16 +8,16 @@
     -->
     <changeSet id="20211104191904-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="functional_flow_id"
-                                 baseTableName="rel_functional_flow__interfaces"
-                                 constraintName="fk_rel_functional_flow__interfaces__functional_flow_id"
+        <addForeignKeyConstraint baseColumnNames="flow_id"
+                                 baseTableName="rel_flow__interfaces"
+                                 constraintName="fk_rel_flow__interfaces__flow_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="functional_flow"/>
+                                 referencedTableName="flow"/>
 
         <addForeignKeyConstraint baseColumnNames="interfaces_id"
-                                 baseTableName="rel_functional_flow__interfaces"
-                                 constraintName="fk_rel_functional_flow__interfaces__interfaces_id"
+                                 baseTableName="rel_flow__interfaces"
+                                 constraintName="fk_rel_flow__interfaces__interfaces_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="flow_interface"/>
+                                 referencedTableName="interface"/>
     </changeSet>
 </databaseChangeLog>

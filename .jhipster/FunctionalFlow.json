@@ -68,7 +68,7 @@
       "ownerSide": false
     }
   ],
-  "entityTableName": "functional_flow",
+  "entityTableName": "flow",
   "dto": "no",
   "pagination": "no",
   "service": "no",

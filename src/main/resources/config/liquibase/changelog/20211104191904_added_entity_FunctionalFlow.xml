@@ -10,7 +10,7 @@
         Added the entity FunctionalFlow.
     -->
     <changeSet id="20211104191904-1" author="jhipster">
-        <createTable tableName="functional_flow">
+        <createTable tableName="flow">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -20,7 +20,7 @@
             <column name="description" type="varchar(1500)">
                 <constraints nullable="true" />
             </column>
-            <column name="comment" type="varchar(1000)">
+            <column name="jhi_comment" type="varchar(1000)">
                 <constraints nullable="true" />
             </column>
             <column name="status" type="varchar(255)">
@@ -44,16 +44,16 @@
 
     <changeSet id="20211104191904-1-relations" author="jhipster">
 
-        <createTable tableName="rel_functional_flow__interfaces">
+        <createTable tableName="rel_flow__interfaces">
             <column name="interfaces_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="functional_flow_id" type="bigint">
+            <column name="flow_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="functional_flow_id, interfaces_id" tableName="rel_functional_flow__interfaces"/>
+        <addPrimaryKey columnNames="flow_id, interfaces_id" tableName="rel_flow__interfaces"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
