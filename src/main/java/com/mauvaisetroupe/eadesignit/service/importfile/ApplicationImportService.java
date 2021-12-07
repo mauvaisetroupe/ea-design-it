@@ -105,12 +105,13 @@ public class ApplicationImportService {
     }
 
     public Application mapImportToApplication(ApplicationImport applicationImport) {
+        // Check if alias not used for another application
         Optional<Application> optional = applicationRepository.findByAlias(applicationImport.getIdFromExcel());
         final Application application;
         if (optional.isPresent()) {
             application = optional.get();
             Assert.isTrue(
-                application.getName().equals(applicationImport.getName()),
+                application.getName().toLowerCase().equals(applicationImport.getName().toLowerCase()),
                 "Cannot change application name (" +
                 application.getName() +
                 "/" +
@@ -120,6 +121,21 @@ public class ApplicationImportService {
         } else {
             application = new Application();
         }
+
+        Application appliWithSameName = applicationRepository.findByNameIgnoreCase(applicationImport.getName());
+        if (appliWithSameName != null) {
+            Assert.isTrue(
+                appliWithSameName.getAlias().toLowerCase().equals(applicationImport.getIdFromExcel()),
+                "Cannot have same application name for two aliases '" +
+                appliWithSameName.getName() +
+                "' : (" +
+                appliWithSameName.getAlias() +
+                "/" +
+                applicationImport.getIdFromExcel() +
+                "), please  correrct your Excel file"
+            );
+        }
+
         application.setComment(applicationImport.getComment());
         application.setDescription(applicationImport.getDescription());
         application.setName(applicationImport.getName());
