@@ -50,7 +50,7 @@
             />
             <div v-if="$v.application.description.$anyDirty && $v.application.description.$invalid">
               <small class="form-text text-danger" v-if="!$v.application.description.maxLength">
-                This field cannot be longer than 1000 characters.
+                This field cannot be longer than 1500 characters.
               </small>
             </div>
           </div>
@@ -67,7 +67,7 @@
             />
             <div v-if="$v.application.comment.$anyDirty && $v.application.comment.$invalid">
               <small class="form-text text-danger" v-if="!$v.application.comment.maxLength">
-                This field cannot be longer than 500 characters.
+                This field cannot be longer than 1000 characters.
               </small>
             </div>
           </div>

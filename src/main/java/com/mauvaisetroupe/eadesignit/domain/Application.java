@@ -35,12 +35,12 @@ public class Application implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Size(max = 1000)
-    @Column(name = "description", length = 1000)
+    @Size(max = 1500)
+    @Column(name = "description", length = 1500)
     private String description;
 
-    @Size(max = 500)
-    @Column(name = "comment", length = 500)
+    @Size(max = 1000)
+    @Column(name = "comment", length = 1000)
     private String comment;
 
     @Size(max = 500)

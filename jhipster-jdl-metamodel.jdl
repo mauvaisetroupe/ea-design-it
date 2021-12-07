@@ -48,8 +48,8 @@ entity Owner {
 
 entity FunctionalFlow {
     alias String
-    description String maxlength(1000)
-    comment String maxlength(500)  
+    description String maxlength(1500)
+    comment String maxlength(1000)  
     status String
     documentationURL String maxlength(500)
     documentationURL2 String maxlength(500)
@@ -69,8 +69,8 @@ entity FlowInterface {
 entity Application {
 	alias String pattern(/^HPX\.CMP\.[0-9]{8}$/)
 	name String,
-    description String maxlength(1000)
-    comment String maxlength(500)  
+    description String maxlength(1500)
+    comment String maxlength(1000)  
     documentationURL String maxlength(500)
     startDate LocalDate
     endDate LocalDate
