@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -30,7 +31,8 @@ public class ApplicationCategory implements Serializable {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "description")
+    @Size(max = 250)
+    @Column(name = "description", length = 250)
     private String description;
 
     @ManyToMany(mappedBy = "categories")

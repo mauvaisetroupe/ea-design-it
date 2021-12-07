@@ -8,6 +8,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +48,7 @@ public class ApplicationCategoryResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/application-categories")
-    public ResponseEntity<ApplicationCategory> createApplicationCategory(@RequestBody ApplicationCategory applicationCategory)
+    public ResponseEntity<ApplicationCategory> createApplicationCategory(@Valid @RequestBody ApplicationCategory applicationCategory)
         throws URISyntaxException {
         log.debug("REST request to save ApplicationCategory : {}", applicationCategory);
         if (applicationCategory.getId() != null) {
@@ -72,7 +74,7 @@ public class ApplicationCategoryResource {
     @PutMapping("/application-categories/{id}")
     public ResponseEntity<ApplicationCategory> updateApplicationCategory(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody ApplicationCategory applicationCategory
+        @Valid @RequestBody ApplicationCategory applicationCategory
     ) throws URISyntaxException {
         log.debug("REST request to update ApplicationCategory : {}, {}", id, applicationCategory);
         if (applicationCategory.getId() == null) {
@@ -107,7 +109,7 @@ public class ApplicationCategoryResource {
     @PatchMapping(value = "/application-categories/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<ApplicationCategory> partialUpdateApplicationCategory(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody ApplicationCategory applicationCategory
+        @NotNull @RequestBody ApplicationCategory applicationCategory
     ) throws URISyntaxException {
         log.debug("REST request to partial update ApplicationCategory partially : {}, {}", id, applicationCategory);
         if (applicationCategory.getId() == null) {

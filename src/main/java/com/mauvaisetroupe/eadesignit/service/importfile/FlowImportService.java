@@ -27,6 +27,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,6 +147,9 @@ public class FlowImportService {
                         flowInterface.addDataFlows(dataFlow);
                         dataFlowRepository.save(dataFlow);
                     }
+                } else {
+                    flowInterface = null;
+                    functionalFlow = null;
                 }
             } else {
                 flowImport.setImportFunctionalFlowStatus(ImportStatus.ERROR);
@@ -171,9 +179,9 @@ public class FlowImportService {
     }
 
     private FunctionalFlow findOrCreateFunctionalFlow(FlowImport flowImport) {
-        Optional<FunctionalFlow> functionalFlowOption = flowRepository.findByAlias(flowImport.getFlowAlias());
         FunctionalFlow functionalFlow = null;
         try {
+            Optional<FunctionalFlow> functionalFlowOption = flowRepository.findByAlias(flowImport.getFlowAlias());
             if (!functionalFlowOption.isPresent()) {
                 flowImport.setImportFunctionalFlowStatus(ImportStatus.NEW);
                 functionalFlow = mapToFunctionalFlow(flowImport);
@@ -182,9 +190,16 @@ public class FlowImportService {
                 functionalFlow = functionalFlowOption.get();
             }
             setDocumentation(flowImport, functionalFlow);
-            flowRepository.save(functionalFlow);
+
+            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+            Validator validator = factory.getValidator();
+            validator.validate(functionalFlow);
+            Set<ConstraintViolation<FunctionalFlow>> violations = validator.validate(functionalFlow);
+            if (!violations.isEmpty()) {
+                throw new ConstraintViolationException(violations);
+            }
         } catch (Exception e) {
-            log.error("Error with row " + flowImport, e);
+            log.error("Error with row " + flowImport + " " + e.getMessage(), e);
             flowImport.setImportFunctionalFlowStatus(ImportStatus.ERROR);
             addError(flowImport, e);
             functionalFlow = null;
@@ -206,9 +221,9 @@ public class FlowImportService {
     }
 
     private FlowInterface findOrCreateInterface(FlowImport flowImport) {
-        Optional<FlowInterface> flowInterfaceOption = interfaceRepository.findByAlias(flowImport.getIdFlowFromExcel());
         FlowInterface flowInterface = null;
         try {
+            Optional<FlowInterface> flowInterfaceOption = interfaceRepository.findByAlias(flowImport.getIdFlowFromExcel());
             if (!flowInterfaceOption.isPresent()) {
                 flowImport.setImportInterfaceStatus(ImportStatus.NEW);
                 flowInterface = mapToFlowInterface(flowImport);
@@ -239,8 +254,16 @@ public class FlowImportService {
                     "]"
                 );
             }
+
+            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+            Validator validator = factory.getValidator();
+            validator.validate(flowInterface);
+            Set<ConstraintViolation<FlowInterface>> violations = validator.validate(flowInterface);
+            if (!violations.isEmpty()) {
+                throw new ConstraintViolationException(violations);
+            }
         } catch (Exception e) {
-            log.error("Error with row " + flowImport);
+            log.error("Error with row " + flowImport + " " + e.getMessage());
             flowInterface = null;
             flowImport.setImportInterfaceStatus(ImportStatus.ERROR);
             addError(flowImport, e);
@@ -333,7 +356,7 @@ public class FlowImportService {
                 }
             }
         } catch (Exception e) {
-            log.error("Error with row " + flowImport, e);
+            log.error("Error with row " + flowImport + " " + e.getMessage());
             dataFlow = null;
             flowImport.setImportDataFlowStatus(ImportStatus.ERROR);
             addError(flowImport, e);

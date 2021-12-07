@@ -22,7 +22,9 @@ const validations: any = {
     description: {
       maxLength: maxLength(1000),
     },
-    comment: {},
+    comment: {
+      maxLength: maxLength(500),
+    },
     status: {},
     documentationURL: {
       maxLength: maxLength(500),
@@ -32,7 +34,9 @@ const validations: any = {
     },
     startDate: {},
     endDate: {},
-    landscapes: {},
+    landscapes: {
+      required,
+    },
   },
 };
 

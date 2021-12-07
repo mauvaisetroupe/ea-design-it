@@ -24,7 +24,9 @@ const validations: any = {
     description: {
       maxLength: maxLength(1000),
     },
-    comment: {},
+    comment: {
+      maxLength: maxLength(500),
+    },
     documentationURL: {
       maxLength: maxLength(500),
     },

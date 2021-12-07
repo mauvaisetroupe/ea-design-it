@@ -49,7 +49,7 @@ entity Owner {
 entity FunctionalFlow {
     alias String
     description String maxlength(1000)
-    comment String
+    comment String maxlength(500)  
     status String
     documentationURL String maxlength(500)
     documentationURL2 String maxlength(500)
@@ -70,7 +70,7 @@ entity Application {
 	alias String pattern(/^HPX\.CMP\.[0-9]{8}$/)
 	name String,
     description String maxlength(1000)
-    comment String 
+    comment String maxlength(500)  
     documentationURL String maxlength(500)
     startDate LocalDate
     endDate LocalDate
@@ -123,7 +123,7 @@ entity DataFlowItem {
 entity ApplicationComponent {
 	name String,
     description String maxlength(1000),
-    comment String 
+    comment String maxlength(500)  
     documentationURL String maxlength(500)
     startDate LocalDate
     endDate LocalDate
@@ -138,13 +138,13 @@ entity DataFormat {
 entity ApplicationCategory {
     name String
     type String
-    description String    
+    description String maxlength(250)     
 }
 
 entity Technology {
     name String
     type String
-    description String
+    description String maxlength(250)  
 }
 
 enum ViewPoint {

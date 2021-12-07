@@ -125,7 +125,7 @@ public class ApplicationImportService {
         Application appliWithSameName = applicationRepository.findByNameIgnoreCase(applicationImport.getName());
         if (appliWithSameName != null) {
             Assert.isTrue(
-                appliWithSameName.getAlias().toLowerCase().equals(applicationImport.getIdFromExcel()),
+                appliWithSameName.getAlias().toLowerCase().equals(applicationImport.getIdFromExcel().toLowerCase()),
                 "Cannot have same application name for two aliases '" +
                 appliWithSameName.getName() +
                 "' : (" +

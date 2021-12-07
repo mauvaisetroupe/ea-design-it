@@ -34,7 +34,8 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     @Column(name = "description", length = 1000)
     private String description;
 
-    @Column(name = "comment")
+    @Size(max = 500)
+    @Column(name = "comment", length = 500)
     private String comment;
 
     @Column(name = "status")
@@ -304,7 +305,15 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     @Override
     public String toString() {
         return "FunctionalFlow{" +
+            "id=" + getId() +
             ", alias='" + getAlias() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", comment='" + getComment() + "'" +
+            ", status='" + getStatus() + "'" +
+            ", documentationURL='" + getDocumentationURL() + "'" +
+            ", documentationURL2='" + getDocumentationURL2() + "'" +
+            ", startDate='" + getStartDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
             "}";
     }
 
