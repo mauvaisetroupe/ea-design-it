@@ -19,7 +19,9 @@
     },
     {
       "fieldName": "comment",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
     },
     {
       "fieldName": "documentationURL",

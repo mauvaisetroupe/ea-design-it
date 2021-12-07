@@ -1,5 +1,7 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
+import { maxLength } from 'vuelidate/lib/validators';
+
 import AlertService from '@/shared/alert/alert.service';
 
 import ApplicationService from '@/entities/application/application.service';
@@ -15,7 +17,9 @@ const validations: any = {
   technology: {
     name: {},
     type: {},
-    description: {},
+    description: {
+      maxLength: maxLength(250),
+    },
   },
 };
 

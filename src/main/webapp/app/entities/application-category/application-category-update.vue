@@ -45,6 +45,11 @@
               :class="{ valid: !$v.applicationCategory.description.$invalid, invalid: $v.applicationCategory.description.$invalid }"
               v-model="$v.applicationCategory.description.$model"
             />
+            <div v-if="$v.applicationCategory.description.$anyDirty && $v.applicationCategory.description.$invalid">
+              <small class="form-text text-danger" v-if="!$v.applicationCategory.description.maxLength">
+                This field cannot be longer than 250 characters.
+              </small>
+            </div>
           </div>
         </div>
         <div>

@@ -50,6 +50,11 @@
               :class="{ valid: !$v.applicationComponent.comment.$invalid, invalid: $v.applicationComponent.comment.$invalid }"
               v-model="$v.applicationComponent.comment.$model"
             />
+            <div v-if="$v.applicationComponent.comment.$anyDirty && $v.applicationComponent.comment.$invalid">
+              <small class="form-text text-danger" v-if="!$v.applicationComponent.comment.maxLength">
+                This field cannot be longer than 500 characters.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="application-component-documentationURL">Documentation URL</label>

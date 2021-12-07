@@ -50,6 +50,11 @@
               :class="{ valid: !$v.functionalFlow.comment.$invalid, invalid: $v.functionalFlow.comment.$invalid }"
               v-model="$v.functionalFlow.comment.$model"
             />
+            <div v-if="$v.functionalFlow.comment.$anyDirty && $v.functionalFlow.comment.$invalid">
+              <small class="form-text text-danger" v-if="!$v.functionalFlow.comment.maxLength">
+                This field cannot be longer than 500 characters.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="functional-flow-status">Status</label>

@@ -133,9 +133,11 @@ public class FlowImportService {
                 if (landscapeView != null && functionalFlow != null && flowInterface != null) {
                     // Set<>, so could add even if already associated
                     functionalFlow.addLandscape(landscapeView);
-                    functionalFlow.addInterfaces(flowInterface);
-                    interfaceRepository.save(flowInterface);
-                    flowRepository.save(functionalFlow);
+                    if (!functionalFlow.getInterfaces().contains(flowInterface)) {
+                        functionalFlow.addInterfaces(flowInterface);
+                        interfaceRepository.save(flowInterface);
+                        flowRepository.save(functionalFlow);
+                    }
                     landscapeViewRepository.save(landscapeView);
                     if (dataFlow != null) {
                         functionalFlow.addDataFlows(dataFlow);

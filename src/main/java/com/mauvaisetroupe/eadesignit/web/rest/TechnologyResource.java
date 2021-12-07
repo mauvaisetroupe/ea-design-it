@@ -8,6 +8,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +48,7 @@ public class TechnologyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/technologies")
-    public ResponseEntity<Technology> createTechnology(@RequestBody Technology technology) throws URISyntaxException {
+    public ResponseEntity<Technology> createTechnology(@Valid @RequestBody Technology technology) throws URISyntaxException {
         log.debug("REST request to save Technology : {}", technology);
         if (technology.getId() != null) {
             throw new BadRequestAlertException("A new technology cannot already have an ID", ENTITY_NAME, "idexists");
@@ -71,7 +73,7 @@ public class TechnologyResource {
     @PutMapping("/technologies/{id}")
     public ResponseEntity<Technology> updateTechnology(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody Technology technology
+        @Valid @RequestBody Technology technology
     ) throws URISyntaxException {
         log.debug("REST request to update Technology : {}, {}", id, technology);
         if (technology.getId() == null) {
@@ -106,7 +108,7 @@ public class TechnologyResource {
     @PatchMapping(value = "/technologies/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Technology> partialUpdateTechnology(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody Technology technology
+        @NotNull @RequestBody Technology technology
     ) throws URISyntaxException {
         log.debug("REST request to partial update Technology partially : {}, {}", id, technology);
         if (technology.getId() == null) {
