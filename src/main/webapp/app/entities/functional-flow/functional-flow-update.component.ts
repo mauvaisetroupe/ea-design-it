@@ -20,10 +20,10 @@ const validations: any = {
   functionalFlow: {
     alias: {},
     description: {
-      maxLength: maxLength(1000),
+      maxLength: maxLength(1500),
     },
     comment: {
-      maxLength: maxLength(500),
+      maxLength: maxLength(1000),
     },
     status: {},
     documentationURL: {

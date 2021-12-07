@@ -35,7 +35,7 @@
             />
             <div v-if="$v.functionalFlow.description.$anyDirty && $v.functionalFlow.description.$invalid">
               <small class="form-text text-danger" v-if="!$v.functionalFlow.description.maxLength">
-                This field cannot be longer than 1000 characters.
+                This field cannot be longer than 1500 characters.
               </small>
             </div>
           </div>
@@ -52,7 +52,7 @@
             />
             <div v-if="$v.functionalFlow.comment.$anyDirty && $v.functionalFlow.comment.$invalid">
               <small class="form-text text-danger" v-if="!$v.functionalFlow.comment.maxLength">
-                This field cannot be longer than 500 characters.
+                This field cannot be longer than 1000 characters.
               </small>
             </div>
           </div>

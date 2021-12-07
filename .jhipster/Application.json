@@ -15,13 +15,13 @@
       "fieldName": "description",
       "fieldType": "String",
       "fieldValidateRules": ["maxlength"],
-      "fieldValidateRulesMaxlength": "1000"
+      "fieldValidateRulesMaxlength": "1500"
     },
     {
       "fieldName": "comment",
       "fieldType": "String",
       "fieldValidateRules": ["maxlength"],
-      "fieldValidateRulesMaxlength": "500"
+      "fieldValidateRulesMaxlength": "1000"
     },
     {
       "fieldName": "documentationURL",

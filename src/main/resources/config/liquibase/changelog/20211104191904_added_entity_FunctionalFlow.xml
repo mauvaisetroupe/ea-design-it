@@ -17,10 +17,10 @@
             <column name="alias" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="description" type="varchar(1000)">
+            <column name="description" type="varchar(1500)">
                 <constraints nullable="true" />
             </column>
-            <column name="comment" type="varchar(500)">
+            <column name="comment" type="varchar(1000)">
                 <constraints nullable="true" />
             </column>
             <column name="status" type="varchar(255)">

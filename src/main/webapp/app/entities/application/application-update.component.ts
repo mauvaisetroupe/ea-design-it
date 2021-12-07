@@ -26,10 +26,10 @@ const validations: any = {
     alias: {},
     name: {},
     description: {
-      maxLength: maxLength(1000),
+      maxLength: maxLength(1500),
     },
     comment: {
-      maxLength: maxLength(500),
+      maxLength: maxLength(1000),
     },
     documentationURL: {
       maxLength: maxLength(500),
