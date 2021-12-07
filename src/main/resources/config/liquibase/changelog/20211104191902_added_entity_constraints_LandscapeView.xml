@@ -24,6 +24,6 @@
                                  baseTableName="rel_landscape_view__flows"
                                  constraintName="fk_rel_landscape_view__flows__flows_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="functional_flow"/>
+                                 referencedTableName="flow"/>
     </changeSet>
 </databaseChangeLog>

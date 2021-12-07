@@ -9,38 +9,38 @@
     <changeSet id="20211104191905-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="source_id"
-                                 baseTableName="flow_interface"
-                                 constraintName="fk_flow_interface__source_id"
+                                 baseTableName="interface"
+                                 constraintName="fk_interface__source_id"
                                  referencedColumnNames="id"
                                  referencedTableName="application"/>
 
         <addForeignKeyConstraint baseColumnNames="target_id"
-                                 baseTableName="flow_interface"
-                                 constraintName="fk_flow_interface__target_id"
+                                 baseTableName="interface"
+                                 constraintName="fk_interface__target_id"
                                  referencedColumnNames="id"
                                  referencedTableName="application"/>
 
         <addForeignKeyConstraint baseColumnNames="source_component_id"
-                                 baseTableName="flow_interface"
-                                 constraintName="fk_flow_interface__source_component_id"
+                                 baseTableName="interface"
+                                 constraintName="fk_interface__source_component_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="application_component"/>
+                                 referencedTableName="component"/>
 
         <addForeignKeyConstraint baseColumnNames="target_component_id"
-                                 baseTableName="flow_interface"
-                                 constraintName="fk_flow_interface__target_component_id"
+                                 baseTableName="interface"
+                                 constraintName="fk_interface__target_component_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="application_component"/>
+                                 referencedTableName="component"/>
 
         <addForeignKeyConstraint baseColumnNames="protocol_id"
-                                 baseTableName="flow_interface"
-                                 constraintName="fk_flow_interface__protocol_id"
+                                 baseTableName="interface"
+                                 constraintName="fk_interface__protocol_id"
                                  referencedColumnNames="id"
                                  referencedTableName="protocol"/>
 
         <addForeignKeyConstraint baseColumnNames="owner_id"
-                                 baseTableName="flow_interface"
-                                 constraintName="fk_flow_interface__owner_id"
+                                 baseTableName="interface"
+                                 constraintName="fk_interface__owner_id"
                                  referencedColumnNames="id"
                                  referencedTableName="owner"/>
     </changeSet>

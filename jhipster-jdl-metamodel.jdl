@@ -46,7 +46,7 @@ entity Owner {
 	name String
 }
 
-entity FunctionalFlow {
+entity FunctionalFlow(flow) {
     alias String
     description String maxlength(1500)
     comment String maxlength(1000)  
@@ -57,7 +57,7 @@ entity FunctionalFlow {
     endDate LocalDate
 }
 
-entity FlowInterface {
+entity FlowInterface(interface) {
     alias String
     status String
     documentationURL String maxlength(500)
@@ -94,7 +94,7 @@ entity Protocol {
  * - A WSDL when Protocol=SOAP
  * - An XSD when Protocol=ESB, MESSAGING
  */
-entity DataFlow {
+entity DataFlow(dataflow) {
     resourceName String /** TOPIC name for event, FileName for Files*/
     resourceType String
     description String maxlength(1000)
@@ -120,7 +120,7 @@ entity DataFlowItem {
 }
 
 
-entity ApplicationComponent {
+entity ApplicationComponent(component) {
 	name String,
     description String maxlength(1000),
     comment String maxlength(500)  

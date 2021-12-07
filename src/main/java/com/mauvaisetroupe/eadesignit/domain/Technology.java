@@ -28,7 +28,7 @@ public class Technology implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "type")
+    @Column(name = "jhi_type")
     private String type;
 
     @Size(max = 250)

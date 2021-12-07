@@ -68,7 +68,7 @@
       "ownerSide": true
     }
   ],
-  "entityTableName": "application_component",
+  "entityTableName": "component",
   "dto": "no",
   "pagination": "no",
   "service": "no",

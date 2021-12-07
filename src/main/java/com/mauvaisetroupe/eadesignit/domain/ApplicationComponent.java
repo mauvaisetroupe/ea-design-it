@@ -16,7 +16,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * A ApplicationComponent.
  */
 @Entity
-@Table(name = "application_component")
+@Table(name = "component")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ApplicationComponent implements Serializable {
 
@@ -36,7 +36,7 @@ public class ApplicationComponent implements Serializable {
     private String description;
 
     @Size(max = 500)
-    @Column(name = "comment", length = 500)
+    @Column(name = "jhi_comment", length = 500)
     private String comment;
 
     @Size(max = 500)
@@ -64,8 +64,8 @@ public class ApplicationComponent implements Serializable {
 
     @ManyToMany
     @JoinTable(
-        name = "rel_application_component__categories",
-        joinColumns = @JoinColumn(name = "application_component_id"),
+        name = "rel_component__categories",
+        joinColumns = @JoinColumn(name = "component_id"),
         inverseJoinColumns = @JoinColumn(name = "categories_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -74,8 +74,8 @@ public class ApplicationComponent implements Serializable {
 
     @ManyToMany
     @JoinTable(
-        name = "rel_application_component__technologies",
-        joinColumns = @JoinColumn(name = "application_component_id"),
+        name = "rel_component__technologies",
+        joinColumns = @JoinColumn(name = "component_id"),
         inverseJoinColumns = @JoinColumn(name = "technologies_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

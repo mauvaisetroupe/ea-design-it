@@ -20,7 +20,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
     description = "DataFlow represents\n- A file when Protocol=FILE\n- A topic when Protocol=Event\n- A Swagger when Protocol=API\n- A WSDL when Protocol=SOAP\n- An XSD when Protocol=ESB, MESSAGING"
 )
 @Entity
-@Table(name = "data_flow")
+@Table(name = "dataflow")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class DataFlow implements Serializable {
 
@@ -78,8 +78,8 @@ public class DataFlow implements Serializable {
 
     @ManyToMany
     @JoinTable(
-        name = "rel_data_flow__functional_flows",
-        joinColumns = @JoinColumn(name = "data_flow_id"),
+        name = "rel_dataflow__functional_flows",
+        joinColumns = @JoinColumn(name = "dataflow_id"),
         inverseJoinColumns = @JoinColumn(name = "functional_flows_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
