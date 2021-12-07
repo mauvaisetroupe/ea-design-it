@@ -56,7 +56,7 @@
             <column name="flow_status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="comment" type="varchar(255)">
+            <column name="jhi_comment" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="document_name" type="varchar(255)">

@@ -9,27 +9,27 @@
     <changeSet id="20211104191907-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="format_id"
-                                 baseTableName="data_flow"
-                                 constraintName="fk_data_flow__format_id"
+                                 baseTableName="dataflow"
+                                 constraintName="fk_dataflow__format_id"
                                  referencedColumnNames="id"
                                  referencedTableName="data_format"/>
 
-        <addForeignKeyConstraint baseColumnNames="data_flow_id"
-                                 baseTableName="rel_data_flow__functional_flows"
-                                 constraintName="fk_rel_data_flow__functional_flows__data_flow_id"
+        <addForeignKeyConstraint baseColumnNames="dataflow_id"
+                                 baseTableName="rel_dataflow__functional_flows"
+                                 constraintName="fk_rel_dataflow__functional_flows__dataflow_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="data_flow"/>
+                                 referencedTableName="dataflow"/>
 
         <addForeignKeyConstraint baseColumnNames="functional_flows_id"
-                                 baseTableName="rel_data_flow__functional_flows"
-                                 constraintName="fk_rel_data_flow__functional_flows__functional_flows_id"
+                                 baseTableName="rel_dataflow__functional_flows"
+                                 constraintName="fk_rel_dataflow__functional_flows__functional_flows_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="functional_flow"/>
+                                 referencedTableName="flow"/>
 
         <addForeignKeyConstraint baseColumnNames="flow_interface_id"
-                                 baseTableName="data_flow"
-                                 constraintName="fk_data_flow__flow_interface_id"
+                                 baseTableName="dataflow"
+                                 constraintName="fk_dataflow__flow_interface_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="flow_interface"/>
+                                 referencedTableName="interface"/>
     </changeSet>
 </databaseChangeLog>

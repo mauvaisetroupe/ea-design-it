@@ -23,7 +23,7 @@
             <column name="description" type="varchar(1500)">
                 <constraints nullable="true" />
             </column>
-            <column name="comment" type="varchar(1000)">
+            <column name="jhi_comment" type="varchar(1000)">
                 <constraints nullable="true" />
             </column>
             <column name="documentation_url" type="varchar(500)">

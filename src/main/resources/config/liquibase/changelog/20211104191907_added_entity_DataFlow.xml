@@ -10,7 +10,7 @@
         Added the entity DataFlow.
     -->
     <changeSet id="20211104191907-1" author="jhipster">
-        <createTable tableName="data_flow" remarks="DataFlow represents\n- A file when Protocol=FILE\n- A topic when Protocol=Event\n- A Swagger when Protocol=API\n- A WSDL when Protocol=SOAP\n- An XSD when Protocol=ESB, MESSAGING">
+        <createTable tableName="dataflow" remarks="DataFlow represents\n- A file when Protocol=FILE\n- A topic when Protocol=Event\n- A Swagger when Protocol=API\n- A WSDL when Protocol=SOAP\n- An XSD when Protocol=ESB, MESSAGING">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -50,16 +50,16 @@
 
     <changeSet id="20211104191907-1-relations" author="jhipster">
 
-        <createTable tableName="rel_data_flow__functional_flows">
+        <createTable tableName="rel_dataflow__functional_flows">
             <column name="functional_flows_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="data_flow_id" type="bigint">
+            <column name="dataflow_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="data_flow_id, functional_flows_id" tableName="rel_data_flow__functional_flows"/>
+        <addPrimaryKey columnNames="dataflow_id, functional_flows_id" tableName="rel_dataflow__functional_flows"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

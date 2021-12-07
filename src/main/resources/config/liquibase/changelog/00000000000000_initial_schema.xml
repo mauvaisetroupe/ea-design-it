@@ -83,7 +83,6 @@
                   separator=";"
                   tableName="jhi_user"
                   usePreparedStatements="true">
-            <column name="id" type="numeric"/>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>

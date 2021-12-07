@@ -29,13 +29,13 @@
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="type" type="varchar(255)">
+            <column name="jhi_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="technology" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="comment" type="varchar(255)">
+            <column name="jhi_comment" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="import_status" type="varchar(255)">

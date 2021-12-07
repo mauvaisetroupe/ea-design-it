@@ -37,13 +37,13 @@ public class ApplicationImport implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "type")
+    @Column(name = "jhi_type")
     private String type;
 
     @Column(name = "technology")
     private String technology;
 
-    @Column(name = "comment")
+    @Column(name = "jhi_comment")
     private String comment;
 
     @Enumerated(EnumType.STRING)
