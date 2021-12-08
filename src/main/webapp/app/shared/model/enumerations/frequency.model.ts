@@ -14,4 +14,6 @@ export enum Frequency {
   NRT = 'NRT',
 
   ON_USER_ACTION = 'ON_USER_ACTION',
+
+  INTRADAY = 'INTRADAY',
 }
