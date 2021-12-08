@@ -23,6 +23,11 @@
     <div class="alert alert-warning" v-if="!isFetching && applications && applications.length === 0">
       <span>No applications found</span>
     </div>
+
+    <div>
+      <input type="text" placeholder="Filter by text" v-model="filter" />
+    </div>
+
     <div class="table-responsive" v-if="applications && applications.length > 0">
       <table class="table table-striped" aria-describedby="applications">
         <thead>
