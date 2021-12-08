@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="application">
-        <h2 class="jh-entity-heading" data-cy="applicationDetailsHeading"><span>Application</span> {{ application.id }}</h2>
+        <h2 class="jh-entity-heading" data-cy="applicationDetailsHeading"><span>Application</span> - {{ application.name }}</h2>
         <dl class="row jh-entity-details">
           <dt>
             <span>Alias</span>

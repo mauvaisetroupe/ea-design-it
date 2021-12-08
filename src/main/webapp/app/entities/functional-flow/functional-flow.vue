@@ -54,7 +54,7 @@
             </td>
             <td>{{ functionalFlow.alias }}</td>
             <td>{{ functionalFlow.description }}</td>
-            <td>{{ functionalFlow.comment }}</td>
+            <td>{{ functionalFlow.comment ? functionalFlow.comment.substring(0, 30) : '' }}</td>
             <td>{{ functionalFlow.status }}</td>
             <td>
               <a :href="functionalFlow.documentationURL">{{

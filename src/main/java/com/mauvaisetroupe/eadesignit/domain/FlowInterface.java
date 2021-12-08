@@ -77,7 +77,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface> {
 
     @ManyToMany(mappedBy = "interfaces", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "interfaces", "landscapes", "dataFlows" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "interfaces", "dataFlows" }, allowSetters = true)
     private Set<FunctionalFlow> functionalFlows = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

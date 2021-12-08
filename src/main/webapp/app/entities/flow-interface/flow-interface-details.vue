@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="flowInterface">
-        <h2 class="jh-entity-heading" data-cy="flowInterfaceDetailsHeading"><span>Interface</span> {{ flowInterface.alias }}</h2>
+        <h2 class="jh-entity-heading" data-cy="flowInterfaceDetailsHeading"><span>Interface</span> - {{ flowInterface.alias }}</h2>
         <dl class="row jh-entity-details">
           <dt>
             <span>Alias</span>
@@ -159,6 +159,7 @@
                 <th scope="row"><span>ID</span></th>
                 <th scope="row"><span>Alias</span></th>
                 <th scope="row"><span>Description</span></th>
+                <th scope="row"><span>Landscape</span></th>
               </tr>
             </thead>
             <tbody>
@@ -170,7 +171,14 @@
                 </td>
                 <td>{{ functionalFlow.alias }}</td>
                 <td>{{ functionalFlow.description }}</td>
-                <td>{{ functionalFlow.comment }}</td>
+                <td>
+                  <span v-for="landscape in functionalFlow.landscapes" :key="landscape.id">
+                    <router-link :to="{ name: 'LandscapeViewView', params: { landscapeViewId: landscape.id } }">{{
+                      landscape.diagramName
+                    }}</router-link>
+                  </span>
+                </td>
+                <td></td>
               </tr>
             </tbody>
           </table>
