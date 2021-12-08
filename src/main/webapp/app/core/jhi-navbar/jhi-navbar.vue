@@ -61,7 +61,11 @@
           </span>
           <b-dropdown-item to="/reporting/flow-interface">
             <font-awesome-icon icon="asterisk" />
-            <span>Interface</span>
+            <span>Duplicated Interfaces</span>
+          </b-dropdown-item>
+          <b-dropdown-item to="/flow-interface?searchTerm=protocol::empty">
+            <font-awesome-icon icon="asterisk" />
+            <span>Empty protocols</span>
           </b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">

@@ -14,23 +14,25 @@ import AlertService from '@/shared/alert/alert.service';
   computed: {
     filteredRows() {
       return this.flowInterfaces.filter(row => {
+        const searchTerm = this.filter.toLowerCase();
         const id = row.id.toString().toLowerCase();
         const description = row.description ? row.description.toString().toLowerCase() : '';
         const alias = row.alias.toString().toLowerCase();
         const source = row.source.name.toString().toLowerCase();
         const target = row.target.name.toString().toLowerCase();
         const proto = row.protocol ? row.protocol.name.toString().toLowerCase() : '';
-
-        const searchTerm = this.filter.toLowerCase();
-
-        return (
-          id.includes(searchTerm) ||
-          description.includes(searchTerm) ||
-          alias.includes(searchTerm) ||
-          source.includes(searchTerm) ||
-          target.includes(searchTerm) ||
-          proto.includes(searchTerm)
-        );
+        if (searchTerm == 'protocol::empty') {
+          return proto === '';
+        } else {
+          return (
+            id.includes(searchTerm) ||
+            description.includes(searchTerm) ||
+            alias.includes(searchTerm) ||
+            source.includes(searchTerm) ||
+            target.includes(searchTerm) ||
+            proto.includes(searchTerm)
+          );
+        }
       });
     },
   },
@@ -45,10 +47,13 @@ export default class FlowInterface extends Vue {
 
   public isFetching = false;
 
-  public filter = '';
+  public filter: string = '';
 
   public mounted(): void {
     this.retrieveAllFlowInterfaces();
+    if (this.$route.query.searchTerm) {
+      this.filter = this.$route.query.searchTerm as string;
+    }
   }
 
   public clear(): void {
