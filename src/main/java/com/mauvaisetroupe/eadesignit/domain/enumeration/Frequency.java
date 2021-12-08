@@ -12,4 +12,5 @@ public enum Frequency {
     ON_DEMAND,
     NRT,
     ON_USER_ACTION,
+    INTRADAY,
 }
