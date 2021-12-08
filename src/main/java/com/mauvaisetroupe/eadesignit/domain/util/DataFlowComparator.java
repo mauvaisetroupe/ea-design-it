@@ -6,6 +6,9 @@ import com.mauvaisetroupe.eadesignit.domain.FlowImport;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
+import java.util.Set;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 public class DataFlowComparator {
 
@@ -87,5 +90,28 @@ public class DataFlowComparator {
 
     public Frequency getFrequency(String frequency) {
         return Frequency.valueOf(clean(frequency));
+    }
+
+    public DataFlow findEquivalentInCollection(FlowImport flowImport, Set<DataFlow> potentialDataFlows) {
+        DataFlow dataFlow = null;
+        // try to find an existing dataflow that is equivalent (same frequeny, same format, same )
+        if (!CollectionUtils.isEmpty(potentialDataFlows)) {
+            for (DataFlow potentiaDataFlow : potentialDataFlows) {
+                if (this.areEquivalent(flowImport, potentiaDataFlow)) {
+                    dataFlow = potentiaDataFlow;
+                    break;
+                }
+            }
+        }
+        return dataFlow;
+    }
+
+    public boolean isDataFlowEmpty(FlowImport flowImport) {
+        if (flowImport == null) return true;
+        return (
+            !StringUtils.hasText(flowImport.getFrequency()) &&
+            !StringUtils.hasText(flowImport.getFormat()) &&
+            !StringUtils.hasText(flowImport.getIntegrationPattern())
+        );
     }
 }

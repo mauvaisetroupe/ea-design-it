@@ -23,6 +23,7 @@ import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -292,39 +294,43 @@ public class FlowImportService {
 
     private DataFlow findOrCreateDataFlow(FlowImport flowImport, Protocol protocol) {
         DataFlow dataFlow = null;
+        Set<DataFlow> potentialDataFlows = new HashSet<>();
         DataFlowComparator comparator = new DataFlowComparator();
         try {
-            dataFlow =
+            // Find dataflows with same functional flow and same interface
+            potentialDataFlows =
                 dataFlowRepository.findByFlowInterface_AliasAndFunctionalFlows_Alias(
                     flowImport.getIdFlowFromExcel(),
                     flowImport.getFlowAlias()
                 );
 
-            // try to find an existing dataflow
-            if (dataFlow != null) {
-                flowImport.setImportDataFlowStatus(ImportStatus.EXISTING);
-            } else {
+            dataFlow = comparator.findEquivalentInCollection(flowImport, potentialDataFlows);
+
+            if (dataFlow == null) {
                 // if a dataflow exist for same interface, with same characteristics,
                 // then use it adding reference to this functional flow
                 log.debug("Testing interface : " + flowImport.getIdFlowFromExcel());
-                Set<DataFlow> potentialDataFlows = dataFlowRepository.findByFlowInterface_Alias(flowImport.getIdFlowFromExcel());
-                for (DataFlow potentiaDataFlow : potentialDataFlows) {
-                    log.debug("Testing dataFlow : " + potentiaDataFlow.getId());
-                    if (comparator.areEquivalent(flowImport, potentiaDataFlow)) {
-                        dataFlow = potentiaDataFlow;
-                        flowImport.setImportDataFlowStatus(ImportStatus.EXISTING);
-                        break;
-                    }
-                }
+                potentialDataFlows = dataFlowRepository.findByFlowInterface_Alias(flowImport.getIdFlowFromExcel());
+                dataFlow = comparator.findEquivalentInCollection(flowImport, potentialDataFlows);
             }
-            // Nothing found, than create a new one if necessary (frequency, format or protocol to store)
+
             if (dataFlow == null) {
-                boolean dataFlowToCreate = false;
-                dataFlow = new DataFlow();
+                if (!comparator.isDataFlowEmpty(flowImport)) {
+                    // Nothing found, than create a new one if necessary (frequency, format or protocol to store)
+                    dataFlow = new DataFlow();
+                    flowImport.setImportDataFlowStatus(ImportStatus.NEW);
+                }
+            } else {
+                flowImport.setImportDataFlowStatus(ImportStatus.EXISTING);
+            }
+
+            // DataFlow has been found or created, update frequency, format and protocol
+            if (dataFlow != null) {
+                // Frequency
                 if (StringUtils.hasText(flowImport.getFrequency())) {
                     dataFlow.setFrequency(comparator.getFrequency(flowImport.getFrequency()));
-                    dataFlowToCreate = true;
                 }
+                // Format
                 if (StringUtils.hasText(flowImport.getFormat())) {
                     DataFormat dataFormat = dataFormatRepository.findByNameIgnoreCase(flowImport.getFormat());
                     if (dataFormat == null) {
@@ -333,33 +339,35 @@ public class FlowImportService {
                         dataFormatRepository.save(dataFormat);
                     }
                     dataFlow.setFormat(dataFormat);
-                    dataFlowToCreate = true;
                 }
-                if (protocol != null) {
-                    if (protocol.getType().equals(ProtocolType.API)) {
-                        dataFlow.setContractURL(flowImport.getSwagger());
-                        dataFlow.setResourceName("REST API Call " + flowImport.getSourceElement() + " / " + flowImport.getTargetElement());
-                    } else if (protocol.getType().equals(ProtocolType.EVENT)) {
-                        dataFlow.setResourceName(GENERIC_EVENT_FROM_ADD);
-                    } else if (protocol.getType().equals(ProtocolType.FILE)) {
-                        dataFlow.setResourceName(GENERIC_FILE_FROM_ADD);
-                    } else {
-                        dataFlow.setResourceName(GENERIC_DATA_FLOW + " - " + protocol.getType());
-                    }
-                    dataFlowToCreate = true;
+                // Contract
+                if (StringUtils.hasText(flowImport.getSwagger())) {
+                    dataFlow.setContractURL(flowImport.getSwagger());
                 }
-                if (dataFlowToCreate) {
-                    flowImport.setImportDataFlowStatus(ImportStatus.NEW);
-                } else {
-                    dataFlow = null;
-                    flowImport.setImportDataFlowStatus(null);
-                }
+
+                // add Generic resourcename depending on protocol
+                dataFlow = setGenericResourceNameIfEmpty(flowImport, protocol, dataFlow);
             }
         } catch (Exception e) {
             log.error("Error with row " + flowImport + " " + e.getMessage());
             dataFlow = null;
             flowImport.setImportDataFlowStatus(ImportStatus.ERROR);
             addError(flowImport, e);
+        }
+        return dataFlow;
+    }
+
+    private DataFlow setGenericResourceNameIfEmpty(FlowImport flowImport, Protocol protocol, DataFlow dataFlow) {
+        if (protocol != null && dataFlow != null && !StringUtils.hasText(dataFlow.getResourceName())) {
+            if (protocol.getType().equals(ProtocolType.API)) {
+                dataFlow.setResourceName("REST API Call " + flowImport.getSourceElement() + " / " + flowImport.getTargetElement());
+            } else if (protocol.getType().equals(ProtocolType.EVENT)) {
+                dataFlow.setResourceName(GENERIC_EVENT_FROM_ADD);
+            } else if (protocol.getType().equals(ProtocolType.FILE)) {
+                dataFlow.setResourceName(GENERIC_FILE_FROM_ADD);
+            } else {
+                dataFlow.setResourceName(GENERIC_DATA_FLOW + " - " + protocol.getType());
+            }
         }
         return dataFlow;
     }
@@ -418,9 +426,17 @@ public class FlowImportService {
 
     private ProtocolType guessPtotocolType(String protocolName) {
         if (!StringUtils.hasText(protocolName)) return null;
+        if (protocolName.toLowerCase().contains("api")) return ProtocolType.API;
+        if (protocolName.toLowerCase().contains("event")) return ProtocolType.EVENT;
+
         if (protocolName.toLowerCase().contains("file")) return ProtocolType.FILE;
         if (protocolName.toLowerCase().contains("nas")) return ProtocolType.FILE;
+        if (protocolName.toLowerCase().contains("ftp")) return ProtocolType.FILE;
+        if (protocolName.toLowerCase().contains("mft")) return ProtocolType.FILE;
+
         if (protocolName.toLowerCase().contains("queue")) return ProtocolType.MESSAGING;
+        if (protocolName.toLowerCase().contains("esb")) return ProtocolType.MESSAGING;
+
         return ProtocolType.OTHER;
     }
 }

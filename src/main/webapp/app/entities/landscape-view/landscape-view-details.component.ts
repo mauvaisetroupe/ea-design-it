@@ -73,6 +73,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
           source: inter.source,
           target: inter.target,
           colored: mycolor,
+          dataFlows: inter.dataFlows,
         };
         this.captions.push(caption);
         firstLine = false;

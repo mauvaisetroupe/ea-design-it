@@ -71,6 +71,7 @@
             <th scope="row"><span>Source</span></th>
             <th scope="row"><span>Target</span></th>
             <th scope="row"><span>Protocol</span></th>
+            <th scope="row"><span>DataFlow</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -98,9 +99,24 @@
               </router-link>
             </td>
             <td>
-              <router-link v-if="caption.protocol" :to="{ name: 'ProtocolView', params: { protocolId: caption.protocol.id } }">
-                {{ caption.protocol.name }}
+              <router-link
+                v-if="caption.protocol"
+                :to="{ name: 'ProtocolView', params: { protocolId: caption.protocol.id } }"
+                :title="caption.protocol.name"
+              >
+                {{ caption.protocol.type }}
               </router-link>
+            </td>
+            <td>
+              <span v-for="(dataFlow, i) in caption.dataFlows" :key="dataFlow.id"
+                >{{ i > 0 ? ', ' : '' }}
+                <router-link
+                  class="form-control-static"
+                  :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }"
+                  :title="dataFlow.resourceName"
+                  >{{ dataFlow.id }}</router-link
+                >
+              </span>
             </td>
           </tr>
         </tbody>
