@@ -74,20 +74,22 @@ export default class FlowImport extends Vue {
   public getErrors() {
     const errors = [];
     this.notFilteredDtos.forEach(dto => {
+      let line = 1;
       dto.flowImports.forEach(elem => {
-        const flowImport = elem as IFlowImport;
+        const flowImport = elem;
         if (
           flowImport.importFunctionalFlowStatus === 'ERROR' ||
           flowImport.importInterfaceStatus === 'ERROR' ||
           flowImport.importDataFlowStatus === 'ERROR'
         ) {
-          flowImport.id = dto.excelFileName;
+          flowImport.id = dto.excelFileName + '_' + line.toString();
           const errorRow = {
             ...flowImport,
           };
           errors.push(errorRow);
           console.log(errorRow);
         }
+        line = line + 1;
       });
     });
     return errors;

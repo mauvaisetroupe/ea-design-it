@@ -167,7 +167,7 @@ docker-compose -f src/main/docker/oracle.yml down
 ```
 
 ```
-docker run -d -p 1521:1521 -e ORACLE_PASSWORD=EADesignIt -e APP_USER=EADesignIt -e APP_USER_PASSWORD=EADesignIt  gvenzl/oracle-xe:18
+docker run -d -p 1521:1521 -e ORACLE_PASSWORD=EADesignIt -e APP_USER=EADesignIt -e APP_USER_PASSWORD=EADesignIt -v /media/data/ubuntu/docker-data/docker-data/lco-data/oracle:/opt/oracle/oradata gvenzl/oracle-xe:18
 ```
 
 You can also fully dockerize your application and all the services that it depends on.
