@@ -62,6 +62,8 @@ public class ExcelReader {
                             if (value instanceof String) {
                                 if (isNull((String) value)) {
                                     value = null;
+                                } else {
+                                    value = ((String) value).trim();
                                 }
                             }
                             // if 3 first cells are empty, do not consider the line
