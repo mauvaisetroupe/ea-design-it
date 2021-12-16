@@ -15,10 +15,10 @@
 
 logging:
   level:
-    ROOT: DEBUG
-    tech.jhipster: DEBUG
-    org.hibernate.SQL: DEBUG
-    com.mauvaisetroupe.eadesignit: DEBUG
+    ROOT: WARN
+    tech.jhipster: WARN
+    org.hibernate.SQL: WARN
+    com.mauvaisetroupe.eadesignit: WARN
 
 spring:
   devtools:
