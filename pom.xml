@@ -14,8 +14,8 @@
 
     <scm>
         <url>https://github.com/mauvaisetroupe/EADesignIt/</url>
-        <connection>scm:git:ssh://github.com/mauvaisetroupe/EADesignIt.git</connection>
-        <developerConnection>scm:git:ssh@github.com/mauvaisetroupe/EADesignIt.git</developerConnection>
+        <connection>scm:git:ssh://git@github.com/mauvaisetroupe/EADesignIt.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/mauvaisetroupe/EADesignIt.git</developerConnection>
     </scm>
 
     <repositories>
