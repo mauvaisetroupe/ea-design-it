@@ -31,7 +31,7 @@ public class ExcelReader {
     Workbook workbook = null;
 
     public ExcelReader(InputStream excel) throws EncryptedDocumentException, IOException {
-        this.workbook = WorkbookFactory.create(excel);
+        if (excel != null) this.workbook = WorkbookFactory.create(excel);
     }
 
     public List<Map<String, Object>> getSheet(String sheetName) {
