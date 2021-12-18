@@ -12,6 +12,12 @@
     <name>EA Design It</name>
     <description>Description for EADesignIt</description>
 
+    <scm>
+        <url>https://github.com/mauvaisetroupe/EADesignIt/</url>
+        <connection>scm:git:ssh://github.com/mauvaisetroupe/EADesignIt.git</connection>
+        <developerConnection>scm:git:ssh@github.com/mauvaisetroupe/EADesignIt.git</developerConnection>
+    </scm>
+
     <repositories>
         <!-- jhipster-needle-maven-repository -->
     </repositories>
