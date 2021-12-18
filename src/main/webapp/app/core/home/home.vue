@@ -20,12 +20,7 @@
       </div>
 
       <div class="alert alert-warning" v-if="!authenticated">
-        <span>If you want to </span>
-        <a class="alert-link" v-on:click="openLogin()">sign in</a
-        ><span
-          >, you can try the default accounts:<br v-if="authenticated" />- Administrator (login="admin" and password="admin") <br />- User
-          (login="user" and password="user").</span
-        >
+        <span>Please </span><a class="alert-link" v-on:click="openLogin()">sign in</a>.
       </div>
       <div class="alert alert-warning" v-if="!authenticated">
         <span>You don't have an account yet?</span>&nbsp;
