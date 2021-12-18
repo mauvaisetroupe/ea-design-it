@@ -25,30 +25,6 @@ public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Lo
     Set<FlowInterface> findByAliasIn(@NotNull List<String> aliasToMerge);
 
     @Query(
-        value = "select i1.id from FLOW_INTERFACE i1 " +
-        "JOIN (select distinct source_id, target_id, protocol_id from FLOW_INTERFACE  group by source_id, target_id, protocol_id HAVING count(*) > 1) i2 " +
-        "left join APPLICATION app1 on i1.SOURCE_ID = app1.ID " +
-        "left join APPLICATION app2 on i1.TARGET_ID = app2.ID " +
-        "left join PROTOCOL on i1.PROTOCOL_ID = PROTOCOL.ID " +
-        "WHERE i1.source_id=i2.source_id AND i1.target_id=i2.target_id AND i1.protocol_id=i2.protocol_id " +
-        "ORDER BY app1.name, app2.name, protocol.name ",
-        nativeQuery = true
-    )
-    public List<Long> getDuplicatedInterfaceIds();
-
-    @Query(
-        value = "select i1.alias, app1.name as source, app2.name as target from FLOW_INTERFACE i1 " +
-        "JOIN (select distinct source_id, target_id, protocol_id from FLOW_INTERFACE  group by source_id, target_id, protocol_id HAVING count(*) > 1) i2 " +
-        "left join APPLICATION app1 on i1.SOURCE_ID = app1.ID " +
-        "left join APPLICATION app2 on i1.TARGET_ID = app2.ID " +
-        "left join PROTOCOL on i1.PROTOCOL_ID = PROTOCOL.ID " +
-        "WHERE i1.source_id=i2.source_id AND i1.target_id=i2.target_id AND i1.protocol_id=i2.protocol_id " +
-        "ORDER BY app1.name, app2.name, protocol.name ",
-        nativeQuery = true
-    )
-    public List<Object[]> getDuplicatedInterfaceAsObject();
-
-    @Query(
         value = "select i1.* from INTERFACE i1  " +
         "JOIN (select distinct source_id, target_id, protocol_id from INTERFACE  group by source_id, target_id, protocol_id HAVING count(*) > 1) i2  " +
         "on i1.source_id=i2.source_id AND i1.target_id=i2.target_id AND i1.protocol_id=i2.protocol_id  " +
