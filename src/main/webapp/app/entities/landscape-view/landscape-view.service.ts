@@ -4,6 +4,7 @@ import { ILandscapeView } from '@/shared/model/landscape-view.model';
 
 const baseApiUrl = 'api/landscape-views';
 const basePlantUMLApiUrl = 'api/plantuml/landscape-view/get-svg';
+const baseDrawIOApiUrl = 'api/drawio/landscape-view/get-xml';
 
 export default class LandscapeViewService {
   public find(id: number): Promise<ILandscapeView> {
@@ -89,6 +90,19 @@ export default class LandscapeViewService {
     return new Promise<any>((resolve, reject) => {
       axios
         .get(`${basePlantUMLApiUrl}/${id}`)
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public getDrawIO(id: number) {
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .get(`${baseDrawIOApiUrl}/${id}`)
         .then(res => {
           resolve(res);
         })

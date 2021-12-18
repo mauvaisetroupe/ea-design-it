@@ -103,8 +103,23 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   }
 
   public editDiagram(): void {
-    this.isHidden = false;
-    this.isEditing = true;
+    if (!this.landscapeView.compressedDrawXML) {
+      this.landscapeViewService()
+        .getDrawIO(this.landscapeView.id)
+        .then(
+          res => {
+            this.landscapeView.compressedDrawXML = res.data;
+            this.isHidden = false;
+            this.isEditing = true;
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    } else {
+      this.isHidden = false;
+      this.isEditing = true;
+    }
   }
 
   public saveDiagram(): void {

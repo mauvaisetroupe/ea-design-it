@@ -172,7 +172,6 @@ public class LandscapeViewResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the landscapeView, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/landscape-views/{id}")
-    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public ResponseEntity<LandscapeView> getLandscapeView(@PathVariable Long id) {
         log.debug("REST request to get LandscapeView : {}", id);
         Optional<LandscapeView> landscapeView = landscapeViewRepository.findById(id);
@@ -180,10 +179,7 @@ public class LandscapeViewResource {
         if (landscapeView.isPresent()) {
             try {
                 MXFileSerializer fileSerializer = new MXFileSerializer(landscapeView.get());
-                if (!StringUtils.hasText(landscapeView.get().getCompressedDrawXML())) {
-                    // If no draw.io XML is persisted, create one in order to have a draft to edit
-                    landscapeView.get().setCompressedDrawXML(fileSerializer.createMXFileXML());
-                } else {
+                if (StringUtils.hasText(landscapeView.get().getCompressedDrawXML())) {
                     // check if drawio is uptodate, if not remove SVG from database
                     // and send updated xml
                     String newXML = fileSerializer.updateMXFileXML();
