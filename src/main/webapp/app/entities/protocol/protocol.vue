@@ -6,7 +6,7 @@
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
         </button>
-        <router-link :to="{ name: 'ProtocolCreate' }" custom v-slot="{ navigate }">
+        <router-link :to="{ name: 'ProtocolCreate' }" custom v-slot="{ navigate }" v-if="$store.getters.authenticated">
           <button
             @click="navigate"
             id="jh-create-entity"
@@ -52,13 +52,19 @@
                     <span class="d-none d-md-inline">View</span>
                   </button>
                 </router-link>
-                <router-link :to="{ name: 'ProtocolEdit', params: { protocolId: protocol.id } }" custom v-slot="{ navigate }">
+                <router-link
+                  :to="{ name: 'ProtocolEdit', params: { protocolId: protocol.id } }"
+                  custom
+                  v-slot="{ navigate }"
+                  v-if="$store.getters.authenticated"
+                >
                   <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                     <span class="d-none d-md-inline">Edit</span>
                   </button>
                 </router-link>
                 <b-button
+                  v-if="$store.getters.authenticated"
                   v-on:click="prepareRemove(protocol)"
                   variant="danger"
                   class="btn btn-sm"

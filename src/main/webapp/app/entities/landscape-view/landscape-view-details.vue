@@ -50,7 +50,7 @@
           custom
           v-slot="{ navigate }"
         >
-          <button @click="navigate" class="btn btn-primary">
+          <button @click="navigate" class="btn btn-primary" v-if="$store.getters.authenticated">
             <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
           </button>
         </router-link>
@@ -124,11 +124,13 @@
       <h2>Draw.io</h2>
       <div v-if="drawIoSVG && !isEditing">
         <div v-html="drawIoSVG" />
-        [ <a v-on:click="editDiagram()">Edit diagram</a> ]
-        <span v-if="drawIOToBeSaved">[ <a v-on:click="saveDiagram()">Save diagram</a> ]</span>
-        <span v-if="!drawIOToBeSaved">[ <a v-on:click="deleteDiagram()">Delete diagram</a> ]</span>
+        <div v-if="$store.getters.authenticated">
+          [ <a v-on:click="editDiagram()">Edit diagram</a> ]
+          <span v-if="drawIOToBeSaved">[ <a v-on:click="saveDiagram()">Save diagram</a> ]</span>
+          <span v-if="!drawIOToBeSaved">[ <a v-on:click="deleteDiagram()">Delete diagram</a> ]</span>
+        </div>
       </div>
-      <div v-if="!drawIoSVG">
+      <div v-if="!drawIoSVG && $store.getters.authenticated">
         <div>No preview available, <a v-on:click="editDiagram()">[ Generate and edit diagram ]</a></div>
         <div>(use Arrange > Layout > Vertical Flow or Arrange > Layout > Organic to distribute the first diagram components)</div>
       </div>
