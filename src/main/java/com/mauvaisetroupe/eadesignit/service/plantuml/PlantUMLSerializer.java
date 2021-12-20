@@ -6,7 +6,10 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,23 +25,32 @@ public class PlantUMLSerializer {
     private PlantUMLBuilder plantUMLBuilder;
 
     public String getSVG(LandscapeView landscapeView) throws IOException {
-        String plantUMLSource = plantUMLBuilder.getPlantumlHeader();
+        Map<SourceTarget, Set<FunctionalFlow>> relationships = new HashMap<>();
         for (FunctionalFlow functionalFlow : sortFlow(landscapeView.getFlows())) {
             for (FlowInterface flowInterface : sortInterface(functionalFlow.getInterfaces())) {
-                String url = "/functional-flow/" + functionalFlow.getId() + "/view";
-                String label = functionalFlow.getAlias();
-                plantUMLSource =
-                    plantUMLBuilder.getPlantumlRelationShip(
-                        plantUMLSource,
-                        flowInterface.getSource(),
-                        flowInterface.getTarget(),
-                        label,
-                        url
-                    );
+                SourceTarget key = new SourceTarget(flowInterface.getSource(), flowInterface.getTarget());
+                if (!relationships.containsKey(key)) {
+                    relationships.put(key, new HashSet<>());
+                }
+                relationships.get(key).add(functionalFlow);
             }
         }
-        plantUMLSource = plantUMLBuilder.getPlantumlFooter(plantUMLSource);
-        return plantUMLBuilder.getSVGFromSource(plantUMLSource);
+
+        StringBuilder plantUMLSource = new StringBuilder();
+        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
+        for (SourceTarget sourceTarget : relationships.keySet()) {
+            List<String[]> labelAndURLs = new ArrayList<>();
+            for (FunctionalFlow functionalFlow : relationships.get(sourceTarget)) {
+                String url = "/functional-flow/" + functionalFlow.getId() + "/view";
+                String label = functionalFlow.getAlias();
+                String[] labelAndURL = { label, url };
+                labelAndURLs.add(labelAndURL);
+            }
+            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, sourceTarget.getSource(), sourceTarget.getTarget(), labelAndURLs);
+        }
+        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+
+        return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getSVG(FunctionalFlow functionalFlow) throws IOException {
@@ -46,20 +58,28 @@ public class PlantUMLSerializer {
     }
 
     public String getSVG(Set<FlowInterface> interfaces) throws IOException {
-        String plantUMLSource = plantUMLBuilder.getPlantumlHeader();
+        Map<SourceTarget, Set<FlowInterface>> relationships = new HashMap<>();
         for (FlowInterface flowInterface : sortInterface(interfaces)) {
-            String url = "/flow-interface/" + flowInterface.getId() + "/view";
-            plantUMLSource =
-                plantUMLBuilder.getPlantumlRelationShip(
-                    plantUMLSource,
-                    flowInterface.getSource(),
-                    flowInterface.getTarget(),
-                    flowInterface.getAlias(),
-                    url
-                );
+            SourceTarget key = new SourceTarget(flowInterface.getSource(), flowInterface.getTarget());
+            if (!relationships.containsKey(key)) {
+                relationships.put(key, new HashSet<>());
+            }
+            relationships.get(key).add(flowInterface);
         }
-        plantUMLSource = plantUMLBuilder.getPlantumlFooter(plantUMLSource);
-        return plantUMLBuilder.getSVGFromSource(plantUMLSource);
+
+        StringBuilder plantUMLSource = new StringBuilder();
+        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
+        for (SourceTarget sourceTarget : relationships.keySet()) {
+            List<String[]> labelAndURLs = new ArrayList<>();
+            for (FlowInterface flowInterface : relationships.get(sourceTarget)) {
+                String label = flowInterface.getAlias();
+                String url = "/flow-interface/" + flowInterface.getId() + "/view";
+                labelAndURLs.add(new String[] { label, url });
+            }
+            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, sourceTarget.getSource(), sourceTarget.getTarget(), labelAndURLs);
+        }
+        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     private List<FlowInterface> sortInterface(Set<FlowInterface> interfaces) {
