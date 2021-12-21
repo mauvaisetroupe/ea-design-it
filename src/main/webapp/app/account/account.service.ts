@@ -3,6 +3,10 @@ import { Store } from 'vuex';
 import VueRouter from 'vue-router';
 
 export default class AccountService {
+  private hasAdminAuthorityValue = false;
+  private hasUserAuthorityValue = false;
+  public anonymousReadAllowed = true;
+
   constructor(private store: Store<any>, private router: VueRouter) {
     this.init();
   }
@@ -82,5 +86,25 @@ export default class AccountService {
 
   public get userAuthorities(): any {
     return this.store.getters.account.authorities;
+  }
+
+  public hasUserAuthority(): boolean {
+    this.hasAnyAuthorityAndCheckAuth('ROLE_USER').then(value => {
+      this.hasUserAuthorityValue = value;
+    });
+    return this.hasUserAuthorityValue;
+  }
+
+  public get readAuthorities(): boolean {
+    if (this.anonymousReadAllowed) {
+      //anonymous read
+      return true;
+    } else {
+      return this.hasUserAuthority();
+    }
+  }
+
+  public get writeAuthorities(): boolean {
+    return this.store.getters.authenticated;
   }
 }

@@ -6,7 +6,7 @@
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
         </button>
-        <router-link :to="{ name: 'FunctionalFlowCreate' }" custom v-slot="{ navigate }">
+        <router-link :to="{ name: 'FunctionalFlowCreate' }" custom v-slot="{ navigate }" v-if="accountService().writeAuthorities">
           <button
             @click="navigate"
             id="jh-create-entity"
@@ -99,6 +99,7 @@
                   </button>
                 </router-link>
                 <router-link
+                  v-if="accountService().writeAuthorities"
                   :to="{ name: 'FunctionalFlowEdit', params: { functionalFlowId: functionalFlow.id } }"
                   custom
                   v-slot="{ navigate }"
@@ -109,6 +110,7 @@
                   </button>
                 </router-link>
                 <b-button
+                  v-if="accountService().writeAuthorities"
                   v-on:click="prepareRemove(functionalFlow)"
                   variant="danger"
                   class="btn btn-sm"

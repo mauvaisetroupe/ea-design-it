@@ -6,6 +6,7 @@ import { IFlowInterface } from '@/shared/model/flow-interface.model';
 
 import FlowInterfaceService from './flow-interface.service';
 import AlertService from '@/shared/alert/alert.service';
+import AccountService from '@/account/account.service';
 import ReportingService from '@/eadesignit/reporting.service';
 import { DataFlow } from '@/shared/model/data-flow.model';
 
@@ -15,6 +16,7 @@ import { DataFlow } from '@/shared/model/data-flow.model';
 export default class FlowInterface extends Vue {
   @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
   @Inject('alertService') private alertService: () => AlertService;
+  @Inject('accountService') private accountService: () => AccountService;
   @Inject('reportingService') private reportingService: () => ReportingService;
 
   private interfaceToKeep: IFlowInterface = null;

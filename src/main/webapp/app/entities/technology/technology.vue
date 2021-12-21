@@ -6,7 +6,7 @@
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
         </button>
-        <router-link :to="{ name: 'TechnologyCreate' }" custom v-slot="{ navigate }">
+        <router-link :to="{ name: 'TechnologyCreate' }" custom v-slot="{ navigate }" v-if="accountService().writeAuthorities">
           <button
             @click="navigate"
             id="jh-create-entity"
@@ -50,13 +50,19 @@
                     <span class="d-none d-md-inline">View</span>
                   </button>
                 </router-link>
-                <router-link :to="{ name: 'TechnologyEdit', params: { technologyId: technology.id } }" custom v-slot="{ navigate }">
+                <router-link
+                  :to="{ name: 'TechnologyEdit', params: { technologyId: technology.id } }"
+                  custom
+                  v-slot="{ navigate }"
+                  v-if="accountService().writeAuthorities"
+                >
                   <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                     <span class="d-none d-md-inline">Edit</span>
                   </button>
                 </router-link>
                 <b-button
+                  v-if="accountService().writeAuthorities"
                   v-on:click="prepareRemove(technology)"
                   variant="danger"
                   class="btn btn-sm"

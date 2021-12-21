@@ -6,13 +6,14 @@ import JhiDataUtils from '@/shared/data/data-utils.service';
 import { ILandscapeView, LandscapeView } from '@/shared/model/landscape-view.model';
 import LandscapeViewService from './landscape-view.service';
 import AlertService from '@/shared/alert/alert.service';
+import AccountService from '@/account/account.service';
 import { FlowImport, IFlowImport } from '@/shared/model/flow-import.model';
 
 @Component
 export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
   @Inject('alertService') private alertService: () => AlertService;
-
+  @Inject('accountService') private accountService: () => AccountService;
   public landscapeView: ILandscapeView = {};
   public plantUMLImage = '';
   public captions = [];

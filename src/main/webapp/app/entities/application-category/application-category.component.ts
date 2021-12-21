@@ -6,6 +6,7 @@ import { IApplicationCategory } from '@/shared/model/application-category.model'
 
 import ApplicationCategoryService from './application-category.service';
 import AlertService from '@/shared/alert/alert.service';
+import AccountService from '@/account/account.service';
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -13,7 +14,7 @@ import AlertService from '@/shared/alert/alert.service';
 export default class ApplicationCategory extends Vue {
   @Inject('applicationCategoryService') private applicationCategoryService: () => ApplicationCategoryService;
   @Inject('alertService') private alertService: () => AlertService;
-
+  @Inject('accountService') private accountService: () => AccountService;
   private removeId: number = null;
 
   public applicationCategories: IApplicationCategory[] = [];

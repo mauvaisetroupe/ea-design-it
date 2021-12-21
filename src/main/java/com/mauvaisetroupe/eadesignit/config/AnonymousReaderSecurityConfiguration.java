@@ -1,8 +1,7 @@
 package com.mauvaisetroupe.eadesignit.config;
 
-import com.mauvaisetroupe.eadesignit.security.AuthoritiesConstants;
-import com.mauvaisetroupe.eadesignit.security.jwt.JWTConfigurer;
-import com.mauvaisetroupe.eadesignit.security.jwt.TokenProvider;
+import com.mauvaisetroupe.eadesignit.security.*;
+import com.mauvaisetroupe.eadesignit.security.jwt.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -24,8 +23,8 @@ import tech.jhipster.config.JHipsterProperties;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
-@ConditionalOnProperty(prefix = "application", name = "security-anonymous-reader", havingValue = "false")
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+@ConditionalOnProperty(prefix = "application", name = "security-anonymous-reader", havingValue = "true")
+public class AnonymousReaderSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final JHipsterProperties jHipsterProperties;
 
@@ -34,7 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final CorsFilter corsFilter;
     private final SecurityProblemSupport problemSupport;
 
-    public SecurityConfiguration(
+    public AnonymousReaderSecurityConfiguration(
         TokenProvider tokenProvider,
         CorsFilter corsFilter,
         JHipsterProperties jHipsterProperties,
@@ -95,7 +94,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
             .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/**").authenticated()
+            .antMatchers(HttpMethod.GET,"/api/**").permitAll()
+            .antMatchers(HttpMethod.POST,"/api/**").hasAnyAuthority(AuthoritiesConstants.USER)
+            .antMatchers(HttpMethod.PUT,"/api/**").hasAnyAuthority(AuthoritiesConstants.USER)
+            .antMatchers(HttpMethod.PATCH,"/api/**").hasAnyAuthority(AuthoritiesConstants.USER)
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/health/**").permitAll()
             .antMatchers("/management/info").permitAll()

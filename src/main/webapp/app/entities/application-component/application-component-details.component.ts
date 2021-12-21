@@ -3,12 +3,13 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import { IApplicationComponent } from '@/shared/model/application-component.model';
 import ApplicationComponentService from './application-component.service';
 import AlertService from '@/shared/alert/alert.service';
+import AccountService from '@/account/account.service';
 
 @Component
 export default class ApplicationComponentDetails extends Vue {
   @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
   @Inject('alertService') private alertService: () => AlertService;
-
+  @Inject('accountService') private accountService: () => AccountService;
   public applicationComponent: IApplicationComponent = {};
 
   beforeRouteEnter(to, from, next) {

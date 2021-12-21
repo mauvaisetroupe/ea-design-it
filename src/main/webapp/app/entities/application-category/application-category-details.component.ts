@@ -3,12 +3,13 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import { IApplicationCategory } from '@/shared/model/application-category.model';
 import ApplicationCategoryService from './application-category.service';
 import AlertService from '@/shared/alert/alert.service';
+import AccountService from '@/account/account.service';
 
 @Component
 export default class ApplicationCategoryDetails extends Vue {
   @Inject('applicationCategoryService') private applicationCategoryService: () => ApplicationCategoryService;
   @Inject('alertService') private alertService: () => AlertService;
-
+  @Inject('accountService') private accountService: () => AccountService;
   public applicationCategory: IApplicationCategory = {};
 
   beforeRouteEnter(to, from, next) {

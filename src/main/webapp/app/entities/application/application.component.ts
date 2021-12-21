@@ -6,6 +6,7 @@ import { IApplication } from '@/shared/model/application.model';
 
 import ApplicationService from './application.service';
 import AlertService from '@/shared/alert/alert.service';
+import AccountService from '@/account/account.service';
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -40,7 +41,7 @@ import AlertService from '@/shared/alert/alert.service';
 export default class Application extends Vue {
   @Inject('applicationService') private applicationService: () => ApplicationService;
   @Inject('alertService') private alertService: () => AlertService;
-
+  @Inject('accountService') private accountService: () => AccountService;
   private removeId: number = null;
 
   public applications: IApplication[] = [];

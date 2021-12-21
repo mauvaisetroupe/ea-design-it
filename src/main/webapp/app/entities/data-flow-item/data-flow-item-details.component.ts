@@ -3,12 +3,13 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import { IDataFlowItem } from '@/shared/model/data-flow-item.model';
 import DataFlowItemService from './data-flow-item.service';
 import AlertService from '@/shared/alert/alert.service';
+import AccountService from '@/account/account.service';
 
 @Component
 export default class DataFlowItemDetails extends Vue {
   @Inject('dataFlowItemService') private dataFlowItemService: () => DataFlowItemService;
   @Inject('alertService') private alertService: () => AlertService;
-
+  @Inject('accountService') private accountService: () => AccountService;
   public dataFlowItem: IDataFlowItem = {};
 
   beforeRouteEnter(to, from, next) {

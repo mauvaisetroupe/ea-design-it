@@ -6,6 +6,7 @@ import { IDataFlowItem } from '@/shared/model/data-flow-item.model';
 
 import DataFlowItemService from './data-flow-item.service';
 import AlertService from '@/shared/alert/alert.service';
+import AccountService from '@/account/account.service';
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -13,7 +14,7 @@ import AlertService from '@/shared/alert/alert.service';
 export default class DataFlowItem extends Vue {
   @Inject('dataFlowItemService') private dataFlowItemService: () => DataFlowItemService;
   @Inject('alertService') private alertService: () => AlertService;
-
+  @Inject('accountService') private accountService: () => AccountService;
   private removeId: number = null;
 
   public dataFlowItems: IDataFlowItem[] = [];

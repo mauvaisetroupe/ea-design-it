@@ -155,12 +155,12 @@
             <thead>
               <tr>
                 <th></th>
-                <th scope="row"><span>Flows</span></th>
+                <th scope="row"><span>Flow</span></th>
                 <th scope="row"><span>Inter.</span></th>
-                <th scope="row"><span>ID</span></th>
-                <th scope="row"><span>Resource Name</span></th>
-                <th scope="row"><span>Frequency</span></th>
-                <th scope="row"><span>Format</span></th>
+                <th scope="row"><span>Data Id</span></th>
+                <th scope="row"><span>Data Resource Name</span></th>
+                <th scope="row"><span>Data Frequency</span></th>
+                <th scope="row"><span>Data Format</span></th>
               </tr>
             </thead>
             <tr v-for="dataFlowToMerge in dataFlowsToMerge" :key="dataFlowToMerge.id">
