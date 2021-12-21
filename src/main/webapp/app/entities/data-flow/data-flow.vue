@@ -6,7 +6,7 @@
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
         </button>
-        <router-link :to="{ name: 'DataFlowCreate' }" custom v-slot="{ navigate }" v-if="$store.getters.authenticated">
+        <router-link :to="{ name: 'DataFlowCreate' }" custom v-slot="{ navigate }" v-if="accountService().writeAuthorities">
           <button
             @click="navigate"
             id="jh-create-entity"
@@ -104,7 +104,7 @@
                   :to="{ name: 'DataFlowEdit', params: { dataFlowId: dataFlow.id } }"
                   custom
                   v-slot="{ navigate }"
-                  v-if="$store.getters.authenticated"
+                  v-if="accountService().writeAuthorities"
                 >
                   <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
@@ -112,7 +112,7 @@
                   </button>
                 </router-link>
                 <b-button
-                  v-if="$store.getters.authenticated"
+                  v-if="accountService().writeAuthorities"
                   v-on:click="prepareRemove(dataFlow)"
                   variant="danger"
                   class="btn btn-sm"

@@ -8,7 +8,7 @@
         </button>
         <router-link :to="{ name: 'ApplicationCreate' }" custom v-slot="{ navigate }">
           <button
-            v-if="$store.getters.authenticated"
+            v-if="accountService().writeAuthorities"
             @click="navigate"
             id="jh-create-entity"
             data-cy="entityCreateButton"
@@ -99,7 +99,7 @@
                   </button>
                 </router-link>
                 <router-link
-                  v-if="$store.getters.authenticated"
+                  v-if="accountService().writeAuthorities"
                   :to="{ name: 'ApplicationEdit', params: { applicationId: application.id } }"
                   custom
                   v-slot="{ navigate }"
@@ -110,7 +110,7 @@
                   </button>
                 </router-link>
                 <b-button
-                  v-if="$store.getters.authenticated"
+                  v-if="accountService().writeAuthorities"
                   v-on:click="prepareRemove(application)"
                   variant="danger"
                   class="btn btn-sm"

@@ -50,7 +50,7 @@
           custom
           v-slot="{ navigate }"
         >
-          <button @click="navigate" class="btn btn-primary" v-if="$store.getters.authenticated">
+          <button @click="navigate" class="btn btn-primary" v-if="accountService().writeAuthorities">
             <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
           </button>
         </router-link>
@@ -124,7 +124,7 @@
       <h2>Draw.io</h2>
       <div v-if="drawIoSVG && !isEditing">
         <div v-html="drawIoSVG" />
-        <div v-if="$store.getters.authenticated">
+        <div v-if="accountService().writeAuthorities">
           [ <a v-on:click="editDiagram()">Edit diagram</a> ]
           <span v-if="drawIOToBeSaved">[ <a v-on:click="saveDiagram()">Save diagram</a> ]</span>
           <span v-if="!drawIOToBeSaved">[ <a v-on:click="deleteDiagram()">Delete diagram</a> ]</span>

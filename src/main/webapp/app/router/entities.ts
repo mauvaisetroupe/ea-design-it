@@ -99,6 +99,7 @@ export default [
     path: '/landscape-view',
     name: 'LandscapeView',
     component: LandscapeView,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/landscape-view/new',
@@ -116,11 +117,13 @@ export default [
     path: '/landscape-view/:landscapeViewId/view',
     name: 'LandscapeViewView',
     component: LandscapeViewDetails,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/owner',
     name: 'Owner',
     component: Owner,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/owner/new',
@@ -138,11 +141,13 @@ export default [
     path: '/owner/:ownerId/view',
     name: 'OwnerView',
     component: OwnerDetails,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/functional-flow',
     name: 'FunctionalFlow',
     component: FunctionalFlow,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/functional-flow/new',
@@ -160,11 +165,13 @@ export default [
     path: '/functional-flow/:functionalFlowId/view',
     name: 'FunctionalFlowView',
     component: FunctionalFlowDetails,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/flow-interface',
     name: 'FlowInterface',
     component: FlowInterface,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/flow-interface/new',
@@ -182,11 +189,13 @@ export default [
     path: '/flow-interface/:flowInterfaceId/view',
     name: 'FlowInterfaceView',
     component: FlowInterfaceDetails,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/application',
     name: 'Application',
     component: Application,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/application/new',
@@ -204,11 +213,13 @@ export default [
     path: '/application/:applicationId/view',
     name: 'ApplicationView',
     component: ApplicationDetails,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/data-flow',
     name: 'DataFlow',
     component: DataFlow,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/data-flow/new',
@@ -226,11 +237,13 @@ export default [
     path: '/data-flow/:dataFlowId/view',
     name: 'DataFlowView',
     component: DataFlowDetails,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/application-component',
     name: 'ApplicationComponent',
     component: ApplicationComponent,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/application-component/new',
@@ -248,6 +261,7 @@ export default [
     path: '/application-component/:applicationComponentId/view',
     name: 'ApplicationComponentView',
     component: ApplicationComponentDetails,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/application-import',
@@ -301,6 +315,7 @@ export default [
     path: '/protocol',
     name: 'Protocol',
     component: Protocol,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/protocol/new',
@@ -318,11 +333,13 @@ export default [
     path: '/protocol/:protocolId/view',
     name: 'ProtocolView',
     component: ProtocolDetails,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/data-flow-item',
     name: 'DataFlowItem',
     component: DataFlowItem,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/data-flow-item/new',
@@ -340,6 +357,7 @@ export default [
     path: '/data-flow-item/:dataFlowItemId/view',
     name: 'DataFlowItemView',
     component: DataFlowItemDetails,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/data-format',
@@ -363,6 +381,7 @@ export default [
     path: '/data-format/:dataFormatId/view',
     name: 'DataFormatView',
     component: DataFormatDetails,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/application-category',
@@ -386,6 +405,7 @@ export default [
     path: '/application-category/:applicationCategoryId/view',
     name: 'ApplicationCategoryView',
     component: ApplicationCategoryDetails,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/data-flow-import',
@@ -433,6 +453,7 @@ export default [
     path: '/technology/:technologyId/view',
     name: 'TechnologyView',
     component: TechnologyDetails,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
 ];

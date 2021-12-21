@@ -8,6 +8,7 @@ import JhiDataUtils from '@/shared/data/data-utils.service';
 
 import LandscapeViewService from './landscape-view.service';
 import AlertService from '@/shared/alert/alert.service';
+import AccountService from '@/account/account.service';
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -15,7 +16,7 @@ import AlertService from '@/shared/alert/alert.service';
 export default class LandscapeView extends mixins(JhiDataUtils) {
   @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
   @Inject('alertService') private alertService: () => AlertService;
-
+  @Inject('accountService') private accountService: () => AccountService;
   private removeId: number = null;
 
   public landscapeViews: ILandscapeView[] = [];

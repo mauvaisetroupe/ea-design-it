@@ -6,6 +6,7 @@ import { IProtocol } from '@/shared/model/protocol.model';
 
 import ProtocolService from './protocol.service';
 import AlertService from '@/shared/alert/alert.service';
+import AccountService from '@/account/account.service';
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -13,7 +14,7 @@ import AlertService from '@/shared/alert/alert.service';
 export default class Protocol extends Vue {
   @Inject('protocolService') private protocolService: () => ProtocolService;
   @Inject('alertService') private alertService: () => AlertService;
-
+  @Inject('accountService') private accountService: () => AccountService;
   private removeId: number = null;
 
   public protocols: IProtocol[] = [];

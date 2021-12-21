@@ -45,6 +45,7 @@ import TechnologyService from '@/entities/technology/technology.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 import ReportingService from '@/eadesignit/reporting.service';
+import { Authority } from './shared/security/authority';
 
 /* tslint:enable */
 Vue.config.productionTip = false;
@@ -63,19 +64,30 @@ const loginService = new LoginService();
 const accountService = new AccountService(store, router);
 
 router.beforeEach((to, from, next) => {
+  // Check if anonymous read is allowed
+  console.log('SHOULD LOAD ANONYMOUS READING PARAMETER');
+
   if (!to.matched.length) {
     next('/not-found');
   }
 
   if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
-    accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities).then(value => {
-      if (!value) {
-        sessionStorage.setItem('requested-url', to.fullPath);
-        next('/forbidden');
-      } else {
-        next();
-      }
-    });
+    console.log(to.meta.authorities);
+    console.log(to.meta.authorities.includes(Authority.ANONYMOUS_ALLOWED));
+    console.log(accountService.anonymousReadAllowed);
+
+    if (to.meta.authorities.includes(Authority.ANONYMOUS_ALLOWED) && accountService.anonymousReadAllowed) {
+      next();
+    } else {
+      accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities).then(value => {
+        if (!value) {
+          sessionStorage.setItem('requested-url', to.fullPath);
+          next('/forbidden');
+        } else {
+          next();
+        }
+      });
+    }
   } else {
     // no authorities, so just proceed
     next();

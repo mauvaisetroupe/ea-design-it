@@ -2,6 +2,7 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import { IApplication } from '@/shared/model/application.model';
 import ApplicationService from './application.service';
+import AccountService from '@/account/account.service';
 import AlertService from '@/shared/alert/alert.service';
 import { IFlowInterface } from '@/shared/model/flow-interface.model';
 
@@ -9,7 +10,7 @@ import { IFlowInterface } from '@/shared/model/flow-interface.model';
 export default class ApplicationDetails extends Vue {
   @Inject('applicationService') private applicationService: () => ApplicationService;
   @Inject('alertService') private alertService: () => AlertService;
-
+  @Inject('accountService') private accountService: () => AccountService;
   public application: IApplication = {};
   public plantUMLImage = '';
   public interfaces: IFlowInterface[] = [];

@@ -6,6 +6,7 @@ import { IOwner } from '@/shared/model/owner.model';
 
 import OwnerService from './owner.service';
 import AlertService from '@/shared/alert/alert.service';
+import AccountService from '@/account/account.service';
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -13,7 +14,7 @@ import AlertService from '@/shared/alert/alert.service';
 export default class Owner extends Vue {
   @Inject('ownerService') private ownerService: () => OwnerService;
   @Inject('alertService') private alertService: () => AlertService;
-
+  @Inject('accountService') private accountService: () => AccountService;
   private removeId: number = null;
 
   public owners: IOwner[] = [];
