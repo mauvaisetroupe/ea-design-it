@@ -203,7 +203,12 @@ entity ApplicationImport(tmp_import_application_import) {
 	name String,
     description String 
     type String
+    softwareType String
+    category1 String
+    category2 String
+    category3 String
 	technology String
+    documentation String
     comment String 
     importStatus ImportStatus
     importStatusMessage String

@@ -43,10 +43,40 @@
             <span>{{ applicationImport.type }}</span>
           </dd>
           <dt>
+            <span>Software Type</span>
+          </dt>
+          <dd>
+            <span>{{ applicationImport.softwareType }}</span>
+          </dd>
+          <dt>
+            <span>Category 1</span>
+          </dt>
+          <dd>
+            <span>{{ applicationImport.category1 }}</span>
+          </dd>
+          <dt>
+            <span>Category 2</span>
+          </dt>
+          <dd>
+            <span>{{ applicationImport.category2 }}</span>
+          </dd>
+          <dt>
+            <span>Category 3</span>
+          </dt>
+          <dd>
+            <span>{{ applicationImport.category3 }}</span>
+          </dd>
+          <dt>
             <span>Technology</span>
           </dt>
           <dd>
             <span>{{ applicationImport.technology }}</span>
+          </dd>
+          <dt>
+            <span>Documentation</span>
+          </dt>
+          <dd>
+            <span>{{ applicationImport.documentation }}</span>
           </dd>
           <dt>
             <span>Comment</span>

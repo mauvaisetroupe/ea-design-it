@@ -40,8 +40,23 @@ public class ApplicationImport implements Serializable {
     @Column(name = "jhi_type")
     private String type;
 
+    @Column(name = "software_type")
+    private String softwareType;
+
+    @Column(name = "category_1")
+    private String category1;
+
+    @Column(name = "category_2")
+    private String category2;
+
+    @Column(name = "category_3")
+    private String category3;
+
     @Column(name = "technology")
     private String technology;
+
+    @Column(name = "documentation")
+    private String documentation;
 
     @Column(name = "jhi_comment")
     private String comment;
@@ -149,6 +164,58 @@ public class ApplicationImport implements Serializable {
         this.type = type;
     }
 
+    public String getSoftwareType() {
+        return this.softwareType;
+    }
+
+    public ApplicationImport softwareType(String softwareType) {
+        this.setSoftwareType(softwareType);
+        return this;
+    }
+
+    public void setSoftwareType(String softwareType) {
+        this.softwareType = softwareType;
+    }
+
+    public String getCategory1() {
+        return this.category1;
+    }
+
+    public ApplicationImport category1(String category1) {
+        this.setCategory1(category1);
+        return this;
+    }
+
+    public void setCategory1(String category1) {
+        this.category1 = category1;
+    }
+
+    public String getCategory2() {
+        return this.category2;
+    }
+
+    public ApplicationImport category2(String category2) {
+        this.setCategory2(category2);
+        return this;
+    }
+
+    public void setCategory2(String category2) {
+        this.category2 = category2;
+    }
+
+    public String getCategory3() {
+        return this.category3;
+    }
+
+    public ApplicationImport category3(String category3) {
+        this.setCategory3(category3);
+        return this;
+    }
+
+    public void setCategory3(String category3) {
+        this.category3 = category3;
+    }
+
     public String getTechnology() {
         return this.technology;
     }
@@ -160,6 +227,19 @@ public class ApplicationImport implements Serializable {
 
     public void setTechnology(String technology) {
         this.technology = technology;
+    }
+
+    public String getDocumentation() {
+        return this.documentation;
+    }
+
+    public ApplicationImport documentation(String documentation) {
+        this.setDocumentation(documentation);
+        return this;
+    }
+
+    public void setDocumentation(String documentation) {
+        this.documentation = documentation;
     }
 
     public String getComment() {
@@ -244,7 +324,12 @@ public class ApplicationImport implements Serializable {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", type='" + getType() + "'" +
+            ", softwareType='" + getSoftwareType() + "'" +
+            ", category1='" + getCategory1() + "'" +
+            ", category2='" + getCategory2() + "'" +
+            ", category3='" + getCategory3() + "'" +
             ", technology='" + getTechnology() + "'" +
+            ", documentation='" + getDocumentation() + "'" +
             ", comment='" + getComment() + "'" +
             ", importStatus='" + getImportStatus() + "'" +
             ", importStatusMessage='" + getImportStatusMessage() + "'" +

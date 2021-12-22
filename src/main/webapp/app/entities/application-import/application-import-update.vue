@@ -83,6 +83,54 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-import-softwareType">Software Type</label>
+            <input
+              type="text"
+              class="form-control"
+              name="softwareType"
+              id="application-import-softwareType"
+              data-cy="softwareType"
+              :class="{ valid: !$v.applicationImport.softwareType.$invalid, invalid: $v.applicationImport.softwareType.$invalid }"
+              v-model="$v.applicationImport.softwareType.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="application-import-category1">Category 1</label>
+            <input
+              type="text"
+              class="form-control"
+              name="category1"
+              id="application-import-category1"
+              data-cy="category1"
+              :class="{ valid: !$v.applicationImport.category1.$invalid, invalid: $v.applicationImport.category1.$invalid }"
+              v-model="$v.applicationImport.category1.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="application-import-category2">Category 2</label>
+            <input
+              type="text"
+              class="form-control"
+              name="category2"
+              id="application-import-category2"
+              data-cy="category2"
+              :class="{ valid: !$v.applicationImport.category2.$invalid, invalid: $v.applicationImport.category2.$invalid }"
+              v-model="$v.applicationImport.category2.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="application-import-category3">Category 3</label>
+            <input
+              type="text"
+              class="form-control"
+              name="category3"
+              id="application-import-category3"
+              data-cy="category3"
+              :class="{ valid: !$v.applicationImport.category3.$invalid, invalid: $v.applicationImport.category3.$invalid }"
+              v-model="$v.applicationImport.category3.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="application-import-technology">Technology</label>
             <input
               type="text"
@@ -92,6 +140,18 @@
               data-cy="technology"
               :class="{ valid: !$v.applicationImport.technology.$invalid, invalid: $v.applicationImport.technology.$invalid }"
               v-model="$v.applicationImport.technology.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="application-import-documentation">Documentation</label>
+            <input
+              type="text"
+              class="form-control"
+              name="documentation"
+              id="application-import-documentation"
+              data-cy="documentation"
+              :class="{ valid: !$v.applicationImport.documentation.$invalid, invalid: $v.applicationImport.documentation.$invalid }"
+              v-model="$v.applicationImport.documentation.$model"
             />
           </div>
           <div class="form-group">

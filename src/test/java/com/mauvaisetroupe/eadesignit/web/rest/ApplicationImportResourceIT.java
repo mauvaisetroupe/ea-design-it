@@ -48,8 +48,23 @@ class ApplicationImportResourceIT {
     private static final String DEFAULT_TYPE = "AAAAAAAAAA";
     private static final String UPDATED_TYPE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_SOFTWARE_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_SOFTWARE_TYPE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CATEGORY_1 = "AAAAAAAAAA";
+    private static final String UPDATED_CATEGORY_1 = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CATEGORY_2 = "AAAAAAAAAA";
+    private static final String UPDATED_CATEGORY_2 = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CATEGORY_3 = "AAAAAAAAAA";
+    private static final String UPDATED_CATEGORY_3 = "BBBBBBBBBB";
+
     private static final String DEFAULT_TECHNOLOGY = "AAAAAAAAAA";
     private static final String UPDATED_TECHNOLOGY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DOCUMENTATION = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENTATION = "BBBBBBBBBB";
 
     private static final String DEFAULT_COMMENT = "AAAAAAAAAA";
     private static final String UPDATED_COMMENT = "BBBBBBBBBB";
@@ -94,7 +109,12 @@ class ApplicationImportResourceIT {
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .type(DEFAULT_TYPE)
+            .softwareType(DEFAULT_SOFTWARE_TYPE)
+            .category1(DEFAULT_CATEGORY_1)
+            .category2(DEFAULT_CATEGORY_2)
+            .category3(DEFAULT_CATEGORY_3)
             .technology(DEFAULT_TECHNOLOGY)
+            .documentation(DEFAULT_DOCUMENTATION)
             .comment(DEFAULT_COMMENT)
             .importStatus(DEFAULT_IMPORT_STATUS)
             .importStatusMessage(DEFAULT_IMPORT_STATUS_MESSAGE)
@@ -116,7 +136,12 @@ class ApplicationImportResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
+            .softwareType(UPDATED_SOFTWARE_TYPE)
+            .category1(UPDATED_CATEGORY_1)
+            .category2(UPDATED_CATEGORY_2)
+            .category3(UPDATED_CATEGORY_3)
             .technology(UPDATED_TECHNOLOGY)
+            .documentation(UPDATED_DOCUMENTATION)
             .comment(UPDATED_COMMENT)
             .importStatus(UPDATED_IMPORT_STATUS)
             .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE)
@@ -150,7 +175,12 @@ class ApplicationImportResourceIT {
         assertThat(testApplicationImport.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testApplicationImport.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testApplicationImport.getType()).isEqualTo(DEFAULT_TYPE);
+        assertThat(testApplicationImport.getSoftwareType()).isEqualTo(DEFAULT_SOFTWARE_TYPE);
+        assertThat(testApplicationImport.getCategory1()).isEqualTo(DEFAULT_CATEGORY_1);
+        assertThat(testApplicationImport.getCategory2()).isEqualTo(DEFAULT_CATEGORY_2);
+        assertThat(testApplicationImport.getCategory3()).isEqualTo(DEFAULT_CATEGORY_3);
         assertThat(testApplicationImport.getTechnology()).isEqualTo(DEFAULT_TECHNOLOGY);
+        assertThat(testApplicationImport.getDocumentation()).isEqualTo(DEFAULT_DOCUMENTATION);
         assertThat(testApplicationImport.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testApplicationImport.getImportStatus()).isEqualTo(DEFAULT_IMPORT_STATUS);
         assertThat(testApplicationImport.getImportStatusMessage()).isEqualTo(DEFAULT_IMPORT_STATUS_MESSAGE);
@@ -195,7 +225,12 @@ class ApplicationImportResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
+            .andExpect(jsonPath("$.[*].softwareType").value(hasItem(DEFAULT_SOFTWARE_TYPE)))
+            .andExpect(jsonPath("$.[*].category1").value(hasItem(DEFAULT_CATEGORY_1)))
+            .andExpect(jsonPath("$.[*].category2").value(hasItem(DEFAULT_CATEGORY_2)))
+            .andExpect(jsonPath("$.[*].category3").value(hasItem(DEFAULT_CATEGORY_3)))
             .andExpect(jsonPath("$.[*].technology").value(hasItem(DEFAULT_TECHNOLOGY)))
+            .andExpect(jsonPath("$.[*].documentation").value(hasItem(DEFAULT_DOCUMENTATION)))
             .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)))
             .andExpect(jsonPath("$.[*].importStatus").value(hasItem(DEFAULT_IMPORT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].importStatusMessage").value(hasItem(DEFAULT_IMPORT_STATUS_MESSAGE)))
@@ -220,7 +255,12 @@ class ApplicationImportResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
+            .andExpect(jsonPath("$.softwareType").value(DEFAULT_SOFTWARE_TYPE))
+            .andExpect(jsonPath("$.category1").value(DEFAULT_CATEGORY_1))
+            .andExpect(jsonPath("$.category2").value(DEFAULT_CATEGORY_2))
+            .andExpect(jsonPath("$.category3").value(DEFAULT_CATEGORY_3))
             .andExpect(jsonPath("$.technology").value(DEFAULT_TECHNOLOGY))
+            .andExpect(jsonPath("$.documentation").value(DEFAULT_DOCUMENTATION))
             .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT))
             .andExpect(jsonPath("$.importStatus").value(DEFAULT_IMPORT_STATUS.toString()))
             .andExpect(jsonPath("$.importStatusMessage").value(DEFAULT_IMPORT_STATUS_MESSAGE))
@@ -253,7 +293,12 @@ class ApplicationImportResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
+            .softwareType(UPDATED_SOFTWARE_TYPE)
+            .category1(UPDATED_CATEGORY_1)
+            .category2(UPDATED_CATEGORY_2)
+            .category3(UPDATED_CATEGORY_3)
             .technology(UPDATED_TECHNOLOGY)
+            .documentation(UPDATED_DOCUMENTATION)
             .comment(UPDATED_COMMENT)
             .importStatus(UPDATED_IMPORT_STATUS)
             .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE)
@@ -277,7 +322,12 @@ class ApplicationImportResourceIT {
         assertThat(testApplicationImport.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testApplicationImport.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testApplicationImport.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testApplicationImport.getSoftwareType()).isEqualTo(UPDATED_SOFTWARE_TYPE);
+        assertThat(testApplicationImport.getCategory1()).isEqualTo(UPDATED_CATEGORY_1);
+        assertThat(testApplicationImport.getCategory2()).isEqualTo(UPDATED_CATEGORY_2);
+        assertThat(testApplicationImport.getCategory3()).isEqualTo(UPDATED_CATEGORY_3);
         assertThat(testApplicationImport.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
+        assertThat(testApplicationImport.getDocumentation()).isEqualTo(UPDATED_DOCUMENTATION);
         assertThat(testApplicationImport.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testApplicationImport.getImportStatus()).isEqualTo(UPDATED_IMPORT_STATUS);
         assertThat(testApplicationImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
@@ -358,8 +408,10 @@ class ApplicationImportResourceIT {
             .importId(UPDATED_IMPORT_ID)
             .name(UPDATED_NAME)
             .type(UPDATED_TYPE)
-            .importStatus(UPDATED_IMPORT_STATUS)
-            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE);
+            .category2(UPDATED_CATEGORY_2)
+            .category3(UPDATED_CATEGORY_3)
+            .documentation(UPDATED_DOCUMENTATION)
+            .importStatus(UPDATED_IMPORT_STATUS);
 
         restApplicationImportMockMvc
             .perform(
@@ -379,10 +431,15 @@ class ApplicationImportResourceIT {
         assertThat(testApplicationImport.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testApplicationImport.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testApplicationImport.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testApplicationImport.getSoftwareType()).isEqualTo(DEFAULT_SOFTWARE_TYPE);
+        assertThat(testApplicationImport.getCategory1()).isEqualTo(DEFAULT_CATEGORY_1);
+        assertThat(testApplicationImport.getCategory2()).isEqualTo(UPDATED_CATEGORY_2);
+        assertThat(testApplicationImport.getCategory3()).isEqualTo(UPDATED_CATEGORY_3);
         assertThat(testApplicationImport.getTechnology()).isEqualTo(DEFAULT_TECHNOLOGY);
+        assertThat(testApplicationImport.getDocumentation()).isEqualTo(UPDATED_DOCUMENTATION);
         assertThat(testApplicationImport.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testApplicationImport.getImportStatus()).isEqualTo(UPDATED_IMPORT_STATUS);
-        assertThat(testApplicationImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
+        assertThat(testApplicationImport.getImportStatusMessage()).isEqualTo(DEFAULT_IMPORT_STATUS_MESSAGE);
         assertThat(testApplicationImport.getExistingApplicationID()).isEqualTo(DEFAULT_EXISTING_APPLICATION_ID);
     }
 
@@ -405,7 +462,12 @@ class ApplicationImportResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .type(UPDATED_TYPE)
+            .softwareType(UPDATED_SOFTWARE_TYPE)
+            .category1(UPDATED_CATEGORY_1)
+            .category2(UPDATED_CATEGORY_2)
+            .category3(UPDATED_CATEGORY_3)
             .technology(UPDATED_TECHNOLOGY)
+            .documentation(UPDATED_DOCUMENTATION)
             .comment(UPDATED_COMMENT)
             .importStatus(UPDATED_IMPORT_STATUS)
             .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE)
@@ -429,7 +491,12 @@ class ApplicationImportResourceIT {
         assertThat(testApplicationImport.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testApplicationImport.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testApplicationImport.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testApplicationImport.getSoftwareType()).isEqualTo(UPDATED_SOFTWARE_TYPE);
+        assertThat(testApplicationImport.getCategory1()).isEqualTo(UPDATED_CATEGORY_1);
+        assertThat(testApplicationImport.getCategory2()).isEqualTo(UPDATED_CATEGORY_2);
+        assertThat(testApplicationImport.getCategory3()).isEqualTo(UPDATED_CATEGORY_3);
         assertThat(testApplicationImport.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
+        assertThat(testApplicationImport.getDocumentation()).isEqualTo(UPDATED_DOCUMENTATION);
         assertThat(testApplicationImport.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testApplicationImport.getImportStatus()).isEqualTo(UPDATED_IMPORT_STATUS);
         assertThat(testApplicationImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);

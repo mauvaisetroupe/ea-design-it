@@ -142,8 +142,23 @@ public class ApplicationImportResource {
                 if (applicationImport.getType() != null) {
                     existingApplicationImport.setType(applicationImport.getType());
                 }
+                if (applicationImport.getSoftwareType() != null) {
+                    existingApplicationImport.setSoftwareType(applicationImport.getSoftwareType());
+                }
+                if (applicationImport.getCategory1() != null) {
+                    existingApplicationImport.setCategory1(applicationImport.getCategory1());
+                }
+                if (applicationImport.getCategory2() != null) {
+                    existingApplicationImport.setCategory2(applicationImport.getCategory2());
+                }
+                if (applicationImport.getCategory3() != null) {
+                    existingApplicationImport.setCategory3(applicationImport.getCategory3());
+                }
                 if (applicationImport.getTechnology() != null) {
                     existingApplicationImport.setTechnology(applicationImport.getTechnology());
+                }
+                if (applicationImport.getDocumentation() != null) {
+                    existingApplicationImport.setDocumentation(applicationImport.getDocumentation());
                 }
                 if (applicationImport.getComment() != null) {
                     existingApplicationImport.setComment(applicationImport.getComment());

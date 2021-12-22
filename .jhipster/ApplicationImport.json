@@ -26,7 +26,27 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "softwareType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "category1",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "category2",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "category3",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "technology",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "documentation",
       "fieldType": "String"
     },
     {
