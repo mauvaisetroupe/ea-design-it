@@ -14,6 +14,7 @@ export interface IApplicationImport {
   technology?: string | null;
   documentation?: string | null;
   comment?: string | null;
+  owner?: string | null;
   importStatus?: ImportStatus | null;
   importStatusMessage?: string | null;
   existingApplicationID?: string | null;
@@ -35,6 +36,7 @@ export class ApplicationImport implements IApplicationImport {
     public technology?: string | null,
     public documentation?: string | null,
     public comment?: string | null,
+    public owner?: string | null,
     public importStatus?: ImportStatus | null,
     public importStatusMessage?: string | null,
     public existingApplicationID?: string | null

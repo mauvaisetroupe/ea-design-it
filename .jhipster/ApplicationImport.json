@@ -54,6 +54,10 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "owner",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "importStatus",
       "fieldType": "ImportStatus",
       "fieldValues": "NEW,EXISTING,UPDATED,ERROR"

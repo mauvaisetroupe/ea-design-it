@@ -163,6 +163,9 @@ public class ApplicationImportResource {
                 if (applicationImport.getComment() != null) {
                     existingApplicationImport.setComment(applicationImport.getComment());
                 }
+                if (applicationImport.getOwner() != null) {
+                    existingApplicationImport.setOwner(applicationImport.getOwner());
+                }
                 if (applicationImport.getImportStatus() != null) {
                     existingApplicationImport.setImportStatus(applicationImport.getImportStatus());
                 }

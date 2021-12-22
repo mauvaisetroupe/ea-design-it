@@ -210,6 +210,7 @@ entity ApplicationImport(tmp_import_application_import) {
 	technology String
     documentation String
     comment String 
+    owner String
     importStatus ImportStatus
     importStatusMessage String
     existingApplicationID String // ID of Application when importStatus = EXISINT or UPDATED

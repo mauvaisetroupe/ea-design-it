@@ -53,6 +53,9 @@
             <column name="jhi_comment" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="owner" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="import_status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>

@@ -45,6 +45,7 @@ describe('Service Tests', () => {
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
+        'AAAAAAA',
         ImportStatus.NEW,
         'AAAAAAA',
         'AAAAAAA'
@@ -113,6 +114,7 @@ describe('Service Tests', () => {
             technology: 'BBBBBB',
             documentation: 'BBBBBB',
             comment: 'BBBBBB',
+            owner: 'BBBBBB',
             importStatus: 'BBBBBB',
             importStatusMessage: 'BBBBBB',
             existingApplicationID: 'BBBBBB',
@@ -147,7 +149,8 @@ describe('Service Tests', () => {
             type: 'BBBBBB',
             softwareType: 'BBBBBB',
             documentation: 'BBBBBB',
-            importStatus: 'BBBBBB',
+            owner: 'BBBBBB',
+            importStatusMessage: 'BBBBBB',
             existingApplicationID: 'BBBBBB',
           },
           new ApplicationImport()
@@ -189,6 +192,7 @@ describe('Service Tests', () => {
             technology: 'BBBBBB',
             documentation: 'BBBBBB',
             comment: 'BBBBBB',
+            owner: 'BBBBBB',
             importStatus: 'BBBBBB',
             importStatusMessage: 'BBBBBB',
             existingApplicationID: 'BBBBBB',

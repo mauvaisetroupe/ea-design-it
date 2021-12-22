@@ -61,6 +61,9 @@ public class ApplicationImport implements Serializable {
     @Column(name = "jhi_comment")
     private String comment;
 
+    @Column(name = "owner")
+    private String owner;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "import_status")
     private ImportStatus importStatus;
@@ -255,6 +258,19 @@ public class ApplicationImport implements Serializable {
         this.comment = comment;
     }
 
+    public String getOwner() {
+        return this.owner;
+    }
+
+    public ApplicationImport owner(String owner) {
+        this.setOwner(owner);
+        return this;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
     public ImportStatus getImportStatus() {
         return this.importStatus;
     }
@@ -331,6 +347,7 @@ public class ApplicationImport implements Serializable {
             ", technology='" + getTechnology() + "'" +
             ", documentation='" + getDocumentation() + "'" +
             ", comment='" + getComment() + "'" +
+            ", owner='" + getOwner() + "'" +
             ", importStatus='" + getImportStatus() + "'" +
             ", importStatusMessage='" + getImportStatusMessage() + "'" +
             ", existingApplicationID='" + getExistingApplicationID() + "'" +
