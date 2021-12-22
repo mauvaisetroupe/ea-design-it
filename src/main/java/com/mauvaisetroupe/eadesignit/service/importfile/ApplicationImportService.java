@@ -38,8 +38,8 @@ public class ApplicationImportService {
     private static final String APPLICATION_TYPE = "application.type";
     private static final String SOFTWARE_TYPE = "software.type";
     private static final String APPLICATION_CATEGORY_1 = "application.category.1";
-    private static final String APPLICATION_CATEGORY_2 = "application.category2";
-    private static final String APPLICATION_CATEGORY_3 = "application.category3";
+    private static final String APPLICATION_CATEGORY_2 = "application.category.2";
+    private static final String APPLICATION_CATEGORY_3 = "application.category.3";
     private static final String APPLICATION_TECHNOLOGY = "application.technology";
     private static final String APPLICATION_DOCUMENTATION = "application.documentation";
     private static final String APPLICATION_OWNER = "application.owner";
@@ -118,10 +118,13 @@ public class ApplicationImportService {
         applicationImport.setDescription((String) map.get(APPLICATION_DESCRIPTION));
         applicationImport.setComment((String) map.get(APPLICATION_COMMENT));
         applicationImport.setType((String) map.get(APPLICATION_TYPE));
+        applicationImport.setSoftwareType((String) map.get(SOFTWARE_TYPE));
         applicationImport.setTechnology((String) map.get(APPLICATION_TECHNOLOGY));
         applicationImport.setCategory1((String) map.get(APPLICATION_CATEGORY_1));
         applicationImport.setCategory2((String) map.get(APPLICATION_CATEGORY_2));
         applicationImport.setCategory3((String) map.get(APPLICATION_CATEGORY_3));
+        applicationImport.setOwner((String) map.get(APPLICATION_OWNER));
+        applicationImport.setDocumentation((String) map.get(APPLICATION_DOCUMENTATION));
         return applicationImport;
     }
 
