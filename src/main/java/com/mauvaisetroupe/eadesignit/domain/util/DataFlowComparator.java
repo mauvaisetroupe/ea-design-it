@@ -49,7 +49,7 @@ public class DataFlowComparator {
 
     public boolean areEquivalent(FlowImport flowImport, DataFlow potentiaDataFlow) {
         // in import excel process, just insert frequency, format and contract if API
-        if (!checkEqual(clean(flowImport.getFrequency()), potentiaDataFlow.getFrequency())) return false;
+        if (!checkEqual(EnumUtil.clean(flowImport.getFrequency()), potentiaDataFlow.getFrequency())) return false;
         if (!checkEqual(flowImport.getFormat(), potentiaDataFlow.getFormat())) return false;
         Protocol protocol = potentiaDataFlow.getFlowInterface().getProtocol();
         if (protocol != null && protocol.getType().equals(ProtocolType.API)) {
@@ -76,20 +76,8 @@ public class DataFlowComparator {
         return (string.toLowerCase().equals(frequency.name().toLowerCase()));
     }
 
-    private String clean(String value) {
-        if (value == null) return null;
-        return value
-            .replace('/', '_')
-            .replace(' ', '_')
-            .replace('(', '_')
-            .replace(')', '_')
-            .replace("__", "_")
-            .replace("__", "_")
-            .replaceAll("(.*)_$", "$1");
-    }
-
     public Frequency getFrequency(String frequency) {
-        return Frequency.valueOf(clean(frequency));
+        return Frequency.valueOf(EnumUtil.clean(frequency));
     }
 
     public DataFlow findEquivalentInCollection(FlowImport flowImport, Set<DataFlow> potentialDataFlows) {

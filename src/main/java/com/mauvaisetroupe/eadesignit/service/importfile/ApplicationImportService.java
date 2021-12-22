@@ -4,7 +4,10 @@ import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationCategory;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.domain.Technology;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
+import com.mauvaisetroupe.eadesignit.domain.util.EnumUtil;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationCategoryRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.TechnologyRepository;
@@ -31,7 +34,12 @@ public class ApplicationImportService {
     private static final String APPLICATION_DESCRIPTION = "application.description";
     private static final String APPLICATION_COMMENT = "application.comment";
     private static final String APPLICATION_TYPE = "application.type";
+    private static final String SOFTWARE_TYPE = "software.type";
+    private static final String APPLICATION_CATEGORY_1 = "application.category.1";
+    private static final String APPLICATION_CATEGORY_2 = "application.category2";
+    private static final String APPLICATION_CATEGORY_3 = "application.category3";
     private static final String APPLICATION_TECHNOLOGY = "application.technology";
+    private static final String APPLICATION_DOCUMENTATION = "application.documentation";
     private static final String APPLICATION_OWNER = "application.owner";
 
     private final List<String> columnsArray = new ArrayList<String>();
@@ -58,7 +66,12 @@ public class ApplicationImportService {
         this.columnsArray.add(APPLICATION_DESCRIPTION);
         this.columnsArray.add(APPLICATION_COMMENT);
         this.columnsArray.add(APPLICATION_TYPE);
+        this.columnsArray.add(SOFTWARE_TYPE);
+        this.columnsArray.add(APPLICATION_CATEGORY_1);
+        this.columnsArray.add(APPLICATION_CATEGORY_2);
+        this.columnsArray.add(APPLICATION_CATEGORY_3);
         this.columnsArray.add(APPLICATION_TECHNOLOGY);
+        this.columnsArray.add(APPLICATION_DOCUMENTATION);
         this.columnsArray.add(APPLICATION_OWNER);
     }
 
@@ -101,6 +114,9 @@ public class ApplicationImportService {
         applicationImport.setComment((String) map.get(APPLICATION_COMMENT));
         applicationImport.setType((String) map.get(APPLICATION_TYPE));
         applicationImport.setTechnology((String) map.get(APPLICATION_TECHNOLOGY));
+        applicationImport.setCategory1((String) map.get(APPLICATION_CATEGORY_1));
+        applicationImport.setCategory2((String) map.get(APPLICATION_CATEGORY_2));
+        applicationImport.setCategory3((String) map.get(APPLICATION_CATEGORY_3));
         return applicationImport;
     }
 
@@ -140,6 +156,18 @@ public class ApplicationImportService {
         application.setDescription(applicationImport.getDescription());
         application.setName(applicationImport.getName());
 
+        // Application Type
+        if (StringUtils.hasText(applicationImport.getType())) {
+            application.setApplicationType(ApplicationType.valueOf(EnumUtil.clean(applicationImport.getType())));
+        }
+
+        // Software Type
+        if (StringUtils.hasText(applicationImport.getSoftwareType())) {
+            application.setSoftwareType(SoftwareType.valueOf(EnumUtil.clean(applicationImport.getSoftwareType())));
+        }
+
+        // Technology
+
         if (StringUtils.hasText(applicationImport.getTechnology())) {
             Technology technology = technologyRepository.findByNameIgnoreCase(applicationImport.getTechnology());
             if (technology == null) {
@@ -150,16 +178,37 @@ public class ApplicationImportService {
             application.addTechnologies(technology);
         }
 
-        if (StringUtils.hasText(applicationImport.getType())) {
-            ApplicationCategory applicationCategory = applicationCategoryRepository.findByNameIgnoreCase(applicationImport.getType());
-            if (applicationCategory == null) {
-                applicationCategory = new ApplicationCategory();
-                applicationCategory.setName(applicationImport.getType());
-                applicationCategoryRepository.save(applicationCategory);
+        // Categories 1, 2 et 3
+
+        if (StringUtils.hasText(applicationImport.getCategory1())) {
+            ApplicationCategory applicationCategory1 = applicationCategoryRepository.findByNameIgnoreCase(applicationImport.getCategory1());
+            if (applicationCategory1 == null) {
+                applicationCategory1 = new ApplicationCategory();
+                applicationCategory1.setName(applicationImport.getCategory1());
+                applicationCategoryRepository.save(applicationCategory1);
             }
-            application.addCategories(applicationCategory);
+            application.addCategories(applicationCategory1);
         }
 
+        if (StringUtils.hasText(applicationImport.getCategory2())) {
+            ApplicationCategory applicationCategory2 = applicationCategoryRepository.findByNameIgnoreCase(applicationImport.getCategory2());
+            if (applicationCategory2 == null) {
+                applicationCategory2 = new ApplicationCategory();
+                applicationCategory2.setName(applicationImport.getCategory2());
+                applicationCategoryRepository.save(applicationCategory2);
+            }
+            application.addCategories(applicationCategory2);
+        }
+
+        if (StringUtils.hasText(applicationImport.getCategory3())) {
+            ApplicationCategory applicationCategory3 = applicationCategoryRepository.findByNameIgnoreCase(applicationImport.getCategory3());
+            if (applicationCategory3 == null) {
+                applicationCategory3 = new ApplicationCategory();
+                applicationCategory3.setName(applicationImport.getCategory3());
+                applicationCategoryRepository.save(applicationCategory3);
+            }
+            application.addCategories(applicationCategory3);
+        }
         return application;
     }
 }
