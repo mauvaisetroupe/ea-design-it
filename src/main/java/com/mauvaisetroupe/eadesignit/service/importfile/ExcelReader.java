@@ -90,6 +90,8 @@ public class ExcelReader {
     protected boolean isNull(String value) {
         if (!StringUtils.hasText(value)) return true;
         value = value.replace("?", "");
+        value = value.replace("N/A", "");
+        value = value.replace("n/a", "");
         if (!StringUtils.hasText(value)) return true;
         return false;
     }
