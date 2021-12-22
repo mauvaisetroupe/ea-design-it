@@ -85,6 +85,12 @@
             <span>{{ applicationImport.comment }}</span>
           </dd>
           <dt>
+            <span>Owner</span>
+          </dt>
+          <dd>
+            <span>{{ applicationImport.owner }}</span>
+          </dd>
+          <dt>
             <span>Import Status</span>
           </dt>
           <dd>

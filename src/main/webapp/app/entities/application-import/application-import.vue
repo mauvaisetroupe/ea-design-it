@@ -41,6 +41,7 @@
             <th scope="row"><span>Technology</span></th>
             <th scope="row"><span>Documentation</span></th>
             <th scope="row"><span>Comment</span></th>
+            <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>Import Status</span></th>
             <th scope="row"><span>Import Status Message</span></th>
             <th scope="row"><span>Existing Application ID</span></th>
@@ -67,6 +68,7 @@
             <td>{{ applicationImport.technology }}</td>
             <td>{{ applicationImport.documentation }}</td>
             <td>{{ applicationImport.comment }}</td>
+            <td>{{ applicationImport.owner }}</td>
             <td>{{ applicationImport.importStatus }}</td>
             <td>{{ applicationImport.importStatusMessage }}</td>
             <td>{{ applicationImport.existingApplicationID }}</td>

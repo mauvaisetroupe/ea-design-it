@@ -167,6 +167,18 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-import-owner">Owner</label>
+            <input
+              type="text"
+              class="form-control"
+              name="owner"
+              id="application-import-owner"
+              data-cy="owner"
+              :class="{ valid: !$v.applicationImport.owner.$invalid, invalid: $v.applicationImport.owner.$invalid }"
+              v-model="$v.applicationImport.owner.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="application-import-importStatus">Import Status</label>
             <select
               class="form-control"

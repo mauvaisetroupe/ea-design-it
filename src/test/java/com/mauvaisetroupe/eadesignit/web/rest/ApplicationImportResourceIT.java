@@ -69,6 +69,9 @@ class ApplicationImportResourceIT {
     private static final String DEFAULT_COMMENT = "AAAAAAAAAA";
     private static final String UPDATED_COMMENT = "BBBBBBBBBB";
 
+    private static final String DEFAULT_OWNER = "AAAAAAAAAA";
+    private static final String UPDATED_OWNER = "BBBBBBBBBB";
+
     private static final ImportStatus DEFAULT_IMPORT_STATUS = ImportStatus.NEW;
     private static final ImportStatus UPDATED_IMPORT_STATUS = ImportStatus.EXISTING;
 
@@ -116,6 +119,7 @@ class ApplicationImportResourceIT {
             .technology(DEFAULT_TECHNOLOGY)
             .documentation(DEFAULT_DOCUMENTATION)
             .comment(DEFAULT_COMMENT)
+            .owner(DEFAULT_OWNER)
             .importStatus(DEFAULT_IMPORT_STATUS)
             .importStatusMessage(DEFAULT_IMPORT_STATUS_MESSAGE)
             .existingApplicationID(DEFAULT_EXISTING_APPLICATION_ID);
@@ -143,6 +147,7 @@ class ApplicationImportResourceIT {
             .technology(UPDATED_TECHNOLOGY)
             .documentation(UPDATED_DOCUMENTATION)
             .comment(UPDATED_COMMENT)
+            .owner(UPDATED_OWNER)
             .importStatus(UPDATED_IMPORT_STATUS)
             .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE)
             .existingApplicationID(UPDATED_EXISTING_APPLICATION_ID);
@@ -182,6 +187,7 @@ class ApplicationImportResourceIT {
         assertThat(testApplicationImport.getTechnology()).isEqualTo(DEFAULT_TECHNOLOGY);
         assertThat(testApplicationImport.getDocumentation()).isEqualTo(DEFAULT_DOCUMENTATION);
         assertThat(testApplicationImport.getComment()).isEqualTo(DEFAULT_COMMENT);
+        assertThat(testApplicationImport.getOwner()).isEqualTo(DEFAULT_OWNER);
         assertThat(testApplicationImport.getImportStatus()).isEqualTo(DEFAULT_IMPORT_STATUS);
         assertThat(testApplicationImport.getImportStatusMessage()).isEqualTo(DEFAULT_IMPORT_STATUS_MESSAGE);
         assertThat(testApplicationImport.getExistingApplicationID()).isEqualTo(DEFAULT_EXISTING_APPLICATION_ID);
@@ -232,6 +238,7 @@ class ApplicationImportResourceIT {
             .andExpect(jsonPath("$.[*].technology").value(hasItem(DEFAULT_TECHNOLOGY)))
             .andExpect(jsonPath("$.[*].documentation").value(hasItem(DEFAULT_DOCUMENTATION)))
             .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)))
+            .andExpect(jsonPath("$.[*].owner").value(hasItem(DEFAULT_OWNER)))
             .andExpect(jsonPath("$.[*].importStatus").value(hasItem(DEFAULT_IMPORT_STATUS.toString())))
             .andExpect(jsonPath("$.[*].importStatusMessage").value(hasItem(DEFAULT_IMPORT_STATUS_MESSAGE)))
             .andExpect(jsonPath("$.[*].existingApplicationID").value(hasItem(DEFAULT_EXISTING_APPLICATION_ID)));
@@ -262,6 +269,7 @@ class ApplicationImportResourceIT {
             .andExpect(jsonPath("$.technology").value(DEFAULT_TECHNOLOGY))
             .andExpect(jsonPath("$.documentation").value(DEFAULT_DOCUMENTATION))
             .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT))
+            .andExpect(jsonPath("$.owner").value(DEFAULT_OWNER))
             .andExpect(jsonPath("$.importStatus").value(DEFAULT_IMPORT_STATUS.toString()))
             .andExpect(jsonPath("$.importStatusMessage").value(DEFAULT_IMPORT_STATUS_MESSAGE))
             .andExpect(jsonPath("$.existingApplicationID").value(DEFAULT_EXISTING_APPLICATION_ID));
@@ -300,6 +308,7 @@ class ApplicationImportResourceIT {
             .technology(UPDATED_TECHNOLOGY)
             .documentation(UPDATED_DOCUMENTATION)
             .comment(UPDATED_COMMENT)
+            .owner(UPDATED_OWNER)
             .importStatus(UPDATED_IMPORT_STATUS)
             .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE)
             .existingApplicationID(UPDATED_EXISTING_APPLICATION_ID);
@@ -329,6 +338,7 @@ class ApplicationImportResourceIT {
         assertThat(testApplicationImport.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
         assertThat(testApplicationImport.getDocumentation()).isEqualTo(UPDATED_DOCUMENTATION);
         assertThat(testApplicationImport.getComment()).isEqualTo(UPDATED_COMMENT);
+        assertThat(testApplicationImport.getOwner()).isEqualTo(UPDATED_OWNER);
         assertThat(testApplicationImport.getImportStatus()).isEqualTo(UPDATED_IMPORT_STATUS);
         assertThat(testApplicationImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
         assertThat(testApplicationImport.getExistingApplicationID()).isEqualTo(UPDATED_EXISTING_APPLICATION_ID);
@@ -411,7 +421,8 @@ class ApplicationImportResourceIT {
             .category2(UPDATED_CATEGORY_2)
             .category3(UPDATED_CATEGORY_3)
             .documentation(UPDATED_DOCUMENTATION)
-            .importStatus(UPDATED_IMPORT_STATUS);
+            .owner(UPDATED_OWNER)
+            .existingApplicationID(UPDATED_EXISTING_APPLICATION_ID);
 
         restApplicationImportMockMvc
             .perform(
@@ -438,9 +449,10 @@ class ApplicationImportResourceIT {
         assertThat(testApplicationImport.getTechnology()).isEqualTo(DEFAULT_TECHNOLOGY);
         assertThat(testApplicationImport.getDocumentation()).isEqualTo(UPDATED_DOCUMENTATION);
         assertThat(testApplicationImport.getComment()).isEqualTo(DEFAULT_COMMENT);
-        assertThat(testApplicationImport.getImportStatus()).isEqualTo(UPDATED_IMPORT_STATUS);
+        assertThat(testApplicationImport.getOwner()).isEqualTo(UPDATED_OWNER);
+        assertThat(testApplicationImport.getImportStatus()).isEqualTo(DEFAULT_IMPORT_STATUS);
         assertThat(testApplicationImport.getImportStatusMessage()).isEqualTo(DEFAULT_IMPORT_STATUS_MESSAGE);
-        assertThat(testApplicationImport.getExistingApplicationID()).isEqualTo(DEFAULT_EXISTING_APPLICATION_ID);
+        assertThat(testApplicationImport.getExistingApplicationID()).isEqualTo(UPDATED_EXISTING_APPLICATION_ID);
     }
 
     @Test
@@ -469,6 +481,7 @@ class ApplicationImportResourceIT {
             .technology(UPDATED_TECHNOLOGY)
             .documentation(UPDATED_DOCUMENTATION)
             .comment(UPDATED_COMMENT)
+            .owner(UPDATED_OWNER)
             .importStatus(UPDATED_IMPORT_STATUS)
             .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE)
             .existingApplicationID(UPDATED_EXISTING_APPLICATION_ID);
@@ -498,6 +511,7 @@ class ApplicationImportResourceIT {
         assertThat(testApplicationImport.getTechnology()).isEqualTo(UPDATED_TECHNOLOGY);
         assertThat(testApplicationImport.getDocumentation()).isEqualTo(UPDATED_DOCUMENTATION);
         assertThat(testApplicationImport.getComment()).isEqualTo(UPDATED_COMMENT);
+        assertThat(testApplicationImport.getOwner()).isEqualTo(UPDATED_OWNER);
         assertThat(testApplicationImport.getImportStatus()).isEqualTo(UPDATED_IMPORT_STATUS);
         assertThat(testApplicationImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
         assertThat(testApplicationImport.getExistingApplicationID()).isEqualTo(UPDATED_EXISTING_APPLICATION_ID);

@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface OwnerRepository extends JpaRepository<Owner, Long> {}
+public interface OwnerRepository extends JpaRepository<Owner, Long> {
+    Owner findByNameIgnoreCase(String name);
+}

@@ -3,6 +3,7 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationCategory;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
+import com.mauvaisetroupe.eadesignit.domain.Owner;
 import com.mauvaisetroupe.eadesignit.domain.Technology;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
@@ -10,6 +11,7 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
 import com.mauvaisetroupe.eadesignit.domain.util.EnumUtil;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationCategoryRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
 import com.mauvaisetroupe.eadesignit.repository.TechnologyRepository;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,15 +53,18 @@ public class ApplicationImportService {
     private final ApplicationRepository applicationRepository;
     private final ApplicationCategoryRepository applicationCategoryRepository;
     private final TechnologyRepository technologyRepository;
+    private final OwnerRepository ownerRepository;
 
     public ApplicationImportService(
         ApplicationRepository applicationRepository,
         ApplicationCategoryRepository applicationCategoryRepository,
-        TechnologyRepository technologyRepository
+        TechnologyRepository technologyRepository,
+        OwnerRepository ownerRepository
     ) {
         this.applicationRepository = applicationRepository;
         this.applicationCategoryRepository = applicationCategoryRepository;
         this.technologyRepository = technologyRepository;
+        this.ownerRepository = ownerRepository;
 
         this.columnsArray.add(APPLICATION_ID);
         this.columnsArray.add(APPLICATION_NAME);
@@ -176,6 +181,17 @@ public class ApplicationImportService {
                 technologyRepository.save(technology);
             }
             application.addTechnologies(technology);
+        }
+
+        // owner
+        if (StringUtils.hasText(applicationImport.getOwner())) {
+            Owner owner = ownerRepository.findByNameIgnoreCase(applicationImport.getOwner());
+            if (owner == null) {
+                owner = new Owner();
+                owner.setName(applicationImport.getOwner());
+                ownerRepository.save(owner);
+            }
+            application.setOwner(owner);
         }
 
         // Categories 1, 2 et 3

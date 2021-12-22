@@ -21,6 +21,7 @@ const validations: any = {
     technology: {},
     documentation: {},
     comment: {},
+    owner: {},
     importStatus: {},
     importStatusMessage: {},
     existingApplicationID: {},
