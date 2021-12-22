@@ -32,7 +32,22 @@
             <column name="jhi_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="software_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="category_1" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="category_2" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="category_3" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="technology" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="documentation" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="jhi_comment" type="varchar(255)">
