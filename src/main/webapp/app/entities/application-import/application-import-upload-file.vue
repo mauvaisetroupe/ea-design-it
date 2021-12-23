@@ -62,6 +62,7 @@
         </thead>
         <tbody>
           <tr v-for="applicationImport in applicationImports" :key="applicationImport.id" data-cy="entityTable">
+            <td>{{ applicationImport.id }}</td>
             <td>{{ applicationImport.importId }}</td>
             <td>{{ applicationImport.excelFileName }}</td>
             <td>{{ applicationImport.idFromExcel }}</td>
