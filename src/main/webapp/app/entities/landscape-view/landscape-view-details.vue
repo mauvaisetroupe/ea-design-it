@@ -122,6 +122,20 @@
         </tbody>
       </table>
       <h2>Draw.io</h2>
+      <div>
+        <button
+          v-if="drawIoSVG && !isEditing"
+          type="submit"
+          v-on:click="exportDrawIOXML()"
+          class="btn btn-info"
+          data-cy="entityDetailsBackButton"
+        >
+          <font-awesome-icon icon="eye"></font-awesome-icon>
+          <span> Export diagram</span>
+        </button>
+        <br />
+        <br />
+      </div>
       <div v-if="drawIoSVG && !isEditing">
         <div v-html="drawIoSVG" />
         <div v-if="accountService().writeAuthorities">
@@ -130,7 +144,7 @@
           <span v-if="!drawIOToBeSaved">[ <a v-on:click="deleteDiagram()">Delete diagram</a> ]</span>
         </div>
       </div>
-      <div v-if="!drawIoSVG && $store.getters.authenticated">
+      <div v-if="!drawIoSVG && accountService().writeAuthorities">
         <div>No preview available, <a v-on:click="editDiagram()">[ Generate and edit diagram ]</a></div>
         <div>(use Arrange > Layout > Vertical Flow or Arrange > Layout > Organic to distribute the first diagram components)</div>
       </div>
