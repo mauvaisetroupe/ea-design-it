@@ -2,19 +2,10 @@
   <div>
     <h2 id="page-heading" data-cy="ApplicationImportHeading">
       <span id="application-import-heading">Application Imports</span>
-
-      <div class="d-flex justify-content-end" v-if="rowsLoaded">
-        <router-link :to="{ name: 'ApplicationImportCreate' }" custom v-slot="{ navigate }">
-          <button
-            @click="navigate"
-            id="jh-create-entity"
-            data-cy="entityCreateButton"
-            class="btn btn-primary jh-create-entity create-application-import"
-          >
-            <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span>Import and update</span>
-          </button>
-        </router-link>
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-info mr-2" v-if="isFetching">
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refreshing</span>
+        </button>
       </div>
     </h2>
 

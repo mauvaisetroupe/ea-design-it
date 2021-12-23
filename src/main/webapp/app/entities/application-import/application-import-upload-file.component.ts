@@ -28,18 +28,15 @@ export default class ApplicationImportUploadFile extends Vue {
   public submitFile(): void {
     this.isFetching = true;
     this.fileSubmited = true;
-    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
     this.applicationImportService()
       .uploadFile(this.excelFile)
       .then(
         res => {
-          console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
           this.applicationImports = res.data;
           this.isFetching = false;
           this.rowsLoaded = true;
         },
         err => {
-          console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
           this.isFetching = false;
           this.alertService().showHttpError(this, err.response);
         }
