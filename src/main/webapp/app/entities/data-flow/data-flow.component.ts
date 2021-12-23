@@ -11,6 +11,34 @@ import AccountService from '@/account/account.service';
 @Component({
   mixins: [Vue2Filters.mixin],
 })
+@Component({
+  computed: {
+    filteredRows() {
+      return this.dataFlows.filter(row => {
+        const data_id = row.id.toString().toLowerCase();
+        const name = row.resourceName ? row.resourceName.toString().toLowerCase() : '';
+        const description = row.description ? row.description.toString().toLowerCase() : '';
+        const frequency = row.frequency ? row.frequency.toString().toLowerCase() : '';
+        const format = row.format ? row.format.name.toString().toLowerCase() : '';
+        const flowInterface = row.flowInterface ? row.flowInterface.alias.toString().toLowerCase() : '';
+        const protocol =
+          row.flowInterface != null && row.flowInterface.protocol != null ? row.flowInterface.protocol.name.toString().toLowerCase() : '';
+
+        const searchTerm = this.filter.toLowerCase();
+
+        return (
+          data_id.includes(searchTerm) ||
+          name.includes(searchTerm) ||
+          description.includes(searchTerm) ||
+          frequency.includes(searchTerm) ||
+          format.includes(searchTerm) ||
+          flowInterface.includes(searchTerm) ||
+          protocol.includes(searchTerm)
+        );
+      });
+    },
+  },
+})
 export default class DataFlow extends Vue {
   @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
   @Inject('alertService') private alertService: () => AlertService;
@@ -20,6 +48,8 @@ export default class DataFlow extends Vue {
   public dataFlows: IDataFlow[] = [];
 
   public isFetching = false;
+
+  public filter = '';
 
   public mounted(): void {
     this.retrieveAllDataFlows();

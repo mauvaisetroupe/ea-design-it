@@ -23,6 +23,11 @@
     <div class="alert alert-warning" v-if="!isFetching && dataFlows && dataFlows.length === 0">
       <span>No dataFlows found</span>
     </div>
+
+    <div>
+      <input type="text" placeholder="Filter by text" v-model="filter" />
+    </div>
+
     <div class="table-responsive" v-if="dataFlows && dataFlows.length > 0">
       <table class="table table-striped" aria-describedby="dataFlows">
         <thead>
@@ -40,11 +45,12 @@
             <th scope="row"><span>Functional Flows</span></th>
             <th scope="row"><span>Flow Interface</span></th>
             <th scope="row"><span>Interface Protocol</span></th>
+            <th scope="row"><span>Data Items</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="dataFlow in dataFlows" :key="dataFlow.id" data-cy="entityTable">
+          <tr v-for="dataFlow in filteredRows" :key="dataFlow.id" data-cy="entityTable">
             <td>
               <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }">{{ dataFlow.id }}</router-link>
             </td>
@@ -92,6 +98,14 @@
               </div>
             </td>
             <td>{{ dataFlow.flowInterface.protocol ? dataFlow.flowInterface.protocol.name : '' }}</td>
+            <td>
+              <span v-for="(dataFlowItem, i) in dataFlow.items" :key="dataFlowItem.id"
+                >{{ i > 0 ? ', ' : '' }}
+                <router-link :to="{ name: 'DataFlowItemView', params: { dataFlowItemId: dataFlowItem.id } }">{{
+                  dataFlowItem.id
+                }}</router-link>
+              </span>
+            </td>
             <td class="text-right">
               <div class="btn-group">
                 <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }" custom v-slot="{ navigate }">
