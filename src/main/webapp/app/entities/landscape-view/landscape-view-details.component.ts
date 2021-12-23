@@ -181,4 +181,14 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
       }
     }
   }
+
+  public exportDrawIOXML() {
+    let xmlContent = 'data:text/xml;charset=utf-8,';
+    xmlContent += this.landscapeView.compressedDrawXML;
+    const data = encodeURI(xmlContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', data);
+    link.setAttribute('download', 'draw-io-export-' + this.landscapeView.diagramName.replace(/ /g, '-') + '.xml');
+    link.click();
+  }
 }
