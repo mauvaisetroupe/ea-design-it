@@ -67,6 +67,7 @@ public class DataFlowImportService {
         List<Map<String, Object>> dataflowItems = datFlowExcelReader.getSheet(DATAFLOWITEM_SHEET_NAME);
 
         List<DataFlowImport> result = new ArrayList<DataFlowImport>();
+        int line = 1;
         for (Map<String, Object> map : dataflows) {
             DataFlowImport dataFlowImport = mapArrayToImportDataFlowImport(map);
             DataFlow dataFlow = null;
@@ -92,12 +93,15 @@ public class DataFlowImportService {
                 }
             } catch (Exception e) {
                 dataFlow = null;
-                dataFlowImport.setImportDataItemStatus(ImportStatus.ERROR);
+                dataFlowImport.setImportDataStatus(ImportStatus.ERROR);
                 dataFlowImport.setImportStatusMessage(e.getMessage());
             }
+            dataFlowImport.setDataId("data/" + line);
             result.add(dataFlowImport);
+            line++;
         }
 
+        line = 1;
         for (Map<String, Object> map : dataflowItems) {
             DataFlowImport dataFlowImport = mapArrayToImportDataFlowImport(map);
             DataFlowItem dataFlowItem = mapImportToDataFlowItem(dataFlowImport);
@@ -124,7 +128,9 @@ public class DataFlowImportService {
                 dataFlowImport.setImportDataItemStatus(ImportStatus.ERROR);
                 dataFlowImport.setImportStatusMessage(e.getMessage());
             }
+            dataFlowImport.setDataId("item/" + line);
             result.add(dataFlowImport);
+            line++;
         }
         return result;
     }
@@ -158,11 +164,11 @@ public class DataFlowImportService {
         DataFlow dataFlow = null;
         if (dataFlows == null || dataFlows.isEmpty()) {
             dataFlow = new DataFlow();
-            dataImport.setImportDataItemStatus(ImportStatus.NEW);
+            dataImport.setImportDataStatus(ImportStatus.NEW);
         } else {
             if (dataFlows.size() == 1) {
                 dataFlow = dataFlows.iterator().next();
-                dataImport.setImportDataItemStatus(ImportStatus.EXISTING);
+                dataImport.setImportDataStatus(ImportStatus.EXISTING);
             } else {
                 throw new Exception("Many dataflow for same resource name");
             }

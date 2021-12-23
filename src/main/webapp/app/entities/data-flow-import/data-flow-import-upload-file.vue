@@ -2,13 +2,20 @@
   <div>
     <h2 id="page-heading" data-cy="FlowImportHeading">
       <span id="flow-import-heading">Data & Data Item Imports</span>
-      <div class="d-flex justify-content-end" v-if="rowsLoaded || isFetching"></div>
+      <div class="d-flex justify-content-end" v-if="rowsLoaded || isFetching">
+        <button class="btn btn-info mr-2" v-on:click="filterErrors" :disabled="isFetching">
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Filter Errors</span>
+        </button>
+        <button class="btn btn-info mr-2" v-on:click="exportErrors" :disabled="isFetching">
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Export Errors Report</span>
+        </button>
+      </div>
     </h2>
 
     <div v-if="!rowsLoaded">
       <div class="form-group">
         <div class="custom-file">
-          <input type="file" id="customFile" @change="handleFileUpload($event)" multiple />
+          <input type="file" id="customFile" @change="handleFileUpload($event)" />
           <label class="custom-file-label" for="customFile">{{ excelFileName }}</label>
         </div>
       </div>
@@ -28,6 +35,9 @@
           <tr>
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Data Id</span></th>
+            <th scope="row"><span>Import Data Status</span></th>
+            <th scope="row"><span>Import Data Item Status</span></th>
+            <th scope="row"><span>Import Status Message</span></th>
             <th scope="row"><span>Data Parent Id</span></th>
             <th scope="row"><span>Data Parent Name</span></th>
             <th scope="row"><span>Functional Flow Id</span></th>
@@ -42,20 +52,26 @@
             <th scope="row"><span>Data Documentation URL</span></th>
             <th scope="row"><span>Source</span></th>
             <th scope="row"><span>Target</span></th>
-            <th scope="row"><span>Import Data Status</span></th>
-            <th scope="row"><span>Import Data Item Status</span></th>
-            <th scope="row"><span>Import Status Message</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="dataFlowImport in dataFlowImports" :key="dataFlowImport.id" data-cy="entityTable">
             <td>
-              <router-link :to="{ name: 'DataFlowImportView', params: { dataFlowImportId: dataFlowImport.id } }">{{
-                dataFlowImport.id
-              }}</router-link>
+              {{ dataFlowImport.id }}
             </td>
             <td>{{ dataFlowImport.dataId }}</td>
+            <td>
+              <span v-bind:class="[dataFlowImport.importDataStatus === 'ERROR' ? 'rederror' : '']">{{
+                dataFlowImport.importDataStatus
+              }}</span>
+            </td>
+            <td>
+              <span v-bind:class="[dataFlowImport.importDataItemStatus === 'ERROR' ? 'rederror' : '']">{{
+                dataFlowImport.importDataItemStatus
+              }}</span>
+            </td>
+            <td>{{ dataFlowImport.importStatusMessage }}</td>
             <td>{{ dataFlowImport.dataParentId }}</td>
             <td>{{ dataFlowImport.dataParentName }}</td>
             <td>{{ dataFlowImport.functionalFlowId }}</td>
@@ -70,17 +86,6 @@
             <td>{{ dataFlowImport.dataDocumentationURL }}</td>
             <td>{{ dataFlowImport.source }}</td>
             <td>{{ dataFlowImport.target }}</td>
-            <td>
-              <span v-bind:class="[dataFlowImport.importDataStatus === 'ERROR' ? 'rederror' : '']">{{
-                dataFlowImport.importDataStatus
-              }}</span>
-            </td>
-            <td>
-              <span v-bind:class="[dataFlowImport.importDataItemStatuss === 'ERROR' ? 'rederror' : '']">{{
-                dataFlowImport.importDataItemStatus
-              }}</span>
-            </td>
-            <td>{{ dataFlowImport.importStatusMessage }}</td>
           </tr>
         </tbody>
       </table>
