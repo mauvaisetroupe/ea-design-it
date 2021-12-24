@@ -122,31 +122,36 @@
         </tbody>
       </table>
       <h2>Draw.io</h2>
-      <div>
-        <button
-          v-if="drawIoSVG && !isEditing"
-          type="submit"
-          v-on:click="exportDrawIOXML()"
-          class="btn btn-info"
-          data-cy="entityDetailsBackButton"
-        >
-          <font-awesome-icon icon="eye"></font-awesome-icon>
-          <span> Export diagram</span>
+
+      <div v-if="!drawIoSVG && accountService().writeAuthorities">
+        <button @click="editDiagram()" class="btn btn-warning" v-if="accountService().writeAuthorities">
+          <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Generate diagram</span>
         </button>
-        <br />
-        <br />
-      </div>
-      <div v-if="drawIoSVG && !isEditing">
-        <div v-html="drawIoSVG" />
-        <div v-if="accountService().writeAuthorities">
-          [ <a v-on:click="editDiagram()">Edit diagram</a> ]
-          <span v-if="drawIOToBeSaved">[ <a v-on:click="saveDiagram()">Save diagram</a> ]</span>
-          <span v-if="!drawIOToBeSaved">[ <a v-on:click="deleteDiagram()">Delete diagram</a> ]</span>
+        <div>
+          No preview available, Generate diagram and use Arrange > Layout > Vertical Flow or Arrange > Layout > Organic to distribute the
+          first diagram components
         </div>
       </div>
-      <div v-if="!drawIoSVG && accountService().writeAuthorities">
-        <div>No preview available, <a v-on:click="editDiagram()">[ Generate and edit diagram ]</a></div>
-        <div>(use Arrange > Layout > Vertical Flow or Arrange > Layout > Organic to distribute the first diagram components)</div>
+
+      <div v-if="drawIoSVG && !isEditing">
+        <div v-html="drawIoSVG" />
+      </div>
+
+      <div class="btn-group">
+        <span v-if="!isEditing">
+          <button @click="editDiagram()" class="btn btn-warning" v-if="accountService().writeAuthorities && drawIoSVG">
+            <font-awesome-icon icon="pencil-alt"></font-awesome-icon><span> Edit diagram</span>
+          </button>
+          <button @click="saveDiagram()" class="btn btn-primary" v-if="accountService().writeAuthorities && drawIoSVG && drawIOToBeSaved">
+            <font-awesome-icon icon="pencil-alt"></font-awesome-icon><span> Save diagram</span>
+          </button>
+          <button @click="prepareRemove()" class="btn btn-danger" v-if="accountService().writeAuthorities && drawIoSVG && !drawIOToBeSaved">
+            <font-awesome-icon icon="times"></font-awesome-icon><span> Delete Diagram</span>
+          </button>
+          <button @click="exportDrawIOXML()" class="btn btn-info" v-if="drawIoSVG && !isEditing">
+            <font-awesome-icon icon="eye"></font-awesome-icon><span> Export diagram</span>
+          </button>
+        </span>
       </div>
       <div v-if="!isHidden">
         <iframe
@@ -156,6 +161,28 @@
         />
       </div>
     </div>
+    <b-modal ref="removeEntity" id="removeEntity">
+      <span slot="modal-title"
+        ><span id="eaDesignItApp.landscapeView.delete.question" data-cy="landscapeViewDeleteDialogHeading"
+          >Confirm delete operation</span
+        ></span
+      >
+      <div class="modal-body">
+        <p id="jhi-delete-landscapeView-heading">Are you sure you want to delete this Landscape View?</p>
+      </div>
+      <div slot="modal-footer">
+        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="jhi-confirm-delete-landscapeView"
+          data-cy="entityConfirmDeleteButton"
+          v-on:click="deleteDiagram()"
+        >
+          Delete
+        </button>
+      </div>
+    </b-modal>
   </div>
 </template>
 <style>

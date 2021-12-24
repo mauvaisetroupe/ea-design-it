@@ -153,6 +153,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
           this.alertService().showHttpError(this, err.response);
         }
       );
+    (<any>this.$refs.removeEntity).hide();
   }
 
   public receiveMessage(evt) {
@@ -190,5 +191,15 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     link.setAttribute('href', data);
     link.setAttribute('download', 'draw-io-export-' + this.landscapeView.diagramName.replace(/ /g, '-') + '.xml');
     link.click();
+  }
+
+  public prepareRemove(instance: ILandscapeView): void {
+    if (<any>this.$refs.removeEntity) {
+      (<any>this.$refs.removeEntity).show();
+    }
+  }
+
+  public closeDialog(): void {
+    (<any>this.$refs.removeEntity).hide();
   }
 }
