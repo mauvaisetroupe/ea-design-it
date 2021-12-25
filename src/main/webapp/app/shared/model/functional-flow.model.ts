@@ -4,7 +4,7 @@ import { IDataFlow } from '@/shared/model/data-flow.model';
 
 export interface IFunctionalFlow {
   id?: number;
-  alias?: string | null;
+  alias?: string;
   description?: string | null;
   comment?: string | null;
   status?: string | null;
@@ -13,14 +13,14 @@ export interface IFunctionalFlow {
   startDate?: Date | null;
   endDate?: Date | null;
   interfaces?: IFlowInterface[] | null;
-  landscapes?: ILandscapeView[];
+  landscapes?: ILandscapeView[] | null;
   dataFlows?: IDataFlow[] | null;
 }
 
 export class FunctionalFlow implements IFunctionalFlow {
   constructor(
     public id?: number,
-    public alias?: string | null,
+    public alias?: string,
     public description?: string | null,
     public comment?: string | null,
     public status?: string | null,
@@ -29,7 +29,7 @@ export class FunctionalFlow implements IFunctionalFlow {
     public startDate?: Date | null,
     public endDate?: Date | null,
     public interfaces?: IFlowInterface[] | null,
-    public landscapes?: ILandscapeView[],
+    public landscapes?: ILandscapeView[] | null,
     public dataFlows?: IDataFlow[] | null
   ) {}
 }

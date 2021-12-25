@@ -6,7 +6,7 @@ import { IFlowInterface } from '@/shared/model/flow-interface.model';
 import { Frequency } from '@/shared/model/enumerations/frequency.model';
 export interface IDataFlow {
   id?: number;
-  resourceName?: string | null;
+  resourceName?: string;
   resourceType?: string | null;
   description?: string | null;
   frequency?: Frequency | null;
@@ -23,7 +23,7 @@ export interface IDataFlow {
 export class DataFlow implements IDataFlow {
   constructor(
     public id?: number,
-    public resourceName?: string | null,
+    public resourceName?: string,
     public resourceType?: string | null,
     public description?: string | null,
     public frequency?: Frequency | null,

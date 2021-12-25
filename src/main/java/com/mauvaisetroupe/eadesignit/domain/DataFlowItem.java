@@ -26,7 +26,8 @@ public class DataFlowItem implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "resource_name")
+    @NotNull
+    @Column(name = "resource_name", nullable = false)
     private String resourceName;
 
     @Column(name = "resource_type")

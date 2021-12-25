@@ -41,8 +41,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ApplicationResourceIT {
 
-    private static final String DEFAULT_ALIAS = "HPX.CMP.71231711";
-    private static final String UPDATED_ALIAS = "HPX.CMP.48642885";
+    private static final String DEFAULT_ALIAS = "AAAAAAAAAA";
+    private static final String UPDATED_ALIAS = "BBBBBBBBBB";
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
@@ -65,8 +65,8 @@ class ApplicationResourceIT {
     private static final ApplicationType DEFAULT_APPLICATION_TYPE = ApplicationType.SOFTWARE;
     private static final ApplicationType UPDATED_APPLICATION_TYPE = ApplicationType.MIDDLEWARE;
 
-    private static final SoftwareType DEFAULT_SOFTWARE_TYPE = SoftwareType.ONPREMISE_COTS;
-    private static final SoftwareType UPDATED_SOFTWARE_TYPE = SoftwareType.ONPREMISE_CUSTOM;
+    private static final SoftwareType DEFAULT_SOFTWARE_TYPE = SoftwareType.ON_PREMISE_COTS;
+    private static final SoftwareType UPDATED_SOFTWARE_TYPE = SoftwareType.ON_PREMISE_CUSTOM;
 
     private static final String ENTITY_API_URL = "/api/applications";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -173,6 +173,23 @@ class ApplicationResourceIT {
         // Validate the Application in the database
         List<Application> applicationList = applicationRepository.findAll();
         assertThat(applicationList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = applicationRepository.findAll().size();
+        // set the field null
+        application.setName(null);
+
+        // Create the Application, which fails.
+
+        restApplicationMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(application)))
+            .andExpect(status().isBadRequest());
+
+        List<Application> applicationList = applicationRepository.findAll();
+        assertThat(applicationList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -360,7 +377,7 @@ class ApplicationResourceIT {
         Application partialUpdatedApplication = new Application();
         partialUpdatedApplication.setId(application.getId());
 
-        partialUpdatedApplication.description(UPDATED_DESCRIPTION).endDate(UPDATED_END_DATE);
+        partialUpdatedApplication.name(UPDATED_NAME).endDate(UPDATED_END_DATE);
 
         restApplicationMockMvc
             .perform(
@@ -375,8 +392,8 @@ class ApplicationResourceIT {
         assertThat(applicationList).hasSize(databaseSizeBeforeUpdate);
         Application testApplication = applicationList.get(applicationList.size() - 1);
         assertThat(testApplication.getAlias()).isEqualTo(DEFAULT_ALIAS);
-        assertThat(testApplication.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testApplication.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testApplication.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testApplication.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testApplication.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testApplication.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
         assertThat(testApplication.getStartDate()).isEqualTo(DEFAULT_START_DATE);

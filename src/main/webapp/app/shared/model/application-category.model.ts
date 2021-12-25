@@ -3,7 +3,7 @@ import { IApplicationComponent } from '@/shared/model/application-component.mode
 
 export interface IApplicationCategory {
   id?: number;
-  name?: string | null;
+  name?: string;
   type?: string | null;
   description?: string | null;
   applications?: IApplication[] | null;
@@ -13,7 +13,7 @@ export interface IApplicationCategory {
 export class ApplicationCategory implements IApplicationCategory {
   constructor(
     public id?: number,
-    public name?: string | null,
+    public name?: string,
     public type?: string | null,
     public description?: string | null,
     public applications?: IApplication[] | null,

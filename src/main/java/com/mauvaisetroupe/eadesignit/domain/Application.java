@@ -28,11 +28,11 @@ public class Application implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Pattern(regexp = "^HPX\\.CMP\\.[0-9]{8}$")
-    @Column(name = "alias")
+    @Column(name = "alias", unique = true)
     private String alias;
 
-    @Column(name = "name")
+    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Size(max = 1500)

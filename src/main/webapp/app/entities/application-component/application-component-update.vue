@@ -11,6 +11,19 @@
             <input type="text" class="form-control" id="id" name="id" v-model="applicationComponent.id" readonly />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-component-alias">Alias</label>
+            <input
+              type="text"
+              class="form-control"
+              name="alias"
+              id="application-component-alias"
+              data-cy="alias"
+              :class="{ valid: !$v.applicationComponent.alias.$invalid, invalid: $v.applicationComponent.alias.$invalid }"
+              v-model="$v.applicationComponent.alias.$model"
+            />
+            <div v-if="$v.applicationComponent.alias.$anyDirty && $v.applicationComponent.alias.$invalid"></div>
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="application-component-name">Name</label>
             <input
               type="text"
@@ -20,7 +33,11 @@
               data-cy="name"
               :class="{ valid: !$v.applicationComponent.name.$invalid, invalid: $v.applicationComponent.name.$invalid }"
               v-model="$v.applicationComponent.name.$model"
+              required
             />
+            <div v-if="$v.applicationComponent.name.$anyDirty && $v.applicationComponent.name.$invalid">
+              <small class="form-text text-danger" v-if="!$v.applicationComponent.name.required"> This field is required. </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="application-component-description">Description</label>

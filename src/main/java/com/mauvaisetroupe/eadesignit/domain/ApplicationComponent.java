@@ -28,7 +28,11 @@ public class ApplicationComponent implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "alias", unique = true)
+    private String alias;
+
+    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Size(max = 1000)
@@ -95,6 +99,19 @@ public class ApplicationComponent implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getAlias() {
+        return this.alias;
+    }
+
+    public ApplicationComponent alias(String alias) {
+        this.setAlias(alias);
+        return this;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public String getName() {
@@ -288,6 +305,7 @@ public class ApplicationComponent implements Serializable {
     public String toString() {
         return "ApplicationComponent{" +
             "id=" + getId() +
+            ", alias='" + getAlias() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", comment='" + getComment() + "'" +

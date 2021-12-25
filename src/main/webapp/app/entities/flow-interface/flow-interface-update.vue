@@ -21,7 +21,11 @@
               data-cy="alias"
               :class="{ valid: !$v.flowInterface.alias.$invalid, invalid: $v.flowInterface.alias.$invalid }"
               v-model="$v.flowInterface.alias.$model"
+              required
             />
+            <div v-if="$v.flowInterface.alias.$anyDirty && $v.flowInterface.alias.$invalid">
+              <small class="form-text text-danger" v-if="!$v.flowInterface.alias.required"> This field is required. </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="flow-interface-status">Status</label>

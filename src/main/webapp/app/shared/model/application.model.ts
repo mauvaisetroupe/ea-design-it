@@ -8,7 +8,7 @@ import { SoftwareType } from '@/shared/model/enumerations/software-type.model';
 export interface IApplication {
   id?: number;
   alias?: string | null;
-  name?: string | null;
+  name?: string;
   description?: string | null;
   comment?: string | null;
   documentationURL?: string | null;
@@ -26,7 +26,7 @@ export class Application implements IApplication {
   constructor(
     public id?: number,
     public alias?: string | null,
-    public name?: string | null,
+    public name?: string,
     public description?: string | null,
     public comment?: string | null,
     public documentationURL?: string | null,

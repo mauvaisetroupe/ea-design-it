@@ -18,7 +18,11 @@
               data-cy="name"
               :class="{ valid: !$v.dataFormat.name.$invalid, invalid: $v.dataFormat.name.$invalid }"
               v-model="$v.dataFormat.name.$model"
+              required
             />
+            <div v-if="$v.dataFormat.name.$anyDirty && $v.dataFormat.name.$invalid">
+              <small class="form-text text-danger" v-if="!$v.dataFormat.name.required"> This field is required. </small>
+            </div>
           </div>
         </div>
         <div>

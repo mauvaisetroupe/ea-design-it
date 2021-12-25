@@ -7,7 +7,7 @@ import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 export interface IFlowInterface {
   id?: number;
-  alias?: string | null;
+  alias?: string;
   status?: string | null;
   documentationURL?: string | null;
   documentationURL2?: string | null;
@@ -26,7 +26,7 @@ export interface IFlowInterface {
 export class FlowInterface implements IFlowInterface {
   constructor(
     public id?: number,
-    public alias?: string | null,
+    public alias?: string,
     public status?: string | null,
     public documentationURL?: string | null,
     public documentationURL2?: string | null,

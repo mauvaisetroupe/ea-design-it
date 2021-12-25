@@ -1,5 +1,5 @@
 relationship ManyToMany {
-	LandscapeView{flows(alias)} to FunctionalFlow{landscape(diagramName) required}
+	LandscapeView{flows(alias)} to FunctionalFlow{landscape(diagramName) }
 	
     FunctionalFlow{interfaces(alias)} to FlowInterface{functionalFlows(alias)}
 	
@@ -47,7 +47,7 @@ entity Owner {
 }
 
 entity FunctionalFlow(flow) {
-    alias String
+    alias String required unique // mandatory for label on arrow diagram
     description String maxlength(1500)
     comment String maxlength(1000)  
     status String
@@ -58,7 +58,7 @@ entity FunctionalFlow(flow) {
 }
 
 entity FlowInterface(interface) {
-    alias String
+    alias String required unique // mandatory for label on arrow diagram
     status String
     documentationURL String maxlength(500)
     documentationURL2 String maxlength(500)
@@ -67,8 +67,8 @@ entity FlowInterface(interface) {
 }
 
 entity Application {
-	alias String pattern(/^HPX\.CMP\.[0-9]{8}$/)
-	name String,
+	alias String unique
+	name String required
     description String maxlength(1500)
     comment String maxlength(1000)  
     documentationURL String maxlength(500)
@@ -80,8 +80,8 @@ entity Application {
 }
 
 entity Protocol {
-	name String
-    type ProtocolType
+	name String required
+    type ProtocolType required
     description String maxlength(1000)
     scope String
 }
@@ -95,7 +95,7 @@ entity Protocol {
  * - An XSD when Protocol=ESB, MESSAGING
  */
 entity DataFlow(dataflow) {
-    resourceName String /** TOPIC name for event, FileName for Files*/
+    resourceName String required /** TOPIC name for event, FileName for Files*/
     resourceType String
     description String maxlength(1000)
     frequency Frequency
@@ -110,7 +110,7 @@ entity DataFlow(dataflow) {
  * - A Event when DataFlow.Protocol=Event
  */
 entity DataFlowItem {
-    resourceName String
+    resourceName String required
     resourceType String
     description String maxlength(1000)  
     contractURL String maxlength(500)
@@ -121,7 +121,8 @@ entity DataFlowItem {
 
 
 entity ApplicationComponent(component) {
-	name String,
+    alias String unique
+	name String required
     description String maxlength(1000),
     comment String maxlength(500)  
     documentationURL String maxlength(500)
@@ -132,17 +133,17 @@ entity ApplicationComponent(component) {
 }
 
 entity DataFormat {
-	name String
+	name String required
 }
 
 entity ApplicationCategory {
-    name String
+    name String required
     type String
     description String maxlength(250)     
 }
 
 entity Technology {
-    name String
+    name String required
     type String
     description String maxlength(250)  
 }
@@ -185,10 +186,12 @@ enum ApplicationType {
 }
 
 enum SoftwareType {
-	ONPREMISE_COTS
-    ONPREMISE_CUSTOM
+    ON_PREMISE_COTS
+    ON_PREMISE_CUSTOM
     CLOUD_CUSTOM
     CLOUD_SAAS
+    CLOUD_THIRD_PARTY
+    ON_PREMISE_EXTERNAL_LIBRARY
 }
 
 

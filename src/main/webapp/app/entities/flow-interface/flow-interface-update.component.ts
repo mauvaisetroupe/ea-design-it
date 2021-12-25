@@ -1,6 +1,6 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import { maxLength, required } from 'vuelidate/lib/validators';
+import { required, maxLength } from 'vuelidate/lib/validators';
 
 import AlertService from '@/shared/alert/alert.service';
 
@@ -27,7 +27,9 @@ import FlowInterfaceService from './flow-interface.service';
 
 const validations: any = {
   flowInterface: {
-    alias: {},
+    alias: {
+      required,
+    },
     status: {},
     documentationURL: {
       maxLength: maxLength(500),

@@ -120,6 +120,23 @@ class TechnologyResourceIT {
 
     @Test
     @Transactional
+    void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = technologyRepository.findAll().size();
+        // set the field null
+        technology.setName(null);
+
+        // Create the Technology, which fails.
+
+        restTechnologyMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(technology)))
+            .andExpect(status().isBadRequest());
+
+        List<Technology> technologyList = technologyRepository.findAll();
+        assertThat(technologyList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllTechnologies() throws Exception {
         // Initialize the database
         technologyRepository.saveAndFlush(technology);

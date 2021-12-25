@@ -45,7 +45,7 @@ describe('Service Tests', () => {
         currentDate,
         currentDate,
         ApplicationType.SOFTWARE,
-        SoftwareType.ONPREMISE_COTS
+        SoftwareType.ON_PREMISE_COTS
       );
     });
 

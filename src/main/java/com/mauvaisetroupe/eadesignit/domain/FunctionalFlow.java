@@ -27,7 +27,8 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "alias")
+    @NotNull
+    @Column(name = "alias", nullable = false, unique = true)
     private String alias;
 
     @Size(max = 1500)

@@ -191,6 +191,23 @@ class DataFlowResourceIT {
 
     @Test
     @Transactional
+    void checkResourceNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = dataFlowRepository.findAll().size();
+        // set the field null
+        dataFlow.setResourceName(null);
+
+        // Create the DataFlow, which fails.
+
+        restDataFlowMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(dataFlow)))
+            .andExpect(status().isBadRequest());
+
+        List<DataFlow> dataFlowList = dataFlowRepository.findAll();
+        assertThat(dataFlowList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllDataFlows() throws Exception {
         // Initialize the database
         dataFlowRepository.saveAndFlush(dataFlow);

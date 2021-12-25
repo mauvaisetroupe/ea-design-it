@@ -2,8 +2,14 @@
   "name": "ApplicationComponent",
   "fields": [
     {
+      "fieldName": "alias",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
       "fieldName": "name",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "description",
@@ -39,7 +45,7 @@
     {
       "fieldName": "softwareType",
       "fieldType": "SoftwareType",
-      "fieldValues": "ONPREMISE_COTS,ONPREMISE_CUSTOM,CLOUD_CUSTOM,CLOUD_SAAS"
+      "fieldValues": "ON_PREMISE_COTS,ON_PREMISE_CUSTOM,CLOUD_CUSTOM,CLOUD_SAAS,CLOUD_THIRD_PARTY,ON_PREMISE_EXTERNAL_LIBRARY"
     }
   ],
   "relationships": [

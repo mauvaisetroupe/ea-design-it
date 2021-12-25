@@ -8,6 +8,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +48,7 @@ public class DataFormatResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/data-formats")
-    public ResponseEntity<DataFormat> createDataFormat(@RequestBody DataFormat dataFormat) throws URISyntaxException {
+    public ResponseEntity<DataFormat> createDataFormat(@Valid @RequestBody DataFormat dataFormat) throws URISyntaxException {
         log.debug("REST request to save DataFormat : {}", dataFormat);
         if (dataFormat.getId() != null) {
             throw new BadRequestAlertException("A new dataFormat cannot already have an ID", ENTITY_NAME, "idexists");
@@ -71,7 +73,7 @@ public class DataFormatResource {
     @PutMapping("/data-formats/{id}")
     public ResponseEntity<DataFormat> updateDataFormat(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody DataFormat dataFormat
+        @Valid @RequestBody DataFormat dataFormat
     ) throws URISyntaxException {
         log.debug("REST request to update DataFormat : {}, {}", id, dataFormat);
         if (dataFormat.getId() == null) {
@@ -106,7 +108,7 @@ public class DataFormatResource {
     @PatchMapping(value = "/data-formats/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<DataFormat> partialUpdateDataFormat(
         @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody DataFormat dataFormat
+        @NotNull @RequestBody DataFormat dataFormat
     ) throws URISyntaxException {
         log.debug("REST request to partial update DataFormat partially : {}, {}", id, dataFormat);
         if (dataFormat.getId() == null) {

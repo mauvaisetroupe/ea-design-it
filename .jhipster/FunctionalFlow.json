@@ -3,7 +3,8 @@
   "fields": [
     {
       "fieldName": "alias",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
     },
     {
       "fieldName": "description",
@@ -55,7 +56,6 @@
       "relationshipType": "many-to-many",
       "otherEntityName": "landscapeView",
       "otherEntityRelationshipName": "flows",
-      "relationshipValidateRules": "required",
       "relationshipName": "landscape",
       "otherEntityField": "diagramName",
       "ownerSide": false

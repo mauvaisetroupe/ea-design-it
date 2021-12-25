@@ -26,7 +26,8 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface> {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "alias")
+    @NotNull
+    @Column(name = "alias", nullable = false, unique = true)
     private String alias;
 
     @Column(name = "status")

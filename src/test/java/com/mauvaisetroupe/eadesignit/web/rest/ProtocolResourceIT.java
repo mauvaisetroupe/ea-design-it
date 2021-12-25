@@ -125,6 +125,40 @@ class ProtocolResourceIT {
 
     @Test
     @Transactional
+    void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = protocolRepository.findAll().size();
+        // set the field null
+        protocol.setName(null);
+
+        // Create the Protocol, which fails.
+
+        restProtocolMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(protocol)))
+            .andExpect(status().isBadRequest());
+
+        List<Protocol> protocolList = protocolRepository.findAll();
+        assertThat(protocolList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = protocolRepository.findAll().size();
+        // set the field null
+        protocol.setType(null);
+
+        // Create the Protocol, which fails.
+
+        restProtocolMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(protocol)))
+            .andExpect(status().isBadRequest());
+
+        List<Protocol> protocolList = protocolRepository.findAll();
+        assertThat(protocolList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllProtocols() throws Exception {
         // Initialize the database
         protocolRepository.saveAndFlush(protocol);

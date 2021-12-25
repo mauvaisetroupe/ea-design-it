@@ -130,6 +130,25 @@ class ApplicationCategoryResourceIT {
 
     @Test
     @Transactional
+    void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = applicationCategoryRepository.findAll().size();
+        // set the field null
+        applicationCategory.setName(null);
+
+        // Create the ApplicationCategory, which fails.
+
+        restApplicationCategoryMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(applicationCategory))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<ApplicationCategory> applicationCategoryList = applicationCategoryRepository.findAll();
+        assertThat(applicationCategoryList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllApplicationCategories() throws Exception {
         // Initialize the database
         applicationCategoryRepository.saveAndFlush(applicationCategory);

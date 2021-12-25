@@ -126,6 +126,9 @@ public class ApplicationComponentResource {
         Optional<ApplicationComponent> result = applicationComponentRepository
             .findById(applicationComponent.getId())
             .map(existingApplicationComponent -> {
+                if (applicationComponent.getAlias() != null) {
+                    existingApplicationComponent.setAlias(applicationComponent.getAlias());
+                }
                 if (applicationComponent.getName() != null) {
                     existingApplicationComponent.setName(applicationComponent.getName());
                 }
