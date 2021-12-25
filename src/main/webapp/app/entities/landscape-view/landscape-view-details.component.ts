@@ -8,6 +8,9 @@ import LandscapeViewService from './landscape-view.service';
 import AlertService from '@/shared/alert/alert.service';
 import AccountService from '@/account/account.service';
 import { FlowImport, IFlowImport } from '@/shared/model/flow-import.model';
+import { FlowInterface, IFlowInterface } from '@/shared/model/flow-interface.model';
+import { FunctionalFlow } from '@/shared/model/functional-flow.model';
+import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 @Component
 export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
@@ -36,7 +39,6 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
       .find(landscapeViewId)
       .then(res => {
         this.landscapeView = res;
-        this.fillCaption();
         if (this.landscapeView.compressedDrawSVG) {
           this.drawIoSVG = decodeURIComponent(escape(window.atob(this.landscapeView.compressedDrawSVG)));
         }
@@ -45,41 +47,6 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
         this.alertService().showHttpError(this, error.response);
       });
     this.getPlantUML(landscapeViewId);
-  }
-
-  public fillCaption() {
-    let mycolor = 'mycolor';
-    this.landscapeView.flows.forEach(flow => {
-      let firstLine = true;
-      if (mycolor === 'mycolor') {
-        mycolor = '';
-      } else {
-        mycolor = 'mycolor';
-      }
-      flow.interfaces.forEach(inter => {
-        let aliasLabel = '|';
-        let aliasDescription = '|';
-        if (firstLine) {
-          aliasLabel = flow.alias;
-          aliasDescription = flow.description;
-        }
-
-        const caption = {
-          flowAlias: aliasLabel,
-          flowID: flow.id,
-          interfaceAlias: inter.alias,
-          interfaceID: inter.id,
-          description: aliasDescription,
-          protocol: inter.protocol,
-          source: inter.source,
-          target: inter.target,
-          colored: mycolor,
-          dataFlows: inter.dataFlows,
-        };
-        this.captions.push(caption);
-        firstLine = false;
-      });
-    });
   }
 
   public previousState() {

@@ -59,8 +59,10 @@
         <br />
       </div>
       <br />
-      <h2>PlantUML preview</h2>
+      <h3>Landscape "{{ landscapeView.diagramName }}" diagram</h3>
       <div v-html="plantUMLImage" class="table-responsive"></div>
+      <br />
+      <h3>Landscape "{{ landscapeView.diagramName }}" Functional Flows</h3>
       <br />
       <table class="table">
         <thead>
@@ -76,51 +78,127 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="caption in captions" v-bind:key="caption.id" :class="caption.colored">
-            <td>
-              <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: caption.flowID } }">{{
-                caption.flowAlias
-              }}</router-link>
-            </td>
-            <td>{{ caption.description }}</td>
-            <td>
-              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: caption.interfaceID } }">{{
-                caption.interfaceAlias
-              }}</router-link>
-            </td>
-            <td>
-              <router-link :to="{ name: 'ApplicationView', params: { applicationId: caption.source.id } }">
-                {{ caption.source.name }}
-              </router-link>
-            </td>
-            <td>
-              <router-link :to="{ name: 'ApplicationView', params: { applicationId: caption.target.id } }">
-                {{ caption.target.name }}
-              </router-link>
-            </td>
-            <td>
-              <router-link
-                v-if="caption.protocol"
-                :to="{ name: 'ProtocolView', params: { protocolId: caption.protocol.id } }"
-                :title="caption.protocol.name"
-              >
-                {{ caption.protocol.type }}
-              </router-link>
-            </td>
-            <td>
-              <span v-for="(dataFlow, i) in caption.dataFlows" :key="dataFlow.id"
-                >{{ i > 0 ? ', ' : '' }}
-                <router-link
-                  class="form-control-static"
-                  :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }"
-                  :title="dataFlow.resourceName"
-                  >{{ dataFlow.id }}</router-link
-                >
-              </span>
-            </td>
-          </tr>
+          <template v-for="(functionalFlow, i) in landscapeView.flows">
+            <template v-for="(inter, j) in functionalFlow.interfaces">
+              <tr v-bind:key="inter.id" :class="i % 2 == 0 ? 'mycolor' : ''">
+                <td>
+                  <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }" v-if="j == 0">{{
+                    functionalFlow.alias
+                  }}</router-link>
+                </td>
+                <td>
+                  <span v-if="j == 0">{{ functionalFlow.description }}</span>
+                </td>
+                <td>
+                  <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: inter.id } }">{{ inter.alias }}</router-link>
+                </td>
+                <td>
+                  <router-link :to="{ name: 'ApplicationView', params: { applicationId: inter.source.id } }">
+                    {{ inter.source.name }}
+                  </router-link>
+                </td>
+                <td>
+                  <router-link :to="{ name: 'ApplicationView', params: { applicationId: inter.target.id } }">
+                    {{ inter.target.name }}
+                  </router-link>
+                </td>
+                <td>
+                  <router-link
+                    v-if="inter.protocol"
+                    :to="{ name: 'ProtocolView', params: { protocolId: inter.protocol.id } }"
+                    :title="inter.protocol.name"
+                  >
+                    {{ inter.protocol.type }}
+                  </router-link>
+                </td>
+                <td>
+                  <span v-for="(dataFlow, i) in inter.dataFlows" :key="dataFlow.id"
+                    >{{ i > 0 ? ', ' : '' }}
+                    <router-link
+                      class="form-control-static"
+                      :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }"
+                      :title="dataFlow.resourceName"
+                      >{{ dataFlow.id }}</router-link
+                    >
+                  </span>
+                </td>
+                <td class="text-right">
+                  <div class="btn-group" v-if="j == 0">
+                    <router-link
+                      :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }"
+                      custom
+                      v-slot="{ navigate }"
+                    >
+                      <button
+                        @click="navigate"
+                        class="btn btn-primary btn-sm edit"
+                        data-cy="entityEditButton"
+                        v-if="accountService().writeAuthorities"
+                      >
+                        <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+                        <span class="d-none d-md-inline">Edit</span>
+                      </button>
+
+                      <button
+                        @click="navigate"
+                        class="btn btn-info btn-sm details"
+                        data-cy="entityDetailsButton"
+                        v-if="!accountService().writeAuthorities"
+                      >
+                        <font-awesome-icon icon="eye"></font-awesome-icon>
+                        <span class="d-none d-md-inline">View</span>
+                      </button>
+                    </router-link>
+
+                    <b-button
+                      v-if="accountService().writeAuthorities"
+                      v-on:click="prepareRemove(functionalFlow.id)"
+                      variant="warning"
+                      class="btn btn-sm"
+                      data-cy="entityDeleteButton"
+                      v-b-modal.removeEntity
+                    >
+                      <font-awesome-icon icon="times"></font-awesome-icon>
+                      <span class="d-none d-md-inline">Detach</span>
+                    </b-button>
+                  </div>
+                </td>
+              </tr>
+            </template>
+          </template>
         </tbody>
       </table>
+
+      <div class="d-flex justify-content-end">
+        <span>
+          <button
+            class="btn btn-primary jh-create-entity create-functional-flow"
+            v-if="accountService().writeAuthorities"
+            @click="addNew()"
+          >
+            <font-awesome-icon icon="plus"></font-awesome-icon>
+            <span>Add exisintg Functional Flow</span>
+          </button>
+
+          <router-link
+            :to="{ name: 'FunctionalFlowCreate', query: { landscapeViewId: landscapeView.id } }"
+            custom
+            v-slot="{ navigate }"
+            v-if="accountService().writeAuthorities"
+          >
+            <button
+              @click="navigate"
+              id="jh-create-entity"
+              data-cy="entityCreateButton"
+              class="btn btn-primary jh-create-entity create-functional-flow"
+            >
+              <font-awesome-icon icon="plus"></font-awesome-icon>
+              <span> Create a new Functional Flow </span>
+            </button>
+          </router-link>
+        </span>
+      </div>
+
       <h2>Draw.io</h2>
 
       <div v-if="!drawIoSVG && accountService().writeAuthorities">

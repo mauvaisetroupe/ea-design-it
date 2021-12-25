@@ -120,11 +120,13 @@
             <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
           </button>
         </router-link>
+        <br />
+        <br />
 
+        <h3>{{ flowInterface.alias }} Data Flows</h3>
         <div class="table-responsive" v-if="flowInterface.dataFlows && flowInterface.dataFlows.length > 0">
           <br />
           <br />
-          <h3>Data Flows declared for interface {{ flowInterface.alias }}</h3>
           <table class="table table-striped" aria-describedby="dataFlows">
             <thead>
               <tr>
@@ -144,9 +146,68 @@
                 <td>{{ dataFlow.resourceName }}</td>
                 <td>{{ dataFlow.resourceType }}</td>
                 <td>{{ dataFlow.description }}</td>
+                <td class="text-right">
+                  <div class="btn-group">
+                    <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }" custom v-slot="{ navigate }">
+                      <button
+                        @click="navigate"
+                        class="btn btn-info btn-sm details"
+                        data-cy="entityDetailsButton"
+                        v-if="!accountService().writeAuthorities"
+                      >
+                        <font-awesome-icon icon="eye"></font-awesome-icon>
+                        <span class="d-none d-md-inline">View</span>
+                      </button>
+                      <button
+                        @click="navigate"
+                        class="btn btn-primary btn-sm edit"
+                        data-cy="entityEditButton"
+                        v-if="accountService().writeAuthorities"
+                      >
+                        <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+                        <span class="d-none d-md-inline">Edit</span>
+                      </button>
+                    </router-link>
+                    <b-button
+                      v-if="accountService().writeAuthorities"
+                      v-on:click="prepareRemove(inter)"
+                      variant="warning"
+                      class="btn btn-sm"
+                      data-cy="entityDeleteButton"
+                      v-b-modal.removeEntity
+                    >
+                      <font-awesome-icon icon="times"></font-awesome-icon>
+                      <span class="d-none d-md-inline">Detach</span>
+                    </b-button>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="d-flex justify-content-end">
+          <span>
+            <button
+              class="btn btn-primary jh-create-entity create-functional-flow"
+              v-if="accountService().writeAuthorities"
+              @click="addNew()"
+            >
+              <font-awesome-icon icon="plus"></font-awesome-icon>
+              <span>Add exisintg Data Flow</span>
+            </button>
+            <router-link :to="{ name: 'DataFlowCreate' }" custom v-slot="{ navigate }" v-if="accountService().writeAuthorities">
+              <button
+                @click="navigate"
+                id="jh-create-entity"
+                data-cy="entityCreateButton"
+                class="btn btn-primary jh-create-entity create-flow-interface"
+                v-if="accountService().writeAuthorities"
+              >
+                <font-awesome-icon icon="plus"></font-awesome-icon>
+                <span> Create a new Data Flow </span>
+              </button>
+            </router-link>
+          </span>
         </div>
 
         <div class="table-responsive" v-if="flowInterface.functionalFlows && flowInterface.functionalFlows.length > 0">

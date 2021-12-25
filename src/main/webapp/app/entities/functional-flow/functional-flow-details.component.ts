@@ -27,7 +27,6 @@ export default class FunctionalFlowDetails extends Vue {
       .find(functionalFlowId)
       .then(res => {
         this.functionalFlow = res;
-        this.fillCaption();
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
@@ -37,22 +36,6 @@ export default class FunctionalFlowDetails extends Vue {
 
   public previousState() {
     this.$router.go(-1);
-  }
-
-  public fillCaption() {
-    this.functionalFlow.interfaces.forEach(inter => {
-      const caption = {
-        flowAlias: this.functionalFlow.alias,
-        interfaceAlias: inter.alias,
-        interfaceID: inter.id,
-        description: this.functionalFlow.description,
-        protocol: inter.protocol,
-        source: inter.source,
-        target: inter.target,
-        dataFlows: inter.dataFlows,
-      };
-      this.captions.push(caption);
-    });
   }
 
   public getPlantUML(landscapeViewId) {
