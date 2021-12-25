@@ -4,7 +4,8 @@
     {
       "fieldName": "resourceName",
       "fieldType": "String",
-      "javadoc": "TOPIC name for event, FileName for Files"
+      "javadoc": "TOPIC name for event, FileName for Files",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "resourceType",

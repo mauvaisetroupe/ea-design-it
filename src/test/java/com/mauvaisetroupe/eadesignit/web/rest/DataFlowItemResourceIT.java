@@ -152,6 +152,23 @@ class DataFlowItemResourceIT {
 
     @Test
     @Transactional
+    void checkResourceNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = dataFlowItemRepository.findAll().size();
+        // set the field null
+        dataFlowItem.setResourceName(null);
+
+        // Create the DataFlowItem, which fails.
+
+        restDataFlowItemMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(dataFlowItem)))
+            .andExpect(status().isBadRequest());
+
+        List<DataFlowItem> dataFlowItemList = dataFlowItemRepository.findAll();
+        assertThat(dataFlowItemList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllDataFlowItems() throws Exception {
         // Initialize the database
         dataFlowItemRepository.saveAndFlush(dataFlowItem);

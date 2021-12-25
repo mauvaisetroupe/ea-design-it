@@ -7,6 +7,12 @@
         </h2>
         <dl class="row jh-entity-details">
           <dt>
+            <span>Alias</span>
+          </dt>
+          <dd>
+            <span>{{ applicationComponent.alias }}</span>
+          </dd>
+          <dt>
             <span>Name</span>
           </dt>
           <dd>

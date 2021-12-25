@@ -3,12 +3,14 @@
   "fields": [
     {
       "fieldName": "name",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "type",
       "fieldType": "ProtocolType",
-      "fieldValues": "API,ESB,EVENT,FILE,MESSAGING,SOAP,ETL,DB,FRONT,OTHER"
+      "fieldValues": "API,ESB,EVENT,FILE,MESSAGING,SOAP,ETL,DB,FRONT,OTHER",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "description",

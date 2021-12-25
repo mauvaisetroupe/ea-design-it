@@ -18,7 +18,11 @@
               data-cy="name"
               :class="{ valid: !$v.protocol.name.$invalid, invalid: $v.protocol.name.$invalid }"
               v-model="$v.protocol.name.$model"
+              required
             />
+            <div v-if="$v.protocol.name.$anyDirty && $v.protocol.name.$invalid">
+              <small class="form-text text-danger" v-if="!$v.protocol.name.required"> This field is required. </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="protocol-type">Type</label>
@@ -29,9 +33,13 @@
               v-model="$v.protocol.type.$model"
               id="protocol-type"
               data-cy="type"
+              required
             >
               <option v-for="protocolType in protocolTypeValues" :key="protocolType" v-bind:value="protocolType">{{ protocolType }}</option>
             </select>
+            <div v-if="$v.protocol.type.$anyDirty && $v.protocol.type.$invalid">
+              <small class="form-text text-danger" v-if="!$v.protocol.type.required"> This field is required. </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="protocol-description">Description</label>

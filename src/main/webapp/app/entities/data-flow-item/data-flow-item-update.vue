@@ -20,7 +20,11 @@
               data-cy="resourceName"
               :class="{ valid: !$v.dataFlowItem.resourceName.$invalid, invalid: $v.dataFlowItem.resourceName.$invalid }"
               v-model="$v.dataFlowItem.resourceName.$model"
+              required
             />
+            <div v-if="$v.dataFlowItem.resourceName.$anyDirty && $v.dataFlowItem.resourceName.$invalid">
+              <small class="form-text text-danger" v-if="!$v.dataFlowItem.resourceName.required"> This field is required. </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="data-flow-item-resourceType">Resource Type</label>

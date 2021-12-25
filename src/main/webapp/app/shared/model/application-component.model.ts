@@ -6,7 +6,8 @@ import { ApplicationType } from '@/shared/model/enumerations/application-type.mo
 import { SoftwareType } from '@/shared/model/enumerations/software-type.model';
 export interface IApplicationComponent {
   id?: number;
-  name?: string | null;
+  alias?: string | null;
+  name?: string;
   description?: string | null;
   comment?: string | null;
   documentationURL?: string | null;
@@ -22,7 +23,8 @@ export interface IApplicationComponent {
 export class ApplicationComponent implements IApplicationComponent {
   constructor(
     public id?: number,
-    public name?: string | null,
+    public alias?: string | null,
+    public name?: string,
     public description?: string | null,
     public comment?: string | null,
     public documentationURL?: string | null,

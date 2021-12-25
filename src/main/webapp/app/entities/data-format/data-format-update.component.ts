@@ -1,5 +1,7 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
+import { required } from 'vuelidate/lib/validators';
+
 import AlertService from '@/shared/alert/alert.service';
 
 import { IDataFormat, DataFormat } from '@/shared/model/data-format.model';
@@ -7,7 +9,9 @@ import DataFormatService from './data-format.service';
 
 const validations: any = {
   dataFormat: {
-    name: {},
+    name: {
+      required,
+    },
   },
 };
 

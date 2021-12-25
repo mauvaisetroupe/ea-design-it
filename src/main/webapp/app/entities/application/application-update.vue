@@ -19,11 +19,7 @@
               :class="{ valid: !$v.application.alias.$invalid, invalid: $v.application.alias.$invalid }"
               v-model="$v.application.alias.$model"
             />
-            <div v-if="$v.application.alias.$anyDirty && $v.application.alias.$invalid">
-              <small class="form-text text-danger" v-if="!$v.application.alias.pattern">
-                This field should follow pattern for "Alias".
-              </small>
-            </div>
+            <div v-if="$v.application.alias.$anyDirty && $v.application.alias.$invalid"></div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="application-name">Name</label>
@@ -35,7 +31,11 @@
               data-cy="name"
               :class="{ valid: !$v.application.name.$invalid, invalid: $v.application.name.$invalid }"
               v-model="$v.application.name.$model"
+              required
             />
+            <div v-if="$v.application.name.$anyDirty && $v.application.name.$invalid">
+              <small class="form-text text-danger" v-if="!$v.application.name.required"> This field is required. </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="application-description">Description</label>

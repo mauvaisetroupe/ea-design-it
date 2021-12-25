@@ -20,7 +20,11 @@
               data-cy="name"
               :class="{ valid: !$v.applicationCategory.name.$invalid, invalid: $v.applicationCategory.name.$invalid }"
               v-model="$v.applicationCategory.name.$model"
+              required
             />
+            <div v-if="$v.applicationCategory.name.$anyDirty && $v.applicationCategory.name.$invalid">
+              <small class="form-text text-danger" v-if="!$v.applicationCategory.name.required"> This field is required. </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="application-category-type">Type</label>

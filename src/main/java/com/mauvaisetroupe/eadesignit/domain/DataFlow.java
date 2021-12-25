@@ -35,8 +35,9 @@ public class DataFlow implements Serializable {
     /**
      * TOPIC name for event, FileName for Files
      */
-    @ApiModelProperty(value = "TOPIC name for event, FileName for Files")
-    @Column(name = "resource_name")
+    @ApiModelProperty(value = "TOPIC name for event, FileName for Files", required = true)
+    @NotNull
+    @Column(name = "resource_name", nullable = false)
     private String resourceName;
 
     @Column(name = "resource_type")

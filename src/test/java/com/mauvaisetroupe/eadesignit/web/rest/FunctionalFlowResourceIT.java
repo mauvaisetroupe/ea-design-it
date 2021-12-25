@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
-import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -100,16 +99,6 @@ class FunctionalFlowResourceIT {
             .documentationURL2(DEFAULT_DOCUMENTATION_URL_2)
             .startDate(DEFAULT_START_DATE)
             .endDate(DEFAULT_END_DATE);
-        // Add required entity
-        LandscapeView landscapeView;
-        if (TestUtil.findAll(em, LandscapeView.class).isEmpty()) {
-            landscapeView = LandscapeViewResourceIT.createEntity(em);
-            em.persist(landscapeView);
-            em.flush();
-        } else {
-            landscapeView = TestUtil.findAll(em, LandscapeView.class).get(0);
-        }
-        functionalFlow.getLandscapes().add(landscapeView);
         return functionalFlow;
     }
 
@@ -129,16 +118,6 @@ class FunctionalFlowResourceIT {
             .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE);
-        // Add required entity
-        LandscapeView landscapeView;
-        if (TestUtil.findAll(em, LandscapeView.class).isEmpty()) {
-            landscapeView = LandscapeViewResourceIT.createUpdatedEntity(em);
-            em.persist(landscapeView);
-            em.flush();
-        } else {
-            landscapeView = TestUtil.findAll(em, LandscapeView.class).get(0);
-        }
-        functionalFlow.getLandscapes().add(landscapeView);
         return functionalFlow;
     }
 
@@ -190,6 +169,25 @@ class FunctionalFlowResourceIT {
         // Validate the FunctionalFlow in the database
         List<FunctionalFlow> functionalFlowList = functionalFlowRepository.findAll();
         assertThat(functionalFlowList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    void checkAliasIsRequired() throws Exception {
+        int databaseSizeBeforeTest = functionalFlowRepository.findAll().size();
+        // set the field null
+        functionalFlow.setAlias(null);
+
+        // Create the FunctionalFlow, which fails.
+
+        restFunctionalFlowMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(functionalFlow))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<FunctionalFlow> functionalFlowList = functionalFlowRepository.findAll();
+        assertThat(functionalFlowList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test

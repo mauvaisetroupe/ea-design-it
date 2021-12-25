@@ -20,7 +20,11 @@
               data-cy="alias"
               :class="{ valid: !$v.functionalFlow.alias.$invalid, invalid: $v.functionalFlow.alias.$invalid }"
               v-model="$v.functionalFlow.alias.$model"
+              required
             />
+            <div v-if="$v.functionalFlow.alias.$anyDirty && $v.functionalFlow.alias.$invalid">
+              <small class="form-text text-danger" v-if="!$v.functionalFlow.alias.required"> This field is required. </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="functional-flow-description">Description</label>
@@ -177,9 +181,6 @@
                 {{ flowInterfaceOption.alias }}
               </option>
             </select>
-          </div>
-          <div v-if="$v.functionalFlow.landscapes.$anyDirty && $v.functionalFlow.landscapes.$invalid">
-            <small class="form-text text-danger" v-if="!$v.functionalFlow.landscapes.required"> This field is required. </small>
           </div>
         </div>
         <div>

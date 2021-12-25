@@ -3,7 +3,8 @@
   "fields": [
     {
       "fieldName": "alias",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
     },
     {
       "fieldName": "status",

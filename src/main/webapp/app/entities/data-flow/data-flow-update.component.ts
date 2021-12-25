@@ -1,6 +1,6 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import { maxLength, required } from 'vuelidate/lib/validators';
+import { required, maxLength } from 'vuelidate/lib/validators';
 
 import AlertService from '@/shared/alert/alert.service';
 
@@ -22,7 +22,9 @@ import { Frequency } from '@/shared/model/enumerations/frequency.model';
 
 const validations: any = {
   dataFlow: {
-    resourceName: {},
+    resourceName: {
+      required,
+    },
     resourceType: {},
     description: {
       maxLength: maxLength(1000),

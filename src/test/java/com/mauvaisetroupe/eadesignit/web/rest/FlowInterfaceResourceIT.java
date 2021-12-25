@@ -171,6 +171,23 @@ class FlowInterfaceResourceIT {
 
     @Test
     @Transactional
+    void checkAliasIsRequired() throws Exception {
+        int databaseSizeBeforeTest = flowInterfaceRepository.findAll().size();
+        // set the field null
+        flowInterface.setAlias(null);
+
+        // Create the FlowInterface, which fails.
+
+        restFlowInterfaceMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(flowInterface)))
+            .andExpect(status().isBadRequest());
+
+        List<FlowInterface> flowInterfaceList = flowInterfaceRepository.findAll();
+        assertThat(flowInterfaceList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllFlowInterfaces() throws Exception {
         // Initialize the database
         flowInterfaceRepository.saveAndFlush(flowInterface);

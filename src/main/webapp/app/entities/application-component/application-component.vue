@@ -28,6 +28,7 @@
         <thead>
           <tr>
             <th scope="row"><span>ID</span></th>
+            <th scope="row"><span>Alias</span></th>
             <th scope="row"><span>Name</span></th>
             <th scope="row"><span>Description</span></th>
             <th scope="row"><span>Comment</span></th>
@@ -49,6 +50,7 @@
                 applicationComponent.id
               }}</router-link>
             </td>
+            <td>{{ applicationComponent.alias }}</td>
             <td>{{ applicationComponent.name }}</td>
             <td>{{ applicationComponent.description }}</td>
             <td>{{ applicationComponent.comment }}</td>

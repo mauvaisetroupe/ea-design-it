@@ -41,10 +41,11 @@ describe('Service Tests', () => {
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
+        'AAAAAAA',
         currentDate,
         currentDate,
         ApplicationType.SOFTWARE,
-        SoftwareType.ONPREMISE_COTS
+        SoftwareType.ON_PREMISE_COTS
       );
     });
 
@@ -111,6 +112,7 @@ describe('Service Tests', () => {
       it('should update a ApplicationComponent', async () => {
         const returnedFromService = Object.assign(
           {
+            alias: 'BBBBBB',
             name: 'BBBBBB',
             description: 'BBBBBB',
             comment: 'BBBBBB',
@@ -151,10 +153,10 @@ describe('Service Tests', () => {
       it('should partial update a ApplicationComponent', async () => {
         const patchObject = Object.assign(
           {
-            description: 'BBBBBB',
+            name: 'BBBBBB',
+            comment: 'BBBBBB',
             documentationURL: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),
-            endDate: dayjs(currentDate).format(DATE_FORMAT),
           },
           new ApplicationComponent()
         );
@@ -188,6 +190,7 @@ describe('Service Tests', () => {
       it('should return a list of ApplicationComponent', async () => {
         const returnedFromService = Object.assign(
           {
+            alias: 'BBBBBB',
             name: 'BBBBBB',
             description: 'BBBBBB',
             comment: 'BBBBBB',

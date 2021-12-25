@@ -18,7 +18,11 @@
               data-cy="name"
               :class="{ valid: !$v.technology.name.$invalid, invalid: $v.technology.name.$invalid }"
               v-model="$v.technology.name.$model"
+              required
             />
+            <div v-if="$v.technology.name.$anyDirty && $v.technology.name.$invalid">
+              <small class="form-text text-danger" v-if="!$v.technology.name.required"> This field is required. </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="technology-type">Type</label>

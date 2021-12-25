@@ -1,6 +1,6 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import { maxLength, required } from 'vuelidate/lib/validators';
+import { required, maxLength } from 'vuelidate/lib/validators';
 
 import AlertService from '@/shared/alert/alert.service';
 
@@ -18,7 +18,9 @@ import FunctionalFlowService from './functional-flow.service';
 
 const validations: any = {
   functionalFlow: {
-    alias: {},
+    alias: {
+      required,
+    },
     description: {
       maxLength: maxLength(1500),
     },
@@ -34,9 +36,6 @@ const validations: any = {
     },
     startDate: {},
     endDate: {},
-    landscapes: {
-      required,
-    },
   },
 };
 

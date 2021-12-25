@@ -15,7 +15,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="alias" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_flow__alias" />
             </column>
             <column name="description" type="varchar(1500)">
                 <constraints nullable="true" />

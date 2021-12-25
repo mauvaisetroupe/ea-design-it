@@ -112,6 +112,23 @@ class DataFormatResourceIT {
 
     @Test
     @Transactional
+    void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = dataFormatRepository.findAll().size();
+        // set the field null
+        dataFormat.setName(null);
+
+        // Create the DataFormat, which fails.
+
+        restDataFormatMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(dataFormat)))
+            .andExpect(status().isBadRequest());
+
+        List<DataFormat> dataFormatList = dataFormatRepository.findAll();
+        assertThat(dataFormatList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllDataFormats() throws Exception {
         // Initialize the database
         dataFormatRepository.saveAndFlush(dataFormat);

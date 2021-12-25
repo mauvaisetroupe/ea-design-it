@@ -1,8 +1,8 @@
 import { ProtocolType } from '@/shared/model/enumerations/protocol-type.model';
 export interface IProtocol {
   id?: number;
-  name?: string | null;
-  type?: ProtocolType | null;
+  name?: string;
+  type?: ProtocolType;
   description?: string | null;
   scope?: string | null;
 }
@@ -10,8 +10,8 @@ export interface IProtocol {
 export class Protocol implements IProtocol {
   constructor(
     public id?: number,
-    public name?: string | null,
-    public type?: ProtocolType | null,
+    public name?: string,
+    public type?: ProtocolType,
     public description?: string | null,
     public scope?: string | null
   ) {}

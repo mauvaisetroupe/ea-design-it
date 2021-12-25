@@ -42,6 +42,9 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ApplicationComponentResourceIT {
 
+    private static final String DEFAULT_ALIAS = "AAAAAAAAAA";
+    private static final String UPDATED_ALIAS = "BBBBBBBBBB";
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
@@ -63,8 +66,8 @@ class ApplicationComponentResourceIT {
     private static final ApplicationType DEFAULT_APPLICATION_TYPE = ApplicationType.SOFTWARE;
     private static final ApplicationType UPDATED_APPLICATION_TYPE = ApplicationType.MIDDLEWARE;
 
-    private static final SoftwareType DEFAULT_SOFTWARE_TYPE = SoftwareType.ONPREMISE_COTS;
-    private static final SoftwareType UPDATED_SOFTWARE_TYPE = SoftwareType.ONPREMISE_CUSTOM;
+    private static final SoftwareType DEFAULT_SOFTWARE_TYPE = SoftwareType.ON_PREMISE_COTS;
+    private static final SoftwareType UPDATED_SOFTWARE_TYPE = SoftwareType.ON_PREMISE_CUSTOM;
 
     private static final String ENTITY_API_URL = "/api/application-components";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -94,6 +97,7 @@ class ApplicationComponentResourceIT {
      */
     public static ApplicationComponent createEntity(EntityManager em) {
         ApplicationComponent applicationComponent = new ApplicationComponent()
+            .alias(DEFAULT_ALIAS)
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .comment(DEFAULT_COMMENT)
@@ -123,6 +127,7 @@ class ApplicationComponentResourceIT {
      */
     public static ApplicationComponent createUpdatedEntity(EntityManager em) {
         ApplicationComponent applicationComponent = new ApplicationComponent()
+            .alias(UPDATED_ALIAS)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .comment(UPDATED_COMMENT)
@@ -166,6 +171,7 @@ class ApplicationComponentResourceIT {
         List<ApplicationComponent> applicationComponentList = applicationComponentRepository.findAll();
         assertThat(applicationComponentList).hasSize(databaseSizeBeforeCreate + 1);
         ApplicationComponent testApplicationComponent = applicationComponentList.get(applicationComponentList.size() - 1);
+        assertThat(testApplicationComponent.getAlias()).isEqualTo(DEFAULT_ALIAS);
         assertThat(testApplicationComponent.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testApplicationComponent.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testApplicationComponent.getComment()).isEqualTo(DEFAULT_COMMENT);
@@ -200,6 +206,27 @@ class ApplicationComponentResourceIT {
 
     @Test
     @Transactional
+    void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = applicationComponentRepository.findAll().size();
+        // set the field null
+        applicationComponent.setName(null);
+
+        // Create the ApplicationComponent, which fails.
+
+        restApplicationComponentMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(applicationComponent))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<ApplicationComponent> applicationComponentList = applicationComponentRepository.findAll();
+        assertThat(applicationComponentList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllApplicationComponents() throws Exception {
         // Initialize the database
         applicationComponentRepository.saveAndFlush(applicationComponent);
@@ -210,6 +237,7 @@ class ApplicationComponentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(applicationComponent.getId().intValue())))
+            .andExpect(jsonPath("$.[*].alias").value(hasItem(DEFAULT_ALIAS)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)))
@@ -250,6 +278,7 @@ class ApplicationComponentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(applicationComponent.getId().intValue()))
+            .andExpect(jsonPath("$.alias").value(DEFAULT_ALIAS))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT))
@@ -280,6 +309,7 @@ class ApplicationComponentResourceIT {
         // Disconnect from session so that the updates on updatedApplicationComponent are not directly saved in db
         em.detach(updatedApplicationComponent);
         updatedApplicationComponent
+            .alias(UPDATED_ALIAS)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .comment(UPDATED_COMMENT)
@@ -301,6 +331,7 @@ class ApplicationComponentResourceIT {
         List<ApplicationComponent> applicationComponentList = applicationComponentRepository.findAll();
         assertThat(applicationComponentList).hasSize(databaseSizeBeforeUpdate);
         ApplicationComponent testApplicationComponent = applicationComponentList.get(applicationComponentList.size() - 1);
+        assertThat(testApplicationComponent.getAlias()).isEqualTo(UPDATED_ALIAS);
         assertThat(testApplicationComponent.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testApplicationComponent.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testApplicationComponent.getComment()).isEqualTo(UPDATED_COMMENT);
@@ -382,9 +413,10 @@ class ApplicationComponentResourceIT {
         partialUpdatedApplicationComponent.setId(applicationComponent.getId());
 
         partialUpdatedApplicationComponent
+            .description(UPDATED_DESCRIPTION)
             .comment(UPDATED_COMMENT)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
-            .startDate(UPDATED_START_DATE);
+            .softwareType(UPDATED_SOFTWARE_TYPE);
 
         restApplicationComponentMockMvc
             .perform(
@@ -398,14 +430,15 @@ class ApplicationComponentResourceIT {
         List<ApplicationComponent> applicationComponentList = applicationComponentRepository.findAll();
         assertThat(applicationComponentList).hasSize(databaseSizeBeforeUpdate);
         ApplicationComponent testApplicationComponent = applicationComponentList.get(applicationComponentList.size() - 1);
+        assertThat(testApplicationComponent.getAlias()).isEqualTo(DEFAULT_ALIAS);
         assertThat(testApplicationComponent.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testApplicationComponent.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testApplicationComponent.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testApplicationComponent.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testApplicationComponent.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
-        assertThat(testApplicationComponent.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testApplicationComponent.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testApplicationComponent.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testApplicationComponent.getApplicationType()).isEqualTo(DEFAULT_APPLICATION_TYPE);
-        assertThat(testApplicationComponent.getSoftwareType()).isEqualTo(DEFAULT_SOFTWARE_TYPE);
+        assertThat(testApplicationComponent.getSoftwareType()).isEqualTo(UPDATED_SOFTWARE_TYPE);
     }
 
     @Test
@@ -421,6 +454,7 @@ class ApplicationComponentResourceIT {
         partialUpdatedApplicationComponent.setId(applicationComponent.getId());
 
         partialUpdatedApplicationComponent
+            .alias(UPDATED_ALIAS)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .comment(UPDATED_COMMENT)
@@ -442,6 +476,7 @@ class ApplicationComponentResourceIT {
         List<ApplicationComponent> applicationComponentList = applicationComponentRepository.findAll();
         assertThat(applicationComponentList).hasSize(databaseSizeBeforeUpdate);
         ApplicationComponent testApplicationComponent = applicationComponentList.get(applicationComponentList.size() - 1);
+        assertThat(testApplicationComponent.getAlias()).isEqualTo(UPDATED_ALIAS);
         assertThat(testApplicationComponent.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testApplicationComponent.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testApplicationComponent.getComment()).isEqualTo(UPDATED_COMMENT);

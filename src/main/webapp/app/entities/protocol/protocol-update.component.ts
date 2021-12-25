@@ -1,6 +1,6 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import { maxLength } from 'vuelidate/lib/validators';
+import { required, maxLength } from 'vuelidate/lib/validators';
 
 import AlertService from '@/shared/alert/alert.service';
 
@@ -10,8 +10,12 @@ import { ProtocolType } from '@/shared/model/enumerations/protocol-type.model';
 
 const validations: any = {
   protocol: {
-    name: {},
-    type: {},
+    name: {
+      required,
+    },
+    type: {
+      required,
+    },
     description: {
       maxLength: maxLength(1000),
     },
