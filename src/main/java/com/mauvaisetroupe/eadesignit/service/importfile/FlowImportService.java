@@ -147,11 +147,15 @@ public class FlowImportService {
                     if (dataFlow != null) {
                         functionalFlow.addDataFlows(dataFlow);
                         flowInterface.addDataFlows(dataFlow);
+                        // validate here beacause relationship should not be null
+                        validateBean(dataFlow);
                         dataFlowRepository.save(dataFlow);
                         interfaceRepository.save(flowInterface);
                     }
                     if (protocol != null) {
                         flowInterface.setProtocol(protocol);
+                        // validate here beacause relationship should not be null
+                        validateBean(protocol);
                         protocolRepository.save(protocol);
                         interfaceRepository.save(flowInterface);
                     }
@@ -198,14 +202,7 @@ public class FlowImportService {
                 functionalFlow = functionalFlowOption.get();
             }
             setDocumentation(flowImport, functionalFlow);
-
-            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-            Validator validator = factory.getValidator();
-            validator.validate(functionalFlow);
-            Set<ConstraintViolation<FunctionalFlow>> violations = validator.validate(functionalFlow);
-            if (!violations.isEmpty()) {
-                throw new ConstraintViolationException(violations);
-            }
+            validateBean(functionalFlow);
         } catch (Exception e) {
             log.error("Error with row " + flowImport + " " + e.getMessage(), e);
             flowImport.setImportFunctionalFlowStatus(ImportStatus.ERROR);
@@ -263,13 +260,7 @@ public class FlowImportService {
                 );
             }
 
-            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-            Validator validator = factory.getValidator();
-            validator.validate(flowInterface);
-            Set<ConstraintViolation<FlowInterface>> violations = validator.validate(flowInterface);
-            if (!violations.isEmpty()) {
-                throw new ConstraintViolationException(violations);
-            }
+            validateBean(flowInterface);
         } catch (Exception e) {
             log.error("Error with row " + flowImport + " " + e.getMessage());
             flowInterface = null;
@@ -354,7 +345,7 @@ public class FlowImportService {
                 dataFlow = setGenericResourceNameIfEmpty(flowImport, protocol, dataFlow);
             }
         } catch (Exception e) {
-            log.error("Error with row " + flowImport + " " + e.getMessage());
+            log.error("Error with row " + flowImport + " " + e.getMessage(), e);
             dataFlow = null;
             flowImport.setImportDataFlowStatus(ImportStatus.ERROR);
             addError(flowImport, e);
@@ -363,15 +354,20 @@ public class FlowImportService {
     }
 
     private DataFlow setGenericResourceNameIfEmpty(FlowImport flowImport, Protocol protocol, DataFlow dataFlow) {
-        if (protocol != null && dataFlow != null && !StringUtils.hasText(dataFlow.getResourceName())) {
-            if (protocol.getType().equals(ProtocolType.API)) {
-                dataFlow.setResourceName("REST API Call " + flowImport.getSourceElement() + " / " + flowImport.getTargetElement());
-            } else if (protocol.getType().equals(ProtocolType.EVENT)) {
-                dataFlow.setResourceName(GENERIC_EVENT_FROM_ADD);
-            } else if (protocol.getType().equals(ProtocolType.FILE)) {
-                dataFlow.setResourceName(GENERIC_FILE_FROM_ADD);
+        if (dataFlow != null && !StringUtils.hasText(dataFlow.getResourceName())) {
+            if (protocol != null) {
+                if (protocol.getType().equals(ProtocolType.API)) {
+                    dataFlow.setResourceName("REST API Call " + flowImport.getSourceElement() + " / " + flowImport.getTargetElement());
+                } else if (protocol.getType().equals(ProtocolType.EVENT)) {
+                    dataFlow.setResourceName(GENERIC_EVENT_FROM_ADD);
+                } else if (protocol.getType().equals(ProtocolType.FILE)) {
+                    dataFlow.setResourceName(GENERIC_FILE_FROM_ADD);
+                } else {
+                    dataFlow.setResourceName(GENERIC_DATA_FLOW + " - " + protocol.getType());
+                }
             } else {
-                dataFlow.setResourceName(GENERIC_DATA_FLOW + " - " + protocol.getType());
+                // Resource name is required
+                dataFlow.setResourceName(GENERIC_DATA_FLOW);
             }
         }
         return dataFlow;
@@ -443,5 +439,15 @@ public class FlowImportService {
         if (protocolName.toLowerCase().contains("esb")) return ProtocolType.MESSAGING;
 
         return ProtocolType.OTHER;
+    }
+
+    private void validateBean(Object bean) {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        validator.validate(bean);
+        Set<ConstraintViolation<Object>> violations = validator.validate(bean);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
     }
 }
