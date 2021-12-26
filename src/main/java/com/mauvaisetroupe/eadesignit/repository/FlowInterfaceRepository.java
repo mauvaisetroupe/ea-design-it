@@ -35,4 +35,8 @@ public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Lo
         nativeQuery = true
     )
     public List<FlowInterface> getDuplicatedInterface();
+
+    public List<FlowInterface> findBySourceIdAndTargetIdAndProtocolId(Long sourceId, Long targetId, Long protocolId);
+
+    public List<FlowInterface> findBySourceIdAndTargetId(Long sourceId, Long targetId);
 }

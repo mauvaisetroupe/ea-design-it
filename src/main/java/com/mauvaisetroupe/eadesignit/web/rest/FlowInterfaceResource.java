@@ -8,14 +8,26 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -160,9 +172,39 @@ public class FlowInterfaceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of flowInterfaces in body.
      */
     @GetMapping("/flow-interfaces")
-    public List<FlowInterface> getAllFlowInterfaces() {
-        log.debug("REST request to get all FlowInterfaces");
-        return flowInterfaceRepository.findAll();
+    public List<FlowInterface> getAllFlowInterfaces(@RequestParam(value = "search", required = false) String search) {
+        if (search != null) {
+            Long sourceId = null, targetId = null, protocolId = null;
+            Pattern pattern = Pattern.compile("(\\w+?)(:)(\\w+?),");
+            Matcher matcher = pattern.matcher(search + ",");
+            while (matcher.find()) {
+                String key = matcher.group(1);
+                String operator = matcher.group(2);
+                String value = matcher.group(3);
+
+                switch (key) {
+                    case "sourceId":
+                        sourceId = Long.parseLong(value);
+                        break;
+                    case "targetId":
+                        targetId = Long.parseLong(value);
+                        break;
+                    case "protocolId":
+                        protocolId = Long.parseLong(value);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (protocolId == null) {
+                return flowInterfaceRepository.findBySourceIdAndTargetId(sourceId, targetId);
+            } else {
+                return flowInterfaceRepository.findBySourceIdAndTargetIdAndProtocolId(sourceId, targetId, protocolId);
+            }
+        } else {
+            log.debug("REST request to get all FlowInterfaces");
+            return flowInterfaceRepository.findAll();
+        }
     }
 
     /**
