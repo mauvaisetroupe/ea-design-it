@@ -102,7 +102,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="inter in functionalFlow.interfaces" v-bind:key="inter.id">
+            <tr v-for="(inter, i) in functionalFlow.interfaces" v-bind:key="inter.id">
               <td>
                 <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: inter.id } }">{{ inter.alias }}</router-link>
               </td>
@@ -150,14 +150,7 @@
                       <span class="d-none d-md-inline">Edit</span>
                     </button>
                   </router-link>
-                  <b-button
-                    v-if="accountService().writeAuthorities"
-                    v-on:click="prepareRemove(inter)"
-                    variant="warning"
-                    class="btn btn-sm"
-                    data-cy="entityDeleteButton"
-                    v-b-modal.removeEntity
-                  >
+                  <b-button v-if="accountService().writeAuthorities" v-on:click="detachInterface(i)" variant="warning" class="btn btn-sm">
                     <font-awesome-icon icon="times"></font-awesome-icon>
                     <span class="d-none d-md-inline">Detach</span>
                   </b-button>
@@ -173,23 +166,19 @@
           <button
             class="btn btn-primary jh-create-entity create-functional-flow"
             v-if="accountService().writeAuthorities"
-            @click="addNew()"
+            @click="prepareSearchInterfaces()"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span>Add exisintg Interface</span>
+            <span>Add Interface</span>
           </button>
-          <router-link :to="{ name: 'FlowInterfaceCreate', query: { functionalFlowId: functionalFlow.id } }" custom v-slot="{ navigate }">
-            <button
-              @click="navigate"
-              id="jh-create-entity"
-              data-cy="entityCreateButton"
-              class="btn btn-primary jh-create-entity create-flow-interface"
-              v-if="accountService().writeAuthorities"
-            >
-              <font-awesome-icon icon="plus"></font-awesome-icon>
-              <span> Create a new Flow Interface </span>
-            </button>
-          </router-link>
+          <button
+            class="btn btn-primary jh-create-entity create-functional-flow"
+            v-if="accountService().writeAuthorities && toBeSaved"
+            @click="saveFunctionalFlow()"
+          >
+            <font-awesome-icon icon="plus"></font-awesome-icon>
+            <span>Save</span>
+          </button>
         </span>
       </div>
 
@@ -220,7 +209,116 @@
         </table>
       </div>
     </div>
+    <b-modal ref="searchEntity" id="searchEntity" class="mymodalclass">
+      <span slot="modal-title"
+        ><span id="eaDesignItApp.flowInterface.delete.question" data-cy="flowInterfaceDeleteDialogHeading"
+          >Find or create Interface</span
+        ></span
+      >
+      <div class="modal-body">
+        <datalist id="applications">
+          <option v-for="applcation in applications" :key="applcation.id">{{ applcation.name }}</option>
+        </datalist>
+        <datalist id="protocols">
+          <option v-for="protocol in protocols" :key="protocol.id">{{ protocol.name }}</option>
+        </datalist>
+        <span>
+          Source : <input list="applications" v-model="searchSourceName" /> Target :
+          <input list="applications" v-model="searchTargetName" /> Protocol : <input list="protocols" v-model="searchProtocolName" />
+          <button type="button" class="btn btn-primary" v-on:click="searchInterfaces()">Search Interface</button>
+        </span>
+        <div class="table-responsive" v-if="interfaces && interfaces.length > 0">
+          <table class="table">
+            <thead>
+              <tr>
+                <th></th>
+                <th scope="row"><span>Alias</span></th>
+                <th scope="row"><span>Source</span></th>
+                <th scope="row"><span>Target</span></th>
+                <th scope="row"><span>Protocol</span></th>
+                <th scope="row"><span>DataFlows</span></th>
+                <th scope="row"><span>Functional Flows (used by)</span></th>
+              </tr>
+            </thead>
+            <tr v-for="inter in interfaces" :key="inter.id">
+              <td>
+                <input type="checkbox" :id="inter.id" :value="inter" v-model="checkedInterface" />
+              </td>
+              <td>{{ inter.alias }}</td>
+              <td>{{ inter.source.name }}</td>
+              <td>{{ inter.target.name }}</td>
+              <td>
+                <span v-if="inter.protocol">{{ inter.protocol.name }}</span>
+              </td>
+              <td>
+                <span
+                  v-for="dataflow in inter.dataFlows"
+                  :key="dataflow.id"
+                  :title="'frequency : [' + dataflow.frequency + ']' + (dataflow.format ? ', format : [' + dataflow.format.name + ']' : '')"
+                >
+                  {{ dataflow.resourceName }}
+                </span>
+              </td>
+              <td>
+                <span v-for="flow in inter.functionalFlows" :key="flow.id" :title="flow.description">
+                  {{ flow.alias }}
+                </span>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div v-if="searchDone && (!checkedInterface || checkedInterface.length === 0)">
+          <p />
+          <p>Nothing found. Do you want to create new Interface?</p>
+        </div>
+      </div>
+      <div slot="modal-footer">
+        <button type="button" class="btn btn-secondary" v-on:click="closeSearchDialog()">Cancel</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="mergeflowInterfaceButtonID"
+          ref="mergeflowInterfaceButtonRef"
+          data-cy="entityConfirmDeleteButton"
+          v-on:click="addOrCreateInterface()"
+          v-if="checkedInterface && checkedInterface.length > 0"
+        >
+          Add
+        </button>
+        <router-link
+          :to="{
+            name: 'FlowInterfaceCreate',
+            query: {
+              functionalFlowId: functionalFlow.id,
+              sourceId: searchSourceId,
+              targetId: searchTargetId,
+              protocolId: searchProtocolId,
+            },
+          }"
+          custom
+          v-slot="{ navigate }"
+          v-if="accountService().writeAuthorities"
+        >
+          <button
+            @click="navigate"
+            id="jh-create-entity"
+            data-cy="entityCreateButton"
+            class="btn btn-primary jh-create-entity create-flow-interface"
+            v-if="searchDone && (!checkedInterface || checkedInterface.length === 0)"
+          >
+            <font-awesome-icon icon="plus"></font-awesome-icon>
+            <span> Create a new Flow Interface </span>
+          </button>
+        </router-link>
+      </div>
+    </b-modal>
   </div>
 </template>
 
 <script lang="ts" src="./functional-flow-details.component.ts"></script>
+
+<style>
+.modal-dialog {
+  max-width: 80%;
+}
+</style>

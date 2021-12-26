@@ -79,26 +79,35 @@
         </thead>
         <tbody>
           <template v-for="(functionalFlow, i) in landscapeView.flows">
-            <template v-for="(inter, j) in functionalFlow.interfaces">
+            <template
+              v-for="(inter, j) in functionalFlow.interfaces != null && functionalFlow.interfaces.length > 0
+                ? functionalFlow.interfaces
+                : emptyInterfaces"
+            >
               <tr v-bind:key="inter.id" :class="i % 2 == 0 ? 'mycolor' : ''">
                 <td>
-                  <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }" v-if="j == 0">{{
-                    functionalFlow.alias
-                  }}</router-link>
+                  <router-link
+                    :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }"
+                    v-if="functionalFlow && j == 0"
+                  >
+                    {{ functionalFlow.alias }}
+                  </router-link>
                 </td>
                 <td>
                   <span v-if="j == 0">{{ functionalFlow.description }}</span>
                 </td>
                 <td>
-                  <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: inter.id } }">{{ inter.alias }}</router-link>
+                  <router-link v-if="inter.id" :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: inter.id } }">{{
+                    inter.alias
+                  }}</router-link>
                 </td>
                 <td>
-                  <router-link :to="{ name: 'ApplicationView', params: { applicationId: inter.source.id } }">
+                  <router-link v-if="inter.id" :to="{ name: 'ApplicationView', params: { applicationId: inter.source.id } }">
                     {{ inter.source.name }}
                   </router-link>
                 </td>
                 <td>
-                  <router-link :to="{ name: 'ApplicationView', params: { applicationId: inter.target.id } }">
+                  <router-link v-if="inter.id" :to="{ name: 'ApplicationView', params: { applicationId: inter.target.id } }">
                     {{ inter.target.name }}
                   </router-link>
                 </td>
@@ -112,14 +121,16 @@
                   </router-link>
                 </td>
                 <td>
-                  <span v-for="(dataFlow, i) in inter.dataFlows" :key="dataFlow.id"
-                    >{{ i > 0 ? ', ' : '' }}
-                    <router-link
-                      class="form-control-static"
-                      :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }"
-                      :title="dataFlow.resourceName"
-                      >{{ dataFlow.id }}</router-link
-                    >
+                  <span v-if="inter.id">
+                    <span v-for="(dataFlow, i) in inter.dataFlows" :key="dataFlow.id"
+                      >{{ i > 0 ? ', ' : '' }}
+                      <router-link
+                        class="form-control-static"
+                        :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }"
+                        :title="dataFlow.resourceName"
+                        >{{ dataFlow.id }}</router-link
+                      >
+                    </span>
                   </span>
                 </td>
                 <td class="text-right">
@@ -152,11 +163,9 @@
 
                     <b-button
                       v-if="accountService().writeAuthorities"
-                      v-on:click="prepareRemove(functionalFlow.id)"
                       variant="warning"
                       class="btn btn-sm"
-                      data-cy="entityDeleteButton"
-                      v-b-modal.removeEntity
+                      @click="detachFunctionalFlow(i)"
                     >
                       <font-awesome-icon icon="times"></font-awesome-icon>
                       <span class="d-none d-md-inline">Detach</span>
@@ -258,6 +267,25 @@
           v-on:click="deleteDiagram()"
         >
           Delete
+        </button>
+      </div>
+    </b-modal>
+
+    <b-modal ref="addExistingEntity" id="addExistingEntity">
+      <span slot="modal-title">Search for exising Functional Flow</span>
+      <div class="modal-body">
+        <p id="jhi-delete-landscapeView-heading">Search for exising Functional Flow</p>
+      </div>
+      <div slot="modal-footer">
+        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="jhi-confirm-delete-landscapeView"
+          data-cy="entityConfirmDeleteButton"
+          v-on:click="deleteDiagram()"
+        >
+          Search
         </button>
       </div>
     </b-modal>

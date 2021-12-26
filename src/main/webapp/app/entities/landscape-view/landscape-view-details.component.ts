@@ -25,6 +25,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public isHidden = true;
   public isEditing = false;
   public drawIOToBeSaved = false;
+  public emptyInterfaces = [new FlowInterface()];
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -168,5 +169,14 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
 
   public closeDialog(): void {
     (<any>this.$refs.removeEntity).hide();
+  }
+
+  public detachFunctionalFlow(index: number) {
+    this.landscapeView.flows.splice(index, 1);
+    this.landscapeViewService()
+      .update(this.landscapeView)
+      .then(res => {
+        this.landscapeView = res;
+      });
   }
 }

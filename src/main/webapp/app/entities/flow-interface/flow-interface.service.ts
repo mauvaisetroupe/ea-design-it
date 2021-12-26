@@ -31,6 +31,22 @@ export default class FlowInterfaceService {
     });
   }
 
+  public search(sourceId: number, targetId: number, protocolId: number): Promise<any> {
+    let search = 'sourceId:' + sourceId + ',targetId:' + targetId;
+    if (protocolId) search = search + ',protocolId:' + protocolId;
+    const params = { search: search };
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .get(baseApiUrl, { params })
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
   public delete(id: number): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios

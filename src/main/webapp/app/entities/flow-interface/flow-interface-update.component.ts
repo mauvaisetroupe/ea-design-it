@@ -102,6 +102,45 @@ export default class FlowInterfaceUpdate extends Vue {
     );
   }
 
+  public assignFunctionalFlow(): IFunctionalFlow {
+    // is landcaspe ID pass as param
+    let functionalFlowToSave: IFunctionalFlow;
+    if (this.$route.query.functionalFlowId) {
+      this.functionalFlows.forEach(functionalFlow => {
+        console.log(functionalFlow.id + '---' + this.$route.query.functionalFlowId);
+        if (functionalFlow.id === parseInt(this.$route.query.functionalFlowId as string)) {
+          console.log('FunctionalFlow : ' + functionalFlow.id);
+          functionalFlowToSave = functionalFlow;
+        }
+      });
+    }
+    return functionalFlowToSave;
+  }
+
+  public assignSourceAndTarget() {
+    if (this.$route.query.sourceId || this.$route.query.targetId) {
+      this.applications.forEach(a => {
+        if (this.$route.query.sourceId && a.id === parseInt(this.$route.query.sourceId as string)) {
+          this.flowInterface.source = a;
+        }
+
+        if (this.$route.query.targetId && a.id === parseInt(this.$route.query.targetId as string)) {
+          this.flowInterface.target = a;
+        }
+      });
+    }
+  }
+
+  public assignProtocol() {
+    if (this.$route.query.protocolId) {
+      this.protocols.forEach(p => {
+        if (p.id === parseInt(this.$route.query.protocolId as string)) {
+          this.flowInterface.protocol = p;
+        }
+      });
+    }
+  }
+
   public save(): void {
     this.isSaving = true;
     if (this.flowInterface.id) {
@@ -127,16 +166,36 @@ export default class FlowInterfaceUpdate extends Vue {
       this.flowInterfaceService()
         .create(this.flowInterface)
         .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A FlowInterface is created with identifier ' + param.id;
-          this.$root.$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
+          let createdInterface: IFunctionalFlow = param;
+          let functionalFlowToSave = this.assignFunctionalFlow();
+          if (functionalFlowToSave != null) {
+            functionalFlowToSave.interfaces.push(createdInterface);
+            this.functionalFlowService()
+              .update(functionalFlowToSave)
+              .then(param2 => {
+                this.isSaving = false;
+                this.$router.go(-1);
+                const message = 'A FlowInterface is created with identifier ' + param.id + ' for FunctionalFloe  ' + param2.id;
+                this.$root.$bvToast.toast(message.toString(), {
+                  toaster: 'b-toaster-top-center',
+                  title: 'Success',
+                  variant: 'success',
+                  solid: true,
+                  autoHideDelay: 5000,
+                });
+              });
+          } else {
+            this.isSaving = false;
+            this.$router.go(-1);
+            const message = 'A FlowInterface is created with identifier ' + param.id;
+            this.$root.$bvToast.toast(message.toString(), {
+              toaster: 'b-toaster-top-center',
+              title: 'Success',
+              variant: 'success',
+              solid: true,
+              autoHideDelay: 5000,
+            });
+          }
         })
         .catch(error => {
           this.isSaving = false;
@@ -170,6 +229,7 @@ export default class FlowInterfaceUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.applications = res.data;
+        this.assignSourceAndTarget();
       });
     this.applicationComponentService()
       .retrieve()
@@ -180,6 +240,7 @@ export default class FlowInterfaceUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.protocols = res.data;
+        this.assignProtocol();
       });
     this.ownerService()
       .retrieve()

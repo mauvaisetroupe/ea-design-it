@@ -82,6 +82,21 @@ export default class FunctionalFlowUpdate extends Vue {
     this.functionalFlow.interfaces = [];
   }
 
+  public assignLandscape(): ILandscapeView {
+    // is landcaspe ID pass as param
+    let landscapeToSave: ILandscapeView;
+    if (this.$route.query.landscapeViewId) {
+      this.landscapeViews.forEach(landscape => {
+        console.log(landscape.id + ' ...[' + this.$route.query.landscapeViewId + ']...');
+        console.log('----[' + parseInt(this.$route.query.landscapeViewId as string) + ']---');
+        if (landscape.id === parseInt(this.$route.query.landscapeViewId as string)) {
+          landscapeToSave = landscape;
+        }
+      });
+    }
+    return landscapeToSave;
+  }
+
   public save(): void {
     this.isSaving = true;
     if (this.functionalFlow.id) {
@@ -107,16 +122,40 @@ export default class FunctionalFlowUpdate extends Vue {
       this.functionalFlowService()
         .create(this.functionalFlow)
         .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A FunctionalFlow is created with identifier ' + param.id;
-          this.$root.$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
+          let createdFunctionalFlow: IFunctionalFlow = param;
+          // add to landscape if exist then save landscape
+          let landscapeToSave = this.assignLandscape();
+          console.log(landscapeToSave);
+          if (landscapeToSave != null) {
+            landscapeToSave.flows.push(createdFunctionalFlow);
+            console.log('About to save landcsape : ');
+            console.log(landscapeToSave);
+            this.landscapeViewService()
+              .update(landscapeToSave)
+              .then(param2 => {
+                this.isSaving = false;
+                this.$router.go(-1);
+                const message = 'A FunctionalFlow is created with identifier ' + param.id + ' for landscape ' + param2.id;
+                this.$root.$bvToast.toast(message.toString(), {
+                  toaster: 'b-toaster-top-center',
+                  title: 'Success',
+                  variant: 'success',
+                  solid: true,
+                  autoHideDelay: 5000,
+                });
+              });
+          } else {
+            this.isSaving = false;
+            this.$router.go(-1);
+            const message = 'A FunctionalFlow is created with identifier ' + param.id;
+            this.$root.$bvToast.toast(message.toString(), {
+              toaster: 'b-toaster-top-center',
+              title: 'Success',
+              variant: 'success',
+              solid: true,
+              autoHideDelay: 5000,
+            });
+          }
         })
         .catch(error => {
           this.isSaving = false;
