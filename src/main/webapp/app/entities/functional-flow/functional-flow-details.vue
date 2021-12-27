@@ -59,17 +59,6 @@
           <dd>
             <span>{{ functionalFlow.endDate }}</span>
           </dd>
-          <dt>
-            <span>Interfaces</span>
-          </dt>
-          <dd>
-            <span v-for="(interfaces, i) in functionalFlow.interfaces" :key="interfaces.id"
-              >{{ i > 0 ? ', ' : '' }}
-              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: interfaces.id } }">{{
-                interfaces.alias
-              }}</router-link>
-            </span>
-          </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>

@@ -48,26 +48,6 @@
               </option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="landscape-view-flows">Flows</label>
-            <select
-              class="form-control"
-              id="landscape-view-flows"
-              data-cy="flows"
-              multiple
-              name="flows"
-              v-if="landscapeView.flows !== undefined"
-              v-model="landscapeView.flows"
-            >
-              <option
-                v-bind:value="getSelected(landscapeView.flows, functionalFlowOption)"
-                v-for="functionalFlowOption in functionalFlows"
-                :key="functionalFlowOption.id"
-              >
-                {{ functionalFlowOption.alias }}
-              </option>
-            </select>
-          </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
