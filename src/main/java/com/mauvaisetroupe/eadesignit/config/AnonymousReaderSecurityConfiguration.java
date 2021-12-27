@@ -23,7 +23,7 @@ import tech.jhipster.config.JHipsterProperties;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
-@ConditionalOnProperty(prefix = "application", name = "security-anonymous-reader", havingValue = "true")
+@ConditionalOnProperty(prefix = "application", name = "security-anonymous-reader", havingValue = "true", matchIfMissing = true)
 public class AnonymousReaderSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final JHipsterProperties jHipsterProperties;
