@@ -7,6 +7,8 @@ import { ILandscapeView, LandscapeView } from '@/shared/model/landscape-view.mod
 import LandscapeViewService from './landscape-view.service';
 import AlertService from '@/shared/alert/alert.service';
 import AccountService from '@/account/account.service';
+import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
+
 import { FlowImport, IFlowImport } from '@/shared/model/flow-import.model';
 import { FlowInterface, IFlowInterface } from '@/shared/model/flow-interface.model';
 import { FunctionalFlow } from '@/shared/model/functional-flow.model';
@@ -17,15 +19,18 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('accountService') private accountService: () => AccountService;
+  @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
+
   public landscapeView: ILandscapeView = {};
   public plantUMLImage = '';
-  public captions = [];
 
   public drawIoSVG = '';
   public isHidden = true;
   public isEditing = false;
   public drawIOToBeSaved = false;
   public emptyInterfaces = [new FlowInterface()];
+  public functionalFlows: FunctionalFlow[] = [];
+  public toBeSaved = false;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -177,6 +182,36 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
       .update(this.landscapeView)
       .then(res => {
         this.landscapeView = res;
+      });
+  }
+
+  public openSearchFlow(): void {
+    if (<any>this.$refs.addExistingEntity) {
+      this.functionalFlowService()
+        .retrieve()
+        .then(res => {
+          console.log(res.data);
+          this.functionalFlows = res.data;
+          (<any>this.$refs.addExistingEntity).show();
+        });
+    }
+  }
+
+  public closeSearchFlow(): void {
+    (<any>this.$refs.addExistingEntity).hide();
+  }
+
+  public addNew(functionalFlow: IFunctionalFlow): void {
+    if (!this.landscapeView.flows) {
+      this.landscapeView.flows = [];
+    }
+    this.landscapeView.flows.push(functionalFlow);
+    this.toBeSaved = true;
+    this.landscapeViewService()
+      .update(this.landscapeView)
+      .then(res => {
+        this.landscapeView = res;
+        this.closeSearchFlow();
       });
   }
 }

@@ -183,7 +183,8 @@
           <button
             class="btn btn-primary jh-create-entity create-functional-flow"
             v-if="accountService().writeAuthorities"
-            @click="addNew()"
+            title="Add existing Functional flow, from other landscape, with same description, same interfaces"
+            @click="openSearchFlow()"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
             <span>Add exisintg Functional Flow</span>
@@ -200,6 +201,7 @@
               id="jh-create-entity"
               data-cy="entityCreateButton"
               class="btn btn-primary jh-create-entity create-functional-flow"
+              title="Create a new Functional Flow, based on existing Interfaces or creating new Interfaces"
             >
               <font-awesome-icon icon="plus"></font-awesome-icon>
               <span> Create a new Functional Flow </span>
@@ -275,17 +277,77 @@
       <span slot="modal-title">Search for exising Functional Flow</span>
       <div class="modal-body">
         <p id="jhi-delete-landscapeView-heading">Search for exising Functional Flow</p>
+        <div class="table-responsive" v-if="functionalFlows && functionalFlows.length > 0">
+          <table class="table table-striped" aria-describedby="functionalFlows">
+            <thead>
+              <tr>
+                <th scope="row"><span>Alias</span></th>
+                <th scope="row"><span>Description</span></th>
+                <th scope="row"><span>Documentation URL</span></th>
+                <th scope="row"><span>Documentation URL 2</span></th>
+                <th scope="row"><span>Interfaces</span></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="functionalFlow in functionalFlows" :key="functionalFlow.id" data-cy="entityTable">
+                <td>
+                  <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }" target="_blank">{{
+                    functionalFlow.alias
+                  }}</router-link>
+                </td>
+                <td>{{ functionalFlow.description }}</td>
+                <td>
+                  <a :href="functionalFlow.documentationURL" target="_blank">{{
+                    functionalFlow.documentationURL ? functionalFlow.documentationURL.substring(0, 20) : ''
+                  }}</a>
+                </td>
+                <td>
+                  <a :href="functionalFlow.documentationURL2" target="_blank">{{
+                    functionalFlow.documentationURL2 ? functionalFlow.documentationURL2.substring(0, 20) : ''
+                  }}</a>
+                </td>
+                <td>{{ functionalFlow.startDate }}</td>
+                <td>{{ functionalFlow.endDate }}</td>
+                <td>
+                  <span
+                    v-for="(interfaces, i) in functionalFlow.interfaces"
+                    :key="interfaces.id"
+                    :title="
+                      '[ ' +
+                      interfaces.source.name +
+                      ' / ' +
+                      interfaces.target.name +
+                      ' ]' +
+                      (interfaces.protocol ? ' (' + interfaces.protocol.type + ') ' : '')
+                    "
+                    >{{ i > 0 ? ', ' : '' }}
+                    {{ interfaces.alias }}
+                  </span>
+                </td>
+                <td class="text-right">
+                  <div class="btn-group">
+                    <button @click="addNew(functionalFlow)" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
+                      <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+                      <span class="d-none d-md-inline">Add</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+        <button type="button" class="btn btn-secondary" v-on:click="closeSearchFlow()">Cancel</button>
         <button
           type="button"
           class="btn btn-primary"
           id="jhi-confirm-delete-landscapeView"
           data-cy="entityConfirmDeleteButton"
-          v-on:click="deleteDiagram()"
+          v-on:click="addNew()"
         >
-          Search
+          Add
         </button>
       </div>
     </b-modal>
@@ -304,6 +366,9 @@ iframe {
 }
 .mycolor {
   background-color: rgba(0, 0, 0, 0.1);
+}
+.modal-dialog {
+  max-width: 80%;
 }
 </style>
 
