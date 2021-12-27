@@ -126,16 +126,18 @@ export default class FunctionalFlowDetails extends Vue {
       }
       this.functionalFlow.interfaces = this.functionalFlow.interfaces.concat(this.checkedInterface);
       this.toBeSaved = true;
+      this.functionalFlowService()
+        .update(this.functionalFlow)
+        .then(res => {
+          this.functionalFlow = res;
+          this.closeSearchDialog();
+          this.toBeSaved = false;
+        });
     }
   }
 
   public closeSearchDialog(): void {
     (<any>this.$refs.searchEntity).hide();
-  }
-
-  public saveFunctionalFlow(): void {
-    this.functionalFlowService().update(this.functionalFlow);
-    this.toBeSaved = false;
   }
 
   public detachInterface(index: number) {
