@@ -212,13 +212,13 @@
 
       <h2>Draw.io</h2>
 
-      <div v-if="!drawIoSVG && accountService().writeAuthorities">
+      <div v-if="!drawIoSVG">
         <button @click="editDiagram()" class="btn btn-warning" v-if="accountService().writeAuthorities">
           <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Generate diagram</span>
         </button>
-        <div>
-          No preview available, Generate diagram and use Arrange > Layout > Vertical Flow or Arrange > Layout > Organic to distribute the
-          first diagram components
+        <div>No preview available</div>
+        <div v-if="accountService().writeAuthorities">
+          Generate diagram and use Arrange > Layout > Vertical Flow or Arrange > Layout > Organic to distribute the first diagram components
         </div>
       </div>
 
