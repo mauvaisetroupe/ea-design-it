@@ -1,7 +1,9 @@
 <template>
   <div>
     <h2 id="page-heading" data-cy="FunctionalFlowHeading">
-      <span id="functional-flow-heading">Functional Flows</span>
+      <span id="functional-flow-heading"
+        ><font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Functional Flows</span
+      >
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>

@@ -1,7 +1,9 @@
 <template>
   <div>
     <h2 id="page-heading" data-cy="LandscapeViewHeading">
-      <span id="landscape-view-heading">Landscape Views</span>
+      <span id="landscape-view-heading"
+        ><font-awesome-icon icon="map" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Landscape Views</span
+      >
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>

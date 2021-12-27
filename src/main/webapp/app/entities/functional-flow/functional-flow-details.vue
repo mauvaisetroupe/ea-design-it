@@ -2,7 +2,10 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="functionalFlow">
-        <h2 class="jh-entity-heading" data-cy="functionalFlowDetailsHeading"><span>Functional Flow</span> - {{ functionalFlow.alias }}</h2>
+        <h2 class="jh-entity-heading" data-cy="functionalFlowDetailsHeading">
+          <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon>
+          <span>Functional Flow</span> - {{ functionalFlow.alias }}
+        </h2>
         <dl class="row jh-entity-details">
           <dt>
             <span>Alias</span>
@@ -85,7 +88,7 @@
 
       <br />
 
-      <h3>Flow {{ functionalFlow.alias }} Interfaces</h3>
+      <h3><font-awesome-icon icon="grip-lines" style="color: Tomato; font-size: 0.9em"></font-awesome-icon> Interfaces</h3>
       <div v-html="plantUMLImage"></div>
       <br />
 
@@ -185,7 +188,10 @@
       <div class="table-responsive" v-if="functionalFlow.landscapes && functionalFlow.landscapes.length > 0">
         <br />
         <br />
-        <h3>Landscapes using Functional Flow {{ functionalFlow.alias }}</h3>
+        <h3>
+          <font-awesome-icon icon="map" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Landscapes using Functional Flow
+          {{ functionalFlow.alias }}
+        </h3>
 
         <table class="table table-striped">
           <thead>
@@ -320,5 +326,9 @@
 <style>
 .modal-dialog {
   max-width: 80%;
+}
+.fa-project-diagram g g path {
+  stroke: red;
+  stroke-width: 10;
 }
 </style>

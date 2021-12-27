@@ -3,7 +3,7 @@
     <div class="col-8">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
         <h2 id="eaDesignItApp.landscapeView.home.createOrEditLabel" data-cy="LandscapeViewCreateUpdateHeading">
-          Create or edit a LandscapeView
+          <font-awesome-icon icon="map" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Create or edit a LandscapeView
         </h2>
         <div>
           <div class="form-group" v-if="landscapeView.id">

@@ -2,7 +2,10 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="dataFlowItem">
-        <h2 class="jh-entity-heading" data-cy="dataFlowItemDetailsHeading"><span>DataFlowItem</span> {{ dataFlowItem.id }}</h2>
+        <h2 class="jh-entity-heading" data-cy="dataFlowItemDetailsHeading">
+          <font-awesome-icon icon="clone" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> <span>DataFlowItem</span>
+          {{ dataFlowItem.id }}
+        </h2>
         <dl class="row jh-entity-details">
           <dt>
             <span>Resource Name</span>

@@ -2,7 +2,9 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
-        <h2 id="eaDesignItApp.dataFlow.home.createOrEditLabel" data-cy="DataFlowCreateUpdateHeading">Create or edit a DataFlow</h2>
+        <h2 id="eaDesignItApp.dataFlow.home.createOrEditLabel" data-cy="DataFlowCreateUpdateHeading">
+          <font-awesome-icon icon="folder" style="color: Tomato; font-size: 0.9em"></font-awesome-icon> Create or edit a DataFlow
+        </h2>
         <div>
           <div class="form-group" v-if="dataFlow.id">
             <label for="id">ID</label>

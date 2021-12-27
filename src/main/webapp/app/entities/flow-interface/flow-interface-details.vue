@@ -2,7 +2,10 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="flowInterface">
-        <h2 class="jh-entity-heading" data-cy="flowInterfaceDetailsHeading"><span>Interface</span> - {{ flowInterface.alias }}</h2>
+        <h2 class="jh-entity-heading" data-cy="flowInterfaceDetailsHeading">
+          <font-awesome-icon icon="grip-lines" style="color: Tomato; font-size: 0.9em"></font-awesome-icon> <span>Interface</span> -
+          {{ flowInterface.alias }}
+        </h2>
         <dl class="row jh-entity-details">
           <dt>
             <span>Alias</span>
@@ -123,7 +126,7 @@
         <br />
         <br />
 
-        <h3>{{ flowInterface.alias }} Data Flows</h3>
+        <h3><font-awesome-icon icon="folder" style="color: Tomato; font-size: 0.9em"></font-awesome-icon> Data Flows</h3>
         <div class="table-responsive" v-if="flowInterface.dataFlows && flowInterface.dataFlows.length > 0">
           <br />
           <br />
@@ -213,7 +216,10 @@
         <div class="table-responsive" v-if="flowInterface.functionalFlows && flowInterface.functionalFlows.length > 0">
           <br />
           <br />
-          <h3>Functional Flows using interface {{ flowInterface.alias }}</h3>
+          <h3>
+            <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Functional Flows using
+            interface {{ flowInterface.alias }}
+          </h3>
           <table class="table table-striped" aria-describedby="functionalFlows">
             <thead>
               <tr>

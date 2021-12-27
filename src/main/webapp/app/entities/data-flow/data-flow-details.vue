@@ -2,7 +2,10 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="dataFlow">
-        <h2 class="jh-entity-heading" data-cy="dataFlowDetailsHeading"><span>DataFlow</span> {{ dataFlow.id }}</h2>
+        <h2 class="jh-entity-heading" data-cy="dataFlowDetailsHeading">
+          <font-awesome-icon icon="folder" style="color: Tomato; font-size: 0.9em"></font-awesome-icon> <span>DataFlow</span>
+          {{ dataFlow.id }}
+        </h2>
         <dl class="row jh-entity-details">
           <dt>
             <span>Resource Name</span>
@@ -102,7 +105,7 @@
       <div class="table-responsive" v-if="dataFlow.items && dataFlow.items.length > 0">
         <br />
         <br />
-        <h2>DataFlow Items :</h2>
+        <h2><font-awesome-icon icon="clone" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> DataFlow Items :</h2>
         <table class="table table-striped" aria-describedby="dataFlowItems">
           <thead>
             <tr>

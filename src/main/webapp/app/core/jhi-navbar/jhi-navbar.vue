@@ -37,27 +37,27 @@
             <span class="no-bold">EADesignIt</span>
           </span>
           <b-dropdown-item to="/landscape-view">
-            <font-awesome-icon icon="asterisk" />
+            <font-awesome-icon icon="map" />
             <span>Landscape</span>
           </b-dropdown-item>
           <b-dropdown-item to="/functional-flow">
-            <font-awesome-icon icon="asterisk" />
+            <font-awesome-icon icon="project-diagram" />
             <span>Functional Flow</span>
           </b-dropdown-item>
           <b-dropdown-item to="/flow-interface">
-            <font-awesome-icon icon="asterisk" />
+            <font-awesome-icon icon="grip-lines" />
             <span>Interface</span>
           </b-dropdown-item>
           <b-dropdown-item to="/application">
-            <font-awesome-icon icon="asterisk" />
+            <font-awesome-icon icon="window-maximize" />
             <span>Application</span>
           </b-dropdown-item>
           <b-dropdown-item to="/data-flow">
-            <font-awesome-icon icon="asterisk" />
+            <font-awesome-icon icon="folder" />
             <span>Data Flow : Event topics, Files, Swagger</span>
           </b-dropdown-item>
           <b-dropdown-item to="/data-flow-item">
-            <font-awesome-icon icon="asterisk" />
+            <font-awesome-icon icon="clone" />
             <span>Data Flow Item : Events </span>
           </b-dropdown-item>
         </b-nav-item-dropdown>

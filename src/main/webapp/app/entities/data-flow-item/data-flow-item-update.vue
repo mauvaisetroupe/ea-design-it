@@ -3,7 +3,7 @@
     <div class="col-8">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
         <h2 id="eaDesignItApp.dataFlowItem.home.createOrEditLabel" data-cy="DataFlowItemCreateUpdateHeading">
-          Create or edit a DataFlowItem
+          <font-awesome-icon icon="clone" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Create or edit a DataFlowItem
         </h2>
         <div>
           <div class="form-group" v-if="dataFlowItem.id">

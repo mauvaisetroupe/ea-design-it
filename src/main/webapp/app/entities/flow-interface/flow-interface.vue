@@ -1,7 +1,9 @@
 <template>
   <div>
     <h2 id="page-heading" data-cy="FlowInterfaceHeading">
-      <span id="flow-interface-heading">Flow Interfaces</span>
+      <span id="flow-interface-heading"
+        ><font-awesome-icon icon="grip-lines" style="color: Tomato; font-size: 0.9em"></font-awesome-icon> Flow Interfaces</span
+      >
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>

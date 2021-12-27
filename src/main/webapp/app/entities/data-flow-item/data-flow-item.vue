@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2 id="page-heading" data-cy="DataFlowItemHeading">
+      <font-awesome-icon icon="clone" style="color: Tomato; font-size: 0.7em"></font-awesome-icon>
       <span id="data-flow-item-heading">Data Flow Items</span>
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">

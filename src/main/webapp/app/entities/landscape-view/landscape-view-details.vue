@@ -3,7 +3,10 @@
     <div class="col-12">
       <div v-if="landscapeView">
         <h2 class="jh-entity-heading" data-cy="landscapeViewDetailsHeading">
-          <span>Landscape - {{ landscapeView.diagramName }}</span>
+          <span
+            ><font-awesome-icon icon="map" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Landscape -
+            {{ landscapeView.diagramName }}</span
+          >
         </h2>
         <dl class="row jh-entity-details">
           <dt>
@@ -59,10 +62,10 @@
         <br />
       </div>
       <br />
-      <h3>Landscape "{{ landscapeView.diagramName }}" diagram</h3>
+      <h3>Landscape diagram</h3>
       <div v-html="plantUMLImage" class="table-responsive"></div>
       <br />
-      <h3>Landscape "{{ landscapeView.diagramName }}" Functional Flows</h3>
+      <h3><font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Functional Flows</h3>
       <br />
       <table class="table">
         <thead>
