@@ -90,7 +90,7 @@
                   </button>
                 </router-link>
                 <b-button
-                  v-if="accountService().writeAuthorities"
+                  v-if="accountService().deleteAuthorities"
                   v-on:click="prepareRemove(landscapeView)"
                   variant="danger"
                   class="btn btn-sm"

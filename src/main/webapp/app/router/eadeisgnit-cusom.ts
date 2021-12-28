@@ -15,24 +15,24 @@ export default [
     path: '/application-import-upload-file',
     name: 'ApplicationImportUploadFile',
     component: ApplicationImportUploadFile,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/flow-import-upload-file',
     name: 'FlowImportUploadFile',
     component: FlowImportUploadFile,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/event-import-upload-file',
     name: 'EventImportUploadFile',
     component: EventImportUploadFile,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/reporting/flow-interface',
     name: 'FlowReporting',
     component: FlowReporting,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
 ];

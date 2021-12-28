@@ -45,18 +45,6 @@ const ApplicationComponentUpdate = () => import('@/entities/application-componen
 // prettier-ignore
 const ApplicationComponentDetails = () => import('@/entities/application-component/application-component-details.vue');
 // prettier-ignore
-const ApplicationImport = () => import('@/entities/application-import/application-import.vue');
-// prettier-ignore
-const ApplicationImportUpdate = () => import('@/entities/application-import/application-import-update.vue');
-// prettier-ignore
-const ApplicationImportDetails = () => import('@/entities/application-import/application-import-details.vue');
-// prettier-ignore
-const FlowImport = () => import('@/entities/flow-import/flow-import.vue');
-// prettier-ignore
-const FlowImportUpdate = () => import('@/entities/flow-import/flow-import-update.vue');
-// prettier-ignore
-const FlowImportDetails = () => import('@/entities/flow-import/flow-import-details.vue');
-// prettier-ignore
 const Protocol = () => import('@/entities/protocol/protocol.vue');
 // prettier-ignore
 const ProtocolUpdate = () => import('@/entities/protocol/protocol-update.vue');
@@ -81,12 +69,6 @@ const ApplicationCategoryUpdate = () => import('@/entities/application-category/
 // prettier-ignore
 const ApplicationCategoryDetails = () => import('@/entities/application-category/application-category-details.vue');
 // prettier-ignore
-const DataFlowImport = () => import('@/entities/data-flow-import/data-flow-import.vue');
-// prettier-ignore
-const DataFlowImportUpdate = () => import('@/entities/data-flow-import/data-flow-import-update.vue');
-// prettier-ignore
-const DataFlowImportDetails = () => import('@/entities/data-flow-import/data-flow-import-details.vue');
-// prettier-ignore
 const Technology = () => import('@/entities/technology/technology.vue');
 // prettier-ignore
 const TechnologyUpdate = () => import('@/entities/technology/technology-update.vue');
@@ -105,13 +87,13 @@ export default [
     path: '/landscape-view/new',
     name: 'LandscapeViewCreate',
     component: LandscapeViewUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/landscape-view/:landscapeViewId/edit',
     name: 'LandscapeViewEdit',
     component: LandscapeViewUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/landscape-view/:landscapeViewId/view',
@@ -129,13 +111,13 @@ export default [
     path: '/owner/new',
     name: 'OwnerCreate',
     component: OwnerUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/owner/:ownerId/edit',
     name: 'OwnerEdit',
     component: OwnerUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/owner/:ownerId/view',
@@ -153,13 +135,13 @@ export default [
     path: '/functional-flow/new',
     name: 'FunctionalFlowCreate',
     component: FunctionalFlowUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/functional-flow/:functionalFlowId/edit',
     name: 'FunctionalFlowEdit',
     component: FunctionalFlowUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/functional-flow/:functionalFlowId/view',
@@ -177,13 +159,13 @@ export default [
     path: '/flow-interface/new',
     name: 'FlowInterfaceCreate',
     component: FlowInterfaceUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/flow-interface/:flowInterfaceId/edit',
     name: 'FlowInterfaceEdit',
     component: FlowInterfaceUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/flow-interface/:flowInterfaceId/view',
@@ -201,13 +183,13 @@ export default [
     path: '/application/new',
     name: 'ApplicationCreate',
     component: ApplicationUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/application/:applicationId/edit',
     name: 'ApplicationEdit',
     component: ApplicationUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/application/:applicationId/view',
@@ -225,13 +207,13 @@ export default [
     path: '/data-flow/new',
     name: 'DataFlowCreate',
     component: DataFlowUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/data-flow/:dataFlowId/edit',
     name: 'DataFlowEdit',
     component: DataFlowUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/data-flow/:dataFlowId/view',
@@ -249,67 +231,19 @@ export default [
     path: '/application-component/new',
     name: 'ApplicationComponentCreate',
     component: ApplicationComponentUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/application-component/:applicationComponentId/edit',
     name: 'ApplicationComponentEdit',
     component: ApplicationComponentUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/application-component/:applicationComponentId/view',
     name: 'ApplicationComponentView',
     component: ApplicationComponentDetails,
     meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
-  },
-  {
-    path: '/application-import',
-    name: 'ApplicationImport',
-    component: ApplicationImport,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
-    path: '/application-import/new',
-    name: 'ApplicationImportCreate',
-    component: ApplicationImportUpdate,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
-    path: '/application-import/:applicationImportId/edit',
-    name: 'ApplicationImportEdit',
-    component: ApplicationImportUpdate,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
-    path: '/application-import/:applicationImportId/view',
-    name: 'ApplicationImportView',
-    component: ApplicationImportDetails,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
-    path: '/flow-import',
-    name: 'FlowImport',
-    component: FlowImport,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
-    path: '/flow-import/new',
-    name: 'FlowImportCreate',
-    component: FlowImportUpdate,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
-    path: '/flow-import/:flowImportId/edit',
-    name: 'FlowImportEdit',
-    component: FlowImportUpdate,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
-    path: '/flow-import/:flowImportId/view',
-    name: 'FlowImportView',
-    component: FlowImportDetails,
-    meta: { authorities: [Authority.USER] },
   },
   {
     path: '/protocol',
@@ -321,13 +255,13 @@ export default [
     path: '/protocol/new',
     name: 'ProtocolCreate',
     component: ProtocolUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/protocol/:protocolId/edit',
     name: 'ProtocolEdit',
     component: ProtocolUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/protocol/:protocolId/view',
@@ -345,13 +279,13 @@ export default [
     path: '/data-flow-item/new',
     name: 'DataFlowItemCreate',
     component: DataFlowItemUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/data-flow-item/:dataFlowItemId/edit',
     name: 'DataFlowItemEdit',
     component: DataFlowItemUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/data-flow-item/:dataFlowItemId/view',
@@ -363,19 +297,19 @@ export default [
     path: '/data-format',
     name: 'DataFormat',
     component: DataFormat,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/data-format/new',
     name: 'DataFormatCreate',
     component: DataFormatUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/data-format/:dataFormatId/edit',
     name: 'DataFormatEdit',
     component: DataFormatUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/data-format/:dataFormatId/view',
@@ -387,19 +321,19 @@ export default [
     path: '/application-category',
     name: 'ApplicationCategory',
     component: ApplicationCategory,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/application-category/new',
     name: 'ApplicationCategoryCreate',
     component: ApplicationCategoryUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/application-category/:applicationCategoryId/edit',
     name: 'ApplicationCategoryEdit',
     component: ApplicationCategoryUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/application-category/:applicationCategoryId/view',
@@ -408,34 +342,10 @@ export default [
     meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
-    path: '/data-flow-import',
-    name: 'DataFlowImport',
-    component: DataFlowImport,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
-    path: '/data-flow-import/new',
-    name: 'DataFlowImportCreate',
-    component: DataFlowImportUpdate,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
-    path: '/data-flow-import/:dataFlowImportId/edit',
-    name: 'DataFlowImportEdit',
-    component: DataFlowImportUpdate,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
-    path: '/data-flow-import/:dataFlowImportId/view',
-    name: 'DataFlowImportView',
-    component: DataFlowImportDetails,
-    meta: { authorities: [Authority.USER] },
-  },
-  {
     path: '/technology',
     name: 'Technology',
     component: Technology,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/technology/new',

@@ -44,7 +44,7 @@
           more explanation
         </p>
       </div>
-      <div v-if="authenticated">
+      <div v-if="accountService().writeAuthorities">
         <h2>Import Excel files</h2>
         <ul>
           <li>Import Excel <a href="/application-import-upload-file">Applications</a> file</li>

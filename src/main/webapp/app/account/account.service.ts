@@ -5,6 +5,9 @@ import VueRouter from 'vue-router';
 export default class AccountService {
   private hasAdminAuthorityValue = false;
   private hasUserAuthorityValue = false;
+  private hasWriteAuthorityValue = false;
+  private hasDeleteAuthorityValue = false;
+
   public anonymousReadAllowed = true;
 
   constructor(private store: Store<any>, private router: VueRouter) {
@@ -43,6 +46,9 @@ export default class AccountService {
               this.router.replace(sessionStorage.getItem('requested-url'));
               sessionStorage.removeItem('requested-url');
             }
+            this.hasUserAuthority();
+            this.hasWriteAuthority();
+            this.hasDeleteAuthority();
           } else {
             this.store.commit('logout');
             this.router.push('/');
@@ -88,11 +94,22 @@ export default class AccountService {
     return this.store.getters.account.authorities;
   }
 
-  public hasUserAuthority(): boolean {
+  public hasUserAuthority() {
     this.hasAnyAuthorityAndCheckAuth('ROLE_USER').then(value => {
       this.hasUserAuthorityValue = value;
     });
-    return this.hasUserAuthorityValue;
+  }
+
+  public hasWriteAuthority() {
+    this.hasAnyAuthorityAndCheckAuth('ROLE_WRITE').then(value => {
+      this.hasWriteAuthorityValue = value;
+    });
+  }
+
+  public hasDeleteAuthority() {
+    this.hasAnyAuthorityAndCheckAuth('ROLE_HARD_DELETE').then(value => {
+      this.hasDeleteAuthorityValue = value;
+    });
   }
 
   public get readAuthorities(): boolean {
@@ -100,11 +117,15 @@ export default class AccountService {
       //anonymous read
       return true;
     } else {
-      return this.hasUserAuthority();
+      return this.hasUserAuthorityValue;
     }
   }
 
   public get writeAuthorities(): boolean {
-    return this.store.getters.authenticated;
+    return this.store.getters.authenticated && this.hasWriteAuthorityValue;
+  }
+
+  public get deleteAuthorities(): boolean {
+    return this.store.getters.authenticated && this.hasDeleteAuthorityValue;
   }
 }
