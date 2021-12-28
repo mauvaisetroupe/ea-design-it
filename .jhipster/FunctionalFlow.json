@@ -45,6 +45,13 @@
   ],
   "relationships": [
     {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "owner",
+      "otherEntityRelationshipName": "functionalFlow",
+      "relationshipName": "owner",
+      "otherEntityField": "name"
+    },
+    {
       "relationshipType": "many-to-many",
       "otherEntityName": "flowInterface",
       "otherEntityRelationshipName": "functionalFlows",

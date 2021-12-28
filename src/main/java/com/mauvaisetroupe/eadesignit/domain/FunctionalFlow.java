@@ -56,6 +56,10 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
+    private Owner owner;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @OrderBy
     @JoinTable(
@@ -194,6 +198,19 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public Owner getOwner() {
+        return this.owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public FunctionalFlow owner(Owner owner) {
+        this.setOwner(owner);
+        return this;
     }
 
     public Set<FlowInterface> getInterfaces() {

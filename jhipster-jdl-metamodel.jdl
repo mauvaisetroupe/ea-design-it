@@ -25,6 +25,7 @@ relationship ManyToOne {
 	ApplicationComponent{application(name) required} to Application{applicationsList(name)}
 	
     LandscapeView{owner(name)} to Owner
+    FunctionalFlow{owner(name)} to Owner
 	FlowInterface{owner(name)} to Owner
     Application{owner(name)} to Owner
 	

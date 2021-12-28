@@ -38,6 +38,9 @@
             <column name="end_date" type="date">
                 <constraints nullable="true" />
             </column>
+            <column name="owner_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>

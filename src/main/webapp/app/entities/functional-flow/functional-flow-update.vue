@@ -164,6 +164,19 @@
               />
             </b-input-group>
           </div>
+          <div class="form-group">
+            <label class="form-control-label" for="functional-flow-owner">Owner</label>
+            <select class="form-control" id="functional-flow-owner" data-cy="owner" name="owner" v-model="functionalFlow.owner">
+              <option v-bind:value="null"></option>
+              <option
+                v-bind:value="functionalFlow.owner && ownerOption.id === functionalFlow.owner.id ? functionalFlow.owner : ownerOption"
+                v-for="ownerOption in owners"
+                :key="ownerOption.id"
+              >
+                {{ ownerOption.name }}
+              </option>
+            </select>
+          </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">

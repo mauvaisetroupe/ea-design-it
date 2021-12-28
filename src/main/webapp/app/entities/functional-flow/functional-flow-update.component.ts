@@ -4,6 +4,9 @@ import { required, maxLength } from 'vuelidate/lib/validators';
 
 import AlertService from '@/shared/alert/alert.service';
 
+import OwnerService from '@/entities/owner/owner.service';
+import { IOwner } from '@/shared/model/owner.model';
+
 import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
 import { IFlowInterface } from '@/shared/model/flow-interface.model';
 
@@ -47,6 +50,10 @@ export default class FunctionalFlowUpdate extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
 
   public functionalFlow: IFunctionalFlow = new FunctionalFlow();
+
+  @Inject('ownerService') private ownerService: () => OwnerService;
+
+  public owners: IOwner[] = [];
 
   @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
 
@@ -180,6 +187,11 @@ export default class FunctionalFlowUpdate extends Vue {
   }
 
   public initRelationships(): void {
+    this.ownerService()
+      .retrieve()
+      .then(res => {
+        this.owners = res.data;
+      });
     this.flowInterfaceService()
       .retrieve()
       .then(res => {

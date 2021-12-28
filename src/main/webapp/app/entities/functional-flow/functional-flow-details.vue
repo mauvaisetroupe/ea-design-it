@@ -59,6 +59,16 @@
           <dd>
             <span>{{ functionalFlow.endDate }}</span>
           </dd>
+          <dt>
+            <span>Owner</span>
+          </dt>
+          <dd>
+            <div v-if="functionalFlow.owner">
+              <router-link :to="{ name: 'OwnerView', params: { ownerId: functionalFlow.owner.id } }">{{
+                functionalFlow.owner.name
+              }}</router-link>
+            </div>
+          </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
