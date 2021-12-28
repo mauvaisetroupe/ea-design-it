@@ -191,6 +191,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
       .then(res => {
         this.landscapeView = res;
         this.closeDetachDialog();
+        this.getPlantUML(this.landscapeView.id);
       });
   }
 
@@ -225,6 +226,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
       .then(res => {
         this.landscapeView = res;
         this.closeSearchFlow();
+        this.getPlantUML(this.landscapeView.id);
       });
   }
 }

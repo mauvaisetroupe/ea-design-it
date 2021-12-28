@@ -134,6 +134,7 @@ export default class FunctionalFlowDetails extends Vue {
           this.functionalFlow = res;
           this.closeSearchDialog();
           this.toBeSaved = false;
+          this.getPlantUML(this.functionalFlow.id);
         });
     }
   }
@@ -149,6 +150,7 @@ export default class FunctionalFlowDetails extends Vue {
       .then(res => {
         this.functionalFlow = res;
         this.closeDetachDialog();
+        this.getPlantUML(this.functionalFlow.id);
       });
   }
 
