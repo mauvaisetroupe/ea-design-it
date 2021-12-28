@@ -20,6 +20,22 @@
               v-model="$v.owner.name.$model"
             />
           </div>
+          <div class="form-group">
+            <label for="owner-users">Users</label>
+            <select
+              class="form-control"
+              id="owner-users"
+              data-cy="users"
+              multiple
+              name="users"
+              v-if="owner.users !== undefined"
+              v-model="owner.users"
+            >
+              <option v-bind:value="getSelected(owner.users, userOption)" v-for="userOption in users" :key="userOption.id">
+                {{ userOption.login }}
+              </option>
+            </select>
+          </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">

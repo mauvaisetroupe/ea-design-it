@@ -62,6 +62,7 @@ public class Application implements Serializable {
     private SoftwareType softwareType;
 
     @ManyToOne
+    @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner owner;
 
     @ManyToMany

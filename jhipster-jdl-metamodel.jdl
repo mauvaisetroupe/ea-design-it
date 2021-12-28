@@ -10,6 +10,8 @@ relationship ManyToMany {
 	
     Application{technologies(name)} to Technology{applications(name)}
 	ApplicationComponent{technologies(name)} to Technology{components(name)}
+    
+    Owner{users(login)} to User 
 }
 
 relationship ManyToOne {

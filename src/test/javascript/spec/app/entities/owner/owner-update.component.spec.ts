@@ -8,6 +8,7 @@ import OwnerUpdateComponent from '@/entities/owner/owner-update.vue';
 import OwnerClass from '@/entities/owner/owner-update.component';
 import OwnerService from '@/entities/owner/owner.service';
 
+import UserService from '@/admin/user-management/user-management.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -38,6 +39,8 @@ describe('Component Tests', () => {
         provide: {
           ownerService: () => ownerServiceStub,
           alertService: () => new AlertService(),
+
+          userService: () => new UserService(),
         },
       });
       comp = wrapper.vm;
