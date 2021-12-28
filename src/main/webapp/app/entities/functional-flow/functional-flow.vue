@@ -36,6 +36,7 @@
             <th scope="row"><span>Documentation URL 2</span></th>
             <th scope="row"><span>Start Date</span></th>
             <th scope="row"><span>End Date</span></th>
+            <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>Interfaces</span></th>
             <th scope="row"></th>
           </tr>
@@ -55,6 +56,13 @@
             <td>{{ functionalFlow.documentationURL2 }}</td>
             <td>{{ functionalFlow.startDate }}</td>
             <td>{{ functionalFlow.endDate }}</td>
+            <td>
+              <div v-if="functionalFlow.owner">
+                <router-link :to="{ name: 'OwnerView', params: { ownerId: functionalFlow.owner.id } }">{{
+                  functionalFlow.owner.name
+                }}</router-link>
+              </div>
+            </td>
             <td>
               <span v-for="(interfaces, i) in functionalFlow.interfaces" :key="interfaces.id"
                 >{{ i > 0 ? ', ' : '' }}

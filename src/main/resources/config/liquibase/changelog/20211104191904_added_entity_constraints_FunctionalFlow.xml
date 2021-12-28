@@ -8,6 +8,12 @@
     -->
     <changeSet id="20211104191904-2" author="jhipster">
 
+        <addForeignKeyConstraint baseColumnNames="owner_id"
+                                 baseTableName="flow"
+                                 constraintName="fk_flow__owner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="owner"/>
+
         <addForeignKeyConstraint baseColumnNames="flow_id"
                                  baseTableName="rel_flow__interfaces"
                                  constraintName="fk_rel_flow__interfaces__flow_id"

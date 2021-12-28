@@ -53,6 +53,16 @@
             <span>{{ functionalFlow.endDate }}</span>
           </dd>
           <dt>
+            <span>Owner</span>
+          </dt>
+          <dd>
+            <div v-if="functionalFlow.owner">
+              <router-link :to="{ name: 'OwnerView', params: { ownerId: functionalFlow.owner.id } }">{{
+                functionalFlow.owner.name
+              }}</router-link>
+            </div>
+          </dd>
+          <dt>
             <span>Interfaces</span>
           </dt>
           <dd>

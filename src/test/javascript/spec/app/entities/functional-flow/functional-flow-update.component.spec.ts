@@ -8,6 +8,8 @@ import FunctionalFlowUpdateComponent from '@/entities/functional-flow/functional
 import FunctionalFlowClass from '@/entities/functional-flow/functional-flow-update.component';
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 
+import OwnerService from '@/entities/owner/owner.service';
+
 import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
 
 import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
@@ -43,6 +45,8 @@ describe('Component Tests', () => {
         provide: {
           functionalFlowService: () => functionalFlowServiceStub,
           alertService: () => new AlertService(),
+
+          ownerService: () => new OwnerService(),
 
           flowInterfaceService: () => new FlowInterfaceService(),
 

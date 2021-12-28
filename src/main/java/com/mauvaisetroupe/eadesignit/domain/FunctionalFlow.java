@@ -55,6 +55,10 @@ public class FunctionalFlow implements Serializable {
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
+    private Owner owner;
+
     @ManyToMany
     @JoinTable(
         name = "rel_flow__interfaces",
@@ -195,6 +199,19 @@ public class FunctionalFlow implements Serializable {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public Owner getOwner() {
+        return this.owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public FunctionalFlow owner(Owner owner) {
+        this.setOwner(owner);
+        return this;
     }
 
     public Set<FlowInterface> getInterfaces() {

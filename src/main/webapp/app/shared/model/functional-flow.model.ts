@@ -1,3 +1,4 @@
+import { IOwner } from '@/shared/model/owner.model';
 import { IFlowInterface } from '@/shared/model/flow-interface.model';
 import { ILandscapeView } from '@/shared/model/landscape-view.model';
 import { IDataFlow } from '@/shared/model/data-flow.model';
@@ -12,6 +13,7 @@ export interface IFunctionalFlow {
   documentationURL2?: string | null;
   startDate?: Date | null;
   endDate?: Date | null;
+  owner?: IOwner | null;
   interfaces?: IFlowInterface[] | null;
   landscapes?: ILandscapeView[] | null;
   dataFlows?: IDataFlow[] | null;
@@ -28,6 +30,7 @@ export class FunctionalFlow implements IFunctionalFlow {
     public documentationURL2?: string | null,
     public startDate?: Date | null,
     public endDate?: Date | null,
+    public owner?: IOwner | null,
     public interfaces?: IFlowInterface[] | null,
     public landscapes?: ILandscapeView[] | null,
     public dataFlows?: IDataFlow[] | null
