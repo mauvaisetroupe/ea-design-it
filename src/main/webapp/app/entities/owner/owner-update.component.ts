@@ -2,6 +2,8 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import AlertService from '@/shared/alert/alert.service';
 
+import UserService from '@/admin/user-management/user-management.service';
+
 import { IOwner, Owner } from '@/shared/model/owner.model';
 import OwnerService from './owner.service';
 
@@ -19,6 +21,10 @@ export default class OwnerUpdate extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
 
   public owner: IOwner = new Owner();
+
+  @Inject('userService') private userService: () => UserService;
+
+  public users: Array<any> = [];
   public isSaving = false;
   public currentLanguage = '';
 
@@ -27,6 +33,7 @@ export default class OwnerUpdate extends Vue {
       if (to.params.ownerId) {
         vm.retrieveOwner(to.params.ownerId);
       }
+      vm.initRelationships();
     });
   }
 
@@ -38,6 +45,7 @@ export default class OwnerUpdate extends Vue {
         this.currentLanguage = this.$store.getters.currentLanguage;
       }
     );
+    this.owner.users = [];
   }
 
   public save(): void {
@@ -98,5 +106,22 @@ export default class OwnerUpdate extends Vue {
     this.$router.go(-1);
   }
 
-  public initRelationships(): void {}
+  public initRelationships(): void {
+    this.userService()
+      .retrieve()
+      .then(res => {
+        this.users = res.data;
+      });
+  }
+
+  public getSelected(selectedVals, option): any {
+    if (selectedVals) {
+      for (let i = 0; i < selectedVals.length; i++) {
+        if (option.id === selectedVals[i].id) {
+          return selectedVals[i];
+        }
+      }
+    }
+    return option;
+  }
 }

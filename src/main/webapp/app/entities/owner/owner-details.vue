@@ -10,6 +10,15 @@
           <dd>
             <span>{{ owner.name }}</span>
           </dd>
+          <dt>
+            <span>Users</span>
+          </dt>
+          <dd>
+            <span v-for="(users, i) in owner.users" :key="users.id"
+              >{{ i > 0 ? ', ' : '' }}
+              {{ users.login }}
+            </span>
+          </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>

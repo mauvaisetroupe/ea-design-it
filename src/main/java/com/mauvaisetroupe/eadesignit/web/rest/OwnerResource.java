@@ -136,12 +136,13 @@ public class OwnerResource {
     /**
      * {@code GET  /owners} : get all the owners.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of owners in body.
      */
     @GetMapping("/owners")
-    public List<Owner> getAllOwners() {
+    public List<Owner> getAllOwners(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Owners");
-        return ownerRepository.findAll();
+        return ownerRepository.findAllWithEagerRelationships();
     }
 
     /**
@@ -153,7 +154,7 @@ public class OwnerResource {
     @GetMapping("/owners/{id}")
     public ResponseEntity<Owner> getOwner(@PathVariable Long id) {
         log.debug("REST request to get Owner : {}", id);
-        Optional<Owner> owner = ownerRepository.findById(id);
+        Optional<Owner> owner = ownerRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(owner);
     }
 

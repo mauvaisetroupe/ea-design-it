@@ -74,6 +74,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface> {
     private Protocol protocol;
 
     @ManyToOne
+    @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner owner;
 
     @ManyToMany(mappedBy = "interfaces", fetch = FetchType.EAGER)

@@ -29,6 +29,7 @@
           <tr>
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Name</span></th>
+            <th scope="row"><span>Users</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -38,6 +39,12 @@
               <router-link :to="{ name: 'OwnerView', params: { ownerId: owner.id } }">{{ owner.id }}</router-link>
             </td>
             <td>{{ owner.name }}</td>
+            <td>
+              <span v-for="(users, i) in owner.users" :key="users.id"
+                >{{ i > 0 ? ', ' : '' }}
+                {{ users.login }}
+              </span>
+            </td>
             <td class="text-right">
               <div class="btn-group">
                 <router-link

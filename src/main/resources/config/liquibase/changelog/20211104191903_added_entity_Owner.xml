@@ -21,5 +21,19 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="20211104191903-1-relations" author="jhipster">
+
+        <createTable tableName="rel_owner__users">
+            <column name="users_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="owner_id, users_id" tableName="rel_owner__users"/>
+    </changeSet>
+
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 </databaseChangeLog>

@@ -6,7 +6,16 @@
       "fieldType": "String"
     }
   ],
-  "relationships": [],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "owner",
+      "relationshipName": "users",
+      "otherEntityField": "login",
+      "ownerSide": true
+    }
+  ],
   "entityTableName": "owner",
   "dto": "no",
   "pagination": "no",
