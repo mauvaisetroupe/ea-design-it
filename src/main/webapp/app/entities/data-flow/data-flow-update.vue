@@ -199,9 +199,8 @@
               data-cy="flowInterface"
               name="flowInterface"
               v-model="dataFlow.flowInterface"
-              required
             >
-              <option v-if="!dataFlow.flowInterface" v-bind:value="null" selected></option>
+              <option v-bind:value="null"></option>
               <option
                 v-bind:value="
                   dataFlow.flowInterface && flowInterfaceOption.id === dataFlow.flowInterface.id
@@ -214,9 +213,6 @@
                 {{ flowInterfaceOption.alias }}
               </option>
             </select>
-          </div>
-          <div v-if="$v.dataFlow.flowInterface.$anyDirty && $v.dataFlow.flowInterface.$invalid">
-            <small class="form-text text-danger" v-if="!$v.dataFlow.flowInterface.required"> This field is required. </small>
           </div>
         </div>
         <div>
