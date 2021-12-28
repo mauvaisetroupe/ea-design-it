@@ -25,4 +25,6 @@ public interface OwnerRepository extends JpaRepository<Owner, Long> {
 
     @Query("select owner from Owner owner left join fetch owner.users where owner.id =:id")
     Optional<Owner> findOneWithEagerRelationships(@Param("id") Long id);
+
+    Owner findByNameIgnoreCase(String owner);
 }
