@@ -164,12 +164,7 @@
                       </button>
                     </router-link>
 
-                    <b-button
-                      v-if="accountService().writeAuthorities"
-                      variant="warning"
-                      class="btn btn-sm"
-                      @click="detachFunctionalFlow(i)"
-                    >
+                    <b-button v-if="accountService().writeAuthorities" variant="warning" class="btn btn-sm" @click="prepareToDetach(i)">
                       <font-awesome-icon icon="times"></font-awesome-icon>
                       <span class="d-none d-md-inline">Detach</span>
                     </b-button>
@@ -253,7 +248,7 @@
         />
       </div>
     </div>
-    <b-modal ref="removeEntity" id="removeEntity">
+    <b-modal ref="removeDiagramEntity" id="removeDiagramEntity">
       <span slot="modal-title"
         ><span id="eaDesignItApp.landscapeView.delete.question" data-cy="landscapeViewDeleteDialogHeading"
           >Confirm delete operation</span
@@ -270,6 +265,29 @@
           id="jhi-confirm-delete-landscapeView"
           data-cy="entityConfirmDeleteButton"
           v-on:click="deleteDiagram()"
+        >
+          Delete
+        </button>
+      </div>
+    </b-modal>
+
+    <b-modal ref="detachFlowEntity" id="detachFlowEntity">
+      <span slot="modal-title"
+        ><span id="eaDesignItApp.landscapeView.delete.question" data-cy="landscapeViewDeleteDialogHeading"
+          >Confirm delete operation</span
+        ></span
+      >
+      <div class="modal-body">
+        <p id="jhi-delete-landscapeView-heading">Are you sure you want to detach this Functional Flow?</p>
+      </div>
+      <div slot="modal-footer">
+        <button type="button" class="btn btn-secondary" v-on:click="closeDetachDialog()">Cancel</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="jhi-confirm-delete-landscapeView"
+          data-cy="entityConfirmDeleteButton"
+          v-on:click="detachFunctionalFlow()"
         >
           Delete
         </button>

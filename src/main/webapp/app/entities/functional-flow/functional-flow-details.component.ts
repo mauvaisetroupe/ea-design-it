@@ -53,6 +53,8 @@ export default class FunctionalFlowDetails extends Vue {
   public toBeSaved: boolean = false;
   public searchDone = false;
 
+  public interfaceToDetach: number;
+
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (to.params.functionalFlowId) {
@@ -140,12 +142,24 @@ export default class FunctionalFlowDetails extends Vue {
     (<any>this.$refs.searchEntity).hide();
   }
 
-  public detachInterface(index: number) {
-    this.functionalFlow.interfaces.splice(index, 1);
+  public detachInterface() {
+    this.functionalFlow.interfaces.splice(this.interfaceToDetach, 1);
     this.functionalFlowService()
       .update(this.functionalFlow)
       .then(res => {
         this.functionalFlow = res;
+        this.closeDetachDialog();
       });
+  }
+
+  public prepareToDetach(index: number) {
+    if (<any>this.$refs.detachInterfaceEntity) {
+      (<any>this.$refs.detachInterfaceEntity).show();
+    }
+    this.interfaceToDetach = index;
+  }
+
+  public closeDetachDialog(): void {
+    (<any>this.$refs.detachInterfaceEntity).hide();
   }
 }

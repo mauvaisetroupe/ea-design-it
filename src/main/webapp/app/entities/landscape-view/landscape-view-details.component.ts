@@ -31,6 +31,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public emptyInterfaces = [new FlowInterface()];
   public functionalFlows: FunctionalFlow[] = [];
   public toBeSaved = false;
+  public flowToDetach: number;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -126,7 +127,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
           this.alertService().showHttpError(this, err.response);
         }
       );
-    (<any>this.$refs.removeEntity).hide();
+    (<any>this.$refs.removeDiagramEntity).hide();
   }
 
   public receiveMessage(evt) {
@@ -167,22 +168,34 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   }
 
   public prepareRemove(instance: ILandscapeView): void {
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
+    if (<any>this.$refs.removeDiagramEntity) {
+      (<any>this.$refs.removeDiagramEntity).show();
     }
   }
 
   public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
+    (<any>this.$refs.removeDiagramEntity).hide();
   }
 
-  public detachFunctionalFlow(index: number) {
-    this.landscapeView.flows.splice(index, 1);
+  public prepareToDetach(index: number) {
+    if (<any>this.$refs.detachFlowEntity) {
+      (<any>this.$refs.detachFlowEntity).show();
+    }
+    this.flowToDetach = index;
+  }
+
+  public detachFunctionalFlow() {
+    this.landscapeView.flows.splice(this.flowToDetach, 1);
     this.landscapeViewService()
       .update(this.landscapeView)
       .then(res => {
         this.landscapeView = res;
+        this.closeDetachDialog();
       });
+  }
+
+  public closeDetachDialog(): void {
+    (<any>this.$refs.detachFlowEntity).hide();
   }
 
   public openSearchFlow(): void {

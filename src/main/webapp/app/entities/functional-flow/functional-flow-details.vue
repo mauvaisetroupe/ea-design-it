@@ -142,7 +142,7 @@
                       <span class="d-none d-md-inline">Edit</span>
                     </button>
                   </router-link>
-                  <b-button v-if="accountService().writeAuthorities" v-on:click="detachInterface(i)" variant="warning" class="btn btn-sm">
+                  <b-button v-if="accountService().writeAuthorities" v-on:click="prepareToDetach(i)" variant="warning" class="btn btn-sm">
                     <font-awesome-icon icon="times"></font-awesome-icon>
                     <span class="d-none d-md-inline">Detach</span>
                   </b-button>
@@ -305,6 +305,28 @@
             <span> Create a new Flow Interface </span>
           </button>
         </router-link>
+      </div>
+    </b-modal>
+    <b-modal ref="detachInterfaceEntity" id="detachInterfaceEntity">
+      <span slot="modal-title"
+        ><span id="eaDesignItApp.landscapeView.delete.question" data-cy="landscapeViewDeleteDialogHeading"
+          >Confirm delete operation</span
+        ></span
+      >
+      <div class="modal-body">
+        <p id="jhi-delete-landscapeView-heading">Are you sure you want to detach this Interface?</p>
+      </div>
+      <div slot="modal-footer">
+        <button type="button" class="btn btn-secondary" v-on:click="closeDetachDialog()">Cancel</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="jhi-confirm-delete-landscapeView"
+          data-cy="entityConfirmDeleteButton"
+          v-on:click="detachInterface()"
+        >
+          Delete
+        </button>
       </div>
     </b-modal>
   </div>
