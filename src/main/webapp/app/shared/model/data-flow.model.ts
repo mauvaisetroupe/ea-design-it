@@ -17,7 +17,7 @@ export interface IDataFlow {
   items?: IDataFlowItem[] | null;
   format?: IDataFormat | null;
   functionalFlows?: IFunctionalFlow[] | null;
-  flowInterface?: IFlowInterface;
+  flowInterface?: IFlowInterface | null;
 }
 
 export class DataFlow implements IDataFlow {
@@ -34,6 +34,6 @@ export class DataFlow implements IDataFlow {
     public items?: IDataFlowItem[] | null,
     public format?: IDataFormat | null,
     public functionalFlows?: IFunctionalFlow[] | null,
-    public flowInterface?: IFlowInterface
+    public flowInterface?: IFlowInterface | null
   ) {}
 }

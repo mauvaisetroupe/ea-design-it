@@ -30,7 +30,7 @@ relationship ManyToOne {
 }
 
 relationship OneToMany {
-	FlowInterface{dataFlows} to DataFlow{flowInterface(alias) required}
+	FlowInterface{dataFlows} to DataFlow{flowInterface(alias)}
 	DataFlow{items} to DataFlowItem{dataFlow}
 }
 

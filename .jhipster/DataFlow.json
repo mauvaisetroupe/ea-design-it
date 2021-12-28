@@ -70,7 +70,6 @@
       "relationshipType": "many-to-one",
       "otherEntityName": "flowInterface",
       "otherEntityRelationshipName": "dataFlows",
-      "relationshipValidateRules": "required",
       "relationshipName": "flowInterface",
       "otherEntityField": "alias"
     }

@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
-import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import java.time.LocalDate;
@@ -101,16 +100,6 @@ class DataFlowResourceIT {
             .documentationURL(DEFAULT_DOCUMENTATION_URL)
             .startDate(DEFAULT_START_DATE)
             .endDate(DEFAULT_END_DATE);
-        // Add required entity
-        FlowInterface flowInterface;
-        if (TestUtil.findAll(em, FlowInterface.class).isEmpty()) {
-            flowInterface = FlowInterfaceResourceIT.createEntity(em);
-            em.persist(flowInterface);
-            em.flush();
-        } else {
-            flowInterface = TestUtil.findAll(em, FlowInterface.class).get(0);
-        }
-        dataFlow.setFlowInterface(flowInterface);
         return dataFlow;
     }
 
@@ -130,16 +119,6 @@ class DataFlowResourceIT {
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE);
-        // Add required entity
-        FlowInterface flowInterface;
-        if (TestUtil.findAll(em, FlowInterface.class).isEmpty()) {
-            flowInterface = FlowInterfaceResourceIT.createUpdatedEntity(em);
-            em.persist(flowInterface);
-            em.flush();
-        } else {
-            flowInterface = TestUtil.findAll(em, FlowInterface.class).get(0);
-        }
-        dataFlow.setFlowInterface(flowInterface);
         return dataFlow;
     }
 
