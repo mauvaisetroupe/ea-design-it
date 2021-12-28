@@ -142,7 +142,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="dataFlow in flowInterface.dataFlows" :key="dataFlow.id" data-cy="entityTable">
+              <tr v-for="(dataFlow, i) in flowInterface.dataFlows" :key="dataFlow.id" data-cy="entityTable">
                 <td>
                   <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }">{{ dataFlow.id }}</router-link>
                 </td>
@@ -173,7 +173,7 @@
                     </router-link>
                     <b-button
                       v-if="accountService().writeAuthorities"
-                      v-on:click="prepareRemove(inter)"
+                      v-on:click="prepareToDetach(dataFlow)"
                       variant="warning"
                       class="btn btn-sm"
                       data-cy="entityDeleteButton"
@@ -252,6 +252,28 @@
         </div>
       </div>
     </div>
+    <b-modal ref="detachDataEntity" id="detachDataEntity">
+      <span slot="modal-title"
+        ><span id="eaDesignItApp.landscapeView.delete.question" data-cy="landscapeViewDeleteDialogHeading"
+          >Confirm delete operation</span
+        ></span
+      >
+      <div class="modal-body">
+        <p id="jhi-delete-landscapeView-heading">Are you sure you want to detach this Data Flow?</p>
+      </div>
+      <div slot="modal-footer">
+        <button type="button" class="btn btn-secondary" v-on:click="closeDetachDialog()">Cancel</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="jhi-confirm-delete-landscapeView"
+          data-cy="entityConfirmDeleteButton"
+          v-on:click="detachDataFlow()"
+        >
+          Delete
+        </button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
