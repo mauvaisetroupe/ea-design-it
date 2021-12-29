@@ -109,4 +109,19 @@ export default class Application extends Vue {
   public closeDialog(): void {
     (<any>this.$refs.removeEntity).hide();
   }
+
+  public isOwner(application: IApplication): Boolean {
+    const username = this.$store.getters.account?.login ?? '';
+    if (this.accountService().writeAuthorities) {
+      return true;
+    }
+    if (application.owner && application.owner.users) {
+      for (const user of application.owner.users) {
+        if (user.login === username) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }

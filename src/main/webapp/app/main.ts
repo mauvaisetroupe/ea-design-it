@@ -72,15 +72,15 @@ router.beforeEach((to, from, next) => {
   }
 
   if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
-    console.log(to.meta.authorities);
-    console.log(to.meta.authorities.includes(Authority.ANONYMOUS_ALLOWED));
-    console.log(accountService.anonymousReadAllowed);
+    console.log('to.meta.authorities' + to.meta.authorities);
 
     if (to.meta.authorities.includes(Authority.ANONYMOUS_ALLOWED) && accountService.anonymousReadAllowed) {
       next();
     } else {
       accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities).then(value => {
         if (!value) {
+          console.log(to);
+          console.log('hasAnyAuthorityAndCheckAuth(' + to.meta.authorities + ') -> ' + value);
           sessionStorage.setItem('requested-url', to.fullPath);
           next('/forbidden');
         } else {

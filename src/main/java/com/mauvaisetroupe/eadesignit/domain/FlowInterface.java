@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mauvaisetroupe.eadesignit.domain.util.Ownershipable;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -16,7 +17,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "interface")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class FlowInterface implements Serializable, Comparable<FlowInterface> {
+public class FlowInterface implements Serializable, Comparable<FlowInterface>, Ownershipable {
 
     private static final long serialVersionUID = 1L;
 
@@ -74,7 +75,6 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface> {
     private Protocol protocol;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner owner;
 
     @ManyToMany(mappedBy = "interfaces", fetch = FetchType.EAGER)

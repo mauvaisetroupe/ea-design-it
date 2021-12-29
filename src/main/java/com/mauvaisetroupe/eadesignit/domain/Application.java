@@ -3,6 +3,7 @@ package com.mauvaisetroupe.eadesignit.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
+import com.mauvaisetroupe.eadesignit.domain.util.Ownershipable;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -18,7 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "application")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Application implements Serializable {
+public class Application implements Serializable, Ownershipable {
 
     private static final long serialVersionUID = 1L;
 
@@ -62,7 +63,6 @@ public class Application implements Serializable {
     private SoftwareType softwareType;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner owner;
 
     @ManyToMany

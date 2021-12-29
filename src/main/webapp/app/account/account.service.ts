@@ -7,6 +7,7 @@ export default class AccountService {
   private hasUserAuthorityValue = false;
   private hasWriteAuthorityValue = false;
   private hasDeleteAuthorityValue = false;
+  private hasContributorAuthorityValue = false;
 
   public anonymousReadAllowed = true;
 
@@ -49,6 +50,7 @@ export default class AccountService {
             this.hasUserAuthority();
             this.hasWriteAuthority();
             this.hasDeleteAuthority();
+            this.hasContributorAuthority();
           } else {
             this.store.commit('logout');
             this.router.push('/');
@@ -71,8 +73,7 @@ export default class AccountService {
     if (!this.authenticated || !this.userAuthorities) {
       const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
       if (!this.store.getters.account && !this.store.getters.logon && token) {
-        return this.retrieveAccount();
-      } else {
+        this.retrieveAccount();
         return Promise.resolve(false);
       }
     }
@@ -112,6 +113,12 @@ export default class AccountService {
     });
   }
 
+  public hasContributorAuthority() {
+    this.hasAnyAuthorityAndCheckAuth('ROLE_CONTRIBUTOR').then(value => {
+      this.hasContributorAuthorityValue = value;
+    });
+  }
+
   public get readAuthorities(): boolean {
     if (this.anonymousReadAllowed) {
       //anonymous read
@@ -127,5 +134,13 @@ export default class AccountService {
 
   public get deleteAuthorities(): boolean {
     return this.store.getters.authenticated && this.hasDeleteAuthorityValue;
+  }
+
+  public get contributorAuthorities(): boolean {
+    return this.store.getters.authenticated && this.hasContributorAuthorityValue;
+  }
+
+  public get writeOrContributor(): boolean {
+    return this.store.getters.authenticated && (this.hasWriteAuthorityValue || this.hasContributorAuthorityValue);
   }
 }

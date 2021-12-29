@@ -14,6 +14,7 @@ import admin from '@/router/admin';
 import entities from '@/router/entities';
 import pages from '@/router/pages';
 import importuploadfile from '@/router/eadeisgnit-cusom';
+import { Authority } from '@/shared/security/authority';
 
 Vue.use(Router);
 
@@ -24,7 +25,8 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
+      meta: { authorities: [Authority.ANONYMOUS_ALLOWED] },
     },
     {
       path: '/forbidden',

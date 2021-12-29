@@ -52,4 +52,18 @@ export default class ApplicationDetails extends Vue {
         }
       );
   }
+  public isOwner(application: IApplication): Boolean {
+    const username = this.$store.getters.account?.login ?? '';
+    if (this.accountService().writeAuthorities) {
+      return true;
+    }
+    if (application.owner && application.owner.users) {
+      for (const user of application.owner.users) {
+        if (user.login === username) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }

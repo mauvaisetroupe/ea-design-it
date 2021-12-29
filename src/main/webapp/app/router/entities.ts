@@ -93,7 +93,7 @@ export default [
     path: '/landscape-view/:landscapeViewId/edit',
     name: 'LandscapeViewEdit',
     component: LandscapeViewUpdate,
-    meta: { authorities: [Authority.WRITE] },
+    meta: { authorities: [Authority.WRITE, Authority.CONTRIBUTOR] },
   },
   {
     path: '/landscape-view/:landscapeViewId/view',
@@ -141,7 +141,7 @@ export default [
     path: '/functional-flow/:functionalFlowId/edit',
     name: 'FunctionalFlowEdit',
     component: FunctionalFlowUpdate,
-    meta: { authorities: [Authority.WRITE] },
+    meta: { authorities: [Authority.WRITE, Authority.CONTRIBUTOR] },
   },
   {
     path: '/functional-flow/:functionalFlowId/view',
@@ -165,7 +165,7 @@ export default [
     path: '/flow-interface/:flowInterfaceId/edit',
     name: 'FlowInterfaceEdit',
     component: FlowInterfaceUpdate,
-    meta: { authorities: [Authority.WRITE] },
+    meta: { authorities: [Authority.WRITE, Authority.CONTRIBUTOR] },
   },
   {
     path: '/flow-interface/:flowInterfaceId/view',
@@ -189,7 +189,7 @@ export default [
     path: '/application/:applicationId/edit',
     name: 'ApplicationEdit',
     component: ApplicationUpdate,
-    meta: { authorities: [Authority.WRITE] },
+    meta: { authorities: [Authority.WRITE, Authority.CONTRIBUTOR] },
   },
   {
     path: '/application/:applicationId/view',
@@ -213,7 +213,7 @@ export default [
     path: '/data-flow/:dataFlowId/edit',
     name: 'DataFlowEdit',
     component: DataFlowUpdate,
-    meta: { authorities: [Authority.WRITE] },
+    meta: { authorities: [Authority.WRITE, Authority.CONTRIBUTOR] },
   },
   {
     path: '/data-flow/:dataFlowId/view',
@@ -237,7 +237,7 @@ export default [
     path: '/application-component/:applicationComponentId/edit',
     name: 'ApplicationComponentEdit',
     component: ApplicationComponentUpdate,
-    meta: { authorities: [Authority.WRITE] },
+    meta: { authorities: [Authority.WRITE, Authority.CONTRIBUTOR] },
   },
   {
     path: '/application-component/:applicationComponentId/view',
@@ -285,7 +285,7 @@ export default [
     path: '/data-flow-item/:dataFlowItemId/edit',
     name: 'DataFlowItemEdit',
     component: DataFlowItemUpdate,
-    meta: { authorities: [Authority.WRITE] },
+    meta: { authorities: [Authority.WRITE, Authority.CONTRIBUTOR] },
   },
   {
     path: '/data-flow-item/:dataFlowItemId/view',
@@ -351,13 +351,13 @@ export default [
     path: '/technology/new',
     name: 'TechnologyCreate',
     component: TechnologyUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/technology/:technologyId/edit',
     name: 'TechnologyEdit',
     component: TechnologyUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/technology/:technologyId/view',

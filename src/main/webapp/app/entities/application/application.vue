@@ -99,12 +99,17 @@
                   </button>
                 </router-link>
                 <router-link
-                  v-if="accountService().writeAuthorities"
+                  v-if="accountService().writeOrContributor"
                   :to="{ name: 'ApplicationEdit', params: { applicationId: application.id } }"
                   custom
                   v-slot="{ navigate }"
                 >
-                  <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
+                  <button
+                    @click="navigate"
+                    class="btn btn-primary btn-sm edit"
+                    data-cy="entityEditButton"
+                    :disabled="!isOwner(application)"
+                  >
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                     <span class="d-none d-md-inline">Edit</span>
                   </button>

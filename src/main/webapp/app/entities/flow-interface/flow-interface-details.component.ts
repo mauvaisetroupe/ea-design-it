@@ -59,4 +59,19 @@ export default class FlowInterfaceDetails extends Vue {
   public closeDetachDialog(): void {
     (<any>this.$refs.detachDataEntity).hide();
   }
+
+  public isOwner(flowInterface: IFlowInterface): Boolean {
+    const username = this.$store.getters.account?.login ?? '';
+    if (this.accountService().writeAuthorities) {
+      return true;
+    }
+    if (flowInterface.owner && flowInterface.owner.users) {
+      for (const user of flowInterface.owner.users) {
+        if (user.login === username) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }

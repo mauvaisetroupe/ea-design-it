@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
@@ -48,6 +49,7 @@ public class ApplicationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/applications")
+    @PreAuthorize("@ownershipChecker.check(#application)")
     public ResponseEntity<Application> createApplication(@Valid @RequestBody Application application) throws URISyntaxException {
         log.debug("REST request to save Application : {}", application);
         if (application.getId() != null) {
@@ -71,6 +73,7 @@ public class ApplicationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/applications/{id}")
+    @PreAuthorize("@ownershipChecker.check(#application)")
     public ResponseEntity<Application> updateApplication(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody Application application
@@ -106,6 +109,7 @@ public class ApplicationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/applications/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("@ownershipChecker.check(#application)")
     public ResponseEntity<Application> partialUpdateApplication(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody Application application
@@ -195,6 +199,7 @@ public class ApplicationResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/applications/{id}")
+    @PreAuthorize("@ownershipChecker.check(#application)")
     public ResponseEntity<Void> deleteApplication(@PathVariable Long id) {
         log.debug("REST request to delete Application : {}", id);
         applicationRepository.deleteById(id);

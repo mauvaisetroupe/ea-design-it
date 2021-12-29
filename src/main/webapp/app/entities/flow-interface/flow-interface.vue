@@ -132,7 +132,8 @@
                     @click="navigate"
                     class="btn btn-primary btn-sm edit"
                     data-cy="entityEditButton"
-                    v-if="accountService().writeAuthorities"
+                    v-if="accountService().writeOrContributor"
+                    :disabled="!isOwner(flowInterface)"
                   >
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                     <span class="d-none d-md-inline">Edit</span>

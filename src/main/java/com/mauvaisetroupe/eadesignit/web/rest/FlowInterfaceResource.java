@@ -15,8 +15,8 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,6 +83,7 @@ public class FlowInterfaceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/flow-interfaces/{id}")
+    @PreAuthorize("@ownershipChecker.check(#flowInterface)")
     public ResponseEntity<FlowInterface> updateFlowInterface(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody FlowInterface flowInterface
@@ -118,6 +119,7 @@ public class FlowInterfaceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/flow-interfaces/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("@ownershipChecker.check(#flowInterface)")
     public ResponseEntity<FlowInterface> partialUpdateFlowInterface(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody FlowInterface flowInterface
