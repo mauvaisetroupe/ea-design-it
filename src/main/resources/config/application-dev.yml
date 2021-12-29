@@ -34,7 +34,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:h2:file:./target/h2db/db/eadesignit;DB_CLOSE_DELAY=-1
     username: EADesignIt
-    password: EADesignIt
+    password:
     hikari:
       poolName: Hikari
       auto-commit: false
