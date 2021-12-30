@@ -55,9 +55,9 @@
           Please, refer to <a href="https://github.com/mauvaisetroupe/EADesignIt/tree/main/documentation/excel-import">documentation</a> for
           more explanation
         </p>
-        <div class="alert alert-success">
-          <span v-if="username">You are logged in as user "{{ username }}"</span>
-        </div>
+      </div>
+      <div class="alert alert-success" v-if="authenticated">
+        <span v-if="username">You are logged in as user "{{ username }}"</span>
       </div>
       <div class="alert alert-warning" v-if="!authenticated">
         <span>Please </span><a class="alert-link" v-on:click="openLogin()">sign in</a>.
