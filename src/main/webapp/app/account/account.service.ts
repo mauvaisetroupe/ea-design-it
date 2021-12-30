@@ -11,6 +11,11 @@ export default class AccountService {
 
   public init(): void {
     this.retrieveProfiles();
+    // remember me...
+    const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
+    if (!this.store.getters.account && !this.store.getters.logon && token) {
+      this.retrieveAccount();
+    }
   }
 
   public retrieveProfiles(): Promise<boolean> {
