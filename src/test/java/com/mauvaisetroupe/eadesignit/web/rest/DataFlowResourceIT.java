@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class DataFlowResourceIT {
 
     private static final String DEFAULT_RESOURCE_NAME = "AAAAAAAAAA";
@@ -497,6 +497,7 @@ class DataFlowResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE" })
     void deleteDataFlow() throws Exception {
         // Initialize the database
         dataFlowRepository.saveAndFlush(dataFlow);

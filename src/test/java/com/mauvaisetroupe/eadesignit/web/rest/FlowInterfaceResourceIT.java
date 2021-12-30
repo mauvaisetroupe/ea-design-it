@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class FlowInterfaceResourceIT {
 
     private static final String DEFAULT_ALIAS = "AAAAAAAAAA";
@@ -469,6 +469,7 @@ class FlowInterfaceResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE" })
     void deleteFlowInterface() throws Exception {
         // Initialize the database
         flowInterfaceRepository.saveAndFlush(flowInterface);

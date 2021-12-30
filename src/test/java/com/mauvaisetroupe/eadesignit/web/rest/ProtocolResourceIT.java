@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class ProtocolResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -410,6 +410,7 @@ class ProtocolResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE" })
     void deleteProtocol() throws Exception {
         // Initialize the database
         protocolRepository.saveAndFlush(protocol);

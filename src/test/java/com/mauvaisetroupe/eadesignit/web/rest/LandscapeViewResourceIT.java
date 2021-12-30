@@ -36,7 +36,7 @@ import org.springframework.util.Base64Utils;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class LandscapeViewResourceIT {
 
     private static final ViewPoint DEFAULT_VIEWPOINT = ViewPoint.APPLICATION_LANDSCAPE;
@@ -428,6 +428,7 @@ class LandscapeViewResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE" })
     void deleteLandscapeView() throws Exception {
         // Initialize the database
         landscapeViewRepository.saveAndFlush(landscapeView);

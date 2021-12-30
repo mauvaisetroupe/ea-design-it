@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class DataFlowItemResourceIT {
 
     private static final String DEFAULT_RESOURCE_NAME = "AAAAAAAAAA";
@@ -455,6 +455,7 @@ class DataFlowItemResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE" })
     void deleteDataFlowItem() throws Exception {
         // Initialize the database
         dataFlowItemRepository.saveAndFlush(dataFlowItem);

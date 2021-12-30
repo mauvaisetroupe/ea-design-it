@@ -96,6 +96,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/account/reset-password/finish").permitAll()
             .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers(HttpMethod.GET,"/api/**").permitAll()
+            .antMatchers(HttpMethod.POST,"/api/account/**").hasAnyAuthority(AuthoritiesConstants.USER) // change password...
             .antMatchers(HttpMethod.POST,"/api/**").hasAnyAuthority(AuthoritiesConstants.WRITE)
             .antMatchers(HttpMethod.PUT,"/api/applications/**").hasAnyAuthority(AuthoritiesConstants.WRITE,AuthoritiesConstants.CONTRIBUTOR)
             .antMatchers(HttpMethod.PATCH,"/api/applications/**").hasAnyAuthority(AuthoritiesConstants.WRITE,AuthoritiesConstants.CONTRIBUTOR)

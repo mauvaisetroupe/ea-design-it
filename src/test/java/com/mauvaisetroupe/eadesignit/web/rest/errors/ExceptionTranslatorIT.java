@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 /**
  * Integration tests {@link ExceptionTranslator} controller advice.
  */
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 @AutoConfigureMockMvc
 @IntegrationTest
 class ExceptionTranslatorIT {

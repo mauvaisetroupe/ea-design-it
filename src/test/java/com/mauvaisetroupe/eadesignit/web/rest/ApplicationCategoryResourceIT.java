@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class ApplicationCategoryResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -401,6 +401,7 @@ class ApplicationCategoryResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE" })
     void deleteApplicationCategory() throws Exception {
         // Initialize the database
         applicationCategoryRepository.saveAndFlush(applicationCategory);

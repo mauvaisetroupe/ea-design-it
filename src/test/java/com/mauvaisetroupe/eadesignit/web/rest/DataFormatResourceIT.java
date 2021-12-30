@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class DataFormatResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -367,6 +367,7 @@ class DataFormatResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE" })
     void deleteDataFormat() throws Exception {
         // Initialize the database
         dataFormatRepository.saveAndFlush(dataFormat);

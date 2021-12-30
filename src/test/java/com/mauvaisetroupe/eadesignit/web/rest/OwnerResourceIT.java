@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class OwnerResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -375,6 +375,7 @@ class OwnerResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE" })
     void deleteOwner() throws Exception {
         // Initialize the database
         ownerRepository.saveAndFlush(owner);

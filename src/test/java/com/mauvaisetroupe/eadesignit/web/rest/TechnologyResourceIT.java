@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class TechnologyResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -385,6 +385,7 @@ class TechnologyResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE" })
     void deleteTechnology() throws Exception {
         // Initialize the database
         technologyRepository.saveAndFlush(technology);

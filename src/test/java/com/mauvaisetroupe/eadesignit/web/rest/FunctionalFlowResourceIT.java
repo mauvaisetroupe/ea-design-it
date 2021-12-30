@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class FunctionalFlowResourceIT {
 
     private static final String DEFAULT_ALIAS = "AAAAAAAAAA";
@@ -504,6 +504,7 @@ class FunctionalFlowResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE" })
     void deleteFunctionalFlow() throws Exception {
         // Initialize the database
         functionalFlowRepository.saveAndFlush(functionalFlow);

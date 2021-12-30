@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class ApplicationComponentResourceIT {
 
     private static final String DEFAULT_ALIAS = "AAAAAAAAAA";
@@ -549,6 +549,7 @@ class ApplicationComponentResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE" })
     void deleteApplicationComponent() throws Exception {
         // Initialize the database
         applicationComponentRepository.saveAndFlush(applicationComponent);
