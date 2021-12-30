@@ -45,16 +45,5 @@ export const accountStore: Module<any, any> = {
 
 function hasAuthority(state, role): boolean {
   console.log('performance issue?');
-  if (state.userIdentity && state.userIdentity.authorities) {
-    let authorities = state.userIdentity.authorities;
-    if (typeof authorities === 'string') {
-      authorities = [authorities];
-    }
-    for (const authority of authorities) {
-      if (authorities.includes(role)) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return state.userIdentity?.authorities?.includes(role);
 }
