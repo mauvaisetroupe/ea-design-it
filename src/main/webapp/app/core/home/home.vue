@@ -44,7 +44,7 @@
           more explanation
         </p>
       </div>
-      <div v-if="accountService().writeAuthorities">
+      <div v-if="$store.getters.writeAuthority">
         <h2>Import Excel files</h2>
         <ul>
           <li>Import Excel <a href="/application-import-upload-file">Applications</a> file</li>

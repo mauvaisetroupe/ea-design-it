@@ -24,14 +24,7 @@
             <span>Home</span>
           </span>
         </b-nav-item>
-        <b-nav-item-dropdown
-          right
-          id="entity-menu"
-          active-class="active"
-          class="pointer"
-          data-cy="entity"
-          v-if="accountService().readAuthorities"
-        >
+        <b-nav-item-dropdown right id="entity-menu" active-class="active" class="pointer" data-cy="entity" v-if="readAuthorities">
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="th-list" />
             <span class="no-bold">EADesignIt</span>
@@ -145,7 +138,7 @@
         <b-nav-item-dropdown
           right
           id="admin-menu"
-          v-if="hasAnyAuthority('ROLE_ADMIN') && authenticated"
+          v-if="adminAuthorities"
           :class="{ 'router-link-active': subIsActive('/admin') }"
           active-class="active"
           class="pointer"

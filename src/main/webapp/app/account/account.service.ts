@@ -3,12 +3,6 @@ import { Store } from 'vuex';
 import VueRouter from 'vue-router';
 
 export default class AccountService {
-  private hasAdminAuthorityValue = false;
-  private hasUserAuthorityValue = false;
-  private hasWriteAuthorityValue = false;
-  private hasDeleteAuthorityValue = false;
-  private hasContributorAuthorityValue = false;
-
   public anonymousReadAllowed = true;
 
   constructor(private store: Store<any>, private router: VueRouter) {
@@ -47,10 +41,6 @@ export default class AccountService {
               this.router.replace(sessionStorage.getItem('requested-url'));
               sessionStorage.removeItem('requested-url');
             }
-            this.hasUserAuthority();
-            this.hasWriteAuthority();
-            this.hasDeleteAuthority();
-            this.hasContributorAuthority();
           } else {
             this.store.commit('logout');
             this.router.push('/');
@@ -95,52 +85,28 @@ export default class AccountService {
     return this.store.getters.account.authorities;
   }
 
-  public hasUserAuthority() {
-    this.hasAnyAuthorityAndCheckAuth('ROLE_USER').then(value => {
-      this.hasUserAuthorityValue = value;
-    });
-  }
-
-  public hasWriteAuthority() {
-    this.hasAnyAuthorityAndCheckAuth('ROLE_WRITE').then(value => {
-      this.hasWriteAuthorityValue = value;
-    });
-  }
-
-  public hasDeleteAuthority() {
-    this.hasAnyAuthorityAndCheckAuth('ROLE_HARD_DELETE').then(value => {
-      this.hasDeleteAuthorityValue = value;
-    });
-  }
-
-  public hasContributorAuthority() {
-    this.hasAnyAuthorityAndCheckAuth('ROLE_CONTRIBUTOR').then(value => {
-      this.hasContributorAuthorityValue = value;
-    });
-  }
-
   public get readAuthorities(): boolean {
     if (this.anonymousReadAllowed) {
       //anonymous read
       return true;
     } else {
-      return this.hasUserAuthorityValue;
+      return this.store.getters.userAuthority;
     }
   }
 
   public get writeAuthorities(): boolean {
-    return this.store.getters.authenticated && this.hasWriteAuthorityValue;
+    return this.store.getters.writeAuthority;
   }
 
   public get deleteAuthorities(): boolean {
-    return this.store.getters.authenticated && this.hasDeleteAuthorityValue;
+    return this.store.getters.seleteAuthority;
   }
 
   public get contributorAuthorities(): boolean {
-    return this.store.getters.authenticated && this.hasContributorAuthorityValue;
+    return this.store.getters.contributorAuthority;
   }
 
   public get writeOrContributor(): boolean {
-    return this.store.getters.authenticated && (this.hasWriteAuthorityValue || this.hasContributorAuthorityValue);
+    return this.writeAuthorities || this.contributorAuthorities;
   }
 }

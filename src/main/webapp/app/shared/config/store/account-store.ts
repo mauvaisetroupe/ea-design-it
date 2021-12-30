@@ -14,6 +14,11 @@ export const accountStore: Module<any, any> = {
     authenticated: state => state.authenticated,
     activeProfiles: state => state.activeProfiles,
     ribbonOnProfiles: state => state.ribbonOnProfiles,
+    writeAuthority: state => hasAuthority(state, 'ROLE_WRITE'),
+    userAuthority: state => hasAuthority(state, 'ROLE_USER'),
+    deleteAuthority: state => hasAuthority(state, 'ROLE_HARD_DELETE'),
+    contributorAuthority: state => hasAuthority(state, 'ROLE_CONTRIBUTOR'),
+    adminAuthority: state => hasAuthority(state, 'ROLE_ADMIN'),
   },
   mutations: {
     authenticate(state) {
@@ -37,3 +42,19 @@ export const accountStore: Module<any, any> = {
     },
   },
 };
+
+function hasAuthority(state, role): boolean {
+  console.log('performance issue?');
+  if (state.userIdentity && state.userIdentity.authorities) {
+    let authorities = state.userIdentity.authorities;
+    if (typeof authorities === 'string') {
+      authorities = [authorities];
+    }
+    for (const authority of authorities) {
+      if (authorities.includes(role)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
