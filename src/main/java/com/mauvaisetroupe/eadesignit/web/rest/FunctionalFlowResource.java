@@ -5,6 +5,7 @@ import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import io.swagger.v3.oas.annotations.Parameter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -201,4 +204,11 @@ public class FunctionalFlowResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    @GetMapping("/functional-flows/new/applications")
+    public FunctionalFlow getFunctionalNonPersistedFlowFromApplications(@Parameter Long[] applicationIds) {
+        log.debug("REST request to build non persisted FunctionalFlow with applications ids: {}", Arrays.toString(applicationIds));
+        FunctionalFlow functionalFlow = new FunctionalFlow();
+        return functionalFlow;
+    }    
 }
