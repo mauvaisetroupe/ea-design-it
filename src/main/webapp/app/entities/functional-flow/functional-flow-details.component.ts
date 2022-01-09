@@ -55,15 +55,31 @@ export default class FunctionalFlowDetails extends Vue {
 
   public interfaceToDetach: number;
 
+  public notPersisted: boolean = false;
+
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (to.params.functionalFlowId) {
-        vm.retrieveFunctionalFlow(to.params.functionalFlowId);
+        if (to.params.functionalFlowId != 'new') {
+          vm.retrieveFunctionalFlow(to.params.functionalFlowId);
+        }
+        else if (to.query.id) {
+          vm.generateDiagramForSelection(to.query.id);
+        }
       }
     });
   }
 
+  public generateDiagramForSelection(applicationIds: number[]) {
+    this.notPersisted = true;
+    this.functionalFlowService().createNewFromApplications(applicationIds).then(res =>  {
+      this.functionalFlow = res;
+      this.getPlantUMLforapplications(applicationIds)
+    });
+  }
+
   public retrieveFunctionalFlow(functionalFlowId) {
+    this.notPersisted = false;
     this.functionalFlowService()
       .find(functionalFlowId)
       .then(res => {
@@ -93,6 +109,21 @@ export default class FunctionalFlowDetails extends Vue {
       );
   }
 
+  public getPlantUMLforapplications(aplicationIds: number[]) {
+    console.log('Entering in method getPlantUMLforapplications');
+    this.functionalFlowService()
+      .getPlantUMLforApplications(aplicationIds)
+      .then(
+        res => {
+          console.log(res.data)
+
+          this.plantUMLImage = res.data;
+        },
+        err => {
+          console.log(err);
+        }
+      );
+  }
   public prepareSearchInterfaces(): void {
     this.applicationService()
       .retrieve()

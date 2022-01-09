@@ -22,6 +22,7 @@ import org.springframework.stereotype.Repository;
 public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Long> {
     Optional<FlowInterface> findByAlias(String idFlowFromExcel);
     Set<FlowInterface> findBySource_NameOrTarget_Name(String sourceName, String targetName);
+    Set<FlowInterface> findBySourceIdInAndTargetIdIn(Long[] sourceIds, Long[] targetIds);
     Set<FlowInterface> findByAliasIn(@NotNull List<String> aliasToMerge);
 
     @Query(

@@ -6,7 +6,7 @@
           <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon>
           <span>Functional Flow</span> - {{ functionalFlow.alias }}
         </h2>
-        <dl class="row jh-entity-details">
+        <dl class="row jh-entity-details" v-if="! notPersisted">
           <dt>
             <span>Alias</span>
           </dt>
@@ -137,7 +137,7 @@
                       @click="navigate"
                       class="btn btn-info btn-sm details"
                       data-cy="entityDetailsButton"
-                      v-if="!accountService().writeAuthorities"
+                      v-if="!accountService().writeAuthorities || notPersisted"
                     >
                       <font-awesome-icon icon="eye"></font-awesome-icon>
                       <span class="d-none d-md-inline">View</span>
@@ -146,13 +146,13 @@
                       @click="navigate"
                       class="btn btn-primary btn-sm edit"
                       data-cy="entityEditButton"
-                      v-if="accountService().writeAuthorities"
+                      v-if="accountService().writeAuthorities && !notPersisted"
                     >
                       <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                       <span class="d-none d-md-inline">Edit</span>
                     </button>
                   </router-link>
-                  <b-button v-if="accountService().writeAuthorities" v-on:click="prepareToDetach(i)" variant="warning" class="btn btn-sm">
+                  <b-button v-if="accountService().writeAuthorities  && !notPersisted" v-on:click="prepareToDetach(i)" variant="warning" class="btn btn-sm">
                     <font-awesome-icon icon="times"></font-awesome-icon>
                     <span class="d-none d-md-inline">Detach</span>
                   </b-button>
@@ -163,7 +163,7 @@
         </table>
       </div>
 
-      <div class="d-flex justify-content-end">
+      <div class="d-flex justify-content-end" v-if="! notPersisted">
         <span>
           <button
             class="btn btn-primary jh-create-entity create-functional-flow"

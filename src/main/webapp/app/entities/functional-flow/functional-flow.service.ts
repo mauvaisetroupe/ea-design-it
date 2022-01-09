@@ -4,6 +4,7 @@ import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 const baseApiUrl = 'api/functional-flows';
 const basePlantUMLApiUrl = 'api/plantuml/functional-flow/get-svg';
+const basePlantUMLApiUrl2 = 'api/plantuml/applications/get-svg';
 
 
 export default class FunctionalFlowService {
@@ -98,9 +99,22 @@ export default class FunctionalFlowService {
     });
   }
 
+  public getPlantUMLforApplications(id: number[]) {
+    const params = {ids: id}
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .get(`${basePlantUMLApiUrl2}`, { params })
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }  
+
   public createNewFromApplications(applicationIds: number[]): Promise<IFunctionalFlow> {
-    const params = { applicationIds: applicationIds };
-    console.log(params)
+    const params = { ids: applicationIds };
     return new Promise<IFunctionalFlow>((resolve, reject) => {
       axios
         .get(`${baseApiUrl}/new/applications`, { params })
