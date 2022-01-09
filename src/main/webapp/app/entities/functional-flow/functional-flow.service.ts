@@ -5,6 +5,7 @@ import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 const baseApiUrl = 'api/functional-flows';
 const basePlantUMLApiUrl = 'api/plantuml/functional-flow/get-svg';
 
+
 export default class FunctionalFlowService {
   public find(id: number): Promise<IFunctionalFlow> {
     return new Promise<IFunctionalFlow>((resolve, reject) => {
@@ -96,4 +97,19 @@ export default class FunctionalFlowService {
         });
     });
   }
+
+  public createNewFromApplications(applicationIds: number[]): Promise<IFunctionalFlow> {
+    const params = { applicationIds: applicationIds };
+    console.log(params)
+    return new Promise<IFunctionalFlow>((resolve, reject) => {
+      axios
+        .get(`${baseApiUrl}/new/applications`, { params })
+        .then(res => {
+          resolve(res.data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }  
 }
