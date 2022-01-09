@@ -3,6 +3,11 @@
     <h2 id="page-heading" data-cy="ApplicationHeading">
       <span id="application-heading">Applications</span>
       <div class="d-flex justify-content-end">
+
+        <button class="btn btn-warning mr-2" v-on:click="generateDiagramForSelection" :disabled="selectedApplications.length < 1" title="Select applications to generate diagram">
+            <font-awesome-icon icon="plus"></font-awesome-icon><span> Generate Diagram</span>
+        </button>
+
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
         </button>
@@ -33,6 +38,7 @@
       <table class="table table-striped" aria-describedby="applications">
         <thead>
           <tr>
+            <th></th>
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Alias</span></th>
             <th scope="row"><span>Name</span></th>
@@ -51,6 +57,7 @@
         </thead>
         <tbody>
           <tr v-for="application in filteredRows" :key="application.id" data-cy="entityTable">
+            <td><input type="checkbox" name="selectedAppliation" :id="application.id" :value="application" v-model="selectedApplications"></td>
             <td>
               <router-link :to="{ name: 'ApplicationView', params: { applicationId: application.id } }">{{ application.id }}</router-link>
             </td>

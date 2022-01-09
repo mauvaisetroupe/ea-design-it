@@ -50,6 +50,8 @@ export default class Application extends Vue {
 
   public filter = '';
 
+  public selectedApplications : IApplication[]= []
+
   public mounted(): void {
     this.retrieveAllApplications();
   }
@@ -123,5 +125,9 @@ export default class Application extends Vue {
       }
     }
     return false;
+  }
+
+  public generateDiagramForSelection() {
+    
   }
 }
