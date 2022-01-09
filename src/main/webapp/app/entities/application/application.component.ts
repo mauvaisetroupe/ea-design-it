@@ -7,6 +7,7 @@ import { IApplication } from '@/shared/model/application.model';
 import ApplicationService from './application.service';
 import AlertService from '@/shared/alert/alert.service';
 import AccountService from '@/account/account.service';
+import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -49,6 +50,8 @@ export default class Application extends Vue {
   public isFetching = false;
 
   public filter = '';
+
+  public selectedApplicationIds : number[]= []
 
   public mounted(): void {
     this.retrieveAllApplications();
@@ -124,4 +127,5 @@ export default class Application extends Vue {
     }
     return false;
   }
+
 }
