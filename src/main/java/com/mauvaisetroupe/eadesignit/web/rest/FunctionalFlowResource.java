@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import io.swagger.v3.oas.annotations.Parameter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -206,7 +205,7 @@ public class FunctionalFlowResource {
     }
 
     @GetMapping("/functional-flows/new/applications")
-    public FunctionalFlow getFunctionalNonPersistedFlowFromApplications(@Parameter Long[] applicationIds) {
+    public FunctionalFlow getFunctionalNonPersistedFlowFromApplications(@RequestParam Long[] applicationIds) {
         log.debug("REST request to build non persisted FunctionalFlow with applications ids: {}", Arrays.toString(applicationIds));
         FunctionalFlow functionalFlow = new FunctionalFlow();
         return functionalFlow;
