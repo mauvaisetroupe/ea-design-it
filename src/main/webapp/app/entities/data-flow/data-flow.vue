@@ -61,14 +61,12 @@
             <td>{{ dataFlow.description }}</td>
             <td>{{ dataFlow.frequency }}</td>
             <td>
-              <a v-if="dataFlow.contractURL" v-bind:href="dataFlow.contractURL">{{
-                dataFlow.contractURL ? dataFlow.contractURL.substring(0, 50) : ''
-              }}</a>
+              <a v-if="dataFlow.contractURL" v-bind:href="dataFlow.contractURL">{{ dataFlow.contractURL.substring(0, 20) }}...</a>
             </td>
             <td>
-              <a v-if="dataFlow.documentationURL" v-bind:href="dataFlow.documentationURL">{{
-                dataFlow.documentationURL ? dataFlow.documentationURL.subbstring(0, 50) : ''
-              }}</a>
+              <a v-if="dataFlow.documentationURL" v-bind:href="dataFlow.documentationURL"
+                >{{ dataFlow.documentationURL.subbstring(0, 20) }}...</a
+              >
             </td>
             <td>{{ dataFlow.startDate }}</td>
             <td>{{ dataFlow.endDate }}</td>

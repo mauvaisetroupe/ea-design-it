@@ -50,7 +50,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
 
     @OneToMany(mappedBy = "flowInterface", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "items", "functionalFlows", "flowInterface" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "functionalFlows", "flowInterface" }, allowSetters = true)
     private Set<DataFlow> dataFlows = new HashSet<>();
 
     @ManyToOne(optional = false)

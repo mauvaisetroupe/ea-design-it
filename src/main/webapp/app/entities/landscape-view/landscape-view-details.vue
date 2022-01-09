@@ -132,7 +132,7 @@
                         :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }"
                         :title="dataFlow.resourceName"
                         >{{ dataFlow.id }}</router-link
-                      >
+                      ><sup v-if="dataFlow.items && dataFlow.items.length > 0">({{ dataFlow.items.length }})</sup>
                     </span>
                   </span>
                 </td>

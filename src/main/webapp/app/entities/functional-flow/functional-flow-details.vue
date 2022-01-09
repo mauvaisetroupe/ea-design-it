@@ -6,7 +6,7 @@
           <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon>
           <span>Functional Flow</span> - {{ functionalFlow.alias }}
         </h2>
-        <dl class="row jh-entity-details" v-if="! notPersisted">
+        <dl class="row jh-entity-details" v-if="!notPersisted">
           <dt>
             <span>Alias</span>
           </dt>
@@ -125,9 +125,11 @@
               </td>
               <td>
                 <span v-for="dataflow in inter.dataFlows" :key="dataflow.id">
-                  <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataflow.id } }">
-                    {{ dataflow.id }}
-                  </router-link>
+                  <router-link
+                    :to="{ name: 'DataFlowView', params: { dataFlowId: dataflow.id } }"
+                    :title="dataflow.resourceName + (dataflow.items.length > 0 ? ' / ' + dataflow.items.length + ' items ' : ' / no items')"
+                    >{{ dataflow.id }}</router-link
+                  ><sup v-if="dataflow.items && dataflow.items.length > 0">({{ dataflow.items.length }})</sup>&nbsp;
                 </span>
               </td>
               <td class="text-right">
@@ -152,7 +154,12 @@
                       <span class="d-none d-md-inline">Edit</span>
                     </button>
                   </router-link>
-                  <b-button v-if="accountService().writeAuthorities  && !notPersisted" v-on:click="prepareToDetach(i)" variant="warning" class="btn btn-sm">
+                  <b-button
+                    v-if="accountService().writeAuthorities && !notPersisted"
+                    v-on:click="prepareToDetach(i)"
+                    variant="warning"
+                    class="btn btn-sm"
+                  >
                     <font-awesome-icon icon="times"></font-awesome-icon>
                     <span class="d-none d-md-inline">Detach</span>
                   </b-button>
@@ -163,7 +170,7 @@
         </table>
       </div>
 
-      <div class="d-flex justify-content-end" v-if="! notPersisted">
+      <div class="d-flex justify-content-end" v-if="!notPersisted">
         <span>
           <button
             class="btn btn-primary jh-create-entity create-functional-flow"

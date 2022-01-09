@@ -137,7 +137,7 @@
                 <th scope="row"><span>Resource Name</span></th>
                 <th scope="row"><span>Resource Type</span></th>
                 <th scope="row"><span>Description</span></th>
-
+                <th scope="row"><span>Data Items</span></th>
                 <th scope="row"></th>
               </tr>
             </thead>
@@ -149,6 +149,13 @@
                 <td>{{ dataFlow.resourceName }}</td>
                 <td>{{ dataFlow.resourceType }}</td>
                 <td>{{ dataFlow.description }}</td>
+                <td>
+                  <span v-for="item in dataFlow.items" :key="item.id">
+                    <router-link :to="{ name: 'DataFlowItemView', params: { dataFlowItemId: item.id } }" :title="item.resourceName">
+                      {{ item.id }}
+                    </router-link>
+                  </span>
+                </td>
                 <td class="text-right">
                   <div class="btn-group">
                     <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }" custom v-slot="{ navigate }">
@@ -239,7 +246,8 @@
                 <td>{{ functionalFlow.alias }}</td>
                 <td>{{ functionalFlow.description }}</td>
                 <td>
-                  <span v-for="landscape in functionalFlow.landscapes" :key="landscape.id">
+                  <span v-for="(landscape, i) in functionalFlow.landscapes" :key="landscape.id">
+                    {{ i > 0 ? ', ' : '' }}
                     <router-link :to="{ name: 'LandscapeViewView', params: { landscapeViewId: landscape.id } }">{{
                       landscape.diagramName
                     }}</router-link>

@@ -113,6 +113,7 @@
               <th scope="row"><span>Resource Name</span></th>
               <th scope="row"><span>Resource Type</span></th>
               <th scope="row"><span>Description</span></th>
+              <th scope="row"><span>Contract</span></th>
             </tr>
           </thead>
           <tbody>
@@ -125,6 +126,11 @@
               <td>{{ dataFlowItem.resourceName }}</td>
               <td>{{ dataFlowItem.resourceType }}</td>
               <td>{{ dataFlowItem.description }}</td>
+              <td>
+                <a v-if="dataFlowItem.contractURL" v-bind:href="dataFlowItem.contractURL"
+                  >{{ dataFlowItem.contractURL.substring(0, 50) }}...</a
+                >
+              </td>
             </tr>
           </tbody>
         </table>
