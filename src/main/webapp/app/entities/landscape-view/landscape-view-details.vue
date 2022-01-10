@@ -89,12 +89,21 @@
             >
               <tr v-bind:key="inter.id" :class="i % 2 == 0 ? 'mycolor' : ''">
                 <td>
-                  <router-link
-                    :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }"
-                    v-if="functionalFlow && j == 0"
-                  >
-                    {{ functionalFlow.alias }}
-                  </router-link>
+                  <div v-if="!reorderAlias || !inter.id">
+                    <router-link
+                      :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }"
+                      v-if="functionalFlow && j == 0"
+                    >
+                      {{ functionalFlow.alias }}
+                    </router-link>
+                  </div>
+                  <div v-if="reorderAlias && inter.id">
+                    <select @change="reorder(inter, functionalFlow, $event)" :id="inter.id" class="btn-success">
+                      <option v-for="flow in landscapeView.flows" :key="flow.id" :value="flow.id" :selected="flow.id === functionalFlow.id">
+                        {{ flow.alias }}
+                      </option>
+                    </select>
+                  </div>
                 </td>
                 <td>
                   <span v-if="j == 0">{{ functionalFlow.description }}</span>
@@ -137,7 +146,7 @@
                   </span>
                 </td>
                 <td class="text-right">
-                  <div class="btn-group" v-if="j == 0">
+                  <div class="btn-group" v-if="j == 0 && !reorderAlias">
                     <router-link
                       :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }"
                       custom
@@ -175,39 +184,78 @@
           </template>
         </tbody>
       </table>
-
-      <div class="d-flex justify-content-end">
-        <span>
+      <div class="row">
+        <div class="col-md-6">
           <button
-            class="btn btn-primary jh-create-entity create-functional-flow"
-            v-if="accountService().writeAuthorities"
-            title="Add existing Functional flow, from other landscape, with same description, same interfaces"
-            @click="openSearchFlow()"
+            @click="startReorder()"
+            id="jh-create-entity"
+            data-cy="entityCreateButton"
+            class="btn btn-success jh-create-entity create-functional-flow"
+            title="Edit Flow Alias in order to move interfaces from on flow to another"
+            v-if="accountService().writeAuthorities && !reorderAlias"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span>Add exisintg Functional Flow</span>
+            <span> Organize Flows</span>
           </button>
 
-          <router-link
-            :to="{ name: 'FunctionalFlowCreate', query: { landscapeViewId: landscapeView.id } }"
-            custom
-            v-slot="{ navigate }"
-            v-if="accountService().writeAuthorities"
+          <button
+            @click="saveReorder()"
+            id="jh-create-entity"
+            data-cy="entityCreateButton"
+            class="btn btn-success jh-create-entity create-functional-flow"
+            title="Edit Flow Alias in order to move interfaces from on flow to another"
+            v-if="reorderAlias && reorderAliasflowToSave.length > 0"
           >
+            <font-awesome-icon icon="plus"></font-awesome-icon>
+            <span>Save</span>
+          </button>
+
+          <button
+            @click="cancelReorder()"
+            id="jh-create-entity"
+            data-cy="entityCreateButton"
+            class="btn btn-success jh-create-entity create-functional-flow"
+            title="Edit Flow Alias in order to move interfaces from on flow to another"
+            v-if="reorderAlias"
+          >
+            <font-awesome-icon icon="plus"></font-awesome-icon>
+            <span>Cancel</span>
+          </button>
+        </div>
+        <div class="col-md-6 d-flex justify-content-end" v-if="!reorderAlias">
+          <span>
             <button
-              @click="navigate"
-              id="jh-create-entity"
-              data-cy="entityCreateButton"
               class="btn btn-primary jh-create-entity create-functional-flow"
-              title="Create a new Functional Flow, based on existing Interfaces or creating new Interfaces"
+              v-if="accountService().writeAuthorities"
+              title="Add existing Functional flow, from other landscape, with same description, same interfaces"
+              @click="openSearchFlow()"
             >
               <font-awesome-icon icon="plus"></font-awesome-icon>
-              <span> Create a new Functional Flow </span>
+              <span>Add exisintg Functional Flow</span>
             </button>
-          </router-link>
-        </span>
+
+            <router-link
+              :to="{ name: 'FunctionalFlowCreate', query: { landscapeViewId: landscapeView.id } }"
+              custom
+              v-slot="{ navigate }"
+              v-if="accountService().writeAuthorities"
+            >
+              <button
+                @click="navigate"
+                id="jh-create-entity"
+                data-cy="entityCreateButton"
+                class="btn btn-primary jh-create-entity create-functional-flow"
+                title="Create a new Functional Flow, based on existing Interfaces or creating new Interfaces"
+              >
+                <font-awesome-icon icon="plus"></font-awesome-icon>
+                <span> Create a new Functional Flow </span>
+              </button>
+            </router-link>
+          </span>
+        </div>
       </div>
 
+      <br /><br /><br /><br /><br /><br />
       <h2>Draw.io</h2>
 
       <div v-if="!drawIoSVG">

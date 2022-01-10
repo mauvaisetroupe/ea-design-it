@@ -33,6 +33,13 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public toBeSaved = false;
   public flowToDetach: number;
 
+  public reorderAlias = false;
+  public reorderAliasflowToSave: IFunctionalFlow[] = [];
+
+  public get allAlias() {
+    return this.landscapeView.flows.map(f => f.alias);
+  }
+
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (to.params.landscapeViewId) {
@@ -228,5 +235,59 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
         this.closeSearchFlow();
         this.getPlantUML(this.landscapeView.id);
       });
+  }
+
+  // FLOW REORGANIZATION
+
+  public startReorder() {
+    this.reorderAlias = true;
+    this.reorderAliasflowToSave = [];
+  }
+
+  public reorder(flowInterface: IFlowInterface, functionalFlow: IFunctionalFlow, event) {
+    const newFlowId: number = parseInt(event.target.value);
+    const newFunctionalFlow: IFunctionalFlow = this.landscapeView.flows.find(f => f.id === newFlowId);
+
+    // add interface in new Flow
+    newFunctionalFlow.interfaces.push(flowInterface);
+    // remove interface from old Flow
+    functionalFlow.interfaces = functionalFlow.interfaces.filter(i => i.id != flowInterface.id);
+
+    // Add old & new Flows for later update by REST call
+    if (this.reorderAliasflowToSave.filter(e => e.id === functionalFlow.id).length === 0) {
+      this.reorderAliasflowToSave.push(functionalFlow);
+    }
+    if (this.reorderAliasflowToSave.filter(e => e.id === newFunctionalFlow.id).length === 0) {
+      this.reorderAliasflowToSave.push(newFunctionalFlow);
+    }
+  }
+
+  public cancelReorder() {
+    this.landscapeViewService()
+      .find(this.landscapeView.id)
+      .then(res => {
+        this.landscapeView = res;
+      })
+      .catch(error => {
+        this.alertService().showHttpError(this, error.response);
+      });
+    this.reorderAlias = false;
+    this.reorderAliasflowToSave = [];
+  }
+
+  public saveReorder() {
+    let promises = [];
+    this.reorderAliasflowToSave.forEach(flow => {
+      promises.push(this.functionalFlowService().update(flow));
+    });
+    Promise.all(promises).then(res => {
+      this.landscapeViewService()
+        .find(this.landscapeView.id)
+        .then(res => {
+          this.landscapeView = res;
+          this.reorderAlias = false;
+          this.reorderAliasflowToSave = [];
+        });
+    });
   }
 }
