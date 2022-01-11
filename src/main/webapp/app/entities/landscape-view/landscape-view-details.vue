@@ -106,7 +106,10 @@
                   </div>
                 </td>
                 <td>
-                  <span v-if="j == 0">{{ functionalFlow.description }}</span>
+                  <span v-if="j == 0">
+                    <span v-if="!reorderAlias">{{ functionalFlow.description }}</span>
+                    <span v-else><textarea style="width: 100%; min-width:600px" rows="1" v-model="functionalFlow.description" @change="changeDescription(functionalFlow)"></textarea></span>
+                    </span>
                 </td>
                 <td>
                   <router-link v-if="inter.id" :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: inter.id } }">{{

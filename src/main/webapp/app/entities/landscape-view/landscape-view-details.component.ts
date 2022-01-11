@@ -262,6 +262,13 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     }
   }
 
+  public changeDescription(functionalFlow: IFunctionalFlow) {
+    // Add old & new Flows for later update by REST call
+    if (this.reorderAliasflowToSave.filter(e => e.id === functionalFlow.id).length === 0) {
+      this.reorderAliasflowToSave.push(functionalFlow);
+    }
+  }  
+
   public cancelReorder() {
     this.landscapeViewService()
       .find(this.landscapeView.id)
