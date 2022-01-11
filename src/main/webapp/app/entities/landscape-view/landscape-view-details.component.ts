@@ -281,13 +281,9 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
       promises.push(this.functionalFlowService().update(flow));
     });
     Promise.all(promises).then(res => {
-      this.landscapeViewService()
-        .find(this.landscapeView.id)
-        .then(res => {
-          this.landscapeView = res;
-          this.reorderAlias = false;
-          this.reorderAliasflowToSave = [];
-        });
+      this.retrieveLandscapeView(this.landscapeView.id);
+      this.reorderAlias = false;
+      this.reorderAliasflowToSave = [];
     });
   }
 }
