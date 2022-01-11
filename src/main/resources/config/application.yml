@@ -138,6 +138,8 @@ server:
     session:
       cookie:
         http-only: true
+  tomcat:
+    relaxed-query-chars: ['{','}',']','[']
 
 # Properties to be exposed on the /info management endpoint
 info:
