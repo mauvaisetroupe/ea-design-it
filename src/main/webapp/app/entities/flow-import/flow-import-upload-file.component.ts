@@ -30,22 +30,32 @@ export default class FlowImport extends Vue {
   }
 
   public submitFile(): void {
+    this.notFilteredDtos = [];
+    this.dtos = [];
     this.isFetching = true;
     this.fileSubmited = true;
-    this.flowImportService()
-      .uploadFile(this.excelFiles)
-      .then(
-        res => {
-          this.dtos = res.data;
-          this.notFilteredDtos = res.data;
-          this.isFetching = false;
-          this.rowsLoaded = true;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
+
+    const promises = [];
+    for (let index = 0; index < this.excelFiles.length; index++) {
+      const excelFile = this.excelFiles[index];
+      const p = this.flowImportService()
+        .uploadFile([excelFile])
+        .then(
+          res => {
+            this.dtos.push(...res.data);
+            this.notFilteredDtos.push(...res.data);
+            this.rowsLoaded = true;
+          },
+          err => {
+            this.isFetching = false;
+            this.alertService().showHttpError(this, err.response);
+          }
+        );
+      promises.push(p);
+    }
+    Promise.all(promises).then(res => {
+      this.isFetching = false;
+    });
   }
 
   public filterErrors() {
