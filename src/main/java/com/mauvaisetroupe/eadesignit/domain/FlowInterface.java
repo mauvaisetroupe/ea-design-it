@@ -41,6 +41,10 @@ public class FlowInterface implements Serializable {
     @Column(name = "documentation_url_2", length = 500)
     private String documentationURL2;
 
+    @Size(max = 1500)
+    @Column(name = "description", length = 1500)
+    private String description;
+
     @Column(name = "start_date")
     private LocalDate startDate;
 
@@ -54,12 +58,12 @@ public class FlowInterface implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "owner", "categories", "technologies", "applicationsLists" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "owner", "categories", "technologies", "capabilities", "applicationsLists" }, allowSetters = true)
     private Application source;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "owner", "categories", "technologies", "applicationsLists" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "owner", "categories", "technologies", "capabilities", "applicationsLists" }, allowSetters = true)
     private Application target;
 
     @ManyToOne
@@ -147,6 +151,19 @@ public class FlowInterface implements Serializable {
 
     public void setDocumentationURL2(String documentationURL2) {
         this.documentationURL2 = documentationURL2;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public FlowInterface description(String description) {
+        this.setDescription(description);
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDate getStartDate() {
@@ -343,6 +360,7 @@ public class FlowInterface implements Serializable {
             ", status='" + getStatus() + "'" +
             ", documentationURL='" + getDocumentationURL() + "'" +
             ", documentationURL2='" + getDocumentationURL2() + "'" +
+            ", description='" + getDescription() + "'" +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
             "}";

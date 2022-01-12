@@ -32,6 +32,7 @@
             <th scope="row"><span>Status</span></th>
             <th scope="row"><span>Documentation URL</span></th>
             <th scope="row"><span>Documentation URL 2</span></th>
+            <th scope="row"><span>Description</span></th>
             <th scope="row"><span>Start Date</span></th>
             <th scope="row"><span>End Date</span></th>
             <th scope="row"><span>Source</span></th>
@@ -54,6 +55,7 @@
             <td>{{ flowInterface.status }}</td>
             <td>{{ flowInterface.documentationURL }}</td>
             <td>{{ flowInterface.documentationURL2 }}</td>
+            <td>{{ flowInterface.description }}</td>
             <td>{{ flowInterface.startDate }}</td>
             <td>{{ flowInterface.endDate }}</td>
             <td>

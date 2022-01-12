@@ -1,11 +1,9 @@
 /* tslint:disable max-line-length */
 import axios from 'axios';
 import sinon from 'sinon';
-import dayjs from 'dayjs';
 
-import { DATE_FORMAT } from '@/shared/date/filters';
-import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
-import { FlowInterface } from '@/shared/model/flow-interface.model';
+import CapabilityService from '@/entities/capability/capability.service';
+import { Capability } from '@/shared/model/capability.model';
 
 const error = {
   response: {
@@ -25,26 +23,18 @@ const axiosStub = {
 };
 
 describe('Service Tests', () => {
-  describe('FlowInterface Service', () => {
-    let service: FlowInterfaceService;
+  describe('Capability Service', () => {
+    let service: CapabilityService;
     let elemDefault;
-    let currentDate: Date;
 
     beforeEach(() => {
-      service = new FlowInterfaceService();
-      currentDate = new Date();
-      elemDefault = new FlowInterface(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
+      service = new CapabilityService();
+      elemDefault = new Capability(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 0);
     });
 
     describe('Service methods', () => {
       it('should find an element', async () => {
-        const returnedFromService = Object.assign(
-          {
-            startDate: dayjs(currentDate).format(DATE_FORMAT),
-            endDate: dayjs(currentDate).format(DATE_FORMAT),
-          },
-          elemDefault
-        );
+        const returnedFromService = Object.assign({}, elemDefault);
         axiosStub.get.resolves({ data: returnedFromService });
 
         return service.find(123).then(res => {
@@ -62,22 +52,14 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should create a FlowInterface', async () => {
+      it('should create a Capability', async () => {
         const returnedFromService = Object.assign(
           {
             id: 123,
-            startDate: dayjs(currentDate).format(DATE_FORMAT),
-            endDate: dayjs(currentDate).format(DATE_FORMAT),
           },
           elemDefault
         );
-        const expected = Object.assign(
-          {
-            startDate: currentDate,
-            endDate: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
 
         axiosStub.post.resolves({ data: returnedFromService });
         return service.create({}).then(res => {
@@ -85,7 +67,7 @@ describe('Service Tests', () => {
         });
       });
 
-      it('should not create a FlowInterface', async () => {
+      it('should not create a Capability', async () => {
         axiosStub.post.rejects(error);
 
         return service
@@ -96,27 +78,18 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should update a FlowInterface', async () => {
+      it('should update a Capability', async () => {
         const returnedFromService = Object.assign(
           {
-            alias: 'BBBBBB',
-            status: 'BBBBBB',
-            documentationURL: 'BBBBBB',
-            documentationURL2: 'BBBBBB',
+            name: 'BBBBBB',
             description: 'BBBBBB',
-            startDate: dayjs(currentDate).format(DATE_FORMAT),
-            endDate: dayjs(currentDate).format(DATE_FORMAT),
+            comment: 'BBBBBB',
+            level: 1,
           },
           elemDefault
         );
 
-        const expected = Object.assign(
-          {
-            startDate: currentDate,
-            endDate: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
         axiosStub.put.resolves({ data: returnedFromService });
 
         return service.update(expected).then(res => {
@@ -124,7 +97,7 @@ describe('Service Tests', () => {
         });
       });
 
-      it('should not update a FlowInterface', async () => {
+      it('should not update a Capability', async () => {
         axiosStub.put.rejects(error);
 
         return service
@@ -135,23 +108,17 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should partial update a FlowInterface', async () => {
+      it('should partial update a Capability', async () => {
         const patchObject = Object.assign(
           {
-            status: 'BBBBBB',
-            documentationURL: 'BBBBBB',
+            name: 'BBBBBB',
+            level: 1,
           },
-          new FlowInterface()
+          new Capability()
         );
         const returnedFromService = Object.assign(patchObject, elemDefault);
 
-        const expected = Object.assign(
-          {
-            startDate: currentDate,
-            endDate: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
         axiosStub.patch.resolves({ data: returnedFromService });
 
         return service.partialUpdate(patchObject).then(res => {
@@ -159,7 +126,7 @@ describe('Service Tests', () => {
         });
       });
 
-      it('should not partial update a FlowInterface', async () => {
+      it('should not partial update a Capability', async () => {
         axiosStub.patch.rejects(error);
 
         return service
@@ -170,33 +137,24 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should return a list of FlowInterface', async () => {
+      it('should return a list of Capability', async () => {
         const returnedFromService = Object.assign(
           {
-            alias: 'BBBBBB',
-            status: 'BBBBBB',
-            documentationURL: 'BBBBBB',
-            documentationURL2: 'BBBBBB',
+            name: 'BBBBBB',
             description: 'BBBBBB',
-            startDate: dayjs(currentDate).format(DATE_FORMAT),
-            endDate: dayjs(currentDate).format(DATE_FORMAT),
+            comment: 'BBBBBB',
+            level: 1,
           },
           elemDefault
         );
-        const expected = Object.assign(
-          {
-            startDate: currentDate,
-            endDate: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
         axiosStub.get.resolves([returnedFromService]);
         return service.retrieve().then(res => {
           expect(res).toContainEqual(expected);
         });
       });
 
-      it('should not return a list of FlowInterface', async () => {
+      it('should not return a list of Capability', async () => {
         axiosStub.get.rejects(error);
 
         return service
@@ -207,14 +165,14 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should delete a FlowInterface', async () => {
+      it('should delete a Capability', async () => {
         axiosStub.delete.resolves({ ok: true });
         return service.delete(123).then(res => {
           expect(res.ok).toBeTruthy();
         });
       });
 
-      it('should not delete a FlowInterface', async () => {
+      it('should not delete a Capability', async () => {
         axiosStub.delete.rejects(error);
 
         return service

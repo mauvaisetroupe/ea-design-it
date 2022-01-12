@@ -129,6 +129,10 @@
             <font-awesome-icon icon="asterisk" />
             <span>Technology</span>
           </b-dropdown-item>
+          <b-dropdown-item to="/capability">
+            <font-awesome-icon icon="asterisk" />
+            <span>Capability</span>
+          </b-dropdown-item>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </b-nav-item-dropdown>
         <b-nav-item-dropdown

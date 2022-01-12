@@ -40,6 +40,7 @@
             <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>Categories</span></th>
             <th scope="row"><span>Technologies</span></th>
+            <th scope="row"><span>Capabilities</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -79,6 +80,14 @@
                 >{{ i > 0 ? ', ' : '' }}
                 <router-link class="form-control-static" :to="{ name: 'TechnologyView', params: { technologyId: technologies.id } }">{{
                   technologies.name
+                }}</router-link>
+              </span>
+            </td>
+            <td>
+              <span v-for="(capabilities, i) in application.capabilities" :key="capabilities.id"
+                >{{ i > 0 ? ', ' : '' }}
+                <router-link class="form-control-static" :to="{ name: 'CapabilityView', params: { capabilityId: capabilities.id } }">{{
+                  capabilities.name
                 }}</router-link>
               </span>
             </td>

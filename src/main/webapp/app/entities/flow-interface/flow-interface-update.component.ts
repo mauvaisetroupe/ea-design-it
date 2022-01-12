@@ -37,6 +37,9 @@ const validations: any = {
     documentationURL2: {
       maxLength: maxLength(500),
     },
+    description: {
+      maxLength: maxLength(1500),
+    },
     startDate: {},
     endDate: {},
     source: {

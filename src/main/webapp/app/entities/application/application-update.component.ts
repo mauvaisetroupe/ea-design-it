@@ -13,6 +13,9 @@ import { IApplicationCategory } from '@/shared/model/application-category.model'
 import TechnologyService from '@/entities/technology/technology.service';
 import { ITechnology } from '@/shared/model/technology.model';
 
+import CapabilityService from '@/entities/capability/capability.service';
+import { ICapability } from '@/shared/model/capability.model';
+
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
 import { IApplicationComponent } from '@/shared/model/application-component.model';
 
@@ -64,6 +67,10 @@ export default class ApplicationUpdate extends Vue {
 
   public technologies: ITechnology[] = [];
 
+  @Inject('capabilityService') private capabilityService: () => CapabilityService;
+
+  public capabilities: ICapability[] = [];
+
   @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
 
   public applicationComponents: IApplicationComponent[] = [];
@@ -91,6 +98,7 @@ export default class ApplicationUpdate extends Vue {
     );
     this.application.categories = [];
     this.application.technologies = [];
+    this.application.capabilities = [];
   }
 
   public save(): void {
@@ -166,6 +174,11 @@ export default class ApplicationUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.technologies = res.data;
+      });
+    this.capabilityService()
+      .retrieve()
+      .then(res => {
+        this.capabilities = res.data;
       });
     this.applicationComponentService()
       .retrieve()

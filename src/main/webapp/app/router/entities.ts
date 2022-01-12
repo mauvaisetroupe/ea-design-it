@@ -92,6 +92,12 @@ const Technology = () => import('@/entities/technology/technology.vue');
 const TechnologyUpdate = () => import('@/entities/technology/technology-update.vue');
 // prettier-ignore
 const TechnologyDetails = () => import('@/entities/technology/technology-details.vue');
+// prettier-ignore
+const Capability = () => import('@/entities/capability/capability.vue');
+// prettier-ignore
+const CapabilityUpdate = () => import('@/entities/capability/capability-update.vue');
+// prettier-ignore
+const CapabilityDetails = () => import('@/entities/capability/capability-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default [
@@ -453,6 +459,30 @@ export default [
     path: '/technology/:technologyId/view',
     name: 'TechnologyView',
     component: TechnologyDetails,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/capability',
+    name: 'Capability',
+    component: Capability,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/capability/new',
+    name: 'CapabilityCreate',
+    component: CapabilityUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/capability/:capabilityId/edit',
+    name: 'CapabilityEdit',
+    component: CapabilityUpdate,
+    meta: { authorities: [Authority.USER] },
+  },
+  {
+    path: '/capability/:capabilityId/view',
+    name: 'CapabilityView',
+    component: CapabilityDetails,
     meta: { authorities: [Authority.USER] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

@@ -34,6 +34,7 @@
             <th scope="row"><span>Compressed Draw SVG</span></th>
             <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>Flows</span></th>
+            <th scope="row"><span>Capabilities</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -60,6 +61,14 @@
                 >{{ i > 0 ? ', ' : '' }}
                 <router-link class="form-control-static" :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flows.id } }">{{
                   flows.alias
+                }}</router-link>
+              </span>
+            </td>
+            <td>
+              <span v-for="(capabilities, i) in landscapeView.capabilities" :key="capabilities.id"
+                >{{ i > 0 ? ', ' : '' }}
+                <router-link class="form-control-static" :to="{ name: 'CapabilityView', params: { capabilityId: capabilities.id } }">{{
+                  capabilities.name
                 }}</router-link>
               </span>
             </td>

@@ -29,6 +29,12 @@
             <span>{{ flowInterface.documentationURL2 }}</span>
           </dd>
           <dt>
+            <span>Description</span>
+          </dt>
+          <dd>
+            <span>{{ flowInterface.description }}</span>
+          </dd>
+          <dt>
             <span>Start Date</span>
           </dt>
           <dd>

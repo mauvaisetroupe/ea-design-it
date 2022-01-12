@@ -86,6 +86,15 @@
               <router-link :to="{ name: 'TechnologyView', params: { technologyId: technologies.id } }">{{ technologies.name }}</router-link>
             </span>
           </dd>
+          <dt>
+            <span>Capabilities</span>
+          </dt>
+          <dd>
+            <span v-for="(capabilities, i) in application.capabilities" :key="capabilities.id"
+              >{{ i > 0 ? ', ' : '' }}
+              <router-link :to="{ name: 'CapabilityView', params: { capabilityId: capabilities.id } }">{{ capabilities.name }}</router-link>
+            </span>
+          </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>

@@ -90,6 +90,26 @@
               </option>
             </select>
           </div>
+          <div class="form-group">
+            <label for="landscape-view-capabilities">Capabilities</label>
+            <select
+              class="form-control"
+              id="landscape-view-capabilities"
+              data-cy="capabilities"
+              multiple
+              name="capabilities"
+              v-if="landscapeView.capabilities !== undefined"
+              v-model="landscapeView.capabilities"
+            >
+              <option
+                v-bind:value="getSelected(landscapeView.capabilities, capabilityOption)"
+                v-for="capabilityOption in capabilities"
+                :key="capabilityOption.id"
+              >
+                {{ capabilityOption.name }}
+              </option>
+            </select>
+          </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">

@@ -82,6 +82,12 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Technology.class.getName() + ".applications");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Technology.class.getName() + ".components");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Owner.class.getName() + ".users");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.LandscapeView.class.getName() + ".capabilities");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Application.class.getName() + ".capabilities");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Capability.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Capability.class.getName() + ".subCapabilities");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Capability.class.getName() + ".applications");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Capability.class.getName() + ".landscapes");
             // jhipster-needle-ehcache-add-entry
         };
     }

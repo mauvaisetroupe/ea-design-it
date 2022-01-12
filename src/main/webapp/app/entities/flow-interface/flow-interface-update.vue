@@ -73,6 +73,23 @@
             </div>
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="flow-interface-description">Description</label>
+            <input
+              type="text"
+              class="form-control"
+              name="description"
+              id="flow-interface-description"
+              data-cy="description"
+              :class="{ valid: !$v.flowInterface.description.$invalid, invalid: $v.flowInterface.description.$invalid }"
+              v-model="$v.flowInterface.description.$model"
+            />
+            <div v-if="$v.flowInterface.description.$anyDirty && $v.flowInterface.description.$invalid">
+              <small class="form-text text-danger" v-if="!$v.flowInterface.description.maxLength">
+                This field cannot be longer than 1500 characters.
+              </small>
+            </div>
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="flow-interface-startDate">Start Date</label>
             <b-input-group class="mb-3">
               <b-input-group-prepend>

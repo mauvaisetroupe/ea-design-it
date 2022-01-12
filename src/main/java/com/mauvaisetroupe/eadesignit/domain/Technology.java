@@ -38,7 +38,7 @@ public class Technology implements Serializable {
 
     @ManyToMany(mappedBy = "technologies")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "owner", "categories", "technologies", "applicationsLists" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "owner", "categories", "technologies", "capabilities", "applicationsLists" }, allowSetters = true)
     private Set<Application> applications = new HashSet<>();
 
     @ManyToMany(mappedBy = "technologies")
