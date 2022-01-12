@@ -61,11 +61,6 @@ describe('JhiNavbar', () => {
     expect(loginService.openLogin).toHaveBeenCalled();
   });
 
-  it('should use account service', () => {
-    jhiNavbar.hasAnyAuthority('auth');
-
-    expect(accountService.hasAnyAuthorityAndCheckAuth).toHaveBeenCalled();
-  });
 
   it('logout should clear credentials', () => {
     store.commit('authenticated', { login: 'test' });
