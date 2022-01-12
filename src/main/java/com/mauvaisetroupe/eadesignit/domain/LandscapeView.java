@@ -5,7 +5,6 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.ViewPoint;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
@@ -54,7 +53,7 @@ public class LandscapeView implements Serializable {
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "landscapes", "dataFlows" }, allowSetters = true)
-    private SortedSet<FunctionalFlow> flows = new TreeSet<>();
+    private Set<FunctionalFlow> flows = new TreeSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -150,11 +149,11 @@ public class LandscapeView implements Serializable {
         return this.flows;
     }
 
-    public void setFlows(SortedSet<FunctionalFlow> functionalFlows) {
+    public void setFlows(Set<FunctionalFlow> functionalFlows) {
         this.flows = functionalFlows;
     }
 
-    public LandscapeView flows(SortedSet<FunctionalFlow> functionalFlows) {
+    public LandscapeView flows(Set<FunctionalFlow> functionalFlows) {
         this.setFlows(functionalFlows);
         return this;
     }
