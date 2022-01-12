@@ -55,6 +55,16 @@ public class LandscapeView implements Serializable {
     @JsonIgnoreProperties(value = { "landscapes", "dataFlows" }, allowSetters = true)
     private SortedSet<FunctionalFlow> flows = new TreeSet<>();
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_landscape_vie__capabili_21",
+        joinColumns = @JoinColumn(name = "landscape_view_id"),
+        inverseJoinColumns = @JoinColumn(name = "capabilities_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "subCapabilities", "parent", "applications", "landscapes" }, allowSetters = true)
+    private Set<Capability> capabilities = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -157,6 +167,31 @@ public class LandscapeView implements Serializable {
     public LandscapeView removeFlows(FunctionalFlow functionalFlow) {
         this.flows.remove(functionalFlow);
         functionalFlow.getLandscapes().remove(this);
+        return this;
+    }
+
+    public Set<Capability> getCapabilities() {
+        return this.capabilities;
+    }
+
+    public void setCapabilities(Set<Capability> capabilities) {
+        this.capabilities = capabilities;
+    }
+
+    public LandscapeView capabilities(Set<Capability> capabilities) {
+        this.setCapabilities(capabilities);
+        return this;
+    }
+
+    public LandscapeView addCapabilities(Capability capability) {
+        this.capabilities.add(capability);
+        capability.getLandscapes().add(this);
+        return this;
+    }
+
+    public LandscapeView removeCapabilities(Capability capability) {
+        this.capabilities.remove(capability);
+        capability.getLandscapes().remove(this);
         return this;
     }
 

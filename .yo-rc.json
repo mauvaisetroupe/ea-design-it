@@ -58,9 +58,10 @@
       "DataFormat",
       "ApplicationCategory",
       "DataFlowImport",
-      "Technology"
+      "Technology",
+      "Capability"
     ],
-    "lastLiquibaseTimestamp": 1638388384000,
+    "lastLiquibaseTimestamp": 1642010220000,
     "herokuAppName": "ea-design-it",
     "herokuDeployType": "git",
     "herokuJavaVersion": "17"

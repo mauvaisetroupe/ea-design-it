@@ -1,0 +1,68 @@
+{
+  "name": "Capability",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1500"
+    },
+    {
+      "fieldName": "comment",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1500"
+    },
+    {
+      "fieldName": "level",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "capability",
+      "otherEntityRelationshipName": "parent",
+      "relationshipName": "subCapabilities",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "capability",
+      "otherEntityRelationshipName": "subCapabilities",
+      "relationshipName": "parent",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "application",
+      "otherEntityRelationshipName": "capabilities",
+      "relationshipName": "applications",
+      "otherEntityField": "name",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "landscapeView",
+      "otherEntityRelationshipName": "capabilities",
+      "relationshipName": "landscapes",
+      "otherEntityField": "diagramName",
+      "ownerSide": false
+    }
+  ],
+  "entityTableName": "capability",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20220112175700"
+}

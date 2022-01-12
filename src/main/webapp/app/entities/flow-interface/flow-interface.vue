@@ -39,6 +39,7 @@
             <th scope="row"><span>Status</span></th>
             <th scope="row"><span>Documentation URL</span></th>
             <th scope="row"><span>Documentation URL 2</span></th>
+            <th scope="row"><span>Description</span></th>
             <th scope="row"><span>Start Date</span></th>
             <th scope="row"><span>End Date</span></th>
             <th scope="row"><span>Source</span></th>
@@ -65,6 +66,7 @@
             <td>
               <a v-bind:href="flowInterface.documentationURL2">{{ flowInterface.documentationURL2 }}</a>
             </td>
+            <td>{{ flowInterface.description }}</td>
             <td>{{ flowInterface.startDate }}</td>
             <td>{{ flowInterface.endDate }}</td>
             <td>

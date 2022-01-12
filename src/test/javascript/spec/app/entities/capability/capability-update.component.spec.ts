@@ -4,15 +4,13 @@ import sinon, { SinonStubbedInstance } from 'sinon';
 import Router from 'vue-router';
 
 import * as config from '@/shared/config/config';
-import LandscapeViewUpdateComponent from '@/entities/landscape-view/landscape-view-update.vue';
-import LandscapeViewClass from '@/entities/landscape-view/landscape-view-update.component';
-import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
-
-import OwnerService from '@/entities/owner/owner.service';
-
-import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
-
+import CapabilityUpdateComponent from '@/entities/capability/capability-update.vue';
+import CapabilityClass from '@/entities/capability/capability-update.component';
 import CapabilityService from '@/entities/capability/capability.service';
+
+import ApplicationService from '@/entities/application/application.service';
+
+import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -28,27 +26,25 @@ localVue.component('b-form-datepicker', {});
 localVue.component('b-form-input', {});
 
 describe('Component Tests', () => {
-  describe('LandscapeView Management Update Component', () => {
-    let wrapper: Wrapper<LandscapeViewClass>;
-    let comp: LandscapeViewClass;
-    let landscapeViewServiceStub: SinonStubbedInstance<LandscapeViewService>;
+  describe('Capability Management Update Component', () => {
+    let wrapper: Wrapper<CapabilityClass>;
+    let comp: CapabilityClass;
+    let capabilityServiceStub: SinonStubbedInstance<CapabilityService>;
 
     beforeEach(() => {
-      landscapeViewServiceStub = sinon.createStubInstance<LandscapeViewService>(LandscapeViewService);
+      capabilityServiceStub = sinon.createStubInstance<CapabilityService>(CapabilityService);
 
-      wrapper = shallowMount<LandscapeViewClass>(LandscapeViewUpdateComponent, {
+      wrapper = shallowMount<CapabilityClass>(CapabilityUpdateComponent, {
         store,
         localVue,
         router,
         provide: {
-          landscapeViewService: () => landscapeViewServiceStub,
+          capabilityService: () => capabilityServiceStub,
           alertService: () => new AlertService(),
 
-          ownerService: () => new OwnerService(),
+          applicationService: () => new ApplicationService(),
 
-          functionalFlowService: () => new FunctionalFlowService(),
-
-          capabilityService: () => new CapabilityService(),
+          landscapeViewService: () => new LandscapeViewService(),
         },
       });
       comp = wrapper.vm;
@@ -58,30 +54,30 @@ describe('Component Tests', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
         const entity = { id: 123 };
-        comp.landscapeView = entity;
-        landscapeViewServiceStub.update.resolves(entity);
+        comp.capability = entity;
+        capabilityServiceStub.update.resolves(entity);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(landscapeViewServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(capabilityServiceStub.update.calledWith(entity)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        comp.landscapeView = entity;
-        landscapeViewServiceStub.create.resolves(entity);
+        comp.capability = entity;
+        capabilityServiceStub.create.resolves(entity);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(landscapeViewServiceStub.create.calledWith(entity)).toBeTruthy();
+        expect(capabilityServiceStub.create.calledWith(entity)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
     });
@@ -89,16 +85,16 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundLandscapeView = { id: 123 };
-        landscapeViewServiceStub.find.resolves(foundLandscapeView);
-        landscapeViewServiceStub.retrieve.resolves([foundLandscapeView]);
+        const foundCapability = { id: 123 };
+        capabilityServiceStub.find.resolves(foundCapability);
+        capabilityServiceStub.retrieve.resolves([foundCapability]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { landscapeViewId: 123 } }, null, cb => cb(comp));
+        comp.beforeRouteEnter({ params: { capabilityId: 123 } }, null, cb => cb(comp));
         await comp.$nextTick();
 
         // THEN
-        expect(comp.landscapeView).toBe(foundLandscapeView);
+        expect(comp.capability).toBe(foundCapability);
       });
     });
 

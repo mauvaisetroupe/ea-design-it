@@ -63,7 +63,7 @@ public class ApplicationComponent implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "owner", "categories", "technologies", "applicationsLists" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "owner", "categories", "technologies", "capabilities", "applicationsLists" }, allowSetters = true)
     private Application application;
 
     @ManyToMany
