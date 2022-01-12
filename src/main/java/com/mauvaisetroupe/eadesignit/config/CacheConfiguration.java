@@ -1,7 +1,5 @@
 package com.mauvaisetroupe.eadesignit.config;
 
-import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLBuilder;
-import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer;
 import java.time.Duration;
 import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;
@@ -85,8 +83,6 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Technology.class.getName() + ".components");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Owner.class.getName() + ".users");
             // jhipster-needle-ehcache-add-entry
-
-            createCache(cm, PlantUMLBuilder.PLANTUML_SVG_CACHE);
         };
     }
 
