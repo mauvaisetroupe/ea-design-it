@@ -52,22 +52,17 @@ public class CapabilityImportService {
             capabilityImportDTO.setL3(l3);
             if (l0 != null) {
                 result.add(capabilityImportDTO);
-
                 if (l1 != null) {
                     l0.addSubCapabilities(l1);
-                    //                    capabilityRepository.save(l1);
-
                     if (l2 != null) {
                         l1.addSubCapabilities(l2);
-                        //                        capabilityRepository.save(l2);
-
                         if (l3 != null) {
                             l2.addSubCapabilities(l3);
-                            //                            capabilityRepository.save(l3);
                         }
                     }
                 }
             }
+            //save is automatically done by @Transactional
         }
         return result;
     }
@@ -75,15 +70,18 @@ public class CapabilityImportService {
     private Capability mapArrayToCapability(Map<String, Object> map, String nameColumn, String descriptionColumn, Integer level) {
         Capability capability = null;
         try {
-            String name = map.get(nameColumn).toString();
-            capability = this.capabilityRepository.findByNameIgnoreCaseAndLevel(name, level);
-            if (capability == null) {
-                log.debug("Capabilty to be created : " + capability);
-                capability = new Capability();
-                capability.setName(name);
-                capability.setDescription((String) map.get(descriptionColumn));
-                capability.setLevel(level);
-                capabilityRepository.save(capability);
+            Object cellValue = map.get(nameColumn);
+            if (cellValue != null && cellValue.toString().trim().length() > 2) {
+                String name = map.get(nameColumn).toString();
+                capability = this.capabilityRepository.findByNameIgnoreCaseAndLevel(name, level);
+                if (capability == null) {
+                    log.debug("Capabilty to be created : " + capability);
+                    capability = new Capability();
+                    capability.setName(name);
+                    capability.setDescription((String) map.get(descriptionColumn));
+                    capability.setLevel(level);
+                    capabilityRepository.save(capability);
+                }
             }
         } catch (Exception e) {
             log.error(e.toString());
