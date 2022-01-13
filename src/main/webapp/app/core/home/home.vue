@@ -15,28 +15,29 @@
         <h2>Main concepts</h2>
         <ul>
           <li>
-            A <a href="/landscape-view">Landscape</a> is an architecture diagram that represents a subset of
-            <a href="/application">Application</a>, and their Functional Flow
+            A <router-link to="landscape-view">Landscape</router-link> is an architecture diagram that represents a subset of
+            <router-link to="application">Application</router-link>, and their Functional Flow
           </li>
           <li>
-            In the context of a Landscape, a <a href="/functional-flow">Functional Flow</a> represents a functional information exchange
-            between two applications
+            In the context of a Landscape, a <router-link to="functional-flow">Functional Flow</router-link> represents a functional
+            information exchange between two applications
           </li>
           <li>
-            A Functional Flow is implemented through one or more <a href="/flow-interface">Interface</a> to transfer information between
-            source and target.
+            A Functional Flow is implemented through one or more <router-link to="flow-interface">Interface</router-link> to transfer
+            information between source and target.
           </li>
           <li>
             Interface is a "pipeline" between two applications and it's fully defined by a source and a target Application and a
-            <a href="/protocol">Protocol</a>
+            <router-link to="protocol">Protocol</router-link>
           </li>
           <li>
             In the context of a Function Flow, exchange data through a specific Interface is implemented by a
-            <a href="/data-flow">Data Flow</a> (concretly, DataFlow is a File, an Event in a topic or API call of a swagger)
+            <router-link to="data-flow">Data Flow</router-link> (concretly, DataFlow is a File, an Event in a topic or API call of a
+            swagger)
           </li>
           <li>
-            <a href="/data-flow-item">Data Flow Item</a> is used for model a more fined-grained data exchange (operation of swagger,
-            substructure in the File, event of a topic)
+            <router-link to="data-flow-item">Data Flow Item</router-link> is used for model a more fined-grained data exchange (operation of
+            swagger, substructure in the File, event of a topic)
           </li>
         </ul>
         <p>
@@ -47,9 +48,9 @@
       <div v-if="$store.getters.writeAuthority">
         <h2>Import Excel files</h2>
         <ul>
-          <li>Import Excel <a href="/application-import-upload-file">Applications</a> file</li>
-          <li>Import Excel <a href="/flow-import-upload-file">Functional Flows &amp; Interfaces </a> file</li>
-          <li>Import Excel <a href="/event-import-upload-file">Data Flows &amp; Dat Flow Items</a> file</li>
+          <li>Import Excel <router-link to="/application-import-upload-file"> Applications</router-link> file</li>
+          <li>Import Excel <router-link to="flow-import-upload-file">Functional Flows &amp; Interfaces </router-link> file</li>
+          <li>Import Excel <router-link to="event-import-upload-file">Data Flows &amp; Dat Flow Items</router-link> file</li>
         </ul>
         <p>
           Please, refer to <a href="https://github.com/mauvaisetroupe/EADesignIt/tree/main/documentation/excel-import">documentation</a> for
