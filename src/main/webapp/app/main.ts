@@ -47,6 +47,7 @@ import CapabilityService from '@/entities/capability/capability.service';
 
 import ReportingService from '@/eadesignit/reporting.service';
 import { Authority } from './shared/security/authority';
+import CapabilityImportService from '@/entities/capability-import/capability-import.service';
 
 /* tslint:enable */
 Vue.config.productionTip = false;
@@ -133,6 +134,7 @@ new Vue({
     alertService: () => new AlertService(),
 
     reportingService: () => new ReportingService(),
+    capabilityImportService: () => new CapabilityImportService(),
   },
   store,
 });

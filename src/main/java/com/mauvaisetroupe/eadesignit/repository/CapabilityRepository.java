@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CapabilityRepository extends JpaRepository<Capability, Long> {}
+public interface CapabilityRepository extends JpaRepository<Capability, Long> {
+    Capability findByNameIgnoreCaseAndLevel(String name, Integer level);
+}
