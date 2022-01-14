@@ -74,7 +74,7 @@ export default class AccountService {
     }
 
     for (const authority of authorities) {
-      if (this.userAuthorities.includes(authority)) {
+      if (this.userAuthorities?.includes(authority)) {
         return Promise.resolve(true);
       }
     }
@@ -87,7 +87,7 @@ export default class AccountService {
   }
 
   public get userAuthorities(): any {
-    return this.store.getters.account.authorities;
+    return this.store.getters.account?.authorities;
   }
 
   public get readAuthorities(): boolean {

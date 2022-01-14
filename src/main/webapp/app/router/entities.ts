@@ -375,25 +375,25 @@ export default [
     path: '/capability',
     name: 'Capability',
     component: Capability,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   {
     path: '/capability/new',
     name: 'CapabilityCreate',
     component: CapabilityUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/capability/:capabilityId/edit',
     name: 'CapabilityEdit',
     component: CapabilityUpdate,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.WRITE] },
   },
   {
     path: '/capability/:capabilityId/view',
     name: 'CapabilityView',
     component: CapabilityDetails,
-    meta: { authorities: [Authority.USER] },
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
 ];
