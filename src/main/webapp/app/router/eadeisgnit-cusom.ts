@@ -10,6 +10,8 @@ const EventImportUploadFile = () => import('@/entities/data-flow-import/data-flo
 // prettier-ignore
 const CapabilityImportUploadFile = () => import('@/entities/capability-import/capability-import-upload-file.vue');
 // prettier-ignore
+const ApplicationCapabilityImportUploadFile = () => import('@/entities/capability-import/application-capability-import-upload-file.vue');
+// prettier-ignore
 const FlowReporting = () => import('@/entities/flow-interface/reporting-flow-interface.vue');
 
 export default [
@@ -35,6 +37,12 @@ export default [
     path: '/capability-import-upload-file',
     name: 'CapabilityImportUploadFile',
     component: CapabilityImportUploadFile,
+    meta: { authorities: [Authority.WRITE] },
+  },
+  {
+    path: '/application-capability-import-upload-file',
+    name: 'ApplicationCapabilityImportUploadFile',
+    component: ApplicationCapabilityImportUploadFile,
     meta: { authorities: [Authority.WRITE] },
   },
   {

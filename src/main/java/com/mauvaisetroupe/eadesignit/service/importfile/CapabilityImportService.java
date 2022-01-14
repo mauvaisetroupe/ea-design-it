@@ -4,6 +4,7 @@ import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -44,15 +45,11 @@ public class CapabilityImportService {
         for (Map<String, Object> map : capabilitiesDF) {
             CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO();
             // new capability created from excel, without parent assigned
-            CapabilityDTO l0Import = mapArrayToCapability(map, L0_NAME, L0_DESCRIPTION, 0);
-            CapabilityDTO l1Import = mapArrayToCapability(map, L1_NAME, L1_DESCRIPTION, 1);
-            CapabilityDTO l2Import = mapArrayToCapability(map, L2_NAME, L2_DESCRIPTION, 2);
-            CapabilityDTO l3Import = mapArrayToCapability(map, L3_NAME, L3_DESCRIPTION, 3);
-            capabilityImportDTO.setL0(l0Import);
-            capabilityImportDTO.setL1(l1Import);
-            capabilityImportDTO.setL2(l2Import);
-            capabilityImportDTO.setL3(l3Import);
-
+            CapabilityDTO l0Import = CapabilityUtil.mapArrayToCapability(map, L0_NAME, L0_DESCRIPTION, 0);
+            CapabilityDTO l1Import = CapabilityUtil.mapArrayToCapability(map, L1_NAME, L1_DESCRIPTION, 1);
+            CapabilityDTO l2Import = CapabilityUtil.mapArrayToCapability(map, L2_NAME, L2_DESCRIPTION, 2);
+            CapabilityDTO l3Import = CapabilityUtil.mapArrayToCapability(map, L3_NAME, L3_DESCRIPTION, 3);
+            capabilityImportDTO = CapabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import);
             Capability l0 = findOrCreateCapability(l0Import, null);
             if (l0 != null) {
                 // at least one capability not null
@@ -97,23 +94,6 @@ public class CapabilityImportService {
             return potentials.get(0);
         }
         throw new IllegalStateException("Could not find a unique Capability");
-    }
-
-    private CapabilityDTO mapArrayToCapability(Map<String, Object> map, String nameColumn, String descriptionColumn, Integer level) {
-        CapabilityDTO capability = null;
-        try {
-            Object cellValue = map.get(nameColumn);
-            if (cellValue != null && cellValue.toString().trim().length() > 2) {
-                capability = new CapabilityDTO();
-                String name = map.get(nameColumn).toString();
-                capability.setName(name);
-                capability.setDescription((String) map.get(descriptionColumn));
-                capability.setLevel(level);
-            }
-        } catch (Exception e) {
-            log.error(e.toString());
-        }
-        return capability;
     }
 
     private Capability createCapability(CapabilityDTO capabilityDTO) {

@@ -38,4 +38,9 @@ public class CapabilityImportDTO {
     public void setL3(CapabilityDTO l3) {
         L3 = l3;
     }
+
+    @Override
+    public String toString() {
+        return "CapabilityImportDTO [L0=" + L0 + ", L1=" + L1 + ", L2=" + L2 + ", L3=" + L3 + "]";
+    }
 }

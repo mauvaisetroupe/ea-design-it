@@ -50,6 +50,8 @@
           <li>Import Excel <a href="/application-import-upload-file">Applications</a> file</li>
           <li>Import Excel <a href="/flow-import-upload-file">Functional Flows &amp; Interfaces </a> file</li>
           <li>Import Excel <a href="/event-import-upload-file">Data Flows &amp; Dat Flow Items</a> file</li>
+          <li>Import Excel <router-link to="/capability-import-upload-file">Capabilities</router-link></li>
+          <li>Import Excel mapping <router-link to="/application-capability-import-upload-file">Applications/Capabilities</router-link></li>
         </ul>
         <p>
           Please, refer to <a href="https://github.com/mauvaisetroupe/EADesignIt/tree/main/documentation/excel-import">documentation</a> for

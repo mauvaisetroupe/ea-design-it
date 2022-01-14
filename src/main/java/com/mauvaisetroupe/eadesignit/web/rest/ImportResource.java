@@ -3,10 +3,12 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.domain.DataFlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
+import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationCapabilityImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.CapabilityImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.DataFlowImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.FlowImportService;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.FlowImportDTO;
 import java.util.ArrayList;
@@ -30,17 +32,20 @@ public class ImportResource {
     private final FlowImportService flowImportService;
     private final DataFlowImportService dataFlowImportService;
     private final CapabilityImportService capabilityImportService;
+    private final ApplicationCapabilityImportService applicationCapabilityImportService;
 
     public ImportResource(
         ApplicationImportService importService,
         FlowImportService flowImportService,
         DataFlowImportService dataFlowImportService,
-        CapabilityImportService capabilityImportService
+        CapabilityImportService capabilityImportService,
+        ApplicationCapabilityImportService applicationCapabilityImportService
     ) {
         this.applicationImportService = importService;
         this.flowImportService = flowImportService;
         this.dataFlowImportService = dataFlowImportService;
         this.capabilityImportService = capabilityImportService;
+        this.applicationCapabilityImportService = applicationCapabilityImportService;
     }
 
     @PostMapping("/import/application/upload-file")
@@ -66,5 +71,10 @@ public class ImportResource {
     @PostMapping("/import/capability/upload-file")
     public List<CapabilityImportDTO> uploadCapabilityFile(@RequestPart MultipartFile file) throws Exception {
         return capabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+    }
+
+    @PostMapping("/import/application/capability/upload-file")
+    public List<ApplicationCapabilityDTO> uploadapplicationCapabilityFile(@RequestPart MultipartFile file) throws Exception {
+        return applicationCapabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
     }
 }

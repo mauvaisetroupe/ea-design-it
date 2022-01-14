@@ -42,4 +42,9 @@ public class CapabilityDTO implements Serializable {
     public void setLevel(Integer level) {
         this.level = level;
     }
+
+    @Override
+    public String toString() {
+        return "CapabilityDTO [comment=" + comment + ", description=" + description + ", level=" + level + ", name=" + name + "]";
+    }
 }
