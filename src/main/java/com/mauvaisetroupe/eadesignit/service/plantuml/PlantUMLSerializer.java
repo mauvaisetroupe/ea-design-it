@@ -1,11 +1,15 @@
 package com.mauvaisetroupe.eadesignit.service.plantuml;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
+import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -95,11 +99,24 @@ public class PlantUMLSerializer {
         return sortedList;
     }
 
-    public String getCapabilitiesSVG(Application application) throws IOException {
+    public String getCapabilitiesFromLeavesSVG(Collection<Capability> capabilities) throws IOException {
         StringBuilder plantUMLSource = new StringBuilder();
         plantUMLBuilder.getPlantumlHeader(plantUMLSource);
-        plantUMLBuilder.getPlantumlCapabilities(plantUMLSource, application.getCapabilities());
+
+        CapabilityUtil capabilityUtil = new CapabilityUtil();
+        List<CapabilityDTO> rootDTO = capabilityUtil.getRoot(capabilities);
+        plantUMLBuilder.getPlantumlCapabilitiesDTO(plantUMLSource, rootDTO);
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        System.out.println(plantUMLSource);
+        return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
+    }
+
+    public String getCapabilitiesFromRootsSVG(Collection<Capability> capabilities) throws IOException {
+        StringBuilder plantUMLSource = new StringBuilder();
+        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
+        plantUMLBuilder.getPlantumlCapabilities(plantUMLSource, capabilities);
+        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        System.out.println(plantUMLSource);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 }

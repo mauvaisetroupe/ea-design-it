@@ -168,7 +168,7 @@
         </tbody>
       </table>
     </div>
-    <div>
+    <div class="col-12" v-if="capabilitiesPlantUMLImage">
       <h2>Capabilities</h2>
       <div v-html="capabilitiesPlantUMLImage"></div>
     </div>

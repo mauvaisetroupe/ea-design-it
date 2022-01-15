@@ -10,6 +10,7 @@ export default class CapabilityDetails extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
 
   public capability: ICapability = {};
+  public capabilitiesPlantUMLImage = '';
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -24,6 +25,7 @@ export default class CapabilityDetails extends Vue {
       .find(capabilityId)
       .then(res => {
         this.capability = res;
+        this.getCapabilitiesPlantUML(this.capability.id);
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
@@ -32,5 +34,18 @@ export default class CapabilityDetails extends Vue {
 
   public previousState() {
     this.$router.go(-1);
+  }
+
+  public getCapabilitiesPlantUML(capabilityId) {
+    this.capabilityService()
+      .getCapabilitiesPlantUML(capabilityId)
+      .then(
+        res => {
+          this.capabilitiesPlantUMLImage = res.data;
+        },
+        err => {
+          console.log(err);
+        }
+      );
   }
 }

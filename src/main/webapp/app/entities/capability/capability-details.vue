@@ -2,13 +2,13 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="capability">
-        <h2 class="jh-entity-heading" data-cy="capabilityDetailsHeading"><span>Capability</span> {{ capability.id }}</h2>
+        <h2 class="jh-entity-heading" data-cy="capabilityDetailsHeading"><span>Capability</span> {{ capability.name }}</h2>
         <dl class="row jh-entity-details">
           <dt>
-            <span>Name</span>
+            <span>Id</span>
           </dt>
           <dd>
-            <span>{{ capability.name }}</span>
+            <span>{{ capability.id }}</span>
           </dd>
           <dt>
             <span>Description</span>
@@ -51,6 +51,10 @@
           </button>
         </router-link>
       </div>
+    </div>
+    <div class="col-12">
+      <h2>Capabilities</h2>
+      <div v-html="capabilitiesPlantUMLImage"></div>
     </div>
   </div>
 </template>

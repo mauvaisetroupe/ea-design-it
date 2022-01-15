@@ -25,16 +25,18 @@ export default class ApplicationDetails extends Vue {
   }
 
   public retrieveApplication(applicationId) {
+    this.plantUMLImage = '';
+    this.capabilitiesPlantUMLImage = '';
     this.applicationService()
       .find(applicationId)
       .then(res => {
         this.application = res;
+        this.getPlantUML(applicationId);
+        this.getCapabilitiesPlantUML(applicationId);
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
       });
-    this.getPlantUML(applicationId);
-    this.getCapabilitiesPlantUML(applicationId);
   }
 
   public previousState() {
@@ -56,16 +58,18 @@ export default class ApplicationDetails extends Vue {
   }
 
   public getCapabilitiesPlantUML(applicationId) {
-    this.applicationService()
-      .getCapabilitiesPlantUML(applicationId)
-      .then(
-        res => {
-          this.capabilitiesPlantUMLImage = res.data;
-        },
-        err => {
-          console.log(err);
-        }
-      );
+    if (this.application.capabilities?.length > 0) {
+      this.applicationService()
+        .getCapabilitiesPlantUML(applicationId)
+        .then(
+          res => {
+            this.capabilitiesPlantUMLImage = res.data;
+          },
+          err => {
+            console.log(err);
+          }
+        );
+    }
   }
 
   public isOwner(application: IApplication): Boolean {

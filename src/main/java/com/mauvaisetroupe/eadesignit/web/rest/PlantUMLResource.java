@@ -1,10 +1,12 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
+import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
@@ -12,6 +14,8 @@ import com.mauvaisetroupe.eadesignit.service.dto.PlantumlDTO;
 import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer;
 import io.undertow.util.BadRequestException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.slf4j.Logger;
@@ -34,6 +38,8 @@ public class PlantUMLResource {
     private final FunctionalFlowRepository functionalFlowRepository;
     private final FlowInterfaceRepository flowInterfaceRepository;
     private final ApplicationRepository applicationRepository;
+    private final CapabilityRepository capabilityRepository;
+
     private final PlantUMLSerializer plantUMLSerializer;
 
     private final Logger log = LoggerFactory.getLogger(PlantUMLResource.class);
@@ -43,6 +49,7 @@ public class PlantUMLResource {
         FunctionalFlowRepository functionalFlowRepository,
         ApplicationRepository applicationRepository,
         FlowInterfaceRepository flowInterfaceRepository,
+        CapabilityRepository capabilityRepository,
         PlantUMLSerializer plantUMLSerializer
     ) {
         this.landscapeViewRepository = landscapeViewRepository;
@@ -50,6 +57,7 @@ public class PlantUMLResource {
         this.applicationRepository = applicationRepository;
         this.flowInterfaceRepository = flowInterfaceRepository;
         this.plantUMLSerializer = plantUMLSerializer;
+        this.capabilityRepository = capabilityRepository;
     }
 
     @GetMapping(value = "plantuml/landscape-view/get-svg/{id}")
@@ -92,9 +100,9 @@ public class PlantUMLResource {
     public @ResponseBody String getApplicationCapabilitiesSVG(@PathVariable Long id) throws IOException, BadRequestException {
         Optional<Application> optional = applicationRepository.findById(id);
         if (optional.isPresent()) {
-            return this.plantUMLSerializer.getCapabilitiesSVG(optional.get());
+            return this.plantUMLSerializer.getCapabilitiesFromLeavesSVG(optional.get().getCapabilities());
         } else {
-            throw new BadRequestException("Cannot find landscape View");
+            throw new BadRequestException("Cannot find application");
         }
     }
 
@@ -102,5 +110,18 @@ public class PlantUMLResource {
     public @ResponseBody String getApplicationsSVG(@RequestParam(value = "ids[]") Long[] ids) throws IOException, BadRequestException {
         Set<FlowInterface> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
         return this.plantUMLSerializer.getSVG(interfaces);
+    }
+
+    @GetMapping(value = "plantuml/capabilities/get-svg/{id}")
+    public @ResponseBody String getCapabilitiesSVG(@PathVariable Long id) throws IOException, BadRequestException {
+        Optional<Capability> optional = capabilityRepository.findById(id);
+        if (optional.isPresent()) {
+            Capability capability = optional.get();
+            List<Capability> tmp = new ArrayList<>();
+            tmp.add(capability);
+            return this.plantUMLSerializer.getCapabilitiesFromRootsSVG(tmp);
+        } else {
+            throw new BadRequestException("Cannot find application");
+        }
     }
 }

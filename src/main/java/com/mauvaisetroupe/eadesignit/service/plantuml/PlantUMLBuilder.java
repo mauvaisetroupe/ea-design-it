@@ -3,13 +3,12 @@ package com.mauvaisetroupe.eadesignit.service.plantuml;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
-import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
@@ -73,20 +72,49 @@ public class PlantUMLBuilder {
         getPlantumlRelationShip(plantUMLSource, source, target, labelAndURLs);
     }
 
-    public void getPlantumlCapabilities(StringBuilder plantUMLSource, Set<Capability> capabilities) {
-        CapabilityUtil capabilityUtil = new CapabilityUtil();
-        List<CapabilityDTO> rootDTO = capabilityUtil.getRoot(capabilities);
-        for (CapabilityDTO capability : rootDTO) {
+    public void getPlantumlCapabilities(StringBuilder plantUMLSource, Collection<Capability> capabilities) {
+        for (Capability capability : capabilities) {
+            getRectangle1(capability, plantUMLSource, "");
+        }
+    }
+
+    public void getPlantumlCapabilitiesDTO(StringBuilder plantUMLSource, Collection<CapabilityDTO> capabilities) {
+        for (CapabilityDTO capability : capabilities) {
             getRectangle2(capability, plantUMLSource, "");
         }
     }
 
+    private void getRectangle1(Capability root, StringBuilder result, String tab) {
+        result.append(
+            tab +
+            "rectangle \"" +
+            root.getName().replaceAll("[\n\r]", " ") +
+            "\" as C" +
+            root.getId() +
+            (root.getSubCapabilities().size() != 0 ? " {" : "") +
+            " \n"
+        );
+        for (Capability dto : root.getSubCapabilities()) {
+            getRectangle1(dto, result, tab + "   ");
+        }
+        if (root.getSubCapabilities().size() != 0) result.append(tab + "}\n");
+        result.append(tab + "url of C" + root.getId() + " is [[/capability/" + root.getId() + "/view]]\n");
+    }
+
     private void getRectangle2(CapabilityDTO root, StringBuilder result, String tab) {
-        System.out.println(root);
-        result.append(tab + "rectangle \"" + root.getName() + "\"" + (root.getSubCapabilities().size() != 0 ? " {" : "") + " \n");
+        result.append(
+            tab +
+            "rectangle \"" +
+            root.getName().replaceAll("[\n\r]", " ") +
+            "\" as C" +
+            root.getId() +
+            (root.getSubCapabilities().size() != 0 ? " {" : "") +
+            " \n"
+        );
         for (CapabilityDTO dto : root.getSubCapabilities()) {
             getRectangle2(dto, result, tab + "   ");
         }
         if (root.getSubCapabilities().size() != 0) result.append(tab + "}\n");
+        result.append(tab + "url of C" + root.getId() + " is [[/capability/" + root.getId() + "/view]]\n");
     }
 }
