@@ -92,7 +92,7 @@ public class Application implements Serializable, Ownershipable {
         inverseJoinColumns = @JoinColumn(name = "capabilities_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "subCapabilities", "parent", "applications", "landscapes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "parent", "applications", "landscapes" }, allowSetters = true)
     private Set<Capability> capabilities = new HashSet<>();
 
     @OneToMany(mappedBy = "application")

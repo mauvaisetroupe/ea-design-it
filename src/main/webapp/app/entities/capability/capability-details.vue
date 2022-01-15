@@ -54,9 +54,68 @@
     </div>
     <div class="col-12">
       <h2>Capabilities</h2>
-      <div v-html="capabilitiesPlantUMLImage"></div>
+      <div class="common" :class="capability.subCapabilities.length > 0 ? 'alpha' : 'beta'">
+        <div :title="capability.description">{{ capability.name }}</div>
+        <div v-if="capability.subCapabilities" class="d-flex flex-wrap">
+          <div
+            v-for="child1 in capability.subCapabilities"
+            :key="child1.id"
+            class="common"
+            :class="child1.subCapabilities.length > 0 ? 'alpha' : 'beta'"
+          >
+            <div :title="child1.description">
+              <a @click="retrieveCapability(child1.id)">{{ child1.name }}</a>
+            </div>
+            <div v-if="child1.subCapabilities" class="d-flex flex-wrap">
+              <div
+                v-for="child2 in child1.subCapabilities"
+                :key="child2.id"
+                class="common"
+                :class="child2.subCapabilities.length > 0 ? 'alpha' : 'beta'"
+              >
+                <div :title="child2.description">
+                  <a @click="retrieveCapability(child2.id)">{{ child2.name }}</a>
+                </div>
+                <div v-if="child2.subCapabilities" class="d-flex flex-wrap">
+                  <div
+                    v-for="child3 in child2.subCapabilities"
+                    :key="child3.id"
+                    class="common"
+                    :class="child3.subCapabilities.length > 0 ? 'alpha' : 'beta'"
+                  >
+                    <div>
+                      <a @click="retrieveCapability(child3.id)">{{ child3.name }}</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.common {
+  font-weight: bold;
+  border: solid;
+  border-color: black;
+  border-width: 3px;
+  padding: 5px;
+  margin: 10px;
+  box-shadow: 8px 8px 12px #aaa;
+}
+
+.alpha {
+  background-color: white;
+}
+
+.beta {
+  background-color: #fefece;
+  max-width: 300px;
+}
+</style>
 
 <script lang="ts" src="./capability-details.component.ts"></script>

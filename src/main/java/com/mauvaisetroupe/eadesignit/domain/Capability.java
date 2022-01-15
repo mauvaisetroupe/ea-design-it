@@ -40,9 +40,9 @@ public class Capability implements Serializable {
     @Column(name = "jhi_level")
     private Integer level;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "subCapabilities", "parent", "applications", "landscapes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "parent", "applications", "landscapes" }, allowSetters = true)
     private Set<Capability> subCapabilities = new HashSet<>();
 
     @ManyToOne

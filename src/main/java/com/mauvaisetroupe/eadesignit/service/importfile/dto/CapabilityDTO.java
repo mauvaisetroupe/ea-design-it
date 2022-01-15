@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.service.importfile.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +14,10 @@ public class CapabilityDTO implements Serializable {
     private String description;
     private String comment;
     private Integer level;
+
+    @JsonIgnoreProperties(value = { "parent" }, allowSetters = true)
     private Set<CapabilityDTO> subCapabilities = new HashSet<>();
+
     private CapabilityDTO parent;
 
     public String getName() {
