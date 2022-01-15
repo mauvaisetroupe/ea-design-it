@@ -88,10 +88,19 @@ public class PlantUMLResource {
         }
     }
 
+    @GetMapping(value = "plantuml/application/capability/get-svg/{id}")
+    public @ResponseBody String getApplicationCapabilitiesSVG(@PathVariable Long id) throws IOException, BadRequestException {
+        Optional<Application> optional = applicationRepository.findById(id);
+        if (optional.isPresent()) {
+            return this.plantUMLSerializer.getCapabilitiesSVG(optional.get());
+        } else {
+            throw new BadRequestException("Cannot find landscape View");
+        }
+    }
 
     @GetMapping(value = "plantuml/applications/get-svg")
     public @ResponseBody String getApplicationsSVG(@RequestParam(value = "ids[]") Long[] ids) throws IOException, BadRequestException {
         Set<FlowInterface> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
         return this.plantUMLSerializer.getSVG(interfaces);
-    }    
+    }
 }

@@ -13,6 +13,7 @@ export default class ApplicationDetails extends Vue {
   @Inject('accountService') private accountService: () => AccountService;
   public application: IApplication = {};
   public plantUMLImage = '';
+  public capabilitiesPlantUMLImage = '';
   public interfaces: IFlowInterface[] = [];
 
   beforeRouteEnter(to, from, next) {
@@ -33,6 +34,7 @@ export default class ApplicationDetails extends Vue {
         this.alertService().showHttpError(this, error.response);
       });
     this.getPlantUML(applicationId);
+    this.getCapabilitiesPlantUML(applicationId);
   }
 
   public previousState() {
@@ -52,6 +54,20 @@ export default class ApplicationDetails extends Vue {
         }
       );
   }
+
+  public getCapabilitiesPlantUML(applicationId) {
+    this.applicationService()
+      .getCapabilitiesPlantUML(applicationId)
+      .then(
+        res => {
+          this.capabilitiesPlantUMLImage = res.data;
+        },
+        err => {
+          console.log(err);
+        }
+      );
+  }
+
   public isOwner(application: IApplication): Boolean {
     const username = this.$store.getters.account?.login ?? '';
     if (this.accountService().writeAuthorities) {

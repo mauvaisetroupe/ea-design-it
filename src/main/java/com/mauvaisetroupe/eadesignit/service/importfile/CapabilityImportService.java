@@ -42,14 +42,15 @@ public class CapabilityImportService {
         List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(CAPABILITY_SHEET_NAME);
 
         List<CapabilityImportDTO> result = new ArrayList<CapabilityImportDTO>();
+        CapabilityUtil capabilityUtil = new CapabilityUtil();
         for (Map<String, Object> map : capabilitiesDF) {
             CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO();
             // new capability created from excel, without parent assigned
-            CapabilityDTO l0Import = CapabilityUtil.mapArrayToCapability(map, L0_NAME, L0_DESCRIPTION, 0);
-            CapabilityDTO l1Import = CapabilityUtil.mapArrayToCapability(map, L1_NAME, L1_DESCRIPTION, 1);
-            CapabilityDTO l2Import = CapabilityUtil.mapArrayToCapability(map, L2_NAME, L2_DESCRIPTION, 2);
-            CapabilityDTO l3Import = CapabilityUtil.mapArrayToCapability(map, L3_NAME, L3_DESCRIPTION, 3);
-            capabilityImportDTO = CapabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import);
+            CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, L0_DESCRIPTION, 0);
+            CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, L1_DESCRIPTION, 1);
+            CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, L2_DESCRIPTION, 2);
+            CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, L3_DESCRIPTION, 3);
+            capabilityImportDTO = capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import);
             Capability l0 = findOrCreateCapability(l0Import, null);
             if (l0 != null) {
                 // at least one capability not null

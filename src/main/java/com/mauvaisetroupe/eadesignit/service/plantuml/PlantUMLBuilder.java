@@ -1,11 +1,15 @@
 package com.mauvaisetroupe.eadesignit.service.plantuml;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
+import com.mauvaisetroupe.eadesignit.domain.Capability;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
@@ -67,5 +71,22 @@ public class PlantUMLBuilder {
         String[] labelAndURL = { alias, url };
         labelAndURLs.add(labelAndURL);
         getPlantumlRelationShip(plantUMLSource, source, target, labelAndURLs);
+    }
+
+    public void getPlantumlCapabilities(StringBuilder plantUMLSource, Set<Capability> capabilities) {
+        CapabilityUtil capabilityUtil = new CapabilityUtil();
+        List<CapabilityDTO> rootDTO = capabilityUtil.getRoot(capabilities);
+        for (CapabilityDTO capability : rootDTO) {
+            getRectangle2(capability, plantUMLSource, "");
+        }
+    }
+
+    private void getRectangle2(CapabilityDTO root, StringBuilder result, String tab) {
+        System.out.println(root);
+        result.append(tab + "rectangle \"" + root.getName() + "\"" + (root.getSubCapabilities().size() != 0 ? " {" : "") + " \n");
+        for (CapabilityDTO dto : root.getSubCapabilities()) {
+            getRectangle2(dto, result, tab + "   ");
+        }
+        if (root.getSubCapabilities().size() != 0) result.append(tab + "}\n");
     }
 }

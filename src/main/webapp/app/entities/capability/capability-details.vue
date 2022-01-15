@@ -33,9 +33,7 @@
           </dt>
           <dd>
             <div v-if="capability.parent">
-              <router-link :to="{ name: 'CapabilityView', params: { capabilityId: capability.parent.id } }">{{
-                capability.parent.name
-              }}</router-link>
+              <a @click="retrieveCapability(capability.parent.id)">{{ capability.parent.name }}</a>
             </div>
           </dd>
         </dl>

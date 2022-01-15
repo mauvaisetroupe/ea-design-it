@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-12">
       <div v-if="application">
         <h2 class="jh-entity-heading" data-cy="applicationDetailsHeading"><span>Application</span> - {{ application.name }}</h2>
         <dl class="row jh-entity-details">
@@ -94,7 +94,9 @@
           <dd>
             <span v-for="(capabilities, i) in application.capabilities" :key="capabilities.id"
               >{{ i > 0 ? ', ' : '' }}
-              <router-link :to="{ name: 'CapabilityView', params: { capabilityId: capabilities.id } }">{{ capabilities.name }}</router-link>
+              <router-link :to="{ name: 'CapabilityView', params: { capabilityId: capabilities.id } }" :title="capabilities.description">{{
+                capabilities.name
+              }}</router-link>
             </span>
           </dd>
         </dl>
@@ -165,6 +167,10 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div>
+      <h2>Capabilities</h2>
+      <div v-html="capabilitiesPlantUMLImage"></div>
     </div>
   </div>
 </template>

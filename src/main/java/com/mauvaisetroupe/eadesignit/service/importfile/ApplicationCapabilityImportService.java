@@ -45,6 +45,7 @@ public class ApplicationCapabilityImportService {
         ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
         List<String> sheetnames = capabilityFlowExcelReader.getSheetNames();
         List<ApplicationCapabilityDTO> result = new ArrayList<ApplicationCapabilityDTO>();
+        CapabilityUtil capabilityUtil = new CapabilityUtil();
         for (String sheetname : sheetnames) {
             if (sheetname.startsWith("ADD")) {
                 List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(sheetname);
@@ -52,12 +53,12 @@ public class ApplicationCapabilityImportService {
                 for (Map<String, Object> map : capabilitiesDF) {
                     ApplicationCapabilityDTO applicationCapabilityDTO = new ApplicationCapabilityDTO();
 
-                    CapabilityDTO l0Import = CapabilityUtil.mapArrayToCapability(map, L0_NAME, null, 0);
-                    CapabilityDTO l1Import = CapabilityUtil.mapArrayToCapability(map, L1_NAME, null, 1);
-                    CapabilityDTO l2Import = CapabilityUtil.mapArrayToCapability(map, L2_NAME, null, 2);
-                    CapabilityDTO l3Import = CapabilityUtil.mapArrayToCapability(map, L3_NAME, null, 3);
+                    CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, null, 0);
+                    CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, null, 1);
+                    CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, null, 2);
+                    CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, null, 3);
                     applicationCapabilityDTO.setCapabilityImportDTO(
-                        CapabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import)
+                        capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import)
                     );
 
                     Capability capability = findCapability(l0Import, l1Import, l2Import, l3Import);

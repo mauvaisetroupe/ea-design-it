@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.service.plantuml;
 
+import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
@@ -92,5 +93,13 @@ public class PlantUMLSerializer {
         List<FunctionalFlow> sortedList = new ArrayList<>(flows);
         Collections.sort(sortedList);
         return sortedList;
+    }
+
+    public String getCapabilitiesSVG(Application application) throws IOException {
+        StringBuilder plantUMLSource = new StringBuilder();
+        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
+        plantUMLBuilder.getPlantumlCapabilities(plantUMLSource, application.getCapabilities());
+        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 }
