@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class CapabilityResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -402,6 +402,7 @@ class CapabilityResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE" })
     void deleteCapability() throws Exception {
         // Initialize the database
         capabilityRepository.saveAndFlush(capability);
