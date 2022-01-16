@@ -4,13 +4,13 @@ import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.mapper.CapabilityMapper;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 public class CapabilityUtil {
 
@@ -47,53 +47,37 @@ public class CapabilityUtil {
         return capabilityImportDTO;
     }
 
-    public List<CapabilityDTO> getRoot(Collection<Capability> inputs) {
+    public Set<CapabilityDTO> getRoot(Collection<Capability> inputs) {
         // Merge all capabilities finding common parents
         // Return merged capabilities by root (and not by leaf), inverse manyToOne relationship
 
-        List<CapabilityDTO> listOfLeaves = new ArrayList<>();
+        Set<CapabilityDTO> listOfRoots = new HashSet<>();
         CapabilityMapper mapper = new CapabilityMapper();
+        Map<Long, CapabilityDTO> capabilityById = new HashMap<>();
 
         for (Capability applicationCapability : inputs) {
             boolean found = false;
-            for (CapabilityDTO capabilityInResult : listOfLeaves) {
-                while (capabilityInResult.getLevel() >= applicationCapability.getLevel()) {
-                    capabilityInResult = capabilityInResult.getParent();
-                }
-                Assert.isTrue(capabilityInResult.getLevel() == applicationCapability.getLevel() - 1, "compare prarent");
-                if (capabilityInResult.getId() == applicationCapability.getParent().getId()) {
-                    CapabilityDTO capabilityDTO = mapper.clone(applicationCapability);
-                    capabilityInResult.addSubCapabilities(capabilityDTO);
-                    log.debug("Addind " + capabilityDTO + " to parent " + capabilityInResult);
+            Capability tmpCapability = applicationCapability;
+            CapabilityDTO childDTO = null;
+            CapabilityDTO dto = null;
+            while (tmpCapability != null && !found) {
+                if (capabilityById.containsKey(tmpCapability.getId())) {
                     found = true;
+                    dto = capabilityById.get(tmpCapability.getId());
+                } else {
+                    dto = mapper.clone(tmpCapability);
+                    capabilityById.put(dto.getId(), dto);
                 }
+                if (childDTO != null) {
+                    dto.addSubCapabilities(childDTO);
+                }
+                childDTO = dto;
+                tmpCapability = tmpCapability.getParent();
             }
-            if (!found) {
-                // deeply clone capabilities to DTO fome leaf to root
-
-                Capability tmpCapability = applicationCapability;
-                CapabilityDTO tmpDTO = mapper.clone(applicationCapability);
-                CapabilityDTO leafDTO = tmpDTO;
-                while (tmpCapability.getParent() != null) {
-                    tmpCapability = tmpCapability.getParent();
-                    CapabilityDTO parentDTO = mapper.clone(tmpCapability);
-                    parentDTO.addSubCapabilities(tmpDTO);
-                    tmpDTO = parentDTO;
-                }
-                log.debug("Adding " + leafDTO);
-                listOfLeaves.add(leafDTO);
+            if (dto.getParent() == null) {
+                listOfRoots.add(dto);
             }
         }
-
-        // browse lead and put root as entry
-        List<CapabilityDTO> rootDTO = new ArrayList<>();
-        for (CapabilityDTO capabilityDTO : listOfLeaves) {
-            CapabilityDTO root = capabilityDTO;
-            while (root.getParent() != null) {
-                root = root.getParent();
-            }
-            rootDTO.add(root);
-        }
-        return rootDTO;
+        return listOfRoots;
     }
 }

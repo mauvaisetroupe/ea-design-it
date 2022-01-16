@@ -7,6 +7,7 @@ import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -212,12 +213,11 @@ public class ApplicationResource {
     }
 
     @GetMapping("/applications/{id}/capabilities")
-    public List<CapabilityDTO> getApplicationCapabilities(@PathVariable Long id) {
-        System.out.println("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+    public Collection<CapabilityDTO> getApplicationCapabilities(@PathVariable Long id) {
         log.debug("REST request to get Application : {}", id);
         Optional<Application> application = applicationRepository.findById(id);
         CapabilityUtil capabilityUtil = new CapabilityUtil();
-        List<CapabilityDTO> result = capabilityUtil.getRoot(application.get().getCapabilities());
+        Collection<CapabilityDTO> result = capabilityUtil.getRoot(application.get().getCapabilities());
         return result;
     }
 }
