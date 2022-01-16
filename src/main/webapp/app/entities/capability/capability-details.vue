@@ -36,6 +36,15 @@
               <a @click="retrieveCapability(capability.parent.id)">{{ capability.parent.name }}</a>
             </div>
           </dd>
+          <dt>
+            <span>Applications</span>
+          </dt>
+          <dd>
+            <span v-for="(application, i) in capability.applications" :key="application.id"
+              >{{ i > 0 ? ', ' : '' }}
+              <router-link :to="{ name: 'ApplicationView', params: { applicationId: application.id } }">{{ application.name }}</router-link>
+            </span>
+          </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
