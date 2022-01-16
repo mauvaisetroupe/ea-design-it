@@ -117,13 +117,13 @@ public class MXFileSerializer {
         }
 
         for (String id : deletedApplicationIds) {
-            Element elem = (Element) xpath.evaluate("//mxCell[@id='" + id + "']", doc, XPathConstants.NODE);
+            Element elem = (Element) xpath.evaluate("//mxCell[@elementId='" + id + "']", doc, XPathConstants.NODE);
             applyStrokeColor(elem, "#FF0000"); // red
             updated = true;
         }
 
         for (String id : deletedEdgeIds) {
-            Element elem = (Element) xpath.evaluate("//mxCell[@id='" + id + "']", doc, XPathConstants.NODE);
+            Element elem = (Element) xpath.evaluate("//mxCell[@elementId='" + id + "']", doc, XPathConstants.NODE);
             applyStrokeColor(elem, "#FF0000"); // red
             updated = true;
         }
@@ -158,21 +158,40 @@ public class MXFileSerializer {
         XPathFactory xpathfactory = XPathFactory.newInstance();
         XPath xpath = xpathfactory.newXPath();
         NodeList nodeList = (NodeList) xpath.evaluate(
-            "//mxCell[starts-with(@id,'" + MXFileSerializer.APP_ID_PREFIX + "')]",
+            "//mxCell[starts-with(@elementId,'" + MXFileSerializer.APP_ID_PREFIX + "')]",
             doc,
             XPathConstants.NODESET
         );
         for (int i = 0; i < nodeList.getLength(); i++) {
-            existingApplicationIds.add(((Element) nodeList.item(i)).getAttribute("id"));
+            String elementIdValue = ((Element) nodeList.item(i)).getAttribute("elementId");
+            existingApplicationIds.add(elementIdValue);
+            // with import/export, 'id', 'source' and 'target' can change but 'elementId', 'sourceId' and 'targetId' are preserved
+            ((Element) nodeList.item(i)).setAttribute("id", elementIdValue);
         }
 
-        // applications in exisiting XML
+        // edges in exisiting XML
         Set<String> existingEdgeIds = new HashSet<String>();
         xpath = xpathfactory.newXPath();
         nodeList =
-            (NodeList) xpath.evaluate("//mxCell[starts-with(@id,'" + MXFileSerializer.EDGE_ID_PREFIX + "')]", doc, XPathConstants.NODESET);
+            (NodeList) xpath.evaluate(
+                "//mxCell[starts-with(@elementId,'" + MXFileSerializer.EDGE_ID_PREFIX + "')]",
+                doc,
+                XPathConstants.NODESET
+            );
         for (int i = 0; i < nodeList.getLength(); i++) {
-            existingEdgeIds.add(((Element) nodeList.item(i)).getAttribute("id"));
+            String elementIdValue = ((Element) nodeList.item(i)).getAttribute("elementId");
+            existingEdgeIds.add(elementIdValue);
+
+            // with import/export, 'id', 'source' and 'target' can change but 'elementId', 'sourceId' and 'targetId' are preserved
+            ((Element) nodeList.item(i)).setAttribute("id", elementIdValue);
+
+            // with import/export, 'id', 'source' and 'target' can change but 'elementId', 'sourceId' and 'targetId' are preserved
+            String sourceId = ((Element) nodeList.item(i)).getAttribute("sourceId");
+            ((Element) nodeList.item(i)).setAttribute("source", sourceId);
+
+            // with import/export, 'id', 'source' and 'target' can change but 'elementId', 'sourceId' and 'targetId' are preserved
+            String targetId = ((Element) nodeList.item(i)).getAttribute("targetId");
+            ((Element) nodeList.item(i)).setAttribute("target", targetId);
         }
 
         addedApplicationIds.addAll(expectedApplicationElementIds);
