@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-content-center">
-    <div class="col-12">
+    <div class="col-8">
       <div v-if="application">
         <h2 class="jh-entity-heading" data-cy="applicationDetailsHeading"><span>Application</span> - {{ application.name }}</h2>
         <dl class="row jh-entity-details">
@@ -115,10 +115,8 @@
         </router-link>
       </div>
       <br />
-      <h2>PlantUML preview</h2>
+      <h2>Interfaces for {{ application.name }}</h2>
       <div v-html="plantUMLImage"></div>
-      <br />
-      <h3>Interfaces for {{ application.name }}</h3>
       <table class="table">
         <thead>
           <tr>
@@ -168,8 +166,8 @@
         </tbody>
       </table>
     </div>
-    <div class="col-12" v-if="consolidatedCapabilities.length > 0">
-      <h2>Capabilities</h2>
+    <div class="col-8" v-if="consolidatedCapabilities.length > 0">
+      <h2>Capabilities for {{ application.name }}</h2>
       <div
         v-for="capability in consolidatedCapabilities"
         :key="capability.id"
@@ -177,9 +175,9 @@
         :class="capability.subCapabilities.length > 0 ? 'alpha' : 'beta'"
       >
         <div :title="capability.description">
-          <router-link :to="{ name: 'CapabilityView', params: { capabilityId: capability.id } }" :title="capability.description">{{
-            capability.name
-          }}</router-link>
+          <router-link :to="{ name: 'CapabilityView', params: { capabilityId: capability.id } }" :title="capability.description"
+            >{{ capability.level }}. {{ capability.name }}</router-link
+          >
         </div>
         <div v-if="capability.subCapabilities" class="d-flex flex-wrap">
           <div
@@ -189,9 +187,9 @@
             :class="child1.subCapabilities.length > 0 ? 'alpha' : 'beta'"
           >
             <div :title="child1.description">
-              <router-link :to="{ name: 'CapabilityView', params: { capabilityId: child1.id } }" :title="child1.description">{{
-                child1.name
-              }}</router-link>
+              <router-link :to="{ name: 'CapabilityView', params: { capabilityId: child1.id } }" :title="child1.description"
+                >{{ child1.level }}. {{ child1.name }}</router-link
+              >
             </div>
             <div v-if="child1.subCapabilities" class="d-flex flex-wrap">
               <div
@@ -201,9 +199,9 @@
                 :class="child2.subCapabilities.length > 0 ? 'alpha' : 'beta'"
               >
                 <div>
-                  <router-link :to="{ name: 'CapabilityView', params: { capabilityId: child2.id } }" :title="child2.description">{{
-                    child2.name
-                  }}</router-link>
+                  <router-link :to="{ name: 'CapabilityView', params: { capabilityId: child2.id } }" :title="child2.description"
+                    >{{ child2.level }}. {{ child2.name }}</router-link
+                  >
                 </div>
                 <div v-if="child2.subCapabilities" class="d-flex flex-wrap">
                   <div
@@ -213,9 +211,9 @@
                     :class="child3.subCapabilities.length > 0 ? 'alpha' : 'beta'"
                   >
                     <div>
-                      <router-link :to="{ name: 'CapabilityView', params: { capabilityId: child3.id } }" :title="child3.description">{{
-                        child3.name
-                      }}</router-link>
+                      <router-link :to="{ name: 'CapabilityView', params: { capabilityId: child3.id } }" :title="child3.description"
+                        >{{ child3.level }}. {{ child3.name }}</router-link
+                      >
                     </div>
                   </div>
                 </div>

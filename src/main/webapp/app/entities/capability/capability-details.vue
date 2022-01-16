@@ -52,39 +52,41 @@
         </router-link>
       </div>
     </div>
-    <div class="col-12">
-      <h2>Capabilities</h2>
-      <div class="common" :class="capability.subCapabilities.length > 0 ? 'alpha' : 'beta'">
-        <div :title="capability.description">{{ capability.name }}</div>
-        <div v-if="capability.subCapabilities" class="d-flex flex-wrap">
-          <div
-            v-for="child1 in capability.subCapabilities"
-            :key="child1.id"
-            class="common"
-            :class="child1.subCapabilities.length > 0 ? 'alpha' : 'beta'"
-          >
-            <div :title="child1.description">
-              <a @click="retrieveCapability(child1.id)">{{ child1.name }}</a>
-            </div>
-            <div v-if="child1.subCapabilities" class="d-flex flex-wrap">
-              <div
-                v-for="child2 in child1.subCapabilities"
-                :key="child2.id"
-                class="common"
-                :class="child2.subCapabilities.length > 0 ? 'alpha' : 'beta'"
-              >
-                <div :title="child2.description">
-                  <a @click="retrieveCapability(child2.id)">{{ child2.name }}</a>
-                </div>
-                <div v-if="child2.subCapabilities" class="d-flex flex-wrap">
-                  <div
-                    v-for="child3 in child2.subCapabilities"
-                    :key="child3.id"
-                    class="common"
-                    :class="child3.subCapabilities.length > 0 ? 'alpha' : 'beta'"
-                  >
-                    <div>
-                      <a @click="retrieveCapability(child3.id)">{{ child3.name }}</a>
+    <div class="col-8">
+      <div class="mt-5">
+        <h2>Graphical view</h2>
+        <div class="common" :class="capability.subCapabilities.length > 0 ? 'alpha' : 'beta'">
+          <div :title="capability.description">{{ capability.level }}. {{ capability.name }}</div>
+          <div v-if="capability.subCapabilities" class="d-flex flex-wrap">
+            <div
+              v-for="child1 in capability.subCapabilities"
+              :key="child1.id"
+              class="common"
+              :class="child1.subCapabilities.length > 0 ? 'alpha' : 'beta'"
+            >
+              <div :title="child1.description">
+                {{ child1.level }}. <a @click="retrieveCapability(child1.id)">{{ child1.name }}</a>
+              </div>
+              <div v-if="child1.subCapabilities" class="d-flex flex-wrap">
+                <div
+                  v-for="child2 in child1.subCapabilities"
+                  :key="child2.id"
+                  class="common"
+                  :class="child2.subCapabilities.length > 0 ? 'alpha' : 'beta'"
+                >
+                  <div :title="child2.description">
+                    {{ child2.level }}. <a @click="retrieveCapability(child2.id)">{{ child2.name }}</a>
+                  </div>
+                  <div v-if="child2.subCapabilities" class="d-flex flex-wrap">
+                    <div
+                      v-for="child3 in child2.subCapabilities"
+                      :key="child3.id"
+                      class="common"
+                      :class="child3.subCapabilities.length > 0 ? 'alpha' : 'beta'"
+                    >
+                      <div>
+                        {{ child3.level }}. <a @click="retrieveCapability(child3.id)">{{ child3.name }}</a>
+                      </div>
                     </div>
                   </div>
                 </div>
