@@ -288,7 +288,7 @@
         </div>
       </div>
 
-      <div v-if="drawIoSVG && !isEditing">
+      <div v-if="drawIoSVG && !isEditing" class="m-5">
         <div v-html="drawIoSVG" />
       </div>
 
