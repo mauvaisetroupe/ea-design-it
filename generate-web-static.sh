@@ -1,8 +1,8 @@
 rm -rf ./tmp
 mkdir ./tmp
-cp ./targer/*original*.jar ./tmp.
+cp ./target/*original ./tmp/ea-design-it.zip
 cd tmp
-unzip *original*
+unzip ea-design-it.zip
 zip -r ../static-web-app.zip static/
 cd ..
 rm -rf tmp
