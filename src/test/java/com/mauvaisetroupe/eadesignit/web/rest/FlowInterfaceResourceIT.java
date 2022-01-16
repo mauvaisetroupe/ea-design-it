@@ -44,6 +44,9 @@ class FlowInterfaceResourceIT {
     private static final String DEFAULT_DOCUMENTATION_URL_2 = "AAAAAAAAAA";
     private static final String UPDATED_DOCUMENTATION_URL_2 = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
     private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
 
@@ -79,6 +82,7 @@ class FlowInterfaceResourceIT {
             .status(DEFAULT_STATUS)
             .documentationURL(DEFAULT_DOCUMENTATION_URL)
             .documentationURL2(DEFAULT_DOCUMENTATION_URL_2)
+            .description(DEFAULT_DESCRIPTION)
             .startDate(DEFAULT_START_DATE)
             .endDate(DEFAULT_END_DATE);
         // Add required entity
@@ -108,6 +112,7 @@ class FlowInterfaceResourceIT {
             .status(UPDATED_STATUS)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
+            .description(UPDATED_DESCRIPTION)
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE);
         // Add required entity
@@ -147,6 +152,7 @@ class FlowInterfaceResourceIT {
         assertThat(testFlowInterface.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
         assertThat(testFlowInterface.getDocumentationURL2()).isEqualTo(DEFAULT_DOCUMENTATION_URL_2);
+        assertThat(testFlowInterface.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testFlowInterface.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testFlowInterface.getEndDate()).isEqualTo(DEFAULT_END_DATE);
     }
@@ -202,6 +208,7 @@ class FlowInterfaceResourceIT {
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
             .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)))
             .andExpect(jsonPath("$.[*].documentationURL2").value(hasItem(DEFAULT_DOCUMENTATION_URL_2)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
     }
@@ -222,6 +229,7 @@ class FlowInterfaceResourceIT {
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
             .andExpect(jsonPath("$.documentationURL").value(DEFAULT_DOCUMENTATION_URL))
             .andExpect(jsonPath("$.documentationURL2").value(DEFAULT_DOCUMENTATION_URL_2))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
             .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
     }
@@ -250,6 +258,7 @@ class FlowInterfaceResourceIT {
             .status(UPDATED_STATUS)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
+            .description(UPDATED_DESCRIPTION)
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE);
 
@@ -269,6 +278,7 @@ class FlowInterfaceResourceIT {
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
         assertThat(testFlowInterface.getDocumentationURL2()).isEqualTo(UPDATED_DOCUMENTATION_URL_2);
+        assertThat(testFlowInterface.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testFlowInterface.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testFlowInterface.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
@@ -346,6 +356,7 @@ class FlowInterfaceResourceIT {
             .status(UPDATED_STATUS)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
+            .description(UPDATED_DESCRIPTION)
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE);
 
@@ -365,6 +376,7 @@ class FlowInterfaceResourceIT {
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
         assertThat(testFlowInterface.getDocumentationURL2()).isEqualTo(UPDATED_DOCUMENTATION_URL_2);
+        assertThat(testFlowInterface.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testFlowInterface.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testFlowInterface.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
@@ -386,6 +398,7 @@ class FlowInterfaceResourceIT {
             .status(UPDATED_STATUS)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
             .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
+            .description(UPDATED_DESCRIPTION)
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE);
 
@@ -405,6 +418,7 @@ class FlowInterfaceResourceIT {
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
         assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
         assertThat(testFlowInterface.getDocumentationURL2()).isEqualTo(UPDATED_DOCUMENTATION_URL_2);
+        assertThat(testFlowInterface.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testFlowInterface.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testFlowInterface.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }

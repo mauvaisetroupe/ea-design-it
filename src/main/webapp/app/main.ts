@@ -42,10 +42,12 @@ import DataFormatService from '@/entities/data-format/data-format.service';
 import ApplicationCategoryService from '@/entities/application-category/application-category.service';
 import DataFlowImportService from '@/entities/data-flow-import/data-flow-import.service';
 import TechnologyService from '@/entities/technology/technology.service';
+import CapabilityService from '@/entities/capability/capability.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 import ReportingService from '@/eadesignit/reporting.service';
 import { Authority } from './shared/security/authority';
+import CapabilityImportService from '@/entities/capability-import/capability-import.service';
 
 /* tslint:enable */
 Vue.config.productionTip = false;
@@ -126,11 +128,13 @@ new Vue({
     applicationCategoryService: () => new ApplicationCategoryService(),
     dataFlowImportService: () => new DataFlowImportService(),
     technologyService: () => new TechnologyService(),
+    capabilityService: () => new CapabilityService(),
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService,
     alertService: () => new AlertService(),
 
     reportingService: () => new ReportingService(),
+    capabilityImportService: () => new CapabilityImportService(),
   },
   store,
 });

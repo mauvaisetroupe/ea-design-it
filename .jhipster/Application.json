@@ -73,6 +73,14 @@
       "ownerSide": true
     },
     {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "capability",
+      "otherEntityRelationshipName": "applications",
+      "relationshipName": "capabilities",
+      "otherEntityField": "name",
+      "ownerSide": true
+    },
+    {
       "relationshipType": "one-to-many",
       "otherEntityName": "applicationComponent",
       "otherEntityRelationshipName": "application",

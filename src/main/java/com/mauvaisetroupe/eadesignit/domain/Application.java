@@ -85,6 +85,16 @@ public class Application implements Serializable, Ownershipable {
     @JsonIgnoreProperties(value = { "applications", "components" }, allowSetters = true)
     private Set<Technology> technologies = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_application__capabilities",
+        joinColumns = @JoinColumn(name = "application_id"),
+        inverseJoinColumns = @JoinColumn(name = "capabilities_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "parent", "applications", "landscapes" }, allowSetters = true)
+    private Set<Capability> capabilities = new HashSet<>();
+
     @OneToMany(mappedBy = "application")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "application", "categories", "technologies" }, allowSetters = true)
@@ -282,6 +292,31 @@ public class Application implements Serializable, Ownershipable {
     public Application removeTechnologies(Technology technology) {
         this.technologies.remove(technology);
         technology.getApplications().remove(this);
+        return this;
+    }
+
+    public Set<Capability> getCapabilities() {
+        return this.capabilities;
+    }
+
+    public void setCapabilities(Set<Capability> capabilities) {
+        this.capabilities = capabilities;
+    }
+
+    public Application capabilities(Set<Capability> capabilities) {
+        this.setCapabilities(capabilities);
+        return this;
+    }
+
+    public Application addCapabilities(Capability capability) {
+        this.capabilities.add(capability);
+        capability.getApplications().add(this);
+        return this;
+    }
+
+    public Application removeCapabilities(Capability capability) {
+        this.capabilities.remove(capability);
+        capability.getApplications().remove(this);
         return this;
     }
 

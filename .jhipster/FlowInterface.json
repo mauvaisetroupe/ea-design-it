@@ -23,6 +23,12 @@
       "fieldValidateRulesMaxlength": "500"
     },
     {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1500"
+    },
+    {
       "fieldName": "startDate",
       "fieldType": "LocalDate"
     },

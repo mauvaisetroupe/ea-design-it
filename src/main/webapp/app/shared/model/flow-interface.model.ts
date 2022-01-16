@@ -11,6 +11,7 @@ export interface IFlowInterface {
   status?: string | null;
   documentationURL?: string | null;
   documentationURL2?: string | null;
+  description?: string | null;
   startDate?: Date | null;
   endDate?: Date | null;
   dataFlows?: IDataFlow[] | null;
@@ -30,6 +31,7 @@ export class FlowInterface implements IFlowInterface {
     public status?: string | null,
     public documentationURL?: string | null,
     public documentationURL2?: string | null,
+    public description?: string | null,
     public startDate?: Date | null,
     public endDate?: Date | null,
     public dataFlows?: IDataFlow[] | null,

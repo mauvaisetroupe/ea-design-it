@@ -11,6 +11,8 @@ import LandscapeViewService from '@/entities/landscape-view/landscape-view.servi
 import OwnerService from '@/entities/owner/owner.service';
 
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
+
+import CapabilityService from '@/entities/capability/capability.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -45,6 +47,8 @@ describe('Component Tests', () => {
           ownerService: () => new OwnerService(),
 
           functionalFlowService: () => new FunctionalFlowService(),
+
+          capabilityService: () => new CapabilityService(),
         },
       });
       comp = wrapper.vm;

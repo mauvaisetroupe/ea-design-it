@@ -33,7 +33,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new FlowInterfaceService();
       currentDate = new Date();
-      elemDefault = new FlowInterface(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
+      elemDefault = new FlowInterface(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', currentDate, currentDate);
     });
 
     describe('Service methods', () => {
@@ -103,6 +103,7 @@ describe('Service Tests', () => {
             status: 'BBBBBB',
             documentationURL: 'BBBBBB',
             documentationURL2: 'BBBBBB',
+            description: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),
             endDate: dayjs(currentDate).format(DATE_FORMAT),
           },
@@ -176,6 +177,7 @@ describe('Service Tests', () => {
             status: 'BBBBBB',
             documentationURL: 'BBBBBB',
             documentationURL2: 'BBBBBB',
+            description: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),
             endDate: dayjs(currentDate).format(DATE_FORMAT),
           },

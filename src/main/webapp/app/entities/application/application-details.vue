@@ -88,6 +88,17 @@
               <router-link :to="{ name: 'TechnologyView', params: { technologyId: technologies.id } }">{{ technologies.name }}</router-link>
             </span>
           </dd>
+          <dt>
+            <span>Capabilities</span>
+          </dt>
+          <dd>
+            <span v-for="(capabilities, i) in application.capabilities" :key="capabilities.id"
+              >{{ i > 0 ? ', ' : '' }}
+              <router-link :to="{ name: 'CapabilityView', params: { capabilityId: capabilities.id } }" :title="capabilities.description">{{
+                capabilities.name
+              }}</router-link>
+            </span>
+          </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
@@ -104,10 +115,8 @@
         </router-link>
       </div>
       <br />
-      <h2>PlantUML preview</h2>
+      <h2>Interfaces for {{ application.name }}</h2>
       <div v-html="plantUMLImage"></div>
-      <br />
-      <h3>Interfaces for {{ application.name }}</h3>
       <table class="table">
         <thead>
           <tr>
@@ -157,7 +166,85 @@
         </tbody>
       </table>
     </div>
+    <div class="col-8" v-if="consolidatedCapabilities.length > 0">
+      <h2>Capabilities for {{ application.name }}</h2>
+      <div
+        v-for="capability in consolidatedCapabilities"
+        :key="capability.id"
+        class="common"
+        :class="capability.subCapabilities.length > 0 ? 'alpha' : 'beta'"
+      >
+        <div :title="capability.description">
+          <router-link :to="{ name: 'CapabilityView', params: { capabilityId: capability.id } }" :title="capability.description"
+            >{{ capability.level }}. {{ capability.name }}</router-link
+          >
+        </div>
+        <div v-if="capability.subCapabilities" class="d-flex flex-wrap">
+          <div
+            v-for="child1 in capability.subCapabilities"
+            :key="child1.id"
+            class="common"
+            :class="child1.subCapabilities.length > 0 ? 'alpha' : 'beta'"
+          >
+            <div :title="child1.description">
+              <router-link :to="{ name: 'CapabilityView', params: { capabilityId: child1.id } }" :title="child1.description"
+                >{{ child1.level }}. {{ child1.name }}</router-link
+              >
+            </div>
+            <div v-if="child1.subCapabilities" class="d-flex flex-wrap">
+              <div
+                v-for="child2 in child1.subCapabilities"
+                :key="child2.id"
+                class="common"
+                :class="child2.subCapabilities.length > 0 ? 'alpha' : 'beta'"
+              >
+                <div>
+                  <router-link :to="{ name: 'CapabilityView', params: { capabilityId: child2.id } }" :title="child2.description"
+                    >{{ child2.level }}. {{ child2.name }}</router-link
+                  >
+                </div>
+                <div v-if="child2.subCapabilities" class="d-flex flex-wrap">
+                  <div
+                    v-for="child3 in child2.subCapabilities"
+                    :key="child3.id"
+                    class="common"
+                    :class="child3.subCapabilities.length > 0 ? 'alpha' : 'beta'"
+                  >
+                    <div>
+                      <router-link :to="{ name: 'CapabilityView', params: { capabilityId: child3.id } }" :title="child3.description"
+                        >{{ child3.level }}. {{ child3.name }}</router-link
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.common {
+  font-weight: bold;
+  border: solid;
+  border-color: black;
+  border-width: 3px;
+  padding: 5px;
+  margin: 10px;
+  box-shadow: 8px 8px 12px #aaa;
+}
+
+.alpha {
+  background-color: white;
+}
+
+.beta {
+  background-color: #fefece;
+  max-width: 300px;
+}
+</style>
 
 <script lang="ts" src="./application-details.component.ts"></script>

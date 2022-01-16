@@ -3,10 +3,13 @@
     <h2 id="page-heading" data-cy="ApplicationHeading">
       <span id="application-heading">Applications</span>
       <div class="d-flex justify-content-end">
-
-        <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: 'new' }, query: {id:selectedApplicationIds} }">
-          <button class="btn btn-warning mr-2"  :disabled="selectedApplicationIds.length < 1" title="Select applications to generate diagram">
-              <font-awesome-icon icon="plus"></font-awesome-icon><span> Generate Diagram</span>
+        <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: 'new' }, query: { id: selectedApplicationIds } }">
+          <button
+            class="btn btn-warning mr-2"
+            :disabled="selectedApplicationIds.length < 1"
+            title="Select applications to generate diagram"
+          >
+            <font-awesome-icon icon="plus"></font-awesome-icon><span> Generate Diagram</span>
           </button>
         </router-link>
 
@@ -54,12 +57,21 @@
             <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>Categories</span></th>
             <th scope="row"><span>Technologies</span></th>
+            <th scope="row"><span>Capabilities</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="application in filteredRows" :key="application.id" data-cy="entityTable">
-            <td><input type="checkbox" name="selectedAppliation" :id="application.id" :value="application.id" v-model="selectedApplicationIds"></td>
+            <td>
+              <input
+                type="checkbox"
+                name="selectedAppliation"
+                :id="application.id"
+                :value="application.id"
+                v-model="selectedApplicationIds"
+              />
+            </td>
             <td>
               <router-link :to="{ name: 'ApplicationView', params: { applicationId: application.id } }">{{ application.id }}</router-link>
             </td>
@@ -96,6 +108,14 @@
                 >{{ i > 0 ? ', ' : '' }}
                 <router-link class="form-control-static" :to="{ name: 'TechnologyView', params: { technologyId: technologies.id } }">{{
                   technologies.name
+                }}</router-link>
+              </span>
+            </td>
+            <td>
+              <span v-for="(capabilities, i) in application.capabilities" :key="capabilities.id"
+                >{{ i > 0 ? ', ' : '' }}
+                <router-link class="form-control-static" :to="{ name: 'CapabilityView', params: { capabilityId: capabilities.id } }">{{
+                  capabilities.name
                 }}</router-link>
               </span>
             </td>

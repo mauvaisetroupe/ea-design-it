@@ -14,6 +14,7 @@ import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Name;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -124,5 +125,13 @@ public class ExcelReader {
             }
         }
         return cell.getStringCellValue();
+    }
+
+    public List<String> getSheetNames() {
+        List<String> sheetNames = new ArrayList<String>();
+        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+            sheetNames.add(workbook.getSheetName(i));
+        }
+        return sheetNames;
     }
 }

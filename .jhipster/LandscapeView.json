@@ -36,6 +36,14 @@
       "relationshipName": "flows",
       "otherEntityField": "alias",
       "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "capability",
+      "otherEntityRelationshipName": "landscapes",
+      "relationshipName": "capabilities",
+      "otherEntityField": "name",
+      "ownerSide": true
     }
   ],
   "entityTableName": "landscape_view",

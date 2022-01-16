@@ -2,9 +2,12 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -207,5 +210,14 @@ public class ApplicationResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/applications/{id}/capabilities")
+    public Collection<CapabilityDTO> getApplicationCapabilities(@PathVariable Long id) {
+        log.debug("REST request to get Application : {}", id);
+        Optional<Application> application = applicationRepository.findById(id);
+        CapabilityUtil capabilityUtil = new CapabilityUtil();
+        Collection<CapabilityDTO> result = capabilityUtil.getRoot(application.get().getCapabilities());
+        return result;
     }
 }

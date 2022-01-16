@@ -5,6 +5,7 @@ import ApplicationService from './application.service';
 import AccountService from '@/account/account.service';
 import AlertService from '@/shared/alert/alert.service';
 import { IFlowInterface } from '@/shared/model/flow-interface.model';
+import { ICapability } from '@/shared/model/capability.model';
 
 @Component
 export default class ApplicationDetails extends Vue {
@@ -13,7 +14,9 @@ export default class ApplicationDetails extends Vue {
   @Inject('accountService') private accountService: () => AccountService;
   public application: IApplication = {};
   public plantUMLImage = '';
+  public capabilitiesPlantUMLImage = '';
   public interfaces: IFlowInterface[] = [];
+  public consolidatedCapabilities: ICapability[] = [];
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -24,15 +27,18 @@ export default class ApplicationDetails extends Vue {
   }
 
   public retrieveApplication(applicationId) {
+    this.plantUMLImage = '';
+    this.capabilitiesPlantUMLImage = '';
     this.applicationService()
       .find(applicationId)
       .then(res => {
         this.application = res;
+        this.getPlantUML(applicationId);
+        this.retrieveCapabilities(applicationId);
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
       });
-    this.getPlantUML(applicationId);
   }
 
   public previousState() {
@@ -52,6 +58,7 @@ export default class ApplicationDetails extends Vue {
         }
       );
   }
+
   public isOwner(application: IApplication): Boolean {
     const username = this.$store.getters.account?.login ?? '';
     if (this.accountService().writeAuthorities) {
@@ -65,5 +72,16 @@ export default class ApplicationDetails extends Vue {
       }
     }
     return false;
+  }
+
+  public retrieveCapabilities(applicationId) {
+    this.applicationService()
+      .getCapabilities(applicationId)
+      .then(res => {
+        this.consolidatedCapabilities = res;
+      })
+      .catch(error => {
+        this.alertService().showHttpError(this, error.response);
+      });
   }
 }
