@@ -104,7 +104,7 @@ public class PlantUMLSerializer {
         plantUMLBuilder.getPlantumlHeader(plantUMLSource);
 
         CapabilityUtil capabilityUtil = new CapabilityUtil();
-        List<CapabilityDTO> rootDTO = capabilityUtil.getRoot(capabilities);
+        Collection<CapabilityDTO> rootDTO = capabilityUtil.getRoot(capabilities);
         plantUMLBuilder.getPlantumlCapabilitiesDTO(plantUMLSource, rootDTO);
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
         System.out.println(plantUMLSource);
