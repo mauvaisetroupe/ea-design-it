@@ -104,7 +104,7 @@ export default class AccountService {
   }
 
   public get deleteAuthorities(): boolean {
-    return this.store.getters.seleteAuthority;
+    return this.store.getters.deleteAuthority;
   }
 
   public get contributorAuthorities(): boolean {
