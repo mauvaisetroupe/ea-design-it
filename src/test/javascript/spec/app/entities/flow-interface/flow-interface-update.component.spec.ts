@@ -18,7 +18,7 @@ import ProtocolService from '@/entities/protocol/protocol.service';
 
 import OwnerService from '@/entities/owner/owner.service';
 
-import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
+import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -60,7 +60,7 @@ describe('Component Tests', () => {
 
           ownerService: () => new OwnerService(),
 
-          functionalFlowService: () => new FunctionalFlowService(),
+          functionalFlowStepService: () => new FunctionalFlowStepService(),
         },
       });
       comp = wrapper.vm;

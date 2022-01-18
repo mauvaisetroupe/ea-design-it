@@ -175,26 +175,6 @@
               </option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="functional-flow-interfaces">Interfaces</label>
-            <select
-              class="form-control"
-              id="functional-flow-interfaces"
-              data-cy="interfaces"
-              multiple
-              name="interfaces"
-              v-if="functionalFlow.interfaces !== undefined"
-              v-model="functionalFlow.interfaces"
-            >
-              <option
-                v-bind:value="getSelected(functionalFlow.interfaces, flowInterfaceOption)"
-                v-for="flowInterfaceOption in flowInterfaces"
-                :key="flowInterfaceOption.id"
-              >
-                {{ flowInterfaceOption.alias }}
-              </option>
-            </select>
-          </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">

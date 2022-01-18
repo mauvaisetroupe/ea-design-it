@@ -164,13 +164,12 @@ public class FunctionalFlowResource {
     /**
      * {@code GET  /functional-flows} : get all the functionalFlows.
      *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of functionalFlows in body.
      */
     @GetMapping("/functional-flows")
-    public List<FunctionalFlow> getAllFunctionalFlows(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<FunctionalFlow> getAllFunctionalFlows() {
         log.debug("REST request to get all FunctionalFlows");
-        return functionalFlowRepository.findAllWithEagerRelationships();
+        return functionalFlowRepository.findAll();
     }
 
     /**
@@ -182,7 +181,7 @@ public class FunctionalFlowResource {
     @GetMapping("/functional-flows/{id}")
     public ResponseEntity<FunctionalFlow> getFunctionalFlow(@PathVariable Long id) {
         log.debug("REST request to get FunctionalFlow : {}", id);
-        Optional<FunctionalFlow> functionalFlow = functionalFlowRepository.findOneWithEagerRelationships(id);
+        Optional<FunctionalFlow> functionalFlow = functionalFlowRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(functionalFlow);
     }
 

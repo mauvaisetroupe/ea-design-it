@@ -51,7 +51,7 @@ public class LandscapeView implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "flows_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "owner", "interfaces", "landscapes", "dataFlows" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "steps", "owner", "landscapes", "dataFlows" }, allowSetters = true)
     private Set<FunctionalFlow> flows = new HashSet<>();
 
     @ManyToMany

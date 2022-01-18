@@ -1,0 +1,39 @@
+{
+  "name": "FunctionalFlowStep",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "flowInterface",
+      "otherEntityRelationshipName": "steps",
+      "relationshipValidateRules": "required",
+      "relationshipName": "flowInterface",
+      "otherEntityField": "alias"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "functionalFlow",
+      "otherEntityRelationshipName": "steps",
+      "relationshipValidateRules": "required",
+      "relationshipName": "flow",
+      "otherEntityField": "alias"
+    }
+  ],
+  "entityTableName": "flowstep",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20220118113150"
+}

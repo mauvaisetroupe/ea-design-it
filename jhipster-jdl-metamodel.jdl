@@ -1,7 +1,6 @@
 relationship ManyToMany {
 	LandscapeView{flows(alias)} to FunctionalFlow{landscape(diagramName) }
 	
-    FunctionalFlow{interfaces(alias)} to FlowInterface{functionalFlows(alias)}
 	
     DataFlow{functionalFlows(alias)} to FunctionalFlow{dataFlows}
 	
@@ -33,12 +32,16 @@ relationship ManyToOne {
     Application{owner(name)} to Owner
 	
     DataFlow{format(name)} to DataFormat
+    
+    FunctionalFlowStep{flowInterface(alias) required} to FlowInterface{steps}
 }
 
 relationship OneToMany {
 	FlowInterface{dataFlows} to DataFlow{flowInterface(alias)}
 	DataFlow{items} to DataFlowItem{dataFlow}
     Capability{subCapabilities(name)} to Capability{parent(name)}
+    FunctionalFlow{steps} to FunctionalFlowStep{flow(alias) required}
+
 }
 
 
@@ -62,6 +65,10 @@ entity FunctionalFlow(flow) {
     documentationURL2 String maxlength(500)
     startDate LocalDate
     endDate LocalDate
+}
+
+entity FunctionalFlowStep(flowstep) {
+    description String maxlength(500)
 }
 
 entity FlowInterface(interface) {

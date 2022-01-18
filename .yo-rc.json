@@ -59,7 +59,8 @@
       "ApplicationCategory",
       "DataFlowImport",
       "Technology",
-      "Capability"
+      "Capability",
+      "FunctionalFlowStep"
     ],
     "lastLiquibaseTimestamp": 1642010220000,
     "herokuAppName": "ea-design-it",

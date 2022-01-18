@@ -25,5 +25,17 @@
                                  constraintName="fk_rel_landscape_view__flows__flows_id"
                                  referencedColumnNames="id"
                                  referencedTableName="flow"/>
+
+        <addForeignKeyConstraint baseColumnNames="landscape_view_id"
+                                 baseTableName="rel_landscape_vie__capabili_21"
+                                 constraintName="fk_rel_landscape_vie__capabili_21__landscape_view_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landscape_view"/>
+
+        <addForeignKeyConstraint baseColumnNames="capabilities_id"
+                                 baseTableName="rel_landscape_vie__capabili_21"
+                                 constraintName="fk_rel_landscape_vie__capabili_21__capabilities_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="capability"/>
     </changeSet>
 </databaseChangeLog>

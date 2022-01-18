@@ -45,6 +45,17 @@
         </createTable>
 
         <addPrimaryKey columnNames="landscape_view_id, flows_id" tableName="rel_landscape_view__flows"/>
+
+        <createTable tableName="rel_landscape_vie__capabili_21">
+            <column name="capabilities_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="landscape_view_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="landscape_view_id, capabilities_id" tableName="rel_landscape_vie__capabili_21"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

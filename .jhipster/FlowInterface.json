@@ -89,12 +89,10 @@
       "otherEntityField": "name"
     },
     {
-      "relationshipType": "many-to-many",
-      "otherEntityName": "functionalFlow",
-      "otherEntityRelationshipName": "interfaces",
-      "relationshipName": "functionalFlows",
-      "otherEntityField": "alias",
-      "ownerSide": false
+      "relationshipType": "one-to-many",
+      "otherEntityName": "functionalFlowStep",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipName": "steps"
     }
   ],
   "entityTableName": "interface",

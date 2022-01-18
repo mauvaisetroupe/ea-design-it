@@ -3,7 +3,7 @@ import { IApplication } from '@/shared/model/application.model';
 import { IApplicationComponent } from '@/shared/model/application-component.model';
 import { IProtocol } from '@/shared/model/protocol.model';
 import { IOwner } from '@/shared/model/owner.model';
-import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
 
 export interface IFlowInterface {
   id?: number;
@@ -21,7 +21,7 @@ export interface IFlowInterface {
   targetComponent?: IApplicationComponent | null;
   protocol?: IProtocol | null;
   owner?: IOwner | null;
-  functionalFlows?: IFunctionalFlow[] | null;
+  steps?: IFunctionalFlowStep[] | null;
 }
 
 export class FlowInterface implements IFlowInterface {
@@ -41,6 +41,6 @@ export class FlowInterface implements IFlowInterface {
     public targetComponent?: IApplicationComponent | null,
     public protocol?: IProtocol | null,
     public owner?: IOwner | null,
-    public functionalFlows?: IFunctionalFlow[] | null
+    public steps?: IFunctionalFlowStep[] | null
   ) {}
 }

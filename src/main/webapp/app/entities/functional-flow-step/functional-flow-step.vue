@@ -1,71 +1,65 @@
 <template>
   <div>
-    <h2 id="page-heading" data-cy="FunctionalFlowHeading">
-      <span id="functional-flow-heading">Functional Flows</span>
+    <h2 id="page-heading" data-cy="FunctionalFlowStepHeading">
+      <span id="functional-flow-step-heading">Functional Flow Steps</span>
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
         </button>
-        <router-link :to="{ name: 'FunctionalFlowCreate' }" custom v-slot="{ navigate }">
+        <router-link :to="{ name: 'FunctionalFlowStepCreate' }" custom v-slot="{ navigate }">
           <button
             @click="navigate"
             id="jh-create-entity"
             data-cy="entityCreateButton"
-            class="btn btn-primary jh-create-entity create-functional-flow"
+            class="btn btn-primary jh-create-entity create-functional-flow-step"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Create a new Functional Flow </span>
+            <span> Create a new Functional Flow Step </span>
           </button>
         </router-link>
       </div>
     </h2>
     <br />
-    <div class="alert alert-warning" v-if="!isFetching && functionalFlows && functionalFlows.length === 0">
-      <span>No functionalFlows found</span>
+    <div class="alert alert-warning" v-if="!isFetching && functionalFlowSteps && functionalFlowSteps.length === 0">
+      <span>No functionalFlowSteps found</span>
     </div>
-    <div class="table-responsive" v-if="functionalFlows && functionalFlows.length > 0">
-      <table class="table table-striped" aria-describedby="functionalFlows">
+    <div class="table-responsive" v-if="functionalFlowSteps && functionalFlowSteps.length > 0">
+      <table class="table table-striped" aria-describedby="functionalFlowSteps">
         <thead>
           <tr>
             <th scope="row"><span>ID</span></th>
-            <th scope="row"><span>Alias</span></th>
             <th scope="row"><span>Description</span></th>
-            <th scope="row"><span>Comment</span></th>
-            <th scope="row"><span>Status</span></th>
-            <th scope="row"><span>Documentation URL</span></th>
-            <th scope="row"><span>Documentation URL 2</span></th>
-            <th scope="row"><span>Start Date</span></th>
-            <th scope="row"><span>End Date</span></th>
-            <th scope="row"><span>Owner</span></th>
+            <th scope="row"><span>Flow Interface</span></th>
+            <th scope="row"><span>Flow</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="functionalFlow in functionalFlows" :key="functionalFlow.id" data-cy="entityTable">
+          <tr v-for="functionalFlowStep in functionalFlowSteps" :key="functionalFlowStep.id" data-cy="entityTable">
             <td>
-              <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }">{{
-                functionalFlow.id
+              <router-link :to="{ name: 'FunctionalFlowStepView', params: { functionalFlowStepId: functionalFlowStep.id } }">{{
+                functionalFlowStep.id
               }}</router-link>
             </td>
-            <td>{{ functionalFlow.alias }}</td>
-            <td>{{ functionalFlow.description }}</td>
-            <td>{{ functionalFlow.comment }}</td>
-            <td>{{ functionalFlow.status }}</td>
-            <td>{{ functionalFlow.documentationURL }}</td>
-            <td>{{ functionalFlow.documentationURL2 }}</td>
-            <td>{{ functionalFlow.startDate }}</td>
-            <td>{{ functionalFlow.endDate }}</td>
+            <td>{{ functionalFlowStep.description }}</td>
             <td>
-              <div v-if="functionalFlow.owner">
-                <router-link :to="{ name: 'OwnerView', params: { ownerId: functionalFlow.owner.id } }">{{
-                  functionalFlow.owner.name
+              <div v-if="functionalFlowStep.flowInterface">
+                <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: functionalFlowStep.flowInterface.id } }">{{
+                  functionalFlowStep.flowInterface.alias
+                }}</router-link>
+              </div>
+            </td>
+            <td>
+              <div v-if="functionalFlowStep.flow">
+                <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlowStep.flow.id } }">{{
+                  functionalFlowStep.flow.alias
                 }}</router-link>
               </div>
             </td>
             <td class="text-right">
               <div class="btn-group">
                 <router-link
-                  :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }"
+                  :to="{ name: 'FunctionalFlowStepView', params: { functionalFlowStepId: functionalFlowStep.id } }"
                   custom
                   v-slot="{ navigate }"
                 >
@@ -75,7 +69,7 @@
                   </button>
                 </router-link>
                 <router-link
-                  :to="{ name: 'FunctionalFlowEdit', params: { functionalFlowId: functionalFlow.id } }"
+                  :to="{ name: 'FunctionalFlowStepEdit', params: { functionalFlowStepId: functionalFlowStep.id } }"
                   custom
                   v-slot="{ navigate }"
                 >
@@ -85,7 +79,7 @@
                   </button>
                 </router-link>
                 <b-button
-                  v-on:click="prepareRemove(functionalFlow)"
+                  v-on:click="prepareRemove(functionalFlowStep)"
                   variant="danger"
                   class="btn btn-sm"
                   data-cy="entityDeleteButton"
@@ -102,21 +96,21 @@
     </div>
     <b-modal ref="removeEntity" id="removeEntity">
       <span slot="modal-title"
-        ><span id="eaDesignItApp.functionalFlow.delete.question" data-cy="functionalFlowDeleteDialogHeading"
+        ><span id="eaDesignItApp.functionalFlowStep.delete.question" data-cy="functionalFlowStepDeleteDialogHeading"
           >Confirm delete operation</span
         ></span
       >
       <div class="modal-body">
-        <p id="jhi-delete-functionalFlow-heading">Are you sure you want to delete this Functional Flow?</p>
+        <p id="jhi-delete-functionalFlowStep-heading">Are you sure you want to delete this Functional Flow Step?</p>
       </div>
       <div slot="modal-footer">
         <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
         <button
           type="button"
           class="btn btn-primary"
-          id="jhi-confirm-delete-functionalFlow"
+          id="jhi-confirm-delete-functionalFlowStep"
           data-cy="entityConfirmDeleteButton"
-          v-on:click="removeFunctionalFlow()"
+          v-on:click="removeFunctionalFlowStep()"
         >
           Delete
         </button>
@@ -125,4 +119,4 @@
   </div>
 </template>
 
-<script lang="ts" src="./functional-flow.component.ts"></script>
+<script lang="ts" src="./functional-flow-step.component.ts"></script>

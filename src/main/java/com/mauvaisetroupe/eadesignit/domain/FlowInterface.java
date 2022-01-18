@@ -81,10 +81,10 @@ public class FlowInterface implements Serializable {
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner owner;
 
-    @ManyToMany(mappedBy = "interfaces")
+    @OneToMany(mappedBy = "flowInterface")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "owner", "interfaces", "landscapes", "dataFlows" }, allowSetters = true)
-    private Set<FunctionalFlow> functionalFlows = new HashSet<>();
+    @JsonIgnoreProperties(value = { "flowInterface", "flow" }, allowSetters = true)
+    private Set<FunctionalFlowStep> steps = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -301,34 +301,34 @@ public class FlowInterface implements Serializable {
         return this;
     }
 
-    public Set<FunctionalFlow> getFunctionalFlows() {
-        return this.functionalFlows;
+    public Set<FunctionalFlowStep> getSteps() {
+        return this.steps;
     }
 
-    public void setFunctionalFlows(Set<FunctionalFlow> functionalFlows) {
-        if (this.functionalFlows != null) {
-            this.functionalFlows.forEach(i -> i.removeInterfaces(this));
+    public void setSteps(Set<FunctionalFlowStep> functionalFlowSteps) {
+        if (this.steps != null) {
+            this.steps.forEach(i -> i.setFlowInterface(null));
         }
-        if (functionalFlows != null) {
-            functionalFlows.forEach(i -> i.addInterfaces(this));
+        if (functionalFlowSteps != null) {
+            functionalFlowSteps.forEach(i -> i.setFlowInterface(this));
         }
-        this.functionalFlows = functionalFlows;
+        this.steps = functionalFlowSteps;
     }
 
-    public FlowInterface functionalFlows(Set<FunctionalFlow> functionalFlows) {
-        this.setFunctionalFlows(functionalFlows);
+    public FlowInterface steps(Set<FunctionalFlowStep> functionalFlowSteps) {
+        this.setSteps(functionalFlowSteps);
         return this;
     }
 
-    public FlowInterface addFunctionalFlows(FunctionalFlow functionalFlow) {
-        this.functionalFlows.add(functionalFlow);
-        functionalFlow.getInterfaces().add(this);
+    public FlowInterface addSteps(FunctionalFlowStep functionalFlowStep) {
+        this.steps.add(functionalFlowStep);
+        functionalFlowStep.setFlowInterface(this);
         return this;
     }
 
-    public FlowInterface removeFunctionalFlows(FunctionalFlow functionalFlow) {
-        this.functionalFlows.remove(functionalFlow);
-        functionalFlow.getInterfaces().remove(this);
+    public FlowInterface removeSteps(FunctionalFlowStep functionalFlowStep) {
+        this.steps.remove(functionalFlowStep);
+        functionalFlowStep.setFlowInterface(null);
         return this;
     }
 

@@ -19,8 +19,8 @@ import { IProtocol } from '@/shared/model/protocol.model';
 import OwnerService from '@/entities/owner/owner.service';
 import { IOwner } from '@/shared/model/owner.model';
 
-import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
-import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
+import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
 
 import { IFlowInterface, FlowInterface } from '@/shared/model/flow-interface.model';
 import FlowInterfaceService from './flow-interface.service';
@@ -80,9 +80,9 @@ export default class FlowInterfaceUpdate extends Vue {
 
   public owners: IOwner[] = [];
 
-  @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
+  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
 
-  public functionalFlows: IFunctionalFlow[] = [];
+  public functionalFlowSteps: IFunctionalFlowStep[] = [];
   public isSaving = false;
   public currentLanguage = '';
 
@@ -189,10 +189,10 @@ export default class FlowInterfaceUpdate extends Vue {
       .then(res => {
         this.owners = res.data;
       });
-    this.functionalFlowService()
+    this.functionalFlowStepService()
       .retrieve()
       .then(res => {
-        this.functionalFlows = res.data;
+        this.functionalFlowSteps = res.data;
       });
   }
 }

@@ -4,14 +4,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
     <!--
-        Added the constraints for entity FunctionalFlow.
+        Added the constraints for entity Capability.
     -->
-    <changeSet id="20211104191904-2" author="jhipster">
+    <changeSet id="20220112175700-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="owner_id"
-                                 baseTableName="flow"
-                                 constraintName="fk_flow__owner_id"
+        <addForeignKeyConstraint baseColumnNames="parent_id"
+                                 baseTableName="capability"
+                                 constraintName="fk_capability__parent_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="owner"/>
+                                 referencedTableName="capability"/>
     </changeSet>
 </databaseChangeLog>

@@ -43,6 +43,7 @@ import ApplicationCategoryService from '@/entities/application-category/applicat
 import DataFlowImportService from '@/entities/data-flow-import/data-flow-import.service';
 import TechnologyService from '@/entities/technology/technology.service';
 import CapabilityService from '@/entities/capability/capability.service';
+import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 import ReportingService from '@/eadesignit/reporting.service';
@@ -116,6 +117,7 @@ new Vue({
     dataFlowImportService: () => new DataFlowImportService(),
     technologyService: () => new TechnologyService(),
     capabilityService: () => new CapabilityService(),
+    functionalFlowStepService: () => new FunctionalFlowStepService(),
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService,
     alertService: () => new AlertService(),
