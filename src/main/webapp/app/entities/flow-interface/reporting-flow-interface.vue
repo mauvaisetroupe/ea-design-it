@@ -115,9 +115,9 @@
             <td>
               <span v-for="(dataFlow, i) in flowInterface.dataFlows" :key="dataFlow.id"
                 >{{ i > 0 ? ', ' : '' }}
-                <router-link class="form-control-static" :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }">{{
-                  dataFlow.id
-                }}</router-link>
+                <router-link class="form-control-static" :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }"
+                  >{{ dataFlow.id }}<sup v-if="dataFlow.items && dataFlow.items.length > 0">({{ dataFlow.items.length }})</sup></router-link
+                >
               </span>
             </td>
             <td class="text-right">
@@ -146,58 +146,88 @@
       >
       <div class="modal-body">
         <p id="jhi-delete-flowInterface-heading" v-if="interfaceToKeep">
-          Are you sure you want to merge flows Interface {{ checkToMerge }} between <strong>{{ interfaceToKeep.source.name }}</strong> and
+          Are you sure you want to merge flows Interface between <strong>{{ interfaceToKeep.source.name }}</strong> and
           <strong>{{ interfaceToKeep.target.name }}</strong> ?
+        </p>
+        <p id="jhi-delete-flowInterface-heading" v-if="interfaceToKeep">
+          Interface <strong>{{ interfaceToKeep.alias }}</strong> will replace <strong>{{ checkToMerge }}</strong> ?
         </p>
         <strong>Data Flow Comparison</strong>
         <div class="table-responsive">
           <table class="table">
             <thead>
               <tr>
-                <th></th>
+                <th scope="row">keep</th>
+                <th scope="row">merge</th>
+                <th scope="row" colspan="3"><span>Interface</span></th>
                 <th scope="row"><span>Flow</span></th>
-                <th scope="row"><span>Inter.</span></th>
                 <th scope="row"><span>Data Id</span></th>
                 <th scope="row"><span>Data Resource Name</span></th>
                 <th scope="row"><span>Data Frequency</span></th>
                 <th scope="row"><span>Data Format</span></th>
               </tr>
             </thead>
-            <tr v-for="dataFlowToMerge in dataFlowsToMerge" :key="dataFlowToMerge.id">
-              <td>
-                <input
-                  v-if="dataFlowToMerge.flowInterface.alias != interfaceToKeep.alias"
-                  type="checkbox"
-                  :id="dataFlowToMerge.flowInterface.alias"
-                  :value="dataFlowToMerge.flowInterface.alias"
-                  v-model="checkToMerge"
-                />
-              </td>
-              <td>
-                <span v-for="(flow, i) in dataFlowToMerge.flowInterface.functionalFlows" :key="flow.id">
-                  {{ i > 0 ? ', ' : '' }}
-                  {{ flow.alias }}
-                </span>
-              </td>
-              <td>{{ dataFlowToMerge.flowInterface.alias }}</td>
-              <td>{{ dataFlowToMerge.id }}</td>
-              <td>{{ dataFlowToMerge.resourceName }}</td>
-              <td>{{ dataFlowToMerge.frequency }}</td>
-              <td>{{ dataFlowToMerge.format ? dataFlowToMerge.format.name : '' }}</td>
-              <td>{{ dataFlowToMerge.resourceType }}</td>
-              <td>{{ dataFlowToMerge.contractURL }}</td>
-              <td>{{ dataFlowToMerge.documentationURL }}</td>
-              <td>{{ dataFlowToMerge.documentationURL2 }}</td>
-              <td>{{ dataFlowToMerge.startDate }}</td>
-              <td>{{ dataFlowToMerge.endDate }}</td>
-              <td>{{ dataFlowToMerge.description }}</td>
-            </tr>
+            <template v-for="(inter, i) in interfacesToMerge">
+              <template v-for="(dataFlowToMerge, j) in inter.dataFlows">
+                <tr :key="dataFlowToMerge.id" :class="i % 2 == 0 ? 'mycolor' : ''">
+                  <td><input v-if="j == 0" type="radio" :value="inter" v-model="interfaceToKeep" @change="prepareMerge(inter)" /></td>
+                  <td>
+                    <input
+                      v-if="j == 0"
+                      :disabled="inter.alias == interfaceToKeep.alias"
+                      type="checkbox"
+                      :id="inter.alias"
+                      :value="inter.alias"
+                      v-model="checkToMerge"
+                    />
+                  </td>
+                  <td>{{ inter.alias }}</td>
+                  <td>
+                    <span v-if="inter.documentationURL">
+                      <a :href="inter.documentationURL" :title="inter.alias" target="_blank">{{ inter.documentationURL }}</a>
+                    </span>
+                  </td>
+                  <td>
+                    <span v-if="inter.documentationURL2">
+                      <a :href="inter.documentationURL2" :title="inter.alias" target="_blank">{{ inter.documentationURL2 }}</a>
+                    </span>
+                  </td>
+                  <td>
+                    <span v-for="(flow, k) in inter.functionalFlows" :key="flow.id" :title="flow.description">
+                      {{ k > 0 ? ', ' : '' }}
+                      {{ flow.alias }}
+                    </span>
+                  </td>
+                  <td>{{ dataFlowToMerge.id }}</td>
+                  <td>{{ dataFlowToMerge.resourceName }}</td>
+                  <td>{{ dataFlowToMerge.frequency }}</td>
+                  <td>{{ dataFlowToMerge.format ? dataFlowToMerge.format.name : '' }}</td>
+                  <td>{{ dataFlowToMerge.resourceType }}</td>
+                  <td>
+                    <span v-if="dataFlowToMerge.contractURL">
+                      <a
+                        :href="dataFlowToMerge.contractURL"
+                        :title="'dataFlow ' + dataFlowToMerge.id + ' : ' + dataFlowToMerge.resourceName"
+                        target="_blank"
+                        >{{ dataFlowToMerge.contractURL }}</a
+                      >
+                    </span>
+                  </td>
+                  <td>
+                    <span v-if="dataFlowToMerge.documentationURL">
+                      <a :href="dataFlowToMerge.documentationURL" :title="dataFlowToMerge.resourceName" target="_blank">{{
+                        dataFlowToMerge.documentationURL
+                      }}</a>
+                    </span>
+                  </td>
+                  <td>{{ dataFlowToMerge.startDate }}</td>
+                  <td>{{ dataFlowToMerge.endDate }}</td>
+                  <td title="dataFlow description">{{ dataFlowToMerge.description }}</td>
+                </tr>
+              </template>
+            </template>
           </table>
         </div>
-
-        <p id="jhi-delete-flowInterface-heading" v-if="interfaceToKeep">
-          Interface <strong>{{ interfaceToKeep.alias }}</strong> will replace all others?
-        </p>
       </div>
       <div slot="modal-footer">
         <button type="button" class="btn btn-secondary" v-on:click="closeMergeDialog()">Cancel</button>

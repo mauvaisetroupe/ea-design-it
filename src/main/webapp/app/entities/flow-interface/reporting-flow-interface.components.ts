@@ -21,7 +21,6 @@ export default class FlowInterface extends Vue {
 
   private interfaceToKeep: IFlowInterface = null;
   private interfacesToMerge: IFlowInterface[] = null;
-  private dataFlowsToMerge: DataFlow[] = null;
   private checkToMerge = [];
 
   public flowInterfaces: IFlowInterface[] = [];
@@ -80,7 +79,6 @@ export default class FlowInterface extends Vue {
     console.log(aliasToMerge);
 
     this.interfacesToMerge = [];
-    this.dataFlowsToMerge = [];
     this.checkToMerge = [];
 
     this.flowInterfaces.forEach(inter => {
@@ -89,24 +87,6 @@ export default class FlowInterface extends Vue {
         if (inter.id != this.interfaceToKeep.id) {
           this.checkToMerge.push(inter.alias);
         }
-        inter.dataFlows.forEach(df => {
-          if (df.flowInterface == null) {
-            df.flowInterface = {};
-          }
-          df.flowInterface.alias = inter.alias;
-
-          if (df.flowInterface.functionalFlows == null) {
-            df.flowInterface.functionalFlows = [];
-          }
-          inter.functionalFlows.forEach(element => {
-            const funct = {
-              alias: element.alias,
-            };
-            df.flowInterface.functionalFlows.push(funct);
-          });
-
-          this.dataFlowsToMerge.push(df);
-        });
       }
     });
 
@@ -129,7 +109,6 @@ export default class FlowInterface extends Vue {
         });
         this.interfaceToKeep = null;
         this.interfacesToMerge = null;
-        this.dataFlowsToMerge = null;
         this.checkToMerge = [];
         this.retrieveAllFlowInterfaces();
         this.closeMergeDialog();
