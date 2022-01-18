@@ -11,11 +11,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.validation.constraints.NotNull;
+import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 @Service
 public class ReportingService {
@@ -38,7 +40,7 @@ public class ReportingService {
         FlowInterface interfaceToKeep = flowInterfaceRepository.findById(id).get();
         Set<FlowInterface> interfacesToMerge = flowInterfaceRepository.findByAliasIn(aliasToMerge);
 
-        // Check functional flows (because I have a bug!!!)
+        // Check functional flows for logging purpose
         for (FunctionalFlow ff : interfaceToKeep.getFunctionalFlows()) {
             log.debug(" ### Functional Flow {} has Interfaces {} ... retrieve from {}", ff, ff.getInterfaces(), interfaceToKeep.getAlias());
             FunctionalFlow functionalFlow2 = functionalFlowRepository.findById(ff.getId()).get();
@@ -84,6 +86,10 @@ public class ReportingService {
             Assert.isTrue(interfaceToMerge.getProtocol().equals(interfaceToKeep.getProtocol()), "Not implemented");
 
             //owner not check, could potentially be different
+
+            // Documentation URL
+            addIfNecessaryDocumenation(interfaceToKeep, interfaceToMerge.getDocumentationURL());
+            addIfNecessaryDocumenation(interfaceToKeep, interfaceToMerge.getDocumentationURL2());
 
             //dataflow
             // make copy to avoid concurrent modification exception
@@ -166,5 +172,18 @@ public class ReportingService {
             log.debug(" ### ### Delete " + interfaceToMerge.getAlias());
             flowInterfaceRepository.delete(interfaceToMerge);
         }
+    }
+
+    private void addIfNecessaryDocumenation(FlowInterface interfaceToKeep, String documentationURL) {
+        if (!StringUtils.hasText(documentationURL)) return;
+        if (documentationURL.equals(interfaceToKeep.getDocumentationURL())) return;
+        if (documentationURL.equals(interfaceToKeep.getDocumentationURL2())) return;
+        if (!StringUtils.hasText(interfaceToKeep.getDocumentationURL())) {
+            interfaceToKeep.setDocumentationURL(documentationURL);
+        }
+        if (!StringUtils.hasText(interfaceToKeep.getDocumentationURL2())) {
+            interfaceToKeep.setDocumentationURL2(documentationURL);
+        }
+        throw new NotImplementedException("Cannot add documentation URL");
     }
 }
