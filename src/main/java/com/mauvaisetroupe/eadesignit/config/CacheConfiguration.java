@@ -90,6 +90,9 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Capability.class.getName() + ".subCapabilities");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Capability.class.getName() + ".applications");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Capability.class.getName() + ".landscapes");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.FunctionalFlow.class.getName() + ".steps");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.FlowInterface.class.getName() + ".steps");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep.class.getName());
             // jhipster-needle-ehcache-add-entry
 
             createCache(cm, PlantUMLBuilder.PLANTUML_SVG_CACHE);

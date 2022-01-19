@@ -22,6 +22,9 @@ import { IOwner } from '@/shared/model/owner.model';
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
+import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
+import { FunctionalFlowStep, IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+
 import { IFlowInterface, FlowInterface } from '@/shared/model/flow-interface.model';
 import FlowInterfaceService from './flow-interface.service';
 
@@ -67,6 +70,7 @@ export default class FlowInterfaceUpdate extends Vue {
   @Inject('applicationService') private applicationService: () => ApplicationService;
 
   public applications: IApplication[] = [];
+  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
 
   @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
 
@@ -172,13 +176,15 @@ export default class FlowInterfaceUpdate extends Vue {
           let createdInterface: IFunctionalFlow = param;
           let functionalFlowToSave = this.assignFunctionalFlow();
           if (functionalFlowToSave != null) {
-            functionalFlowToSave.interfaces.push(createdInterface);
-            this.functionalFlowService()
-              .update(functionalFlowToSave)
+            let step: IFunctionalFlowStep = new FunctionalFlowStep();
+            step.flowInterface = createdInterface;
+            step.flow = functionalFlowToSave;
+            this.functionalFlowStepService()
+              .create(step)
               .then(param2 => {
                 this.isSaving = false;
                 this.$router.go(-1);
-                const message = 'A FlowInterface is created with identifier ' + param.id + ' for FunctionalFloe  ' + param2.id;
+                const message = 'A Interface is created with identifier ' + param.id + ' for FunctionalFlow  ' + functionalFlowToSave.id;
                 this.$root.$bvToast.toast(message.toString(), {
                   toaster: 'b-toaster-top-center',
                   title: 'Success',

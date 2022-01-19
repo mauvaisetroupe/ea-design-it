@@ -79,8 +79,11 @@
                 >
               </div>
             </td>
-            <td>{{ dataFlowItem.dataFlow.flowInterface.protocol ? dataFlowItem.dataFlow.flowInterface.protocol.name : '' }}</td>
-
+            <td>
+              <div v-if="dataFlowItem.dataFlow.flowInterface">
+                {{ dataFlowItem.dataFlow.flowInterface.protocol ? dataFlowItem.dataFlow.flowInterface.protocol.name : '' }}
+              </div>
+            </td>
             <td class="text-right">
               <div class="btn-group">
                 <router-link :to="{ name: 'DataFlowItemView', params: { dataFlowItemId: dataFlowItem.id } }" custom v-slot="{ navigate }">

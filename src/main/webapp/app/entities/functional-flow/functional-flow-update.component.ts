@@ -4,11 +4,11 @@ import { required, maxLength } from 'vuelidate/lib/validators';
 
 import AlertService from '@/shared/alert/alert.service';
 
+import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
+import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+
 import OwnerService from '@/entities/owner/owner.service';
 import { IOwner } from '@/shared/model/owner.model';
-
-import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
-import { IFlowInterface } from '@/shared/model/flow-interface.model';
 
 import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
 import { ILandscapeView } from '@/shared/model/landscape-view.model';
@@ -51,13 +51,13 @@ export default class FunctionalFlowUpdate extends Vue {
 
   public functionalFlow: IFunctionalFlow = new FunctionalFlow();
 
+  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
+
+  public functionalFlowSteps: IFunctionalFlowStep[] = [];
+
   @Inject('ownerService') private ownerService: () => OwnerService;
 
   public owners: IOwner[] = [];
-
-  @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
-
-  public flowInterfaces: IFlowInterface[] = [];
 
   @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
 
@@ -86,7 +86,6 @@ export default class FunctionalFlowUpdate extends Vue {
         this.currentLanguage = this.$store.getters.currentLanguage;
       }
     );
-    this.functionalFlow.interfaces = [];
   }
 
   public assignLandscape(): ILandscapeView {
@@ -187,15 +186,15 @@ export default class FunctionalFlowUpdate extends Vue {
   }
 
   public initRelationships(): void {
+    this.functionalFlowStepService()
+      .retrieve()
+      .then(res => {
+        this.functionalFlowSteps = res.data;
+      });
     this.ownerService()
       .retrieve()
       .then(res => {
         this.owners = res.data;
-      });
-    this.flowInterfaceService()
-      .retrieve()
-      .then(res => {
-        this.flowInterfaces = res.data;
       });
     this.landscapeViewService()
       .retrieve()
@@ -207,16 +206,5 @@ export default class FunctionalFlowUpdate extends Vue {
       .then(res => {
         this.dataFlows = res.data;
       });
-  }
-
-  public getSelected(selectedVals, option): any {
-    if (selectedVals) {
-      for (let i = 0; i < selectedVals.length; i++) {
-        if (option.id === selectedVals[i].id) {
-          return selectedVals[i];
-        }
-      }
-    }
-    return option;
   }
 }

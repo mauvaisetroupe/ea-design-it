@@ -13,6 +13,8 @@ import { FlowImport, IFlowImport } from '@/shared/model/flow-import.model';
 import { FlowInterface, IFlowInterface } from '@/shared/model/flow-interface.model';
 import { FunctionalFlow } from '@/shared/model/functional-flow.model';
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { IFunctionalFlowStep, FunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
 
 @Component
 export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
@@ -20,6 +22,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('accountService') private accountService: () => AccountService;
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
+  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
 
   public landscapeView: ILandscapeView = {};
   public plantUMLImage = '';
@@ -28,13 +31,17 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public isHidden = true;
   public isEditing = false;
   public drawIOToBeSaved = false;
-  public emptyInterfaces = [new FlowInterface()];
+  public emptySteps = [];
   public functionalFlows: FunctionalFlow[] = [];
   public toBeSaved = false;
   public flowToDetach: number;
 
   public reorderAlias = false;
+
+  //for description update
   public reorderAliasflowToSave: IFunctionalFlow[] = [];
+  //for reordering update
+  public reorderStepToSave: IFunctionalFlowStep[] = [];
 
   public get allAlias() {
     return this.landscapeView.flows.map(f => f.alias);
@@ -49,6 +56,10 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   }
 
   public retrieveLandscapeView(landscapeViewId) {
+    let step: FunctionalFlowStep = new FunctionalFlowStep();
+    let inter: FlowInterface = new FlowInterface();
+    step.flowInterface = inter;
+    this.emptySteps.push(step);
     this.landscapeViewService()
       .find(landscapeViewId)
       .then(res => {
@@ -60,7 +71,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
       });
-    this.getPlantUML(landscapeViewId);
+    //this.getPlantUML(landscapeViewId);
   }
 
   public previousState() {
@@ -242,24 +253,34 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public startReorder() {
     this.reorderAlias = true;
     this.reorderAliasflowToSave = [];
+    this.reorderStepToSave = [];
   }
 
-  public reorder(flowInterface: IFlowInterface, functionalFlow: IFunctionalFlow, event) {
+  public reorder(step: IFunctionalFlowStep, functionalFlow: IFunctionalFlow, event) {
     const newFlowId: number = parseInt(event.target.value);
     const newFunctionalFlow: IFunctionalFlow = this.landscapeView.flows.find(f => f.id === newFlowId);
 
+    // This is only for rendering page before save...
     // add interface in new Flow
-    newFunctionalFlow.interfaces.push(flowInterface);
+    newFunctionalFlow.steps.push(step);
     // remove interface from old Flow
-    functionalFlow.interfaces = functionalFlow.interfaces.filter(i => i.id != flowInterface.id);
+    functionalFlow.steps = functionalFlow.steps.filter(i => i.id != step.id);
+
+    // step.flow = newFunctionalFlow this cause an erro, for looping steps?
+    let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
+    newFunctionalFlowSimplified = { ...newFunctionalFlow };
+    newFunctionalFlowSimplified.steps = [];
+    step.flow = newFunctionalFlowSimplified;
+
+    this.reorderStepToSave.push(step);
 
     // Add old & new Flows for later update by REST call
-    if (this.reorderAliasflowToSave.filter(e => e.id === functionalFlow.id).length === 0) {
-      this.reorderAliasflowToSave.push(functionalFlow);
-    }
-    if (this.reorderAliasflowToSave.filter(e => e.id === newFunctionalFlow.id).length === 0) {
-      this.reorderAliasflowToSave.push(newFunctionalFlow);
-    }
+    // if (this.reorderAliasflowToSave.filter(e => e.id === functionalFlow.id).length === 0) {
+    //   this.reorderAliasflowToSave.push(functionalFlow);
+    // }
+    // if (this.reorderAliasflowToSave.filter(e => e.id === newFunctionalFlow.id).length === 0) {
+    //   this.reorderAliasflowToSave.push(newFunctionalFlow);
+    // }
   }
 
   public changeDescription(functionalFlow: IFunctionalFlow) {
@@ -267,7 +288,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     if (this.reorderAliasflowToSave.filter(e => e.id === functionalFlow.id).length === 0) {
       this.reorderAliasflowToSave.push(functionalFlow);
     }
-  }  
+  }
 
   public cancelReorder() {
     this.landscapeViewService()
@@ -286,6 +307,9 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     let promises = [];
     this.reorderAliasflowToSave.forEach(flow => {
       promises.push(this.functionalFlowService().update(flow));
+    });
+    this.reorderStepToSave.forEach(step => {
+      promises.push(this.functionalFlowStepService().update(step));
     });
     Promise.all(promises).then(res => {
       this.retrieveLandscapeView(this.landscapeView.id);

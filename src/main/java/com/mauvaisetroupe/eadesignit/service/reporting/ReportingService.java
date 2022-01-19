@@ -2,7 +2,7 @@ package com.mauvaisetroupe.eadesignit.service.reporting;
 
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
-import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
+import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.util.DataFlowComparator;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
@@ -39,34 +39,6 @@ public class ReportingService {
         // INPUTS
         FlowInterface interfaceToKeep = flowInterfaceRepository.findById(id).get();
         Set<FlowInterface> interfacesToMerge = flowInterfaceRepository.findByAliasIn(aliasToMerge);
-
-        // Check functional flows for logging purpose
-        for (FunctionalFlow ff : interfaceToKeep.getFunctionalFlows()) {
-            log.debug(" ### Functional Flow {} has Interfaces {} ... retrieve from {}", ff, ff.getInterfaces(), interfaceToKeep.getAlias());
-            FunctionalFlow functionalFlow2 = functionalFlowRepository.findById(ff.getId()).get();
-            log.debug(
-                " ### Functional Flow {} has Interfaces {} ... retrieve in DB ",
-                functionalFlow2.getAlias(),
-                functionalFlow2.getInterfaces()
-            );
-        }
-        for (FlowInterface intt : interfacesToMerge) {
-            for (FunctionalFlow ff : intt.getFunctionalFlows()) {
-                log.debug(
-                    " ### Functional Flow {} has Interfaces {} ... retrieve from {}",
-                    intt.getFunctionalFlows(),
-                    ff.getInterfaces(),
-                    intt.getAlias()
-                );
-                FunctionalFlow functionalFlow2 = functionalFlowRepository.findById(ff.getId()).get();
-                log.debug(
-                    " ### Functional Flow {} has Interfaces {} ... retrieve in DB ",
-                    functionalFlow2.getAlias(),
-                    functionalFlow2.getInterfaces()
-                );
-            }
-        }
-        // ENd check
 
         for (FlowInterface interfaceToMerge : interfacesToMerge) {
             log.debug(" ### ### ### About to merge interface :" + interfaceToMerge.getAlias());
@@ -137,37 +109,12 @@ public class ReportingService {
             }
 
             // Functional Flows to move (avoid ConcurrentMofificationException)
-            Set<FunctionalFlow> flowsToModify = new HashSet<>();
-            flowsToModify.addAll(interfaceToMerge.getFunctionalFlows());
-
-            for (FunctionalFlow functionalFlow : flowsToModify) {
-                log.debug(" ### ### Examining Functional Flow :" + functionalFlow.getId());
-                log.debug(" ### Functional Flow {} has Interfaces {}", functionalFlow.getAlias(), functionalFlow.getInterfaces());
-                FunctionalFlow functionalFlow2 = functionalFlowRepository.findById(functionalFlow.getId()).get();
-                log.debug(" ### Functional Flow {} has Interfaces {}", functionalFlow2.getAlias(), functionalFlow2.getInterfaces());
-
-                log.debug(
-                    " ### Removing interface " + interfaceToMerge.getAlias() + " from Functional Flow : " + functionalFlow.getAlias()
-                );
-                functionalFlow.removeInterfaces(interfaceToMerge);
-                functionalFlowRepository.save(functionalFlow);
-                flowInterfaceRepository.save(interfaceToMerge);
-
-                if (!functionalFlow.getInterfaces().contains(interfaceToKeep)) {
-                    //if (!functionalFlow2.getInterfaces().contains(interfaceToKeep)) {
-                    log.debug(" ### Adding interface " + interfaceToKeep.getAlias() + " to Functional Flow : " + functionalFlow.getAlias());
-                    functionalFlow.addInterfaces(interfaceToKeep);
-                    log.debug(" ### Save Functional Flow : " + functionalFlow.getAlias());
-                    functionalFlowRepository.save(functionalFlow);
-                    log.debug(" ### Save Interface : " + interfaceToKeep.getAlias());
-                    flowInterfaceRepository.save(interfaceToKeep);
-                } else {
-                    log.debug(
-                        " ### Interface :  " + interfaceToKeep.getAlias() + " already in " + functionalFlow.getAlias() + " (not added)"
-                    );
-                }
-                log.debug(" ### Functional Flow {} has now Interfaces {}", functionalFlow.getAlias(), functionalFlow.getInterfaces());
+            Set<FunctionalFlowStep> stepsToModify = new HashSet<>();
+            stepsToModify.addAll(interfaceToMerge.getSteps());
+            for (FunctionalFlowStep step : stepsToModify) {
+                step.setFlowInterface(interfaceToMerge);
             }
+
             // Delete interface
             log.debug(" ### ### Delete " + interfaceToMerge.getAlias());
             flowInterfaceRepository.delete(interfaceToMerge);

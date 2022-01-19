@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
+import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import java.io.IOException;
 import java.io.StringReader;
@@ -34,9 +35,9 @@ public class MXFileSerializerTest {
         Application app3 = getApplication("APP3");
         Application app4 = getApplication("APP4");
 
-        functionalFlow.addInterfaces(creteInterface(1L, functionalFlow, app1, app2));
-        functionalFlow.addInterfaces(creteInterface(2L, functionalFlow, app3, app2));
-        functionalFlow.addInterfaces(creteInterface(3L, functionalFlow, app1, app4));
+        functionalFlow.addSteps(creteInterface(1L, functionalFlow, app1, app2));
+        functionalFlow.addSteps(creteInterface(2L, functionalFlow, app3, app2));
+        functionalFlow.addSteps(creteInterface(3L, functionalFlow, app1, app4));
         landscapeView.addFlows(functionalFlow);
 
         MXFileSerializer mxFileSerializer = new MXFileSerializer(landscapeView);
@@ -71,9 +72,9 @@ public class MXFileSerializerTest {
         Application app3 = getApplication("APP3");
         Application app4 = getApplication("APP4");
 
-        functionalFlow.addInterfaces(creteInterface(1L, functionalFlow, app1, app2));
-        functionalFlow.addInterfaces(creteInterface(2L, functionalFlow, app2, app3));
-        functionalFlow.addInterfaces(creteInterface(3L, functionalFlow, app3, app4));
+        functionalFlow.addSteps(creteInterface(1L, functionalFlow, app1, app2));
+        functionalFlow.addSteps(creteInterface(2L, functionalFlow, app2, app3));
+        functionalFlow.addSteps(creteInterface(3L, functionalFlow, app3, app4));
         landscapeView.addFlows(functionalFlow);
         landscapeView.setCompressedDrawXML(xml);
         ////////////////
@@ -115,12 +116,14 @@ public class MXFileSerializerTest {
         assertThat(nodeList.getLength()).isEqualTo(8);
     }
 
-    private FlowInterface creteInterface(Long id, FunctionalFlow functionalFlow, Application source, Application target) {
+    private FunctionalFlowStep creteInterface(Long id, FunctionalFlow functionalFlow, Application source, Application target) {
+        FunctionalFlowStep flowStep = new FunctionalFlowStep();
         FlowInterface flowInterface = new FlowInterface();
         flowInterface.setId(id);
         flowInterface.setSource(source);
         flowInterface.setTarget(target);
-        return flowInterface;
+        flowStep.setFlowInterface(flowInterface);
+        return flowStep;
     }
 
     private Application getApplication(String applicationName) {

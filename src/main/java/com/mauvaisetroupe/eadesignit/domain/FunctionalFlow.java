@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -56,20 +57,14 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     @Column(name = "end_date")
     private LocalDate endDate;
 
+    @OneToMany(mappedBy = "flow", fetch = FetchType.EAGER)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "flow" }, allowSetters = true)
+    private Set<FunctionalFlowStep> steps = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner owner;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @OrderBy
-    @JoinTable(
-        name = "rel_flow__interfaces",
-        joinColumns = @JoinColumn(name = "flow_id"),
-        inverseJoinColumns = @JoinColumn(name = "interfaces_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "owner", "functionalFlows" }, allowSetters = true)
-    private Set<FlowInterface> interfaces = new TreeSet<>();
 
     @ManyToMany(mappedBy = "flows", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -200,6 +195,37 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
         this.endDate = endDate;
     }
 
+    public Set<FunctionalFlowStep> getSteps() {
+        return this.steps;
+    }
+
+    public void setSteps(Set<FunctionalFlowStep> functionalFlowSteps) {
+        if (this.steps != null) {
+            this.steps.forEach(i -> i.setFlow(null));
+        }
+        if (functionalFlowSteps != null) {
+            functionalFlowSteps.forEach(i -> i.setFlow(this));
+        }
+        this.steps = functionalFlowSteps;
+    }
+
+    public FunctionalFlow steps(Set<FunctionalFlowStep> functionalFlowSteps) {
+        this.setSteps(functionalFlowSteps);
+        return this;
+    }
+
+    public FunctionalFlow addSteps(FunctionalFlowStep functionalFlowStep) {
+        this.steps.add(functionalFlowStep);
+        functionalFlowStep.setFlow(this);
+        return this;
+    }
+
+    public FunctionalFlow removeSteps(FunctionalFlowStep functionalFlowStep) {
+        this.steps.remove(functionalFlowStep);
+        functionalFlowStep.setFlow(null);
+        return this;
+    }
+
     public Owner getOwner() {
         return this.owner;
     }
@@ -210,31 +236,6 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
 
     public FunctionalFlow owner(Owner owner) {
         this.setOwner(owner);
-        return this;
-    }
-
-    public Set<FlowInterface> getInterfaces() {
-        return this.interfaces;
-    }
-
-    public void setInterfaces(Set<FlowInterface> flowInterfaces) {
-        this.interfaces = flowInterfaces;
-    }
-
-    public FunctionalFlow interfaces(Set<FlowInterface> flowInterfaces) {
-        this.setInterfaces(flowInterfaces);
-        return this;
-    }
-
-    public FunctionalFlow addInterfaces(FlowInterface flowInterface) {
-        this.interfaces.add(flowInterface);
-        flowInterface.getFunctionalFlows().add(this);
-        return this;
-    }
-
-    public FunctionalFlow removeInterfaces(FlowInterface flowInterface) {
-        this.interfaces.remove(flowInterface);
-        flowInterface.getFunctionalFlows().remove(this);
         return this;
     }
 
@@ -352,5 +353,14 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
             result = this.getAlias().compareTo(arg0.getAlias());
         }
         return result;
+    }
+
+    @JsonIgnore
+    public Set<FlowInterface> getInterfaces() {
+        Set<FlowInterface> interfaces = new TreeSet<>();
+        for (FunctionalFlowStep step : this.steps) {
+            interfaces.add(step.getFlowInterface());
+        }
+        return interfaces;
     }
 }

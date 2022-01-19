@@ -10,9 +10,12 @@ import ProtocolService from '@/entities/protocol/protocol.service';
 import { IProtocol } from '@/shared/model/protocol.model';
 import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
 import { IFlowInterface } from '@/shared/model/flow-interface.model';
+import { IFunctionalFlowStep, FunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
 
 @Component
 export default class FunctionalFlowDetails extends Vue {
+  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('accountService') private accountService: () => AccountService;
@@ -53,7 +56,7 @@ export default class FunctionalFlowDetails extends Vue {
   public toBeSaved: boolean = false;
   public searchDone = false;
 
-  public interfaceToDetach: number;
+  public indexStepToDetach: number;
 
   public notPersisted: boolean = false;
 
@@ -62,8 +65,7 @@ export default class FunctionalFlowDetails extends Vue {
       if (to.params.functionalFlowId) {
         if (to.params.functionalFlowId != 'new') {
           vm.retrieveFunctionalFlow(to.params.functionalFlowId);
-        }
-        else if (to.query.id) {
+        } else if (to.query.id) {
           vm.generateDiagramForSelection(to.query.id);
         }
       }
@@ -72,10 +74,12 @@ export default class FunctionalFlowDetails extends Vue {
 
   public generateDiagramForSelection(applicationIds: number[]) {
     this.notPersisted = true;
-    this.functionalFlowService().createNewFromApplications(applicationIds).then(res =>  {
-      this.functionalFlow = res;
-      this.getPlantUMLforapplications(applicationIds)
-    });
+    this.functionalFlowService()
+      .createNewFromApplications(applicationIds)
+      .then(res => {
+        this.functionalFlow = res;
+        this.getPlantUMLforapplications(applicationIds);
+      });
   }
 
   public retrieveFunctionalFlow(functionalFlowId) {
@@ -115,7 +119,7 @@ export default class FunctionalFlowDetails extends Vue {
       .getPlantUMLforApplications(aplicationIds)
       .then(
         res => {
-          console.log(res.data)
+          console.log(res.data);
 
           this.plantUMLImage = res.data;
         },
@@ -154,19 +158,23 @@ export default class FunctionalFlowDetails extends Vue {
 
   public addOrCreateInterface(): void {
     if (this.checkedInterface && this.checkedInterface.length > 0) {
-      if (!this.functionalFlow.interfaces) {
-        this.functionalFlow.interfaces = [];
+      if (!this.functionalFlow.steps) {
+        this.functionalFlow.steps = [];
       }
-      this.functionalFlow.interfaces = this.functionalFlow.interfaces.concat(this.checkedInterface);
+      this.checkedInterface.forEach(inter => {
+        let step: IFunctionalFlowStep = new FunctionalFlowStep();
+        step.flowInterface = inter;
+        step.flow = this.functionalFlow;
+        this.functionalFlowStepService()
+          .create(step)
+          .then(res => {
+            this.retrieveFunctionalFlow(this.functionalFlow.id);
+            this.closeSearchDialog();
+            this.toBeSaved = false;
+            //this.getPlantUML(this.functionalFlow.id);
+          });
+      });
       this.toBeSaved = true;
-      this.functionalFlowService()
-        .update(this.functionalFlow)
-        .then(res => {
-          this.functionalFlow = res;
-          this.closeSearchDialog();
-          this.toBeSaved = false;
-          this.getPlantUML(this.functionalFlow.id);
-        });
     }
   }
 
@@ -175,21 +183,23 @@ export default class FunctionalFlowDetails extends Vue {
   }
 
   public detachInterface() {
-    this.functionalFlow.interfaces.splice(this.interfaceToDetach, 1);
-    this.functionalFlowService()
-      .update(this.functionalFlow)
+    const stepToDelete: FunctionalFlowStep = this.functionalFlow.steps[this.indexStepToDetach];
+    console.log('about to delete : ' + stepToDelete.id);
+    this.functionalFlowStepService()
+      .delete(stepToDelete.id)
       .then(res => {
-        this.functionalFlow = res;
+        this.retrieveFunctionalFlow(this.functionalFlow.id);
         this.closeDetachDialog();
-        this.getPlantUML(this.functionalFlow.id);
+        this.toBeSaved = false;
       });
   }
 
   public prepareToDetach(index: number) {
+    console.log(index);
     if (<any>this.$refs.detachInterfaceEntity) {
       (<any>this.$refs.detachInterfaceEntity).show();
     }
-    this.interfaceToDetach = index;
+    this.indexStepToDetach = index;
   }
 
   public closeDetachDialog(): void {

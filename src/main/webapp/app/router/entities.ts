@@ -80,6 +80,12 @@ const Capability = () => import('@/entities/capability/capability.vue');
 const CapabilityUpdate = () => import('@/entities/capability/capability-update.vue');
 // prettier-ignore
 const CapabilityDetails = () => import('@/entities/capability/capability-details.vue');
+// prettier-ignore
+const FunctionalFlowStep = () => import('@/entities/functional-flow-step/functional-flow-step.vue');
+// prettier-ignore
+const FunctionalFlowStepUpdate = () => import('@/entities/functional-flow-step/functional-flow-step-update.vue');
+// prettier-ignore
+const FunctionalFlowStepDetails = () => import('@/entities/functional-flow-step/functional-flow-step-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default [
@@ -393,6 +399,30 @@ export default [
     path: '/capability/:capabilityId/view',
     name: 'CapabilityView',
     component: CapabilityDetails,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
+  },
+  {
+    path: '/functional-flow-step',
+    name: 'FunctionalFlowStep',
+    component: FunctionalFlowStep,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
+  },
+  {
+    path: '/functional-flow-step/new',
+    name: 'FunctionalFlowStepCreate',
+    component: FunctionalFlowStepUpdate,
+    meta: { authorities: [Authority.WRITE] },
+  },
+  {
+    path: '/functional-flow-step/:functionalFlowStepId/edit',
+    name: 'FunctionalFlowStepEdit',
+    component: FunctionalFlowStepUpdate,
+    meta: { authorities: [Authority.WRITE] },
+  },
+  {
+    path: '/functional-flow-step/:functionalFlowStepId/view',
+    name: 'FunctionalFlowStepView',
+    component: FunctionalFlowStepDetails,
     meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

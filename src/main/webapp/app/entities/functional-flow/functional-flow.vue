@@ -44,7 +44,6 @@
             <th scope="row"><span>Start Date</span></th>
             <th scope="row"><span>End Date</span></th>
             <th scope="row"><span>Owner</span></th>
-            <th scope="row"><span>Interfaces</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -79,20 +78,20 @@
               </div>
             </td>
             <td>
-              <span v-for="(interfaces, i) in functionalFlow.interfaces" :key="interfaces.id"
+              <span v-for="(step, i) in functionalFlow.steps" :key="step.id"
                 >{{ i > 0 ? ', ' : '' }}
                 <router-link
                   :title="
                     '[ ' +
-                    interfaces.source.name +
+                    step.flowInterface.source.name +
                     ' / ' +
-                    interfaces.target.name +
+                    step.flowInterface.target.name +
                     ' ]' +
-                    (interfaces.protocol ? ' (' + interfaces.protocol.type + ') ' : '')
+                    (step.flowInterface.protocol ? ' (' + step.flowInterface.protocol.type + ') ' : '')
                   "
                   class="form-control-static"
-                  :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: interfaces.id } }"
-                  >{{ interfaces.alias }}</router-link
+                  :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: step.flowInterface.id } }"
+                  >{{ step.flowInterface.alias }}</router-link
                 >
               </span>
             </td>

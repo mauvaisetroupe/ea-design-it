@@ -226,7 +226,7 @@
           </span>
         </div>
 
-        <div class="table-responsive" v-if="flowInterface.functionalFlows && flowInterface.functionalFlows.length > 0">
+        <div class="table-responsive" v-if="flowInterface.steps && flowInterface.steps.length > 0">
           <br />
           <br />
           <h3>
@@ -243,7 +243,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="functionalFlow in flowInterface.functionalFlows" :key="functionalFlow.id" data-cy="entityTable">
+              <tr v-for="step in flowInterface.steps" :key="step.id" data-cy="entityTable" :set="(functionalFlow = step.flow)">
                 <td>
                   <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }">{{
                     functionalFlow.id

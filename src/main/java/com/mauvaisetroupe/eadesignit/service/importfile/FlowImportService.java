@@ -6,6 +6,7 @@ import com.mauvaisetroupe.eadesignit.domain.DataFormat;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
+import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
@@ -17,6 +18,7 @@ import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFormatRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
+import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowStepRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
 import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
@@ -82,6 +84,7 @@ public class FlowImportService {
     private final LandscapeViewRepository landscapeViewRepository;
     private final ProtocolRepository protocolRepository;
     private final DataFormatRepository dataFormatRepository;
+    private final FunctionalFlowStepRepository functionalFlowStepRepository;
 
     public FlowImportService(
         FunctionalFlowRepository flowRepository,
@@ -91,7 +94,8 @@ public class FlowImportService {
         OwnerRepository ownerRepository,
         LandscapeViewRepository landscapeViewRepository,
         ProtocolRepository protocolRepository,
-        DataFormatRepository dataFormatRepository
+        DataFormatRepository dataFormatRepository,
+        FunctionalFlowStepRepository functionalFlowStepRepository
     ) {
         this.flowRepository = flowRepository;
         this.interfaceRepository = interfaceRepository;
@@ -101,6 +105,7 @@ public class FlowImportService {
         this.landscapeViewRepository = landscapeViewRepository;
         this.protocolRepository = protocolRepository;
         this.dataFormatRepository = dataFormatRepository;
+        this.functionalFlowStepRepository = functionalFlowStepRepository;
 
         this.columnsArray.add(FLOW_ID_FLOW);
         this.columnsArray.add(FLOW_ALIAS_FLOW);
@@ -140,9 +145,12 @@ public class FlowImportService {
                 if (landscapeView != null && functionalFlow != null && flowInterface != null) {
                     // Set<>, so could add even if already associated
                     functionalFlow.addLandscape(landscapeView);
-                    functionalFlow.addInterfaces(flowInterface);
+                    FunctionalFlowStep step = new FunctionalFlowStep();
+                    step.setFlowInterface(flowInterface);
+                    functionalFlow.addSteps(step);
                     interfaceRepository.save(flowInterface);
                     flowRepository.save(functionalFlow);
+                    functionalFlowStepRepository.save(step);
                     landscapeViewRepository.save(landscapeView);
                     if (dataFlow != null) {
                         functionalFlow.addDataFlows(dataFlow);

@@ -93,13 +93,11 @@
         <tbody>
           <template v-for="(functionalFlow, i) in landscapeView.flows">
             <template
-              v-for="(inter, j) in functionalFlow.interfaces != null && functionalFlow.interfaces.length > 0
-                ? functionalFlow.interfaces
-                : emptyInterfaces"
+              v-for="(step, j) in functionalFlow.steps != null && functionalFlow.steps.length > 0 ? functionalFlow.steps : emptySteps"
             >
-              <tr v-bind:key="inter.id" :class="i % 2 == 0 ? 'mycolor' : ''">
+              <tr v-bind:key="step.id" :class="i % 2 == 0 ? 'mycolor' : ''">
                 <td>
-                  <div v-if="!reorderAlias || !inter.id">
+                  <div v-if="!reorderAlias || !step.flowInterface.id">
                     <router-link
                       :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }"
                       v-if="functionalFlow && j == 0"
@@ -107,8 +105,8 @@
                       {{ functionalFlow.alias }}
                     </router-link>
                   </div>
-                  <div v-if="reorderAlias && inter.id">
-                    <select @change="reorder(inter, functionalFlow, $event)" :id="inter.id" class="btn-success">
+                  <div v-if="reorderAlias && step.flowInterface.id">
+                    <select @change="reorder(step, functionalFlow, $event)" :id="step.id" class="btn-success">
                       <option v-for="flow in landscapeView.flows" :key="flow.id" :value="flow.id" :selected="flow.id === functionalFlow.id">
                         {{ flow.alias }}
                       </option>
@@ -129,32 +127,41 @@
                   </span>
                 </td>
                 <td>
-                  <router-link v-if="inter.id" :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: inter.id } }">{{
-                    inter.alias
-                  }}</router-link>
+                  <router-link
+                    v-if="step.flowInterface.id"
+                    :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: step.flowInterface.id } }"
+                    >{{ step.flowInterface.alias }}</router-link
+                  >
                 </td>
                 <td>
-                  <router-link v-if="inter.id" :to="{ name: 'ApplicationView', params: { applicationId: inter.source.id } }">
-                    {{ inter.source.name }}
-                  </router-link>
-                </td>
-                <td>
-                  <router-link v-if="inter.id" :to="{ name: 'ApplicationView', params: { applicationId: inter.target.id } }">
-                    {{ inter.target.name }}
+                  <router-link
+                    v-if="step.flowInterface.id"
+                    :to="{ name: 'ApplicationView', params: { applicationId: step.flowInterface.source.id } }"
+                  >
+                    {{ step.flowInterface.source.name }}
                   </router-link>
                 </td>
                 <td>
                   <router-link
-                    v-if="inter.protocol"
-                    :to="{ name: 'ProtocolView', params: { protocolId: inter.protocol.id } }"
-                    :title="inter.protocol.name"
+                    v-if="step.flowInterface.id"
+                    :to="{ name: 'ApplicationView', params: { applicationId: step.flowInterface.target.id } }"
                   >
-                    {{ inter.protocol.type }}
+                    {{ step.flowInterface.target.name }}
+                  </router-link>
+                </td>
+
+                <td>
+                  <router-link
+                    v-if="step.flowInterface.protocol"
+                    :to="{ name: 'ProtocolView', params: { protocolId: step.flowInterface.protocol.id } }"
+                    :title="step.flowInterface.protocol.name"
+                  >
+                    {{ step.flowInterface.protocol.type }}
                   </router-link>
                 </td>
                 <td>
-                  <span v-if="inter.id">
-                    <span v-for="(dataFlow, i) in inter.dataFlows" :key="dataFlow.id"
+                  <span v-if="step.flowInterface.id">
+                    <span v-for="(dataFlow, i) in step.flowInterface.dataFlows" :key="dataFlow.id"
                       >{{ i > 0 ? ', ' : '' }}
                       <router-link
                         class="form-control-static"
@@ -224,7 +231,7 @@
             data-cy="entityCreateButton"
             class="btn btn-success jh-create-entity create-functional-flow"
             title="Edit Flow Alias in order to move interfaces from on flow to another"
-            v-if="reorderAlias && reorderAliasflowToSave.length > 0"
+            v-if="reorderAlias && (reorderAliasflowToSave.length > 0 || reorderStepToSave.length > 0)"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
             <span>Save</span>
@@ -396,12 +403,11 @@
                     functionalFlow.documentationURL2 ? functionalFlow.documentationURL2.substring(0, 20) : ''
                   }}</a>
                 </td>
-                <td>{{ functionalFlow.startDate }}</td>
-                <td>{{ functionalFlow.endDate }}</td>
                 <td>
                   <span
-                    v-for="(interfaces, i) in functionalFlow.interfaces"
-                    :key="interfaces.id"
+                    v-for="(step, i) in functionalFlow.steps"
+                    :set="(interfaces = step.flowInterface)"
+                    :key="step.id"
                     :title="
                       '[ ' +
                       interfaces.source.name +
@@ -414,6 +420,8 @@
                     {{ interfaces.alias }}
                   </span>
                 </td>
+                <td>{{ functionalFlow.startDate }}</td>
+                <td>{{ functionalFlow.endDate }}</td>
                 <td class="text-right">
                   <div class="btn-group">
                     <button @click="addNew(functionalFlow)" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">

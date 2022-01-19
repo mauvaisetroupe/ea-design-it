@@ -18,7 +18,8 @@ import AccountService from '@/account/account.service';
         const alias = row.alias.toString().toLowerCase();
         const id = row.id.toString().toLowerCase();
         const description = row.description ? row.description.toString().toLowerCase() : '';
-        const inFFF = row.interfaces
+        const inFFF = row.steps
+          .map(i => i.flowInterface)
           .map(i => i.alias)
           .join(' ')
           .toString()

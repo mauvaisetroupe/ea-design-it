@@ -1,7 +1,6 @@
 relationship ManyToMany {
 	LandscapeView{flows(alias)} to FunctionalFlow{landscape(diagramName) }
 	
-    FunctionalFlow{interfaces(alias)} to FlowInterface{functionalFlows(alias)}
 	
     DataFlow{functionalFlows(alias)} to FunctionalFlow{dataFlows}
 	
@@ -10,6 +9,9 @@ relationship ManyToMany {
 	
     Application{technologies(name)} to Technology{applications(name)}
 	ApplicationComponent{technologies(name)} to Technology{components(name)}
+    
+    Application{capabilities(name)} to Capability{applications(name)}
+    LandscapeView{capabilities(name)} to Capability{landscapes(diagramName)}
     
     Owner{users(login)} to User 
 }
@@ -30,11 +32,16 @@ relationship ManyToOne {
     Application{owner(name)} to Owner
 	
     DataFlow{format(name)} to DataFormat
+    
+    FunctionalFlowStep{flowInterface(alias) required} to FlowInterface{steps}
 }
 
 relationship OneToMany {
 	FlowInterface{dataFlows} to DataFlow{flowInterface(alias)}
 	DataFlow{items} to DataFlowItem{dataFlow}
+    Capability{subCapabilities(name)} to Capability{parent(name)}
+    FunctionalFlow{steps} to FunctionalFlowStep{flow(alias) required}
+
 }
 
 
@@ -60,11 +67,16 @@ entity FunctionalFlow(flow) {
     endDate LocalDate
 }
 
+entity FunctionalFlowStep(flowstep) {
+    description String maxlength(500)
+}
+
 entity FlowInterface(interface) {
     alias String required unique // mandatory for label on arrow diagram
     status String
     documentationURL String maxlength(500)
     documentationURL2 String maxlength(500)
+    description String maxlength(1500)    
     startDate LocalDate
     endDate LocalDate
 }
@@ -79,7 +91,6 @@ entity Application {
     endDate LocalDate
     applicationType ApplicationType
 	softwareType SoftwareType
-
 }
 
 entity Protocol {
@@ -149,6 +160,13 @@ entity Technology {
     name String required
     type String
     description String maxlength(250)  
+}
+
+entity Capability { 
+	name String required
+	description String maxlength(1500)
+	comment String maxlength(1500)
+    level Integer
 }
 
 enum ViewPoint {

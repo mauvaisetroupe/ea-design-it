@@ -4,17 +4,13 @@ import sinon, { SinonStubbedInstance } from 'sinon';
 import Router from 'vue-router';
 
 import * as config from '@/shared/config/config';
-import FunctionalFlowUpdateComponent from '@/entities/functional-flow/functional-flow-update.vue';
-import FunctionalFlowClass from '@/entities/functional-flow/functional-flow-update.component';
-import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
-
+import FunctionalFlowStepUpdateComponent from '@/entities/functional-flow-step/functional-flow-step-update.vue';
+import FunctionalFlowStepClass from '@/entities/functional-flow-step/functional-flow-step-update.component';
 import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
 
-import OwnerService from '@/entities/owner/owner.service';
+import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
 
-import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
-
-import DataFlowService from '@/entities/data-flow/data-flow.service';
+import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -30,29 +26,25 @@ localVue.component('b-form-datepicker', {});
 localVue.component('b-form-input', {});
 
 describe('Component Tests', () => {
-  describe('FunctionalFlow Management Update Component', () => {
-    let wrapper: Wrapper<FunctionalFlowClass>;
-    let comp: FunctionalFlowClass;
-    let functionalFlowServiceStub: SinonStubbedInstance<FunctionalFlowService>;
+  describe('FunctionalFlowStep Management Update Component', () => {
+    let wrapper: Wrapper<FunctionalFlowStepClass>;
+    let comp: FunctionalFlowStepClass;
+    let functionalFlowStepServiceStub: SinonStubbedInstance<FunctionalFlowStepService>;
 
     beforeEach(() => {
-      functionalFlowServiceStub = sinon.createStubInstance<FunctionalFlowService>(FunctionalFlowService);
+      functionalFlowStepServiceStub = sinon.createStubInstance<FunctionalFlowStepService>(FunctionalFlowStepService);
 
-      wrapper = shallowMount<FunctionalFlowClass>(FunctionalFlowUpdateComponent, {
+      wrapper = shallowMount<FunctionalFlowStepClass>(FunctionalFlowStepUpdateComponent, {
         store,
         localVue,
         router,
         provide: {
-          functionalFlowService: () => functionalFlowServiceStub,
+          functionalFlowStepService: () => functionalFlowStepServiceStub,
           alertService: () => new AlertService(),
 
-          functionalFlowStepService: () => new FunctionalFlowStepService(),
+          flowInterfaceService: () => new FlowInterfaceService(),
 
-          ownerService: () => new OwnerService(),
-
-          landscapeViewService: () => new LandscapeViewService(),
-
-          dataFlowService: () => new DataFlowService(),
+          functionalFlowService: () => new FunctionalFlowService(),
         },
       });
       comp = wrapper.vm;
@@ -62,30 +54,30 @@ describe('Component Tests', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
         const entity = { id: 123 };
-        comp.functionalFlow = entity;
-        functionalFlowServiceStub.update.resolves(entity);
+        comp.functionalFlowStep = entity;
+        functionalFlowStepServiceStub.update.resolves(entity);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(functionalFlowServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(functionalFlowStepServiceStub.update.calledWith(entity)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        comp.functionalFlow = entity;
-        functionalFlowServiceStub.create.resolves(entity);
+        comp.functionalFlowStep = entity;
+        functionalFlowStepServiceStub.create.resolves(entity);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(functionalFlowServiceStub.create.calledWith(entity)).toBeTruthy();
+        expect(functionalFlowStepServiceStub.create.calledWith(entity)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
     });
@@ -93,16 +85,16 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundFunctionalFlow = { id: 123 };
-        functionalFlowServiceStub.find.resolves(foundFunctionalFlow);
-        functionalFlowServiceStub.retrieve.resolves([foundFunctionalFlow]);
+        const foundFunctionalFlowStep = { id: 123 };
+        functionalFlowStepServiceStub.find.resolves(foundFunctionalFlowStep);
+        functionalFlowStepServiceStub.retrieve.resolves([foundFunctionalFlowStep]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { functionalFlowId: 123 } }, null, cb => cb(comp));
+        comp.beforeRouteEnter({ params: { functionalFlowStepId: 123 } }, null, cb => cb(comp));
         await comp.$nextTick();
 
         // THEN
-        expect(comp.functionalFlow).toBe(foundFunctionalFlow);
+        expect(comp.functionalFlowStep).toBe(foundFunctionalFlowStep);
       });
     });
 

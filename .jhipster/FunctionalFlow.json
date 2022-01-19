@@ -45,19 +45,17 @@
   ],
   "relationships": [
     {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "functionalFlowStep",
+      "otherEntityRelationshipName": "flow",
+      "relationshipName": "steps"
+    },
+    {
       "relationshipType": "many-to-one",
       "otherEntityName": "owner",
       "otherEntityRelationshipName": "functionalFlow",
       "relationshipName": "owner",
       "otherEntityField": "name"
-    },
-    {
-      "relationshipType": "many-to-many",
-      "otherEntityName": "flowInterface",
-      "otherEntityRelationshipName": "functionalFlows",
-      "relationshipName": "interfaces",
-      "otherEntityField": "alias",
-      "ownerSide": true
     },
     {
       "relationshipType": "many-to-many",

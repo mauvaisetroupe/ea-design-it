@@ -91,7 +91,7 @@
       <div v-html="plantUMLImage"></div>
       <br />
 
-      <div class="table-responsive" v-if="functionalFlow.interfaces && functionalFlow.interfaces.length > 0">
+      <div class="table-responsive" v-if="functionalFlow.steps && functionalFlow.steps.length > 0">
         <table class="table table-striped">
           <thead>
             <tr>
@@ -104,7 +104,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(inter, i) in functionalFlow.interfaces" v-bind:key="inter.id">
+            <tr v-for="(step, i) in functionalFlow.steps" v-bind:key="step.id" :set="(inter = step.flowInterface)">
               <td>
                 <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: inter.id } }">{{ inter.alias }}</router-link>
               </td>
@@ -342,7 +342,7 @@
           data-cy="entityConfirmDeleteButton"
           v-on:click="detachInterface()"
         >
-          Delete
+          Detach
         </button>
       </div>
     </b-modal>

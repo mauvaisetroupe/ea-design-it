@@ -137,6 +137,10 @@
             <font-awesome-icon icon="asterisk" />
             <span>Capability</span>
           </b-dropdown-item>
+          <b-dropdown-item to="/functional-flow-step">
+            <font-awesome-icon icon="asterisk" />
+            <span>Functional Flow Step</span>
+          </b-dropdown-item>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </b-nav-item-dropdown>
         <b-nav-item-dropdown

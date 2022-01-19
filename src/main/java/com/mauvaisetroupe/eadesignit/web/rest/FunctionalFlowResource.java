@@ -2,17 +2,18 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
+import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -21,7 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -172,11 +172,10 @@ public class FunctionalFlowResource {
     /**
      * {@code GET  /functional-flows} : get all the functionalFlows.
      *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of functionalFlows in body.
      */
     @GetMapping("/functional-flows")
-    public List<FunctionalFlow> getAllFunctionalFlows(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<FunctionalFlow> getAllFunctionalFlows() {
         log.debug("REST request to get all FunctionalFlows");
         return functionalFlowRepository.findAll();
     }
@@ -216,7 +215,13 @@ public class FunctionalFlowResource {
         FunctionalFlow functionalFlow = new FunctionalFlow();
         functionalFlow.setAlias("not persisted");
         Set<FlowInterface> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
-        functionalFlow.setInterfaces(interfaces);
+        Set<FunctionalFlowStep> steps = new HashSet<>();
+        for (FlowInterface flowInterface : interfaces) {
+            FunctionalFlowStep step = new FunctionalFlowStep();
+            step.setFlowInterface(flowInterface);
+            steps.add(step);
+        }
+        functionalFlow.setSteps(steps);
         return functionalFlow;
-    }    
+    }
 }
