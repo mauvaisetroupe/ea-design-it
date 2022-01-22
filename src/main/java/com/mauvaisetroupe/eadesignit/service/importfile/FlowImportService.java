@@ -66,9 +66,7 @@ public class FlowImportService {
     private static final String FLOW_STATUS_FLOW = "Status flow";
     private static final String FLOW_COMMENT = "Comment";
     private static final String FLOW_ADD_CORRESPONDENT_ID = "ADD correspondent ID";
-    private static final String FLOW_CHECK_COLUMN_1 = "Source Element in application list";
-    private static final String FLOW_CHECK_COLUMN_2 = "Target Element in application list";
-    private static final String FLOW_CHECK_COLUMN_3 = "Integration pattern in pattern list";
+    private static final String FLOW_STEP_DESCRIPTION = "Step description";
 
     private final List<String> columnsArray = new ArrayList<String>();
 
@@ -123,6 +121,7 @@ public class FlowImportService {
         this.columnsArray.add(FLOW_STATUS_FLOW);
         this.columnsArray.add(FLOW_COMMENT);
         this.columnsArray.add(FLOW_ADD_CORRESPONDENT_ID);
+        this.columnsArray.add(FLOW_STEP_DESCRIPTION);
     }
 
     public List<FlowImport> importExcel(InputStream file, String filename) throws EncryptedDocumentException, IOException {
@@ -145,12 +144,15 @@ public class FlowImportService {
                 if (landscapeView != null && functionalFlow != null && flowInterface != null) {
                     // Set<>, so could add even if already associated
                     functionalFlow.addLandscape(landscapeView);
-                    FunctionalFlowStep step = new FunctionalFlowStep();
+
+                    // Add step
+                    FunctionalFlowStep step = findOrCreateStep(flowImport, functionalFlow, flowInterface);
                     step.setFlowInterface(flowInterface);
                     functionalFlow.addSteps(step);
                     interfaceRepository.save(flowInterface);
                     flowRepository.save(functionalFlow);
                     functionalFlowStepRepository.save(step);
+
                     landscapeViewRepository.save(landscapeView);
                     if (dataFlow != null) {
                         functionalFlow.addDataFlows(dataFlow);
@@ -181,6 +183,19 @@ public class FlowImportService {
             result.add(flowImport);
         }
         return result;
+    }
+
+    private FunctionalFlowStep findOrCreateStep(FlowImport flowImport, FunctionalFlow functionalFlow, FlowInterface flowInterface) {
+        Optional<FunctionalFlowStep> optional = functionalFlowStepRepository.findByFlowAliasAndFlowInterfaceAliasIgnoreCase(
+            functionalFlow.getAlias(),
+            flowInterface.getAlias()
+        );
+        if (optional.isPresent()) {
+            return optional.get();
+        } else {
+            FunctionalFlowStep step = new FunctionalFlowStep();
+            return step;
+        }
     }
 
     private LandscapeView findOrCreateLandscape(String diagramName) {
