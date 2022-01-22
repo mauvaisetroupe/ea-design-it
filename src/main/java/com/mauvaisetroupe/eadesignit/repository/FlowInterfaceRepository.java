@@ -4,6 +4,7 @@ import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
 import javax.persistence.EntityResult;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.SqlResultSetMappings;
@@ -21,9 +22,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Long> {
     Optional<FlowInterface> findByAlias(String idFlowFromExcel);
-    Set<FlowInterface> findBySource_NameOrTarget_Name(String sourceName, String targetName);
-    Set<FlowInterface> findBySourceIdInAndTargetIdIn(Long[] sourceIds, Long[] targetIds);
-    Set<FlowInterface> findByAliasIn(@NotNull List<String> aliasToMerge);
+    SortedSet<FlowInterface> findBySource_NameOrTarget_Name(String sourceName, String targetName);
+    SortedSet<FlowInterface> findBySourceIdInAndTargetIdIn(Long[] sourceIds, Long[] targetIds);
+    SortedSet<FlowInterface> findByAliasIn(@NotNull List<String> aliasToMerge);
 
     @Query(
         value = "select i1.* from INTERFACE i1  " +

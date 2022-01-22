@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.SortNatural;
 
 /**
  * A LandscapeView.
@@ -45,7 +46,7 @@ public class LandscapeView implements Serializable {
     private Owner owner;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @OrderBy
+    @SortNatural
     @JoinTable(
         name = "rel_landscape_view__flows",
         joinColumns = @JoinColumn(name = "landscape_view_id"),

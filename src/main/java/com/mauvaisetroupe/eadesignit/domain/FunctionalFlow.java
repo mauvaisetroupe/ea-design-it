@@ -6,11 +6,13 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.SortNatural;
 
 /**
  * A FunctionalFlow.
@@ -58,9 +60,10 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     private LocalDate endDate;
 
     @OneToMany(mappedBy = "flow", fetch = FetchType.EAGER)
+    @SortNatural
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "flow" }, allowSetters = true)
-    private Set<FunctionalFlowStep> steps = new HashSet<>();
+    private Set<FunctionalFlowStep> steps = new TreeSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
@@ -356,8 +359,8 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     }
 
     @JsonIgnore
-    public Set<FlowInterface> getInterfaces() {
-        Set<FlowInterface> interfaces = new TreeSet<>();
+    public SortedSet<FlowInterface> getInterfaces() {
+        SortedSet<FlowInterface> interfaces = new TreeSet<>();
         for (FunctionalFlowStep step : this.steps) {
             interfaces.add(step.getFlowInterface());
         }

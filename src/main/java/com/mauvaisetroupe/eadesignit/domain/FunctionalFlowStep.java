@@ -13,7 +13,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "REL_FLOW__INTERFACES", uniqueConstraints = { @UniqueConstraint(columnNames = { "interfaces_id", "flow_id" }) })
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class FunctionalFlowStep implements Serializable {
+public class FunctionalFlowStep implements Serializable, Comparable<FunctionalFlowStep> {
 
     private static final long serialVersionUID = 1L;
 
@@ -118,5 +118,24 @@ public class FunctionalFlowStep implements Serializable {
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
             "}";
+    }
+
+    @Override
+    public int compareTo(FunctionalFlowStep arg0) {
+        int result = -1;
+        if (arg0 == null) {
+            result = -1;
+        } else if (arg0 == this) {
+            result = 0;
+        } else if (arg0.getId() != null && arg0.getId() == this.getId()) {
+            result = 0;
+        } else if (arg0.getFlowInterface() == null || arg0.getFlowInterface().getAlias() == null) {
+            result = -1;
+        } else if (this.getFlowInterface() == null || this.getFlowInterface().getAlias() == null) {
+            result = 1;
+        } else {
+            result = this.getFlowInterface().getAlias().compareTo(arg0.getFlowInterface().getAlias());
+        }
+        return result;
     }
 }

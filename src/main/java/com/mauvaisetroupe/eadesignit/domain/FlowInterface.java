@@ -6,10 +6,12 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.SortNatural;
 
 /**
  * A FlowInterface.
@@ -82,9 +84,10 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
     private Owner owner;
 
     @OneToMany(mappedBy = "flowInterface", fetch = FetchType.EAGER)
+    @SortNatural
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "flowInterface" }, allowSetters = true)
-    private Set<FunctionalFlowStep> steps = new HashSet<>();
+    private Set<FunctionalFlowStep> steps = new TreeSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
