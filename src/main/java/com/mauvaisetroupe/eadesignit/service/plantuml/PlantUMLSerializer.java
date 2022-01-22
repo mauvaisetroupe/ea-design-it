@@ -1,6 +1,5 @@
 package com.mauvaisetroupe.eadesignit.service.plantuml;
 
-import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
@@ -10,12 +9,10 @@ import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +27,12 @@ public class PlantUMLSerializer {
     private PlantUMLBuilder plantUMLBuilder;
 
     public String getSVG(LandscapeView landscapeView) throws IOException {
-        Map<SourceTarget, Set<FunctionalFlow>> relationships = new HashMap<>();
-        for (FunctionalFlow functionalFlow : sortFlow(landscapeView.getFlows())) {
-            for (FlowInterface flowInterface : sortInterface(functionalFlow.getInterfaces())) {
+        LinkedHashMap<SourceTarget, SortedSet<FunctionalFlow>> relationships = new LinkedHashMap<>();
+        for (FunctionalFlow functionalFlow : landscapeView.getFlows()) {
+            for (FlowInterface flowInterface : functionalFlow.getInterfaces()) {
                 SourceTarget key = new SourceTarget(flowInterface.getSource(), flowInterface.getTarget());
                 if (!relationships.containsKey(key)) {
-                    relationships.put(key, new HashSet<>());
+                    relationships.put(key, new TreeSet<>());
                 }
                 relationships.get(key).add(functionalFlow);
             }
@@ -62,12 +59,12 @@ public class PlantUMLSerializer {
         return getSVG(functionalFlow.getInterfaces());
     }
 
-    public String getSVG(Set<FlowInterface> interfaces) throws IOException {
-        Map<SourceTarget, Set<FlowInterface>> relationships = new HashMap<>();
-        for (FlowInterface flowInterface : sortInterface(interfaces)) {
+    public String getSVG(SortedSet<FlowInterface> interfaces) throws IOException {
+        LinkedHashMap<SourceTarget, SortedSet<FlowInterface>> relationships = new LinkedHashMap<>();
+        for (FlowInterface flowInterface : interfaces) {
             SourceTarget key = new SourceTarget(flowInterface.getSource(), flowInterface.getTarget());
             if (!relationships.containsKey(key)) {
-                relationships.put(key, new HashSet<>());
+                relationships.put(key, new TreeSet<>());
             }
             relationships.get(key).add(flowInterface);
         }
@@ -85,18 +82,6 @@ public class PlantUMLSerializer {
         }
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
-    }
-
-    private List<FlowInterface> sortInterface(Set<FlowInterface> interfaces) {
-        List<FlowInterface> sortedList = new ArrayList<>(interfaces);
-        Collections.sort(sortedList);
-        return sortedList;
-    }
-
-    private List<FunctionalFlow> sortFlow(Set<FunctionalFlow> flows) {
-        List<FunctionalFlow> sortedList = new ArrayList<>(flows);
-        Collections.sort(sortedList);
-        return sortedList;
     }
 
     public String getCapabilitiesFromLeavesSVG(Collection<Capability> capabilities) throws IOException {

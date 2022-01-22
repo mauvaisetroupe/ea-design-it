@@ -17,10 +17,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import java.util.SortedSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -86,7 +85,7 @@ public class PlantUMLResource {
         Optional<Application> optional = applicationRepository.findById(id);
 
         if (optional.isPresent()) {
-            Set<FlowInterface> interfaces = flowInterfaceRepository.findBySource_NameOrTarget_Name(
+            SortedSet<FlowInterface> interfaces = flowInterfaceRepository.findBySource_NameOrTarget_Name(
                 optional.get().getName(),
                 optional.get().getName()
             );
@@ -108,7 +107,7 @@ public class PlantUMLResource {
 
     @GetMapping(value = "plantuml/applications/get-svg")
     public @ResponseBody String getApplicationsSVG(@RequestParam(value = "ids[]") Long[] ids) throws IOException, BadRequestException {
-        Set<FlowInterface> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
+        SortedSet<FlowInterface> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
         return this.plantUMLSerializer.getSVG(interfaces);
     }
 
