@@ -112,7 +112,7 @@ public class ReportingService {
             Set<FunctionalFlowStep> stepsToModify = new HashSet<>();
             stepsToModify.addAll(interfaceToMerge.getSteps());
             for (FunctionalFlowStep step : stepsToModify) {
-                step.setFlowInterface(interfaceToMerge);
+                step.setFlowInterface(interfaceToKeep);
             }
 
             // Delete interface
