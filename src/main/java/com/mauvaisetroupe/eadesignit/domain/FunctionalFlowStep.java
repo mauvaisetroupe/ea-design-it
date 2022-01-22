@@ -11,7 +11,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * A FunctionalFlowStep.
  */
 @Entity
-@Table(name = "REL_FLOW__INTERFACES")
+@Table(name = "REL_FLOW__INTERFACES", uniqueConstraints = { @UniqueConstraint(columnNames = { "interfaces_id", "flow_id" }) })
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class FunctionalFlowStep implements Serializable {
 
