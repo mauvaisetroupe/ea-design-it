@@ -255,6 +255,7 @@ entity FlowImport(tmp_import_flows) {
     sourceElement String
     targetElement String
     description String
+    stepDescription String    
     integrationPattern String
   	frequency String
   	format String

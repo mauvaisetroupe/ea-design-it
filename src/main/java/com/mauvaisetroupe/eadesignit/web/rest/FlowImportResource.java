@@ -138,6 +138,9 @@ public class FlowImportResource {
                 if (flowImport.getDescription() != null) {
                     existingFlowImport.setDescription(flowImport.getDescription());
                 }
+                if (flowImport.getStepDescription() != null) {
+                    existingFlowImport.setStepDescription(flowImport.getStepDescription());
+                }
                 if (flowImport.getIntegrationPattern() != null) {
                     existingFlowImport.setIntegrationPattern(flowImport.getIntegrationPattern());
                 }

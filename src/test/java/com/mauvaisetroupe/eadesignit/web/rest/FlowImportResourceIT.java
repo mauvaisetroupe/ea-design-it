@@ -47,6 +47,9 @@ class FlowImportResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final String DEFAULT_STEP_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_STEP_DESCRIPTION = "BBBBBBBBBB";
+
     private static final String DEFAULT_INTEGRATION_PATTERN = "AAAAAAAAAA";
     private static final String UPDATED_INTEGRATION_PATTERN = "BBBBBBBBBB";
 
@@ -122,6 +125,7 @@ class FlowImportResourceIT {
             .sourceElement(DEFAULT_SOURCE_ELEMENT)
             .targetElement(DEFAULT_TARGET_ELEMENT)
             .description(DEFAULT_DESCRIPTION)
+            .stepDescription(DEFAULT_STEP_DESCRIPTION)
             .integrationPattern(DEFAULT_INTEGRATION_PATTERN)
             .frequency(DEFAULT_FREQUENCY)
             .format(DEFAULT_FORMAT)
@@ -153,6 +157,7 @@ class FlowImportResourceIT {
             .sourceElement(UPDATED_SOURCE_ELEMENT)
             .targetElement(UPDATED_TARGET_ELEMENT)
             .description(UPDATED_DESCRIPTION)
+            .stepDescription(UPDATED_STEP_DESCRIPTION)
             .integrationPattern(UPDATED_INTEGRATION_PATTERN)
             .frequency(UPDATED_FREQUENCY)
             .format(UPDATED_FORMAT)
@@ -194,6 +199,7 @@ class FlowImportResourceIT {
         assertThat(testFlowImport.getSourceElement()).isEqualTo(DEFAULT_SOURCE_ELEMENT);
         assertThat(testFlowImport.getTargetElement()).isEqualTo(DEFAULT_TARGET_ELEMENT);
         assertThat(testFlowImport.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testFlowImport.getStepDescription()).isEqualTo(DEFAULT_STEP_DESCRIPTION);
         assertThat(testFlowImport.getIntegrationPattern()).isEqualTo(DEFAULT_INTEGRATION_PATTERN);
         assertThat(testFlowImport.getFrequency()).isEqualTo(DEFAULT_FREQUENCY);
         assertThat(testFlowImport.getFormat()).isEqualTo(DEFAULT_FORMAT);
@@ -246,6 +252,7 @@ class FlowImportResourceIT {
             .andExpect(jsonPath("$.[*].sourceElement").value(hasItem(DEFAULT_SOURCE_ELEMENT)))
             .andExpect(jsonPath("$.[*].targetElement").value(hasItem(DEFAULT_TARGET_ELEMENT)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].stepDescription").value(hasItem(DEFAULT_STEP_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].integrationPattern").value(hasItem(DEFAULT_INTEGRATION_PATTERN)))
             .andExpect(jsonPath("$.[*].frequency").value(hasItem(DEFAULT_FREQUENCY)))
             .andExpect(jsonPath("$.[*].format").value(hasItem(DEFAULT_FORMAT)))
@@ -280,6 +287,7 @@ class FlowImportResourceIT {
             .andExpect(jsonPath("$.sourceElement").value(DEFAULT_SOURCE_ELEMENT))
             .andExpect(jsonPath("$.targetElement").value(DEFAULT_TARGET_ELEMENT))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.stepDescription").value(DEFAULT_STEP_DESCRIPTION))
             .andExpect(jsonPath("$.integrationPattern").value(DEFAULT_INTEGRATION_PATTERN))
             .andExpect(jsonPath("$.frequency").value(DEFAULT_FREQUENCY))
             .andExpect(jsonPath("$.format").value(DEFAULT_FORMAT))
@@ -322,6 +330,7 @@ class FlowImportResourceIT {
             .sourceElement(UPDATED_SOURCE_ELEMENT)
             .targetElement(UPDATED_TARGET_ELEMENT)
             .description(UPDATED_DESCRIPTION)
+            .stepDescription(UPDATED_STEP_DESCRIPTION)
             .integrationPattern(UPDATED_INTEGRATION_PATTERN)
             .frequency(UPDATED_FREQUENCY)
             .format(UPDATED_FORMAT)
@@ -355,6 +364,7 @@ class FlowImportResourceIT {
         assertThat(testFlowImport.getSourceElement()).isEqualTo(UPDATED_SOURCE_ELEMENT);
         assertThat(testFlowImport.getTargetElement()).isEqualTo(UPDATED_TARGET_ELEMENT);
         assertThat(testFlowImport.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testFlowImport.getStepDescription()).isEqualTo(UPDATED_STEP_DESCRIPTION);
         assertThat(testFlowImport.getIntegrationPattern()).isEqualTo(UPDATED_INTEGRATION_PATTERN);
         assertThat(testFlowImport.getFrequency()).isEqualTo(UPDATED_FREQUENCY);
         assertThat(testFlowImport.getFormat()).isEqualTo(UPDATED_FORMAT);
@@ -443,13 +453,13 @@ class FlowImportResourceIT {
         partialUpdatedFlowImport
             .idFlowFromExcel(UPDATED_ID_FLOW_FROM_EXCEL)
             .sourceElement(UPDATED_SOURCE_ELEMENT)
-            .swagger(UPDATED_SWAGGER)
-            .sourceDocumentationStatus(UPDATED_SOURCE_DOCUMENTATION_STATUS)
-            .comment(UPDATED_COMMENT)
+            .format(UPDATED_FORMAT)
+            .targetURLDocumentation(UPDATED_TARGET_URL_DOCUMENTATION)
+            .flowStatus(UPDATED_FLOW_STATUS)
+            .documentName(UPDATED_DOCUMENT_NAME)
             .importInterfaceStatus(UPDATED_IMPORT_INTERFACE_STATUS)
             .importFunctionalFlowStatus(UPDATED_IMPORT_FUNCTIONAL_FLOW_STATUS)
-            .importDataFlowStatus(UPDATED_IMPORT_DATA_FLOW_STATUS)
-            .importStatusMessage(UPDATED_IMPORT_STATUS_MESSAGE);
+            .importDataFlowStatus(UPDATED_IMPORT_DATA_FLOW_STATUS);
 
         restFlowImportMockMvc
             .perform(
@@ -468,21 +478,22 @@ class FlowImportResourceIT {
         assertThat(testFlowImport.getSourceElement()).isEqualTo(UPDATED_SOURCE_ELEMENT);
         assertThat(testFlowImport.getTargetElement()).isEqualTo(DEFAULT_TARGET_ELEMENT);
         assertThat(testFlowImport.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testFlowImport.getStepDescription()).isEqualTo(DEFAULT_STEP_DESCRIPTION);
         assertThat(testFlowImport.getIntegrationPattern()).isEqualTo(DEFAULT_INTEGRATION_PATTERN);
         assertThat(testFlowImport.getFrequency()).isEqualTo(DEFAULT_FREQUENCY);
-        assertThat(testFlowImport.getFormat()).isEqualTo(DEFAULT_FORMAT);
-        assertThat(testFlowImport.getSwagger()).isEqualTo(UPDATED_SWAGGER);
+        assertThat(testFlowImport.getFormat()).isEqualTo(UPDATED_FORMAT);
+        assertThat(testFlowImport.getSwagger()).isEqualTo(DEFAULT_SWAGGER);
         assertThat(testFlowImport.getSourceURLDocumentation()).isEqualTo(DEFAULT_SOURCE_URL_DOCUMENTATION);
-        assertThat(testFlowImport.getTargetURLDocumentation()).isEqualTo(DEFAULT_TARGET_URL_DOCUMENTATION);
-        assertThat(testFlowImport.getSourceDocumentationStatus()).isEqualTo(UPDATED_SOURCE_DOCUMENTATION_STATUS);
+        assertThat(testFlowImport.getTargetURLDocumentation()).isEqualTo(UPDATED_TARGET_URL_DOCUMENTATION);
+        assertThat(testFlowImport.getSourceDocumentationStatus()).isEqualTo(DEFAULT_SOURCE_DOCUMENTATION_STATUS);
         assertThat(testFlowImport.getTargetDocumentationStatus()).isEqualTo(DEFAULT_TARGET_DOCUMENTATION_STATUS);
-        assertThat(testFlowImport.getFlowStatus()).isEqualTo(DEFAULT_FLOW_STATUS);
-        assertThat(testFlowImport.getComment()).isEqualTo(UPDATED_COMMENT);
-        assertThat(testFlowImport.getDocumentName()).isEqualTo(DEFAULT_DOCUMENT_NAME);
+        assertThat(testFlowImport.getFlowStatus()).isEqualTo(UPDATED_FLOW_STATUS);
+        assertThat(testFlowImport.getComment()).isEqualTo(DEFAULT_COMMENT);
+        assertThat(testFlowImport.getDocumentName()).isEqualTo(UPDATED_DOCUMENT_NAME);
         assertThat(testFlowImport.getImportInterfaceStatus()).isEqualTo(UPDATED_IMPORT_INTERFACE_STATUS);
         assertThat(testFlowImport.getImportFunctionalFlowStatus()).isEqualTo(UPDATED_IMPORT_FUNCTIONAL_FLOW_STATUS);
         assertThat(testFlowImport.getImportDataFlowStatus()).isEqualTo(UPDATED_IMPORT_DATA_FLOW_STATUS);
-        assertThat(testFlowImport.getImportStatusMessage()).isEqualTo(UPDATED_IMPORT_STATUS_MESSAGE);
+        assertThat(testFlowImport.getImportStatusMessage()).isEqualTo(DEFAULT_IMPORT_STATUS_MESSAGE);
     }
 
     @Test
@@ -503,6 +514,7 @@ class FlowImportResourceIT {
             .sourceElement(UPDATED_SOURCE_ELEMENT)
             .targetElement(UPDATED_TARGET_ELEMENT)
             .description(UPDATED_DESCRIPTION)
+            .stepDescription(UPDATED_STEP_DESCRIPTION)
             .integrationPattern(UPDATED_INTEGRATION_PATTERN)
             .frequency(UPDATED_FREQUENCY)
             .format(UPDATED_FORMAT)
@@ -536,6 +548,7 @@ class FlowImportResourceIT {
         assertThat(testFlowImport.getSourceElement()).isEqualTo(UPDATED_SOURCE_ELEMENT);
         assertThat(testFlowImport.getTargetElement()).isEqualTo(UPDATED_TARGET_ELEMENT);
         assertThat(testFlowImport.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testFlowImport.getStepDescription()).isEqualTo(UPDATED_STEP_DESCRIPTION);
         assertThat(testFlowImport.getIntegrationPattern()).isEqualTo(UPDATED_INTEGRATION_PATTERN);
         assertThat(testFlowImport.getFrequency()).isEqualTo(UPDATED_FREQUENCY);
         assertThat(testFlowImport.getFormat()).isEqualTo(UPDATED_FORMAT);

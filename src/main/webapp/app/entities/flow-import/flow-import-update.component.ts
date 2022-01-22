@@ -13,6 +13,7 @@ const validations: any = {
     sourceElement: {},
     targetElement: {},
     description: {},
+    stepDescription: {},
     integrationPattern: {},
     frequency: {},
     format: {},

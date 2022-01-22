@@ -29,6 +29,9 @@
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="step_description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="integration_pattern" type="varchar(255)">
                 <constraints nullable="true" />
             </column>

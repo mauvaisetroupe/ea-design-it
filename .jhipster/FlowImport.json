@@ -22,6 +22,10 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "stepDescription",
+      "fieldType": "String"
+    },
+    {
       "fieldName": "integrationPattern",
       "fieldType": "String"
     },
