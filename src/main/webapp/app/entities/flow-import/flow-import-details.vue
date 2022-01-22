@@ -35,6 +35,12 @@
             <span>{{ flowImport.description }}</span>
           </dd>
           <dt>
+            <span>Step Description</span>
+          </dt>
+          <dd>
+            <span>{{ flowImport.stepDescription }}</span>
+          </dd>
+          <dt>
             <span>Integration Pattern</span>
           </dt>
           <dd>

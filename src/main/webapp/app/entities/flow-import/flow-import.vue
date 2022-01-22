@@ -33,6 +33,7 @@
             <th scope="row"><span>Source Element</span></th>
             <th scope="row"><span>Target Element</span></th>
             <th scope="row"><span>Description</span></th>
+            <th scope="row"><span>Step Description</span></th>
             <th scope="row"><span>Integration Pattern</span></th>
             <th scope="row"><span>Frequency</span></th>
             <th scope="row"><span>Format</span></th>
@@ -61,6 +62,7 @@
             <td>{{ flowImport.sourceElement }}</td>
             <td>{{ flowImport.targetElement }}</td>
             <td>{{ flowImport.description }}</td>
+            <td>{{ flowImport.stepDescription }}</td>
             <td>{{ flowImport.integrationPattern }}</td>
             <td>{{ flowImport.frequency }}</td>
             <td>{{ flowImport.format }}</td>

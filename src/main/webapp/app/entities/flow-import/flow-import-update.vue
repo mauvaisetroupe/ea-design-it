@@ -69,6 +69,18 @@
             />
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="flow-import-stepDescription">Step Description</label>
+            <input
+              type="text"
+              class="form-control"
+              name="stepDescription"
+              id="flow-import-stepDescription"
+              data-cy="stepDescription"
+              :class="{ valid: !$v.flowImport.stepDescription.$invalid, invalid: $v.flowImport.stepDescription.$invalid }"
+              v-model="$v.flowImport.stepDescription.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="flow-import-integrationPattern">Integration Pattern</label>
             <input
               type="text"

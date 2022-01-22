@@ -6,6 +6,7 @@ export interface IFlowImport {
   sourceElement?: string | null;
   targetElement?: string | null;
   description?: string | null;
+  stepDescription?: string | null;
   integrationPattern?: string | null;
   frequency?: string | null;
   format?: string | null;
@@ -31,6 +32,7 @@ export class FlowImport implements IFlowImport {
     public sourceElement?: string | null,
     public targetElement?: string | null,
     public description?: string | null,
+    public stepDescription?: string | null,
     public integrationPattern?: string | null,
     public frequency?: string | null,
     public format?: string | null,

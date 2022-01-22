@@ -37,6 +37,9 @@ public class FlowImport implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "step_description")
+    private String stepDescription;
+
     @Column(name = "integration_pattern")
     private String integrationPattern;
 
@@ -163,6 +166,19 @@ public class FlowImport implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getStepDescription() {
+        return this.stepDescription;
+    }
+
+    public FlowImport stepDescription(String stepDescription) {
+        this.setStepDescription(stepDescription);
+        return this;
+    }
+
+    public void setStepDescription(String stepDescription) {
+        this.stepDescription = stepDescription;
     }
 
     public String getIntegrationPattern() {
@@ -389,6 +405,7 @@ public class FlowImport implements Serializable {
             ", sourceElement='" + getSourceElement() + "'" +
             ", targetElement='" + getTargetElement() + "'" +
             ", description='" + getDescription() + "'" +
+            ", stepDescription='" + getStepDescription() + "'" +
             ", integrationPattern='" + getIntegrationPattern() + "'" +
             ", frequency='" + getFrequency() + "'" +
             ", format='" + getFormat() + "'" +
