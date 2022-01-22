@@ -67,11 +67,11 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
         if (this.landscapeView.compressedDrawSVG) {
           this.drawIoSVG = decodeURIComponent(escape(window.atob(this.landscapeView.compressedDrawSVG)));
         }
+        this.getPlantUML(landscapeViewId);
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
       });
-    //this.getPlantUML(landscapeViewId);
   }
 
   public previousState() {
