@@ -18,6 +18,7 @@ const validations: any = {
     description: {
       maxLength: maxLength(500),
     },
+    stepOrder: {},
     flowInterface: {
       required,
     },

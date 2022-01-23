@@ -129,6 +129,9 @@ public class FunctionalFlowStepResource {
                 if (functionalFlowStep.getDescription() != null) {
                     existingFunctionalFlowStep.setDescription(functionalFlowStep.getDescription());
                 }
+                if (functionalFlowStep.getStepOrder() != null) {
+                    existingFunctionalFlowStep.setStepOrder(functionalFlowStep.getStepOrder());
+                }
 
                 return existingFunctionalFlowStep;
             })

@@ -13,6 +13,12 @@
             <span>{{ functionalFlowStep.description }}</span>
           </dd>
           <dt>
+            <span>Step Order</span>
+          </dt>
+          <dd>
+            <span>{{ functionalFlowStep.stepOrder }}</span>
+          </dd>
+          <dt>
             <span>Flow Interface</span>
           </dt>
           <dd>

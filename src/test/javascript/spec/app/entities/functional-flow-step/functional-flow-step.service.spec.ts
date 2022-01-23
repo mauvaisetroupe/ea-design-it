@@ -29,7 +29,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       service = new FunctionalFlowStepService();
-      elemDefault = new FunctionalFlowStep(123, 'AAAAAAA');
+      elemDefault = new FunctionalFlowStep(123, 'AAAAAAA', 0);
     });
 
     describe('Service methods', () => {
@@ -82,6 +82,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             description: 'BBBBBB',
+            stepOrder: 1,
           },
           elemDefault
         );
@@ -132,6 +133,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             description: 'BBBBBB',
+            stepOrder: 1,
           },
           elemDefault
         );

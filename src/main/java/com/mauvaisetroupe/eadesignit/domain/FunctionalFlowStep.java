@@ -27,6 +27,9 @@ public class FunctionalFlowStep implements Serializable {
     @Column(name = "description", length = 500)
     private String description;
 
+    @Column(name = "step_order")
+    private Integer stepOrder;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
@@ -66,6 +69,19 @@ public class FunctionalFlowStep implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getStepOrder() {
+        return this.stepOrder;
+    }
+
+    public FunctionalFlowStep stepOrder(Integer stepOrder) {
+        this.setStepOrder(stepOrder);
+        return this;
+    }
+
+    public void setStepOrder(Integer stepOrder) {
+        this.stepOrder = stepOrder;
     }
 
     public FlowInterface getFlowInterface() {
@@ -119,6 +135,7 @@ public class FunctionalFlowStep implements Serializable {
         return "FunctionalFlowStep{" +
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
+            ", stepOrder=" + getStepOrder() +
             "}";
     }
 }

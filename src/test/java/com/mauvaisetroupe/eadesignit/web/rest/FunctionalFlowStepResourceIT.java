@@ -34,6 +34,9 @@ class FunctionalFlowStepResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final Integer DEFAULT_STEP_ORDER = 1;
+    private static final Integer UPDATED_STEP_ORDER = 2;
+
     private static final String ENTITY_API_URL = "/api/functional-flow-steps";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -58,7 +61,7 @@ class FunctionalFlowStepResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static FunctionalFlowStep createEntity(EntityManager em) {
-        FunctionalFlowStep functionalFlowStep = new FunctionalFlowStep().description(DEFAULT_DESCRIPTION);
+        FunctionalFlowStep functionalFlowStep = new FunctionalFlowStep().description(DEFAULT_DESCRIPTION).stepOrder(DEFAULT_STEP_ORDER);
         // Add required entity
         FlowInterface flowInterface;
         if (TestUtil.findAll(em, FlowInterface.class).isEmpty()) {
@@ -89,7 +92,7 @@ class FunctionalFlowStepResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static FunctionalFlowStep createUpdatedEntity(EntityManager em) {
-        FunctionalFlowStep functionalFlowStep = new FunctionalFlowStep().description(UPDATED_DESCRIPTION);
+        FunctionalFlowStep functionalFlowStep = new FunctionalFlowStep().description(UPDATED_DESCRIPTION).stepOrder(UPDATED_STEP_ORDER);
         // Add required entity
         FlowInterface flowInterface;
         if (TestUtil.findAll(em, FlowInterface.class).isEmpty()) {
@@ -134,6 +137,7 @@ class FunctionalFlowStepResourceIT {
         assertThat(functionalFlowStepList).hasSize(databaseSizeBeforeCreate + 1);
         FunctionalFlowStep testFunctionalFlowStep = functionalFlowStepList.get(functionalFlowStepList.size() - 1);
         assertThat(testFunctionalFlowStep.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testFunctionalFlowStep.getStepOrder()).isEqualTo(DEFAULT_STEP_ORDER);
     }
 
     @Test
@@ -168,7 +172,8 @@ class FunctionalFlowStepResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(functionalFlowStep.getId().intValue())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].stepOrder").value(hasItem(DEFAULT_STEP_ORDER)));
     }
 
     @Test
@@ -183,7 +188,8 @@ class FunctionalFlowStepResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(functionalFlowStep.getId().intValue()))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.stepOrder").value(DEFAULT_STEP_ORDER));
     }
 
     @Test
@@ -205,7 +211,7 @@ class FunctionalFlowStepResourceIT {
         FunctionalFlowStep updatedFunctionalFlowStep = functionalFlowStepRepository.findById(functionalFlowStep.getId()).get();
         // Disconnect from session so that the updates on updatedFunctionalFlowStep are not directly saved in db
         em.detach(updatedFunctionalFlowStep);
-        updatedFunctionalFlowStep.description(UPDATED_DESCRIPTION);
+        updatedFunctionalFlowStep.description(UPDATED_DESCRIPTION).stepOrder(UPDATED_STEP_ORDER);
 
         restFunctionalFlowStepMockMvc
             .perform(
@@ -220,6 +226,7 @@ class FunctionalFlowStepResourceIT {
         assertThat(functionalFlowStepList).hasSize(databaseSizeBeforeUpdate);
         FunctionalFlowStep testFunctionalFlowStep = functionalFlowStepList.get(functionalFlowStepList.size() - 1);
         assertThat(testFunctionalFlowStep.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testFunctionalFlowStep.getStepOrder()).isEqualTo(UPDATED_STEP_ORDER);
     }
 
     @Test
@@ -305,6 +312,7 @@ class FunctionalFlowStepResourceIT {
         assertThat(functionalFlowStepList).hasSize(databaseSizeBeforeUpdate);
         FunctionalFlowStep testFunctionalFlowStep = functionalFlowStepList.get(functionalFlowStepList.size() - 1);
         assertThat(testFunctionalFlowStep.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testFunctionalFlowStep.getStepOrder()).isEqualTo(DEFAULT_STEP_ORDER);
     }
 
     @Test
@@ -319,7 +327,7 @@ class FunctionalFlowStepResourceIT {
         FunctionalFlowStep partialUpdatedFunctionalFlowStep = new FunctionalFlowStep();
         partialUpdatedFunctionalFlowStep.setId(functionalFlowStep.getId());
 
-        partialUpdatedFunctionalFlowStep.description(UPDATED_DESCRIPTION);
+        partialUpdatedFunctionalFlowStep.description(UPDATED_DESCRIPTION).stepOrder(UPDATED_STEP_ORDER);
 
         restFunctionalFlowStepMockMvc
             .perform(
@@ -334,6 +342,7 @@ class FunctionalFlowStepResourceIT {
         assertThat(functionalFlowStepList).hasSize(databaseSizeBeforeUpdate);
         FunctionalFlowStep testFunctionalFlowStep = functionalFlowStepList.get(functionalFlowStepList.size() - 1);
         assertThat(testFunctionalFlowStep.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testFunctionalFlowStep.getStepOrder()).isEqualTo(UPDATED_STEP_ORDER);
     }
 
     @Test

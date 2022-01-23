@@ -17,6 +17,9 @@
             <column name="description" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
+            <column name="step_order" type="integer">
+                <constraints nullable="true" />
+            </column>
             <column name="flow_interface_id" type="bigint">
                 <constraints nullable="false" />
             </column>

@@ -29,6 +29,7 @@
           <tr>
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Description</span></th>
+            <th scope="row"><span>Step Order</span></th>
             <th scope="row"><span>Flow Interface</span></th>
             <th scope="row"><span>Flow</span></th>
             <th scope="row"></th>
@@ -42,6 +43,7 @@
               }}</router-link>
             </td>
             <td>{{ functionalFlowStep.description }}</td>
+            <td>{{ functionalFlowStep.stepOrder }}</td>
             <td>
               <div v-if="functionalFlowStep.flowInterface">
                 <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: functionalFlowStep.flowInterface.id } }">{{
