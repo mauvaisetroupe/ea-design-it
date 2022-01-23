@@ -28,6 +28,18 @@
             </div>
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="functional-flow-step-stepOrder">Step Order</label>
+            <input
+              type="number"
+              class="form-control"
+              name="stepOrder"
+              id="functional-flow-step-stepOrder"
+              data-cy="stepOrder"
+              :class="{ valid: !$v.functionalFlowStep.stepOrder.$invalid, invalid: $v.functionalFlowStep.stepOrder.$invalid }"
+              v-model.number="$v.functionalFlowStep.stepOrder.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="functional-flow-step-flowInterface">Flow Interface</label>
             <select
               class="form-control"

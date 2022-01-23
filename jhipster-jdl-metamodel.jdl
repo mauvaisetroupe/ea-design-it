@@ -69,6 +69,7 @@ entity FunctionalFlow(flow) {
 
 entity FunctionalFlowStep(flowstep) {
     description String maxlength(500)
+    stepOrder Integer
 }
 
 entity FlowInterface(interface) {
