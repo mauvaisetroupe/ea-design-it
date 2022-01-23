@@ -3,6 +3,7 @@ package com.mauvaisetroupe.eadesignit.service.plantuml;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
+import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
@@ -56,7 +57,21 @@ public class PlantUMLSerializer {
     }
 
     public String getSVG(FunctionalFlow functionalFlow) throws IOException {
-        return getSVG(functionalFlow.getInterfaces());
+        StringBuilder plantUMLSource = new StringBuilder();
+        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
+        for (FunctionalFlowStep step : functionalFlow.getSteps()) {
+            List<String[]> labelAndURLs = new ArrayList<>();
+            String label = step.getStepOrder() + ". " + step.getDescription();
+            labelAndURLs.add(new String[] { label, null });
+            plantUMLBuilder.getPlantumlRelationShip(
+                plantUMLSource,
+                step.getFlowInterface().getSource(),
+                step.getFlowInterface().getTarget(),
+                labelAndURLs
+            );
+        }
+        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getSVG(SortedSet<FlowInterface> interfaces) throws IOException {

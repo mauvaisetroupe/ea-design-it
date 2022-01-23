@@ -87,7 +87,10 @@
 
       <br />
 
-      <h3><font-awesome-icon icon="grip-lines" style="color: Tomato; font-size: 0.9em"></font-awesome-icon> Interfaces</h3>
+      <h3>
+        <font-awesome-icon icon="grip-lines" style="color: Tomato; font-size: 0.9em"></font-awesome-icon> Interfaces for
+        {{ functionalFlow.alias }} - {{ functionalFlow.description }}
+      </h3>
       <div v-html="plantUMLImage"></div>
       <br />
 
@@ -95,6 +98,7 @@
         <table class="table table-striped">
           <thead>
             <tr>
+              <th scope="row"><span>Step</span></th>
               <th scope="row"><span>Interface</span></th>
               <th scope="row"><span>Source</span></th>
               <th scope="row"><span>Target</span></th>
@@ -105,6 +109,7 @@
           </thead>
           <tbody>
             <tr v-for="(step, i) in functionalFlow.steps" v-bind:key="step.id" :set="(inter = step.flowInterface)">
+              <td>{{ step.stepOrder }}. {{ step.description }}</td>
               <td>
                 <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: inter.id } }">{{ inter.alias }}</router-link>
               </td>

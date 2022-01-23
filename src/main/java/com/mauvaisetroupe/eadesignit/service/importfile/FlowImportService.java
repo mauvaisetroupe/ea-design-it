@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
@@ -40,7 +41,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -144,13 +144,14 @@ public class FlowImportService {
                 if (landscapeView != null && functionalFlow != null && flowInterface != null) {
                     // Set<>, so could add even if already associated
                     functionalFlow.addLandscape(landscapeView);
+                    // For first persistence
+                    interfaceRepository.save(flowInterface);
+                    flowRepository.save(functionalFlow);
 
                     // Add step
                     FunctionalFlowStep step = findOrCreateStep(flowImport, functionalFlow, flowInterface);
                     step.setFlowInterface(flowInterface);
                     functionalFlow.addSteps(step);
-                    interfaceRepository.save(flowInterface);
-                    flowRepository.save(functionalFlow);
                     functionalFlowStepRepository.save(step);
 
                     landscapeViewRepository.save(landscapeView);
@@ -186,16 +187,18 @@ public class FlowImportService {
     }
 
     private FunctionalFlowStep findOrCreateStep(FlowImport flowImport, FunctionalFlow functionalFlow, FlowInterface flowInterface) {
-        Optional<FunctionalFlowStep> optional = functionalFlowStepRepository.findByFlowAliasAndFlowInterfaceAliasIgnoreCase(
-            functionalFlow.getAlias(),
-            flowInterface.getAlias()
-        );
-        if (optional.isPresent()) {
-            return optional.get();
+        FunctionalFlowStep step = new FunctionalFlowStep();
+        if (functionalFlow.getSteps() == null || functionalFlow.getSteps().size() == 0) {
+            step.setStepOrder(1);
         } else {
-            FunctionalFlowStep step = new FunctionalFlowStep();
-            return step;
+            FunctionalFlowStep lastStep = ((SortedSet<FunctionalFlowStep>) functionalFlow.getSteps()).last();
+            Integer lastOrder = lastStep.getStepOrder();
+            if (lastOrder != null) {
+                step.setStepOrder(lastOrder + 1);
+            }
         }
+        step.setDescription(flowImport.getStepDescription());
+        return step;
     }
 
     private LandscapeView findOrCreateLandscape(String diagramName) {
@@ -429,6 +432,7 @@ public class FlowImportService {
         flowImport.setFlowStatus((String) map.get(FLOW_STATUS_FLOW));
         flowImport.setComment((String) map.get(FLOW_COMMENT));
         flowImport.setDocumentName((String) map.get(FLOW_ADD_CORRESPONDENT_ID));
+        flowImport.setStepDescription((String) map.get(FLOW_STEP_DESCRIPTION));
         return flowImport;
     }
 

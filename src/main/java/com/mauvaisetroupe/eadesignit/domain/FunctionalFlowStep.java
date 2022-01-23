@@ -134,6 +134,8 @@ public class FunctionalFlowStep implements Serializable, Comparable<FunctionalFl
             "id=" + getId() +
             ", description='" + getDescription() + "'" +
             ", stepOrder=" + getStepOrder() +
+            ", flow=" + ((getFlow()==null)?null:getFlow().getAlias()) +
+            ", interface=" + ((getFlowInterface()==null)?null:getFlowInterface().getAlias()) +            
             "}";
     }
 
@@ -146,12 +148,12 @@ public class FunctionalFlowStep implements Serializable, Comparable<FunctionalFl
             result = 0;
         } else if (arg0.getId() != null && arg0.getId() == this.getId()) {
             result = 0;
-        } else if (arg0.getFlowInterface() == null || arg0.getFlowInterface().getAlias() == null) {
+        } else if (arg0.getStepOrder() == null) {
             result = -1;
-        } else if (this.getFlowInterface() == null || this.getFlowInterface().getAlias() == null) {
+        } else if (this.getStepOrder() == null) {
             result = 1;
         } else {
-            result = this.getFlowInterface().getAlias().compareTo(arg0.getFlowInterface().getAlias());
+            result = this.getStepOrder().compareTo(arg0.getStepOrder());
         }
         return result;
     }
