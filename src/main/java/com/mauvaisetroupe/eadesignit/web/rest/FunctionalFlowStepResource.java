@@ -201,10 +201,14 @@ public class FunctionalFlowStepResource {
     @DeleteMapping("/functional-flow-steps/{id}")
     public ResponseEntity<Void> deleteFunctionalFlowStep(@PathVariable Long id) {
         FunctionalFlowStep step = functionalFlowStepRepository.findById(id).get();
+
         FunctionalFlow functionalFlow = step.getFlow();
         functionalFlow.removeSteps(step);
+        functionalFlowRepository.save(functionalFlow);
+
         FlowInterface flowInterface = step.getFlowInterface();
         flowInterface.removeSteps(step);
+        flowInterfaceRepository.save(flowInterface);
 
         log.debug("REST request to delete FunctionalFlowStep : {}", id);
         functionalFlowStepRepository.deleteById(id);
