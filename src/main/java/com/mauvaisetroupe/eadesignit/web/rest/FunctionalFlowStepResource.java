@@ -65,6 +65,15 @@ public class FunctionalFlowStepResource {
         if (functionalFlowStep.getId() != null) {
             throw new BadRequestAlertException("A new functionalFlowStep cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        FunctionalFlow flow = functionalFlowRepository.getById(functionalFlowStep.getFlow().getId());
+        flow.addSteps(functionalFlowStep);
+        functionalFlowRepository.save(flow);
+
+        FlowInterface _interface = flowInterfaceRepository.getById(functionalFlowStep.getFlowInterface().getId());
+        _interface.addSteps(functionalFlowStep);
+        flowInterfaceRepository.save(_interface);
+
         FunctionalFlowStep result = functionalFlowStepRepository.save(functionalFlowStep);
         return ResponseEntity
             .created(new URI("/api/functional-flow-steps/" + result.getId()))
@@ -100,14 +109,23 @@ public class FunctionalFlowStepResource {
         }
 
         FunctionalFlowStep stepFromDB = functionalFlowStepRepository.findById(id).get();
-        if (stepFromDB.getFlow().getId() != functionalFlowStep.getFlow().getId()) {
-            stepFromDB.getFlow().getSteps().remove(functionalFlowStep);
-            stepFromDB.setFlow(functionalFlowStep.getFlow());
+        FunctionalFlow oldFlow = stepFromDB.getFlow();
+        FlowInterface oldInterface = stepFromDB.getFlowInterface();
+        FunctionalFlow newFlow = functionalFlowStep.getFlow();
+        FlowInterface newInterface = functionalFlowStep.getFlowInterface();
+
+        if (!stepFromDB.getFlow().getId().equals(functionalFlowStep.getFlow().getId())) {
+            oldFlow.removeSteps(stepFromDB);
+            newFlow.addSteps(stepFromDB);
+            functionalFlowRepository.save(oldFlow);
+            functionalFlowRepository.save(newFlow);
         }
 
-        if (stepFromDB.getFlowInterface().getId() != functionalFlowStep.getFlowInterface().getId()) {
-            stepFromDB.getFlowInterface().getSteps().remove(functionalFlowStep);
-            stepFromDB.setFlowInterface(functionalFlowStep.getFlowInterface());
+        if (!stepFromDB.getFlowInterface().getId().equals(functionalFlowStep.getFlowInterface().getId())) {
+            oldInterface.removeSteps(stepFromDB);
+            newInterface.addSteps(stepFromDB);
+            flowInterfaceRepository.save(oldInterface);
+            flowInterfaceRepository.save(newInterface);
         }
 
         stepFromDB.setDescription(functionalFlowStep.getDescription());

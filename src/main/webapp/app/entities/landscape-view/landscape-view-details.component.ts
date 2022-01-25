@@ -59,7 +59,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     let step: FunctionalFlowStep = new FunctionalFlowStep();
     let inter: FlowInterface = new FlowInterface();
     step.flowInterface = inter;
-    this.emptySteps.push(step);
+    if (this.emptySteps.length == 0) this.emptySteps.push(step);
     this.landscapeViewService()
       .find(landscapeViewId)
       .then(res => {
