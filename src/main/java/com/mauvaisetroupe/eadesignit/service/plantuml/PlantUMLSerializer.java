@@ -14,10 +14,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import org.apache.commons.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 public class PlantUMLSerializer {
@@ -61,7 +63,8 @@ public class PlantUMLSerializer {
         plantUMLBuilder.getPlantumlHeader(plantUMLSource);
         for (FunctionalFlowStep step : functionalFlow.getSteps()) {
             List<String[]> labelAndURLs = new ArrayList<>();
-            String label = step.getStepOrder() + ". " + step.getDescription();
+            String label = StringUtils.hasText(step.getDescription()) ? step.getDescription() : "";
+            label = step.getStepOrder() + ". " + WordUtils.wrap(label, 50, "\\n", false);
             labelAndURLs.add(new String[] { label, null });
             plantUMLBuilder.getPlantumlRelationShip(
                 plantUMLSource,

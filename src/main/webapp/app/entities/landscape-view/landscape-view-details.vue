@@ -82,6 +82,7 @@
           <tr>
             <th scope="row"><span>Flow</span></th>
             <th scope="row"><span>Description</span></th>
+            <th scope="row"><span>Step</span></th>
             <th scope="row"><span>Interface</span></th>
             <th scope="row"><span>Source</span></th>
             <th scope="row"><span>Target</span></th>
@@ -125,6 +126,9 @@
                       ></textarea>
                     </span>
                   </span>
+                </td>
+                <td>
+                  <span v-if="step.description">{{ step.description }}</span>
                 </td>
                 <td>
                   <router-link
