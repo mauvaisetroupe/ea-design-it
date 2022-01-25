@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -224,7 +225,17 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     }
 
     public FunctionalFlow removeSteps(FunctionalFlowStep functionalFlowStep) {
-        this.steps.remove(functionalFlowStep);
+        if (this.steps.contains(functionalFlowStep)) {
+            this.steps.remove(functionalFlowStep);
+        } else {
+            // hibernate bug due to hashcode ?
+            for (Iterator<FunctionalFlowStep> iterator = this.steps.iterator(); iterator.hasNext();) {
+                FunctionalFlowStep step = iterator.next();
+                if (step.getId() != null && step.getId().equals(functionalFlowStep.getId())) {
+                    iterator.remove();
+                }
+            }
+        }
         functionalFlowStep.setFlow(null);
         return this;
     }

@@ -5,6 +5,7 @@ import com.mauvaisetroupe.eadesignit.domain.util.Ownershipable;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.persistence.*;
@@ -330,7 +331,18 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
     }
 
     public FlowInterface removeSteps(FunctionalFlowStep functionalFlowStep) {
-        this.steps.remove(functionalFlowStep);
+        if (this.steps.contains(functionalFlowStep)) {
+            this.steps.remove(functionalFlowStep);
+        } else {
+            // hibernate bug due to hashcode ?
+            for (Iterator<FunctionalFlowStep> iterator = this.steps.iterator(); iterator.hasNext();) {
+                FunctionalFlowStep step = iterator.next();
+                if (step.getId() != null && step.getId().equals(functionalFlowStep.getId())) {
+                    iterator.remove();
+                }
+            }
+        }
+
         functionalFlowStep.setFlowInterface(null);
         return this;
     }
