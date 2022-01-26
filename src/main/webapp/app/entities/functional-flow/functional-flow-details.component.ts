@@ -255,6 +255,19 @@ export default class FunctionalFlowDetails extends Vue {
     });
   }
 
+  public cancelReorder() {
+    this.functionalFlowService()
+      .find(this.functionalFlow.id)
+      .then(res => {
+        this.functionalFlow = res;
+      })
+      .catch(error => {
+        this.alertService().showHttpError(this, error.response);
+      });
+    this.reorderAlias = false;
+    this.reorderAliasflowToSave = [];
+  }
+
   public addStepToSave(step: IFunctionalFlowStep) {
     if (this.reorderStepToSave.filter(e => e.id === step.id).length === 0) {
       // step.flow = newFunctionalFlow this cause an erro, for looping steps?
