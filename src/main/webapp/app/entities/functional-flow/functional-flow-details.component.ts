@@ -1,6 +1,6 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { FunctionalFlow, IFunctionalFlow } from '@/shared/model/functional-flow.model';
 import FunctionalFlowService from './functional-flow.service';
 import AlertService from '@/shared/alert/alert.service';
 import AccountService from '@/account/account.service';
@@ -59,6 +59,13 @@ export default class FunctionalFlowDetails extends Vue {
   public indexStepToDetach: number;
 
   public notPersisted: boolean = false;
+
+  public reorderAlias = false;
+
+  //for description update
+  public reorderAliasflowToSave: IFunctionalFlow[] = [];
+  //for reordering update
+  public reorderStepToSave: IFunctionalFlowStep[] = [];
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -207,5 +214,55 @@ export default class FunctionalFlowDetails extends Vue {
 
   public closeDetachDialog(): void {
     (<any>this.$refs.detachInterfaceEntity).hide();
+  }
+
+  public startReorder() {
+    this.reorderAlias = true;
+    this.reorderAliasflowToSave = [];
+    this.reorderStepToSave = [];
+  }
+
+  public swap(i: number, j: number) {
+    let tmp = this.functionalFlow.steps[i];
+    this.functionalFlow.steps.splice(i, 1, this.functionalFlow.steps[j]);
+    this.functionalFlow.steps.splice(j, 1, tmp);
+
+    // reorder all steps in flow
+    this.reorderAllSteps(this.functionalFlow);
+  }
+
+  public reorderAllSteps(flow: IFunctionalFlow) {
+    flow.steps.forEach((step, i) => {
+      if (step.stepOrder !== i + 1) {
+        step.stepOrder = i + 1;
+        this.addStepToSave(step);
+      }
+    });
+  }
+
+  public saveReorder() {
+    let promises = [];
+    this.reorderAliasflowToSave.forEach(flow => {
+      promises.push(this.functionalFlowService().update(flow));
+    });
+    this.reorderStepToSave.forEach(step => {
+      promises.push(this.functionalFlowStepService().update(step));
+    });
+    Promise.all(promises).then(res => {
+      this.retrieveFunctionalFlow(this.functionalFlow.id);
+      this.reorderAlias = false;
+      this.reorderAliasflowToSave = [];
+    });
+  }
+
+  public addStepToSave(step: IFunctionalFlowStep) {
+    if (this.reorderStepToSave.filter(e => e.id === step.id).length === 0) {
+      // step.flow = newFunctionalFlow this cause an erro, for looping steps?
+      let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
+      newFunctionalFlowSimplified = { ...this.functionalFlow };
+      newFunctionalFlowSimplified.steps = [];
+      step.flow = newFunctionalFlowSimplified;
+      this.reorderStepToSave.push(step);
+    }
   }
 }

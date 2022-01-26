@@ -100,6 +100,8 @@
           <thead>
             <tr>
               <th scope="row" v-if="!notPersisted"><span>Step</span></th>
+              <th scope="row" v-if="reorderAlias"></th>
+              <th scope="row" v-if="reorderAlias"></th>
               <th scope="row"><span>Interface</span></th>
               <th scope="row"><span>Source</span></th>
               <th scope="row"><span>Target</span></th>
@@ -111,6 +113,17 @@
           <tbody>
             <tr v-for="(step, i) in functionalFlow.steps" v-bind:key="step.id" :set="(inter = step.flowInterface)">
               <td v-if="!notPersisted">{{ step.stepOrder }}. {{ step.description }}</td>
+              <td v-if="reorderAlias">
+                <font-awesome-icon icon="chevron-up" class="btn-success" v-if="i != 0" @click="swap(i, i - 1)"></font-awesome-icon>
+              </td>
+              <td v-if="reorderAlias">
+                <font-awesome-icon
+                  icon="chevron-down"
+                  class="btn-success"
+                  v-if="i != functionalFlow.steps.length - 1"
+                  @click="swap(i, i + 1)"
+                ></font-awesome-icon>
+              </td>
               <td>
                 <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: inter.id } }">{{ inter.alias }}</router-link>
               </td>
@@ -175,26 +188,65 @@
           </tbody>
         </table>
       </div>
-
-      <div class="d-flex justify-content-end" v-if="!notPersisted">
-        <span>
+      <div class="row">
+        <div class="col-md-6">
           <button
-            class="btn btn-primary jh-create-entity create-functional-flow"
-            v-if="accountService().writeAuthorities"
-            @click="prepareSearchInterfaces()"
+            @click="startReorder()"
+            id="jh-create-entity"
+            data-cy="entityCreateButton"
+            class="btn btn-success jh-create-entity create-functional-flow"
+            title="Edit Flow Alias in order to move interfaces from on flow to another"
+            v-if="accountService().writeAuthorities && !reorderAlias"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span>Add Interface</span>
+            <span> Organize Flows</span>
           </button>
+
           <button
-            class="btn btn-primary jh-create-entity create-functional-flow"
-            v-if="accountService().writeAuthorities && toBeSaved"
-            @click="saveFunctionalFlow()"
+            @click="saveReorder()"
+            id="jh-create-entity"
+            data-cy="entityCreateButton"
+            class="btn btn-success jh-create-entity create-functional-flow"
+            title="Edit Flow Alias in order to move interfaces from on flow to another"
+            v-if="reorderAlias && (reorderAliasflowToSave.length > 0 || reorderStepToSave.length > 0)"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
             <span>Save</span>
           </button>
-        </span>
+
+          <button
+            @click="cancelReorder()"
+            id="jh-create-entity"
+            data-cy="entityCreateButton"
+            class="btn btn-success jh-create-entity create-functional-flow"
+            title="Edit Flow Alias in order to move interfaces from on flow to another"
+            v-if="reorderAlias"
+          >
+            <font-awesome-icon icon="plus"></font-awesome-icon>
+            <span>Cancel</span>
+          </button>
+        </div>
+
+        <div class="d-flex justify-content-end col-md-6" v-if="!notPersisted">
+          <span>
+            <button
+              class="btn btn-primary jh-create-entity create-functional-flow"
+              v-if="accountService().writeAuthorities"
+              @click="prepareSearchInterfaces()"
+            >
+              <font-awesome-icon icon="plus"></font-awesome-icon>
+              <span>Add Interface</span>
+            </button>
+            <button
+              class="btn btn-primary jh-create-entity create-functional-flow"
+              v-if="accountService().writeAuthorities && toBeSaved"
+              @click="saveFunctionalFlow()"
+            >
+              <font-awesome-icon icon="plus"></font-awesome-icon>
+              <span>Save</span>
+            </button>
+          </span>
+        </div>
       </div>
 
       <div class="table-responsive" v-if="functionalFlow.landscapes && functionalFlow.landscapes.length > 0">
