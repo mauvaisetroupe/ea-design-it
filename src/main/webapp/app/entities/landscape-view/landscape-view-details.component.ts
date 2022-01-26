@@ -282,11 +282,14 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
 
   public addStepToSave(newFunctionalFlow: IFunctionalFlow, step: IFunctionalFlowStep) {
     // step.flow = newFunctionalFlow this cause an erro, for looping steps?
-    let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
-    newFunctionalFlowSimplified = { ...newFunctionalFlow };
-    newFunctionalFlowSimplified.steps = [];
-    step.flow = newFunctionalFlowSimplified;
-    this.reorderStepToSave.push(step);
+    if (this.reorderStepToSave.filter(e => e.id === step.id).length === 0) {
+      // avoid duplicate
+      let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
+      newFunctionalFlowSimplified = { ...newFunctionalFlow };
+      newFunctionalFlowSimplified.steps = [];
+      step.flow = newFunctionalFlowSimplified;
+      this.reorderStepToSave.push(step);
+    }
   }
 
   public changeDescription(functionalFlow: IFunctionalFlow) {
