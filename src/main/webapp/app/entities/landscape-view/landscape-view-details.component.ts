@@ -266,13 +266,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     // remove interface from old Flow
     functionalFlow.steps = functionalFlow.steps.filter(i => i.id != step.id);
 
-    // step.flow = newFunctionalFlow this cause an erro, for looping steps?
-    let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
-    newFunctionalFlowSimplified = { ...newFunctionalFlow };
-    newFunctionalFlowSimplified.steps = [];
-    step.flow = newFunctionalFlowSimplified;
-
-    this.reorderStepToSave.push(step);
+    this.addStepToSave(newFunctionalFlow, step);
 
     // Add old & new Flows for later update by REST call
     // if (this.reorderAliasflowToSave.filter(e => e.id === functionalFlow.id).length === 0) {
@@ -281,6 +275,18 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     // if (this.reorderAliasflowToSave.filter(e => e.id === newFunctionalFlow.id).length === 0) {
     //   this.reorderAliasflowToSave.push(newFunctionalFlow);
     // }
+
+    this.reorderAllSteps(functionalFlow);
+    this.reorderAllSteps(newFunctionalFlow);
+  }
+
+  public addStepToSave(newFunctionalFlow: IFunctionalFlow, step: IFunctionalFlowStep) {
+    // step.flow = newFunctionalFlow this cause an erro, for looping steps?
+    let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
+    newFunctionalFlowSimplified = { ...newFunctionalFlow };
+    newFunctionalFlowSimplified.steps = [];
+    step.flow = newFunctionalFlowSimplified;
+    this.reorderStepToSave.push(step);
   }
 
   public changeDescription(functionalFlow: IFunctionalFlow) {
@@ -315,6 +321,24 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
       this.retrieveLandscapeView(this.landscapeView.id);
       this.reorderAlias = false;
       this.reorderAliasflowToSave = [];
+    });
+  }
+
+  public swap(flow: IFunctionalFlow, i: number, j: number) {
+    let tmp = flow.steps[i];
+    flow.steps.splice(i, 1, flow.steps[j]);
+    flow.steps.splice(j, 1, tmp);
+
+    // reorder all steps in flow
+    this.reorderAllSteps(flow);
+  }
+
+  public reorderAllSteps(flow: IFunctionalFlow) {
+    flow.steps.forEach((step, i) => {
+      if (step.stepOrder !== i + 1) {
+        step.stepOrder = i + 1;
+        this.addStepToSave(flow, step);
+      }
     });
   }
 }

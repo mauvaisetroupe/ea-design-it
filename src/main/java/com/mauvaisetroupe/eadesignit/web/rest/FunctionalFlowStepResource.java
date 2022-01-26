@@ -129,6 +129,7 @@ public class FunctionalFlowStepResource {
         }
 
         stepFromDB.setDescription(functionalFlowStep.getDescription());
+        stepFromDB.setStepOrder(functionalFlowStep.getStepOrder());
 
         FunctionalFlowStep result = functionalFlowStepRepository.save(stepFromDB);
 

@@ -81,6 +81,8 @@
         <thead>
           <tr>
             <th scope="row"><span>Flow</span></th>
+            <th scope="row" v-if="reorderAlias"></th>
+            <th scope="row" v-if="reorderAlias"></th>
             <th scope="row"><span>Description</span></th>
             <th scope="row"><span>Step</span></th>
             <th scope="row"><span>Interface</span></th>
@@ -114,6 +116,22 @@
                     </select>
                   </div>
                 </td>
+                <td v-if="reorderAlias">
+                  <font-awesome-icon
+                    icon="chevron-up"
+                    class="btn-success"
+                    v-if="j != 0"
+                    @click="swap(functionalFlow, j, j - 1)"
+                  ></font-awesome-icon>
+                </td>
+                <td v-if="reorderAlias">
+                  <font-awesome-icon
+                    icon="chevron-down"
+                    class="btn-success"
+                    v-if="j != functionalFlow.steps.length - 1"
+                    @click="swap(functionalFlow, j, j + 1)"
+                  ></font-awesome-icon>
+                </td>
                 <td>
                   <span v-if="j == 0">
                     <span v-if="!reorderAlias">{{ functionalFlow.description }}</span>
@@ -128,6 +146,7 @@
                   </span>
                 </td>
                 <td>
+                  {{ step.stepOrder }}.
                   <span v-if="step.description">{{ step.description }}</span>
                 </td>
                 <td>

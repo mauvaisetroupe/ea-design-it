@@ -45,6 +45,8 @@ import { faGripLines } from '@fortawesome/free-solid-svg-icons/faGripLines';
 import { faFolder } from '@fortawesome/free-solid-svg-icons/faFolder';
 import { faClone } from '@fortawesome/free-solid-svg-icons/faClone';
 import { faWindowMaximize } from '@fortawesome/free-solid-svg-icons/faWindowMaximize';
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
 
 import VueCookie from 'vue-cookie';
 import Vuelidate from 'vuelidate';
@@ -108,7 +110,9 @@ export function initFortAwesome(vue) {
     faGripLines,
     faFolder,
     faClone,
-    faWindowMaximize
+    faWindowMaximize,
+    faChevronUp,
+    faChevronDown
   );
 }
 

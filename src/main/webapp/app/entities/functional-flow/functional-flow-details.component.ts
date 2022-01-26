@@ -157,14 +157,17 @@ export default class FunctionalFlowDetails extends Vue {
   }
 
   public addOrCreateInterface(): void {
+    let maxStepOrder: number = this.functionalFlow.steps?.length > 0 ? Math.max(...this.functionalFlow.steps.map(o => o.stepOrder)) : 0;
     if (this.checkedInterface && this.checkedInterface.length > 0) {
       if (!this.functionalFlow.steps) {
         this.functionalFlow.steps = [];
       }
       this.checkedInterface.forEach(inter => {
+        maxStepOrder = maxStepOrder + 1;
         let step: IFunctionalFlowStep = new FunctionalFlowStep();
         step.flowInterface = inter;
         step.flow = this.functionalFlow;
+        step.stepOrder = maxStepOrder;
         this.functionalFlowStepService()
           .create(step)
           .then(res => {
