@@ -15,6 +15,7 @@ import { FunctionalFlow } from '@/shared/model/functional-flow.model';
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 import { IFunctionalFlowStep, FunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
 import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
+import FlowImportService from '@/entities/flow-import/flow-import.service';
 
 @Component
 export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
@@ -23,6 +24,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   @Inject('accountService') private accountService: () => AccountService;
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
   @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
+  @Inject('flowImportService') private flowImportService: () => FlowImportService;
 
   public landscapeView: ILandscapeView = {};
   public plantUMLImage = '';
@@ -343,5 +345,22 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
         this.addStepToSave(flow, step);
       }
     });
+  }
+
+  public exportExcel() {
+    this.flowImportService()
+      .downloadFile(this.landscapeView.id)
+      .then(response => {
+        const url = URL.createObjectURL(
+          new Blob([response.data], {
+            type: 'application/vnd.ms-excel',
+          })
+        );
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', this.landscapeView.diagramName + '.xls');
+        document.body.appendChild(link);
+        link.click();
+      });
   }
 }

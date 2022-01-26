@@ -3,17 +3,30 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.domain.DataFlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
+import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationCapabilityImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.CapabilityImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.DataFlowImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.FlowImportService;
+import com.mauvaisetroupe.eadesignit.service.importfile.LandscapeExportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.FlowImportDTO;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -28,25 +41,26 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 public class ImportResource {
 
-    private final ApplicationImportService applicationImportService;
-    private final FlowImportService flowImportService;
-    private final DataFlowImportService dataFlowImportService;
-    private final CapabilityImportService capabilityImportService;
-    private final ApplicationCapabilityImportService applicationCapabilityImportService;
+    @Autowired
+    private ApplicationImportService applicationImportService;
 
-    public ImportResource(
-        ApplicationImportService importService,
-        FlowImportService flowImportService,
-        DataFlowImportService dataFlowImportService,
-        CapabilityImportService capabilityImportService,
-        ApplicationCapabilityImportService applicationCapabilityImportService
-    ) {
-        this.applicationImportService = importService;
-        this.flowImportService = flowImportService;
-        this.dataFlowImportService = dataFlowImportService;
-        this.capabilityImportService = capabilityImportService;
-        this.applicationCapabilityImportService = applicationCapabilityImportService;
-    }
+    @Autowired
+    private FlowImportService flowImportService;
+
+    @Autowired
+    private DataFlowImportService dataFlowImportService;
+
+    @Autowired
+    private CapabilityImportService capabilityImportService;
+
+    @Autowired
+    private ApplicationCapabilityImportService applicationCapabilityImportService;
+
+    @Autowired
+    private LandscapeExportService landscapeExportService;
+
+    @Autowired
+    private LandscapeViewRepository landscapeViewRepository;
 
     @PostMapping("/import/application/upload-file")
     public List<ApplicationImport> uploadFile(@RequestPart MultipartFile file) throws Exception {
@@ -76,5 +90,18 @@ public class ImportResource {
     @PostMapping("/import/application/capability/upload-file")
     public List<ApplicationCapabilityDTO> uploadapplicationCapabilityFile(@RequestPart MultipartFile file) throws Exception {
         return applicationCapabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+    }
+
+    @GetMapping(value = "export/landscape/{id}")
+    public ResponseEntity<Resource> download(@PathVariable Long id) throws IOException {
+        LandscapeView landscapeView = landscapeViewRepository.getById(id);
+        ByteArrayOutputStream file = landscapeExportService.getLandscapeExcel(id);
+        ByteArrayResource byteArrayResource = new ByteArrayResource(file.toByteArray());
+
+        return ResponseEntity
+            .ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + landscapeView.getDiagramName() + "xlsx")
+            .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+            .body(byteArrayResource);
     }
 }

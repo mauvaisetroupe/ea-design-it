@@ -50,23 +50,23 @@ public class FlowImportService {
     private static final String GENERIC_FILE_FROM_ADD = "GENERIC FILE from ADD";
     private static final String GENERIC_EVENT_FROM_ADD = "GENERIC EVENT from ADD";
 
-    private static final String FLOW_ID_FLOW = "Id flow";
-    private static final String FLOW_ALIAS_FLOW = "Alias flow";
-    private static final String FLOW_SOURCE_ELEMENT = "Source Element";
-    private static final String FLOW_TARGET_ELEMENT = "Target Element";
-    private static final String FLOW_DESCRIPTION = "Description";
-    private static final String FLOW_INTEGRATION_PATTERN = "Integration pattern";
-    private static final String FLOW_FREQUENCY = "Frequency";
-    private static final String FLOW_FORMAT = "Format";
-    private static final String FLOW_SWAGGER = "Swagger";
-    private static final String FLOW_BLUEPRINT_SOURCE = "Blueprint From Source";
-    private static final String FLOW_BLUEPRINT_TARGET = "Blueprint From Target";
-    private static final String FLOW_BLUEPRINT_SOURCE_STATUS = "Status Blueprint From Source";
-    private static final String FLOW_BLUEPRINT_TARGET_STATUS = "Status Blueprint From Target";
-    private static final String FLOW_STATUS_FLOW = "Status flow";
-    private static final String FLOW_COMMENT = "Comment";
-    private static final String FLOW_ADD_CORRESPONDENT_ID = "ADD correspondent ID";
-    private static final String FLOW_STEP_DESCRIPTION = "Step description";
+    protected static final String FLOW_ID_FLOW = "Id flow";
+    protected static final String FLOW_ALIAS_FLOW = "Alias flow";
+    protected static final String FLOW_SOURCE_ELEMENT = "Source Element";
+    protected static final String FLOW_TARGET_ELEMENT = "Target Element";
+    protected static final String FLOW_DESCRIPTION = "Description";
+    protected static final String FLOW_INTEGRATION_PATTERN = "Integration pattern";
+    protected static final String FLOW_FREQUENCY = "Frequency";
+    protected static final String FLOW_FORMAT = "Format";
+    protected static final String FLOW_SWAGGER = "Swagger";
+    protected static final String FLOW_BLUEPRINT_SOURCE = "Blueprint From Source";
+    protected static final String FLOW_BLUEPRINT_TARGET = "Blueprint From Target";
+    protected static final String FLOW_BLUEPRINT_SOURCE_STATUS = "Status Blueprint From Source";
+    protected static final String FLOW_BLUEPRINT_TARGET_STATUS = "Status Blueprint From Target";
+    protected static final String FLOW_STATUS_FLOW = "Status flow";
+    protected static final String FLOW_COMMENT = "Comment";
+    protected static final String FLOW_ADD_CORRESPONDENT_ID = "ADD correspondent ID";
+    protected static final String FLOW_STEP_DESCRIPTION = "Step description";
 
     private final List<String> columnsArray = new ArrayList<String>();
 

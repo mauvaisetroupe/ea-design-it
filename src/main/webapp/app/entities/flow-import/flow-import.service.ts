@@ -4,6 +4,7 @@ import { IFlowImport } from '@/shared/model/flow-import.model';
 
 const baseApiUrl = 'api/flow-imports';
 const apiForImportUrl = 'api/import';
+const apiForExportUrl = 'api/export';
 
 export default class FlowImportService {
   public find(id: number): Promise<IFlowImport> {
@@ -96,6 +97,21 @@ export default class FlowImportService {
         })
         .catch(err => {
           console.log(err);
+          reject(err);
+        });
+    });
+  }
+
+  public downloadFile(id: number): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .get(`${apiForExportUrl}/landscape/${id}`, {
+          responseType: 'blob',
+        })
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
           reject(err);
         });
     });

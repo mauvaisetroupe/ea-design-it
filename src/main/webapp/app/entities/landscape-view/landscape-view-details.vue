@@ -75,7 +75,10 @@
       <h3>Landscape diagram</h3>
       <div v-html="plantUMLImage" class="table-responsive"></div>
       <br />
-      <h3><font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Functional Flows</h3>
+      <h3>
+        <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Functional Flows
+        <font-awesome-icon icon="file-excel" style="color: green" @click="exportExcel()"></font-awesome-icon>
+      </h3>
       <br />
       <table class="table">
         <thead>
