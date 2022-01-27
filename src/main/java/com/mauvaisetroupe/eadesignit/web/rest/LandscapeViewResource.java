@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
 import com.mauvaisetroupe.eadesignit.service.drawio.MXFileSerializer;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.io.IOException;
@@ -14,9 +15,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -39,11 +40,11 @@ public class LandscapeViewResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final LandscapeViewRepository landscapeViewRepository;
+    @Autowired
+    private LandscapeViewRepository landscapeViewRepository;
 
-    public LandscapeViewResource(LandscapeViewRepository landscapeViewRepository) {
-        this.landscapeViewRepository = landscapeViewRepository;
-    }
+    @Autowired
+    private LandscapeViewService landscapeViewService;
 
     /**
      * {@code POST  /landscape-views} : Create a new landscapeView.
@@ -205,7 +206,7 @@ public class LandscapeViewResource {
     @DeleteMapping("/landscape-views/{id}")
     public ResponseEntity<Void> deleteLandscapeView(@PathVariable Long id) {
         log.debug("REST request to delete LandscapeView : {}", id);
-        landscapeViewRepository.deleteById(id);
+        landscapeViewService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
