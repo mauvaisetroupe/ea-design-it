@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ViewPoint;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.persistence.*;
@@ -166,8 +167,28 @@ public class LandscapeView implements Serializable {
     }
 
     public LandscapeView removeFlows(FunctionalFlow functionalFlow) {
-        this.flows.remove(functionalFlow);
-        functionalFlow.getLandscapes().remove(this);
+        if (this.flows.contains(functionalFlow)) {
+            this.flows.remove(functionalFlow);
+        } else {
+            // hibernate bug due to hashcode ?
+            for (Iterator<FunctionalFlow> iterator = this.flows.iterator(); iterator.hasNext();) {
+                FunctionalFlow flow = iterator.next();
+                if (flow.getId() != null && flow.getId().equals(functionalFlow.getId())) {
+                    iterator.remove();
+                }
+            }
+        }
+        if (functionalFlow.getLandscapes().contains(this)) {
+            functionalFlow.getLandscapes().remove(this);
+        } else {
+            // hibernate bug due to hashcode ?
+            for (Iterator<LandscapeView> iterator = functionalFlow.getLandscapes().iterator(); iterator.hasNext();) {
+                LandscapeView landscapeView = iterator.next();
+                if (landscapeView.getId() != null && landscapeView.getId().equals(this.getId())) {
+                    iterator.remove();
+                }
+            }
+        }
         return this;
     }
 
