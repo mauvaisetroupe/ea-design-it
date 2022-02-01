@@ -310,8 +310,30 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     }
 
     public FunctionalFlow removeDataFlows(DataFlow dataFlow) {
-        this.dataFlows.remove(dataFlow);
-        dataFlow.getFunctionalFlows().remove(this);
+        if (this.dataFlows.contains(dataFlow)) {
+            this.dataFlows.remove(dataFlow);
+        } else {
+            // hibernate bug due to hashcode ?
+            for (Iterator<DataFlow> iterator = this.dataFlows.iterator(); iterator.hasNext();) {
+                DataFlow _dataflow = iterator.next();
+                if (_dataflow.getId() != null && _dataflow.getId().equals(dataFlow.getId())) {
+                    iterator.remove();
+                }
+            }
+        }
+
+        if (dataFlow.getFunctionalFlows().contains(this)) {
+            dataFlow.getFunctionalFlows().remove(this);
+        } else {
+            // hibernate bug due to hashcode ?
+            for (Iterator<FunctionalFlow> iterator = dataFlow.getFunctionalFlows().iterator(); iterator.hasNext();) {
+                FunctionalFlow _flow = iterator.next();
+                if (_flow.getId() != null && _flow.getId().equals(this.getId())) {
+                    iterator.remove();
+                }
+            }
+        }
+
         return this;
     }
 
