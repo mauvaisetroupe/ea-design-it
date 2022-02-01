@@ -152,6 +152,9 @@ public class FunctionalFlowStep implements Serializable, Comparable<FunctionalFl
             result = -1;
         } else if (this.getStepOrder() == null) {
             result = 1;
+        } else if (this.getStepOrder().equals(arg0.getStepOrder())) {
+            // no ex aequo
+            result = this.getId().compareTo(arg0.getId());
         } else {
             result = this.getStepOrder().compareTo(arg0.getStepOrder());
         }
