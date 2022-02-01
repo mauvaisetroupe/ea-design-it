@@ -19,6 +19,7 @@ logging:
     tech.jhipster: WARN
     org.hibernate.SQL: WARN
     com.mauvaisetroupe.eadesignit: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
 
 spring:
   devtools:
