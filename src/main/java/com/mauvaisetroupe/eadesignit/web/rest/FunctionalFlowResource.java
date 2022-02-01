@@ -5,6 +5,7 @@ import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
+import com.mauvaisetroupe.eadesignit.service.FunctionalflowService;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,13 +42,14 @@ public class FunctionalFlowResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final FunctionalFlowRepository functionalFlowRepository;
-    private final FlowInterfaceRepository flowInterfaceRepository;
+    @Autowired
+    private FunctionalFlowRepository functionalFlowRepository;
 
-    public FunctionalFlowResource(FunctionalFlowRepository functionalFlowRepository, FlowInterfaceRepository flowInterfaceRepository) {
-        this.functionalFlowRepository = functionalFlowRepository;
-        this.flowInterfaceRepository = flowInterfaceRepository;
-    }
+    @Autowired
+    private FlowInterfaceRepository flowInterfaceRepository;
+
+    @Autowired
+    private FunctionalflowService functionalflowService;
 
     /**
      * {@code POST  /functional-flows} : Create a new functionalFlow.
@@ -202,7 +205,7 @@ public class FunctionalFlowResource {
     @DeleteMapping("/functional-flows/{id}")
     public ResponseEntity<Void> deleteFunctionalFlow(@PathVariable Long id) {
         log.debug("REST request to delete FunctionalFlow : {}", id);
-        functionalFlowRepository.deleteById(id);
+        functionalflowService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

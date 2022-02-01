@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
+import com.mauvaisetroupe.eadesignit.service.FlowInterfaceService;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,11 +48,11 @@ public class FlowInterfaceResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final FlowInterfaceRepository flowInterfaceRepository;
+    @Autowired
+    private FlowInterfaceRepository flowInterfaceRepository;
 
-    public FlowInterfaceResource(FlowInterfaceRepository flowInterfaceRepository) {
-        this.flowInterfaceRepository = flowInterfaceRepository;
-    }
+    @Autowired
+    private FlowInterfaceService flowInterfaceService;
 
     /**
      * {@code POST  /flow-interfaces} : Create a new flowInterface.
@@ -234,7 +236,7 @@ public class FlowInterfaceResource {
     @DeleteMapping("/flow-interfaces/{id}")
     public ResponseEntity<Void> deleteFlowInterface(@PathVariable Long id) {
         log.debug("REST request to delete FlowInterface : {}", id);
-        flowInterfaceRepository.deleteById(id);
+        flowInterfaceService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

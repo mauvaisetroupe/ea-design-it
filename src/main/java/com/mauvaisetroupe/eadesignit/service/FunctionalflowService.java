@@ -9,7 +9,6 @@ import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowStepRepository;
-import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,12 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class LandscapeViewService {
+public class FunctionalflowService {
 
-    private final Logger log = LoggerFactory.getLogger(LandscapeViewService.class);
-
-    @Autowired
-    private LandscapeViewRepository landscapeViewRepository;
+    private final Logger log = LoggerFactory.getLogger(FunctionalflowService.class);
 
     @Autowired
     private FunctionalFlowRepository functionalFlowRepository;
@@ -49,20 +45,14 @@ public class LandscapeViewService {
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        log.debug("Request to delete LandscapeView : {}", id);
+        log.debug("Request to delete FunctionalFlow : {}", id);
         // delete landscape and all entities without references to other landscape
 
-        LandscapeView landscapeView = landscapeViewRepository.getById(id);
+        FunctionalFlow flow = functionalFlowRepository.getById(id);
 
-        Set<FunctionalFlow> allFlows = new HashSet<>(landscapeView.getFlows());
+        Set<FlowInterface> allInterfaces = flow.getInterfaces();
 
-        Set<FlowInterface> allInterfaces = allFlows
-            .stream()
-            .map(f -> f.getInterfaces())
-            .flatMap(f -> f.stream())
-            .collect(Collectors.toSet());
-
-        Set<DataFlow> allDataFromFlows = allFlows.stream().map(i -> i.getDataFlows()).flatMap(f -> f.stream()).collect(Collectors.toSet());
+        Set<DataFlow> allDataFromFlows = flow.getDataFlows();
 
         Set<DataFlow> allDataFromInterfaces = allInterfaces
             .stream()
@@ -74,38 +64,32 @@ public class LandscapeViewService {
         allData.addAll(allDataFromFlows);
         allData.addAll(allDataFromInterfaces);
 
-        // Detach all flows from landscape
-        for (FunctionalFlow flow : allFlows) {
-            landscapeView.removeFlows(flow);
-            functionalFlowRepository.save(flow);
-        }
-        // delete landscape
-        landscapeViewRepository.deleteById(id);
-
-        // if flow is not referenced in another landscape, delete flow
-        for (FunctionalFlow flow : allFlows) {
-            if (flow.getLandscapes() == null || flow.getLandscapes().isEmpty()) {
-                // detach and delete steps
-                for (FunctionalFlowStep step : new HashSet<>(flow.getSteps())) {
-                    FlowInterface interface1 = step.getFlowInterface();
-                    interface1.removeSteps(step);
-                    flow.removeSteps(step);
-                    flowInterfaceRepository.save(interface1);
-                    functionalFlowRepository.save(flow);
-                    functionalFlowStepRepository.delete(step);
-                }
-                // detach dataflow
-                for (DataFlow dataFlow : new HashSet<>(flow.getDataFlows())) {
-                    flow.removeDataFlows(dataFlow);
-                    dataFlowRepository.save(dataFlow);
-                    functionalFlowRepository.save(flow);
-                }
-                // delete Flow
-                functionalFlowRepository.delete(flow);
+        if (flow.getLandscapes() == null || flow.getLandscapes().isEmpty()) {
+            // detach and delete steps
+            for (FunctionalFlowStep step : new HashSet<>(flow.getSteps())) {
+                FlowInterface interface1 = step.getFlowInterface();
+                interface1.removeSteps(step);
+                flow.removeSteps(step);
+                flowInterfaceRepository.save(interface1);
+                functionalFlowRepository.save(flow);
+                functionalFlowStepRepository.delete(step);
             }
+            // detach dataflow
+            for (DataFlow dataFlow : new HashSet<>(flow.getDataFlows())) {
+                System.out.println("before" + flow.getDataFlows().size());
+                System.out.println("before" + dataFlow.getFunctionalFlows().size());
+
+                flow.removeDataFlows(dataFlow);
+                dataFlowRepository.save(dataFlow);
+                functionalFlowRepository.save(flow);
+                System.out.println("after" + flow.getDataFlows().size());
+                System.out.println("after" + dataFlow.getFunctionalFlows().size());
+            }
+            // delete Flow
+            functionalFlowRepository.delete(flow);
         }
 
-        // delete Interfcaes not linked to other Flow
+        // delete Interfaces not linked to other Flow
         for (FlowInterface interface1 : allInterfaces) {
             if (interface1.getSteps() == null || interface1.getSteps().isEmpty()) {
                 // detach dataflow
@@ -119,12 +103,14 @@ public class LandscapeViewService {
             }
         }
 
+        // delete DataFlow not linked to
         for (DataFlow dataFlow : allData) {
             if (
                 dataFlow.getFlowInterface() == null &&
                 (dataFlow.getFunctionalFlows() == null || dataFlow.getFunctionalFlows().isEmpty()) &&
                 (dataFlow.getItems() == null || dataFlow.getItems().isEmpty())
             ) {
+                log.debug("About to delete " + dataFlow);
                 dataFlowRepository.delete(dataFlow);
             }
         }
