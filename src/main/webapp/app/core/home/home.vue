@@ -16,15 +16,15 @@
         <ul>
           <li>
             A <router-link to="landscape-view">Landscape</router-link> is an architecture diagram that represents a subset of
-            <router-link to="application">Application</router-link>, and their Functional Flow
+            <router-link to="application">Applications</router-link>, and their Functional Flows
           </li>
           <li>
             In the context of a Landscape, a <router-link to="functional-flow">Functional Flow</router-link> represents a functional
-            information exchange between two applications
+            information exchange between two ore more applications
           </li>
           <li>
-            A Functional Flow is implemented through one or more <router-link to="flow-interface">Interface</router-link> to transfer
-            information between source and target.
+            A Functional Flow is implemented through one or more <router-link to="flow-interface">Interfaces</router-link> to transfer
+            information between a source and a target Application.
           </li>
           <li>
             Interface is a "pipeline" between two applications and it's fully defined by a source and a target Application and a

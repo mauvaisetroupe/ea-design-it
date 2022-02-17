@@ -27,7 +27,7 @@ What an application is? There is no obvious reponse. But anyway, you need a abst
 
 ## Functional Flows
 
-In the context of a **Landscape**, a Functional Flow represents a functional information exchange between two applications
+In the context of a **Landscape**, a Functional Flow represents a functional information exchange between two or more applications
 
 <br/>
 
@@ -37,10 +37,12 @@ In the context of a **Landscape**, a Functional Flow represents a functional inf
 >
 > ![flow view](png/plantuml-functionalflow/plantuml-functionalflow.png)
 
+FunctionalFlow is a list of **steps**, each step leverages on an **Interface**
+
 
 ## Interfaces
 
-A Functional Flow is implemented through one or more **Interface** to transfer information between source and target.
+A Functional Flow is implemented through one or more **Interfaces** to transfer information between source and target.
 
 Interface is a "pipeline" between two applications and it's fully defined by :
 - a source **Application**

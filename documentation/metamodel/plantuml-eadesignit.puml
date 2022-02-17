@@ -1,22 +1,17 @@
 @startuml
-LandscapeView "1" *-down- "n" FunctionalFlow : flows
-FunctionalFlow "n" o-down- "1" Interface : flows
-'FunctionalFlow "1" o-- "n" DataFlow
-DataFlow "n" -right-o "1" Interface
+LandscapeView "1" *-down- "n" FunctionalFlow
+FunctionalFlow "1" *-left- "n" FunctionalFlowStep  : \t\t\t
+FunctionalFlowStep "n" --* "1" Interface
+DataFlow "n" -left-o "1" Interface
+DataFlow "1" o-down- "n" DataFlowItem
 DataFlow "n" -up-o "n" FunctionalFlow
 
-
-
-
-Interface "n" o-right- "1" Application : source
-Interface "n" o-right- "1" Application : target
+Interface "n" o-- "1" Application : source
+Interface "n" o-- "1" Application : target
 Interface "n" o-- "1" ApplicationComponent : source
 Interface "n" o-- "1" ApplicationComponent : target
 
-Application "1" o-- "n" ApplicationComponent : module
-
-DataFlow "1" o-- "n" DataFlowItem
-
+Application "1" o-right- "n" ApplicationComponent : \t\t\t
 
 
 
@@ -25,8 +20,8 @@ Class LandscapeView {
    String owner
 }
 note left of LandscapeView
-  LanscapeView is for example a 
-  target landscape schema in a ADD
+  LanscapeView is a diagram that represents a set 
+  of applications and flows between these applications.
   
   The name 'view' come from in TOGAF vocabulary
   A view responds to a template (viewpoint)
@@ -41,14 +36,26 @@ Class FunctionalFlow {
    String status
 	Interface interfaces
 }
-note left of FunctionalFlow
-  In the context of a <b>LandscapeView</b>,
-  a FunctionalFlow represents a functional information 
-  exchange between two applications
+note right of FunctionalFlow
+  In the context of a LandscapeView,
+  a FunctionalFlow represents a functional 
+  information exchange between two or 
+  more applications
   
-  A FunctionalFlow leverage on a <b>Inteface</b> to transfer
-  information between source and target
+  A FunctionalFlow is a list of <b>steps</b>. 
 end note 
+
+Class FunctionalFlowStep {
+   String description
+   int stepOrder
+}
+
+note left of FunctionalFlowStep
+  Each step leverages on an 
+  <b>Inteface</b> to transfer 
+  information between 
+  applications.
+end note
 
 Class Interface {
    Application source
@@ -57,13 +64,11 @@ Class Interface {
    String status
    String owner
 }
-note top of Interface
-   Interface is a "pipeleline" defined by 
-    - a source <b>Application</b>
-    - a target <b>Applications</b>
-    - a protocol (API, Files, Events)
-   A Functional Flow is implemented 
-   through one or more <b>Interface</b>
+note left of Interface
+   Interface is a "pipeleline" between 
+   a source and a target <b>Application</b>
+   (or Component) via a protocol 
+   (API, Files, Events)
 end note
 
 
@@ -97,15 +102,13 @@ Class DataFlow {
 }
 
 
-note left of DataFlow
-  Exchange data, is modeled by a <b>Data Flow</b>.
-  A Data flow is implemented :
-   - through <u>one</u> specific <b>Interface</b>, 
-   - in the context of <u>one or more</u> <b>Functional Flow</b>
+note right of DataFlow
+  Data Flow is the data going through the 
+  <b>Interface</b> pipeline in the context 
+  of one or more <b>Functional Flow</b>
   
-  DataFlow is a <b>File</b>, an <b>Event-Topic</b> or an <b>API</b>
-
-  Format is JSON, XML, CSV, etc.
+  DataFlow is a <b>File</b>, an <b>Event-Topic</b> 
+  or an <b>API</b>
 end note 
 
 
@@ -114,7 +117,7 @@ Class DataFlowItem {
    String xsdURL
 }
 
-note left of DataFlowItem
+note right of DataFlowItem
    When DataFlow is of type Event-Topic, 
    we need a additional object to model a 
    specific Event in a Topic
