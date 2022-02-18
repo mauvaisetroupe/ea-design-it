@@ -30,11 +30,11 @@ public class FunctionFlowStepRepositoryTest {
     @Test
     void assertEqualityConsistency() {
         Application application1 = new Application();
-        application1.setAlias("HPX.CMP.00000001");
+        application1.setAlias("HPX.CMPT.00000001");
         application1.setName("application1.name");
 
         Application application2 = new Application();
-        application2.setAlias("HPX.CMP.00000002");
+        application2.setAlias("HPX.CMPT.00000002");
         application2.setName("application2.name");
 
         applicationRepository.save(application1);
