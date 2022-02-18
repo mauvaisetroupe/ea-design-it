@@ -33,3 +33,11 @@ Diagram capabilities come however in two forms :
 # Demo
 
 You can find a [demo](https://ea-design-it.herokuapp.com/) on Heroku platform.
+
+Example of generated plantuml diagram :
+
+![interface view](./documentation/application/screenshot-plantuml.png)
+
+Example of generated/midified draw.io diagram :
+
+![interface view](./documentation/application/screenshot-drawio.png)
