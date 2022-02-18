@@ -276,9 +276,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="424.84544"
-     inkscape:cy="221.67757"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="373.75935"
+     inkscape:cy="259.8237"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -474,12 +474,12 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.3499999px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.15229654"
-       x="91.12056"
-       y="97.228714"
+       x="90.933472"
+       y="96.480362"
        id="text1803"><tspan
          sodipodi:role="line"
-         x="91.12056"
-         y="97.228714"
+         x="90.933472"
+         y="96.480362"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.3499999px;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;stroke-width:0.15229654"
          id="tspan3823">Architects</tspan></text>
     <g
@@ -641,52 +641,63 @@
          id="g18529-6" />
     </g>
     <g
-       id="g18556-5-3"
-       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)">
-      <g
-         id="g18499-1-3">
-        <path
-           id="path18495-1-8"
-           d="m 275.086,270.955 c -19.705,30.711 -47.409,71.378 -68.286,92.057 1.956,0.066 3.915,0.099 5.848,0.099 94.095,0 161.003,-76.664 217.257,-122.081 -55.223,-42.845 -105.15,-109.051 -202.966,-126.548 -1.702,-0.305 -3.316,0.947 -4.039,2.518 -0.06,0.13 -0.102,0.264 -0.148,0.397 14.76,18.076 30.833,41.291 44.455,62.047 6.362,9.386 12.426,18.645 17.877,27.14 -79.07,3.854 -158.14,2.85 -237.209,-3.04 -16.674,19.873 -21.715,39.745 -15.123,59.618 1.325,3.994 3.306,7.619 5.791,10.786 47.517,-3.523 95.043,-5.285 142.559,-5.285 31.332,10e-4 62.653,0.765 93.984,2.292 z"
-           style="fill:#4479fa"
-           inkscape:connector-curvature="0" />
-        <path
-           id="path18497-0-0"
-           d="m 212.648,99.428 c 101.226,0 171.009,88.753 229.892,131.842 -58.886,43.091 -128.654,131.841 -229.891,131.841 -1.933,0 -3.892,-0.033 -5.848,-0.099 20.877,-20.679 48.581,-61.346 68.286,-92.057 -31.331,-1.527 -62.652,-2.291 -93.982,-2.291 -47.739,0 -95.488,1.775 -143.227,5.332 -23.899,-28.483 -23.899,-56.968 0,-85.451 47.744,3.557 95.478,5.331 143.222,5.331 31.326,0 62.661,-0.764 93.987,-2.291 -19.705,-30.71 -47.408,-71.378 -68.285,-92.058 1.961,-0.066 3.906,-0.099 5.846,-0.099 m 0,-20 c -2.16,0 -4.353,0.037 -6.52,0.11 -7.98,0.269 -15.036,5.257 -17.949,12.691 -2.913,7.434 -1.126,15.888 4.546,21.507 11.483,11.374 27.456,31.945 46.108,59.263 -19.279,0.583 -38.593,0.876 -57.735,0.876 -47.053,0 -94.74,-1.775 -141.737,-5.276 -0.497,-0.037 -0.994,-0.055 -1.488,-0.055 -5.886,0 -11.504,2.597 -15.319,7.145 -30.074,35.842 -30.074,75.32 0,111.162 3.815,4.547 9.434,7.145 15.319,7.145 0.495,0 0.99,-0.018 1.488,-0.055 46.998,-3.501 94.687,-5.276 141.741,-5.276 19.142,0 38.452,0.293 57.73,0.876 -18.652,27.318 -34.624,47.888 -46.108,59.263 -5.673,5.619 -7.46,14.073 -4.547,21.507 2.913,7.434 9.969,12.423 17.949,12.691 2.166,0.073 4.36,0.11 6.521,0.11 84.784,0 148.184,-55.605 199.127,-100.284 15.088,-13.232 29.339,-25.731 42.574,-35.417 5.147,-3.767 8.189,-9.762 8.189,-16.14 0,-6.378 -3.042,-12.374 -8.189,-16.14 -13.234,-9.684 -27.484,-22.181 -42.57,-35.412 C 360.832,135.036 297.426,79.428 212.648,79.428 Z"
-           style="fill:#2c3d8e"
-           inkscape:connector-curvature="0" />
-      </g>
-      <g
-         id="g18501-8-5" />
-      <g
-         id="g18503-50-6" />
-      <g
-         id="g18505-6-6" />
-      <g
-         id="g18507-4-4" />
-      <g
-         id="g18509-6-0" />
-      <g
-         id="g18511-25-0" />
-      <g
-         id="g18513-86-4" />
-      <g
-         id="g18515-2-6" />
-      <g
-         id="g18517-8-2" />
-      <g
-         id="g18519-4-6" />
-      <g
-         id="g18521-7-7" />
-      <g
-         id="g18523-2-5" />
-      <g
-         id="g18525-4-6" />
-      <g
-         id="g18527-0-9" />
-      <g
-         id="g18529-6-8" />
+       id="g19186">
+      <path
+         inkscape:connector-curvature="0"
+         style="fill:#4d9f4d;fill-opacity:0.8064516;stroke-width:0.03811875"
+         d="m 87.356428,112.87999 c -1.170665,-0.75113 -2.72084,-1.80717 -3.509098,-2.60297 -0.0025,0.0746 -0.0038,0.14923 -0.0038,0.22292 0,3.58678 2.922335,6.13723 4.653575,8.28156 1.633198,-2.10503 4.156887,-4.00819 4.823851,-7.73681 0.01163,-0.0649 -0.0361,-0.1264 -0.09598,-0.15396 -0.005,-0.002 -0.01006,-0.004 -0.01513,-0.006 -0.689034,0.56263 -1.573961,1.17531 -2.365154,1.69457 -0.357783,0.24251 -0.710724,0.47366 -1.034543,0.68145 -0.14691,-3.01405 -0.108638,-6.0281 0.115881,-9.04211 -0.757534,-0.6356 -1.51503,-0.82775 -2.272563,-0.57647 -0.152247,0.0505 -0.290427,0.12602 -0.411149,0.22074 0.134292,1.81129 0.201457,3.62292 0.201457,5.43417 -3.8e-5,1.19434 -0.02916,2.38826 -0.08737,3.58255 z"
+         id="path18495-1-8" />
+      <path
+         inkscape:connector-curvature="0"
+         style="fill:#4d9f4d;fill-opacity:1;stroke-width:0.03811875"
+         d="m 93.894796,110.4999 c 0,3.8586 -3.383153,6.51865 -5.025652,8.76319 -1.642575,-2.24466 -5.025614,-4.90413 -5.025614,-8.76316 0,-0.0737 0.0013,-0.14835 0.0038,-0.22291 0.788258,0.7958 2.338433,1.85184 3.509098,2.60297 0.05821,-1.1943 0.08733,-2.38821 0.08733,-3.58247 0,-1.81975 -0.06766,-3.63989 -0.203249,-5.45964 1.085736,-0.911 2.171549,-0.911 3.257285,0 -0.135588,1.81994 -0.203211,3.6395 -0.203211,5.45945 0,1.1941 0.02912,2.38855 0.08733,3.58266 1.170627,-0.75113 2.72084,-1.80713 3.509136,-2.60294 0.0025,0.0747 0.0038,0.1489 0.0038,0.22285 m 0.762375,0 c 0,-0.0823 -0.0014,-0.16593 -0.0042,-0.24854 -0.01025,-0.30419 -0.20039,-0.57315 -0.483765,-0.68419 -0.283375,-0.11104 -0.605631,-0.0429 -0.81982,0.17329 -0.433563,0.43771 -1.217704,1.04658 -2.259032,1.75758 -0.02222,-0.7349 -0.03339,-1.47112 -0.03339,-2.20079 0,-1.7936 0.06766,-3.61137 0.201115,-5.40284 0.0014,-0.0189 0.0021,-0.0379 0.0021,-0.0567 0,-0.22437 -0.09899,-0.43852 -0.272358,-0.58394 -1.366252,-1.14638 -2.871104,-1.14638 -4.237357,0 -0.173326,0.14542 -0.272358,0.35961 -0.272358,0.58394 0,0.0189 6.86e-4,0.0377 0.0021,0.0567 0.133453,1.79151 0.201114,3.60935 0.201114,5.40299 0,0.72967 -0.01117,1.46574 -0.03339,2.2006 -1.041328,-0.71099 -1.825431,-1.31983 -2.259031,-1.75758 -0.21419,-0.21625 -0.536446,-0.28437 -0.81982,-0.17333 -0.283375,0.11104 -0.47355,0.38001 -0.483765,0.6842 -0.0028,0.0826 -0.0042,0.16619 -0.0042,0.24857 0,3.23186 2.119594,5.64859 3.822701,7.59047 0.504387,0.57514 0.980834,1.11837 1.350052,1.62287 0.143593,0.1962 0.372115,0.31215 0.615237,0.31215 0.243121,0 0.471681,-0.11595 0.615236,-0.31215 0.369142,-0.50447 0.845512,-1.04766 1.349861,-1.62272 1.70326,-1.942 3.822968,-4.35895 3.822968,-7.59058 z"
+         id="path18497-0-0" />
     </g>
+    <g
+       id="g18501-8-5"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18503-50-6"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18505-6-6"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18507-4-4"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18509-6-0"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18511-25-0"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18513-86-4"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18515-2-6"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18517-8-2"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18519-4-6"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18521-7-7"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18523-2-5"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18525-4-6"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18527-0-9"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
+    <g
+       id="g18529-6-8"
+       transform="matrix(0,0.03811875,-0.03811875,0,97.527716,102.34608)" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:6.3499999px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.15229654"
@@ -711,25 +722,25 @@
          id="tspan18969">Build Factory</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#4479fa;fill-opacity:1;stroke:none;stroke-width:0.15229654"
-       x="110.64016"
-       y="105.67345"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#4d9f4d;fill-opacity:1;stroke:none;stroke-width:0.15229654"
+       x="110.26598"
+       y="104.36382"
        id="text1803-7-1"><tspan
          sodipodi:role="line"
          id="tspan18989"
-         x="110.64016"
-         y="105.67345">top down</tspan></text>
+         x="110.26598"
+         y="104.36382">top down</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#4479fa;fill-opacity:1;stroke:none;stroke-width:0.15229654"
-       x="27.084393"
-       y="169.89966"
+       x="41.677307"
+       y="171.02219"
        id="text1803-7-1-2"><tspan
          style="stroke-width:0.15229654"
          sodipodi:role="line"
          id="tspan18989-1"
-         x="27.084393"
-         y="169.89966">bottom-up</tspan></text>
+         x="41.677307"
+         y="171.02219">bottom-up</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#4479fa;fill-opacity:1;stroke:none;stroke-width:0.15229654"
@@ -743,26 +754,26 @@
          id="tspan19081">custom  connectors</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#4479fa;fill-opacity:1;stroke:none;stroke-width:0.15229654"
-       x="57.955105"
-       y="109.01322"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#4d9f4d;fill-opacity:1;stroke:none;stroke-width:0.15229654"
+       x="70.302963"
+       y="107.32944"
        id="text1803-7-1-9"><tspan
-         style="stroke-width:0.15229654"
+         style="fill:#4d9f4d;fill-opacity:1;stroke-width:0.15229654"
          sodipodi:role="line"
          id="tspan18989-14"
-         x="57.955105"
-         y="109.01322">manually</tspan></text>
+         x="70.302963"
+         y="107.32944">manually</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#4479fa;fill-opacity:1;stroke:none;stroke-width:0.15229654"
-       x="68.405968"
-       y="116.21875"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#4d9f4d;fill-opacity:1;stroke:none;stroke-width:0.15229654"
+       x="65.225456"
+       y="115.84456"
        id="text1803-7-1-9-9"><tspan
-         style="stroke-width:0.15229654"
+         style="fill:#4d9f4d;fill-opacity:1;stroke-width:0.15229654"
          sodipodi:role="line"
          id="tspan18989-14-1"
-         x="68.405968"
-         y="116.21875">Excel files</tspan></text>
+         x="65.225456"
+         y="115.84456">Excel import</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#4479fa;fill-opacity:1;stroke:none;stroke-width:0.15229654"
@@ -787,25 +798,36 @@
          id="tspan18944">API Gateway</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#4479fa;fill-opacity:1;stroke:none;stroke-width:0.15229654"
-       x="124.04191"
-       y="110.74784"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#4d9f4d;fill-opacity:1;stroke:none;stroke-width:0.15229654"
+       x="114.12621"
+       y="115.42506"
        id="text1803-7-1-9-9-0"><tspan
-         style="stroke-width:0.15229654"
+         style="fill:#4d9f4d;fill-opacity:1;stroke-width:0.15229654"
          sodipodi:role="line"
          id="tspan18989-14-1-4"
-         x="124.04191"
-         y="110.74784">governance</tspan></text>
+         x="114.12621"
+         y="115.42506">high-level</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#4479fa;fill-opacity:1;stroke:none;stroke-width:0.15229654"
-       x="161.87978"
-       y="178.72495"
+       x="165.06029"
+       y="180.40874"
        id="text1803-7-1-2-5-8"><tspan
          style="stroke-width:0.15229654"
          sodipodi:role="line"
-         x="161.87978"
-         y="178.72495"
+         x="165.06029"
+         y="180.40874"
          id="tspan19081-0">API access</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:'Nunito Sans';-inkscape-font-specification:'Nunito Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#4d9f4d;fill-opacity:1;stroke:none;stroke-width:0.15229654"
+       x="125.7479"
+       y="109.47015"
+       id="text1803-7-1-9-9-0-2"><tspan
+         style="fill:#4d9f4d;fill-opacity:1;stroke-width:0.15229654"
+         sodipodi:role="line"
+         id="tspan18989-14-1-4-9"
+         x="125.7479"
+         y="109.47015">governance</tspan></text>
   </g>
 </svg>
