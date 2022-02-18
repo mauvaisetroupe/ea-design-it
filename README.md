@@ -2,24 +2,21 @@
 
 # Introduction
 
-EADesignIt is a Enterprise Architecture software.
-It's a lightweight and an open source application that will allow to store in a database your applications, and interactions between applications.
+EADesignIt is lightweight and an open source Enterprise Architecture software that will allow you to create transaparency on your assets, their connections and their characteristics storing them in a database repository
 
-It allows to build in a database a referential of :
+EADesignIt aims Enterprise Architects who need to document the state of their enterprise, helping them to describe their applications landscape with a minimal effort, replacing unmaintanable Excel files.
 
-- Applications, and Application Components
-- Interfaces and Flows between Applications
+EADesignIt help architects to document in a centralized repository their assets, including:
+
+- Applications,
+- Application Components
+- Interfaces
+- Data Flows
 - Capabilities covered by Applications
 
-EADesignIt is intended for Enterprise Architects who need to document their applications landscape with minimal effort but in a structured and centralized way, replacing your unmaintanable Excel files.
+Based on the observation that building an enterprise-wide assets repository is a costly activity and that maintaining a fine-grained refential manually could turn into a nightmare, the idea behind EADesignIt is to create via a manually process a top-down high-level repository and give the possibility to complete the feeding of the repository by any bottom-up tooling
 
-Building an enterprise-wide application referential is a costly activity (but sometime mandatory, for compliance reason or other).
-Even more, maintaining a fine-grained refential manually could turn into a nightmare.
-
-So the idea is to :
-
-1. create via a manually process a top-down high-level referential,
-2. and give the possibility to complete the feeding of the database by any bottom-up tool (exampe : importing from an API gateway configuration, listening on the netowrk or an ESB, pluging into the build factory, etc.)
+![approach](./documentation/top-bottom.svg)
 
 For these reasons, note than event if it's then possible to create all entities (applications, interfaces, etc.) via the GUI, the philosophy of the software is to be open :
 
