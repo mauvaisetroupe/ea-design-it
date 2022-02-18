@@ -115,6 +115,9 @@ Here is the meta-model used in the tool.
 
 ![meta model](png/plantuml-eadesignit/plantuml-eadesignit.png)
 
+# JHipster JDL
+
+You can also import the [JDL file](/jhipster-jdl-metamodel.jdl) in [jdl studio](https://start.jhipster.tech/jdl-studio/) for a more accurate and detailed view of the entities and their relationships.
 
 
 

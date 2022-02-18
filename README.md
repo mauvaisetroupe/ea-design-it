@@ -34,6 +34,8 @@ If you want to know if EADesignIt is appropriate for your requirements, the more
 
 Does the data model meet your requirements? So for more explanation of potential features, please read first the [description of data model](./documentation/metamodel).
 
+You can also import the [JDL file](./jhipster-jdl-metamodel.jdl) in [jdl studio](https://start.jhipster.tech/jdl-studio/) for a more accurate and detailed view of the entities and their relationships.
+
 # Diagram or not diagram ?
 
 This application is not a architeture diagram tool.
