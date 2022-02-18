@@ -40,10 +40,7 @@
             swagger, substructure in the File, event of a topic)
           </li>
         </ul>
-        <p>
-          Please, refer to <a href="https://github.com/mauvaisetroupe/EADesignIt/tree/main/documentation/metamodel">documentation</a> for
-          more explanation
-        </p>
+        <p>Please, refer to <a href="https://github.com/mauvaisetroupe/EADesignIt">documentation</a> for more explanation</p>
       </div>
       <div v-if="$store.getters.writeAuthority">
         <h2>Import Excel files</h2>
