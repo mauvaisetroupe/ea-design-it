@@ -1,15 +1,33 @@
 @startuml
 LandscapeView "1" *-down- "n" FunctionalFlow
-FunctionalFlow "1" *-left- "n" FunctionalFlowStep  : \t\t\t
+note on link #White
+     A landscape is composed 
+     of FunctionalFlows
+end note
+FunctionalFlow "1" *-left- "n" FunctionalFlowStep  : \t\t\t\t
+note on link #White
+  A Functional 
+  Flow is a 
+  list of steps 
+end note
 FunctionalFlowStep "n" --* "1" Interface
-DataFlow "n" -left-o "1" Interface
+DataFlow "n" -left-o "1" Interface : \t\t\t\t
+note on link #White 
+   auto detection
+   is to privilege
+end note   
 DataFlow "1" o-down- "n" DataFlowItem
+note on link #White 
+   auto detection
+   is to privilege
+end note   
 DataFlow "n" -up-o "n" FunctionalFlow
-
-Interface "n" o-- "1" Application : source
-Interface "n" o-- "1" Application : target
-Interface "n" o-- "1" ApplicationComponent : source
-Interface "n" o-- "1" ApplicationComponent : target
+note on link #White
+   this relationship 
+   could be complex to maintain 
+end note   
+Interface "n" o-- "2" Application : source, target
+Interface "n" o-- "2" ApplicationComponent : source, target
 
 Application "1" o-right- "n" ApplicationComponent : \t\t\t
 
@@ -25,8 +43,6 @@ note left of LandscapeView
   
   The name 'view' come from in TOGAF vocabulary
   A view responds to a template (viewpoint)
-
-  A landscape view is composed of <b>FunctionalFlow</b>
 end note 
 
 Class FunctionalFlow {
@@ -42,7 +58,6 @@ note right of FunctionalFlow
   information exchange between two or 
   more applications
   
-  A FunctionalFlow is a list of <b>steps</b>. 
 end note 
 
 Class FunctionalFlowStep {
