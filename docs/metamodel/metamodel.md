@@ -1,3 +1,6 @@
+---
+title:EADesignIt - MetaModel
+---
 # Introduction
 This application is tool to model application architecture building diagrams to document applications and interactions between applications (data flows).
 
