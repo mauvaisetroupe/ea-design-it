@@ -62,3 +62,7 @@ You can find a [demo on Heroku platform](https://ea-design-it.herokuapp.com/).
 This application is build with Java, Spring Boot and VueJS.
 
 It's based on JHipster to generate all entities. Please refer to [documentation](./docs/jhipster).
+
+# Documentation
+
+Please visit [github pages](https://mauvaisetroupe.github.io/ea-design-it/)
