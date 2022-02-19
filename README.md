@@ -10,7 +10,7 @@ You can discover EADesignIt featutes browsing the [demo on Heroku platform](http
 
 Based on the observation that building an enterprise-wide assets repository is a costly activity and that maintaining a fine-grained refential manually could turn into a nightmare, the idea behind EADesignIt is to offer the possibility to complete a high-level top-down process by a more automatic-feeding bottom-up approach.
 
-![approach](./documentation/top-bottom.svg)
+![approach](./docs/images/top-bottom.svg)
 
 That's why, event if it's possible to create all entities (applications, interfaces, etc.) via the GUI, the philosophy of the software is to offer an excel import/export mechanism as a first-class citizen feature.
 
@@ -27,7 +27,7 @@ EADesignIt helps architects to document their assets, including:
 - Data Flows,
 - and Applications Capabilities.
 
-If you want to know if EADesignIt is appropriate in your context, the most important aspect is to know if the data model could meet your requirements. To achieve this, please read the [description of data model](./documentation/metamodel). You can also consult the [JDL file](./jhipster-jdl-metamodel.jdl) for a more accurate and detailed view of the entities and their relationships (you can use [jdl studio](https://start.jhipster.tech/jdl-studio/) and import JDL file).
+If you want to know if EADesignIt is appropriate in your context, the most important aspect is to know if the data model could meet your requirements. To achieve this, please read the [description of data model](./doc/../docs/metamodel/metamodel.md). You can also consult the [JDL file](./jhipster-jdl-metamodel.jdl) for a more accurate and detailed view of the entities and their relationships (you can use [jdl studio](https://start.jhipster.tech/jdl-studio/) and import JDL file).
 
 # Diagramming or not diagramming?
 
@@ -41,7 +41,7 @@ EADesignIt uses [plantuml](http://www.plantuml.com) for real-time visualization.
 
 Example of generated plantuml diagram :
 
-![interface view](./documentation/application/screenshot-plantuml.png)
+![interface view](./docs/application/screenshot-plantuml.png)
 
 ## Drawio
 
@@ -51,7 +51,7 @@ If you add a new application in your landscape, EADesignIt will add this additio
 
 Example of generated and editable draw.io diagram :
 
-![interface view](./documentation/application/screenshot-drawio.png)
+![interface view](./docs/application/screenshot-drawio.png)
 
 # Demo
 
@@ -61,4 +61,4 @@ You can find a [demo on Heroku platform](https://ea-design-it.herokuapp.com/).
 
 This application is build with Java, Spring Boot and VueJS.
 
-It's based on JHipster to generate all entities. Please refer to [documentation](./documentation/jhipster).
+It's based on JHipster to generate all entities. Please refer to [documentation](./docs/jhipster).
