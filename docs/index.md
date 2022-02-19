@@ -1,37 +1,64 @@
-## Welcome to GitHub Pages
+# EADesignIt
 
-You can use the [editor on GitHub](https://github.com/mauvaisetroupe/ea-design-it/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
+# Introduction
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+EADesignIt is a lightweight open source Enterprise Architecture software that allows to create transaparency on your assets, their connections and their characteristics. This tool aims Enterprise Architects who need to document the state of their enterprises by helping them to describe their applications landscape with a minimal effort. Its purpose is to replace unmaintanable Excel files by a database repository.
 
-### Markdown
+You can discover EADesignIt featutes browsing the [demo on Heroku platform](https://ea-design-it.herokuapp.com/).
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+# Product philosophy
 
-```markdown
-Syntax highlighted code block
+Based on the observation that building an enterprise-wide assets repository is a costly activity and that maintaining a fine-grained refential manually could turn into a nightmare, the idea behind EADesignIt is to offer the possibility to complete a high-level top-down process by a more automatic-feeding bottom-up approach.
 
-# Header 1
-## Header 2
-### Header 3
+![approach](./documentation/top-bottom.svg)
 
-- Bulleted
-- List
+That's why, event if it's possible to create all entities (applications, interfaces, etc.) via the GUI, the philosophy of the software is to offer an excel import/export mechanism as a first-class citizen feature.
 
-1. Numbered
-2. List
+For the same reason, offering an API over the database to add custom process/tools to populate the database is an essential part of the solution.
 
-**Bold** and _Italic_ and `Code` text
+# Data model
 
-[Link](url) and ![Image](src)
-```
+EADesignIt helps architects to document their assets, including:
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+- Applications,
+- Application Components,
+- Interfaces,
+- Functional Flows,
+- Data Flows,
+- and Applications Capabilities.
 
-### Jekyll Themes
+If you want to know if EADesignIt is appropriate in your context, the most important aspect is to know if the data model could meet your requirements. To achieve this, please read the [description of data model](./documentation/metamodel). You can also consult the [JDL file](./jhipster-jdl-metamodel.jdl) for a more accurate and detailed view of the entities and their relationships (you can use [jdl studio](https://start.jhipster.tech/jdl-studio/) and import JDL file).
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/mauvaisetroupe/ea-design-it/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+# Diagramming or not diagramming?
 
-### Support or Contact
+This application is not an architeture diagram tool. It should preferably be considered as a database repository.
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Diagram capabilities come however in two forms.
+
+## PlantUML
+
+EADesignIt uses [plantuml](http://www.plantuml.com) for real-time visualization. It generates an UML components diagram to expose applications and their integrations.
+
+Example of generated plantuml diagram :
+
+![interface view](./documentation/application/screenshot-plantuml.png)
+
+## Drawio
+
+EADesignIt also generates editable diagram using [drawio](https://drawio-app.com/). Like the one generated on-the-fly with plantuml, this schema represents applications and their interfaces. But with this drawio feauture, you can also easily edit and customize the generated schema and save it in your database.
+
+If you add a new application in your landscape, EADesignIt will add this additional component in your drawio landscape diagram without loosing the formatting you've previously done.
+
+Example of generated and editable draw.io diagram :
+
+![interface view](./documentation/application/screenshot-drawio.png)
+
+# Demo
+
+You can find a [demo on Heroku platform](https://ea-design-it.herokuapp.com/).
+
+# Build the application
+
+This application is build with Java, Spring Boot and VueJS.
+
+It's based on JHipster to generate all entities. Please refer to [documentation](./documentation/jhipster).
