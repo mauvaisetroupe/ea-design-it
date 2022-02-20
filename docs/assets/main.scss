@@ -1,0 +1,70 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+@import "minima";
+
+.wrapper {
+    max-width: 65%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 30px;
+    padding-left: 30px;
+}
+.site-header {
+    background-color: #159957;
+    background-image: linear-gradient(120deg, #155799, #159957);
+}
+@media screen and (max-width: 600px) {
+    .site-nav {
+        background-color: #159957;
+        background-image: linear-gradient(120deg, #155799, #159957);
+    }
+}
+.site-nav .menu-icon > svg {
+    fill: white;
+}
+.page-link {
+    color: white;
+}
+.site-title {
+    color: white;
+}
+.site-title:visited { 
+    color: white; 
+}
+.site-title:hover { 
+    color: white; 
+}
+.site-nav .page-link {
+    color: white;
+    line-height: 1.5;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #159957;
+}
+h1, h2, .post-content h1, .post-content h2 , .post-title  {
+    display: block;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: 300;
+}
+
+h1, .post-content h1, .post-title, .page-heading  {
+    font-size: 2em;
+}
+
+h2, .post-content h2 {
+    font-size: 1.5em;
+}
+    
+
+body {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #606c71;
+    line-height: 1.5;
+    font-size: 1.1rem;
+    overflow-y: scroll;
+}

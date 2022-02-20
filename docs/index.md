@@ -1,6 +1,11 @@
-# EADesignIt
+---
+# Feel free to add content and custom Front Matter to this file.
+# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-# Introduction
+layout: home
+title: Introduction
+---
+
 
 EADesignIt is a lightweight open source Enterprise Architecture software that allows to create transaparency on your assets, their connections and their characteristics. This tool aims Enterprise Architects who need to document the state of their enterprises by helping them to describe their applications landscape with a minimal effort. Its purpose is to replace unmaintanable Excel files by a database repository.
 
@@ -27,7 +32,13 @@ EADesignIt helps architects to document their assets, including:
 - Data Flows,
 - and Applications Capabilities.
 
-If you want to know if EADesignIt is appropriate in your context, the most important aspect is to know if the data model could meet your requirements. To achieve this, please read the [description of data model](./metamodel/metamodel.md). You can also consult the [JDL file](https://github.com/mauvaisetroupe/ea-design-it/blob/main/jhipster-jdl-metamodel.jdl) for a more accurate and detailed view of the entities and their relationships (you can use [jdl studio](https://start.jhipster.tech/jdl-studio/) and import JDL file).
+If you want to know if EADesignIt is appropriate in your context, the most important aspect is to know if the data model could meet your requirements. To achieve this, please read the [description of data model](./metamodel/metamodel.md). 
+
+[![meta model](metamodel/png/plantuml-eadesignit/plantuml-eadesignit.png){: width="500"}](./metamodel/metamodel)
+
+You can also consult the [JDL file](https://github.com/mauvaisetroupe/ea-design-it/blob/main/jhipster-jdl-metamodel.jdl) for a more accurate and detailed view of the entities and their relationships (you can use [jdl studio](https://start.jhipster.tech/jdl-studio/) and import JDL file).
+
+[![meta model](images/jdl.png){: width="500"}](https://github.com/mauvaisetroupe/ea-design-it/blob/main/jhipster-jdl-metamodel.jdl)
 
 # Diagramming or not diagramming?
 
@@ -61,4 +72,4 @@ You can find a [demo on Heroku platform](https://ea-design-it.herokuapp.com/).
 
 This application is build with Java, Spring Boot and VueJS.
 
-It's based on JHipster to generate all entities. Please refer to [documentation](./jhipster/README.md).
+It's based on JHipster to generate all entities. Please refer to [documentation](./jhipster/jhipster.md).

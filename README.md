@@ -1,5 +1,7 @@
 # EADesignIt
 
+Full documentation is [here](https://mauvaisetroupe.github.io/ea-design-it/).
+
 # Introduction
 
 EADesignIt is a lightweight open source Enterprise Architecture software that allows to create transaparency on your assets, their connections and their characteristics. This tool aims Enterprise Architects who need to document the state of their enterprises by helping them to describe their applications landscape with a minimal effort. Its purpose is to replace unmaintanable Excel files by a database repository.
@@ -27,7 +29,7 @@ EADesignIt helps architects to document their assets, including:
 - Data Flows,
 - and Applications Capabilities.
 
-If you want to know if EADesignIt is appropriate in your context, the most important aspect is to know if the data model could meet your requirements. To achieve this, please read the [description of data model](./doc/../docs/metamodel/metamodel.md). You can also consult the [JDL file](./jhipster-jdl-metamodel.jdl) for a more accurate and detailed view of the entities and their relationships (you can use [jdl studio](https://start.jhipster.tech/jdl-studio/) and import JDL file).
+If you want to know if EADesignIt is appropriate in your context, the most important aspect is to know if the data model could meet your requirements. To achieve this, please read the [description of data model](./docs/metamodel/metamodel.md). You can also consult the [JDL file](./jhipster-jdl-metamodel.jdl) for a more accurate and detailed view of the entities and their relationships (you can use [jdl studio](https://start.jhipster.tech/jdl-studio/) and import JDL file).
 
 # Diagramming or not diagramming?
 

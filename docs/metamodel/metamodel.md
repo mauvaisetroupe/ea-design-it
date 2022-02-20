@@ -1,7 +1,9 @@
 ---
-title: "EADesignIt - MetaModel"
+title: "MetaModel"
+layout: page
+order: 1
 ---
-# Introduction
+# Data Model - Introduction
 This application is tool to model application architecture building diagrams to document applications and interactions between applications (data flows).
 
 # Teminology 
@@ -120,7 +122,8 @@ Here is the meta-model used in the tool.
 
 # JHipster JDL
 
-You can also import the [JDL file](/jhipster-jdl-metamodel.jdl) in [jdl studio](https://start.jhipster.tech/jdl-studio/) for a more accurate and detailed view of the entities and their relationships.
+
+You can also consult the [JDL file](https://github.com/mauvaisetroupe/ea-design-it/blob/main/jhipster-jdl-metamodel.jdl) for a more accurate and detailed view of the entities and their relationships (you can use [jdl studio](https://start.jhipster.tech/jdl-studio/) and import JDL file).
 
 
 
