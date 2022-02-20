@@ -1,6 +1,7 @@
 ---
 title: "JHipster"
 layout: page
+permalink: /jhipster/
 ---
 # EADesignIt & JHipster
 

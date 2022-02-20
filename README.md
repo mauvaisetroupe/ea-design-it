@@ -1,6 +1,6 @@
 # EADesignIt
 
-Full documentation is [here](https://mauvaisetroupe.github.io/ea-design-it/).
+[Full documentation is here](https://mauvaisetroupe.github.io/ea-design-it/).
 
 # Introduction
 
@@ -29,7 +29,7 @@ EADesignIt helps architects to document their assets, including:
 - Data Flows,
 - and Applications Capabilities.
 
-If you want to know if EADesignIt is appropriate in your context, the most important aspect is to know if the data model could meet your requirements. To achieve this, please read the [description of data model](./docs/metamodel/metamodel.md). You can also consult the [JDL file](./jhipster-jdl-metamodel.jdl) for a more accurate and detailed view of the entities and their relationships (you can use [jdl studio](https://start.jhipster.tech/jdl-studio/) and import JDL file).
+If you want to know if EADesignIt is appropriate in your context, the most important aspect is to know if the data model could meet your requirements. To achieve this, please read the [description of data model](https://mauvaisetroupe.github.io/ea-design-it/metamodel/). You can also consult the [JDL file](./jhipster-jdl-metamodel.jdl) for a more accurate and detailed view of the entities and their relationships (you can use [jdl studio](https://start.jhipster.tech/jdl-studio/) and import JDL file).
 
 # Diagramming or not diagramming?
 
@@ -63,7 +63,7 @@ You can find a [demo on Heroku platform](https://ea-design-it.herokuapp.com/).
 
 This application is build with Java, Spring Boot and VueJS.
 
-It's based on JHipster to generate all entities. Please refer to [documentation](./docs/jhipster).
+It's based on JHipster to generate all entities. Please refer to [documentation](https://mauvaisetroupe.github.io/ea-design-it/jhipster/).
 
 # Documentation
 

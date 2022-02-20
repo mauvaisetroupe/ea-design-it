@@ -40,7 +40,7 @@
             swagger, substructure in the File, event of a topic)
           </li>
         </ul>
-        <p>Please, refer to <a href="https://github.com/mauvaisetroupe/EADesignIt">documentation</a> for more explanation</p>
+        <p>Please, refer to <a href="https://mauvaisetroupe.github.io/ea-design-it/">documentation</a> for more explanation</p>
       </div>
       <div v-if="$store.getters.writeAuthority">
         <h2>Import Excel files</h2>
@@ -51,10 +51,7 @@
           <li>Import Excel <router-link to="/capability-import-upload-file">Capabilities</router-link></li>
           <li>Import Excel mapping <router-link to="/application-capability-import-upload-file">Applications/Capabilities</router-link></li>
         </ul>
-        <p>
-          Please, refer to <a href="https://github.com/mauvaisetroupe/EADesignIt/tree/main/documentation/excel-import">documentation</a> for
-          more explanation
-        </p>
+        <p>Please, refer to <a href="https://mauvaisetroupe.github.io/ea-design-it/import/">documentation</a> for more explanation</p>
       </div>
       <div class="alert alert-success" v-if="authenticated">
         <span v-if="username">You are logged in as user "{{ username }}"</span>

@@ -1,6 +1,7 @@
 ---
 title: "Excel Import"
 layout: page
+permalink: /import/
 ---
 
 # Import Excel to feed your database
