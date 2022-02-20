@@ -24,8 +24,8 @@ description: >- # this means to ignore newlines until "baseurl:"
   EADesignIt is a lightweight open source Enterprise Architecture 
   software that allows to create transaparency on your assets, 
   their connections and their characteristics.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/ea-design-it" # the subpath of your site, e.g. /blog
+url: "https://mauvaisetroupe.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: mauvaisetroupe
 github_username:  mauvaisetroupe
 
