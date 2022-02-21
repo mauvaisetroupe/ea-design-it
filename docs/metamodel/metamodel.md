@@ -69,26 +69,29 @@ But an Interface has a unique owner (a DEVOPS team)
 
 In the context of a Function Flow, exchange data through a specific Interface is implemented by a **DataFlow** 
 
-
 Concretly, DataFlow is one of the following artifact:
 - a **File**, 
-- an **Event** 
+- an **event** or an **Event topic** 
 - or **API**
-
-> FunctionalFlow createCustomer is implemented trhough two 
-> Interfcaces, and then via multiple DataFlow transfer in each 
-> Interface :
-> - two API call between FrontEnd and MicroService
-> - then by SFTP transfer with many Files (customer-core.cvs &  address.csv) between MicroService and BackEnd
-> 
-> ![dataflow view](png/plantuml-dataflow/plantuml-dataflow.png)
-
 
 A dataflow is implemented through an Interface, hence dataflow ownership is define by Interface owner.
 
+> FunctionalFlow "Customer Synchronization" is implemented trhough two 
+> Interfaces :
+> - TRAD.006, an Event synchronization between Core Banking Sysetm and Trading Platform
+> - TRAD.007, a Batch file symchronization betwwen Core Banking Sysetm and an Account Microservice
+> 
+> ![Flow Interface](./png/dataflow1.png)
+>
+> Interface TRAD.006, is implemented via a Data item (typically a kafka topic) : /EVT/CUSTOMER
+> 
+>  ![Interface and its Data Flows](./png/dataflow2.png)
+
+
 ## DataFlowItem
 
-DataFlowItem is used for model a more fined-grained data exchange
+DataFlowItem is used for model a more fined-grained data exchange.
+
 We could follow for example the following convention :
 
 | Protocol               | DataFlow                             | DataFlowItem
@@ -98,12 +101,12 @@ We could follow for example the following convention :
 | Event                  | A topic                              | An Event in the topic
 
 
-> FunctionalFlow createCustomer is implemented with 
-> Interfcace between MicroSercie and BackEnd
-> - DataFlow is of type Event, and it's a topic (typically Kafka topic), named for exampe /EVT/TOPIC/CUSTOMER
-> - In the topic, we have 2 Events (CUST_CORE and CUST_ADDRESS)
+> Data flow (topic /EVT/CUSTOMER) is used by two Data Flow Item (typically Kafka Events) : 
+>  - A DataFlowItem (typically Kafka Event) EVT/CUSTOMER/CORE for Customer name, birth date...
+>  - A DataFlowItem (typically Kafka Event) EVT/CUSTOMER/ADDRESS for Customer address
 > 
-> ![dataflow view](png/plantuml-dataflowitem/plantuml-dataflowitem.png)
+> ![Data Flows items](./png/dataflow3.png)
+
 
 
 # Meta-Model
