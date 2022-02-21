@@ -8,7 +8,7 @@ This application is tool to model application architecture building diagrams to 
 
 # Teminology 
 
-## Viewpoint
+## Landscape Viewpoint
 IT lanscape, composed by hundred of applications and components is difficult to model. A single and comprehensive model is often too complex to be understood. 
 
 That's why it's important to introduce views and viewpoints.
@@ -17,32 +17,28 @@ Using TOGAF terminology, A **view** is a representation of a whole system from t
 
 This first version of the tool implement a unique ViewPoint : Application **Landscape**
 
-## Application and Application Components
-What an application is? There is no obvious reponse. But anyway, you need a abstraction in order to have a high-level view of your landscape. A pragmatic approach is to decide that an Application is an homogenous set of Application Components seen as one from an external point of view. 
+> ![landscape](./png/landscape.png)
 
-<br/>
+A Landscape is a set of **Functional Flow** that together gives for example a big picture of specific domain.
 
-> In a bank for example, an Application could be the web 
-> banking. Customers use the web banking 
-> as their main bank application. 
-> From DEV & IT-OPS teams perspective, web bankink application 
-> is decomposed into in 3 ou 4 different Application Components
-> separately deployable, that together create the web banking 
-> application
+> ![landscape as set of flows](./png/landscape-flows.png)
 
 ## Functional Flows
 
 In the context of a **Landscape**, a Functional Flow represents a functional information exchange between two or more applications
 
-<br/>
 
-> FrontEnd component need to push data to its BackEnd, 
-> through a Microservice for creating a new customer. 
-> This is a 'createCustomer' functional flow.
+
+> - Securities Partner send prices to Trading Platfom via the Security Master File
+> - Trading Platform synchronize the prices to the Core Banking Sysetm
+> - Core Banking Sysetm confirm the reception of prices to the Trading Platform
 >
-> ![flow view](png/plantuml-functionalflow/plantuml-functionalflow.png)
+> ![landscape as set of flows](./png/flow.png)
+
 
 FunctionalFlow is a list of **steps**, each step leverages on an **Interface**
+
+> ![landscape as set of flows](./png/flow-steps.png)
 
 
 ## Interfaces
@@ -54,18 +50,17 @@ Interface is a "pipeline" between two applications and it's fully defined by :
 - a target **Applications**
 - a protocol (API, Files, Events, etc.)
 
-<br/>
 
-> A single Functional Flow (createCustomer) could be implemented 
+> A single Functional Flow (Instrument prices   ) could be implemented 
 > trough two different Interfaces:
-> - an REST API between FrontEnd and Microservice
-> - an SFTP file transfer between Microservice et Backend
+> - an REST API between Securities Partner and Security Master File
+> - an REST API between Security Master File and Trading Platform
+> - etc.
 >
-> ![interface view](png/plantuml-interface/plantuml-interface.png)
+> ![interface view](png/interfaces.png)
 
-<br/>
 
-On the other hand, an Interfcae could be used to implement different Functional Flows, even in different Landscapes.
+On the other hand, an Interface could be used to implement different Functional Flows, even in different Landscapes.
 
 But an Interface has a unique owner (a DEVOPS team)
 
@@ -80,8 +75,6 @@ Concretly, DataFlow is one of the following artifact:
 - an **Event** 
 - or **API**
 
-<br/>
-
 > FunctionalFlow createCustomer is implemented trhough two 
 > Interfcaces, and then via multiple DataFlow transfer in each 
 > Interface :
@@ -90,9 +83,8 @@ Concretly, DataFlow is one of the following artifact:
 > 
 > ![dataflow view](png/plantuml-dataflow/plantuml-dataflow.png)
 
-<br/>
 
-A dataflow if implemented through an Interface, hence dataflow ownership is define by Interface owner.
+A dataflow is implemented through an Interface, hence dataflow ownership is define by Interface owner.
 
 ## DataFlowItem
 
