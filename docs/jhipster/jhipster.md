@@ -2,6 +2,7 @@
 title: "JHipster"
 layout: page
 permalink: /jhipster/
+nav_order: 5
 ---
 # EADesignIt & JHipster
 

@@ -24,7 +24,7 @@ For the same reason, offering an API over the database to add custom process/too
 
 # Data model
 
-If you want to know if EADesignIt is appropriate in your context, the most important aspect is to know if the data model could meet your requirements. To achieve this, please read the [description of data model](./metamodel/metamodel.md). 
+If you want to know if EADesignIt is appropriate in your context, the most important aspect is to know if the data model could meet your requirements. To achieve this, please read the [description of data model](./metamodel/metamodel-model.md). 
 
 # Diagramming or not diagramming?
 

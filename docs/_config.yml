@@ -40,6 +40,11 @@ remote_theme: pmarsceill/just-the-docs
 logo: "assets/images/logo-ea-design.svg"
 heading_anchors: true
 
+# Aux links for the upper right navigation
+aux_links:
+  "EA Design IT on GitHub":
+    - "//github.com/mauvaisetroupe/ea-design-it"
+
 plugins:
   - jekyll-feed
 
