@@ -34,7 +34,7 @@ Diagram capabilities come however in two forms.
 
 ## PlantUML
 
-EADesignIt uses [plantuml](http://www.plantuml.com) for real-time visualization. It generates an UML components diagram to expose applications and their integrations.
+EADesignIt uses [plantuml](https://www.plantuml.com) for real-time visualization. It generates an UML components diagram to expose applications and their integrations.
 
 Example of generated plantuml diagram :
 
