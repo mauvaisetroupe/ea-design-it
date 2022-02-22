@@ -11,8 +11,7 @@ parent: MetaModel
 
 Here is the meta-model used in the tool.
 
-![meta model](png/plantuml-eadesignit/plantuml-eadesignit.png)
-
+[![meta model](./png/plantuml-eadesignit/plantuml-eadesignit.png)](../png/plantuml-eadesignit/plantuml-eadesignit.png)
 # JHipster JDL
 
 
