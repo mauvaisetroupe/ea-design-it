@@ -29,5 +29,5 @@ You will find these two attributes on the following entities :
 
 
 <span class="fs-2">Not Implemented</span>{: .label .label-red } 
-By default, all objects are displayed, but it is possible to indicate a date in the optional time filter. Thus, by indicating the current date, it is the As-Is architecture that will be displayed, while by indicating a date in the future, it will be the To-Be architecture. This approach, which requires only one repository to store objects from the past, present and future, is clever 
+By default, all objects are displayed, but it is possible to indicate a date in the optional time filter. By indicating the current date, the As-Is architecture is displayed. To-Be architecture can be displayed by indicating a date in the future. This approach requires only one repository to store objects from the past, present and future.
 
