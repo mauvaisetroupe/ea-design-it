@@ -4,6 +4,7 @@
 
 layout: home
 title: Introduction
+nav_order: 1
 ---
 
 
@@ -23,22 +24,7 @@ For the same reason, offering an API over the database to add custom process/too
 
 # Data model
 
-EADesignIt helps architects to document their assets, including:
-
-- Applications,
-- Application Components,
-- Interfaces,
-- Functional Flows,
-- Data Flows,
-- and Applications Capabilities.
-
 If you want to know if EADesignIt is appropriate in your context, the most important aspect is to know if the data model could meet your requirements. To achieve this, please read the [description of data model](./metamodel/metamodel.md). 
-
-[![meta model](metamodel/png/plantuml-eadesignit/plantuml-eadesignit.png){: width="500"}](./metamodel/)
-
-You can also consult the [JDL file](https://github.com/mauvaisetroupe/ea-design-it/blob/main/jhipster-jdl-metamodel.jdl) for a more accurate and detailed view of the entities and their relationships (you can use [jdl studio](https://start.jhipster.tech/jdl-studio/) and import JDL file).
-
-[![meta model](images/jdl.png){: width="500"}](https://github.com/mauvaisetroupe/ea-design-it/blob/main/jhipster-jdl-metamodel.jdl)
 
 # Diagramming or not diagramming?
 
