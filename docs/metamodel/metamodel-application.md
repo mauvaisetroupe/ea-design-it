@@ -35,3 +35,9 @@ In a bank for example, an Application could be the web banking. Customers use th
 ## Example
 
 In the above web banking example, from DEV & IT-OPS teams perspective, web bankink application is decomposed into in 3 ou 4 different Application Components separately deployable, that together create the web banking application
+
+# Corresponding Archimate diagram
+
+<span>Archimate 3.1</span>{: .label .label-blue } An application is composed of Application Component. This is usually modeled with an application Structure Diagram
+
+![landscape archimate](./jpg/applications.jpg)
