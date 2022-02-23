@@ -39,10 +39,10 @@ As explained in [this article](https://bizzdesign.com/blog/practical-archimate-v
  1. Adding one flow relationship for each data object. That choice gives the option to add properties like exchange frequency, format and other details, but that choice can also lead to very complex diagrams. 
  2. Create only one flow relationship per technology interface
 
-With the opiniated choice described above (an interface is a pipeline between a source, a target for a specific protocol - or technology interface, we are clearly in the second option.
+With the opiniated choice described above (an interface is a pipeline between a source, a target for a specific protocol - or technology interface), we are clearly in the second option.
 
 ![interfaces by technology interface](./jpg/interfaces.jpg)
 
-Information concerning frequency, format and other are stored at [Data Flow](./metamodel-data-flow.md) level.
+Information concerning frequency, format and other mentioned in option one are stored at [Data Flow](./metamodel-data-flow.md) level.
 
 
