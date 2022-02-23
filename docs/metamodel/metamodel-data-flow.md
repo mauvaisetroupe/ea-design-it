@@ -36,3 +36,8 @@ Interface TRAD.006, is implemented via a Data item (typically a kafka topic) : /
  
 ![Interface and its Data Flows](./png/dataflow2.png)
 
+# Corresponding Archimate Diagram
+
+<span>Archimate 3.1</span>{: .label .label-blue } A Data Flow is modeled with a Archimate Data Object.
+
+![Data Flow](./jpg/data-flow.jpg)
