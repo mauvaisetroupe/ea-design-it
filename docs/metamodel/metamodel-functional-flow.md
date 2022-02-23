@@ -29,3 +29,15 @@ It is composed of 3 steps :
 
 ![landscape as set of flows](./png/flow-steps.png)
 
+# Corresponding Archimate Diagram
+
+Basically, a Functional Flow is nothing more than a subset of Landscape, representing a specific usage of the landscape in a specific functional use case. 
+
+Archimate diagram is then the same than the one used for Landsacpe
+
+<span>Archimate 3.1</span>{: .label .label-blue } Functional Flow could be modeled in Archimate with a cooperation viewpoint using :
+ - Application Components
+ - Flow Relationship 
+
+![landscape archimate](./jpg/functional-flow.jpg)
+
