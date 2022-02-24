@@ -13,26 +13,29 @@ parent: MetaModel
 
 In the context of a Function Flow, exchange data through a specific Interface is implemented by a **DataFlow** 
 
-Concretly, DataFlow is one of the following artifact:
-- a **File**, 
-- an **event** or an **Event topic** 
-- or **API**
+Typically, a DataFlow is implemented by one of the many data carriers, including:
+- **Files**, 
+- **Event** streams 
+- **API** calls
+- **Message** queues
+- **CORBA** calls
+- Etc.
 
-A dataflow is implemented through an Interface, hence dataflow ownership is define by Interface owner.
+A DataFlow belongs to a distinct Interface, hence Interfaces and related DataFlows share the same owner. 
 
-If you wnat a second level of decription for your data exhange (more detailed), use [Data Flow Item](../data-flow-item)
+Usually, a DataFlow corresponds directly to one technical element like e.g. a particular event stream. This element can be modeled with a [Data Flow Item](../data-flow-item). However, it may happen that a second level of description is needed for your data exchange. An example would be if it happens that different types of events are carried in a single event stream. For this cases, a one-to-many relationship has been provided to [Data Flow Item](../data-flow-item). 
 
 
 ## Example
 
-FunctionalFlow "Customer Synchronization" is implemented trhough two 
+FunctionalFlow "Customer Synchronization" is implemented through two 
 Interfaces :
  - TRAD.006, an Event synchronization between Core Banking Sysetm and Trading Platform
- - TRAD.007, a Batch file symchronization betwwen Core Banking Sysetm and an Account Microservice
+ - TRAD.007, a Batch file synchronization between Core Banking Sysetm and an Account Microservice
  
 ![Flow Interface](./png/dataflow1.png)
 
-Interface TRAD.006, is implemented via a Data item (typically a kafka topic) : /EVT/CUSTOMER
+Interface TRAD.006 is implemented with a DataFlowItem (typically a topic in a streaming platform like Kafka or others) : /EVT/CUSTOMER
  
 ![Interface and its Data Flows](./png/dataflow2.png)
 
