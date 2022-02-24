@@ -16,7 +16,7 @@ That's why it's important to introduce views and viewpoints.
 
 Using TOGAF terminology, A **view** is a representation of a whole system from the perspective of a related set of concerns. A **viewpoint** defines the perspective from which a view is taken. Viewpoint a kind of template, and View is an instantiation of a a specific viewpoint
 
-This first version of the tool implement a unique ViewPoint : Application **Landscape**
+This first version of the tool implement a unique ViewPoint : **Application Landscape**. As explained below, itś equivalent to Archimate **Application Cooperation Viewpoint**.
 
 ## Example
 
