@@ -39,8 +39,12 @@ Interface TRAD.006 is implemented with a DataFlowItem (typically a topic in a st
  
 ![Interface and its Data Flows](./png/dataflow2.png)
 
-# Corresponding Archimate Diagram
+# Mapping with Archimate specification
 
-<span>Archimate 3.1</span>{: .label .label-blue } A Data Flow is modeled with a Archimate Data Object.
+A Data Flow is modeled with a Archimate **Data Object.**
+
+<span>Archimate 3.1</span>{: .label .label-blue } A data object represents data structured for automated processing.
+
+Data Flow could appear on **Application Cooperation Viewpoint** :
 
 ![Data Flow](./jpg/data-flow.jpg)

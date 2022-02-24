@@ -33,7 +33,9 @@ trough two different Interfaces:
 
 ![interface view](png/interfaces.png)
 
-# Corresponding Archimate Diagram
+# Mapping with Archimate specification
+
+Interface can be mapped to **flow relationship**.
 
 As explained in [this article](https://bizzdesign.com/blog/practical-archimate-viewpoints-for-the-application-layer/), you could model your flow relationship in different manner:
  1. Adding one flow relationship for each data object. That choice gives the option to add properties like exchange frequency, format and other details, but that choice can also lead to very complex diagrams. 
