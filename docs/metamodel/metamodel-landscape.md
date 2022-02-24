@@ -34,7 +34,7 @@ In this example, Landscape in composed of 3 Functional Flows : <span>**S01**</sp
 
 # Corresponding Archimate diagram
 
-<span>Archimate 3.1</span>{: .label .label-blue } An application landscape could be modeled in Archimate with a collaboration viewpoint ([see explanations](https://bizzdesign.com/blog/practical-archimate-viewpoints-for-the-application-layer/)) using :
+<span>Archimate 3.1</span>{: .label .label-blue } An application landscape could be modeled in Archimate with a cooperation viewpoint ([see explanations](https://bizzdesign.com/blog/practical-archimate-viewpoints-for-the-application-layer/)) using :
  - Application Components
  - Flow Relationship 
 
