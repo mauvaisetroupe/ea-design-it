@@ -1,5 +1,9 @@
 {
-  "name": "ApplicationComponent",
+  "applications": "*",
+  "changelogDate": "20211104191908",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "component",
   "fields": [
     {
       "fieldName": "alias",
@@ -48,40 +52,36 @@
       "fieldValues": "ON_PREMISE_COTS,ON_PREMISE_CUSTOM,CLOUD_CUSTOM,CLOUD_SAAS,CLOUD_THIRD_PARTY,ON_PREMISE_EXTERNAL_LIBRARY"
     }
   ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "ApplicationComponent",
+  "pagination": "no",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipType": "many-to-one",
+      "otherEntityField": "name",
       "otherEntityName": "application",
       "otherEntityRelationshipName": "applicationsList",
-      "relationshipValidateRules": "required",
       "relationshipName": "application",
-      "otherEntityField": "name"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     },
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
       "otherEntityName": "applicationCategory",
       "otherEntityRelationshipName": "components",
+      "ownerSide": true,
       "relationshipName": "categories",
-      "otherEntityField": "name",
-      "ownerSide": true
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
       "otherEntityName": "technology",
       "otherEntityRelationshipName": "components",
+      "ownerSide": true,
       "relationshipName": "technologies",
-      "otherEntityField": "name",
-      "ownerSide": true
+      "relationshipType": "many-to-many"
     }
   ],
-  "entityTableName": "component",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20211104191908"
+  "service": "no"
 }

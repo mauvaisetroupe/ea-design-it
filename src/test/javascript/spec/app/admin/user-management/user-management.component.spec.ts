@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 import sinon from 'sinon';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { ToastPlugin } from 'bootstrap-vue';
 
 import * as config from '@/shared/config/config';
 import UserManagement from '@/admin/user-management/user-management.vue';
@@ -11,6 +12,7 @@ import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
 
+localVue.use(ToastPlugin);
 config.initVueApp(localVue);
 const store = config.initVueXStore(localVue);
 localVue.component('font-awesome-icon', FontAwesomeIcon);
@@ -49,7 +51,7 @@ describe('UserManagement Component', () => {
         bModal: true,
       },
       provide: {
-        userService: () => new UserManagementService(),
+        userManagementService: () => new UserManagementService(),
         alertService: () => new AlertService(),
       },
     });
@@ -87,8 +89,8 @@ describe('UserManagement Component', () => {
       // GIVEN
       axiosStub.delete.resolves({
         headers: {
-          'x-jhipsterapp-alert': '',
-          'x-jhipsterapp-params': '',
+          'x-eadesignitapp-alert': '',
+          'x-eadesignitapp-params': '',
         },
       });
 

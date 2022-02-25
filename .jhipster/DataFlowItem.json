@@ -1,5 +1,9 @@
 {
-  "name": "DataFlowItem",
+  "applications": "*",
+  "changelogDate": "20211120191107",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "data_flow_item",
   "fields": [
     {
       "fieldName": "resourceName",
@@ -37,23 +41,19 @@
       "fieldType": "LocalDate"
     }
   ],
+  "fluentMethods": true,
+  "javadoc": "DataFlow represents\\n- A Event when DataFlow.Protocol=Event",
+  "jpaMetamodelFiltering": false,
+  "name": "DataFlowItem",
+  "pagination": "no",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipType": "many-to-one",
       "otherEntityName": "dataFlow",
       "otherEntityRelationshipName": "items",
-      "relationshipName": "dataFlow"
+      "relationshipName": "dataFlow",
+      "relationshipType": "many-to-one"
     }
   ],
-  "javadoc": "DataFlow represents\\n- A Event when DataFlow.Protocol=Event",
-  "entityTableName": "data_flow_item",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20211120191107"
+  "service": "no"
 }

@@ -17,33 +17,15 @@ import LogsService from './admin/logs/logs.service';
 import ConfigurationService from '@/admin/configuration/configuration.service';
 import ActivateService from './account/activate/activate.service';
 import RegisterService from './account/register/register.service';
-import UserManagementService from '@/admin/user-management/user-management.service';
+import UserManagementService from './admin/user-management/user-management.service';
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
 import AlertService from './shared/alert/alert.service';
 
+import '../content/scss/global.scss';
 import '../content/scss/vendor.scss';
-
-import UserOAuth2Service from '@/entities/user/user.oauth2.service';
 /* tslint:disable */
 
-import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
-import OwnerService from '@/entities/owner/owner.service';
-import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
-import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
-import ApplicationService from '@/entities/application/application.service';
-import DataFlowService from '@/entities/data-flow/data-flow.service';
-import ApplicationComponentService from '@/entities/application-component/application-component.service';
-import ApplicationImportService from '@/entities/application-import/application-import.service';
-import FlowImportService from '@/entities/flow-import/flow-import.service';
-import ProtocolService from '@/entities/protocol/protocol.service';
-import DataFlowItemService from '@/entities/data-flow-item/data-flow-item.service';
-import DataFormatService from '@/entities/data-format/data-format.service';
-import ApplicationCategoryService from '@/entities/application-category/application-category.service';
-import DataFlowImportService from '@/entities/data-flow-import/data-flow-import.service';
-import TechnologyService from '@/entities/technology/technology.service';
-import CapabilityService from '@/entities/capability/capability.service';
-import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 import ReportingService from '@/eadesignit/reporting.service';
@@ -64,12 +46,10 @@ const store = config.initVueXStore(Vue);
 const loginService = new LoginService();
 const accountService = new AccountService(store, router);
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if (!to.matched.length) {
     next('/not-found');
-  }
-
-  if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
+  } else if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
     accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities).then(value => {
       if (!value) {
         sessionStorage.setItem('requested-url', to.fullPath);
@@ -94,30 +74,12 @@ new Vue({
     loginService: () => loginService,
     activateService: () => new ActivateService(),
     registerService: () => new RegisterService(),
-    userService: () => new UserManagementService(),
+    userManagementService: () => new UserManagementService(),
     healthService: () => new HealthService(),
     configurationService: () => new ConfigurationService(),
     logsService: () => new LogsService(),
     metricsService: () => new MetricsService(),
 
-    userOAuth2Service: () => new UserOAuth2Service(),
-    landscapeViewService: () => new LandscapeViewService(),
-    ownerService: () => new OwnerService(),
-    functionalFlowService: () => new FunctionalFlowService(),
-    flowInterfaceService: () => new FlowInterfaceService(),
-    applicationService: () => new ApplicationService(),
-    dataFlowService: () => new DataFlowService(),
-    applicationComponentService: () => new ApplicationComponentService(),
-    applicationImportService: () => new ApplicationImportService(),
-    flowImportService: () => new FlowImportService(),
-    protocolService: () => new ProtocolService(),
-    dataFlowItemService: () => new DataFlowItemService(),
-    dataFormatService: () => new DataFormatService(),
-    applicationCategoryService: () => new ApplicationCategoryService(),
-    dataFlowImportService: () => new DataFlowImportService(),
-    technologyService: () => new TechnologyService(),
-    capabilityService: () => new CapabilityService(),
-    functionalFlowStepService: () => new FunctionalFlowStepService(),
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService,
     alertService: () => new AlertService(),

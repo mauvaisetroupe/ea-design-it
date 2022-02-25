@@ -150,11 +150,7 @@ export default class LandscapeViewUpdate extends mixins(JhiDataUtils) {
 
   public getSelected(selectedVals, option): any {
     if (selectedVals) {
-      for (let i = 0; i < selectedVals.length; i++) {
-        if (option.id === selectedVals[i].id) {
-          return selectedVals[i];
-        }
-      }
+      return selectedVals.find(value => option.id === value.id) ?? option;
     }
     return option;
   }

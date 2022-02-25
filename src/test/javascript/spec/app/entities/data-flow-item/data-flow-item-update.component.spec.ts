@@ -2,6 +2,7 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import Router from 'vue-router';
+import { ToastPlugin } from 'bootstrap-vue';
 
 import * as config from '@/shared/config/config';
 import DataFlowItemUpdateComponent from '@/entities/data-flow-item/data-flow-item-update.vue';
@@ -17,6 +18,7 @@ config.initVueApp(localVue);
 const store = config.initVueXStore(localVue);
 const router = new Router();
 localVue.use(Router);
+localVue.use(ToastPlugin);
 localVue.component('font-awesome-icon', {});
 localVue.component('b-input-group', {});
 localVue.component('b-input-group-prepend', {});
@@ -40,7 +42,10 @@ describe('Component Tests', () => {
           dataFlowItemService: () => dataFlowItemServiceStub,
           alertService: () => new AlertService(),
 
-          dataFlowService: () => new DataFlowService(),
+          dataFlowService: () =>
+            sinon.createStubInstance<DataFlowService>(DataFlowService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
         },
       });
       comp = wrapper.vm;

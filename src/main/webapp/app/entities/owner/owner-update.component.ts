@@ -2,7 +2,7 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import AlertService from '@/shared/alert/alert.service';
 
-import UserService from '@/admin/user-management/user-management.service';
+import UserService from '@/entities/user/user.service';
 
 import { IOwner, Owner } from '@/shared/model/owner.model';
 import OwnerService from './owner.service';
@@ -116,11 +116,7 @@ export default class OwnerUpdate extends Vue {
 
   public getSelected(selectedVals, option): any {
     if (selectedVals) {
-      for (let i = 0; i < selectedVals.length; i++) {
-        if (option.id === selectedVals[i].id) {
-          return selectedVals[i];
-        }
-      }
+      return selectedVals.find(value => option.id === value.id) ?? option;
     }
     return option;
   }

@@ -2,6 +2,7 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import Router from 'vue-router';
+import { ToastPlugin } from 'bootstrap-vue';
 
 import * as config from '@/shared/config/config';
 import ApplicationUpdateComponent from '@/entities/application/application-update.vue';
@@ -25,6 +26,7 @@ config.initVueApp(localVue);
 const store = config.initVueXStore(localVue);
 const router = new Router();
 localVue.use(Router);
+localVue.use(ToastPlugin);
 localVue.component('font-awesome-icon', {});
 localVue.component('b-input-group', {});
 localVue.component('b-input-group-prepend', {});
@@ -48,15 +50,30 @@ describe('Component Tests', () => {
           applicationService: () => applicationServiceStub,
           alertService: () => new AlertService(),
 
-          ownerService: () => new OwnerService(),
+          ownerService: () =>
+            sinon.createStubInstance<OwnerService>(OwnerService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
 
-          applicationCategoryService: () => new ApplicationCategoryService(),
+          applicationCategoryService: () =>
+            sinon.createStubInstance<ApplicationCategoryService>(ApplicationCategoryService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
 
-          technologyService: () => new TechnologyService(),
+          technologyService: () =>
+            sinon.createStubInstance<TechnologyService>(TechnologyService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
 
-          capabilityService: () => new CapabilityService(),
+          capabilityService: () =>
+            sinon.createStubInstance<CapabilityService>(CapabilityService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
 
-          applicationComponentService: () => new ApplicationComponentService(),
+          applicationComponentService: () =>
+            sinon.createStubInstance<ApplicationComponentService>(ApplicationComponentService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
         },
       });
       comp = wrapper.vm;

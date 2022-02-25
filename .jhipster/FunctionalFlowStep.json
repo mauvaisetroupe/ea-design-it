@@ -1,5 +1,9 @@
 {
-  "name": "FunctionalFlowStep",
+  "applications": "*",
+  "changelogDate": "20220118113150",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "flowstep",
   "fields": [
     {
       "fieldName": "description",
@@ -12,32 +16,28 @@
       "fieldType": "Integer"
     }
   ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "FunctionalFlowStep",
+  "pagination": "no",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipType": "many-to-one",
+      "otherEntityField": "alias",
       "otherEntityName": "flowInterface",
       "otherEntityRelationshipName": "steps",
-      "relationshipValidateRules": "required",
       "relationshipName": "flowInterface",
-      "otherEntityField": "alias"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     },
     {
-      "relationshipType": "many-to-one",
+      "otherEntityField": "alias",
       "otherEntityName": "functionalFlow",
       "otherEntityRelationshipName": "steps",
-      "relationshipValidateRules": "required",
       "relationshipName": "flow",
-      "otherEntityField": "alias"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     }
   ],
-  "entityTableName": "flowstep",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20220118113150"
+  "service": "no"
 }

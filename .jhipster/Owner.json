@@ -1,29 +1,29 @@
 {
-  "name": "Owner",
+  "applications": "*",
+  "changelogDate": "20211104191903",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "owner",
   "fields": [
     {
       "fieldName": "name",
       "fieldType": "String"
     }
   ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Owner",
+  "pagination": "no",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "login",
       "otherEntityName": "user",
       "otherEntityRelationshipName": "owner",
+      "ownerSide": true,
       "relationshipName": "users",
-      "otherEntityField": "login",
-      "ownerSide": true
+      "relationshipType": "many-to-many"
     }
   ],
-  "entityTableName": "owner",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20211104191903"
+  "service": "no"
 }

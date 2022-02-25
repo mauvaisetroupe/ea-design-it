@@ -2,6 +2,7 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import Router from 'vue-router';
+import { ToastPlugin } from 'bootstrap-vue';
 
 import * as config from '@/shared/config/config';
 import CapabilityUpdateComponent from '@/entities/capability/capability-update.vue';
@@ -19,6 +20,7 @@ config.initVueApp(localVue);
 const store = config.initVueXStore(localVue);
 const router = new Router();
 localVue.use(Router);
+localVue.use(ToastPlugin);
 localVue.component('font-awesome-icon', {});
 localVue.component('b-input-group', {});
 localVue.component('b-input-group-prepend', {});
@@ -42,9 +44,15 @@ describe('Component Tests', () => {
           capabilityService: () => capabilityServiceStub,
           alertService: () => new AlertService(),
 
-          applicationService: () => new ApplicationService(),
+          applicationService: () =>
+            sinon.createStubInstance<ApplicationService>(ApplicationService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
 
-          landscapeViewService: () => new LandscapeViewService(),
+          landscapeViewService: () =>
+            sinon.createStubInstance<LandscapeViewService>(LandscapeViewService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
         },
       });
       comp = wrapper.vm;
