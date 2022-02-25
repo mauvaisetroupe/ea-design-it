@@ -1,6 +1,7 @@
 /* tslint:disable max-line-length */
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
+import { ToastPlugin } from 'bootstrap-vue';
 
 import * as config from '@/shared/config/config';
 import ProtocolComponent from '@/entities/protocol/protocol.vue';
@@ -9,6 +10,7 @@ import ProtocolService from '@/entities/protocol/protocol.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
+localVue.use(ToastPlugin);
 
 config.initVueApp(localVue);
 const store = config.initVueXStore(localVue);
@@ -66,12 +68,14 @@ describe('Component Tests', () => {
 
       // WHEN
       comp.prepareRemove({ id: 123 });
+      expect(protocolServiceStub.retrieve.callCount).toEqual(1);
+
       comp.removeProtocol();
       await comp.$nextTick();
 
       // THEN
       expect(protocolServiceStub.delete.called).toBeTruthy();
-      expect(protocolServiceStub.retrieve.callCount).toEqual(1);
+      expect(protocolServiceStub.retrieve.callCount).toEqual(2);
     });
   });
 });

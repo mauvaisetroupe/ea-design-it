@@ -1,5 +1,9 @@
 {
-  "name": "ApplicationImport",
+  "applications": "*",
+  "changelogDate": "20211105141556",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "tmp_import_application_import",
   "fields": [
     {
       "fieldName": "importId",
@@ -71,15 +75,11 @@
       "fieldType": "String"
     }
   ],
-  "relationships": [],
-  "entityTableName": "tmp_import_application_import",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
   "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "ApplicationImport",
+  "pagination": "no",
   "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20211105141556"
+  "relationships": [],
+  "service": "no"
 }

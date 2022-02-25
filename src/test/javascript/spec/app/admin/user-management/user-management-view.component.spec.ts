@@ -30,7 +30,7 @@ describe('UserManagementView Component', () => {
     wrapper = shallowMount<UserManagementViewClass>(UserManagementView, {
       store,
       localVue,
-      provide: { userService: () => new UserManagementService(), alertService: () => new AlertService() },
+      provide: { userManagementService: () => new UserManagementService(), alertService: () => new AlertService() },
     });
     userManagementView = wrapper.vm;
   });

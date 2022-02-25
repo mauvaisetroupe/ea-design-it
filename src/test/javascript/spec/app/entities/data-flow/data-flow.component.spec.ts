@@ -1,6 +1,7 @@
 /* tslint:disable max-line-length */
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
+import { ToastPlugin } from 'bootstrap-vue';
 
 import * as config from '@/shared/config/config';
 import DataFlowComponent from '@/entities/data-flow/data-flow.vue';
@@ -9,6 +10,7 @@ import DataFlowService from '@/entities/data-flow/data-flow.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
+localVue.use(ToastPlugin);
 
 config.initVueApp(localVue);
 const store = config.initVueXStore(localVue);
@@ -66,12 +68,14 @@ describe('Component Tests', () => {
 
       // WHEN
       comp.prepareRemove({ id: 123 });
+      expect(dataFlowServiceStub.retrieve.callCount).toEqual(1);
+
       comp.removeDataFlow();
       await comp.$nextTick();
 
       // THEN
       expect(dataFlowServiceStub.delete.called).toBeTruthy();
-      expect(dataFlowServiceStub.retrieve.callCount).toEqual(1);
+      expect(dataFlowServiceStub.retrieve.callCount).toEqual(2);
     });
   });
 });

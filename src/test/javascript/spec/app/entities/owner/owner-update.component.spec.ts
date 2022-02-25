@@ -2,13 +2,14 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import Router from 'vue-router';
+import { ToastPlugin } from 'bootstrap-vue';
 
 import * as config from '@/shared/config/config';
 import OwnerUpdateComponent from '@/entities/owner/owner-update.vue';
 import OwnerClass from '@/entities/owner/owner-update.component';
 import OwnerService from '@/entities/owner/owner.service';
 
-import UserService from '@/admin/user-management/user-management.service';
+import UserService from '@/entities/user/user.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -17,6 +18,7 @@ config.initVueApp(localVue);
 const store = config.initVueXStore(localVue);
 const router = new Router();
 localVue.use(Router);
+localVue.use(ToastPlugin);
 localVue.component('font-awesome-icon', {});
 localVue.component('b-input-group', {});
 localVue.component('b-input-group-prepend', {});

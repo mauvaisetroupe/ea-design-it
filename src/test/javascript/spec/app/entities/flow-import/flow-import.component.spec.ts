@@ -1,6 +1,7 @@
 /* tslint:disable max-line-length */
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
+import { ToastPlugin } from 'bootstrap-vue';
 
 import * as config from '@/shared/config/config';
 import FlowImportComponent from '@/entities/flow-import/flow-import.vue';
@@ -9,6 +10,7 @@ import FlowImportService from '@/entities/flow-import/flow-import.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
+localVue.use(ToastPlugin);
 
 config.initVueApp(localVue);
 const store = config.initVueXStore(localVue);
@@ -66,12 +68,14 @@ describe('Component Tests', () => {
 
       // WHEN
       comp.prepareRemove({ id: 123 });
+      expect(flowImportServiceStub.retrieve.callCount).toEqual(1);
+
       comp.removeFlowImport();
       await comp.$nextTick();
 
       // THEN
       expect(flowImportServiceStub.delete.called).toBeTruthy();
-      expect(flowImportServiceStub.retrieve.callCount).toEqual(1);
+      expect(flowImportServiceStub.retrieve.callCount).toEqual(2);
     });
   });
 });

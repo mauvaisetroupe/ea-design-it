@@ -2,8 +2,7 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -16,7 +15,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 /**
  * DataFlow represents\n- A file when Protocol=FILE\n- A topic when Protocol=Event\n- A Swagger when Protocol=API\n- A WSDL when Protocol=SOAP\n- An XSD when Protocol=ESB, MESSAGING
  */
-@ApiModel(
+@Schema(
     description = "DataFlow represents\n- A file when Protocol=FILE\n- A topic when Protocol=Event\n- A Swagger when Protocol=API\n- A WSDL when Protocol=SOAP\n- An XSD when Protocol=ESB, MESSAGING"
 )
 @Entity
@@ -35,7 +34,7 @@ public class DataFlow implements Serializable {
     /**
      * TOPIC name for event, FileName for Files
      */
-    @ApiModelProperty(value = "TOPIC name for event, FileName for Files", required = true)
+    @Schema(description = "TOPIC name for event, FileName for Files", required = true)
     @NotNull
     @Column(name = "resource_name", nullable = false)
     private String resourceName;
@@ -54,7 +53,7 @@ public class DataFlow implements Serializable {
     /**
      * Swagger or XSD URL
      */
-    @ApiModelProperty(value = "Swagger or XSD URL")
+    @Schema(description = "Swagger or XSD URL")
     @Size(max = 500)
     @Column(name = "contract_url", length = 500)
     private String contractURL;

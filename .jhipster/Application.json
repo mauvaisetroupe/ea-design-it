@@ -1,5 +1,9 @@
 {
-  "name": "Application",
+  "applications": "*",
+  "changelogDate": "20211104191906",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "application",
   "fields": [
     {
       "fieldName": "alias",
@@ -48,54 +52,50 @@
       "fieldValues": "ON_PREMISE_COTS,ON_PREMISE_CUSTOM,CLOUD_CUSTOM,CLOUD_SAAS,CLOUD_THIRD_PARTY,ON_PREMISE_EXTERNAL_LIBRARY"
     }
   ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Application",
+  "pagination": "no",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipType": "many-to-one",
+      "otherEntityField": "name",
       "otherEntityName": "owner",
       "otherEntityRelationshipName": "application",
       "relationshipName": "owner",
-      "otherEntityField": "name"
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
       "otherEntityName": "applicationCategory",
       "otherEntityRelationshipName": "applications",
+      "ownerSide": true,
       "relationshipName": "categories",
-      "otherEntityField": "name",
-      "ownerSide": true
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
       "otherEntityName": "technology",
       "otherEntityRelationshipName": "applications",
+      "ownerSide": true,
       "relationshipName": "technologies",
-      "otherEntityField": "name",
-      "ownerSide": true
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
       "otherEntityName": "capability",
       "otherEntityRelationshipName": "applications",
+      "ownerSide": true,
       "relationshipName": "capabilities",
-      "otherEntityField": "name",
-      "ownerSide": true
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipType": "one-to-many",
+      "otherEntityField": "name",
       "otherEntityName": "applicationComponent",
       "otherEntityRelationshipName": "application",
       "relationshipName": "applicationsList",
-      "otherEntityField": "name"
+      "relationshipType": "one-to-many"
     }
   ],
-  "entityTableName": "application",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20211104191906"
+  "service": "no"
 }
