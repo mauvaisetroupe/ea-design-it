@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity DataFlowImport.
+    -->
+    <changeSet id="20211124203302-1" author="jhipster">
+        <createTable tableName="tmp_import_dataflows">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="data_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_parent_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_parent_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="functional_flow_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="flow_interface_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_resource_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_resource_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_frequency" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_format" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_contract_url" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_documentation_url" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="source" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="target" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="import_data_status" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="import_data_item_status" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="import_status_message" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+</databaseChangeLog>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity Application.
+    -->
+    <changeSet id="20211104191906-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="owner_id"
+                                 baseTableName="application"
+                                 constraintName="fk_application__owner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="owner"/>
+
+        <addForeignKeyConstraint baseColumnNames="application_id"
+                                 baseTableName="rel_application__categories"
+                                 constraintName="fk_rel_application__categories__application_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application"/>
+
+        <addForeignKeyConstraint baseColumnNames="categories_id"
+                                 baseTableName="rel_application__categories"
+                                 constraintName="fk_rel_application__categories__categories_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="application_id"
+                                 baseTableName="rel_application__technologies"
+                                 constraintName="fk_rel_application__technologies__application_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application"/>
+
+        <addForeignKeyConstraint baseColumnNames="technologies_id"
+                                 baseTableName="rel_application__technologies"
+                                 constraintName="fk_rel_application__technologies__technologies_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="technology"/>
+
+        <addForeignKeyConstraint baseColumnNames="application_id"
+                                 baseTableName="rel_application__capabilities"
+                                 constraintName="fk_rel_application__capabilities__application_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application"/>
+
+        <addForeignKeyConstraint baseColumnNames="capabilities_id"
+                                 baseTableName="rel_application__capabilities"
+                                 constraintName="fk_rel_application__capabilities__capabilities_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="capability"/>
+    </changeSet>
+</databaseChangeLog>

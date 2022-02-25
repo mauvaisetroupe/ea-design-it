@@ -1,0 +1,59 @@
+{
+  "name": "LandscapeView",
+  "fields": [
+    {
+      "fieldName": "viewpoint",
+      "fieldType": "ViewPoint",
+      "fieldValues": "APPLICATION_LANDSCAPE"
+    },
+    {
+      "fieldName": "diagramName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "compressedDrawXML",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "compressedDrawSVG",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "owner",
+      "otherEntityRelationshipName": "landscapeView",
+      "relationshipName": "owner",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "functionalFlow",
+      "otherEntityRelationshipName": "landscape",
+      "relationshipName": "flows",
+      "otherEntityField": "alias",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "capability",
+      "otherEntityRelationshipName": "landscapes",
+      "relationshipName": "capabilities",
+      "otherEntityField": "name",
+      "ownerSide": true
+    }
+  ],
+  "entityTableName": "landscape_view",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211104191902"
+}

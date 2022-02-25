@@ -1,0 +1,48 @@
+{
+  "name": "ApplicationCategory",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "250"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "application",
+      "otherEntityRelationshipName": "categories",
+      "relationshipName": "applications",
+      "otherEntityField": "name",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "applicationComponent",
+      "otherEntityRelationshipName": "categories",
+      "relationshipName": "components",
+      "otherEntityField": "name",
+      "ownerSide": false
+    }
+  ],
+  "entityTableName": "application_category",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211124203301"
+}

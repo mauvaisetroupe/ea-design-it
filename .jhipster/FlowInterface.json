@@ -1,0 +1,108 @@
+{
+  "name": "FlowInterface",
+  "fields": [
+    {
+      "fieldName": "alias",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "documentationURL",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "documentationURL2",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1500"
+    },
+    {
+      "fieldName": "startDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "dataFlow",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipName": "dataFlows"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "application",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipValidateRules": "required",
+      "relationshipName": "source",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "application",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipValidateRules": "required",
+      "relationshipName": "target",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "applicationComponent",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipName": "sourceComponent",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "applicationComponent",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipName": "targetComponent",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "protocol",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipName": "protocol",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "owner",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipName": "owner",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "functionalFlowStep",
+      "otherEntityRelationshipName": "flowInterface",
+      "relationshipName": "steps"
+    }
+  ],
+  "entityTableName": "interface",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211104191905"
+}

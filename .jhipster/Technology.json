@@ -1,0 +1,48 @@
+{
+  "name": "Technology",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "250"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "application",
+      "otherEntityRelationshipName": "technologies",
+      "relationshipName": "applications",
+      "otherEntityField": "name",
+      "ownerSide": false
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "applicationComponent",
+      "otherEntityRelationshipName": "technologies",
+      "relationshipName": "components",
+      "otherEntityField": "name",
+      "ownerSide": false
+    }
+  ],
+  "entityTableName": "technology",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211201195304"
+}

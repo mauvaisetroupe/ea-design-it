@@ -1,0 +1,101 @@
+{
+  "name": "Application",
+  "fields": [
+    {
+      "fieldName": "alias",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1500"
+    },
+    {
+      "fieldName": "comment",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1000"
+    },
+    {
+      "fieldName": "documentationURL",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "startDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "applicationType",
+      "fieldType": "ApplicationType",
+      "fieldValues": "SOFTWARE,MIDDLEWARE,HARDWARE,PARTNER,OTHER"
+    },
+    {
+      "fieldName": "softwareType",
+      "fieldType": "SoftwareType",
+      "fieldValues": "ON_PREMISE_COTS,ON_PREMISE_CUSTOM,CLOUD_CUSTOM,CLOUD_SAAS,CLOUD_THIRD_PARTY,ON_PREMISE_EXTERNAL_LIBRARY"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "owner",
+      "otherEntityRelationshipName": "application",
+      "relationshipName": "owner",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "applicationCategory",
+      "otherEntityRelationshipName": "applications",
+      "relationshipName": "categories",
+      "otherEntityField": "name",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "technology",
+      "otherEntityRelationshipName": "applications",
+      "relationshipName": "technologies",
+      "otherEntityField": "name",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "capability",
+      "otherEntityRelationshipName": "applications",
+      "relationshipName": "capabilities",
+      "otherEntityField": "name",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "applicationComponent",
+      "otherEntityRelationshipName": "application",
+      "relationshipName": "applicationsList",
+      "otherEntityField": "name"
+    }
+  ],
+  "entityTableName": "application",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211104191906"
+}

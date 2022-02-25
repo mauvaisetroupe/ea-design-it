@@ -1,0 +1,88 @@
+{
+  "name": "DataFlow",
+  "fields": [
+    {
+      "fieldName": "resourceName",
+      "fieldType": "String",
+      "javadoc": "TOPIC name for event, FileName for Files",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "resourceType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1000"
+    },
+    {
+      "fieldName": "frequency",
+      "fieldType": "Frequency",
+      "fieldValues": "HOURLY,DAILY,WEEKLY,MONTHLY,YEARLY,ON_DEMAND,NRT,ON_USER_ACTION,INTRADAY"
+    },
+    {
+      "fieldName": "contractURL",
+      "fieldType": "String",
+      "javadoc": "Swagger or XSD URL",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "documentationURL",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "startDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "endDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "dataFlowItem",
+      "otherEntityRelationshipName": "dataFlow",
+      "relationshipName": "items"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "dataFormat",
+      "otherEntityRelationshipName": "dataFlow",
+      "relationshipName": "format",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "functionalFlow",
+      "otherEntityRelationshipName": "dataFlows",
+      "relationshipName": "functionalFlows",
+      "otherEntityField": "alias",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "flowInterface",
+      "otherEntityRelationshipName": "dataFlows",
+      "relationshipName": "flowInterface",
+      "otherEntityField": "alias"
+    }
+  ],
+  "entityTableName": "dataflow",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20211104191907",
+  "javadoc": "DataFlow represents\\n- A file when Protocol=FILE\\n- A topic when Protocol=Event\\n- A Swagger when Protocol=API\\n- A WSDL when Protocol=SOAP\\n- An XSD when Protocol=ESB, MESSAGING"
+}

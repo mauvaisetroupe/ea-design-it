@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <!--
+        Added the constraints for entity FunctionalFlowStep.
+    -->
+    <changeSet id="20220118113150-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="flow_interface_id"
+                                 baseTableName="flowstep"
+                                 constraintName="fk_flowstep__flow_interface_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="interface"/>
+
+        <addForeignKeyConstraint baseColumnNames="flow_id"
+                                 baseTableName="flowstep"
+                                 constraintName="fk_flowstep__flow_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="flow"/>
+    </changeSet>
+</databaseChangeLog>
