@@ -1,5 +1,9 @@
 {
-  "name": "FlowImport",
+  "applications": "*",
+  "changelogDate": "20211107152340",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "tmp_import_flows",
   "fields": [
     {
       "fieldName": "idFlowFromExcel",
@@ -89,15 +93,11 @@
       "fieldType": "String"
     }
   ],
-  "relationships": [],
-  "entityTableName": "tmp_import_flows",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
   "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "FlowImport",
+  "pagination": "no",
   "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20211107152340"
+  "relationships": [],
+  "service": "no"
 }

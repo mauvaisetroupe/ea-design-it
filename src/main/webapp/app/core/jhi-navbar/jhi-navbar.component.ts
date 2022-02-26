@@ -2,7 +2,13 @@ import { Component, Inject, Vue } from 'vue-property-decorator';
 import LoginService from '@/account/login.service';
 import AccountService from '@/account/account.service';
 
-@Component
+import EntitiesMenu from '@/entities/entities-menu.vue';
+
+@Component({
+  components: {
+    'entities-menu': EntitiesMenu,
+  },
+})
 export default class JhiNavbar extends Vue {
   @Inject('loginService')
   private loginService: () => LoginService;
@@ -21,11 +27,14 @@ export default class JhiNavbar extends Vue {
     });
   }
 
-  public logout(): void {
+  public logout(): Promise<any> {
     localStorage.removeItem('jhi-authenticationToken');
     sessionStorage.removeItem('jhi-authenticationToken');
     this.$store.commit('logout');
-    this.$router.push('/');
+    if (this.$route.path !== '/') {
+      return this.$router.push('/');
+    }
+    return Promise.resolve(this.$router.currentRoute);
   }
 
   public openLogin(): void {

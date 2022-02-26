@@ -1,5 +1,9 @@
 {
-  "name": "Technology",
+  "applications": "*",
+  "changelogDate": "20211201195304",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "technology",
   "fields": [
     {
       "fieldName": "name",
@@ -17,32 +21,28 @@
       "fieldValidateRulesMaxlength": "250"
     }
   ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Technology",
+  "pagination": "no",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
       "otherEntityName": "application",
       "otherEntityRelationshipName": "technologies",
+      "ownerSide": false,
       "relationshipName": "applications",
-      "otherEntityField": "name",
-      "ownerSide": false
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
       "otherEntityName": "applicationComponent",
       "otherEntityRelationshipName": "technologies",
+      "ownerSide": false,
       "relationshipName": "components",
-      "otherEntityField": "name",
-      "ownerSide": false
+      "relationshipType": "many-to-many"
     }
   ],
-  "entityTableName": "technology",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20211201195304"
+  "service": "no"
 }

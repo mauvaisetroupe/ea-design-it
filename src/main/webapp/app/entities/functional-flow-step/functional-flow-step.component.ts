@@ -1,5 +1,3 @@
-import { mixins } from 'vue-class-component';
-
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';

@@ -2,6 +2,7 @@
 import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
 import Router from 'vue-router';
+import { ToastPlugin } from 'bootstrap-vue';
 
 import * as config from '@/shared/config/config';
 import FunctionalFlowUpdateComponent from '@/entities/functional-flow/functional-flow-update.vue';
@@ -23,6 +24,7 @@ config.initVueApp(localVue);
 const store = config.initVueXStore(localVue);
 const router = new Router();
 localVue.use(Router);
+localVue.use(ToastPlugin);
 localVue.component('font-awesome-icon', {});
 localVue.component('b-input-group', {});
 localVue.component('b-input-group-prepend', {});
@@ -46,13 +48,25 @@ describe('Component Tests', () => {
           functionalFlowService: () => functionalFlowServiceStub,
           alertService: () => new AlertService(),
 
-          functionalFlowStepService: () => new FunctionalFlowStepService(),
+          functionalFlowStepService: () =>
+            sinon.createStubInstance<FunctionalFlowStepService>(FunctionalFlowStepService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
 
-          ownerService: () => new OwnerService(),
+          ownerService: () =>
+            sinon.createStubInstance<OwnerService>(OwnerService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
 
-          landscapeViewService: () => new LandscapeViewService(),
+          landscapeViewService: () =>
+            sinon.createStubInstance<LandscapeViewService>(LandscapeViewService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
 
-          dataFlowService: () => new DataFlowService(),
+          dataFlowService: () =>
+            sinon.createStubInstance<DataFlowService>(DataFlowService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
         },
       });
       comp = wrapper.vm;

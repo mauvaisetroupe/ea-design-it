@@ -1,5 +1,9 @@
 {
-  "name": "DataFlowImport",
+  "applications": "*",
+  "changelogDate": "20211124203302",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "tmp_import_dataflows",
   "fields": [
     {
       "fieldName": "dataId",
@@ -76,15 +80,11 @@
       "fieldType": "String"
     }
   ],
-  "relationships": [],
-  "entityTableName": "tmp_import_dataflows",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
   "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "DataFlowImport",
+  "pagination": "no",
   "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20211124203302"
+  "relationships": [],
+  "service": "no"
 }

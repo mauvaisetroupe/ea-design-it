@@ -1,5 +1,9 @@
 {
-  "name": "Protocol",
+  "applications": "*",
+  "changelogDate": "20211120084146",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "protocol",
   "fields": [
     {
       "fieldName": "name",
@@ -9,8 +13,8 @@
     {
       "fieldName": "type",
       "fieldType": "ProtocolType",
-      "fieldValues": "API,ESB,EVENT,FILE,MESSAGING,SOAP,ETL,DB,FRONT,OTHER",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required"],
+      "fieldValues": "API,ESB,EVENT,FILE,MESSAGING,SOAP,ETL,DB,FRONT,OTHER"
     },
     {
       "fieldName": "description",
@@ -23,15 +27,11 @@
       "fieldType": "String"
     }
   ],
-  "relationships": [],
-  "entityTableName": "protocol",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
   "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Protocol",
+  "pagination": "no",
   "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20211120084146"
+  "relationships": [],
+  "service": "no"
 }

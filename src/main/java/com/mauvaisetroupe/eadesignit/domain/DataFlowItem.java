@@ -1,7 +1,7 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.*;
@@ -12,7 +12,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 /**
  * DataFlow represents\n- A Event when DataFlow.Protocol=Event
  */
-@ApiModel(description = "DataFlow represents\n- A Event when DataFlow.Protocol=Event")
+@Schema(description = "DataFlow represents\n- A Event when DataFlow.Protocol=Event")
 @Entity
 @Table(name = "data_flow_item")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

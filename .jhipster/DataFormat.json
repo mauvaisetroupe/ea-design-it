@@ -1,5 +1,9 @@
 {
-  "name": "DataFormat",
+  "applications": "*",
+  "changelogDate": "20211124203300",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "data_format",
   "fields": [
     {
       "fieldName": "name",
@@ -7,15 +11,11 @@
       "fieldValidateRules": ["required"]
     }
   ],
-  "relationships": [],
-  "entityTableName": "data_format",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
   "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "DataFormat",
+  "pagination": "no",
   "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20211124203300"
+  "relationships": [],
+  "service": "no"
 }

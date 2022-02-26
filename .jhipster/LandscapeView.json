@@ -1,5 +1,9 @@
 {
-  "name": "LandscapeView",
+  "applications": "*",
+  "changelogDate": "20211104191902",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "landscape_view",
   "fields": [
     {
       "fieldName": "viewpoint",
@@ -21,39 +25,35 @@
       "fieldTypeBlobContent": "text"
     }
   ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "LandscapeView",
+  "pagination": "no",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipType": "many-to-one",
+      "otherEntityField": "name",
       "otherEntityName": "owner",
       "otherEntityRelationshipName": "landscapeView",
       "relationshipName": "owner",
-      "otherEntityField": "name"
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "alias",
       "otherEntityName": "functionalFlow",
       "otherEntityRelationshipName": "landscape",
+      "ownerSide": true,
       "relationshipName": "flows",
-      "otherEntityField": "alias",
-      "ownerSide": true
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
       "otherEntityName": "capability",
       "otherEntityRelationshipName": "landscapes",
+      "ownerSide": true,
       "relationshipName": "capabilities",
-      "otherEntityField": "name",
-      "ownerSide": true
+      "relationshipType": "many-to-many"
     }
   ],
-  "entityTableName": "landscape_view",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20211104191902"
+  "service": "no"
 }

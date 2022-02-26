@@ -1,5 +1,9 @@
 {
-  "name": "ApplicationCategory",
+  "applications": "*",
+  "changelogDate": "20211124203301",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "application_category",
   "fields": [
     {
       "fieldName": "name",
@@ -17,32 +21,28 @@
       "fieldValidateRulesMaxlength": "250"
     }
   ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "ApplicationCategory",
+  "pagination": "no",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
       "otherEntityName": "application",
       "otherEntityRelationshipName": "categories",
+      "ownerSide": false,
       "relationshipName": "applications",
-      "otherEntityField": "name",
-      "ownerSide": false
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "name",
       "otherEntityName": "applicationComponent",
       "otherEntityRelationshipName": "categories",
+      "ownerSide": false,
       "relationshipName": "components",
-      "otherEntityField": "name",
-      "ownerSide": false
+      "relationshipType": "many-to-many"
     }
   ],
-  "entityTableName": "application_category",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20211124203301"
+  "service": "no"
 }

@@ -5,7 +5,7 @@ Component.registerHooks([
   'beforeRouteLeave',
   'beforeRouteUpdate', // for vue-router 2.2+
 ]);
-import Router from 'vue-router';
+import Router, { RouteConfig } from 'vue-router';
 
 const Home = () => import('@/core/home/home.vue');
 const Error = () => import('@/core/error/error.vue');
@@ -19,7 +19,7 @@ import { Authority } from '@/shared/security/authority';
 Vue.use(Router);
 
 // prettier-ignore
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -42,8 +42,10 @@ export default new Router({
     },
     ...account,
     ...admin,
-    ...entities,
+    entities,
     ...pages,
     ...importuploadfile
   ]
 });
+
+export default router;

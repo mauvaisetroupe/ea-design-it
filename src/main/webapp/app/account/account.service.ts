@@ -48,7 +48,9 @@ export default class AccountService {
             }
           } else {
             this.store.commit('logout');
-            this.router.push('/');
+            if (this.router.currentRoute.path !== '/') {
+              this.router.push('/');
+            }
             sessionStorage.removeItem('requested-url');
           }
           resolve(true);

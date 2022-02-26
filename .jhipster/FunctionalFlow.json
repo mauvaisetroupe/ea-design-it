@@ -1,5 +1,9 @@
 {
-  "name": "FunctionalFlow",
+  "applications": "*",
+  "changelogDate": "20211104191904",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "flow",
   "fields": [
     {
       "fieldName": "alias",
@@ -43,44 +47,40 @@
       "fieldType": "LocalDate"
     }
   ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "FunctionalFlow",
+  "pagination": "no",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipType": "one-to-many",
       "otherEntityName": "functionalFlowStep",
       "otherEntityRelationshipName": "flow",
-      "relationshipName": "steps"
+      "relationshipName": "steps",
+      "relationshipType": "one-to-many"
     },
     {
-      "relationshipType": "many-to-one",
+      "otherEntityField": "name",
       "otherEntityName": "owner",
       "otherEntityRelationshipName": "functionalFlow",
       "relationshipName": "owner",
-      "otherEntityField": "name"
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipType": "many-to-many",
+      "otherEntityField": "diagramName",
       "otherEntityName": "landscapeView",
       "otherEntityRelationshipName": "flows",
+      "ownerSide": false,
       "relationshipName": "landscape",
-      "otherEntityField": "diagramName",
-      "ownerSide": false
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipType": "many-to-many",
       "otherEntityName": "dataFlow",
       "otherEntityRelationshipName": "functionalFlows",
+      "ownerSide": false,
       "relationshipName": "dataFlows",
-      "ownerSide": false
+      "relationshipType": "many-to-many"
     }
   ],
-  "entityTableName": "flow",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no",
-  "jpaMetamodelFiltering": false,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "applications": "*",
-  "changelogDate": "20211104191904"
+  "service": "no"
 }
