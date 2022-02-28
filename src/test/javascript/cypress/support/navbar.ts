@@ -38,7 +38,8 @@ Cypress.Commands.add('clickOnAdminMenuItem', (item: string) => {
 });
 
 Cypress.Commands.add('clickOnEntityMenuItem', (entityName: string) => {
-  return cy.get(navbarSelector).get(entityItemSelector).click().get(`.dropdown-item[href="/${entityName}"]`).click();
+  cy.get(navbarSelector).get(entityItemSelector).click();
+  return cy.get(navbarSelector).get(entityItemSelector).find(`.dropdown-item[href="/${entityName}"]`).click();
 });
 
 declare global {
