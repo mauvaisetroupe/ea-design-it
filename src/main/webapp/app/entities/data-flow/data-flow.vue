@@ -97,7 +97,11 @@
                 >
               </div>
             </td>
-            <td>{{ dataFlow.flowInterface.protocol ? dataFlow.flowInterface.protocol.name : '' }}</td>
+            <td>
+              <span v-if="dataFlow.flowInterface">
+                {{ dataFlow.flowInterface.protocol ? dataFlow.flowInterface.protocol.name : '' }}
+              </span>
+            </td>
             <td>
               <span v-for="(dataFlowItem, i) in dataFlow.items" :key="dataFlowItem.id"
                 >{{ i > 0 ? ', ' : '' }}

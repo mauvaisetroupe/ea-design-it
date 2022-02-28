@@ -71,7 +71,7 @@
             </td>
 
             <td>
-              <div v-if="dataFlowItem.dataFlow.flowInterface">
+              <div v-if="dataFlowItem.dataFlow && dataFlowItem.dataFlow.flowInterface">
                 <router-link
                   :title="dataFlowItem.dataFlow.flowInterface.protocol ? dataFlowItem.dataFlow.flowInterface.protocol.name : ''"
                   :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: dataFlowItem.dataFlow.flowInterface.id } }"
@@ -80,7 +80,7 @@
               </div>
             </td>
             <td>
-              <div v-if="dataFlowItem.dataFlow.flowInterface">
+              <div v-if="dataFlowItem.dataFlow && dataFlowItem.dataFlow.flowInterface">
                 {{ dataFlowItem.dataFlow.flowInterface.protocol ? dataFlowItem.dataFlow.flowInterface.protocol.name : '' }}
               </div>
             </td>
