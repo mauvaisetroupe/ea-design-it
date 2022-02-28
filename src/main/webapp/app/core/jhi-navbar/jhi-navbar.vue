@@ -24,7 +24,14 @@
             <span>Home</span>
           </span>
         </b-nav-item>
-        <b-nav-item-dropdown right id="entity-menu" active-class="active" class="pointer" data-cy="entity" v-if="readAuthorities">
+        <b-nav-item-dropdown
+          right
+          id="eadesignit-main-menu"
+          active-class="active"
+          class="pointer"
+          data-cy="eadesign-main"
+          v-if="readAuthorities"
+        >
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="th-list" />
             <span class="no-bold">EADesignIt</span>
@@ -54,7 +61,14 @@
             <span>Data Flow Item : Events </span>
           </b-dropdown-item>
         </b-nav-item-dropdown>
-        <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
+        <b-nav-item-dropdown
+          right
+          id="eadesignit-report-menu"
+          v-if="authenticated"
+          active-class="active"
+          class="pointer"
+          data-cy="eadesign-report"
+        >
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="th-list" />
             <span class="no-bold">EADesignit Report</span>
