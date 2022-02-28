@@ -28,14 +28,6 @@
       <font-awesome-icon icon="asterisk" />
       <span>Application Component</span>
     </b-dropdown-item>
-    <b-dropdown-item to="/application-import">
-      <font-awesome-icon icon="asterisk" />
-      <span>Application Import</span>
-    </b-dropdown-item>
-    <b-dropdown-item to="/flow-import">
-      <font-awesome-icon icon="asterisk" />
-      <span>Flow Import</span>
-    </b-dropdown-item>
     <b-dropdown-item to="/protocol">
       <font-awesome-icon icon="asterisk" />
       <span>Protocol</span>
@@ -51,10 +43,6 @@
     <b-dropdown-item to="/application-category">
       <font-awesome-icon icon="asterisk" />
       <span>Application Category</span>
-    </b-dropdown-item>
-    <b-dropdown-item to="/data-flow-import">
-      <font-awesome-icon icon="asterisk" />
-      <span>Data Flow Import</span>
     </b-dropdown-item>
     <b-dropdown-item to="/technology">
       <font-awesome-icon icon="asterisk" />
