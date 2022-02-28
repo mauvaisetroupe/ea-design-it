@@ -97,6 +97,7 @@
     "axios": "0.25.0",
     "bootstrap": "4.6.1",
     "bootstrap-vue": "2.21.2",
+    "browser-sync": "^2.27.7",
     "dayjs": "1.10.7",
     "swagger-ui-dist": "4.2.1",
     "vue": "2.6.14",
