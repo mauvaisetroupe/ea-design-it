@@ -15,5 +15,6 @@
     "authenticationUrl": "/api/authenticate",
     "jwtStorageName": "jhi-authenticationToken"
   },
-  "experimentalSessionSupport": true
+  "experimentalSessionSupport": true,
+  "experimentalStudio": true
 }
