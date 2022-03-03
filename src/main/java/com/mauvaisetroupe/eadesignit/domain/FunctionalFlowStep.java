@@ -38,7 +38,7 @@ public class FunctionalFlowStep implements Serializable, Comparable<FunctionalFl
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "steps", "owner", "landscapes", "dataFlows" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "steps", "owner", "dataFlows" }, allowSetters = true)
     private FunctionalFlow flow;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
