@@ -123,6 +123,15 @@
       >
       <div class="modal-body">
         <p id="jhi-delete-landscapeView-heading">Are you sure you want to delete this Landscape View?</p>
+        <p><input type="checkbox" v-model="deleteFunctionalFlows" @change="deleteCoherence()" /> Delete unused Functional Flow</p>
+        <p>
+          <input type="checkbox" v-model="deleteInterfaces" @change="deleteCoherence()" :disabled="!deleteFunctionalFlows" /> Delete unused
+          Interfaces
+        </p>
+        <p>
+          <input type="checkbox" v-model="deleteDatas" @change="deleteCoherence()" :disabled="!deleteInterfaces" /> Delete unused Data Flows
+          &amp; Data Flow Items
+        </p>
       </div>
       <div slot="modal-footer">
         <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>

@@ -20,7 +20,21 @@ export default class LandscapeView extends mixins(JhiDataUtils) {
 
   public landscapeViews: ILandscapeView[] = [];
 
+  public deleteFunctionalFlows = true;
+  public deleteInterfaces = true;
+  public deleteDatas = true;
+
   public isFetching = false;
+
+  public deleteCoherence() {
+    if (!this.deleteFunctionalFlows) {
+      this.deleteInterfaces = false;
+      this.deleteDatas = false;
+    }
+    if (!this.deleteInterfaces) {
+      this.deleteDatas = false;
+    }
+  }
 
   public mounted(): void {
     this.retrieveAllLandscapeViews();
@@ -59,7 +73,7 @@ export default class LandscapeView extends mixins(JhiDataUtils) {
 
   public removeLandscapeView(): void {
     this.landscapeViewService()
-      .delete(this.removeId)
+      .delete(this.removeId, this.deleteFunctionalFlows, this.deleteInterfaces, this.deleteDatas)
       .then(() => {
         const message = 'A LandscapeView is deleted with identifier ' + this.removeId;
         this.$bvToast.toast(message.toString(), {

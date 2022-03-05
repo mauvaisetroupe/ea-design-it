@@ -204,9 +204,14 @@ public class LandscapeViewResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/landscape-views/{id}")
-    public ResponseEntity<Void> deleteLandscapeView(@PathVariable Long id) {
-        log.debug("REST request to delete LandscapeView : {}", id);
-        landscapeViewService.delete(id);
+    public ResponseEntity<Void> deleteLandscapeView(
+        @PathVariable Long id,
+        @RequestParam boolean deleteFunctionalFlows,
+        @RequestParam boolean deleteFlowInterfaces,
+        @RequestParam boolean deleteDatas
+    ) {
+        log.debug("REST request to delete LandscapeView : {}, {}, {}, {}", id, deleteFunctionalFlows, deleteFlowInterfaces, deleteDatas);
+        landscapeViewService.delete(id, deleteFunctionalFlows, deleteFlowInterfaces, deleteDatas);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

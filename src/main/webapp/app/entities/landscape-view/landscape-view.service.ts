@@ -34,10 +34,12 @@ export default class LandscapeViewService {
     });
   }
 
-  public delete(id: number): Promise<any> {
+  public delete(id: number, deleteFunctionalFlows: boolean, deleteFlowInterfaces: boolean, deleteDatas: boolean): Promise<any> {
+    const params = { deleteFunctionalFlows: deleteFunctionalFlows, deleteFlowInterfaces: deleteFlowInterfaces, deleteDatas: deleteDatas };
+    console.log(params);
     return new Promise<any>((resolve, reject) => {
       axios
-        .delete(`${baseApiUrl}/${id}`)
+        .delete(`${baseApiUrl}/${id}`, { params })
         .then(res => {
           resolve(res);
         })
