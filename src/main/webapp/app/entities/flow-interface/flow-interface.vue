@@ -148,6 +148,12 @@
                   class="btn btn-sm"
                   data-cy="entityDeleteButton"
                   v-b-modal.removeEntity
+                  :disabled="flowInterface.steps && flowInterface.steps.length > 0"
+                  :title="
+                    !flowInterface.steps || flowInterface.steps.length == 0
+                      ? ''
+                      : 'Cannot be deleted, please detache from all functional flows first'
+                  "
                 >
                   <font-awesome-icon icon="times"></font-awesome-icon>
                   <span class="d-none d-md-inline">Delete</span>
