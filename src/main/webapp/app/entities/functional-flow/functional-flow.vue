@@ -125,6 +125,12 @@
                   class="btn btn-sm"
                   data-cy="entityDeleteButton"
                   v-b-modal.removeEntity
+                  :disabled="functionalFlow.landscapes && functionalFlow.landscapes.length > 0"
+                  :title="
+                    !functionalFlow.landscapes || functionalFlow.landscapes.length == 0
+                      ? ''
+                      : 'Cannot be deleted, please detache from all landscapes first'
+                  "
                 >
                   <font-awesome-icon icon="times"></font-awesome-icon>
                   <span class="d-none d-md-inline">Delete</span>
