@@ -41,6 +41,15 @@ export default class FunctionalFlow extends Vue {
 
   public filter = '';
 
+  public deleteInterfaces = true;
+  public deleteDatas = true;
+
+  public deleteCoherence() {
+    if (!this.deleteInterfaces) {
+      this.deleteDatas = false;
+    }
+  }
+
   public mounted(): void {
     this.retrieveAllFunctionalFlows();
   }
@@ -78,7 +87,7 @@ export default class FunctionalFlow extends Vue {
 
   public removeFunctionalFlow(): void {
     this.functionalFlowService()
-      .delete(this.removeId)
+      .delete(this.removeId, this.deleteInterfaces, this.deleteDatas)
       .then(() => {
         const message = 'A FunctionalFlow is deleted with identifier ' + this.removeId;
         this.$bvToast.toast(message.toString(), {

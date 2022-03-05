@@ -6,7 +6,6 @@ const baseApiUrl = 'api/functional-flows';
 const basePlantUMLApiUrl = 'api/plantuml/functional-flow/get-svg';
 const basePlantUMLApiUrl2 = 'api/plantuml/applications/get-svg';
 
-
 export default class FunctionalFlowService {
   public find(id: number): Promise<IFunctionalFlow> {
     return new Promise<IFunctionalFlow>((resolve, reject) => {
@@ -34,10 +33,11 @@ export default class FunctionalFlowService {
     });
   }
 
-  public delete(id: number): Promise<any> {
+  public delete(id: number, deleteFlowInterfaces: boolean, deleteDatas: boolean): Promise<any> {
+    const params = { deleteFlowInterfaces: deleteFlowInterfaces, deleteDatas: deleteDatas };
     return new Promise<any>((resolve, reject) => {
       axios
-        .delete(`${baseApiUrl}/${id}`)
+        .delete(`${baseApiUrl}/${id}`, { params })
         .then(res => {
           resolve(res);
         })
@@ -100,7 +100,7 @@ export default class FunctionalFlowService {
   }
 
   public getPlantUMLforApplications(id: number[]) {
-    const params = {ids: id}
+    const params = { ids: id };
     return new Promise<any>((resolve, reject) => {
       axios
         .get(`${basePlantUMLApiUrl2}`, { params })
@@ -111,7 +111,7 @@ export default class FunctionalFlowService {
           reject(err);
         });
     });
-  }  
+  }
 
   public createNewFromApplications(applicationIds: number[]): Promise<IFunctionalFlow> {
     const params = { ids: applicationIds };
@@ -125,5 +125,5 @@ export default class FunctionalFlowService {
           reject(err);
         });
     });
-  }  
+  }
 }

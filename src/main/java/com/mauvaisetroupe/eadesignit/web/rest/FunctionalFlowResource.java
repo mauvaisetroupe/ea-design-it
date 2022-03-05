@@ -203,9 +203,13 @@ public class FunctionalFlowResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/functional-flows/{id}")
-    public ResponseEntity<Void> deleteFunctionalFlow(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteFunctionalFlow(
+        @PathVariable Long id,
+        @RequestParam boolean deleteFlowInterfaces,
+        @RequestParam boolean deleteDatas
+    ) {
         log.debug("REST request to delete FunctionalFlow : {}", id);
-        functionalflowService.delete(id);
+        functionalflowService.delete(id, deleteFlowInterfaces, deleteDatas);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

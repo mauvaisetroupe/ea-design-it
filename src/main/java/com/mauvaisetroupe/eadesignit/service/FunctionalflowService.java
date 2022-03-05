@@ -43,8 +43,10 @@ public class FunctionalflowService {
      * Delete the landscapeView by id.
      *
      * @param id the id of the entity.
+     * @param deleteDatas
+     * @param deleteFlowInterfaces
      */
-    public void delete(Long id) {
+    public void delete(Long id, boolean deleteFlowInterfaces, boolean deleteDatas) {
         log.debug("Request to delete FunctionalFlow : {}", id);
         // delete landscape and all entities without references to other landscape
 
@@ -90,28 +92,32 @@ public class FunctionalflowService {
         }
 
         // delete Interfaces not linked to other Flow
-        for (FlowInterface interface1 : allInterfaces) {
-            if (interface1.getSteps() == null || interface1.getSteps().isEmpty()) {
-                // detach dataflow
-                for (DataFlow dataFlow : new HashSet<>(interface1.getDataFlows())) {
-                    interface1.removeDataFlows(dataFlow);
-                    dataFlowRepository.save(dataFlow);
+        if (deleteFlowInterfaces) {
+            for (FlowInterface interface1 : allInterfaces) {
+                if (interface1.getSteps() == null || interface1.getSteps().isEmpty()) {
+                    // detach dataflow
+                    for (DataFlow dataFlow : new HashSet<>(interface1.getDataFlows())) {
+                        interface1.removeDataFlows(dataFlow);
+                        dataFlowRepository.save(dataFlow);
+                    }
+                    // delete Interface
+                    log.debug("about to delete interface " + interface1);
+                    flowInterfaceRepository.delete(interface1);
                 }
-                // delete Interface
-                log.debug("about to delete interface " + interface1);
-                flowInterfaceRepository.delete(interface1);
             }
         }
 
         // delete DataFlow not linked to
-        for (DataFlow dataFlow : allData) {
-            if (
-                dataFlow.getFlowInterface() == null &&
-                (dataFlow.getFunctionalFlows() == null || dataFlow.getFunctionalFlows().isEmpty()) &&
-                (dataFlow.getItems() == null || dataFlow.getItems().isEmpty())
-            ) {
-                log.debug("About to delete " + dataFlow);
-                dataFlowRepository.delete(dataFlow);
+        if (deleteFlowInterfaces && deleteDatas) {
+            for (DataFlow dataFlow : allData) {
+                if (
+                    dataFlow.getFlowInterface() == null &&
+                    (dataFlow.getFunctionalFlows() == null || dataFlow.getFunctionalFlows().isEmpty()) &&
+                    (dataFlow.getItems() == null || dataFlow.getItems().isEmpty())
+                ) {
+                    log.debug("About to delete " + dataFlow);
+                    dataFlowRepository.delete(dataFlow);
+                }
             }
         }
     }
