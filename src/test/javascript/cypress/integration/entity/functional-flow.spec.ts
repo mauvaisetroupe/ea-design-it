@@ -33,7 +33,7 @@ describe('FunctionalFlow e2e test', () => {
     if (functionalFlow) {
       cy.authenticatedRequest({
         method: 'DELETE',
-        url: `/api/functional-flows/${functionalFlow.id}`,
+        url: `/api/functional-flows/${functionalFlow.id}?deleteFlowInterfaces=true&deleteDatas=true`,
       }).then(() => {
         functionalFlow = undefined;
       });

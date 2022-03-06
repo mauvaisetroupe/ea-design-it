@@ -34,7 +34,7 @@ describe('LandscapeView e2e test', () => {
     if (landscapeView) {
       cy.authenticatedRequest({
         method: 'DELETE',
-        url: `/api/landscape-views/${landscapeView.id}`,
+        url: `/api/landscape-views/${landscapeView.id}?deleteFunctionalFlows=true&deleteFlowInterfaces=true&deleteDatas=true`,
       }).then(() => {
         landscapeView = undefined;
       });

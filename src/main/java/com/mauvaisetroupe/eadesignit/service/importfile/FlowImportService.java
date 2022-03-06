@@ -67,6 +67,7 @@ public class FlowImportService {
     protected static final String FLOW_COMMENT = "Comment";
     protected static final String FLOW_ADD_CORRESPONDENT_ID = "ADD correspondent ID";
     protected static final String FLOW_STEP_DESCRIPTION = "Step description";
+    protected static final String FLOW_EXTERNAL = "External";
 
     private final List<String> columnsArray = new ArrayList<String>();
 
@@ -122,6 +123,7 @@ public class FlowImportService {
         this.columnsArray.add(FLOW_COMMENT);
         this.columnsArray.add(FLOW_ADD_CORRESPONDENT_ID);
         this.columnsArray.add(FLOW_STEP_DESCRIPTION);
+        this.columnsArray.add(FLOW_EXTERNAL);
     }
 
     public List<FlowImport> importExcel(InputStream file, String filename) throws EncryptedDocumentException, IOException {
@@ -131,48 +133,81 @@ public class FlowImportService {
         List<Map<String, Object>> flowsDF = excelReader.getSheet(FLOW_SHEET_NAME);
         String diagramName = filename.substring(0, filename.lastIndexOf(".")).replace("_", " ").replace("-", " ");
 
+        // Delete all steps from all FunctionalFlows
+        for (Map<String, Object> map : flowsDF) {
+            FlowImport flowImport = mapArrayToFlowImport(map);
+            if (!flowImport.isExternal()) {
+                if (flowImport.getIdFlowFromExcel() != null && flowImport.getFlowAlias() != null) {
+                    FunctionalFlow functionalFlow = findOrCreateFunctionalFlow(flowImport);
+                    ArrayList<FunctionalFlowStep> list = new ArrayList<>();
+                    list.addAll(functionalFlow.getSteps());
+                    for (FunctionalFlowStep step : list) {
+                        FunctionalFlow flow = step.getFlow();
+                        flow.removeSteps(step);
+                        flowRepository.save(flow);
+
+                        FlowInterface interface1 = step.getFlowInterface();
+                        interface1.removeSteps(step);
+                        interfaceRepository.save(interface1);
+                        functionalFlowStepRepository.delete(step);
+                    }
+                }
+            }
+        }
+
+        LandscapeView landscapeView = findOrCreateLandscape(diagramName);
+
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);
 
             if (flowImport.getIdFlowFromExcel() != null && flowImport.getFlowAlias() != null) {
-                LandscapeView landscapeView = findOrCreateLandscape(diagramName);
-                FunctionalFlow functionalFlow = findOrCreateFunctionalFlow(flowImport);
-                FlowInterface flowInterface = findOrCreateInterface(flowImport);
-                Protocol protocol = findOrCreateProtocol(flowImport);
-                DataFlow dataFlow = findOrCreateDataFlow(flowImport, protocol);
-
-                if (landscapeView != null && functionalFlow != null && flowInterface != null) {
-                    // Set<>, so could add even if already associated
-                    functionalFlow.addLandscape(landscapeView);
-                    // For first persistence
-                    interfaceRepository.save(flowInterface);
-                    flowRepository.save(functionalFlow);
-
-                    // Add step
-                    FunctionalFlowStep step = findOrCreateStep(flowImport, functionalFlow, flowInterface);
-                    step.setFlowInterface(flowInterface);
-                    functionalFlow.addSteps(step);
-                    functionalFlowStepRepository.save(step);
-
-                    landscapeViewRepository.save(landscapeView);
-                    if (dataFlow != null) {
-                        functionalFlow.addDataFlows(dataFlow);
-                        flowInterface.addDataFlows(dataFlow);
-                        // validate here beacause relationship should not be null
-                        validateBean(dataFlow);
-                        dataFlowRepository.save(dataFlow);
-                        interfaceRepository.save(flowInterface);
-                    }
-                    if (protocol != null) {
-                        flowInterface.setProtocol(protocol);
-                        // validate here beacause relationship should not be null
-                        validateBean(protocol);
-                        protocolRepository.save(protocol);
-                        interfaceRepository.save(flowInterface);
+                if (flowImport.isExternal()) {
+                    Optional<FunctionalFlow> functionalFlowOption = flowRepository.findByAlias(flowImport.getFlowAlias());
+                    if (functionalFlowOption.isPresent()) {
+                        FunctionalFlow functionalFlow = functionalFlowOption.get();
+                        functionalFlow.addLandscape(landscapeView);
+                        flowRepository.save(functionalFlow);
+                        landscapeViewRepository.save(landscapeView);
                     }
                 } else {
-                    flowInterface = null;
-                    functionalFlow = null;
+                    FunctionalFlow functionalFlow = findOrCreateFunctionalFlow(flowImport);
+                    FlowInterface flowInterface = findOrCreateInterface(flowImport);
+                    Protocol protocol = findOrCreateProtocol(flowImport);
+                    DataFlow dataFlow = findOrCreateDataFlow(flowImport, protocol);
+
+                    if (landscapeView != null && functionalFlow != null && flowInterface != null) {
+                        // Set<>, so could add even if already associated
+                        functionalFlow.addLandscape(landscapeView);
+                        // For first persistence
+                        interfaceRepository.save(flowInterface);
+                        flowRepository.save(functionalFlow);
+
+                        // Add step
+                        FunctionalFlowStep step = findOrCreateStep(flowImport, functionalFlow, flowInterface);
+                        step.setFlowInterface(flowInterface);
+                        functionalFlow.addSteps(step);
+                        functionalFlowStepRepository.save(step);
+
+                        landscapeViewRepository.save(landscapeView);
+                        if (dataFlow != null) {
+                            functionalFlow.addDataFlows(dataFlow);
+                            flowInterface.addDataFlows(dataFlow);
+                            // validate here beacause relationship should not be null
+                            validateBean(dataFlow);
+                            dataFlowRepository.save(dataFlow);
+                            interfaceRepository.save(flowInterface);
+                        }
+                        if (protocol != null) {
+                            flowInterface.setProtocol(protocol);
+                            // validate here beacause relationship should not be null
+                            validateBean(protocol);
+                            protocolRepository.save(protocol);
+                            interfaceRepository.save(flowInterface);
+                        }
+                    } else {
+                        flowInterface = null;
+                        functionalFlow = null;
+                    }
                 }
             } else {
                 flowImport.setImportFunctionalFlowStatus(ImportStatus.ERROR);
@@ -433,6 +468,12 @@ public class FlowImportService {
         flowImport.setComment((String) map.get(FLOW_COMMENT));
         flowImport.setDocumentName((String) map.get(FLOW_ADD_CORRESPONDENT_ID));
         flowImport.setStepDescription((String) map.get(FLOW_STEP_DESCRIPTION));
+        String _external = (String) map.get(FLOW_EXTERNAL);
+        if (_external != null && _external.toLowerCase().trim().equals("yes")) {
+            flowImport.setExternal(true);
+        } else {
+            flowImport.setExternal(false);
+        }
         return flowImport;
     }
 
