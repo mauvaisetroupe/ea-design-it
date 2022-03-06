@@ -45,11 +45,27 @@
       <div v-if="$store.getters.writeAuthority">
         <h2>Import Excel files</h2>
         <ul>
-          <li>Import Excel <router-link to="/application-import-upload-file"> Applications</router-link> file</li>
-          <li>Import Excel <router-link to="flow-import-upload-file">Functional Flows &amp; Interfaces </router-link> file</li>
-          <li>Import Excel <router-link to="event-import-upload-file">Data Flows &amp; Dat Flow Items</router-link> file</li>
-          <li>Import Excel <router-link to="/capability-import-upload-file">Capabilities</router-link></li>
-          <li>Import Excel mapping <router-link to="/application-capability-import-upload-file">Applications/Capabilities</router-link></li>
+          <li>
+            Import Excel
+            <router-link to="/application-import-upload-file" data-cy="import-excel-applications">Applications</router-link> file
+          </li>
+          <li>
+            Import Excel
+            <router-link to="flow-import-upload-file" data-cy="import-excel-flows">Functional Flows &amp; Interfaces </router-link> file
+          </li>
+          <li>
+            Import Excel
+            <router-link to="event-import-upload-file" data-cy="import-excel-data">Data Flows &amp; Dat Flow Items</router-link> file
+          </li>
+          <li>
+            Import Excel <router-link to="/capability-import-upload-file" data-cy="import-excel-capabilities">Capabilities</router-link>
+          </li>
+          <li>
+            Import Excel mapping
+            <router-link to="/application-capability-import-upload-file" data-cy="import-excel-capabilities-mapping"
+              >Applications/Capabilities</router-link
+            >
+          </li>
         </ul>
         <p>Please, refer to <a href="https://mauvaisetroupe.github.io/ea-design-it/import/">documentation</a> for more explanation</p>
       </div>
