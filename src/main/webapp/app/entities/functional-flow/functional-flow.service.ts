@@ -86,10 +86,11 @@ export default class FunctionalFlowService {
     });
   }
 
-  public getPlantUML(id: number) {
+  public getPlantUML(id: number, sequenceDiagram: boolean) {
     return new Promise<any>((resolve, reject) => {
+      let params = { sequenceDiagram: sequenceDiagram };
       axios
-        .get(`${basePlantUMLApiUrl}/${id}`)
+        .get(`${basePlantUMLApiUrl}/${id}`, { params })
         .then(res => {
           resolve(res);
         })

@@ -29,7 +29,7 @@ public class PlantUMLSerializer {
     @Autowired
     private PlantUMLBuilder plantUMLBuilder;
 
-    public String getSVG(LandscapeView landscapeView) throws IOException {
+    public String getSVG(LandscapeView landscapeView, boolean sequenceDiagram) throws IOException {
         LinkedHashMap<SourceTarget, SortedSet<FunctionalFlow>> relationships = new LinkedHashMap<>();
         for (FunctionalFlow functionalFlow : landscapeView.getFlows()) {
             for (FlowInterface flowInterface : functionalFlow.getInterfaces()) {
@@ -51,14 +51,20 @@ public class PlantUMLSerializer {
                 String[] labelAndURL = { label, url };
                 labelAndURLs.add(labelAndURL);
             }
-            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, sourceTarget.getSource(), sourceTarget.getTarget(), labelAndURLs);
+            plantUMLBuilder.getPlantumlRelationShip(
+                plantUMLSource,
+                sourceTarget.getSource(),
+                sourceTarget.getTarget(),
+                labelAndURLs,
+                sequenceDiagram
+            );
         }
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
 
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
-    public String getSVG(FunctionalFlow functionalFlow) throws IOException {
+    public String getSVG(FunctionalFlow functionalFlow, boolean sequenceDiagram) throws IOException {
         StringBuilder plantUMLSource = new StringBuilder();
         plantUMLBuilder.getPlantumlHeader(plantUMLSource);
         for (FunctionalFlowStep step : functionalFlow.getSteps()) {
@@ -70,14 +76,15 @@ public class PlantUMLSerializer {
                 plantUMLSource,
                 step.getFlowInterface().getSource(),
                 step.getFlowInterface().getTarget(),
-                labelAndURLs
+                labelAndURLs,
+                sequenceDiagram
             );
         }
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
-    public String getSVG(SortedSet<FlowInterface> interfaces) throws IOException {
+    public String getSVG(SortedSet<FlowInterface> interfaces, boolean sequenceDiagram) throws IOException {
         LinkedHashMap<SourceTarget, SortedSet<FlowInterface>> relationships = new LinkedHashMap<>();
         for (FlowInterface flowInterface : interfaces) {
             SourceTarget key = new SourceTarget(flowInterface.getSource(), flowInterface.getTarget());
@@ -96,7 +103,13 @@ public class PlantUMLSerializer {
                 String url = "/flow-interface/" + flowInterface.getId() + "/view";
                 labelAndURLs.add(new String[] { label, url });
             }
-            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, sourceTarget.getSource(), sourceTarget.getTarget(), labelAndURLs);
+            plantUMLBuilder.getPlantumlRelationShip(
+                plantUMLSource,
+                sourceTarget.getSource(),
+                sourceTarget.getTarget(),
+                labelAndURLs,
+                sequenceDiagram
+            );
         }
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());

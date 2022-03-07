@@ -30,13 +30,21 @@ public class PlantUMLBuilder {
         plantUMLSource.append("skinparam componentStyle rectangle\n");
         plantUMLSource.append("skinparam hyperlinkColor #000000\n");
         plantUMLSource.append("skinparam hyperlinkUnderline false\n");
+        plantUMLSource.append("skinparam monochrome true\n");
+        plantUMLSource.append("skinparam shadowing false\n");
+        //plantUMLSource.append("skinparam svgDimensionStyle false\n");
+        plantUMLSource.append("hide footbox\n");
     }
 
-    public void getPlantumlRelationShip(StringBuilder plantUMLSource, Application source, Application target, List<String[]> labelAndURL) {
-        plantUMLSource.append("component [" + source.getName() + "] as C" + source.getId() + "\n");
-        plantUMLSource.append("url of C" + source.getId() + " is [[/application/" + source.getId() + "/view]]\n");
-        plantUMLSource.append("component [" + target.getName() + "] as C" + target.getId() + "\n");
-        plantUMLSource.append("url of C" + target.getId() + " is [[/application/" + target.getId() + "/view]]\n");
+    public void getPlantumlRelationShip(
+        StringBuilder plantUMLSource,
+        Application source,
+        Application target,
+        List<String[]> labelAndURL,
+        boolean sequenceDiagram
+    ) {
+        createComponent(plantUMLSource, source, sequenceDiagram);
+        createComponent(plantUMLSource, target, sequenceDiagram);
         plantUMLSource.append("C" + source.getId() + " --> C" + target.getId() + " :");
         String sepaString = "";
         for (String[] strings : labelAndURL) {
@@ -47,6 +55,15 @@ public class PlantUMLBuilder {
             sepaString = ",\\n";
         }
         plantUMLSource.append("\n");
+    }
+
+    private void createComponent(StringBuilder plantUMLSource, Application application, boolean sequenceDiagram) {
+        if (sequenceDiagram) {
+            plantUMLSource.append("participant \"" + application.getName() + "\" as C" + application.getId() + "\n");
+        } else {
+            plantUMLSource.append("component [" + application.getName() + "] as C" + application.getId() + "\n");
+        }
+        plantUMLSource.append("url of C" + application.getId() + " is [[/application/" + application.getId() + "/view]]\n");
     }
 
     public void getPlantumlFooter(StringBuilder plantUMLSource) {
@@ -65,11 +82,18 @@ public class PlantUMLBuilder {
         return new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
     }
 
-    public void getPlantumlRelationShip(StringBuilder plantUMLSource, Application source, Application target, String alias, String url) {
+    public void getPlantumlRelationShip(
+        StringBuilder plantUMLSource,
+        Application source,
+        Application target,
+        String alias,
+        String url,
+        boolean sequenceDiagram
+    ) {
         List<String[]> labelAndURLs = new ArrayList<>();
         String[] labelAndURL = { alias, url };
         labelAndURLs.add(labelAndURL);
-        getPlantumlRelationShip(plantUMLSource, source, target, labelAndURLs);
+        getPlantumlRelationShip(plantUMLSource, source, target, labelAndURLs, sequenceDiagram);
     }
 
     public void getPlantumlCapabilities(StringBuilder plantUMLSource, Collection<Capability> capabilities) {

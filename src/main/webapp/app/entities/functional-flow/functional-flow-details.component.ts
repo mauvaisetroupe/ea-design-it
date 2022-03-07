@@ -31,6 +31,8 @@ export default class FunctionalFlowDetails extends Vue {
 
   public checkedInterface: IFlowInterface[] = [];
 
+  public sequenceDiagram: boolean = false;
+
   get searchSourceId() {
     if (!this.searchSourceName) return null;
     return this.applications.find(i => i.name == this.searchSourceName).id;
@@ -79,6 +81,11 @@ export default class FunctionalFlowDetails extends Vue {
     });
   }
 
+  public changeDiagram() {
+    this.sequenceDiagram = !this.sequenceDiagram;
+    this.getPlantUML(this.functionalFlow.id);
+  }
+
   public generateDiagramForSelection(applicationIds: number[]) {
     this.notPersisted = true;
     this.functionalFlowService()
@@ -109,7 +116,7 @@ export default class FunctionalFlowDetails extends Vue {
   public getPlantUML(landscapeViewId) {
     console.log('Entering in method getPlantUML');
     this.functionalFlowService()
-      .getPlantUML(landscapeViewId)
+      .getPlantUML(landscapeViewId, this.sequenceDiagram)
       .then(
         res => {
           this.plantUMLImage = res.data;

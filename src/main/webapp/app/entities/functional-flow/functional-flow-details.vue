@@ -87,13 +87,17 @@
 
       <br />
 
-      <h3>
-        <font-awesome-icon icon="grip-lines" style="color: Tomato; font-size: 0.9em"></font-awesome-icon> Interfaces for
-        {{ functionalFlow.alias }}
-      </h3>
+      <h3>{{ functionalFlow.alias }} - {{ functionalFlow.description }}</h3>
       <div v-html="plantUMLImage"></div>
 
-      <div class="my-5 lead">{{ functionalFlow.description }}</div>
+      <div class="float-left">
+        <!-- <button class="btn btn-success float-right" v-on:click="exportDiagram()" style="font-size: 0.7em; padding: 3px; margin: 3px">
+          <font-awesome-icon icon="sync"></font-awesome-icon> <span>Export</span>
+        </button>         -->
+        <button class="btn btn-warning float-right" v-on:click="changeDiagram()" style="font-size: 0.7em; padding: 3px; margin: 3px">
+          <font-awesome-icon icon="sync"></font-awesome-icon> <span v-text="sequenceDiagram ? 'component diagram' : 'sequence diagram'" />
+        </button>
+      </div>
 
       <div class="table-responsive" v-if="functionalFlow.steps && functionalFlow.steps.length > 0">
         <table class="table table-striped">
