@@ -1,7 +1,8 @@
-package com.mauvaisetroupe.eadesignit.domain.util;
+package com.mauvaisetroupe.eadesignit.web.util;
 
 import com.mauvaisetroupe.eadesignit.domain.Owner;
 import com.mauvaisetroupe.eadesignit.domain.User;
+import com.mauvaisetroupe.eadesignit.domain.util.Ownershipable;
 import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
 import com.mauvaisetroupe.eadesignit.security.AuthoritiesConstants;
 import com.mauvaisetroupe.eadesignit.security.SecurityUtils;
