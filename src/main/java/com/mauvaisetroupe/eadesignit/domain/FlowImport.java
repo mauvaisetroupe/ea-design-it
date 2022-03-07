@@ -88,6 +88,7 @@ public class FlowImport implements Serializable {
     @Column(name = "import_status_message")
     private String importStatusMessage;
 
+    @Transient
     private boolean external;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
