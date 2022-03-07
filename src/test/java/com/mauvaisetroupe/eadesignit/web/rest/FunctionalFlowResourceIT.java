@@ -484,7 +484,12 @@ class FunctionalFlowResourceIT {
 
         // Delete the functionalFlow
         restFunctionalFlowMockMvc
-            .perform(delete(ENTITY_API_URL_ID, functionalFlow.getId()).accept(MediaType.APPLICATION_JSON))
+            .perform(
+                delete(ENTITY_API_URL_ID, functionalFlow.getId())
+                    .queryParam("deleteFlowInterfaces", "true")
+                    .queryParam("deleteDatas", "true")
+                    .accept(MediaType.APPLICATION_JSON)
+            )
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item

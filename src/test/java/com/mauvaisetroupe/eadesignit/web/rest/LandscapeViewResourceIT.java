@@ -437,7 +437,13 @@ class LandscapeViewResourceIT {
 
         // Delete the landscapeView
         restLandscapeViewMockMvc
-            .perform(delete(ENTITY_API_URL_ID, landscapeView.getId()).accept(MediaType.APPLICATION_JSON))
+            .perform(
+                delete(ENTITY_API_URL_ID, landscapeView.getId())
+                    .queryParam("deleteFunctionalFlows", "true")
+                    .queryParam("deleteFlowInterfaces", "true")
+                    .queryParam("deleteDatas", "true")
+                    .accept(MediaType.APPLICATION_JSON)
+            )
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
