@@ -8,7 +8,7 @@
     {
       "fieldName": "alias",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["unique"]
     },
     {
       "fieldName": "description",

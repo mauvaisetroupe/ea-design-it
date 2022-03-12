@@ -5,7 +5,7 @@ import { IDataFlow } from '@/shared/model/data-flow.model';
 
 export interface IFunctionalFlow {
   id?: number;
-  alias?: string;
+  alias?: string | null;
   description?: string | null;
   comment?: string | null;
   status?: string | null;
@@ -22,7 +22,7 @@ export interface IFunctionalFlow {
 export class FunctionalFlow implements IFunctionalFlow {
   constructor(
     public id?: number,
-    public alias?: string,
+    public alias?: string | null,
     public description?: string | null,
     public comment?: string | null,
     public status?: string | null,
