@@ -64,6 +64,8 @@ export default class FunctionalFlowDetails extends Vue {
 
   public reorderAlias = false;
 
+  public isFetching = false;
+
   //for description update
   public reorderAliasflowToSave: IFunctionalFlow[] = [];
   //for reordering update
@@ -82,6 +84,7 @@ export default class FunctionalFlowDetails extends Vue {
   }
 
   public changeDiagram() {
+    this.isFetching = true;
     this.sequenceDiagram = !this.sequenceDiagram;
     this.getPlantUML(this.functionalFlow.id);
   }
@@ -120,6 +123,7 @@ export default class FunctionalFlowDetails extends Vue {
       .then(
         res => {
           this.plantUMLImage = res.data;
+          this.isFetching = false;
         },
         err => {
           console.log(err);

@@ -90,12 +90,18 @@
       <h3>{{ functionalFlow.alias }} - {{ functionalFlow.description }}</h3>
       <div v-html="plantUMLImage"></div>
 
-      <div class="float-left">
+      <div class="float-left" v-if="!notPersisted">
         <!-- <button class="btn btn-success float-right" v-on:click="exportDiagram()" style="font-size: 0.7em; padding: 3px; margin: 3px">
           <font-awesome-icon icon="sync"></font-awesome-icon> <span>Export</span>
         </button>         -->
-        <button class="btn btn-warning float-right" v-on:click="changeDiagram()" style="font-size: 0.7em; padding: 3px; margin: 3px">
-          <font-awesome-icon icon="sync"></font-awesome-icon> <span v-text="sequenceDiagram ? 'component diagram' : 'sequence diagram'" />
+        <button
+          class="btn btn-warning float-right"
+          v-on:click="changeDiagram()"
+          style="font-size: 0.7em; padding: 3px; margin: 3px"
+          :disabled="isFetching"
+        >
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon>
+          <span v-text="sequenceDiagram ? 'component diagram' : 'sequence diagram'" />
         </button>
       </div>
 
