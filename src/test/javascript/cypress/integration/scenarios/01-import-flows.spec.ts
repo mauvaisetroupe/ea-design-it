@@ -125,7 +125,7 @@ describe('Application Import and Flows e2e test', () => {
     cy.visit(`${functionalFlowPageUrl}`);
     cy.get(entityCreateButtonSelector).click();
     cy.getEntityCreateUpdateHeading('FunctionalFlow');
-    cy.get(`[data-cy="alias"]`).type('S.02').should('have.value', 'S.02');
+    cy.get(`[data-cy="alias"]`).type('CYP.02').should('have.value', 'CYP.02');
 
     cy.get(entityCreateSaveButtonSelector).click();
 
@@ -189,52 +189,25 @@ describe('Application Import and Flows e2e test', () => {
     });
   });
 
-  it('delete cretaed applications', () => {
-    // load applications pages
-    cy.visit('/');
-    cy.clickOnEntityMenuItem('application');
-    cy.wait('@applicationEntitiesRequest').then(({ response }) => {
-      cy.get(entityTableSelector).should('exist');
-    });
+  const aliases = ['CYP.CMP.00000001', 'CYP.CMP.00000002', 'CYP.CMP.00000003', 'CYP.CMP.00000004'];
+  aliases.forEach(_alias => {
+    it('delete application ' + _alias, () => {
+      // load applications pages
+      cy.visit('/');
+      cy.clickOnEntityMenuItem('application');
+      cy.wait('@applicationEntitiesRequest').then(({ response }) => {
+        cy.get(entityTableSelector).should('exist');
+      });
 
-    let alias = cy.get('td').contains('HPX.CMP.00000001');
-    alias.should('be.visible');
-    alias.siblings().find(entityDeleteButtonSelector).click();
-    cy.getEntityDeleteDialogHeading('application').should('exist');
-    cy.get(entityConfirmDeleteButtonSelector).click();
+      let alias = cy.get('td').contains(_alias);
+      alias.should('be.visible');
+      alias.siblings().find(entityDeleteButtonSelector).click();
+      cy.getEntityDeleteDialogHeading('application').should('exist');
+      cy.get(entityConfirmDeleteButtonSelector).click();
 
-    cy.wait('@applicationDeleteEntityRequest').then(({ response }) => {
-      expect(response!.statusCode).to.equal(204);
-    });
-
-    alias = cy.get('td').contains('HPX.CMP.00000002');
-    alias.should('be.visible');
-    alias.siblings().find(entityDeleteButtonSelector).click();
-    cy.getEntityDeleteDialogHeading('application').should('exist');
-    cy.get(entityConfirmDeleteButtonSelector).click();
-
-    cy.wait('@applicationDeleteEntityRequest').then(({ response }) => {
-      expect(response!.statusCode).to.equal(204);
-    });
-
-    alias = cy.get('td').contains('HPX.CMP.00000003');
-    alias.should('be.visible');
-    alias.siblings().find(entityDeleteButtonSelector).click();
-    cy.getEntityDeleteDialogHeading('application').should('exist');
-    cy.get(entityConfirmDeleteButtonSelector).click();
-
-    cy.wait('@applicationDeleteEntityRequest').then(({ response }) => {
-      expect(response!.statusCode).to.equal(204);
-    });
-
-    alias = cy.get('td').contains('HPX.CMP.00000004');
-    alias.should('be.visible');
-    alias.siblings().find(entityDeleteButtonSelector).click();
-    cy.getEntityDeleteDialogHeading('application').should('exist');
-    cy.get(entityConfirmDeleteButtonSelector).click();
-
-    cy.wait('@applicationDeleteEntityRequest').then(({ response }) => {
-      expect(response!.statusCode).to.equal(204);
+      cy.wait('@applicationDeleteEntityRequest').then(({ response }) => {
+        expect(response!.statusCode).to.equal(204);
+      });
     });
   });
 

@@ -2,10 +2,11 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="functionalFlow">
-        <h2 class="jh-entity-heading" data-cy="functionalFlowDetailsHeading">
+        <h2 class="jh-entity-heading" data-cy="functionalFlowDetailsHeading" v-if="!notPersisted">
           <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon>
           <span>Functional Flow</span> - {{ functionalFlow.alias }}
         </h2>
+        <h2 v-else>Interfaces for selected applications</h2>
         <dl class="row jh-entity-details" v-if="!notPersisted">
           <dt>
             <span>Alias</span>
@@ -87,24 +88,25 @@
 
       <br />
 
-      <h3>{{ functionalFlow.alias }} - {{ functionalFlow.description }}</h3>
-      <div v-html="plantUMLImage"></div>
+      <h3 v-if="!notPersisted">{{ functionalFlow.alias }} - {{ functionalFlow.description }}</h3>
 
-      <div class="float-left" v-if="!notPersisted">
-        <!-- <button class="btn btn-success float-right" v-on:click="exportDiagram()" style="font-size: 0.7em; padding: 3px; margin: 3px">
-          <font-awesome-icon icon="sync"></font-awesome-icon> <span>Export</span>
-        </button>         -->
-        <button
-          class="btn btn-warning float-right"
-          v-on:click="changeDiagram()"
-          style="font-size: 0.7em; padding: 3px; margin: 3px"
-          :disabled="isFetching"
-        >
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon>
-          <span v-text="sequenceDiagram ? 'component diagram' : 'sequence diagram'" />
-        </button>
+      <div v-if="functionalFlow.steps && functionalFlow.steps.length > 1">
+        <div v-html="plantUMLImage"></div>
+        <div class="float-left" v-if="!notPersisted">
+          <!-- <button class="btn btn-success float-right" v-on:click="exportDiagram()" style="font-size: 0.7em; padding: 3px; margin: 3px">
+            <font-awesome-icon icon="sync"></font-awesome-icon> <span>Export</span>
+          </button>         -->
+          <button
+            class="btn btn-warning float-right"
+            v-on:click="changeDiagram()"
+            style="font-size: 0.7em; padding: 3px; margin: 3px"
+            :disabled="isFetching"
+          >
+            <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon>
+            <span v-text="sequenceDiagram ? 'component diagram' : 'sequence diagram'" />
+          </button>
+        </div>
       </div>
-
       <div class="table-responsive" v-if="functionalFlow.steps && functionalFlow.steps.length > 0">
         <table class="table table-striped">
           <thead>

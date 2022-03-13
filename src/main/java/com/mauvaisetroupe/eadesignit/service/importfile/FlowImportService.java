@@ -20,8 +20,8 @@ import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowStepRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
-import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
 import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
+import com.mauvaisetroupe.eadesignit.service.FunctionalflowService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -31,6 +31,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
+import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
@@ -39,6 +41,7 @@ import javax.validation.ValidatorFactory;
 import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -75,37 +78,34 @@ public class FlowImportService {
 
     private final Logger log = LoggerFactory.getLogger(FlowImportService.class);
 
-    private final FunctionalFlowRepository flowRepository;
-    private final FlowInterfaceRepository interfaceRepository;
-    private final ApplicationRepository applicationRepository;
-    private final DataFlowRepository dataFlowRepository;
-    private final OwnerRepository ownerRepository;
-    private final LandscapeViewRepository landscapeViewRepository;
-    private final ProtocolRepository protocolRepository;
-    private final DataFormatRepository dataFormatRepository;
-    private final FunctionalFlowStepRepository functionalFlowStepRepository;
+    @Autowired
+    private FunctionalFlowRepository flowRepository;
 
-    public FlowImportService(
-        FunctionalFlowRepository flowRepository,
-        FlowInterfaceRepository interfaceRepository,
-        ApplicationRepository applicationRepository,
-        DataFlowRepository dataFlowRepository,
-        OwnerRepository ownerRepository,
-        LandscapeViewRepository landscapeViewRepository,
-        ProtocolRepository protocolRepository,
-        DataFormatRepository dataFormatRepository,
-        FunctionalFlowStepRepository functionalFlowStepRepository
-    ) {
-        this.flowRepository = flowRepository;
-        this.interfaceRepository = interfaceRepository;
-        this.applicationRepository = applicationRepository;
-        this.dataFlowRepository = dataFlowRepository;
-        this.ownerRepository = ownerRepository;
-        this.landscapeViewRepository = landscapeViewRepository;
-        this.protocolRepository = protocolRepository;
-        this.dataFormatRepository = dataFormatRepository;
-        this.functionalFlowStepRepository = functionalFlowStepRepository;
+    @Autowired
+    private FlowInterfaceRepository interfaceRepository;
 
+    @Autowired
+    private ApplicationRepository applicationRepository;
+
+    @Autowired
+    private DataFlowRepository dataFlowRepository;
+
+    @Autowired
+    private LandscapeViewRepository landscapeViewRepository;
+
+    @Autowired
+    private ProtocolRepository protocolRepository;
+
+    @Autowired
+    private DataFormatRepository dataFormatRepository;
+
+    @Autowired
+    private FunctionalFlowStepRepository functionalFlowStepRepository;
+
+    @Autowired
+    private FunctionalflowService functionalflowService;
+
+    public FlowImportService() {
         this.columnsArray.add(FLOW_ID_FLOW);
         this.columnsArray.add(FLOW_ALIAS_FLOW);
         this.columnsArray.add(FLOW_SOURCE_ELEMENT);
@@ -126,6 +126,7 @@ public class FlowImportService {
         this.columnsArray.add(FLOW_EXTERNAL);
     }
 
+    @Transactional
     public List<FlowImport> importExcel(InputStream file, String filename) throws EncryptedDocumentException, IOException {
         List<FlowImport> result = new ArrayList<FlowImport>();
 
@@ -133,29 +134,51 @@ public class FlowImportService {
         List<Map<String, Object>> flowsDF = excelReader.getSheet(FLOW_SHEET_NAME);
         String diagramName = filename.substring(0, filename.lastIndexOf(".")).replace("_", " ").replace("-", " ");
 
-        // Delete all steps from all FunctionalFlows
+        // Find flows markes as external in Excel File
+        Set<String> externalFlows = new TreeSet<>();
+        Set<FunctionalFlow> allFlows = new TreeSet<>();
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);
-            if (!flowImport.isExternal()) {
-                if (flowImport.getIdFlowFromExcel() != null && flowImport.getFlowAlias() != null) {
-                    FunctionalFlow functionalFlow = findOrCreateFunctionalFlow(flowImport);
-                    ArrayList<FunctionalFlowStep> list = new ArrayList<>();
-                    list.addAll(functionalFlow.getSteps());
-                    for (FunctionalFlowStep step : list) {
-                        FunctionalFlow flow = step.getFlow();
-                        flow.removeSteps(step);
-                        flowRepository.save(flow);
-
-                        FlowInterface interface1 = step.getFlowInterface();
-                        interface1.removeSteps(step);
-                        interfaceRepository.save(interface1);
-                        functionalFlowStepRepository.delete(step);
-                    }
+            if (flowImport.getFlowAlias() != null) {
+                Optional<FunctionalFlow> optional = flowRepository.findByAlias(flowImport.getFlowAlias());
+                if (optional.isPresent()) {
+                    allFlows.add(optional.get());
+                }
+                if (flowImport.isExternal()) {
+                    externalFlows.add(flowImport.getFlowAlias());
                 }
             }
         }
-
+        // Complete by all Flows from Landscape
         LandscapeView landscapeView = findOrCreateLandscape(diagramName);
+        for (FunctionalFlow flow : landscapeView.getFlows()) {
+            allFlows.add(flow);
+        }
+
+        // Detach all Flows from landscape
+        for (FunctionalFlow functionalFlow : allFlows) {
+            landscapeView.removeFlows(functionalFlow);
+            flowRepository.save(functionalFlow);
+            landscapeViewRepository.save(landscapeView);
+        }
+
+        // Delete all steps from all FunctionalFlows except the ones markes as external
+        for (FunctionalFlow functionalFlow : allFlows) {
+            if (!externalFlows.contains(functionalFlow.getAlias())) {
+                ArrayList<FunctionalFlowStep> list = new ArrayList<>();
+                list.addAll(functionalFlow.getSteps());
+                for (FunctionalFlowStep step : list) {
+                    FunctionalFlow flow = step.getFlow();
+                    flow.removeSteps(step);
+                    flowRepository.save(flow);
+
+                    FlowInterface interface1 = step.getFlowInterface();
+                    interface1.removeSteps(step);
+                    interfaceRepository.save(interface1);
+                    functionalFlowStepRepository.delete(step);
+                }
+            }
+        }
 
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);

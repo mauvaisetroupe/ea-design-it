@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 public class PlantUMLBuilder {
@@ -45,14 +46,17 @@ public class PlantUMLBuilder {
     ) {
         createComponent(plantUMLSource, source, sequenceDiagram);
         createComponent(plantUMLSource, target, sequenceDiagram);
-        plantUMLSource.append("C" + source.getId() + " --> C" + target.getId() + " :");
+        plantUMLSource.append("C" + source.getId() + " --> C" + target.getId());
         String sepaString = "";
         for (String[] strings : labelAndURL) {
             String label = strings[0];
             String URL = strings[1];
-            plantUMLSource.append(sepaString);
-            if (URL == null) plantUMLSource.append(" " + label); else plantUMLSource.append("[[ " + URL + " " + label + " ]]");
-            sepaString = ",\\n";
+            if (StringUtils.hasText(label)) {
+                plantUMLSource.append(" :");
+                plantUMLSource.append(sepaString);
+                if (URL == null) plantUMLSource.append(" " + label); else plantUMLSource.append("[[ " + URL + " " + label + " ]]");
+                sepaString = ",\\n";
+            }
         }
         plantUMLSource.append("\n");
     }

@@ -162,25 +162,6 @@ class FunctionalFlowResourceIT {
 
     @Test
     @Transactional
-    void checkAliasIsRequired() throws Exception {
-        int databaseSizeBeforeTest = functionalFlowRepository.findAll().size();
-        // set the field null
-        functionalFlow.setAlias(null);
-
-        // Create the FunctionalFlow, which fails.
-
-        restFunctionalFlowMockMvc
-            .perform(
-                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(functionalFlow))
-            )
-            .andExpect(status().isBadRequest());
-
-        List<FunctionalFlow> functionalFlowList = functionalFlowRepository.findAll();
-        assertThat(functionalFlowList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllFunctionalFlows() throws Exception {
         // Initialize the database
         functionalFlowRepository.saveAndFlush(functionalFlow);

@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,6 +81,7 @@ public class ApplicationImportService {
         this.columnsArray.add(APPLICATION_OWNER);
     }
 
+    @Transactional
     public List<ApplicationImport> importExcel(InputStream inputStream, String originalFilename)
         throws EncryptedDocumentException, IOException {
         ExcelReader excelReader = new ExcelReader(inputStream);

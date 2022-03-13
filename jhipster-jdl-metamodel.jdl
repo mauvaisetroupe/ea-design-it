@@ -57,7 +57,7 @@ entity Owner {
 }
 
 entity FunctionalFlow(flow) {
-    alias String required unique // mandatory for label on arrow diagram
+    alias String unique
     description String maxlength(1500)
     comment String maxlength(1000)  
     status String
