@@ -183,8 +183,13 @@ public class FlowImportService {
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);
 
-            if (flowImport.getIdFlowFromExcel() != null && flowImport.getFlowAlias() != null) {
-                if (flowImport.isExternal()) {
+            if (flowImport.getIdFlowFromExcel() == null) {
+                flowImport.setImportFunctionalFlowStatus(ImportStatus.ERROR);
+                flowImport.setImportInterfaceStatus(ImportStatus.ERROR);
+                flowImport.setImportDataFlowStatus(ImportStatus.ERROR);
+                flowImport.setImportStatusMessage("IdFlow (interface alias) should not be null");
+            } else if (flowImport.isExternal()) {
+                if (flowImport.getFlowAlias() != null) {
                     Optional<FunctionalFlow> functionalFlowOption = flowRepository.findByAlias(flowImport.getFlowAlias());
                     if (functionalFlowOption.isPresent()) {
                         FunctionalFlow functionalFlow = functionalFlowOption.get();
@@ -193,50 +198,50 @@ public class FlowImportService {
                         landscapeViewRepository.save(landscapeView);
                     }
                 } else {
-                    FunctionalFlow functionalFlow = findOrCreateFunctionalFlow(flowImport);
-                    FlowInterface flowInterface = findOrCreateInterface(flowImport);
-                    Protocol protocol = findOrCreateProtocol(flowImport);
-                    DataFlow dataFlow = findOrCreateDataFlow(flowImport, protocol);
-
-                    if (landscapeView != null && functionalFlow != null && flowInterface != null) {
-                        // Set<>, so could add even if already associated
-                        functionalFlow.addLandscape(landscapeView);
-                        // For first persistence
-                        interfaceRepository.save(flowInterface);
-                        flowRepository.save(functionalFlow);
-
-                        // Add step
-                        FunctionalFlowStep step = findOrCreateStep(flowImport, functionalFlow, flowInterface);
-                        step.setFlowInterface(flowInterface);
-                        functionalFlow.addSteps(step);
-                        functionalFlowStepRepository.save(step);
-
-                        landscapeViewRepository.save(landscapeView);
-                        if (dataFlow != null) {
-                            functionalFlow.addDataFlows(dataFlow);
-                            flowInterface.addDataFlows(dataFlow);
-                            // validate here beacause relationship should not be null
-                            validateBean(dataFlow);
-                            dataFlowRepository.save(dataFlow);
-                            interfaceRepository.save(flowInterface);
-                        }
-                        if (protocol != null) {
-                            flowInterface.setProtocol(protocol);
-                            // validate here beacause relationship should not be null
-                            validateBean(protocol);
-                            protocolRepository.save(protocol);
-                            interfaceRepository.save(flowInterface);
-                        }
-                    } else {
-                        flowInterface = null;
-                        functionalFlow = null;
-                    }
+                    flowImport.setImportFunctionalFlowStatus(ImportStatus.ERROR);
+                    flowImport.setImportInterfaceStatus(ImportStatus.ERROR);
+                    flowImport.setImportDataFlowStatus(ImportStatus.ERROR);
+                    flowImport.setImportStatusMessage("Alias should not be null when external is true");
                 }
             } else {
-                flowImport.setImportFunctionalFlowStatus(ImportStatus.ERROR);
-                flowImport.setImportInterfaceStatus(ImportStatus.ERROR);
-                flowImport.setImportDataFlowStatus(ImportStatus.ERROR);
-                flowImport.setImportStatusMessage("IdFlow & Alias should not be null");
+                FunctionalFlow functionalFlow = findOrCreateFunctionalFlow(flowImport);
+                FlowInterface flowInterface = findOrCreateInterface(flowImport);
+                Protocol protocol = findOrCreateProtocol(flowImport);
+                DataFlow dataFlow = findOrCreateDataFlow(flowImport, protocol);
+
+                if (landscapeView != null && functionalFlow != null && flowInterface != null) {
+                    // Set<>, so could add even if already associated
+                    functionalFlow.addLandscape(landscapeView);
+                    // For first persistence
+                    interfaceRepository.save(flowInterface);
+                    flowRepository.save(functionalFlow);
+
+                    // Add step
+                    FunctionalFlowStep step = findOrCreateStep(flowImport, functionalFlow, flowInterface);
+                    step.setFlowInterface(flowInterface);
+                    functionalFlow.addSteps(step);
+                    functionalFlowStepRepository.save(step);
+
+                    landscapeViewRepository.save(landscapeView);
+                    if (dataFlow != null) {
+                        functionalFlow.addDataFlows(dataFlow);
+                        flowInterface.addDataFlows(dataFlow);
+                        // validate here beacause relationship should not be null
+                        validateBean(dataFlow);
+                        dataFlowRepository.save(dataFlow);
+                        interfaceRepository.save(flowInterface);
+                    }
+                    if (protocol != null) {
+                        flowInterface.setProtocol(protocol);
+                        // validate here beacause relationship should not be null
+                        validateBean(protocol);
+                        protocolRepository.save(protocol);
+                        interfaceRepository.save(flowInterface);
+                    }
+                } else {
+                    flowInterface = null;
+                    functionalFlow = null;
+                }
             }
 
             result.add(flowImport);
@@ -277,13 +282,16 @@ public class FlowImportService {
     private FunctionalFlow findOrCreateFunctionalFlow(FlowImport flowImport) {
         FunctionalFlow functionalFlow = null;
         try {
-            Optional<FunctionalFlow> functionalFlowOption = flowRepository.findByAlias(flowImport.getFlowAlias());
-            if (!functionalFlowOption.isPresent()) {
+            if (StringUtils.hasText(flowImport.getFlowAlias())) {
+                Optional<FunctionalFlow> functionalFlowOption = flowRepository.findByAlias(flowImport.getFlowAlias());
+                if (functionalFlowOption.isPresent()) {
+                    flowImport.setImportFunctionalFlowStatus(ImportStatus.EXISTING);
+                    functionalFlow = functionalFlowOption.get();
+                }
+            }
+            if (functionalFlow == null) {
                 flowImport.setImportFunctionalFlowStatus(ImportStatus.NEW);
                 functionalFlow = mapToFunctionalFlow(flowImport);
-            } else {
-                flowImport.setImportFunctionalFlowStatus(ImportStatus.EXISTING);
-                functionalFlow = functionalFlowOption.get();
             }
             setDocumentation(flowImport, functionalFlow);
             validateBean(functionalFlow);

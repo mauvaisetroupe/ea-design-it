@@ -9,17 +9,14 @@ import java.io.InputStream;
 import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class FlowImportTwiceTest extends ImportFlowTest {
 
     @Test
-    void testImportTwice() throws EncryptedDocumentException, IOException {
-        // Id flow	Alias flow	External	Source Element	Target Element
-        // TRAD.001	CYP.01		APPLICATION-0001	APPLICATION-0002
-        // TRAD.002	CYP.01		APPLICATION-0002	APPLICATION-0003
-        // TRAD.003	CYP.01		APPLICATION-0003	APPLICATION-0004
-        // TRAD.004	CYP.01		APPLICATION-0004	APPLICATION-0003
-        // EXT.001	CYP.02	yes	APPLICATION-0004	APPLICATION-0003
+    void testImportTwice1() throws EncryptedDocumentException, IOException {
+        String filename = "02-import-flows.xlsx";
 
         assertEquals(0, applicationRepository.findAll().size());
         assertEquals(0, landscapeViewRepository.findAll().size());
@@ -30,7 +27,7 @@ public class FlowImportTwiceTest extends ImportFlowTest {
 
         List<LandscapeView> landscapes = checkNbLandscapes(0);
 
-        InputStream file2 = this.getClass().getResourceAsStream("/junit/02-import-flows.xlsx");
+        InputStream file2 = this.getClass().getResourceAsStream("/junit/" + filename);
         assertNotNull(file2);
         flowImportService.importExcel(file2, "my-landscape.xlsx");
 
@@ -38,12 +35,41 @@ public class FlowImportTwiceTest extends ImportFlowTest {
         checkNbFlows(landscapes.get(0), 1);
         checkNbsteps("CYP.01", 4);
 
-        file2 = this.getClass().getResourceAsStream("/junit/02-import-flows.xlsx");
+        file2 = this.getClass().getResourceAsStream("/junit/" + filename);
         assertNotNull(file2);
         flowImportService.importExcel(file2, "my-landscape.xlsx");
 
         landscapes = checkNbLandscapes(1);
         checkNbFlows(landscapes.get(0), 1);
         checkNbsteps("CYP.01", 4);
+    }
+
+    void testImportTwice2() throws EncryptedDocumentException, IOException {
+        String filename = "02-import-flows-02.xlsx";
+
+        assertEquals(0, applicationRepository.findAll().size());
+        assertEquals(0, landscapeViewRepository.findAll().size());
+        assertEquals(0, functionalFlowRepository.findAll().size());
+
+        InputStream file1 = this.getClass().getResourceAsStream("/junit/01-import-applications.xlsx");
+        applicationImportService.importExcel(file1, "my-applications.xlsx");
+
+        List<LandscapeView> landscapes = checkNbLandscapes(0);
+
+        InputStream file2 = this.getClass().getResourceAsStream("/junit/" + filename);
+        assertNotNull(file2);
+        flowImportService.importExcel(file2, "my-landscape.xlsx");
+
+        landscapes = checkNbLandscapes(1);
+        checkNbFlows(landscapes.get(0), 4);
+        checkNbFlows(4);
+
+        file2 = this.getClass().getResourceAsStream("/junit/" + filename);
+        assertNotNull(file2);
+        flowImportService.importExcel(file2, "my-landscape.xlsx");
+
+        landscapes = checkNbLandscapes(1);
+        checkNbFlows(landscapes.get(0), 4);
+        checkNbFlows(4);
     }
 }
