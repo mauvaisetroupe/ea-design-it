@@ -156,15 +156,20 @@ public class FlowImportService {
         }
 
         // Detach all Flows from landscape
+        // And delete if anonymous
         for (FunctionalFlow functionalFlow : allFlows) {
             landscapeView.removeFlows(functionalFlow);
             flowRepository.save(functionalFlow);
             landscapeViewRepository.save(landscapeView);
+            if (functionalFlow.getAlias() == null) {
+                // anonymous, so not used in another landscape
+                functionalflowService.delete(functionalFlow.getId(), true, true);
+            }
         }
 
         // Delete all steps from all FunctionalFlows except the ones markes as external
         for (FunctionalFlow functionalFlow : allFlows) {
-            if (!externalFlows.contains(functionalFlow.getAlias())) {
+            if (functionalFlow.getAlias() == null || !externalFlows.contains(functionalFlow.getAlias())) {
                 ArrayList<FunctionalFlowStep> list = new ArrayList<>();
                 list.addAll(functionalFlow.getSteps());
                 for (FunctionalFlowStep step : list) {
