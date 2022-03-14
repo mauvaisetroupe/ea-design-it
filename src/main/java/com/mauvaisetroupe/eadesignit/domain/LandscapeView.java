@@ -148,7 +148,7 @@ public class LandscapeView implements Serializable {
         return this;
     }
 
-    public Set<FunctionalFlow> getFlows() {
+    public SortedSet<FunctionalFlow> getFlows() {
         return this.flows;
     }
 
