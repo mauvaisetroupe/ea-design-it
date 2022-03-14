@@ -8,12 +8,10 @@ import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import javax.transaction.Transactional;
 import org.apache.poi.EncryptedDocumentException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Transactional
 public class FlowImportWihExistingNotInExcelTest extends ImportFlowTest {
 
     @Autowired

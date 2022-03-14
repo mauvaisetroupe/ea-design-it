@@ -9,8 +9,6 @@ import java.io.InputStream;
 import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 
 public class FlowImportTwiceTest extends ImportFlowTest {
 
@@ -33,6 +31,7 @@ public class FlowImportTwiceTest extends ImportFlowTest {
 
         landscapes = checkNbLandscapes(1);
         checkNbFlows(landscapes.get(0), 1);
+        checkNbFlows(1);
         checkNbsteps("CYP.01", 4);
 
         file2 = this.getClass().getResourceAsStream("/junit/" + filename);
@@ -41,9 +40,11 @@ public class FlowImportTwiceTest extends ImportFlowTest {
 
         landscapes = checkNbLandscapes(1);
         checkNbFlows(landscapes.get(0), 1);
+        checkNbFlows(1);
         checkNbsteps("CYP.01", 4);
     }
 
+    @Test
     void testImportTwice2() throws EncryptedDocumentException, IOException {
         String filename = "02-import-flows-02.xlsx";
 
@@ -61,8 +62,8 @@ public class FlowImportTwiceTest extends ImportFlowTest {
         flowImportService.importExcel(file2, "my-landscape.xlsx");
 
         landscapes = checkNbLandscapes(1);
-        checkNbFlows(landscapes.get(0), 4);
         checkNbFlows(4);
+        checkNbFlows(landscapes.get(0), 4);
 
         file2 = this.getClass().getResourceAsStream("/junit/" + filename);
         assertNotNull(file2);

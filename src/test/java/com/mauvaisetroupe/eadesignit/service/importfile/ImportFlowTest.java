@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -61,6 +62,7 @@ public class ImportFlowTest {
     }
 
     @AfterEach
+    @BeforeEach
     @Transactional
     public void clearDatabase() {
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
