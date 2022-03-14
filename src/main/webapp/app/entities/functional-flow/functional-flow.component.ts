@@ -13,7 +13,7 @@ import AccountService from '@/account/account.service';
   computed: {
     filteredRows() {
       return this.functionalFlows.filter(row => {
-        const alias = row.alias.toString().toLowerCase();
+        const alias = row.alias ? row.alias.toString().toLowerCase() : '';
         const id = row.id.toString().toLowerCase();
         const description = row.description ? row.description.toString().toLowerCase() : '';
         const inFFF = row.steps
