@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -383,16 +384,17 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
         int result = -1;
         if (arg0 == null) {
             result = -1;
-        } else if (arg0 == this) {
-            result = 0;
-        } else if (arg0.getId() != null && arg0.getId() == this.getId()) {
-            result = 0;
-        } else if (arg0.getAlias() == null) {
-            result = -1;
-        } else if (this.getAlias() == null) {
-            result = 1;
+        }
+        // compare alias is one is not null
+        else if (this.alias != null || arg0.alias != null) {
+            result = ObjectUtils.compare(this.alias, arg0.alias, true);
+        }
+        // compare id is one is not null
+        else if (this.id != null || arg0.id != null) {
+            result = ObjectUtils.compare(this.id, arg0.id, true);
         } else {
-            result = this.getAlias().compareTo(arg0.getAlias());
+            // alias and id are both null
+            result = 0;
         }
         return result;
     }
