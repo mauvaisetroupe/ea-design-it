@@ -90,7 +90,7 @@
 
       <h3 v-if="!notPersisted">{{ functionalFlow.alias }} - {{ functionalFlow.description }}</h3>
 
-      <div v-if="functionalFlow.steps && functionalFlow.steps.length > 1">
+      <div>
         <div v-html="plantUMLImage"></div>
         <div class="float-left" v-if="!notPersisted">
           <!-- <button class="btn btn-success float-right" v-on:click="exportDiagram()" style="font-size: 0.7em; padding: 3px; margin: 3px">
@@ -208,7 +208,7 @@
             data-cy="entityCreateButton"
             class="btn btn-success jh-create-entity create-functional-flow"
             title="Edit Flow Alias in order to move interfaces from on flow to another"
-            v-if="accountService().writeAuthorities && !reorderAlias"
+            v-if="accountService().writeAuthorities && !reorderAlias && !notPersisted"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
             <span> Organize Flows</span>
