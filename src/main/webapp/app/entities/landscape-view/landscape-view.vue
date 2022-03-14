@@ -54,7 +54,7 @@
             </td>
             <td>
               <span v-for="(flows, i) in landscapeView.flows" :key="flows.id"
-                >{{ i > 0 ? ', ' : '' }}
+                >{{ i > 0 ? (flows.alias ? ', ' : '') : '' }}
                 <router-link
                   :title="flows.description"
                   class="form-control-static"
