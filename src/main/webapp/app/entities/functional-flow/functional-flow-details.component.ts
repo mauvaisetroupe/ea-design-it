@@ -280,13 +280,22 @@ export default class FunctionalFlowDetails extends Vue {
   }
 
   public addStepToSave(step: IFunctionalFlowStep) {
-    if (this.reorderStepToSave.filter(e => e.id === step.id).length === 0) {
-      // step.flow = newFunctionalFlow this cause an erro, for looping steps?
-      let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
-      newFunctionalFlowSimplified = { ...this.functionalFlow };
-      newFunctionalFlowSimplified.steps = [];
-      step.flow = newFunctionalFlowSimplified;
-      this.reorderStepToSave.push(step);
-    }
+    this.reorderStepToSave = this.reorderStepToSave.filter(s => s.id != step.id);
+    // step.flow = newFunctionalFlow this cause an erro, for looping steps?
+    let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
+    newFunctionalFlowSimplified = { ...this.functionalFlow };
+    newFunctionalFlowSimplified.steps = [];
+    step.flow = newFunctionalFlowSimplified;
+    this.reorderStepToSave.push(step);
+  }
+
+  public changeStepDescription(functionalFlow: IFunctionalFlow, step: IFunctionalFlowStep) {
+    // Add old & new Flows for later update by REST call
+    this.reorderStepToSave = this.reorderStepToSave.filter(s => s.id != step.id);
+    let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
+    newFunctionalFlowSimplified = { ...functionalFlow };
+    newFunctionalFlowSimplified.steps = [];
+    step.flow = newFunctionalFlowSimplified;
+    this.reorderStepToSave.push(step);
   }
 }

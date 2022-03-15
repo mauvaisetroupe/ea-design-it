@@ -114,7 +114,7 @@
                   <div v-if="reorderAlias && step.flowInterface.id">
                     <select @change="reorder(step, functionalFlow, $event)" :id="step.id" class="btn-success">
                       <option v-for="flow in landscapeView.flows" :key="flow.id" :value="flow.id" :selected="flow.id === functionalFlow.id">
-                        {{ flow.alias }}
+                        {{ flow.alias ? flow.alias : flow.id }}
                       </option>
                     </select>
                   </div>
@@ -131,7 +131,7 @@
                   <font-awesome-icon
                     icon="chevron-down"
                     class="btn-success"
-                    v-if="j != functionalFlow.steps.length - 1"
+                    v-if="j != functionalFlow.steps.length - 1 && functionalFlow.steps.length > 1"
                     @click="swap(functionalFlow, j, j + 1)"
                   ></font-awesome-icon>
                 </td>
@@ -149,8 +149,18 @@
                   </span>
                 </td>
                 <td>
-                  {{ step.stepOrder }}.
-                  <span v-if="step.description">{{ step.description }}</span>
+                  <span v-if="step.description != 'EMPTYSTEP'">
+                    {{ step.stepOrder }}.
+                    <span v-if="!reorderAlias">{{ step.description }}</span>
+                    <span v-else>
+                      <textarea
+                        style="width: 100%; min-width: 600px"
+                        rows="1"
+                        v-model="step.description"
+                        @change="changeStepDescription(functionalFlow, step)"
+                      ></textarea>
+                    </span>
+                  </span>
                 </td>
                 <td>
                   <router-link

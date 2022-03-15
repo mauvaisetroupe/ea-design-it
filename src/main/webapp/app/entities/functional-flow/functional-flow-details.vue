@@ -124,7 +124,18 @@
           </thead>
           <tbody>
             <tr v-for="(step, i) in functionalFlow.steps" v-bind:key="step.id" :set="(inter = step.flowInterface)">
-              <td v-if="!notPersisted">{{ step.stepOrder }}. {{ step.description }}</td>
+              <td v-if="!notPersisted">
+                {{ step.stepOrder }}.
+                <span v-if="!reorderAlias">{{ step.description }}</span>
+                <span v-else>
+                  <textarea
+                    style="width: 100%; min-width: 600px"
+                    rows="1"
+                    v-model="step.description"
+                    @change="changeStepDescription(functionalFlow, step)"
+                  ></textarea>
+                </span>
+              </td>
               <td v-if="reorderAlias">
                 <font-awesome-icon icon="chevron-up" class="btn-success" v-if="i != 0" @click="swap(i, i - 1)"></font-awesome-icon>
               </td>

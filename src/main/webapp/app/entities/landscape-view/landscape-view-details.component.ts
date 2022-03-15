@@ -59,6 +59,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
 
   public retrieveLandscapeView(landscapeViewId) {
     let step: FunctionalFlowStep = new FunctionalFlowStep();
+    step.description = 'EMPTYSTEP';
     let inter: FlowInterface = new FlowInterface();
     step.flowInterface = inter;
     if (this.emptySteps.length == 0) this.emptySteps.push(step);
@@ -225,7 +226,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
         .retrieve()
         .then(res => {
           console.log(res.data);
-          this.functionalFlows = res.data;
+          this.functionalFlows = res.data.filter(f => f.alias != null);
           (<any>this.$refs.addExistingEntity).show();
         });
     }
@@ -283,22 +284,29 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   }
 
   public addStepToSave(newFunctionalFlow: IFunctionalFlow, step: IFunctionalFlowStep) {
+    // remove if already exist to avoid duplicate
     // step.flow = newFunctionalFlow this cause an erro, for looping steps?
-    if (this.reorderStepToSave.filter(e => e.id === step.id).length === 0) {
-      // avoid duplicate
-      let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
-      newFunctionalFlowSimplified = { ...newFunctionalFlow };
-      newFunctionalFlowSimplified.steps = [];
-      step.flow = newFunctionalFlowSimplified;
-      this.reorderStepToSave.push(step);
-    }
+    let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
+    newFunctionalFlowSimplified = { ...newFunctionalFlow };
+    newFunctionalFlowSimplified.steps = [];
+    step.flow = newFunctionalFlowSimplified;
+    this.reorderStepToSave.push(step);
   }
 
   public changeDescription(functionalFlow: IFunctionalFlow) {
     // Add old & new Flows for later update by REST call
-    if (this.reorderAliasflowToSave.filter(e => e.id === functionalFlow.id).length === 0) {
-      this.reorderAliasflowToSave.push(functionalFlow);
-    }
+    this.reorderAliasflowToSave = this.reorderAliasflowToSave.filter(e => e.id != functionalFlow.id);
+    this.reorderAliasflowToSave.push(functionalFlow);
+  }
+
+  public changeStepDescription(functionalFlow: IFunctionalFlow, step: IFunctionalFlowStep) {
+    // Add old & new Flows for later update by REST call
+    this.reorderStepToSave = this.reorderStepToSave.filter(s => s.id != step.id);
+    let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
+    newFunctionalFlowSimplified = { ...functionalFlow };
+    newFunctionalFlowSimplified.steps = [];
+    step.flow = newFunctionalFlowSimplified;
+    this.reorderStepToSave.push(step);
   }
 
   public cancelReorder() {
