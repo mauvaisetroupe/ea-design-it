@@ -52,6 +52,7 @@ public class PlantUMLBuilder {
             String label = strings[0];
             String URL = strings[1];
             if (StringUtils.hasText(label)) {
+                label = label.replaceAll("\n", "\\\\n");
                 plantUMLSource.append(" :");
                 plantUMLSource.append(sepaString);
                 if (URL == null) plantUMLSource.append(" " + label); else plantUMLSource.append("[[ " + URL + " " + label + " ]]");
