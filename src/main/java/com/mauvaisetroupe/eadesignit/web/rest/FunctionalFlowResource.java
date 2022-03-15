@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -222,7 +224,7 @@ public class FunctionalFlowResource {
         FunctionalFlow functionalFlow = new FunctionalFlow();
         functionalFlow.setAlias("not persisted");
         Set<FlowInterface> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
-        Set<FunctionalFlowStep> steps = new HashSet<>();
+        SortedSet<FunctionalFlowStep> steps = new TreeSet<>();
         for (FlowInterface flowInterface : interfaces) {
             FunctionalFlowStep step = new FunctionalFlowStep();
             step.setFlowInterface(flowInterface);
