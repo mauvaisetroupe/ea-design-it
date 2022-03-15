@@ -64,7 +64,7 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     @SortNatural
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "flow" }, allowSetters = true)
-    private Set<FunctionalFlowStep> steps = new TreeSet<>();
+    private SortedSet<FunctionalFlowStep> steps = new TreeSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
@@ -203,7 +203,7 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
         return this.steps;
     }
 
-    public void setSteps(Set<FunctionalFlowStep> functionalFlowSteps) {
+    public void setSteps(SortedSet<FunctionalFlowStep> functionalFlowSteps) {
         if (this.steps != null) {
             this.steps.forEach(i -> i.setFlow(null));
         }
@@ -213,7 +213,7 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
         this.steps = functionalFlowSteps;
     }
 
-    public FunctionalFlow steps(Set<FunctionalFlowStep> functionalFlowSteps) {
+    public FunctionalFlow steps(SortedSet<FunctionalFlowStep> functionalFlowSteps) {
         this.setSteps(functionalFlowSteps);
         return this;
     }
