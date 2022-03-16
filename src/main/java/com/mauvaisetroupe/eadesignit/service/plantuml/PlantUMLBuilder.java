@@ -47,16 +47,18 @@ public class PlantUMLBuilder {
         createComponent(plantUMLSource, source, sequenceDiagram);
         createComponent(plantUMLSource, target, sequenceDiagram);
         plantUMLSource.append("C" + source.getId() + " --> C" + target.getId());
-        String sepaString = "";
-        for (String[] strings : labelAndURL) {
-            String label = strings[0];
-            String URL = strings[1];
-            if (StringUtils.hasText(label)) {
-                label = label.replaceAll("\n", "\\\\n");
-                plantUMLSource.append(" :");
-                plantUMLSource.append(sepaString);
-                if (URL == null) plantUMLSource.append(" " + label); else plantUMLSource.append("[[ " + URL + " " + label + " ]]");
-                sepaString = ",\\n";
+        if (labelAndURL != null && labelAndURL.size() > 0) {
+            plantUMLSource.append(" :");
+            String sepaString = "";
+            for (String[] strings : labelAndURL) {
+                String label = strings[0];
+                String URL = strings[1];
+                if (StringUtils.hasText(label)) {
+                    label = label.replaceAll("\n", "\\\\n");
+                    plantUMLSource.append(sepaString);
+                    if (URL == null) plantUMLSource.append(" " + label); else plantUMLSource.append("[[ " + URL + " " + label + " ]]");
+                    sepaString = ",\\n";
+                }
             }
         }
         plantUMLSource.append("\n");
