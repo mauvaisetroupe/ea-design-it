@@ -175,8 +175,11 @@
         :class="capability.subCapabilities.length > 0 ? 'alpha' : 'beta'"
       >
         <div :title="capability.description">
-          <router-link :to="{ name: 'CapabilityView', params: { capabilityId: capability.id } }" :title="capability.description"
-            >{{ capability.level }}. {{ capability.name }}</router-link
+          <router-link
+            :to="{ name: 'CapabilityView', params: { capabilityId: capability.id } }"
+            :title="capability.description"
+            class="capatext"
+            >{{ capability.name }}</router-link
           >
         </div>
         <div v-if="capability.subCapabilities" class="d-flex flex-wrap">
@@ -187,8 +190,11 @@
             :class="child1.subCapabilities.length > 0 ? 'alpha' : 'beta'"
           >
             <div :title="child1.description">
-              <router-link :to="{ name: 'CapabilityView', params: { capabilityId: child1.id } }" :title="child1.description"
-                >{{ child1.level }}. {{ child1.name }}</router-link
+              <router-link
+                :to="{ name: 'CapabilityView', params: { capabilityId: child1.id } }"
+                :title="child1.description"
+                class="capatext"
+                >{{ child1.name }}</router-link
               >
             </div>
             <div v-if="child1.subCapabilities" class="d-flex flex-wrap">
@@ -199,8 +205,11 @@
                 :class="child2.subCapabilities.length > 0 ? 'alpha' : 'beta'"
               >
                 <div>
-                  <router-link :to="{ name: 'CapabilityView', params: { capabilityId: child2.id } }" :title="child2.description"
-                    >{{ child2.level }}. {{ child2.name }}</router-link
+                  <router-link
+                    :to="{ name: 'CapabilityView', params: { capabilityId: child2.id } }"
+                    :title="child2.description"
+                    class="capatext"
+                    >{{ child2.name }}</router-link
                   >
                 </div>
                 <div v-if="child2.subCapabilities" class="d-flex flex-wrap">
@@ -211,8 +220,11 @@
                     :class="child3.subCapabilities.length > 0 ? 'alpha' : 'beta'"
                   >
                     <div>
-                      <router-link :to="{ name: 'CapabilityView', params: { capabilityId: child3.id } }" :title="child3.description"
-                        >{{ child3.level }}. {{ child3.name }}</router-link
+                      <router-link
+                        :to="{ name: 'CapabilityView', params: { capabilityId: child3.id } }"
+                        :title="child3.description"
+                        class="capatext"
+                        >{{ child3.name }}</router-link
                       >
                     </div>
                   </div>
@@ -228,13 +240,13 @@
 
 <style scoped>
 .common {
-  font-weight: bold;
+  font-weight: normal;
   border: solid;
-  border-color: black;
-  border-width: 3px;
+  border-color: rgb(110, 110, 110);
+  border-width: 1px;
   padding: 5px;
-  margin: 10px;
-  box-shadow: 8px 8px 12px #aaa;
+  margin: 5px;
+  box-shadow: 1px 1px 2px #aaa;
 }
 
 .alpha {
@@ -242,8 +254,13 @@
 }
 
 .beta {
-  background-color: #fefece;
+  background-color: #d0ecf0c4;
   max-width: 300px;
+}
+
+.capatext {
+  font-weight: normal;
+  color: rgb(59, 59, 59);
 }
 </style>
 
