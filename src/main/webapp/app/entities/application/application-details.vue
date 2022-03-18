@@ -116,7 +116,7 @@
       </div>
       <br />
       <h2>Interfaces for {{ application.name }}</h2>
-      <div v-html="plantUMLImage"></div>
+      <div v-html="plantUMLImage" class="table-responsive"></div>
       <table class="table">
         <thead>
           <tr>
