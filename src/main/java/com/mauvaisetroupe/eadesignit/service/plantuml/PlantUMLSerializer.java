@@ -29,6 +29,44 @@ public class PlantUMLSerializer {
     @Autowired
     private PlantUMLBuilder plantUMLBuilder;
 
+    public String getSource(LandscapeView landscapeView, boolean sequenceDiagram) throws IOException {
+        LinkedHashMap<SourceTarget, SortedSet<FunctionalFlow>> relationships = new LinkedHashMap<>();
+        List<String[]> legend = new ArrayList<>();
+        legend.add(new String[] { "Flows", "Description" });
+        for (FunctionalFlow functionalFlow : landscapeView.getFlows()) {
+            for (FlowInterface flowInterface : functionalFlow.getInterfaces()) {
+                SourceTarget key = new SourceTarget(flowInterface.getSource(), flowInterface.getTarget());
+                if (!relationships.containsKey(key)) {
+                    relationships.put(key, new TreeSet<>());
+                }
+                relationships.get(key).add(functionalFlow);
+            }
+            legend.add(new String[] { functionalFlow.getAlias(), functionalFlow.getDescription() });
+        }
+
+        StringBuilder plantUMLSource = new StringBuilder();
+        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
+        for (SourceTarget sourceTarget : relationships.keySet()) {
+            List<String[]> labelAndURLs = new ArrayList<>();
+            for (FunctionalFlow functionalFlow : relationships.get(sourceTarget)) {
+                String label = functionalFlow.getAlias();
+                String[] labelAndURL = { label, null };
+                labelAndURLs.add(labelAndURL);
+            }
+            plantUMLBuilder.getSimplePlantumlRelationShip(
+                plantUMLSource,
+                sourceTarget.getSource(),
+                sourceTarget.getTarget(),
+                labelAndURLs,
+                sequenceDiagram
+            );
+        }
+        plantUMLBuilder.getLegend(plantUMLSource, legend);
+        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+
+        return plantUMLSource.toString();
+    }
+
     public String getSVG(LandscapeView landscapeView, boolean sequenceDiagram) throws IOException {
         LinkedHashMap<SourceTarget, SortedSet<FunctionalFlow>> relationships = new LinkedHashMap<>();
         for (FunctionalFlow functionalFlow : landscapeView.getFlows()) {
@@ -84,6 +122,26 @@ public class PlantUMLSerializer {
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
+    public String getSource(FunctionalFlow functionalFlow, boolean sequenceDiagram) throws IOException {
+        StringBuilder plantUMLSource = new StringBuilder();
+        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
+        for (FunctionalFlowStep step : functionalFlow.getSteps()) {
+            List<String[]> labelAndURLs = new ArrayList<>();
+            String label = StringUtils.hasText(step.getDescription()) ? step.getDescription() : "";
+            label = step.getStepOrder() + ". " + WordUtils.wrap(label, 50, "\\n", false);
+            labelAndURLs.add(new String[] { label, null });
+            plantUMLBuilder.getSimplePlantumlRelationShip(
+                plantUMLSource,
+                step.getFlowInterface().getSource(),
+                step.getFlowInterface().getTarget(),
+                labelAndURLs,
+                sequenceDiagram
+            );
+        }
+        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        return plantUMLSource.toString();
+    }
+
     public String getSVG(SortedSet<FlowInterface> interfaces, boolean sequenceDiagram) throws IOException {
         LinkedHashMap<SourceTarget, SortedSet<FlowInterface>> relationships = new LinkedHashMap<>();
         for (FlowInterface flowInterface : interfaces) {
@@ -113,6 +171,47 @@ public class PlantUMLSerializer {
         }
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
+    }
+
+    public String getSource(SortedSet<FlowInterface> interfaces, boolean sequenceDiagram) {
+        List<String[]> legend = new ArrayList<>();
+        legend.add(new String[] { "Interface", "Source", "Target", "Protocol" });
+        LinkedHashMap<SourceTarget, SortedSet<FlowInterface>> relationships = new LinkedHashMap<>();
+        for (FlowInterface flowInterface : interfaces) {
+            SourceTarget key = new SourceTarget(flowInterface.getSource(), flowInterface.getTarget());
+            if (!relationships.containsKey(key)) {
+                relationships.put(key, new TreeSet<>());
+            }
+            relationships.get(key).add(flowInterface);
+            legend.add(
+                new String[] {
+                    flowInterface.getAlias(),
+                    flowInterface.getSource().getName(),
+                    flowInterface.getTarget().getName(),
+                    flowInterface.getProtocol() != null ? flowInterface.getProtocol().getName() : "",
+                }
+            );
+        }
+
+        StringBuilder plantUMLSource = new StringBuilder();
+        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
+        for (SourceTarget sourceTarget : relationships.keySet()) {
+            List<String[]> labelAndURLs = new ArrayList<>();
+            for (FlowInterface flowInterface : relationships.get(sourceTarget)) {
+                String label = flowInterface.getAlias();
+                labelAndURLs.add(new String[] { label, null });
+            }
+            plantUMLBuilder.getSimplePlantumlRelationShip(
+                plantUMLSource,
+                sourceTarget.getSource(),
+                sourceTarget.getTarget(),
+                labelAndURLs,
+                sequenceDiagram
+            );
+        }
+        plantUMLBuilder.getLegend(plantUMLSource, legend);
+        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        return plantUMLSource.toString();
     }
 
     public String getCapabilitiesFromLeavesSVG(Collection<Capability> capabilities) throws IOException {

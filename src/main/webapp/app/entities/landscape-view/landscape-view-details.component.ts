@@ -371,4 +371,21 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
         link.click();
       });
   }
+
+  public exportPlantUML() {
+    this.landscapeViewService()
+      .getPlantUMLSource(this.landscapeView.id)
+      .then(response => {
+        const url = URL.createObjectURL(
+          new Blob([response.data], {
+            type: 'text/plain',
+          })
+        );
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', this.landscapeView.diagramName + '-plantuml.txt');
+        document.body.appendChild(link);
+        link.click();
+      });
+  }
 }

@@ -73,8 +73,20 @@
       </div>
       <br />
       <h3>Landscape diagram</h3>
-      <div v-html="plantUMLImage" class="table-responsive"></div>
-      <br />
+      <div>
+        <div v-html="plantUMLImage" class="table-responsive"></div>
+        <div class="col-12">
+          <button
+            class="btn btn-warning"
+            v-on:click="exportPlantUML()"
+            style="font-size: 0.7em; padding: 3px; margin: 3px"
+            :disabled="isFetching"
+          >
+            <span>Export plantuml</span>
+          </button>
+          <br /><br />
+        </div>
+      </div>
       <h3>
         <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Functional Flows
         <font-awesome-icon icon="file-excel" style="color: green" @click="exportExcel()"></font-awesome-icon>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ILandscapeView } from '@/shared/model/landscape-view.model';
 
 const baseApiUrl = 'api/landscape-views';
-const basePlantUMLApiUrl = 'api/plantuml/landscape-view/get-svg';
+const basePlantUMLApiUrl = 'api/plantuml/landscape-view/';
 const baseDrawIOApiUrl = 'api/drawio/landscape-view/get-xml';
 
 export default class LandscapeViewService {
@@ -91,7 +91,20 @@ export default class LandscapeViewService {
   public getPlantUML(id: number) {
     return new Promise<any>((resolve, reject) => {
       axios
-        .get(`${basePlantUMLApiUrl}/${id}`)
+        .get(`${basePlantUMLApiUrl}/get-svg/${id}`)
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public getPlantUMLSource(id: number) {
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .get(`${basePlantUMLApiUrl}/get-source/${id}`)
         .then(res => {
           resolve(res);
         })

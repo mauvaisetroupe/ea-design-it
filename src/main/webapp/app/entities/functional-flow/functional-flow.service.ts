@@ -3,8 +3,8 @@ import axios from 'axios';
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 const baseApiUrl = 'api/functional-flows';
-const basePlantUMLApiUrl = 'api/plantuml/functional-flow/get-svg';
-const basePlantUMLApiUrl2 = 'api/plantuml/applications/get-svg';
+const basePlantUMLApiUrl = 'api/plantuml/functional-flow';
+const basePlantUMLApiUrl2 = 'api/plantuml/applications';
 
 export default class FunctionalFlowService {
   public find(id: number): Promise<IFunctionalFlow> {
@@ -90,7 +90,21 @@ export default class FunctionalFlowService {
     return new Promise<any>((resolve, reject) => {
       let params = { sequenceDiagram: sequenceDiagram };
       axios
-        .get(`${basePlantUMLApiUrl}/${id}`, { params })
+        .get(`${basePlantUMLApiUrl}/get-svg/${id}`, { params })
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public getPlantUMLSource(id: number, sequenceDiagram: boolean) {
+    let params = { sequenceDiagram: sequenceDiagram };
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .get(`${basePlantUMLApiUrl}/get-source/${id}`, { params })
         .then(res => {
           resolve(res);
         })
@@ -104,7 +118,21 @@ export default class FunctionalFlowService {
     const params = { ids: id };
     return new Promise<any>((resolve, reject) => {
       axios
-        .get(`${basePlantUMLApiUrl2}`, { params })
+        .get(`${basePlantUMLApiUrl2}/get-svg`, { params })
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public getPlantUMSourceforApplications(id: number[]) {
+    const params = { ids: id };
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .get(`${basePlantUMLApiUrl2}/get-source`, { params })
         .then(res => {
           resolve(res);
         })

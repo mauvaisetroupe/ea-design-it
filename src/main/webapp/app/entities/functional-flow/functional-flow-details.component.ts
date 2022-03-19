@@ -66,6 +66,8 @@ export default class FunctionalFlowDetails extends Vue {
 
   public isFetching = false;
 
+  public applicationIds = [];
+
   //for description update
   public reorderAliasflowToSave: IFunctionalFlow[] = [];
   //for reordering update
@@ -95,6 +97,7 @@ export default class FunctionalFlowDetails extends Vue {
       .createNewFromApplications(applicationIds)
       .then(res => {
         this.functionalFlow = res;
+        this.applicationIds = applicationIds;
         this.getPlantUMLforapplications(applicationIds);
       });
   }
@@ -116,10 +119,10 @@ export default class FunctionalFlowDetails extends Vue {
     this.$router.go(-1);
   }
 
-  public getPlantUML(landscapeViewId) {
+  public getPlantUML(functionalFlowId) {
     console.log('Entering in method getPlantUML');
     this.functionalFlowService()
-      .getPlantUML(landscapeViewId, this.sequenceDiagram)
+      .getPlantUML(functionalFlowId, this.sequenceDiagram)
       .then(
         res => {
           this.plantUMLImage = res.data;
@@ -129,6 +132,40 @@ export default class FunctionalFlowDetails extends Vue {
           console.log(err);
         }
       );
+  }
+
+  public exportPlantUML() {
+    if (!this.notPersisted) {
+      this.functionalFlowService()
+        .getPlantUMLSource(this.functionalFlow.id, this.sequenceDiagram)
+        .then(response => {
+          const url = URL.createObjectURL(
+            new Blob([response.data], {
+              type: 'text/plain',
+            })
+          );
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', this.functionalFlow.alias + '-plantuml.txt');
+          document.body.appendChild(link);
+          link.click();
+        });
+    } else {
+      this.functionalFlowService()
+        .getPlantUMSourceforApplications(this.applicationIds)
+        .then(response => {
+          const url = URL.createObjectURL(
+            new Blob([response.data], {
+              type: 'text/plain',
+            })
+          );
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', this.functionalFlow.alias + '-plantuml.txt');
+          document.body.appendChild(link);
+          link.click();
+        });
+    }
   }
 
   public getPlantUMLforapplications(aplicationIds: number[]) {

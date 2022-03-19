@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
@@ -35,6 +37,37 @@ public class PlantUMLBuilder {
         plantUMLSource.append("skinparam shadowing false\n");
         //plantUMLSource.append("skinparam svgDimensionStyle false\n");
         plantUMLSource.append("hide footbox\n");
+    }
+
+    public void getSimplePlantumlRelationShip(
+        StringBuilder plantUMLSource,
+        Application source,
+        Application target,
+        List<String[]> labelAndURL,
+        boolean sequenceDiagram
+    ) {
+        String open = "\"";
+        String close = "\"";
+        if (!sequenceDiagram) {
+            open = "[";
+            close = "]";
+        }
+        plantUMLSource.append(open + source.getName() + close + " --> " + open + target.getName() + close);
+        if (labelAndURL != null && labelAndURL.size() > 0) {
+            plantUMLSource.append(" :");
+            String sepaString = "";
+            for (String[] strings : labelAndURL) {
+                String label = strings[0];
+                String URL = strings[1];
+                if (StringUtils.hasText(label)) {
+                    label = label.replaceAll("\n", "\\\\n");
+                    plantUMLSource.append(sepaString);
+                    if (URL == null) plantUMLSource.append(" " + label); else plantUMLSource.append("[[ " + URL + " " + label + " ]]");
+                    sepaString = ",\\n";
+                }
+            }
+        }
+        plantUMLSource.append("\n");
     }
 
     public void getPlantumlRelationShip(
@@ -147,5 +180,22 @@ public class PlantUMLBuilder {
         }
         if (root.getSubCapabilities().size() != 0) result.append(tab + "}\n");
         result.append(tab + "url of C" + root.getId() + " is [[/capability/" + root.getId() + "/view]]\n");
+    }
+
+    public void getLegend(StringBuilder plantUMLSource, List<String[]> legend) {
+        plantUMLSource.append("Legend\n");
+        boolean header = true;
+        for (String[] row : legend) {
+            for (String string : row) {
+                if (header) {
+                    plantUMLSource.append(" |= " + string);
+                } else {
+                    plantUMLSource.append(" | " + string);
+                }
+            }
+            header = false;
+            plantUMLSource.append(" |\n");
+        }
+        plantUMLSource.append("End Legend\n");
     }
 }

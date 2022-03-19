@@ -92,18 +92,27 @@
 
       <div>
         <div v-html="plantUMLImage"></div>
-        <div class="float-left" v-if="!notPersisted">
+        <div class="col-12">
           <!-- <button class="btn btn-success float-right" v-on:click="exportDiagram()" style="font-size: 0.7em; padding: 3px; margin: 3px">
             <font-awesome-icon icon="sync"></font-awesome-icon> <span>Export</span>
           </button>         -->
           <button
-            class="btn btn-warning float-right"
+            v-if="!notPersisted"
+            class="btn btn-warning"
             v-on:click="changeDiagram()"
             style="font-size: 0.7em; padding: 3px; margin: 3px"
             :disabled="isFetching"
           >
             <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon>
             <span v-text="sequenceDiagram ? 'component diagram' : 'sequence diagram'" />
+          </button>
+          <button
+            class="btn btn-warning"
+            v-on:click="exportPlantUML()"
+            style="font-size: 0.7em; padding: 3px; margin: 3px"
+            :disabled="isFetching"
+          >
+            <span>Export plantuml</span>
           </button>
         </div>
       </div>
