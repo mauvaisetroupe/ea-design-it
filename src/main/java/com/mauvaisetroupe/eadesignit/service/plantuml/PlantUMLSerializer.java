@@ -84,10 +84,12 @@ public class PlantUMLSerializer {
         for (SourceTarget sourceTarget : relationships.keySet()) {
             List<String[]> labelAndURLs = new ArrayList<>();
             for (FunctionalFlow functionalFlow : relationships.get(sourceTarget)) {
-                String url = "/functional-flow/" + functionalFlow.getId() + "/view";
-                String label = functionalFlow.getAlias();
-                String[] labelAndURL = { label, url };
-                labelAndURLs.add(labelAndURL);
+                if (StringUtils.hasText(functionalFlow.getAlias())) {
+                    String url = "/functional-flow/" + functionalFlow.getId() + "/view";
+                    String label = functionalFlow.getAlias();
+                    String[] labelAndURL = { label, url };
+                    labelAndURLs.add(labelAndURL);
+                }
             }
             plantUMLBuilder.getPlantumlRelationShip(
                 plantUMLSource,
