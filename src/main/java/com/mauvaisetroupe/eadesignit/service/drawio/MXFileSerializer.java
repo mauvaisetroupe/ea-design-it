@@ -1,18 +1,15 @@
 package com.mauvaisetroupe.eadesignit.service.drawio;
 
-import com.mauvaisetroupe.eadesignit.domain.Application;
-import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
-import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.service.drawio.dto.Application;
+import com.mauvaisetroupe.eadesignit.service.drawio.dto.Edge;
+import com.mauvaisetroupe.eadesignit.service.drawio.dto.GraphDTO;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,12 +28,13 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class MXFileSerializer {
 
+    private static final String COLOR_GREEN = "#00FF00";
+    private static final String COLOR_RED = "#FF0000";
     protected static final String EDGE_ID_PREFIX = "edge_";
     protected static final String APP_ID_PREFIX = "app_";
 
@@ -50,6 +48,9 @@ public class MXFileSerializer {
     }
 
     public String createMXFileXML() throws ParserConfigurationException {
+        GraphBuilder graphBuilder = new GraphBuilder();
+        GraphDTO graphDTO = graphBuilder.createGraph(landscapeView);
+
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.newDocument();
@@ -64,13 +65,11 @@ public class MXFileSerializer {
         cell1.setAttribute("id", "1");
         cell1.setAttribute("parent", "0");
 
-        for (FunctionalFlow flow : this.landscapeView.getFlows()) {
-            for (FlowInterface inter : flow.getInterfaces()) {
-                createEdge(doc, root, flow, inter);
-            }
+        for (Edge edge : graphDTO.getBidirectionalConsolidatedEdges()) {
+            createEdge(doc, root, edge);
         }
 
-        for (Application application : getDistinctApplications(landscapeView)) {
+        for (Application application : graphDTO.getApplications()) {
             createRectangle(doc, root, application.getId().toString(), application.getName());
         }
 
@@ -89,122 +88,91 @@ public class MXFileSerializer {
         boolean updated = false;
         Document doc = getDecodedExistingXML();
 
-        Set<String> addedApplicationIds = new HashSet<String>();
-        Set<String> deletedApplicationIds = new HashSet<String>();
-        Set<String> adddeEdgeIds = new HashSet<String>();
-        Set<String> deletedEdgeIds = new HashSet<String>();
-        getDifferences(addedApplicationIds, deletedApplicationIds, adddeEdgeIds, deletedEdgeIds, doc, this.landscapeView);
+        GraphBuilder graphBuilder = new GraphBuilder();
+        GraphDTO graphFromLandscape = graphBuilder.createGraph(landscapeView);
+        GraphDTO graphFromMXFile = graphBuilder.createGraph(doc);
 
         XPathFactory xpathfactory = XPathFactory.newInstance();
         XPath xpath = xpathfactory.newXPath();
         Element root = (Element) xpath.evaluate("//root", doc, XPathConstants.NODE);
-        for (Application application : getDistinctApplications(landscapeView)) {
-            if (addedApplicationIds.contains(APP_ID_PREFIX + application.getId())) {
+        for (Application application : graphFromLandscape.getApplications()) {
+            if (!graphFromMXFile.containsApplication(application.getId())) {
                 Element elem = createRectangle(doc, root, application.getId().toString(), application.getName());
-                applyStrokeColor(elem, "#00FF00"); // greem
+                applyStrokeColor(elem, COLOR_GREEN);
                 updated = true;
             }
         }
 
-        for (FunctionalFlow flow : this.landscapeView.getFlows()) {
-            for (FlowInterface inter : flow.getInterfaces()) {
-                if (adddeEdgeIds.contains(EDGE_ID_PREFIX + flow.getId() + "_" + inter.getId())) {
-                    Element elem = createEdge(doc, root, flow, inter);
-                    applyStrokeColor(elem, "#00FF00"); // green
-                    updated = true;
-                }
+        for (Edge edge : graphFromLandscape.getEdges()) {
+            if (!graphFromMXFile.containsEdge(edge.getSourceId(), edge.getTargetId(), false)) {
+                Element elem = createEdge(doc, root, edge);
+                applyStrokeColor(elem, COLOR_GREEN);
+                updated = true;
             }
         }
 
-        for (String id : deletedApplicationIds) {
-            Element elem = (Element) xpath.evaluate("//mxCell[@elementId='" + id + "']", doc, XPathConstants.NODE);
-            applyStrokeColor(elem, "#FF0000"); // red
-            updated = true;
+        for (Application application : graphFromMXFile.getApplications()) {
+            if (!graphFromLandscape.containsApplication(application.getId())) {
+                Element elem = (Element) xpath.evaluate(
+                    "//mxCell[@elementId='" + APP_ID_PREFIX + application.getId() + "']",
+                    doc,
+                    XPathConstants.NODE
+                );
+                applyStrokeColor(elem, COLOR_RED);
+                updated = true;
+            }
         }
 
-        for (String id : deletedEdgeIds) {
-            Element elem = (Element) xpath.evaluate("//mxCell[@elementId='" + id + "']", doc, XPathConstants.NODE);
-            applyStrokeColor(elem, "#FF0000"); // red
-            updated = true;
+        for (Edge edgeFromMXFile : graphFromMXFile.getEdges()) {
+            Edge edgeFromLandscape = graphFromLandscape.getBidirectionalConsolidatedEdge(edgeFromMXFile);
+            Element elem = (Element) xpath.evaluate(
+                "//mxCell[@elementId='" + EDGE_ID_PREFIX + edgeFromMXFile.getId() + "']",
+                doc,
+                XPathConstants.NODE
+            );
+            if (!graphFromLandscape.containsEdge(edgeFromMXFile.getSourceId(), edgeFromMXFile.getTargetId(), false)) {
+                applyStrokeColor(elem, COLOR_RED);
+                updated = true;
+            } else {
+                //update labels with latest version
+                String labels = edgeFromLandscape.getLabelsAsString();
+                String oldLabels = elem.getAttribute("value");
+                if (!labels.equals(oldLabels)) {
+                    updated = true;
+                    elem.setAttribute("value", labels);
+                    applyStrokeColor(elem, COLOR_GREEN);
+                }
+
+                //updates arrow (bidirectional)
+
+                if (
+                    // mono vs bidirection
+                    (edgeFromMXFile.isBidirectional() != edgeFromLandscape.isBidirectional()) ||
+                    // mono but direction inverse
+                    (!edgeFromLandscape.isBidirectional() && !edgeFromLandscape.getSourceId().equals(edgeFromMXFile.getSourceId()))
+                ) {
+                    updated = true;
+                    applyArrowDirections(elem, edgeFromLandscape);
+                    applyStrokeColor(elem, COLOR_GREEN);
+                }
+            }
         }
 
         return updated ? getStringFromDocument(doc) : null;
     }
 
-    private void getDifferences(
-        Set<String> addedApplicationIds,
-        Set<String> deletedApplicationIds,
-        Set<String> adddeEdgeIds,
-        Set<String> deletedEdgeIds,
-        Document doc,
-        LandscapeView landscapeView2
-    ) throws XPathExpressionException {
-        // application in landscape
-        Set<String> expectedApplicationElementIds = getDistinctApplications(landscapeView)
-            .stream()
-            .map(app -> APP_ID_PREFIX + app.getId())
-            .collect(Collectors.toSet());
-
-        // edge from landscape
-        Set<String> expectedEdgeIds = new HashSet<String>();
-        for (FunctionalFlow flow : this.landscapeView.getFlows()) {
-            for (FlowInterface inter : flow.getInterfaces()) {
-                expectedEdgeIds.add(EDGE_ID_PREFIX + flow.getId() + "_" + inter.getId());
-            }
+    private void applyArrowDirections(Element elem, Edge edge) {
+        String style = elem.getAttribute("style");
+        style = style.replaceAll("startArrow=.*?;", "");
+        style = style.replaceAll("endArrow=.*?;", "");
+        if (edge.isBidirectional()) {
+            style = style + "startArrow=classic;endArrow=classic;";
         }
-
-        // applications in exisiting XML
-        Set<String> existingApplicationIds = new HashSet<String>();
-        XPathFactory xpathfactory = XPathFactory.newInstance();
-        XPath xpath = xpathfactory.newXPath();
-        NodeList nodeList = (NodeList) xpath.evaluate(
-            "//mxCell[starts-with(@elementId,'" + MXFileSerializer.APP_ID_PREFIX + "')]",
-            doc,
-            XPathConstants.NODESET
-        );
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            String elementIdValue = ((Element) nodeList.item(i)).getAttribute("elementId");
-            existingApplicationIds.add(elementIdValue);
-            // with import/export, 'id', 'source' and 'target' can change but 'elementId', 'sourceId' and 'targetId' are preserved
-            ((Element) nodeList.item(i)).setAttribute("id", elementIdValue);
-        }
-
-        // edges in exisiting XML
-        Set<String> existingEdgeIds = new HashSet<String>();
-        xpath = xpathfactory.newXPath();
-        nodeList =
-            (NodeList) xpath.evaluate(
-                "//mxCell[starts-with(@elementId,'" + MXFileSerializer.EDGE_ID_PREFIX + "')]",
-                doc,
-                XPathConstants.NODESET
-            );
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            String elementIdValue = ((Element) nodeList.item(i)).getAttribute("elementId");
-            existingEdgeIds.add(elementIdValue);
-
-            // with import/export, 'id', 'source' and 'target' can change but 'elementId', 'sourceId' and 'targetId' are preserved
-            ((Element) nodeList.item(i)).setAttribute("id", elementIdValue);
-
-            // with import/export, 'id', 'source' and 'target' can change but 'elementId', 'sourceId' and 'targetId' are preserved
-            String sourceId = ((Element) nodeList.item(i)).getAttribute("sourceId");
-            ((Element) nodeList.item(i)).setAttribute("source", sourceId);
-
-            // with import/export, 'id', 'source' and 'target' can change but 'elementId', 'sourceId' and 'targetId' are preserved
-            String targetId = ((Element) nodeList.item(i)).getAttribute("targetId");
-            ((Element) nodeList.item(i)).setAttribute("target", targetId);
-        }
-
-        addedApplicationIds.addAll(expectedApplicationElementIds);
-        addedApplicationIds.removeAll(existingApplicationIds);
-
-        deletedApplicationIds.addAll(existingApplicationIds);
-        deletedApplicationIds.removeAll(expectedApplicationElementIds);
-
-        adddeEdgeIds.addAll(expectedEdgeIds);
-        adddeEdgeIds.removeAll(existingEdgeIds);
-
-        deletedEdgeIds.addAll(existingEdgeIds);
-        deletedEdgeIds.removeAll(expectedEdgeIds);
+        elem.setAttribute("style", style);
+        elem.setAttribute("source", APP_ID_PREFIX + edge.getSourceId());
+        elem.setAttribute("target", APP_ID_PREFIX + edge.getTargetId());
+        elem.setAttribute("sourceId", APP_ID_PREFIX + edge.getSourceId());
+        elem.setAttribute("targetId", APP_ID_PREFIX + edge.getTargetId());
     }
 
     public Document getDecodedExistingXML()
@@ -234,17 +202,6 @@ public class MXFileSerializer {
         return doc;
     }
 
-    private Set<Application> getDistinctApplications(LandscapeView landscapeView2) {
-        Set<Application> result = new HashSet<Application>();
-        for (FunctionalFlow flow : this.landscapeView.getFlows()) {
-            for (FlowInterface inter : flow.getInterfaces()) {
-                result.add(inter.getSource());
-                result.add(inter.getTarget());
-            }
-        }
-        return result;
-    }
-
     /////////////////
     // MXFile Helpers
     /////////////////
@@ -269,18 +226,18 @@ public class MXFileSerializer {
         return mxCell;
     }
 
-    private Element createEdge(Document doc, Element root, FunctionalFlow flow, FlowInterface inter) {
+    private Element createEdge(Document doc, Element root, Edge edge) {
         Element mxCell = createElement(doc, root, "mxCell");
-        mxCell.setAttribute("id", EDGE_ID_PREFIX + flow.getId() + "_" + inter.getId());
-        mxCell.setAttribute("elementId", EDGE_ID_PREFIX + flow.getId() + "_" + inter.getId());
-        mxCell.setAttribute("value", flow.getAlias());
+        //mxCell.setAttribute("id", EDGE_ID_PREFIX + edgeId);
+        mxCell.setAttribute("elementId", EDGE_ID_PREFIX + edge.getId());
+        mxCell.setAttribute("value", edge.getLabelsAsString());
         mxCell.setAttribute("style", "endArrow=classic;html=1;rounded=0;");
         mxCell.setAttribute("parent", "1");
         mxCell.setAttribute("edge", "1");
-        mxCell.setAttribute("source", APP_ID_PREFIX + inter.getSource().getId());
-        mxCell.setAttribute("target", APP_ID_PREFIX + inter.getTarget().getId());
-        mxCell.setAttribute("sourceId", APP_ID_PREFIX + inter.getSource().getId());
-        mxCell.setAttribute("targetId", APP_ID_PREFIX + inter.getTarget().getId());
+        mxCell.setAttribute("source", APP_ID_PREFIX + edge.getSourceId());
+        mxCell.setAttribute("target", APP_ID_PREFIX + edge.getTargetId());
+        mxCell.setAttribute("sourceId", APP_ID_PREFIX + edge.getSourceId());
+        mxCell.setAttribute("targetId", APP_ID_PREFIX + edge.getTargetId());
 
         Element geometry = createElement(doc, mxCell, "mxGeometry");
         geometry.setAttribute("relative", "1");
