@@ -7,12 +7,15 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.GraphDTO;
+import com.mauvaisetroupe.eadesignit.service.drawio.dto.Label;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedSet;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import org.apache.commons.text.WordUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -27,9 +30,46 @@ public class GraphBuilder {
                 graph.addApplication(new Application(interface1.getSource().getId(), interface1.getTarget().getName()));
                 graph.addApplication(new Application(interface1.getTarget().getId(), interface1.getTarget().getName()));
                 String id = flow.getId() + "-" + interface1.getId();
-                Edge edge = new Edge(id, interface1.getSource().getId(), interface1.getTarget().getId(), flow.getAlias(), false);
+                String url = "/functional-flow/" + flow.getId() + "/view";
+                Edge edge = new Edge(
+                    id,
+                    interface1.getSource().getId(),
+                    interface1.getTarget().getId(),
+                    new Label(flow.getAlias(), url),
+                    false
+                );
                 graph.addEdge(edge);
             }
+        }
+        graph.consolidateEdges();
+        return graph;
+    }
+
+    public GraphDTO createGraph(FunctionalFlow flow) {
+        GraphDTO graph = new GraphDTO();
+        for (FunctionalFlowStep step : flow.getSteps()) {
+            FlowInterface interface1 = step.getFlowInterface();
+            graph.addApplication(new Application(interface1.getSource().getId(), interface1.getTarget().getName()));
+            graph.addApplication(new Application(interface1.getTarget().getId(), interface1.getTarget().getName()));
+            String id = flow.getId() + "-" + interface1.getId();
+            String label = step.getStepOrder() + ". " + WordUtils.wrap(step.getDescription(), 50, "\\n", false);
+            Edge edge = new Edge(id, interface1.getSource().getId(), interface1.getTarget().getId(), new Label(label, null), false);
+            graph.addEdge(edge);
+        }
+        graph.consolidateEdges();
+        return graph;
+    }
+
+    public GraphDTO createGraph(SortedSet<FlowInterface> interfaces) {
+        GraphDTO graph = new GraphDTO();
+        for (FlowInterface interface1 : interfaces) {
+            graph.addApplication(new Application(interface1.getSource().getId(), interface1.getTarget().getName()));
+            graph.addApplication(new Application(interface1.getTarget().getId(), interface1.getTarget().getName()));
+            Long id = interface1.getId();
+            String label = interface1.getAlias();
+            String url = "/flow-interface/" + interface1.getId() + "/view";
+            Edge edge = new Edge("" + id, interface1.getSource().getId(), interface1.getTarget().getId(), new Label(label, url), false);
+            graph.addEdge(edge);
         }
         graph.consolidateEdges();
         return graph;
@@ -80,7 +120,7 @@ public class GraphBuilder {
                 bidirectional = true;
             }
 
-            Edge edge = new Edge(elementIdValue, sourceId, targetId, labels, bidirectional);
+            Edge edge = new Edge(elementIdValue, sourceId, targetId, new Label(labels, null), bidirectional);
             graph.addEdge(edge);
         }
         graph.consolidateEdges();

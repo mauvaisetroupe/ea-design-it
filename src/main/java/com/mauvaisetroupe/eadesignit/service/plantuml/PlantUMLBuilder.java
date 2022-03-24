@@ -1,16 +1,16 @@
 package com.mauvaisetroupe.eadesignit.service.plantuml;
 
-import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
+import com.mauvaisetroupe.eadesignit.service.drawio.dto.Application;
+import com.mauvaisetroupe.eadesignit.service.drawio.dto.Label;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.SortedSet;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
@@ -39,57 +39,25 @@ public class PlantUMLBuilder {
         plantUMLSource.append("hide footbox\n");
     }
 
-    public void getSimplePlantumlRelationShip(
-        StringBuilder plantUMLSource,
-        Application source,
-        Application target,
-        List<String[]> labelAndURL,
-        boolean sequenceDiagram
-    ) {
-        String open = "\"";
-        String close = "\"";
-        if (!sequenceDiagram) {
-            open = "[";
-            close = "]";
-        }
-        plantUMLSource.append(open + source.getName() + close + " --> " + open + target.getName() + close);
-        if (labelAndURL != null && labelAndURL.size() > 0) {
-            plantUMLSource.append(" :");
-            String sepaString = "";
-            for (String[] strings : labelAndURL) {
-                String label = strings[0];
-                String URL = strings[1];
-                if (StringUtils.hasText(label)) {
-                    label = label.replaceAll("\n", "\\\\n");
-                    plantUMLSource.append(sepaString);
-                    if (URL == null) plantUMLSource.append(" " + label); else plantUMLSource.append("[[ " + URL + " " + label + " ]]");
-                    sepaString = ",\\n";
-                }
-            }
-        }
-        plantUMLSource.append("\n");
-    }
-
     public void getPlantumlRelationShip(
         StringBuilder plantUMLSource,
         Application source,
         Application target,
-        List<String[]> labelAndURL,
-        boolean sequenceDiagram
+        SortedSet<Label> labels,
+        boolean sequenceDiagram,
+        boolean useID
     ) {
-        createComponent(plantUMLSource, source, sequenceDiagram);
-        createComponent(plantUMLSource, target, sequenceDiagram);
-        plantUMLSource.append("C" + source.getId() + " --> C" + target.getId());
-        if (labelAndURL != null && labelAndURL.size() > 0) {
+        plantUMLSource.append(get(source, useID, sequenceDiagram) + " --> " + get(target, useID, sequenceDiagram));
+        if (labels != null && labels.size() > 0) {
             plantUMLSource.append(" :");
             String sepaString = "";
-            for (String[] strings : labelAndURL) {
-                String label = strings[0];
-                String URL = strings[1];
-                if (StringUtils.hasText(label)) {
-                    label = label.replaceAll("\n", "\\\\n");
+            for (Label label : labels) {
+                if (StringUtils.hasText(label.getLabel())) {
+                    String _label = label.getLabel().replaceAll("\n", "\\\\n");
                     plantUMLSource.append(sepaString);
-                    if (URL == null) plantUMLSource.append(" " + label); else plantUMLSource.append("[[ " + URL + " " + label + " ]]");
+                    if (label.getUrl() == null) plantUMLSource.append(" " + _label); else plantUMLSource.append(
+                        "[[ " + label.getUrl() + " " + _label + " ]]"
+                    );
                     sepaString = ",\\n";
                 }
             }
@@ -97,7 +65,16 @@ public class PlantUMLBuilder {
         plantUMLSource.append("\n");
     }
 
-    private void createComponent(StringBuilder plantUMLSource, Application application, boolean sequenceDiagram) {
+    private String get(Application application, boolean useID, boolean sequenceDiagram) {
+        if (useID) {
+            return "C" + application.getId();
+        }
+        String open = sequenceDiagram ? "\"" : "[";
+        String close = sequenceDiagram ? "\"" : "]";
+        return open + application.getName() + close;
+    }
+
+    public void createComponent(StringBuilder plantUMLSource, Application application, boolean sequenceDiagram) {
         if (sequenceDiagram) {
             plantUMLSource.append("participant \"" + application.getName() + "\" as C" + application.getId() + "\n");
         } else {
@@ -120,20 +97,6 @@ public class PlantUMLBuilder {
         byteArrayOutputStream.close();
         log.debug(diagramDescription.getDescription());
         return new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
-    }
-
-    public void getPlantumlRelationShip(
-        StringBuilder plantUMLSource,
-        Application source,
-        Application target,
-        String alias,
-        String url,
-        boolean sequenceDiagram
-    ) {
-        List<String[]> labelAndURLs = new ArrayList<>();
-        String[] labelAndURL = { alias, url };
-        labelAndURLs.add(labelAndURL);
-        getPlantumlRelationShip(plantUMLSource, source, target, labelAndURLs, sequenceDiagram);
     }
 
     public void getPlantumlCapabilities(StringBuilder plantUMLSource, Collection<Capability> capabilities) {

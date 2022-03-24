@@ -70,6 +70,10 @@ public class GraphDTO {
         return applications.values();
     }
 
+    public Application getApplication(Long id) {
+        return applications.get(id);
+    }
+
     public List<Edge> getEdges() {
         return edges;
     }

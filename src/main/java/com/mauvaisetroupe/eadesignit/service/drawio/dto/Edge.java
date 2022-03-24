@@ -13,18 +13,18 @@ public class Edge {
 
     private Long sourceId;
     private Long targetId;
-    private SortedSet<String> labels = new TreeSet<>();
+    private SortedSet<Label> labels = new TreeSet<>();
     private boolean bidirectional = false;
 
-    public Edge(String id, Long sourceId, Long targetId, SortedSet<String> labels, boolean bidirectional) {
+    public Edge(String id, Long sourceId, Long targetId, SortedSet<Label> labels, boolean bidirectional) {
         this.setId(id);
         this.sourceId = sourceId;
         this.targetId = targetId;
-        this.labels = labels;
+        this.labels = new TreeSet<>(labels);
         this.bidirectional = bidirectional;
     }
 
-    public Edge(String id, Long sourceId, Long targetId, String labels, boolean bidirectional) {
+    public Edge(String id, Long sourceId, Long targetId, Label labels, boolean bidirectional) {
         this.setId(id);
         this.sourceId = sourceId;
         this.targetId = targetId;
@@ -56,15 +56,11 @@ public class Edge {
         this.targetId = targetId;
     }
 
-    public SortedSet<String> getLabels() {
+    public SortedSet<Label> getLabels() {
         return labels;
     }
 
-    public void setLabels(SortedSet<String> label) {
-        this.labels = label;
-    }
-
-    public void addLabel(Set<String> label) {
+    public void addLabel(Set<Label> label) {
         this.labels.addAll(label);
     }
 
@@ -79,8 +75,8 @@ public class Edge {
     public String getLabelsAsString() {
         String result = "";
         String separator = "";
-        for (String string : labels) {
-            result = result + separator + string;
+        for (Label label : labels) {
+            result = result + separator + label.label;
             separator = ",";
         }
         return result;
