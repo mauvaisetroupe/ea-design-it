@@ -1,9 +1,13 @@
 package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
+import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
+import com.mauvaisetroupe.eadesignit.domain.Protocol;
+import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -20,10 +24,18 @@ import net.sourceforge.plantuml.sequencediagram.Message;
 import net.sourceforge.plantuml.sequencediagram.Note;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
+import org.apache.commons.lang3.NotImplementedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PlantumlImportService {
+
+    @Autowired
+    private ApplicationRepository applicationRepository;
+
+    @Autowired
+    private FlowInterfaceRepository interfaceRepository;
 
     public static void main(String[] args) throws IOException {
         String plantUMLSource =
@@ -104,8 +116,33 @@ public class PlantumlImportService {
             flow.addSteps(step);
 
             List<Note> notes = message.getNoteOnMessages();
+            DataFlow dataFlow = new DataFlow();
             for (Note note : notes) {
-                System.out.println(note);
+                String _note = note.getStrings().get(0).toString();
+                String[] _string = _note.split(",");
+                for (int i = 0; i < _string.length; i++) {
+                    if (i == 0) {
+                        Protocol protocol = new Protocol();
+
+                        String name = null, url = null;
+                        if (_string[i].contains("[[")) {
+                            _string[i] = _string[i].replace("[[", "");
+                            _string[i] = _string[i].replace("]]", "");
+                            String[] _noteArrray = _string[i].split(" ");
+                            url = _noteArrray[0];
+                            name = _noteArrray[1];
+                            dataFlow.setContractURL(url);
+                            dataFlow.setId(1111L);
+                            interface1.addDataFlows(dataFlow);
+                        } else {
+                            name = _string[i];
+                        }
+                        protocol.setName(name);
+                        interface1.setProtocol(protocol);
+                    } else {
+                        throw new RuntimeException("Not implemented");
+                    }
+                }
             }
         }
         return flow;
