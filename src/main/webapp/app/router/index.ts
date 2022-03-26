@@ -15,6 +15,7 @@ import entities from '@/router/entities';
 import pages from '@/router/pages';
 import importuploadfile from '@/router/eadeisgnit-cusom';
 import { Authority } from '@/shared/security/authority';
+import sequenceDiagramImport from '@/router/eadeisgnit-cusom';
 
 Vue.use(Router);
 
@@ -44,7 +45,8 @@ const router = new Router({
     ...admin,
     entities,
     ...pages,
-    ...importuploadfile
+    ...importuploadfile,
+    ...sequenceDiagramImport
   ]
 });
 

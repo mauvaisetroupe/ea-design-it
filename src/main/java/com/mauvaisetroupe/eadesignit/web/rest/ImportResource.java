@@ -3,6 +3,7 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.domain.DataFlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
+import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationCapabilityImportService;
@@ -11,11 +12,14 @@ import com.mauvaisetroupe.eadesignit.service.importfile.CapabilityImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.DataFlowImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.FlowImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.LandscapeExportService;
+import com.mauvaisetroupe.eadesignit.service.importfile.PlantumlImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.FlowImportDTO;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -28,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,6 +67,9 @@ public class ImportResource {
     @Autowired
     private LandscapeViewRepository landscapeViewRepository;
 
+    @Autowired
+    private PlantumlImportService plantumlImportService;
+
     @PostMapping("/import/application/upload-file")
     public List<ApplicationImport> uploadFile(@RequestPart MultipartFile file) throws Exception {
         return applicationImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
@@ -75,6 +83,13 @@ public class ImportResource {
             dtos.add(new FlowImportDTO(file.getOriginalFilename(), flowImports));
         }
         return dtos;
+    }
+
+    @PostMapping("/import/flow/sequence-diagram")
+    public FunctionalFlow uploadPlantuml(@RequestBody String plantumlSource) throws Exception {
+        plantumlSource = URLDecoder.decode(plantumlSource, StandardCharsets.UTF_8);
+        plantumlSource = plantumlSource.replace("###CR##", "\n");
+        return plantumlImportService.importPlantuml(plantumlSource);
     }
 
     @PostMapping("/import/data-flow/upload-file")

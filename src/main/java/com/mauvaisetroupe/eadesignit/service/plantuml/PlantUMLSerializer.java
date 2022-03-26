@@ -178,4 +178,8 @@ public class PlantUMLSerializer {
         System.out.println(plantUMLSource);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
+
+    public String getSVG(String plantUMLSource) throws IOException {
+        return plantUMLBuilder.getSVGFromSource(plantUMLSource);
+    }
 }

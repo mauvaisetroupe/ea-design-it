@@ -29,6 +29,7 @@ import '../content/scss/vendor.scss';
 import ApplicationImportService from '@/entities/application-import/application-import.service';
 import FlowImportService from '@/entities/flow-import/flow-import.service';
 import DataFlowImportService from '@/entities/data-flow-import/data-flow-import.service';
+import SequenceDiagramService from '@/eadesignit/sequence-diagram/import.service';
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
@@ -102,6 +103,7 @@ new Vue({
     applicationImportService: () => new ApplicationImportService(),
     flowImportService: () => new FlowImportService(),
     dataFlowImportService: () => new DataFlowImportService(),
+    sequenceDiagramService: () => new SequenceDiagramService(),
 
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService,

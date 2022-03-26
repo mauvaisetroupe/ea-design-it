@@ -15,6 +15,8 @@ import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer;
 import io.undertow.util.BadRequestException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +31,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -188,5 +192,12 @@ public class PlantUMLResource {
         } else {
             throw new BadRequestException("Cannot find application");
         }
+    }
+
+    @PostMapping(value = "plantuml/sequence-diagram/get-svg")
+    public @ResponseBody String getSequenceDiagramSVG(@RequestBody String plantumlSource) throws IOException {
+        plantumlSource = URLDecoder.decode(plantumlSource, StandardCharsets.UTF_8);
+        plantumlSource = plantumlSource.replace("###CR##", "\n");
+        return this.plantUMLSerializer.getSVG(plantumlSource);
     }
 }

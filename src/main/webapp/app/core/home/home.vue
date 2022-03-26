@@ -43,7 +43,7 @@
         <p>Please, refer to <a href="https://mauvaisetroupe.github.io/ea-design-it/">documentation</a> for more explanation</p>
       </div>
       <div v-if="$store.getters.writeAuthority">
-        <h2>Import Excel files</h2>
+        <h2>Import</h2>
         <ul>
           <li>
             Import Excel
@@ -65,6 +65,10 @@
             <router-link to="/application-capability-import-upload-file" data-cy="import-excel-capabilities-mapping"
               >Applications/Capabilities</router-link
             >
+          </li>
+          <li>
+            Import Plantuml
+            <router-link to="/sequence-diagram/import" data-cy="import-sequence-diagram-mapping">Sequence diagram</router-link>
           </li>
         </ul>
         <p>Please, refer to <a href="https://mauvaisetroupe.github.io/ea-design-it/import/">documentation</a> for more explanation</p>
