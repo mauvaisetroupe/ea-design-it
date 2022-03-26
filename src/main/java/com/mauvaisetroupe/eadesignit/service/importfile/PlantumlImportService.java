@@ -100,47 +100,49 @@ public class PlantumlImportService {
         List<Event> events = sequenceDiagram.events();
         int stepOrder = 0;
         for (Event event : events) {
-            Message message = (Message) event;
-            FlowInterface interface1 = new FlowInterface();
-            Application source = new Application();
-            source.setName(message.getParticipant1().getDisplay(false).get(0).toString());
-            Application target = new Application();
-            target.setName(message.getParticipant2().getDisplay(false).get(0).toString());
-            interface1.setSource(source);
-            interface1.setTarget(target);
-            FunctionalFlowStep step = new FunctionalFlowStep();
-            step.setFlow(flow);
-            step.setFlowInterface(interface1);
-            step.setStepOrder(stepOrder++);
-            step.setDescription(message.getLabel().get(0).toString());
-            flow.addSteps(step);
+            if (event instanceof Message) {
+                Message message = (Message) event;
+                FlowInterface interface1 = new FlowInterface();
+                Application source = new Application();
+                source.setName(message.getParticipant1().getDisplay(false).get(0).toString());
+                Application target = new Application();
+                target.setName(message.getParticipant2().getDisplay(false).get(0).toString());
+                interface1.setSource(source);
+                interface1.setTarget(target);
+                FunctionalFlowStep step = new FunctionalFlowStep();
+                step.setFlow(flow);
+                step.setFlowInterface(interface1);
+                step.setStepOrder(stepOrder++);
+                step.setDescription(message.getLabel().get(0).toString());
+                flow.addSteps(step);
 
-            List<Note> notes = message.getNoteOnMessages();
-            DataFlow dataFlow = new DataFlow();
-            for (Note note : notes) {
-                String _note = note.getStrings().get(0).toString();
-                String[] _string = _note.split(",");
-                for (int i = 0; i < _string.length; i++) {
-                    if (i == 0) {
-                        Protocol protocol = new Protocol();
+                List<Note> notes = message.getNoteOnMessages();
+                DataFlow dataFlow = new DataFlow();
+                for (Note note : notes) {
+                    String _note = note.getStrings().get(0).toString();
+                    String[] _string = _note.split(",");
+                    for (int i = 0; i < _string.length; i++) {
+                        if (i == 0) {
+                            Protocol protocol = new Protocol();
 
-                        String name = null, url = null;
-                        if (_string[i].contains("[[")) {
-                            _string[i] = _string[i].replace("[[", "");
-                            _string[i] = _string[i].replace("]]", "");
-                            String[] _noteArrray = _string[i].split(" ");
-                            url = _noteArrray[0];
-                            name = _noteArrray[1];
-                            dataFlow.setContractURL(url);
-                            dataFlow.setId(1111L);
-                            interface1.addDataFlows(dataFlow);
+                            String name = null, url = null;
+                            if (_string[i].contains("[[")) {
+                                _string[i] = _string[i].replace("[[", "");
+                                _string[i] = _string[i].replace("]]", "");
+                                String[] _noteArrray = _string[i].split(" ");
+                                url = _noteArrray[0];
+                                name = _noteArrray[1];
+                                dataFlow.setContractURL(url);
+                                dataFlow.setId(1111L);
+                                interface1.addDataFlows(dataFlow);
+                            } else {
+                                name = _string[i];
+                            }
+                            protocol.setName(name);
+                            interface1.setProtocol(protocol);
                         } else {
-                            name = _string[i];
+                            throw new RuntimeException("Not implemented");
                         }
-                        protocol.setName(name);
-                        interface1.setProtocol(protocol);
-                    } else {
-                        throw new RuntimeException("Not implemented");
                     }
                 }
             }
