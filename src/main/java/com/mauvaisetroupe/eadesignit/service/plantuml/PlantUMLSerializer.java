@@ -3,28 +3,22 @@ package com.mauvaisetroupe.eadesignit.service.plantuml;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
-import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.service.drawio.GraphBuilder;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.GraphDTO;
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.Label;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.SortedSet;
-import java.util.TreeSet;
-import org.apache.commons.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 @Service
 public class PlantUMLSerializer {
@@ -35,6 +29,9 @@ public class PlantUMLSerializer {
     private PlantUMLBuilder plantUMLBuilder;
 
     public String getSource(LandscapeView landscapeView, boolean sequenceDiagram) throws IOException {
+        GraphBuilder graphBuilder = new GraphBuilder();
+        GraphDTO graph = graphBuilder.createGraph(landscapeView);
+
         List<String[]> legend = new ArrayList<>();
         legend.add(new String[] { "Flows", "Description" });
         for (FunctionalFlow functionalFlow : landscapeView.getFlows()) {
@@ -43,8 +40,6 @@ public class PlantUMLSerializer {
 
         StringBuilder plantUMLSource = new StringBuilder();
         plantUMLBuilder.getPlantumlHeader(plantUMLSource);
-        GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graph = graphBuilder.createGraph(landscapeView);
 
         for (Edge edge : graph.getConsolidatedEdges()) {
             Application source = graph.getApplication(edge.getSourceId());
@@ -105,7 +100,7 @@ public class PlantUMLSerializer {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(functionalFlow);
 
-        for (Edge edge : graph.getConsolidatedEdges()) {
+        for (Edge edge : graph.getEdges()) {
             Application source = graph.getApplication(edge.getSourceId());
             Application target = graph.getApplication(edge.getTargetId());
             plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), sequenceDiagram, false);
