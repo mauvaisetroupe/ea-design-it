@@ -37,7 +37,7 @@ public class DrawIOResource {
     }
 
     @GetMapping(value = "drawio/landscape-view/get-xml/{id}")
-    public @ResponseBody String getLandscapeXML(@PathVariable Long id)
+    public @ResponseBody String getLandscapeXML(@PathVariable("id") Long id)
         throws IOException, BadRequestException, ParserConfigurationException, XPathExpressionException, SAXException {
         log.debug("REST request to get LandscapeView : {}", id);
         Optional<LandscapeView> landscapeView = landscapeViewRepository.findById(id);
