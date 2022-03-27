@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ILandscapeView } from '@/shared/model/landscape-view.model';
 
 const baseApiUrl = 'api/landscape-views';
-const basePlantUMLApiUrl = 'api/plantuml/landscape-view/';
+const basePlantUMLApiUrl = 'api/plantuml/landscape-view';
 const baseDrawIOApiUrl = 'api/drawio/landscape-view/get-xml';
 
 export default class LandscapeViewService {
