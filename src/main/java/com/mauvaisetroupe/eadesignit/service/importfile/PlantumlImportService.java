@@ -3,13 +3,18 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
+import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
+import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
+import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
+import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowStepRepository;
 import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
 import com.mauvaisetroupe.eadesignit.service.dto.FlowImport;
 import com.mauvaisetroupe.eadesignit.service.dto.FlowImportLine;
+import com.mauvaisetroupe.eadesignit.service.identitier.IdentifierGenerator;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -17,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import net.sourceforge.plantuml.BlockUml;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -32,6 +38,7 @@ import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 @Service
 public class PlantumlImportService {
@@ -47,6 +54,12 @@ public class PlantumlImportService {
 
     @Autowired
     private DataFlowRepository dataFlowRepository;
+
+    @Autowired
+    private FunctionalFlowRepository functionalFlowRepository;
+
+    @Autowired
+    private FunctionalFlowStepRepository flowStepRepository;
 
     public static void main(String[] args) throws IOException {
         String plantUMLSource =
@@ -108,7 +121,7 @@ public class PlantumlImportService {
         BlockUml blockUml = reader.getBlocks().get(0);
         Diagram diagram = blockUml.getDiagram();
 
-        String title = getDiaplay(diagram.getTitleDisplay());
+        String title = displayToString(diagram.getTitleDisplay());
         flowImport.setDescription(title);
 
         SequenceDiagram sequenceDiagram = (SequenceDiagram) diagram;
@@ -120,7 +133,9 @@ public class PlantumlImportService {
                 Message message = (Message) event;
                 FlowImportLine flowImportLine = new FlowImportLine();
                 Application source = checkApplicationExists(message.getParticipant1());
+                if (source == null) flowImport.setOnError(true);
                 Application target = checkApplicationExists(message.getParticipant2());
+                if (target == null) flowImport.setOnError(true);
                 Protocol protocol = null;
                 List<FlowInterface> potentialInterfaces = null;
                 flowImportLine.setSource(source);
@@ -128,7 +143,7 @@ public class PlantumlImportService {
 
                 List<Note> notes = message.getNoteOnMessages();
                 for (Note note : notes) {
-                    String _note = getDiaplay(note.getStrings());
+                    String _note = displayToString(note.getStrings());
                     String[] _string = _note.split(",");
                     for (int i = 0; i < _string.length; i++) {
                         //Protocol is the first item
@@ -171,8 +186,10 @@ public class PlantumlImportService {
                     if (potentialInterfaces != null) {
                         flowImportLine.setPotentialInterfaces(potentialInterfaces);
                         if (potentialInterfaces.size() == 1) {
-                            flowImportLine.setSelectedInterface(potentialInterfaces.get(0));
-                            flowImportLine.addPotentialDataFlow(potentialInterfaces.get(0).getDataFlows());
+                            FlowInterface selectedInterface = potentialInterfaces.get(0);
+                            flowImportLine.setSelectedInterface(selectedInterface);
+                            flowImportLine.addPotentialDataFlow(selectedInterface.getDataFlows());
+                            flowImportLine.setProtocol(selectedInterface.getProtocol());
                         }
                     }
                 }
@@ -181,6 +198,7 @@ public class PlantumlImportService {
                         flowImportLine.setSelectedDataFlow(flowImportLine.getPotentialDataFlows().get(0));
                     }
                 }
+                flowImportLine.setDescription(displayToString(message.getLabel()));
                 flowImportLine.setOrder(stepOrder++);
                 flowImport.addLine(flowImportLine);
             }
@@ -202,21 +220,79 @@ public class PlantumlImportService {
         return new String[] { protocolName, url };
     }
 
-    private String getDiaplay(Display display) {
+    private Application checkApplicationExists(Participant participant) {
+        Application application = null;
+        String appName = displayToString(participant.getDisplay(false));
+        if (appName != null) {
+            application = applicationRepository.findByNameIgnoreCase(appName);
+        }
+        return application;
+    }
+
+    private String displayToString(Display display) {
         if (display != null) {
             if (display.iterator().hasNext()) {
-                return display.iterator().next().toString();
+                String _string = display.iterator().next().toString();
+                if (StringUtils.hasText(_string)) {
+                    _string = _string.replaceAll("\n", "");
+                    _string = _string.replace("\n", "");
+                }
+                return _string;
             }
         }
         return null;
     }
 
-    private Application checkApplicationExists(Participant participant) {
-        Application application = null;
-        String appName = getDiaplay(participant.getDisplay(false));
-        if (appName != null) {
-            application = applicationRepository.findByNameIgnoreCase(appName);
+    public FunctionalFlow saveImport(FlowImport flowImport) {
+        FunctionalFlow functionalFlow = new FunctionalFlow();
+
+        List<String> interfacesAliases = interfaceRepository.findAlias();
+        IdentifierGenerator interfaceIdgenerator = new IdentifierGenerator(interfacesAliases);
+
+        List<String> flowAliases = functionalFlowRepository.findAlias();
+        IdentifierGenerator flowIdGenerator = new IdentifierGenerator(flowAliases);
+
+        functionalFlowRepository.save(functionalFlow);
+        functionalFlow.setDescription(flowImport.getDescription());
+        int order = 1;
+        for (FlowImportLine flowImportLine : flowImport.getFlowImportLines()) {
+            FlowInterface interface1;
+            if (flowImportLine.getSelectedInterface() != null) {
+                interface1 = interfaceRepository.getById(flowImportLine.getSelectedInterface().getId());
+            } else {
+                interface1 = new FlowInterface();
+                interface1.setSource(applicationRepository.getById(flowImportLine.getSource().getId()));
+                interface1.setTarget(applicationRepository.getById(flowImportLine.getTarget().getId()));
+                interface1.setAlias(interfaceIdgenerator.getNext("GEN-"));
+                interfaceRepository.save(interface1);
+                if (flowImportLine.getProtocol() != null) {
+                    interface1.setProtocol(protocolRepository.getById(flowImportLine.getProtocol().getId()));
+                }
+                if (flowImportLine.getSelectedDataFlow() != null) {
+                    DataFlow dataFlow = dataFlowRepository.getById(flowImportLine.getSelectedDataFlow().getId());
+                    if (dataFlow == null) {
+                        dataFlow = new DataFlow();
+                        dataFlowRepository.save(dataFlow);
+                        dataFlow.setFrequency(flowImportLine.getSelectedDataFlow().getFrequency());
+                        dataFlow.setFormat(flowImportLine.getSelectedDataFlow().getFormat());
+                        dataFlow.setContractURL(flowImportLine.getSelectedDataFlow().getContractURL());
+                        dataFlow.setDocumentationURL(flowImportLine.getSelectedDataFlow().getDocumentationURL());
+                    }
+                    interface1.addDataFlows(dataFlow);
+                }
+            }
+            FunctionalFlowStep step = new FunctionalFlowStep();
+            step.setDescription(flowImportLine.getDescription());
+            step.stepOrder(order++);
+            functionalFlow.addSteps(step);
+            interface1.addSteps(step);
+            flowStepRepository.save(step);
         }
-        return application;
+        functionalFlow.setAlias(flowIdGenerator.getNext("GEN."));
+        TreeSet<String> aliases = new TreeSet<>();
+        for (FunctionalFlowStep step : functionalFlow.getSteps()) {
+            aliases.add(step.getFlowInterface().getAlias());
+        }
+        return functionalFlow;
     }
 }
