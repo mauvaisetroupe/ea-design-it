@@ -7,13 +7,14 @@ import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.SortedSet;
+import net.sourceforge.plantuml.BlockUml;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
+import net.sourceforge.plantuml.core.Diagram;
 import net.sourceforge.plantuml.core.DiagramDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,11 +90,22 @@ public class PlantUMLBuilder {
 
     @Cacheable(cacheNames = PLANTUML_SVG_CACHE)
     public String getSVGFromSource(String plantUMLSource) throws IOException {
-        System.out.println(plantUMLSource);
-
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         SourceStringReader reader = new SourceStringReader(plantUMLSource);
         DiagramDescription diagramDescription = reader.outputImage(byteArrayOutputStream, new FileFormatOption(FileFormat.SVG));
+
+        List<BlockUml> blocks = reader.getBlocks();
+        if (blocks != null) {
+            BlockUml blockUml = blocks.iterator().next();
+            if (blockUml != null) {
+                Diagram diagram = blockUml.getDiagram();
+                String errorOrWarning = diagram.getWarningOrError();
+                if (errorOrWarning != null) {
+                    throw new RuntimeException("Error during plantuml redering");
+                }
+            }
+        }
+
         byteArrayOutputStream.close();
         log.debug(diagramDescription.getDescription());
         return new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
