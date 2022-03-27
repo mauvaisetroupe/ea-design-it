@@ -86,7 +86,7 @@ public class ImportResource {
     }
 
     @PostMapping("/import/flow/sequence-diagram")
-    public FunctionalFlow uploadPlantuml(@RequestBody String plantumlSource) throws Exception {
+    public com.mauvaisetroupe.eadesignit.service.dto.FlowImport uploadPlantuml(@RequestBody String plantumlSource) throws Exception {
         plantumlSource = URLDecoder.decode(plantumlSource, StandardCharsets.UTF_8);
         plantumlSource = plantumlSource.replace("###CR##", "\n");
         return plantumlImportService.importPlantuml(plantumlSource);

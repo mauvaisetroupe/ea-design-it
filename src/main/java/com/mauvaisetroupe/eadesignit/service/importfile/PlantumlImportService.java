@@ -3,30 +3,35 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
-import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
-import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
+import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
+import com.mauvaisetroupe.eadesignit.service.dto.FlowImport;
+import com.mauvaisetroupe.eadesignit.service.dto.FlowImportLine;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import net.sourceforge.plantuml.BlockUml;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.core.Diagram;
 import net.sourceforge.plantuml.core.DiagramDescription;
+import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.Message;
 import net.sourceforge.plantuml.sequencediagram.Note;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 @Service
 public class PlantumlImportService {
@@ -36,6 +41,12 @@ public class PlantumlImportService {
 
     @Autowired
     private FlowInterfaceRepository interfaceRepository;
+
+    @Autowired
+    private ProtocolRepository protocolRepository;
+
+    @Autowired
+    private DataFlowRepository dataFlowRepository;
 
     public static void main(String[] args) throws IOException {
         String plantUMLSource =
@@ -90,63 +101,122 @@ public class PlantumlImportService {
         System.out.println(new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8")));
     }
 
-    public FunctionalFlow importPlantuml(String plantUMLSource) {
-        FunctionalFlow flow = new FunctionalFlow();
+    public FlowImport importPlantuml(String plantUMLSource) {
+        FlowImport flowImport = new FlowImport();
 
         SourceStringReader reader = new SourceStringReader(plantUMLSource);
         BlockUml blockUml = reader.getBlocks().get(0);
         Diagram diagram = blockUml.getDiagram();
+
+        String title = getDiaplay(diagram.getTitleDisplay());
+        flowImport.setDescription(title);
+
         SequenceDiagram sequenceDiagram = (SequenceDiagram) diagram;
+
         List<Event> events = sequenceDiagram.events();
         int stepOrder = 0;
         for (Event event : events) {
             if (event instanceof Message) {
                 Message message = (Message) event;
-                FlowInterface interface1 = new FlowInterface();
-                Application source = new Application();
-                source.setName(message.getParticipant1().getDisplay(false).get(0).toString());
-                Application target = new Application();
-                target.setName(message.getParticipant2().getDisplay(false).get(0).toString());
-                interface1.setSource(source);
-                interface1.setTarget(target);
-                FunctionalFlowStep step = new FunctionalFlowStep();
-                step.setFlow(flow);
-                step.setFlowInterface(interface1);
-                step.setStepOrder(stepOrder++);
-                step.setDescription(message.getLabel().get(0).toString());
-                flow.addSteps(step);
+                FlowImportLine flowImportLine = new FlowImportLine();
+                Application source = checkApplicationExists(message.getParticipant1());
+                Application target = checkApplicationExists(message.getParticipant2());
+                Protocol protocol = null;
+                List<FlowInterface> potentialInterfaces = null;
+                flowImportLine.setSource(source);
+                flowImportLine.setTarget(target);
 
                 List<Note> notes = message.getNoteOnMessages();
-                DataFlow dataFlow = new DataFlow();
                 for (Note note : notes) {
-                    String _note = note.getStrings().get(0).toString();
+                    String _note = getDiaplay(note.getStrings());
                     String[] _string = _note.split(",");
                     for (int i = 0; i < _string.length; i++) {
+                        //Protocol is the first item
                         if (i == 0) {
-                            Protocol protocol = new Protocol();
+                            String[] protocolAndUrl = getProtocolAndUrl(_string[i]);
+                            String protocolName = protocolAndUrl[0];
+                            String url = protocolAndUrl[1];
 
-                            String name = null, url = null;
-                            if (_string[i].contains("[[")) {
-                                _string[i] = _string[i].replace("[[", "");
-                                _string[i] = _string[i].replace("]]", "");
-                                String[] _noteArrray = _string[i].split(" ");
-                                url = _noteArrray[0];
-                                name = _noteArrray[1];
-                                dataFlow.setContractURL(url);
-                                dataFlow.setId(1111L);
-                                interface1.addDataFlows(dataFlow);
-                            } else {
-                                name = _string[i];
+                            if (protocolName != null) {
+                                protocol = protocolRepository.findByNameIgnoreCase(protocolName);
+                                flowImportLine.setProtocol(protocol);
                             }
-                            protocol.setName(name);
-                            interface1.setProtocol(protocol);
+
+                            if (url != null) {
+                                Set<DataFlow> potentialDataFlows = dataFlowRepository.findByContractURLIgnoreCase(url);
+                                if (CollectionUtils.isEmpty(potentialDataFlows)) {
+                                    potentialDataFlows = dataFlowRepository.findByDocumentationURLIgnoreCase(url);
+                                }
+                                flowImportLine.setPotentialDataFlows(new ArrayList<>(potentialDataFlows));
+                                if (CollectionUtils.isEmpty(flowImportLine.getPotentialDataFlows())) {
+                                    DataFlow dataFlow = new DataFlow();
+                                    dataFlow.setContractURL(url);
+                                    dataFlow.setId(-1L);
+                                    flowImportLine.addPotentialDataFlow(dataFlow);
+                                    flowImportLine.setSelectedDataFlow(dataFlow);
+                                }
+                            }
                         } else {
                             throw new RuntimeException("Not implemented");
                         }
                     }
                 }
+                if (source != null && target != null) {
+                    if (protocol != null) {
+                        potentialInterfaces =
+                            interfaceRepository.findBySourceIdAndTargetIdAndProtocolId(source.getId(), target.getId(), protocol.getId());
+                    } else {
+                        potentialInterfaces = interfaceRepository.findBySourceIdAndTargetId(source.getId(), target.getId());
+                    }
+                    if (potentialInterfaces != null) {
+                        flowImportLine.setPotentialInterfaces(potentialInterfaces);
+                        if (potentialInterfaces.size() == 1) {
+                            flowImportLine.setSelectedInterface(potentialInterfaces.get(0));
+                            flowImportLine.addPotentialDataFlow(potentialInterfaces.get(0).getDataFlows());
+                        }
+                    }
+                }
+                if (!CollectionUtils.isEmpty(flowImportLine.getPotentialDataFlows())) {
+                    if (flowImportLine.getPotentialDataFlows().size() == 1) {
+                        flowImportLine.setSelectedDataFlow(flowImportLine.getPotentialDataFlows().get(0));
+                    }
+                }
+                flowImportLine.setOrder(stepOrder++);
+                flowImport.addLine(flowImportLine);
             }
         }
-        return flow;
+        return flowImport;
+    }
+
+    private String[] getProtocolAndUrl(String _string) {
+        String protocolName = null, url = null;
+        if (_string.contains("[[")) {
+            _string = _string.replace("[[", "");
+            _string = _string.replace("]]", "");
+            String[] _noteArrray = _string.split(" ");
+            protocolName = _noteArrray[1];
+            url = _noteArrray[0];
+        } else {
+            protocolName = _string;
+        }
+        return new String[] { protocolName, url };
+    }
+
+    private String getDiaplay(Display display) {
+        if (display != null) {
+            if (display.iterator().hasNext()) {
+                return display.iterator().next().toString();
+            }
+        }
+        return null;
+    }
+
+    private Application checkApplicationExists(Participant participant) {
+        Application application = null;
+        String appName = getDiaplay(participant.getDisplay(false));
+        if (appName != null) {
+            application = applicationRepository.findByNameIgnoreCase(appName);
+        }
+        return application;
     }
 }

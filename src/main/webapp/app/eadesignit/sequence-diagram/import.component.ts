@@ -9,6 +9,8 @@ export default class SequenceDiagram extends Vue {
   public plantUMLImage = '';
   public isFetching = false;
   public functionalFlow = {};
+  public importError = '';
+  public previewError = '';
 
   public getPlantUML() {
     this.sequenceDiagramService()
@@ -17,23 +19,32 @@ export default class SequenceDiagram extends Vue {
         res => {
           this.plantUMLImage = res.data;
           this.isFetching = false;
+          this.previewError = '';
         },
         err => {
           console.log(err);
+          this.plantUMLImage = '';
+          this.functionalFlow = '';
+          this.previewError = err;
         }
       );
   }
 
   public importPlantUML() {
+    this.getPlantUML();
+
     this.sequenceDiagramService()
       .importPlantuml(this.plantuml)
       .then(
         res => {
           this.functionalFlow = res.data;
           this.isFetching = false;
+          this.importError = '';
         },
         err => {
-          console.log(err);
+          this.plantUMLImage = '';
+          this.functionalFlow = '';
+          this.importError = err;
         }
       );
   }
