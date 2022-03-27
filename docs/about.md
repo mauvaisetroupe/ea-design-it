@@ -2,7 +2,7 @@
 layout: page
 title: About
 permalink: /about/
-nav_order: 6
+nav_order: 7
 ---
 
 # About EADesignIt

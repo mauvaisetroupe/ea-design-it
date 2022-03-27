@@ -2,7 +2,7 @@
 layout: page
 title: Lifecycle
 permalink: /lifecycle/
-nav_order: 4
+nav_order: 5
 ---
 
 # Landscape As-Is, Landscape To-Be
