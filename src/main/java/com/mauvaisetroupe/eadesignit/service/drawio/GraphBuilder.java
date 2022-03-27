@@ -27,7 +27,7 @@ public class GraphBuilder {
         for (FunctionalFlow flow : landscape.getFlows()) {
             for (FunctionalFlowStep step : flow.getSteps()) {
                 FlowInterface interface1 = step.getFlowInterface();
-                graph.addApplication(new Application(interface1.getSource().getId(), interface1.getTarget().getName()));
+                graph.addApplication(new Application(interface1.getSource().getId(), interface1.getSource().getName()));
                 graph.addApplication(new Application(interface1.getTarget().getId(), interface1.getTarget().getName()));
                 String id = flow.getId() + "-" + interface1.getId();
                 String url = "/functional-flow/" + flow.getId() + "/view";
@@ -49,7 +49,7 @@ public class GraphBuilder {
         GraphDTO graph = new GraphDTO();
         for (FunctionalFlowStep step : flow.getSteps()) {
             FlowInterface interface1 = step.getFlowInterface();
-            graph.addApplication(new Application(interface1.getSource().getId(), interface1.getTarget().getName()));
+            graph.addApplication(new Application(interface1.getSource().getId(), interface1.getSource().getName()));
             graph.addApplication(new Application(interface1.getTarget().getId(), interface1.getTarget().getName()));
             String id = flow.getId() + "-" + interface1.getId();
             String label = step.getStepOrder() + ". " + WordUtils.wrap(step.getDescription(), 50, "\\n", false);
@@ -63,7 +63,7 @@ public class GraphBuilder {
     public GraphDTO createGraph(SortedSet<FlowInterface> interfaces) {
         GraphDTO graph = new GraphDTO();
         for (FlowInterface interface1 : interfaces) {
-            graph.addApplication(new Application(interface1.getSource().getId(), interface1.getTarget().getName()));
+            graph.addApplication(new Application(interface1.getSource().getId(), interface1.getSource().getName()));
             graph.addApplication(new Application(interface1.getTarget().getId(), interface1.getTarget().getName()));
             Long id = interface1.getId();
             String label = interface1.getAlias();
