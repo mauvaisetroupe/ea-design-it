@@ -7,9 +7,18 @@ public class FlowImport {
 
     private List<FlowImportLine> flowImportLines = new ArrayList<>();
     private String description;
+    private boolean onError;
 
     public List<FlowImportLine> getFlowImportLines() {
         return flowImportLines;
+    }
+
+    public boolean isOnError() {
+        return onError;
+    }
+
+    public void setOnError(boolean onError) {
+        this.onError = onError;
     }
 
     public String getDescription() {
