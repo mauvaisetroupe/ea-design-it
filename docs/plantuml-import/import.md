@@ -14,14 +14,13 @@ You can describe your Functional Flow as a Sequence Diagarm
 
 ```
 @startuml
-participant webbanking
-participant "payment" 
-participant "CBS System" as cbs
-
+participant "web banking" as webbanking
+participant "Payment Microservice" as payment
+participant "Core Banking Sysetm" as cbs
+title: "Debit card order"
 webbanking -> payment: first step
-payment -> cbs: first step
+payment -> cbs: second step
 note right:API
-
 @enduml
 ```
 
