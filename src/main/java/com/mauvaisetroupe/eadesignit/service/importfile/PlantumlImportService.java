@@ -230,8 +230,8 @@ public class PlantumlImportService {
     }
 
     private String displayToString(Display display) {
-        if (display != null) {
-            if (display.iterator().hasNext()) {
+        if (display != null && display.size() > 0) {
+            if (display.get(0) != null) {
                 String _string = display.iterator().next().toString();
                 if (StringUtils.hasText(_string)) {
                     _string = _string.replaceAll("\n", "");
