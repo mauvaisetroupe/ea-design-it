@@ -9,6 +9,7 @@ import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
+import java.util.Date;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,11 +31,11 @@ public class FunctionFlowStepRepositoryTest {
     @Test
     void assertEqualityConsistency() {
         Application application1 = new Application();
-        application1.setAlias("HPX.CMPT.00000001");
+        application1.setAlias("HPX.CMPT." + new Date().getTime() + "001");
         application1.setName("application1.name");
 
         Application application2 = new Application();
-        application2.setAlias("HPX.CMPT.00000002");
+        application2.setAlias("HPX.CMPT." + new Date().getTime() + "002");
         application2.setName("application2.name");
 
         applicationRepository.save(application1);
