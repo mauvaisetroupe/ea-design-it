@@ -11,7 +11,6 @@ public class IdentifierGeneratorTest {
 
     @Test
     void testGeneratePotentielIdentifiers() {
-        IdentifierGenerator generator = new IdentifierGenerator();
         Set<String> exisitingIdentifiers = new TreeSet<>();
         exisitingIdentifiers.add("CUST.001");
         exisitingIdentifiers.add("CUST.002");
@@ -22,7 +21,9 @@ public class IdentifierGeneratorTest {
         exisitingIdentifiers.add("TRO,001");
         exisitingIdentifiers.add("TRO,002");
 
-        Set<String> potentialIdentifiers = generator.generatePotentielIdentifiers(exisitingIdentifiers);
+        IdentifierGenerator generator = new IdentifierGenerator(exisitingIdentifiers);
+
+        Set<String> potentialIdentifiers = generator.getPotentialIdentifiers();
 
         System.out.println(potentialIdentifiers);
         assertEquals(3, potentialIdentifiers.size());

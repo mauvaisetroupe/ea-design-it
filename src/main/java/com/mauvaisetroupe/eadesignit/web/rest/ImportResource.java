@@ -85,11 +85,16 @@ public class ImportResource {
         return dtos;
     }
 
-    @PostMapping("/import/flow/sequence-diagram")
+    @PostMapping("/import/flow/sequence-diagram/pre-import")
     public com.mauvaisetroupe.eadesignit.service.dto.FlowImport uploadPlantuml(@RequestBody String plantumlSource) throws Exception {
         plantumlSource = URLDecoder.decode(plantumlSource, StandardCharsets.UTF_8);
         plantumlSource = plantumlSource.replace("###CR##", "\n");
         return plantumlImportService.importPlantuml(plantumlSource);
+    }
+
+    @PostMapping("/import/flow/sequence-diagram/save")
+    public FunctionalFlow saveImport(@RequestBody com.mauvaisetroupe.eadesignit.service.dto.FlowImport flowImport) throws Exception {
+        return plantumlImportService.saveImport(flowImport);
     }
 
     @PostMapping("/import/data-flow/upload-file")

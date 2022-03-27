@@ -23,7 +23,20 @@ export default class SequenceDiagramService {
   public importPlantuml(source: String) {
     return new Promise<any>((resolve, reject) => {
       axios
-        .post(`${importApiUrl}/`, source.replace(/[\n\r]/g, '###CR##'))
+        .post(`${importApiUrl}/pre-import`, source.replace(/[\n\r]/g, '###CR##'))
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public saveImport(flowImport) {
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .post(`${importApiUrl}/save`, flowImport)
         .then(res => {
           resolve(res);
         })

@@ -8,7 +8,7 @@ export default class SequenceDiagram extends Vue {
   public plantuml = '';
   public plantUMLImage = '';
   public isFetching = false;
-  public functionalFlow = {};
+  public functionalFlow = null;
   public importError = '';
   public previewError = '';
 
@@ -24,7 +24,7 @@ export default class SequenceDiagram extends Vue {
         err => {
           console.log(err);
           this.plantUMLImage = '';
-          this.functionalFlow = '';
+          this.functionalFlow = null;
           this.previewError = err;
         }
       );
@@ -47,5 +47,27 @@ export default class SequenceDiagram extends Vue {
           this.importError = err;
         }
       );
+  }
+
+  public saveImport() {
+    this.getPlantUML();
+    this.sequenceDiagramService()
+      .saveImport(this.functionalFlow)
+      .then(
+        res => {
+          this.$router.push({ name: 'FunctionalFlowView', params: { functionalFlowId: res.data.id } });
+        },
+        err => {
+          this.plantUMLImage = '';
+          this.functionalFlow = '';
+          this.importError = err;
+        }
+      );
+  }
+
+  public changeInterface(flowimportLine) {
+    if (flowimportLine.selectedInterface && flowimportLine.selectedInterface.protocol) {
+      flowimportLine.protocol = flowimportLine.selectedInterface.protocol;
+    }
   }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -144,19 +145,17 @@ public class FunctionalFlowStep implements Serializable, Comparable<FunctionalFl
         int result = -1;
         if (arg0 == null) {
             result = -1;
-        } else if (arg0 == this) {
-            result = 0;
-        } else if (arg0.getId() != null && arg0.getId() == this.getId()) {
-            result = 0;
-        } else if (arg0.getStepOrder() == null) {
-            result = -1;
-        } else if (this.getStepOrder() == null) {
-            result = 1;
-        } else if (this.getStepOrder().equals(arg0.getStepOrder())) {
-            // no ex aequo
-            result = this.getId().compareTo(arg0.getId());
+        }
+        // compare alias is one is not null
+        else if (this.stepOrder != null || arg0.stepOrder != null) {
+            result = ObjectUtils.compare(this.stepOrder, arg0.stepOrder, true);
+        }
+        // compare id is one is not null
+        else if (this.id != null || arg0.id != null) {
+            result = ObjectUtils.compare(this.id, arg0.id, true);
         } else {
-            result = this.getStepOrder().compareTo(arg0.getStepOrder());
+            // alias and id are both null
+            result = 0;
         }
         return result;
     }

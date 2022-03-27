@@ -41,4 +41,7 @@ public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Lo
     public List<FlowInterface> findBySourceIdAndTargetIdAndProtocolId(Long sourceId, Long targetId, Long protocolId);
 
     public List<FlowInterface> findBySourceIdAndTargetId(Long sourceId, Long targetId);
+
+    @Query(value = "select distinct(i.alias) from FlowInterface i")
+    public List<String> findAlias();
 }

@@ -13,7 +13,7 @@
     <h2 v-if="functionalFlow">
       {{ functionalFlow.description }}
     </h2>
-    <div class="table-responsive" v-if="functionalFlow.flowImportLines && functionalFlow.flowImportLines.length > 0">
+    <div class="table-responsive" v-if="functionalFlow && functionalFlow.flowImportLines && functionalFlow.flowImportLines.length > 0">
       <table class="table table-striped">
         <thead>
           <tr>
@@ -36,7 +36,7 @@
               <span>{{ step.description }}</span>
             </td>
             <td>
-              <select v-if="step.potentialInterfaces" v-model="step.selectedInterface">
+              <select v-if="step.potentialInterfaces" v-model="step.selectedInterface" @change="changeInterface(step)">
                 <option value=""></option>
                 <option v-for="inter in step.potentialInterfaces" :key="inter.id" :value="inter">{{ inter.alias }}</option>
               </select>
@@ -84,6 +84,17 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div>
+      <button
+        type="submit"
+        :disabled="!functionalFlow || functionalFlow.onError"
+        class="btn btn-primary"
+        data-cy="submit"
+        @click="saveImport"
+      >
+        Save
+      </button>
     </div>
   </div>
 </template>

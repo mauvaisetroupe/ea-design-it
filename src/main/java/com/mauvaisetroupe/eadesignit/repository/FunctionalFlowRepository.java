@@ -4,6 +4,7 @@ import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
@@ -18,5 +19,6 @@ import org.springframework.stereotype.Repository;
 public interface FunctionalFlowRepository extends JpaRepository<FunctionalFlow, Long> {
     Optional<FunctionalFlow> findByAlias(String flowAlias);
 
-    Set<FunctionalFlow> findByStepsFlowInterfaceAlias(String interfaceName);
+    @Query(value = "select distinct(f.alias) from FunctionalFlow f")
+    List<String> findAlias();
 }
