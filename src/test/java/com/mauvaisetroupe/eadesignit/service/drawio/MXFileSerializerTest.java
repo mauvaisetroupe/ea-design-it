@@ -113,7 +113,7 @@ public class MXFileSerializerTest {
                 inputXML,
                 XPathConstants.NODESET
             );
-        assertThat(nodeList.getLength()).isEqualTo(8);
+        assertThat(nodeList.getLength()).isEqualTo(5);
     }
 
     private FunctionalFlowStep creteInterface(Long id, FunctionalFlow functionalFlow, Application source, Application target) {

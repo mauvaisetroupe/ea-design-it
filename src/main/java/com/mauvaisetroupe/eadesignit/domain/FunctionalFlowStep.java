@@ -153,6 +153,10 @@ public class FunctionalFlowStep implements Serializable, Comparable<FunctionalFl
         // compare id is one is not null
         else if (this.id != null || arg0.id != null) {
             result = ObjectUtils.compare(this.id, arg0.id, true);
+        } else if (this.description != null || arg0.description != null) {
+            result = ObjectUtils.compare(this.description, arg0.description, true);
+        } else if (this.flowInterface != null || arg0.flowInterface != null) {
+            result = ObjectUtils.compare(this.flowInterface, arg0.flowInterface, true);
         } else {
             // alias and id are both null
             result = 0;
