@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.service.plantuml;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
+import com.mauvaisetroupe.eadesignit.service.drawio.GraphBuilder;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Label;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
@@ -9,6 +10,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.SortedSet;
 import net.sourceforge.plantuml.BlockUml;
 import net.sourceforge.plantuml.FileFormat;
@@ -20,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 @Component
@@ -64,6 +68,32 @@ public class PlantUMLBuilder {
             }
         }
         plantUMLSource.append("\n");
+        if (sequenceDiagram) {
+            if (hasMetadata(labels)) {
+                plantUMLSource.append("note right\n");
+                for (Label label : labels) {
+                    if (!CollectionUtils.isEmpty(label.getMetadata())) {
+                        for (Entry<String, String> metadata : label.getMetadata().entrySet()) {
+                            if (GraphBuilder.KEY_PROTOCOL.equals(metadata.getKey())) {
+                                plantUMLSource.append(metadata.getValue() + "\n");
+                            } else {
+                                plantUMLSource.append(metadata.getKey() + "=" + metadata.getValue() + "\n");
+                            }
+                        }
+                    }
+                }
+                plantUMLSource.append("end note\n");
+            }
+        }
+    }
+
+    private boolean hasMetadata(SortedSet<Label> labels) {
+        for (Label label : labels) {
+            if (!CollectionUtils.isEmpty(label.getMetadata())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String get(Application application, boolean useID, boolean sequenceDiagram) {
@@ -90,12 +120,14 @@ public class PlantUMLBuilder {
 
     @Cacheable(cacheNames = PLANTUML_SVG_CACHE)
     public String getSVGFromSource(String plantUMLSource) throws IOException {
+        System.out.println(plantUMLSource);
+
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         SourceStringReader reader = new SourceStringReader(plantUMLSource);
         DiagramDescription diagramDescription = reader.outputImage(byteArrayOutputStream, new FileFormatOption(FileFormat.SVG));
 
         List<BlockUml> blocks = reader.getBlocks();
-        if (blocks != null) {
+        if (blocks != null && !blocks.isEmpty()) {
             BlockUml blockUml = blocks.iterator().next();
             if (blockUml != null) {
                 Diagram diagram = blockUml.getDiagram();
@@ -107,7 +139,6 @@ public class PlantUMLBuilder {
         }
 
         byteArrayOutputStream.close();
-        log.debug(diagramDescription.getDescription());
         return new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
     }
 

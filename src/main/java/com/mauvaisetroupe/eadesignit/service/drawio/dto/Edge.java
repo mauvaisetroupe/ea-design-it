@@ -76,7 +76,7 @@ public class Edge {
         String result = "";
         String separator = "";
         for (Label label : labels) {
-            result = result + separator + label.label;
+            result = result + separator + label.getLabel();
             separator = ",";
         }
         return result;

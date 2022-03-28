@@ -22,6 +22,8 @@ import org.w3c.dom.NodeList;
 
 public class GraphBuilder {
 
+    public static final String KEY_PROTOCOL = "protocol";
+
     public GraphDTO createGraph(LandscapeView landscape) {
         GraphDTO graph = new GraphDTO();
         for (FunctionalFlow flow : landscape.getFlows()) {
@@ -52,8 +54,12 @@ public class GraphBuilder {
             graph.addApplication(new Application(interface1.getSource().getId(), interface1.getSource().getName()));
             graph.addApplication(new Application(interface1.getTarget().getId(), interface1.getTarget().getName()));
             String id = flow.getId() + "-" + interface1.getId();
-            String label = step.getStepOrder() + ". " + WordUtils.wrap(step.getDescription(), 50, "\\n", false);
-            Edge edge = new Edge(id, interface1.getSource().getId(), interface1.getTarget().getId(), new Label(label, null), false);
+            String _label = step.getStepOrder() + ". " + WordUtils.wrap(step.getDescription(), 50, "\\n", false);
+            Label label = new Label(_label, null);
+            if (interface1.getProtocol() != null) {
+                label.addMetadata(KEY_PROTOCOL, interface1.getProtocol().getName());
+            }
+            Edge edge = new Edge(id, interface1.getSource().getId(), interface1.getTarget().getId(), label, false);
             graph.addEdge(edge);
         }
         graph.consolidateEdges();
