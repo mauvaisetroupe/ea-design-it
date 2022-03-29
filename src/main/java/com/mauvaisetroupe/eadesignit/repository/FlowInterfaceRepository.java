@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
+import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -42,6 +43,12 @@ public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Lo
 
     public List<FlowInterface> findBySourceIdAndTargetId(Long sourceId, Long targetId);
 
+    public List<FlowInterfaceLight> findProjectedBySourceIdAndTargetIdAndProtocolId(Long sourceId, Long targetId, Long protocolId);
+
+    public List<FlowInterfaceLight> findProjectedBySourceIdAndTargetId(Long sourceId, Long targetId);
+
     @Query(value = "select distinct(i.alias) from FlowInterface i")
     public List<String> findAlias();
+
+    List<FlowInterfaceLight> findAllProjectedBy();
 }
