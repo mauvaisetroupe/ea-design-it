@@ -17,11 +17,13 @@ import AccountService from '@/account/account.service';
         const id = row.id.toString().toLowerCase();
         const description = row.description ? row.description.toString().toLowerCase() : '';
         const inFFF = row.steps
-          .map(i => i.flowInterface)
-          .map(i => i.alias)
-          .join(' ')
-          .toString()
-          .toLowerCase();
+          ? row.steps
+              .map(i => i.flowInterface)
+              .map(i => i.alias)
+              .join(' ')
+              .toString()
+              .toLowerCase()
+          : '';
         const searchTerm = this.filter.toLowerCase();
 
         return alias.includes(searchTerm) || id.includes(searchTerm) || inFFF.includes(searchTerm) || description.includes(searchTerm);
