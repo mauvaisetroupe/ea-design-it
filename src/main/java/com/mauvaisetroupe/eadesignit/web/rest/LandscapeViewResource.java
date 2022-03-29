@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.repository.view.LandscapeLight;
 import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
 import com.mauvaisetroupe.eadesignit.service.drawio.MXFileSerializer;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
@@ -161,9 +162,9 @@ public class LandscapeViewResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of landscapeViews in body.
      */
     @GetMapping("/landscape-views")
-    public List<LandscapeView> getAllLandscapeViews(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<LandscapeLight> getAllLandscapeViews(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all LandscapeViews");
-        return landscapeViewRepository.findAll();
+        return landscapeViewRepository.findAllProjectedBy();
     }
 
     /**

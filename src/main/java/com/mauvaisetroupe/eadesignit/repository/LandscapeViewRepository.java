@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.repository.view.LandscapeLight;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -31,4 +32,6 @@ public interface LandscapeViewRepository extends JpaRepository<LandscapeView, Lo
     Optional<LandscapeView> findOneWithEagerRelationships(@Param("id") Long id);
 
     LandscapeView findByDiagramNameIgnoreCase(String diagramName);
+
+    List<LandscapeLight> findAllProjectedBy();
 }
