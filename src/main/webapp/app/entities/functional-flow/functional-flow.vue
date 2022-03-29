@@ -77,24 +77,6 @@
                 }}</router-link>
               </div>
             </td>
-            <td>
-              <span v-for="(step, i) in functionalFlow.steps" :key="step.id"
-                >{{ i > 0 ? ', ' : '' }}
-                <router-link
-                  :title="
-                    '[ ' +
-                    step.flowInterface.source.name +
-                    ' / ' +
-                    step.flowInterface.target.name +
-                    ' ]' +
-                    (step.flowInterface.protocol ? ' (' + step.flowInterface.protocol.type + ') ' : '')
-                  "
-                  class="form-control-static"
-                  :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: step.flowInterface.id } }"
-                  >{{ step.flowInterface.alias }}</router-link
-                >
-              </span>
-            </td>
             <td class="text-right">
               <div class="btn-group">
                 <router-link

@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
+import com.mauvaisetroupe.eadesignit.repository.view.FunctionalFlowLight;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -21,4 +22,6 @@ public interface FunctionalFlowRepository extends JpaRepository<FunctionalFlow, 
 
     @Query(value = "select distinct(f.alias) from FunctionalFlow f")
     List<String> findAlias();
+
+    List<FunctionalFlowLight> findAllProjectedBy();
 }

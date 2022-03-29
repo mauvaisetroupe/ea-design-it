@@ -5,12 +5,12 @@ import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
+import com.mauvaisetroupe.eadesignit.repository.view.FunctionalFlowLight;
 import com.mauvaisetroupe.eadesignit.service.FunctionalflowService;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -180,9 +180,9 @@ public class FunctionalFlowResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of functionalFlows in body.
      */
     @GetMapping("/functional-flows")
-    public List<FunctionalFlow> getAllFunctionalFlows() {
+    public List<FunctionalFlowLight> getAllFunctionalFlows() {
         log.debug("REST request to get all FunctionalFlows");
-        return functionalFlowRepository.findAll();
+        return functionalFlowRepository.findAllProjectedBy();
     }
 
     /**
