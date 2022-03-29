@@ -31,7 +31,7 @@ export default class FunctionalFlowDetails extends Vue {
 
   public checkedInterface: IFlowInterface[] = [];
 
-  public sequenceDiagram: boolean = false;
+  public sequenceDiagram: boolean = true;
 
   get searchSourceId() {
     if (!this.searchSourceName) return null;
