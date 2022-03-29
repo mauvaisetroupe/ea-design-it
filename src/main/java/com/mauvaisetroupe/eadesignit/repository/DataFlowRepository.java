@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
+import com.mauvaisetroupe.eadesignit.repository.view.DataFlowLight;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -36,4 +37,6 @@ public interface DataFlowRepository extends JpaRepository<DataFlow, Long> {
     Set<DataFlow> findByContractURLIgnoreCase(String url);
 
     Set<DataFlow> findByDocumentationURLIgnoreCase(String url);
+
+    List<DataFlowLight> findAllProjectedBy();
 }

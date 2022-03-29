@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
+import com.mauvaisetroupe.eadesignit.repository.view.DataFlowLight;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -167,9 +168,9 @@ public class DataFlowResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of dataFlows in body.
      */
     @GetMapping("/data-flows")
-    public List<DataFlow> getAllDataFlows(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<DataFlowLight> getAllDataFlows(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all DataFlows");
-        return dataFlowRepository.findAllWithEagerRelationships();
+        return dataFlowRepository.findAllProjectedBy();
     }
 
     /**

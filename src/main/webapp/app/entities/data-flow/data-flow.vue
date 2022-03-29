@@ -44,9 +44,6 @@
             <th scope="row"><span>Start Date</span></th>
             <th scope="row"><span>End Date</span></th>
             <th scope="row"><span>Format</span></th>
-            <th scope="row"><span>Functional Flows</span></th>
-            <th scope="row"><span>Flow Interface</span></th>
-            <th scope="row"><span>Interface Protocol</span></th>
             <th scope="row"><span>Data Items</span></th>
             <th scope="row"></th>
           </tr>
@@ -76,39 +73,6 @@
                   dataFlow.format.name
                 }}</router-link>
               </div>
-            </td>
-            <td>
-              <span v-for="(functionalFlows, i) in dataFlow.functionalFlows" :key="functionalFlows.id"
-                >{{ i > 0 ? ', ' : '' }}
-                <router-link
-                  class="form-control-static"
-                  :title="functionalFlows.description"
-                  :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlows.id } }"
-                  >{{ functionalFlows.alias }}</router-link
-                >
-              </span>
-            </td>
-            <td>
-              <div v-if="dataFlow.flowInterface">
-                <router-link
-                  :title="dataFlow.flowInterface.protocol ? dataFlow.flowInterface.protocol.name : ''"
-                  :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: dataFlow.flowInterface.id } }"
-                  >{{ dataFlow.flowInterface.alias }}</router-link
-                >
-              </div>
-            </td>
-            <td>
-              <span v-if="dataFlow.flowInterface">
-                {{ dataFlow.flowInterface.protocol ? dataFlow.flowInterface.protocol.name : '' }}
-              </span>
-            </td>
-            <td>
-              <span v-for="(dataFlowItem, i) in dataFlow.items" :key="dataFlowItem.id"
-                >{{ i > 0 ? ', ' : '' }}
-                <router-link :to="{ name: 'DataFlowItemView', params: { dataFlowItemId: dataFlowItem.id } }">{{
-                  dataFlowItem.id
-                }}</router-link>
-              </span>
             </td>
             <td class="text-right">
               <div class="btn-group">
