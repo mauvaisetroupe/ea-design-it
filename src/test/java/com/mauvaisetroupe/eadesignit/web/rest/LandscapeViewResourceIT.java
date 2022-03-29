@@ -155,10 +155,7 @@ class LandscapeViewResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(landscapeView.getId().intValue())))
-            .andExpect(jsonPath("$.[*].viewpoint").value(hasItem(DEFAULT_VIEWPOINT.toString())))
-            .andExpect(jsonPath("$.[*].diagramName").value(hasItem(DEFAULT_DIAGRAM_NAME)))
-            .andExpect(jsonPath("$.[*].compressedDrawXML").value(hasItem(DEFAULT_COMPRESSED_DRAW_XML.toString())))
-            .andExpect(jsonPath("$.[*].compressedDrawSVG").value(hasItem(DEFAULT_COMPRESSED_DRAW_SVG.toString())));
+            .andExpect(jsonPath("$.[*].diagramName").value(hasItem(DEFAULT_DIAGRAM_NAME)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -191,10 +188,7 @@ class LandscapeViewResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(landscapeView.getId().intValue()))
-            .andExpect(jsonPath("$.viewpoint").value(DEFAULT_VIEWPOINT.toString()))
-            .andExpect(jsonPath("$.diagramName").value(DEFAULT_DIAGRAM_NAME))
-            .andExpect(jsonPath("$.compressedDrawXML").value(DEFAULT_COMPRESSED_DRAW_XML.toString()))
-            .andExpect(jsonPath("$.compressedDrawSVG").value(DEFAULT_COMPRESSED_DRAW_SVG.toString()));
+            .andExpect(jsonPath("$.diagramName").value(DEFAULT_DIAGRAM_NAME));
     }
 
     @Test
