@@ -110,6 +110,7 @@
             class="btn btn-warning"
             v-on:click="exportPlantUML()"
             style="font-size: 0.7em; padding: 3px; margin: 3px"
+            v-if="plantUMLImage"
             :disabled="isFetching"
           >
             <span>Export plantuml</span>
