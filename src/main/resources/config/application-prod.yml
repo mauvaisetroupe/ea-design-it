@@ -39,6 +39,7 @@ spring:
     hikari:
       poolName: Hikari
       auto-commit: false
+      schema: EADESIGNIT
   jpa:
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
