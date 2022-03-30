@@ -40,7 +40,7 @@ public class ImportFlowTest {
 
     protected List<LandscapeView> checkNbLandscapes(int nbLandscape) {
         List<LandscapeView> landscapes;
-        landscapes = landscapeViewRepository.findAll();
+        landscapes = landscapeViewRepository.findAllWithEagerRelationships();
         assertEquals(nbLandscape, landscapes.size());
         return landscapes;
     }
