@@ -176,7 +176,7 @@ public class LandscapeViewResource {
     @GetMapping("/landscape-views/{id}")
     public ResponseEntity<LandscapeView> getLandscapeView(@PathVariable Long id) {
         log.debug("REST request to get LandscapeView : {}", id);
-        Optional<LandscapeView> landscapeView = landscapeViewRepository.findById(id);
+        Optional<LandscapeView> landscapeView = landscapeViewRepository.findOneWithEagerRelationships(id);
 
         if (landscapeView.isPresent()) {
             try {

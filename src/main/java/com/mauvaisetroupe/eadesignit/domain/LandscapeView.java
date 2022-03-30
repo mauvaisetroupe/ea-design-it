@@ -47,7 +47,7 @@ public class LandscapeView implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Owner owner;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @SortNatural
     @JoinTable(
         name = "rel_landscape_view__flows",
