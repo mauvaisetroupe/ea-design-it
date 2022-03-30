@@ -15,6 +15,8 @@ const ApplicationCapabilityImportUploadFile = () => import('@/entities/capabilit
 const FlowReporting = () => import('@/entities/flow-interface/reporting-flow-interface.vue');
 // prettier-ignore
 const SequenceDiagramImport = () => import('@/eadesignit/sequence-diagram/import.vue');
+// prettier-ignore
+const ApplicationsDiagram = () => import('@/eadesignit/applications-diagram/applications-diagram.vue');
 
 export default [
   {
@@ -55,8 +57,14 @@ export default [
   },
   {
     path: '/sequence-diagram/import',
-    name: 'SequenceDiagramImport2',
+    name: 'SequenceDiagramImport',
     component: SequenceDiagramImport,
     meta: { authorities: [Authority.WRITE] },
+  },
+  {
+    path: '/applications-diagram',
+    name: 'ApplicationsDiagram',
+    component: ApplicationsDiagram,
+    meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
   },
 ];

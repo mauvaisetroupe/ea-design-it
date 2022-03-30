@@ -125,7 +125,6 @@
             <th scope="row"><span>Source</span></th>
             <th scope="row"><span>Target</span></th>
             <th scope="row"><span>Protocol</span></th>
-            <th scope="row"><span>Data Flows</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -152,15 +151,6 @@
               <router-link v-if="caption.protocol" :to="{ name: 'ProtocolView', params: { protocolId: caption.protocol.id } }">
                 {{ caption.protocol.name }}
               </router-link>
-            </td>
-            <td>
-              <span v-for="dataflow in caption.dataFlows" :key="dataflow.id">
-                <router-link
-                  :to="{ name: 'DataFlowView', params: { dataFlowId: dataflow.id } }"
-                  :title="dataflow.resourceName + (dataflow.items.length > 0 ? ' / ' + dataflow.items.length + ' items ' : ' / no items')"
-                  >{{ dataflow.id }}</router-link
-                ><sup v-if="dataflow.items && dataflow.items.length > 0">({{ dataflow.items.length }})</sup>&nbsp;
-              </span>
             </td>
           </tr>
         </tbody>

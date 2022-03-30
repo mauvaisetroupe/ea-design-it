@@ -2,12 +2,11 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="functionalFlow">
-        <h2 class="jh-entity-heading" data-cy="functionalFlowDetailsHeading" v-if="!notPersisted">
+        <h2 class="jh-entity-heading" data-cy="functionalFlowDetailsHeading">
           <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon>
           <span>Functional Flow</span> - {{ functionalFlow.alias }}
         </h2>
-        <h2 v-else>Interfaces for selected applications</h2>
-        <dl class="row jh-entity-details" v-if="!notPersisted">
+        <dl class="row jh-entity-details">
           <dt>
             <span>Alias</span>
           </dt>
@@ -88,7 +87,7 @@
 
       <br />
 
-      <h3 v-if="!notPersisted">{{ functionalFlow.alias }} - {{ functionalFlow.description }}</h3>
+      <h3>{{ functionalFlow.alias }} - {{ functionalFlow.description }}</h3>
 
       <div>
         <div v-html="plantUMLImage"></div>
@@ -97,7 +96,6 @@
             <font-awesome-icon icon="sync"></font-awesome-icon> <span>Export</span>
           </button>         -->
           <button
-            v-if="!notPersisted"
             class="btn btn-warning"
             v-on:click="changeDiagram()"
             style="font-size: 0.7em; padding: 3px; margin: 3px"
@@ -121,7 +119,7 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th scope="row" v-if="!notPersisted"><span>Step</span></th>
+              <th scope="row"><span>Step</span></th>
               <th scope="row" v-if="reorderAlias"></th>
               <th scope="row" v-if="reorderAlias"></th>
               <th scope="row"><span>Interface</span></th>
@@ -134,7 +132,7 @@
           </thead>
           <tbody>
             <tr v-for="(step, i) in functionalFlow.steps" v-bind:key="step.id" :set="(inter = step.flowInterface)">
-              <td v-if="!notPersisted">
+              <td>
                 {{ step.stepOrder }}.
                 <span v-if="!reorderAlias">{{ step.description }}</span>
                 <span v-else>
@@ -191,7 +189,7 @@
                       @click="navigate"
                       class="btn btn-info btn-sm details"
                       data-cy="entityDetailsButton"
-                      v-if="!accountService().writeAuthorities || notPersisted"
+                      v-if="!accountService().writeAuthorities"
                     >
                       <font-awesome-icon icon="eye"></font-awesome-icon>
                       <span class="d-none d-md-inline">View</span>
@@ -200,18 +198,13 @@
                       @click="navigate"
                       class="btn btn-primary btn-sm edit"
                       data-cy="entityEditButton"
-                      v-if="accountService().writeAuthorities && !notPersisted"
+                      v-if="accountService().writeAuthorities"
                     >
                       <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                       <span class="d-none d-md-inline">Edit</span>
                     </button>
                   </router-link>
-                  <b-button
-                    v-if="accountService().writeAuthorities && !notPersisted"
-                    v-on:click="prepareToDetach(i)"
-                    variant="warning"
-                    class="btn btn-sm"
-                  >
+                  <b-button v-if="accountService().writeAuthorities" v-on:click="prepareToDetach(i)" variant="warning" class="btn btn-sm">
                     <font-awesome-icon icon="times"></font-awesome-icon>
                     <span class="d-none d-md-inline">Detach</span>
                   </b-button>
@@ -229,7 +222,7 @@
             data-cy="entityCreateButton"
             class="btn btn-success jh-create-entity create-functional-flow"
             title="Edit Flow Alias in order to move interfaces from on flow to another"
-            v-if="accountService().writeAuthorities && !reorderAlias && !notPersisted"
+            v-if="accountService().writeAuthorities && !reorderAlias"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
             <span> Organize Flows</span>
@@ -260,7 +253,7 @@
           </button>
         </div>
 
-        <div class="d-flex justify-content-end col-md-6" v-if="!notPersisted">
+        <div class="d-flex justify-content-end col-md-6">
           <span>
             <button
               class="btn btn-primary jh-create-entity create-functional-flow"

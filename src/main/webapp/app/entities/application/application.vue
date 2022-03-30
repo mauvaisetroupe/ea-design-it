@@ -3,10 +3,7 @@
     <h2 id="page-heading" data-cy="ApplicationHeading">
       <span id="application-heading">Applications</span>
       <div class="d-flex justify-content-end">
-        <router-link
-          :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: 'new' }, query: { id: selectedApplicationIds } }"
-          v-if="selectedApplicationIds.length >= 2"
-        >
+        <router-link :to="{ name: 'ApplicationsDiagram', query: { id: selectedApplicationIds } }" v-if="selectedApplicationIds.length >= 2">
           <button class="btn btn-warning mr-2" title="Select applications to generate diagram">
             <font-awesome-icon icon="plus"></font-awesome-icon><span> Generate Diagram</span>
           </button>

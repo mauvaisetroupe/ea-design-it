@@ -2,7 +2,6 @@ import axios from 'axios';
 
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
-const baseApiUrl = 'api/functional-flows';
 const basePlantUMLApiUrl = 'api/plantuml';
 const importApiUrl = 'api/import/flow/sequence-diagram';
 

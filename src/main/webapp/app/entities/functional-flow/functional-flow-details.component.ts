@@ -60,8 +60,6 @@ export default class FunctionalFlowDetails extends Vue {
 
   public indexStepToDetach: number;
 
-  public notPersisted: boolean = false;
-
   public reorderAlias = false;
 
   public isFetching = false;
@@ -76,11 +74,7 @@ export default class FunctionalFlowDetails extends Vue {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (to.params.functionalFlowId) {
-        if (to.params.functionalFlowId != 'new') {
-          vm.retrieveFunctionalFlow(to.params.functionalFlowId);
-        } else if (to.query.id) {
-          vm.generateDiagramForSelection(to.query.id);
-        }
+        vm.retrieveFunctionalFlow(to.params.functionalFlowId);
       }
     });
   }
@@ -91,19 +85,7 @@ export default class FunctionalFlowDetails extends Vue {
     this.getPlantUML(this.functionalFlow.id);
   }
 
-  public generateDiagramForSelection(applicationIds: number[]) {
-    this.notPersisted = true;
-    this.functionalFlowService()
-      .createNewFromApplications(applicationIds)
-      .then(res => {
-        this.functionalFlow = res;
-        this.applicationIds = applicationIds;
-        this.getPlantUMLforapplications(applicationIds);
-      });
-  }
-
   public retrieveFunctionalFlow(functionalFlowId) {
-    this.notPersisted = false;
     this.functionalFlowService()
       .find(functionalFlowId)
       .then(res => {
@@ -135,54 +117,22 @@ export default class FunctionalFlowDetails extends Vue {
   }
 
   public exportPlantUML() {
-    if (!this.notPersisted) {
-      this.functionalFlowService()
-        .getPlantUMLSource(this.functionalFlow.id, this.sequenceDiagram)
-        .then(response => {
-          const url = URL.createObjectURL(
-            new Blob([response.data], {
-              type: 'text/plain',
-            })
-          );
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', this.functionalFlow.alias + '-plantuml.txt');
-          document.body.appendChild(link);
-          link.click();
-        });
-    } else {
-      this.functionalFlowService()
-        .getPlantUMSourceforApplications(this.applicationIds)
-        .then(response => {
-          const url = URL.createObjectURL(
-            new Blob([response.data], {
-              type: 'text/plain',
-            })
-          );
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', this.functionalFlow.alias + '-plantuml.txt');
-          document.body.appendChild(link);
-          link.click();
-        });
-    }
-  }
-
-  public getPlantUMLforapplications(aplicationIds: number[]) {
-    console.log('Entering in method getPlantUMLforapplications');
     this.functionalFlowService()
-      .getPlantUMLforApplications(aplicationIds)
-      .then(
-        res => {
-          console.log(res.data);
-
-          this.plantUMLImage = res.data;
-        },
-        err => {
-          console.log(err);
-        }
-      );
+      .getPlantUMLSource(this.functionalFlow.id, this.sequenceDiagram)
+      .then(response => {
+        const url = URL.createObjectURL(
+          new Blob([response.data], {
+            type: 'text/plain',
+          })
+        );
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', this.functionalFlow.alias + '-plantuml.txt');
+        document.body.appendChild(link);
+        link.click();
+      });
   }
+
   public prepareSearchInterfaces(): void {
     this.applicationService()
       .retrieve()
