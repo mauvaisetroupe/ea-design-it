@@ -2,8 +2,9 @@ package com.mauvaisetroupe.eadesignit.repository.view;
 
 import com.mauvaisetroupe.eadesignit.domain.Owner;
 import java.time.LocalDate;
+import org.apache.commons.lang3.ObjectUtils;
 
-public class FunctionalFlowLight {
+public class FunctionalFlowLight implements Comparable<FunctionalFlowLight> {
 
     public FunctionalFlowLight(
         Long id,
@@ -153,5 +154,25 @@ public class FunctionalFlowLight {
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
             "}";
+    }
+
+    @Override
+    public int compareTo(FunctionalFlowLight arg0) {
+        int result = -1;
+        if (arg0 == null) {
+            result = -1;
+        }
+        // compare alias is one is not null
+        else if (this.alias != null || arg0.alias != null) {
+            result = ObjectUtils.compare(this.alias, arg0.alias, true);
+        }
+        // compare id is one is not null
+        else if (this.id != null || arg0.id != null) {
+            result = ObjectUtils.compare(this.id, arg0.id, true);
+        } else {
+            // alias and id are both null
+            result = 0;
+        }
+        return result;
     }
 }

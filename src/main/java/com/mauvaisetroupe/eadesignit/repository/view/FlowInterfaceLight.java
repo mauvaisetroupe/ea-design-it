@@ -5,8 +5,9 @@ import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
 import com.mauvaisetroupe.eadesignit.domain.Owner;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
 import java.time.LocalDate;
+import org.apache.commons.lang3.ObjectUtils;
 
-public class FlowInterfaceLight {
+public class FlowInterfaceLight implements Comparable<FlowInterfaceLight> {
 
     private Long id;
     private String alias;
@@ -199,5 +200,25 @@ public class FlowInterfaceLight {
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
             "}";
+    }
+
+    @Override
+    public int compareTo(FlowInterfaceLight arg0) {
+        int result = -1;
+        if (arg0 == null) {
+            result = -1;
+        }
+        // compare alias is one is not null
+        else if (this.alias != null || arg0.alias != null) {
+            result = ObjectUtils.compare(this.alias, arg0.alias, true);
+        }
+        // compare id is one is not null
+        else if (this.id != null || arg0.id != null) {
+            result = ObjectUtils.compare(this.id, arg0.id, true);
+        } else {
+            // alias and id are both null
+            result = 0;
+        }
+        return result;
     }
 }

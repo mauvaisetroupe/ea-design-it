@@ -1,9 +1,9 @@
 package com.mauvaisetroupe.eadesignit.service.plantuml;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
-import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import com.mauvaisetroupe.eadesignit.service.drawio.GraphBuilder;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Edge;
@@ -109,7 +109,7 @@ public class PlantUMLSerializer {
         return plantUMLSource.toString();
     }
 
-    public String getSVG(SortedSet<FlowInterface> interfaces, boolean sequenceDiagram) throws IOException {
+    public String getSVG(SortedSet<FlowInterfaceLight> interfaces, boolean sequenceDiagram) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(interfaces);
 
@@ -129,10 +129,10 @@ public class PlantUMLSerializer {
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
-    public String getSource(SortedSet<FlowInterface> interfaces, boolean sequenceDiagram) {
+    public String getSource(SortedSet<FlowInterfaceLight> interfaces, boolean sequenceDiagram) {
         List<String[]> legend = new ArrayList<>();
         legend.add(new String[] { "Interface", "Source", "Target", "Protocol" });
-        for (FlowInterface flowInterface : interfaces) {
+        for (FlowInterfaceLight flowInterface : interfaces) {
             legend.add(
                 new String[] {
                     flowInterface.getAlias(),

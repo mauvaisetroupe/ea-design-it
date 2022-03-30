@@ -4,6 +4,7 @@ import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.GraphDTO;
@@ -66,9 +67,9 @@ public class GraphBuilder {
         return graph;
     }
 
-    public GraphDTO createGraph(SortedSet<FlowInterface> interfaces) {
+    public GraphDTO createGraph(SortedSet<FlowInterfaceLight> interfaces) {
         GraphDTO graph = new GraphDTO();
-        for (FlowInterface interface1 : interfaces) {
+        for (FlowInterfaceLight interface1 : interfaces) {
             graph.addApplication(new Application(interface1.getSource().getId(), interface1.getSource().getName()));
             graph.addApplication(new Application(interface1.getTarget().getId(), interface1.getTarget().getName()));
             Long id = interface1.getId();

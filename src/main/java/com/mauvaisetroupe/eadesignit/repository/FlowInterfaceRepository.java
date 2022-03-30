@@ -23,8 +23,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Long> {
     Optional<FlowInterface> findByAlias(String idFlowFromExcel);
-    SortedSet<FlowInterface> findBySource_NameOrTarget_Name(String sourceName, String targetName);
-    SortedSet<FlowInterface> findBySourceIdInAndTargetIdIn(Long[] sourceIds, Long[] targetIds);
     SortedSet<FlowInterface> findByAliasIn(@NotNull List<String> aliasToMerge);
 
     @Query(
@@ -50,5 +48,8 @@ public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Lo
     @Query(value = "select distinct(i.alias) from FlowInterface i")
     public List<String> findAlias();
 
+    // FlowInterface light (without DataFlows, neithers steps and FunctionalFlow)
     List<FlowInterfaceLight> findAllProjectedBy();
+    SortedSet<FlowInterfaceLight> findBySource_NameOrTarget_Name(String sourceName, String targetName);
+    SortedSet<FlowInterfaceLight> findBySourceIdInAndTargetIdIn(Long[] sourceIds, Long[] targetIds);
 }

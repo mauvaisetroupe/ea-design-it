@@ -2,7 +2,6 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
-import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
@@ -10,6 +9,7 @@ import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import com.mauvaisetroupe.eadesignit.service.dto.PlantumlDTO;
 import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer;
 import io.undertow.util.BadRequestException;
@@ -143,7 +143,7 @@ public class PlantUMLResource {
         Optional<Application> optional = applicationRepository.findById(id);
 
         if (optional.isPresent()) {
-            SortedSet<FlowInterface> interfaces = flowInterfaceRepository.findBySource_NameOrTarget_Name(
+            SortedSet<FlowInterfaceLight> interfaces = flowInterfaceRepository.findBySource_NameOrTarget_Name(
                 optional.get().getName(),
                 optional.get().getName()
             );
@@ -168,7 +168,7 @@ public class PlantUMLResource {
         @RequestParam(value = "ids[]") Long[] ids,
         @RequestParam(required = false, defaultValue = "false") boolean sequenceDiagram
     ) throws IOException, BadRequestException {
-        SortedSet<FlowInterface> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
+        SortedSet<FlowInterfaceLight> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
         return this.plantUMLSerializer.getSVG(interfaces, sequenceDiagram);
     }
 
@@ -177,7 +177,7 @@ public class PlantUMLResource {
         @RequestParam(value = "ids[]") Long[] ids,
         @RequestParam(required = false, defaultValue = "false") boolean sequenceDiagram
     ) throws IOException, BadRequestException {
-        SortedSet<FlowInterface> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
+        SortedSet<FlowInterfaceLight> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
         return this.plantUMLSerializer.getSource(interfaces, sequenceDiagram);
     }
 

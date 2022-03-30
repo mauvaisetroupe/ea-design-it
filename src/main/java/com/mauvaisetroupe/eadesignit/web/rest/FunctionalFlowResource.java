@@ -1,10 +1,9 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
-import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
-import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
+import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import com.mauvaisetroupe.eadesignit.repository.view.FunctionalFlowLight;
 import com.mauvaisetroupe.eadesignit.service.FunctionalflowService;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
@@ -15,8 +14,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -219,18 +216,11 @@ public class FunctionalFlowResource {
     }
 
     @GetMapping("/functional-flows/new/applications")
-    public FunctionalFlow getFunctionalNonPersistedFlowFromApplications(@RequestParam(value = "ids[]") Long[] ids) {
+    public Set<FlowInterfaceLight> getFunctionalNonPersistedFlowFromApplications(@RequestParam(value = "ids[]") Long[] ids) {
         log.debug("REST request to build non persisted FunctionalFlow with applications ids: {}", Arrays.toString(ids));
         FunctionalFlow functionalFlow = new FunctionalFlow();
         functionalFlow.setAlias("not persisted");
-        Set<FlowInterface> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
-        SortedSet<FunctionalFlowStep> steps = new TreeSet<>();
-        for (FlowInterface flowInterface : interfaces) {
-            FunctionalFlowStep step = new FunctionalFlowStep();
-            step.setFlowInterface(flowInterface);
-            steps.add(step);
-        }
-        functionalFlow.setSteps(steps);
-        return functionalFlow;
+        Set<FlowInterfaceLight> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
+        return interfaces;
     }
 }
