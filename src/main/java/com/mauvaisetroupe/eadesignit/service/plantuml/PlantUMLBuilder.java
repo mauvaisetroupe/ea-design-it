@@ -53,7 +53,7 @@ public class PlantUMLBuilder {
         boolean useID
     ) {
         plantUMLSource.append(get(source, useID, sequenceDiagram) + " --> " + get(target, useID, sequenceDiagram));
-        if (labels != null && labels.size() > 0) {
+        if (!isEmpty(labels)) {
             plantUMLSource.append(" :");
             String sepaString = "";
             for (Label label : labels) {
@@ -85,6 +85,17 @@ public class PlantUMLBuilder {
                 plantUMLSource.append("end note\n");
             }
         }
+    }
+
+    private boolean isEmpty(SortedSet<Label> labels) {
+        if (labels == null) return true;
+        if (labels.size() == 0) return true;
+        for (Label label : labels) {
+            if (label != null && StringUtils.hasText(label.getLabel())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean hasMetadata(SortedSet<Label> labels) {
