@@ -5,12 +5,14 @@ import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
+import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowStepRepository;
+import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
 import com.mauvaisetroupe.eadesignit.service.dto.FlowImport;
 import com.mauvaisetroupe.eadesignit.service.dto.FlowImportLine;
@@ -60,6 +62,9 @@ public class PlantumlImportService {
 
     @Autowired
     private FunctionalFlowStepRepository flowStepRepository;
+
+    @Autowired
+    private LandscapeViewRepository landscapeViewRepository;
 
     public static void main(String[] args) throws IOException {
         String plantUMLSource =
@@ -243,7 +248,7 @@ public class PlantumlImportService {
         return null;
     }
 
-    public FunctionalFlow saveImport(FlowImport flowImport) {
+    public FunctionalFlow saveImport(FlowImport flowImport, Long landscapeId) {
         FunctionalFlow functionalFlow = new FunctionalFlow();
 
         List<String> interfacesAliases = interfaceRepository.findAlias();
@@ -293,6 +298,14 @@ public class PlantumlImportService {
         for (FunctionalFlowStep step : functionalFlow.getSteps()) {
             aliases.add(step.getFlowInterface().getAlias());
         }
+
+        if (landscapeId != null) {
+            LandscapeView landscapeView = landscapeViewRepository.getById(landscapeId);
+            if (landscapeView != null) {
+                landscapeView.addFlows(functionalFlow);
+            }
+        }
+
         return functionalFlow;
     }
 }

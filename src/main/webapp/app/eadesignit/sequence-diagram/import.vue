@@ -84,6 +84,14 @@
           </tr>
         </tbody>
       </table>
+      <div>
+        <label for="landscape">Choose corresponding landscape to attache flow</label>
+        <select v-model="selectedLandscape">
+          <option v-for="landscape in existingLandscapes" :value="landscape.id" :key="landscape.id">
+            {{ landscape.diagramName }}
+          </option>
+        </select>
+      </div>
     </div>
     <div>
       <button

@@ -32,10 +32,11 @@ export default class SequenceDiagramService {
     });
   }
 
-  public saveImport(flowImport) {
+  public saveImport(flowImport, landscapeId) {
+    const params = { landscapeId: landscapeId };
     return new Promise<any>((resolve, reject) => {
       axios
-        .post(`${importApiUrl}/save`, flowImport)
+        .post(`${importApiUrl}/save`, flowImport, { params })
         .then(res => {
           resolve(res);
         })

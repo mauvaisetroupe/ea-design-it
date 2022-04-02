@@ -1,16 +1,45 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import SequenceDiagramService from './import.service';
+import { ILandscapeView, LandscapeView } from '@/shared/model/landscape-view.model';
+import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
+import AlertService from '@/shared/alert/alert.service';
 
 @Component
 export default class SequenceDiagram extends Vue {
   @Inject('sequenceDiagramService') private sequenceDiagramService: () => SequenceDiagramService;
+  @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
+  @Inject('alertService') private alertService: () => AlertService;
+
   public plantuml = '';
   public plantUMLImage = '';
   public isFetching = false;
   public functionalFlow = null;
   public importError = '';
   public previewError = '';
+
+  public existingLandscapes: ILandscapeView[] = null;
+  public selectedLandscape: String = '';
+
+  public mounted(): void {
+    this.retrieveAllLandscapeViews();
+  }
+
+  public retrieveAllLandscapeViews(): void {
+    this.isFetching = true;
+    this.landscapeViewService()
+      .retrieve()
+      .then(
+        res => {
+          this.existingLandscapes = res.data;
+          this.isFetching = false;
+        },
+        err => {
+          this.isFetching = false;
+          this.alertService().showHttpError(this, err.response);
+        }
+      );
+  }
 
   public getPlantUML() {
     this.sequenceDiagramService()
@@ -52,7 +81,7 @@ export default class SequenceDiagram extends Vue {
   public saveImport() {
     this.getPlantUML();
     this.sequenceDiagramService()
-      .saveImport(this.functionalFlow)
+      .saveImport(this.functionalFlow, this.selectedLandscape)
       .then(
         res => {
           this.$router.push({ name: 'FunctionalFlowView', params: { functionalFlowId: res.data.id } });

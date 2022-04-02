@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -93,8 +94,11 @@ public class ImportResource {
     }
 
     @PostMapping("/import/flow/sequence-diagram/save")
-    public FunctionalFlow saveImport(@RequestBody com.mauvaisetroupe.eadesignit.service.dto.FlowImport flowImport) throws Exception {
-        return plantumlImportService.saveImport(flowImport);
+    public FunctionalFlow saveImport(
+        @RequestBody com.mauvaisetroupe.eadesignit.service.dto.FlowImport flowImport,
+        @RequestParam(required = false) Long landscapeId
+    ) throws Exception {
+        return plantumlImportService.saveImport(flowImport, landscapeId);
     }
 
     @PostMapping("/import/data-flow/upload-file")
