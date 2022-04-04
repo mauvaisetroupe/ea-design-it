@@ -31,6 +31,7 @@ import FlowImportService from '@/entities/flow-import/flow-import.service';
 import DataFlowImportService from '@/entities/data-flow-import/data-flow-import.service';
 import SequenceDiagramService from '@/eadesignit/sequence-diagram/import.service';
 import ApplicationsDiagramService from '@/eadesignit/applications-diagram/applications-diagram.service';
+import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
@@ -113,6 +114,7 @@ new Vue({
 
     reportingService: () => new ReportingService(),
     capabilityImportService: () => new CapabilityImportService(),
+    landscapeViewService: () => new LandscapeViewService(),
   },
   store,
 });
