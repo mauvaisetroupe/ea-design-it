@@ -22,6 +22,26 @@
       <div class="form-group" v-if="excelFiles">
         <button type="submit" class="btn btn-primary mb-2" v-on:click="submitFile()">Submit File</button>
       </div>
+      <div>
+        <p>Choose corresponding landscape to replace</p>
+        <table>
+          <tr v-for="(excel, i) in excelFiles" :key="excel">
+            <td>{{ excel.name }}</td>
+            <td>
+              <select v-model="selectedLandscape[i]">
+                <option
+                  v-for="landscape in existingLandscapes"
+                  :value="landscape.diagramName"
+                  :key="landscape.id"
+                  :selected="landscape.diagramName === selectedLandscape[i]"
+                >
+                  {{ landscape.diagramName }}
+                </option>
+              </select>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
 
     <br />
