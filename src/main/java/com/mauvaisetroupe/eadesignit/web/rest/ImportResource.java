@@ -10,6 +10,7 @@ import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationCapabilityImp
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.CapabilityImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.DataFlowImportService;
+import com.mauvaisetroupe.eadesignit.service.importfile.ExcelReader;
 import com.mauvaisetroupe.eadesignit.service.importfile.FlowImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.LandscapeExportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.PlantumlImportService;
@@ -71,6 +72,12 @@ public class ImportResource {
     @Autowired
     private PlantumlImportService plantumlImportService;
 
+    @PostMapping("/import/sheetnames")
+    public List<String> getSheetNames(@RequestPart MultipartFile file) throws Exception {
+        ExcelReader excelReader = new ExcelReader(file.getInputStream());
+        return excelReader.getSheetNames();
+    }
+
     @PostMapping("/import/application/upload-file")
     public List<ApplicationImport> uploadFile(@RequestPart MultipartFile file) throws Exception {
         return applicationImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
@@ -112,8 +119,11 @@ public class ImportResource {
     }
 
     @PostMapping("/import/application/capability/upload-file")
-    public List<ApplicationCapabilityDTO> uploadapplicationCapabilityFile(@RequestPart MultipartFile file) throws Exception {
-        return applicationCapabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+    public List<ApplicationCapabilityDTO> uploadapplicationCapabilityFile(
+        @RequestPart MultipartFile file,
+        @RequestParam String[] sheetname
+    ) throws Exception {
+        return applicationCapabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename(), sheetname);
     }
 
     @GetMapping(value = "export/landscape/{id}")

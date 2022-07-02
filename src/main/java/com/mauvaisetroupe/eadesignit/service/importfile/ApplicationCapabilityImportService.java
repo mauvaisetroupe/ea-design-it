@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityDTO;
@@ -12,6 +13,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,38 +42,44 @@ public class ApplicationCapabilityImportService {
     private static final String L2_NAME = "CapabilityL2";
     private static final String L3_NAME = "CapabilityL3";
 
-    public List<ApplicationCapabilityDTO> importExcel(InputStream excel, String originalFilename)
+    public List<ApplicationCapabilityDTO> importExcel(InputStream excel, String originalFilename, String[] sheetnames)
         throws EncryptedDocumentException, IOException {
         ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
-        List<String> sheetnames = capabilityFlowExcelReader.getSheetNames();
         List<ApplicationCapabilityDTO> result = new ArrayList<ApplicationCapabilityDTO>();
         CapabilityUtil capabilityUtil = new CapabilityUtil();
         for (String sheetname : sheetnames) {
-            if (sheetname.startsWith("ADD")) {
-                List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(sheetname);
+            List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(sheetname);
 
-                for (Map<String, Object> map : capabilitiesDF) {
-                    ApplicationCapabilityDTO applicationCapabilityDTO = new ApplicationCapabilityDTO();
+            for (Map<String, Object> map : capabilitiesDF) {
+                ApplicationCapabilityDTO applicationCapabilityDTO = new ApplicationCapabilityDTO();
+                applicationCapabilityDTO.setSheetname(sheetname);
 
-                    CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, null, 0);
-                    CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, null, 1);
-                    CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, null, 2);
-                    CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, null, 3);
-                    applicationCapabilityDTO.setCapabilityImportDTO(
-                        capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import)
-                    );
+                CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, null, 0);
+                CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, null, 1);
+                CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, null, 2);
+                CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, null, 3);
+                applicationCapabilityDTO.setCapabilityImportDTO(
+                    capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import)
+                );
 
-                    Capability capability = findCapability(l0Import, l1Import, l2Import, l3Import);
-                    List<Application> applications = findApplication(map);
-                    if (applications.isEmpty()) {
-                        throw new IllegalStateException("No application found : " + map);
-                    }
-                    applicationCapabilityDTO.setApplication(applications);
+                applicationCapabilityDTO.setApplicationNames(mapArrayToString(map));
+
+                Optional<Capability> capability = findCapability(l0Import, l1Import, l2Import, l3Import);
+                List<Application> applications = findApplication(map);
+
+                if (applications.isEmpty()) {
+                    log.error("No application found : " + map);
+                    applicationCapabilityDTO.setImportStatus(ImportStatus.ERROR);
+                } else if (capability.isEmpty()) {
+                    log.error("No Capaility found : " + map);
+                    applicationCapabilityDTO.setImportStatus(ImportStatus.ERROR);
+                } else {
                     for (Application application : applications) {
-                        application.addCapabilities(capability);
+                        application.addCapabilities(capability.get());
                     }
-                    result.add(applicationCapabilityDTO);
+                    applicationCapabilityDTO.setImportStatus(ImportStatus.NEW);
                 }
+                result.add(applicationCapabilityDTO);
             }
         }
         return result;
@@ -94,6 +102,15 @@ public class ApplicationCapabilityImportService {
         return result;
     }
 
+    private List<String> mapArrayToString(Map<String, Object> map) {
+        String[] apps = { APP_NAME_1, APP_NAME_2, APP_NAME_3, APP_NAME_4, APP_NAME_5 };
+        List<String> result = new ArrayList<>();
+        for (String appName : apps) {
+            result.add(getApplicationName(map, appName));
+        }
+        return result;
+    }
+
     private String getApplicationName(Map<String, Object> map, String appName1) {
         Object obj = map.get(appName1);
         if (obj != null) {
@@ -102,30 +119,33 @@ public class ApplicationCapabilityImportService {
         return null;
     }
 
-    private Capability findCapability(CapabilityDTO l0Import, CapabilityDTO l1Import, CapabilityDTO l2Import, CapabilityDTO l3Import) {
+    private Optional<Capability> findCapability(
+        CapabilityDTO l0Import,
+        CapabilityDTO l1Import,
+        CapabilityDTO l2Import,
+        CapabilityDTO l3Import
+    ) {
         List<Capability> potentials = null;
-        if (l3Import != null) {
+        Capability capability = null;
+        if (l3Import != null && l2Import != null) {
             potentials =
                 capabilityRepository.findByNameIgnoreCaseAndParentNameIgnoreCaseAndLevel(l3Import.getName(), l2Import.getName(), 3);
-        } else if (l2Import != null) {
+        } else if (l2Import != null && l1Import != null) {
             potentials =
                 capabilityRepository.findByNameIgnoreCaseAndParentNameIgnoreCaseAndLevel(l2Import.getName(), l1Import.getName(), 2);
-        } else if (l1Import != null) {
+        } else if (l1Import != null && l0Import != null) {
             potentials =
                 capabilityRepository.findByNameIgnoreCaseAndParentNameIgnoreCaseAndLevel(l1Import.getName(), l0Import.getName(), 1);
         } else if (l0Import != null) {
             potentials = capabilityRepository.findByNameIgnoreCaseAndParentNameIgnoreCaseAndLevel(l0Import.getName(), null, 0);
         } else {
-            throw new IllegalStateException(
-                "At least one capability should not be null : " + l0Import + " " + l1Import + " " + l2Import + " " + l3Import
-            );
+            log.error("At least one capability should not be null : " + l0Import + " " + l1Import + " " + l2Import + " " + l3Import);
         }
-        if (potentials.size() != 1) {
-            throw new IllegalStateException(
-                "Capability could not be found : " + l0Import + " " + l1Import + " " + l2Import + " " + l3Import
-            );
+        if (potentials == null || potentials.size() != 1) {
+            log.error("Capability could not be found : " + l0Import + " " + l1Import + " " + l2Import + " " + l3Import);
+        } else {
+            capability = potentials.get(0);
         }
-        Capability capability = potentials.get(0);
-        return capability;
+        return Optional.ofNullable(capability);
     }
 }

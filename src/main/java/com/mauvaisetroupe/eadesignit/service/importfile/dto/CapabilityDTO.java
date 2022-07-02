@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.service.importfile.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +15,7 @@ public class CapabilityDTO implements Serializable {
     private String description;
     private String comment;
     private Integer level;
+    private ImportStatus importStatus;
 
     @JsonIgnoreProperties(value = { "parent" }, allowSetters = true)
     private Set<CapabilityDTO> subCapabilities = new HashSet<>();
@@ -80,6 +82,14 @@ public class CapabilityDTO implements Serializable {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public ImportStatus getImportStatus() {
+        return importStatus;
+    }
+
+    public void setImportStatus(ImportStatus importStatus) {
+        this.importStatus = importStatus;
     }
 
     @Override

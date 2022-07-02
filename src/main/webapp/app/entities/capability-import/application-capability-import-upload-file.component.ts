@@ -18,6 +18,8 @@ export default class CapabilityImport extends Vue {
   public fileSubmited = false;
   public rowsLoaded = false;
   public excelFileName = 'Browse File';
+  public sheetnames = [];
+  public checkedNames = [];
 
   public handleFileUpload(event): void {
     this.excelFile = event.target.files[0];
@@ -28,7 +30,7 @@ export default class CapabilityImport extends Vue {
     this.isFetching = true;
     this.fileSubmited = true;
     this.capabilityImportService()
-      .uploadMappingFile(this.excelFile)
+      .uploadMappingFile(this.excelFile, this.checkedNames)
       .then(
         res => {
           this.capabilitiesImports = res.data;
@@ -40,5 +42,33 @@ export default class CapabilityImport extends Vue {
           this.alertService().showHttpError(this, err.response);
         }
       );
+  }
+
+  public getSheetnames(): void {
+    this.sheetnames = [];
+    this.capabilityImportService()
+      .getSheetNames(this.excelFile)
+      .then(
+        res => {
+          this.sheetnames = res.data;
+          this.sheetnames.forEach(name => {
+            if (name.startsWith('ADD')) {
+              this.checkedNames.push(name);
+            }
+          });
+        },
+        err => {
+          this.isFetching = false;
+          this.alertService().showHttpError(this, err.response);
+        }
+      );
+  }
+
+  public selectAll() {
+    this.checkedNames = this.sheetnames;
+  }
+
+  public selectNone() {
+    this.checkedNames = [];
   }
 }
