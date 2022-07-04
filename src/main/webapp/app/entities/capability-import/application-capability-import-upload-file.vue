@@ -22,12 +22,12 @@
       </div>
 
       <div v-if="sheetnames.length > 0" class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 mb-3">
           <span class="h3">Choose sheets to import</span>
           [<a @click="selectAll">Select All</a>] [<a @click="selectNone">Select None</a>]
         </div>
 
-        <div v-for="sheet in sheetnames" class="col-md-2" :key="sheet">
+        <div v-for="sheet in sheetnames" class="col-md-3" :key="sheet">
           <input type="checkbox" v-model="checkedNames" :value="sheet" :id="sheet" />
           <label :for="sheet">{{ sheet }}</label>
         </div>
