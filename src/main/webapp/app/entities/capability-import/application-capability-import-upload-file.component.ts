@@ -45,11 +45,13 @@ export default class CapabilityImport extends Vue {
   }
 
   public getSheetnames(): void {
+    this.isFetching = true;
     this.sheetnames = [];
     this.capabilityImportService()
       .getSheetNames(this.excelFile)
       .then(
         res => {
+          this.isFetching = false;
           this.sheetnames = res.data;
           this.sheetnames.forEach(name => {
             if (name.startsWith('ADD')) {
