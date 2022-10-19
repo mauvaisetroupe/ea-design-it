@@ -89,7 +89,14 @@
       </div>
       <h3>
         <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Functional Flows
-        <font-awesome-icon icon="file-excel" style="color: green" @click="exportExcel()"></font-awesome-icon>
+        <button
+          class="btn"
+          v-on:click="exportExcel()"
+          style="font-size: 0.7em; padding: 3px; margin: 3px"
+          title="Export landscape as Excel file"
+        >
+          <font-awesome-icon icon="file-excel" style="color: green"></font-awesome-icon>
+        </button>
       </h3>
       <br />
       <table class="table">
