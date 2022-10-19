@@ -69,6 +69,7 @@ public class FlowImportService {
     protected static final String FLOW_STATUS_FLOW = "Status flow";
     protected static final String FLOW_COMMENT = "Comment";
     protected static final String FLOW_ADD_CORRESPONDENT_ID = "ADD correspondent ID";
+    protected static final String FLOW_STEP_NUMBER = "";
     protected static final String FLOW_STEP_DESCRIPTION = "Step description";
     protected static final String FLOW_EXTERNAL = "External";
 

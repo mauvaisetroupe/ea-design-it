@@ -12,9 +12,14 @@ import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.Comment;
 import org.apache.poi.ss.usermodel.ConditionalFormattingRule;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.FontFormatting;
 import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.PatternFormatting;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.SheetConditionalFormatting;
@@ -66,6 +71,9 @@ public class LandscapeExportService {
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_SOURCE_ELEMENT);
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_TARGET_ELEMENT);
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_DESCRIPTION);
+        Cell stepNumberHeader = headerRow.createCell(column++);
+        stepNumberHeader.setCellValue(FlowImportService.FLOW_STEP_NUMBER);
+        addComment(sheet, stepNumberHeader, "Not used during import process, only display helper");
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_STEP_DESCRIPTION);
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_INTEGRATION_PATTERN);
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_FREQUENCY);
@@ -85,6 +93,7 @@ public class LandscapeExportService {
                 row.createCell(column++).setCellValue(interface1.getSource().getName());
                 row.createCell(column++).setCellValue(interface1.getTarget().getName());
                 row.createCell(column++).setCellValue(flow.getDescription());
+                row.createCell(column++).setCellValue(step.getStepOrder());
                 row.createCell(column++).setCellValue(step.getDescription());
                 row.createCell(column++).setCellValue(interface1.getProtocol() != null ? interface1.getProtocol().getName() : "");
                 if (interface1.getDataFlows() != null && interface1.getDataFlows().size() == 1) {
@@ -109,12 +118,30 @@ public class LandscapeExportService {
         // Add conditional formatting if Application doesn't exist
         SheetConditionalFormatting sheetCF = sheet.getSheetConditionalFormatting();
         ConditionalFormattingRule rule = sheetCF.createConditionalFormattingRule("COUNTIF(Application!$B$2:$B$1000,c2)<=0");
-        PatternFormatting fill = rule.createPatternFormatting();
-        fill.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.index);
-        fill.setFillPattern(PatternFormatting.SOLID_FOREGROUND);
+        FontFormatting fontFmt = rule.createFontFormatting();
+        fontFmt.setFontStyle(false, true);
+        fontFmt.setFontColorIndex(IndexedColors.RED.index);
         ConditionalFormattingRule[] cfRules = new ConditionalFormattingRule[] { rule };
         CellRangeAddress[] regions = new CellRangeAddress[] { CellRangeAddress.valueOf("C2:D200") };
         sheetCF.addConditionalFormatting(regions, cfRules);
+    }
+
+    public void addComment(Sheet sheet, Cell cell, String commentText) {
+        CreationHelper factory = sheet.getWorkbook().getCreationHelper();
+        //get an existing cell or create it otherwise:
+
+        ClientAnchor anchor = factory.createClientAnchor();
+        //i found it useful to show the comment box at the bottom right corner
+        // anchor.setCol1(cell.getColumnIndex() + 1); //the box of the comment starts at this given column...
+        // anchor.setCol2(cell.getColumnIndex() + 3); //...and ends at that given column
+        // anchor.setRow1(cell.getRowIndex() + 1); //one row below the cell...
+        // anchor.setRow2(cell.getRowIndex() + 5); //...and 4 rows high
+
+        Drawing drawing = sheet.createDrawingPatriarch();
+        Comment comment = drawing.createCellComment(anchor);
+        //set the comment text and author
+        comment.setString(factory.createRichTextString(commentText));
+        cell.setCellComment(comment);
     }
 
     private void writeApplication(Sheet sheet) {
