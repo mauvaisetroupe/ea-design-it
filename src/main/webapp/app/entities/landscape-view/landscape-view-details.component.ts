@@ -366,7 +366,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
         );
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', this.landscapeView.diagramName + '.xls');
+        link.setAttribute('download', this.landscapeView.diagramName + '.xlsx');
         document.body.appendChild(link);
         link.click();
       });
