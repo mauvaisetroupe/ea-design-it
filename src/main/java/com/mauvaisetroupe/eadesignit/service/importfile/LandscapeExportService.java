@@ -110,8 +110,8 @@ public class LandscapeExportService {
                     row.createCell(column++).setCellValue("multiple");
                     row.createCell(column++).setCellValue("multiple");
                 }
-                row.createCell(column++).setCellValue(interface1.getDocumentationURL());
-                row.createCell(column++).setCellValue(interface1.getDocumentationURL2());
+                row.createCell(column++).setCellValue(flow.getDocumentationURL());
+                row.createCell(column++).setCellValue(flow.getDocumentationURL2());
                 row.createCell(column++).setCellValue(flow.getComment());
             }
         }
