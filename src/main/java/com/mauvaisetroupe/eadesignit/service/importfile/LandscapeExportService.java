@@ -108,9 +108,9 @@ public class LandscapeExportService {
         }
         // Add conditional formatting if Application doesn't exist
         SheetConditionalFormatting sheetCF = sheet.getSheetConditionalFormatting();
-        ConditionalFormattingRule rule = sheetCF.createConditionalFormattingRule("COUNTIF(Applications!$B$2:$B$1000,c2)<=0");
+        ConditionalFormattingRule rule = sheetCF.createConditionalFormattingRule("COUNTIF(Application!$B$2:$B$1000,c2)<=0");
         PatternFormatting fill = rule.createPatternFormatting();
-        fill.setFillBackgroundColor(IndexedColors.YELLOW.index);
+        fill.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.index);
         fill.setFillPattern(PatternFormatting.SOLID_FOREGROUND);
         ConditionalFormattingRule[] cfRules = new ConditionalFormattingRule[] { rule };
         CellRangeAddress[] regions = new CellRangeAddress[] { CellRangeAddress.valueOf("C2:D200") };
