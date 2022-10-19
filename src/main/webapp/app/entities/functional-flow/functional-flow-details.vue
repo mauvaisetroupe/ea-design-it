@@ -36,7 +36,9 @@
           </dt>
           <dd>
             <span
-              ><a v-bind:href="functionalFlow.documentationURL">{{ functionalFlow.documentationURL }}</a></span
+              ><a v-bind:href="functionalFlow.documentationURL">{{
+                functionalFlow.documentationURL ? functionalFlow.documentationURL.substring(0, 200) : ''
+              }}</a></span
             >
           </dd>
           <dt>
@@ -44,7 +46,9 @@
           </dt>
           <dd>
             <span
-              ><a v-bind:href="functionalFlow.documentationURL2">{{ functionalFlow.documentationURL2 }}</a></span
+              ><a v-bind:href="functionalFlow.documentationURL2">{{
+                functionalFlow.documentationURL2 ? functionalFlow.documentationURL2.substring(0, 200) : ''
+              }}</a></span
             >
           </dd>
           <dt>
