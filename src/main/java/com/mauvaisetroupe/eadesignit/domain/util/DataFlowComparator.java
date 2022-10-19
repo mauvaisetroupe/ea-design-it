@@ -99,7 +99,7 @@ public class DataFlowComparator {
         return (
             !StringUtils.hasText(flowImport.getFrequency()) &&
             !StringUtils.hasText(flowImport.getFormat()) &&
-            !StringUtils.hasText(flowImport.getIntegrationPattern())
+            !StringUtils.hasText(flowImport.getSwagger())
         );
     }
 }
