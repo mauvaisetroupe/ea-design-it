@@ -148,7 +148,15 @@
           </div>
           <div class="form-group">
             <label class="form-control-label" for="flow-interface-source">Source</label>
-            <select class="form-control" id="flow-interface-source" data-cy="source" name="source" v-model="flowInterface.source" required>
+            <select
+              class="form-control"
+              id="flow-interface-source"
+              data-cy="source"
+              name="source"
+              v-model="flowInterface.source"
+              required
+              @change="flowInterface.sourceComponent = null"
+            >
               <option v-if="!flowInterface.source" v-bind:value="null" selected></option>
               <option
                 v-bind:value="
@@ -166,7 +174,15 @@
           </div>
           <div class="form-group">
             <label class="form-control-label" for="flow-interface-target">Target</label>
-            <select class="form-control" id="flow-interface-target" data-cy="target" name="target" v-model="flowInterface.target" required>
+            <select
+              class="form-control"
+              id="flow-interface-target"
+              data-cy="target"
+              name="target"
+              v-model="flowInterface.target"
+              required
+              @change="flowInterface.targetComponent = null"
+            >
               <option v-if="!flowInterface.target" v-bind:value="null" selected></option>
               <option
                 v-bind:value="
@@ -190,6 +206,7 @@
               data-cy="sourceComponent"
               name="sourceComponent"
               v-model="flowInterface.sourceComponent"
+              @change="changeSource(flowInterface.sourceComponent)"
             >
               <option v-bind:value="null"></option>
               <option
@@ -213,6 +230,7 @@
               data-cy="targetComponent"
               name="targetComponent"
               v-model="flowInterface.targetComponent"
+              @change="changeTarget(flowInterface.targetComponent)"
             >
               <option v-bind:value="null"></option>
               <option

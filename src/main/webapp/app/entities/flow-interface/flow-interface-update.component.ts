@@ -27,6 +27,7 @@ import { FunctionalFlowStep, IFunctionalFlowStep } from '@/shared/model/function
 
 import { IFlowInterface, FlowInterface } from '@/shared/model/flow-interface.model';
 import FlowInterfaceService from './flow-interface.service';
+import ApplicationComponent from '../application-component/application-component.component';
 
 const validations: any = {
   flowInterface: {
@@ -261,5 +262,13 @@ export default class FlowInterfaceUpdate extends Vue {
       .then(res => {
         this.functionalFlows = res.data;
       });
+  }
+
+  changeSource(component: IApplicationComponent) {
+    this.flowInterface.source = component.application;
+  }
+
+  changeTarget(component: IApplicationComponent) {
+    this.flowInterface.target = component.application;
   }
 }

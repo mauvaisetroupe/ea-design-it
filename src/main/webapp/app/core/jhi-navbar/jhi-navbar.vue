@@ -52,6 +52,10 @@
             <font-awesome-icon icon="window-maximize" />
             <span>Application</span>
           </b-dropdown-item>
+          <b-dropdown-item to="/application-component">
+            <font-awesome-icon icon="window-maximize" />
+            <span>Application Component</span>
+          </b-dropdown-item>
           <b-dropdown-item to="/data-flow">
             <font-awesome-icon icon="folder" />
             <span>Data Flow : Event topics, Files, Swagger</span>
