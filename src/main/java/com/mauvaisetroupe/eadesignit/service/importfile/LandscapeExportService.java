@@ -12,9 +12,14 @@ import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import org.apache.poi.ss.usermodel.ConditionalFormattingRule;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.PatternFormatting;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.SheetConditionalFormatting;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,16 +35,25 @@ public class LandscapeExportService {
 
     public ByteArrayOutputStream getLandscapeExcel(Long landscapeId) throws IOException {
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Application");
-        Sheet sheetflow = workbook.createSheet("Message_Flow");
+        Sheet appliSheet = workbook.createSheet("Application");
+        Sheet flowSheet = workbook.createSheet("Message_Flow");
 
-        writeFlows(sheetflow, landscapeId);
-        writeApplication(sheet);
+        writeFlows(flowSheet, landscapeId);
+        autoSizeAllColumns(flowSheet);
+        writeApplication(appliSheet);
+        autoSizeAllColumns(appliSheet);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         workbook.write(stream);
         workbook.close();
         return stream;
+    }
+
+    private void autoSizeAllColumns(Sheet sheet) {
+        int nbColumns = sheet.getRow(0).getPhysicalNumberOfCells();
+        for (int i = 0; i < nbColumns; i++) {
+            sheet.autoSizeColumn(i);
+        }
     }
 
     private void writeFlows(Sheet sheet, Long landscapeId) {
@@ -92,6 +106,15 @@ public class LandscapeExportService {
                 row.createCell(column++).setCellValue(flow.getComment());
             }
         }
+        // Add conditional formatting if Application doesn't exist
+        SheetConditionalFormatting sheetCF = sheet.getSheetConditionalFormatting();
+        ConditionalFormattingRule rule = sheetCF.createConditionalFormattingRule("COUNTIF(Applications!$B$2:$B$1000,c2)<=0");
+        PatternFormatting fill = rule.createPatternFormatting();
+        fill.setFillBackgroundColor(IndexedColors.YELLOW.index);
+        fill.setFillPattern(PatternFormatting.SOLID_FOREGROUND);
+        ConditionalFormattingRule[] cfRules = new ConditionalFormattingRule[] { rule };
+        CellRangeAddress[] regions = new CellRangeAddress[] { CellRangeAddress.valueOf("C2:D200") };
+        sheetCF.addConditionalFormatting(regions, cfRules);
     }
 
     private void writeApplication(Sheet sheet) {
