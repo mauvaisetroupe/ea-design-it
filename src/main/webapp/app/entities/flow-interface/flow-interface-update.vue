@@ -146,105 +146,116 @@
               />
             </b-input-group>
           </div>
-          <div class="form-group">
-            <label class="form-control-label" for="flow-interface-source">Source</label>
-            <select
-              class="form-control"
-              id="flow-interface-source"
-              data-cy="source"
-              name="source"
-              v-model="flowInterface.source"
-              required
-              @change="flowInterface.sourceComponent = null"
-            >
-              <option v-if="!flowInterface.source" v-bind:value="null" selected></option>
-              <option
-                v-bind:value="
-                  flowInterface.source && applicationOption.id === flowInterface.source.id ? flowInterface.source : applicationOption
-                "
-                v-for="applicationOption in applications"
-                :key="applicationOption.id"
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label class="form-control-label" for="flow-interface-source">Source</label>
+              <select
+                :class="{
+                  'form-control valid': !$v.flowInterface.source.$invalid,
+                  'form-control invalid': $v.flowInterface.source.$invalid,
+                }"
+                id="flow-interface-source"
+                data-cy="source"
+                name="source"
+                v-model="flowInterface.source"
+                required
+                @change="flowInterface.sourceComponent = null"
               >
-                {{ applicationOption.name }}
-              </option>
-            </select>
-          </div>
-          <div v-if="$v.flowInterface.source.$anyDirty && $v.flowInterface.source.$invalid">
-            <small class="form-text text-danger" v-if="!$v.flowInterface.source.required"> This field is required. </small>
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="flow-interface-target">Target</label>
-            <select
-              class="form-control"
-              id="flow-interface-target"
-              data-cy="target"
-              name="target"
-              v-model="flowInterface.target"
-              required
-              @change="flowInterface.targetComponent = null"
-            >
-              <option v-if="!flowInterface.target" v-bind:value="null" selected></option>
-              <option
-                v-bind:value="
-                  flowInterface.target && applicationOption.id === flowInterface.target.id ? flowInterface.target : applicationOption
-                "
-                v-for="applicationOption in applications"
-                :key="applicationOption.id"
+                <option v-if="!flowInterface.source" v-bind:value="null" selected></option>
+                <option
+                  v-bind:value="
+                    flowInterface.source && applicationOption.id === flowInterface.source.id ? flowInterface.source : applicationOption
+                  "
+                  v-for="applicationOption in applications"
+                  :key="applicationOption.id"
+                >
+                  {{ applicationOption.name }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label class="form-control-label" for="flow-interface-sourceComponent">Source Component</label>
+              <select
+                class="form-control"
+                id="flow-interface-sourceComponent"
+                data-cy="sourceComponent"
+                name="sourceComponent"
+                v-model="flowInterface.sourceComponent"
+                @change="changeSource(flowInterface.sourceComponent)"
               >
-                {{ applicationOption.name }}
-              </option>
-            </select>
+                <option v-bind:value="null"></option>
+                <option
+                  v-bind:value="
+                    flowInterface.sourceComponent && applicationComponentOption.id === flowInterface.sourceComponent.id
+                      ? flowInterface.sourceComponent
+                      : applicationComponentOption
+                  "
+                  v-for="applicationComponentOption in applicationComponents"
+                  :key="applicationComponentOption.id"
+                >
+                  {{ applicationComponentOption.name }}
+                </option>
+              </select>
+            </div>
+            <div v-if="$v.flowInterface.source.$anyDirty && $v.flowInterface.source.$invalid">
+              <small class="form-text text-danger" v-if="!$v.flowInterface.source.required"> This field is required. </small>
+            </div>
           </div>
-          <div v-if="$v.flowInterface.target.$anyDirty && $v.flowInterface.target.$invalid">
-            <small class="form-text text-danger" v-if="!$v.flowInterface.target.required"> This field is required. </small>
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="flow-interface-sourceComponent">Source Component</label>
-            <select
-              class="form-control"
-              id="flow-interface-sourceComponent"
-              data-cy="sourceComponent"
-              name="sourceComponent"
-              v-model="flowInterface.sourceComponent"
-              @change="changeSource(flowInterface.sourceComponent)"
-            >
-              <option v-bind:value="null"></option>
-              <option
-                v-bind:value="
-                  flowInterface.sourceComponent && applicationComponentOption.id === flowInterface.sourceComponent.id
-                    ? flowInterface.sourceComponent
-                    : applicationComponentOption
-                "
-                v-for="applicationComponentOption in applicationComponents"
-                :key="applicationComponentOption.id"
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label class="form-control-label" for="flow-interface-target">Target</label>
+              <select
+                :class="{
+                  'form-control valid': !$v.flowInterface.target.$invalid,
+                  'form-control invalid': $v.flowInterface.target.$invalid,
+                }"
+                id="flow-interface-target"
+                data-cy="target"
+                name="target"
+                v-model="flowInterface.target"
+                required
+                @change="flowInterface.targetComponent = null"
               >
-                {{ applicationComponentOption.name }}
-              </option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="flow-interface-targetComponent">Target Component</label>
-            <select
-              class="form-control"
-              id="flow-interface-targetComponent"
-              data-cy="targetComponent"
-              name="targetComponent"
-              v-model="flowInterface.targetComponent"
-              @change="changeTarget(flowInterface.targetComponent)"
-            >
-              <option v-bind:value="null"></option>
-              <option
-                v-bind:value="
-                  flowInterface.targetComponent && applicationComponentOption.id === flowInterface.targetComponent.id
-                    ? flowInterface.targetComponent
-                    : applicationComponentOption
-                "
-                v-for="applicationComponentOption in applicationComponents"
-                :key="applicationComponentOption.id"
+                <option v-if="!flowInterface.target" v-bind:value="null" selected></option>
+                <option
+                  v-bind:value="
+                    flowInterface.target && applicationOption.id === flowInterface.target.id ? flowInterface.target : applicationOption
+                  "
+                  v-for="applicationOption in applications"
+                  :key="applicationOption.id"
+                >
+                  {{ applicationOption.name }}
+                </option>
+              </select>
+            </div>
+            <div v-if="$v.flowInterface.target.$anyDirty && $v.flowInterface.target.$invalid">
+              <small class="form-text text-danger" v-if="!$v.flowInterface.target.required"> This field is required. </small>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label class="form-control-label" for="flow-interface-targetComponent">Target Component</label>
+              <select
+                class="form-control"
+                id="flow-interface-targetComponent"
+                data-cy="targetComponent"
+                name="targetComponent"
+                v-model="flowInterface.targetComponent"
+                @change="changeTarget(flowInterface.targetComponent)"
               >
-                {{ applicationComponentOption.name }}
-              </option>
-            </select>
+                <option v-bind:value="null"></option>
+                <option
+                  v-bind:value="
+                    flowInterface.targetComponent && applicationComponentOption.id === flowInterface.targetComponent.id
+                      ? flowInterface.targetComponent
+                      : applicationComponentOption
+                  "
+                  v-for="applicationComponentOption in applicationComponents"
+                  :key="applicationComponentOption.id"
+                >
+                  {{ applicationComponentOption.name }}
+                </option>
+              </select>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="flow-interface-protocol">Protocol</label>
