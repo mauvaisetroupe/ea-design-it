@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.service.drawio;
 
+import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
@@ -30,17 +31,13 @@ public class GraphBuilder {
         for (FunctionalFlow flow : landscape.getFlows()) {
             for (FunctionalFlowStep step : flow.getSteps()) {
                 FlowInterface interface1 = step.getFlowInterface();
-                graph.addApplication(new Application(interface1.getSource().getId(), interface1.getSource().getName()));
-                graph.addApplication(new Application(interface1.getTarget().getId(), interface1.getTarget().getName()));
+                Application source = getApplication(interface1.getSource(), interface1.getSourceComponent());
+                graph.addApplication(source);
+                Application target = getApplication(interface1.getTarget(), interface1.getTargetComponent());
+                graph.addApplication(target);
                 String id = flow.getId() + "-" + interface1.getId();
                 String url = "/functional-flow/" + flow.getId() + "/view";
-                Edge edge = new Edge(
-                    id,
-                    interface1.getSource().getId(),
-                    interface1.getTarget().getId(),
-                    new Label(flow.getAlias(), url),
-                    false
-                );
+                Edge edge = new Edge(id, source.getId(), target.getId(), new Label(flow.getAlias(), url), false);
                 graph.addEdge(edge);
             }
         }
@@ -52,15 +49,17 @@ public class GraphBuilder {
         GraphDTO graph = new GraphDTO();
         for (FunctionalFlowStep step : flow.getSteps()) {
             FlowInterface interface1 = step.getFlowInterface();
-            graph.addApplication(new Application(interface1.getSource().getId(), interface1.getSource().getName()));
-            graph.addApplication(new Application(interface1.getTarget().getId(), interface1.getTarget().getName()));
+            Application source = getApplication(interface1.getSource(), interface1.getSourceComponent());
+            graph.addApplication(source);
+            Application target = getApplication(interface1.getTarget(), interface1.getTargetComponent());
+            graph.addApplication(target);
             String id = flow.getId() + "-" + interface1.getId();
             String _label = step.getStepOrder() + ". " + WordUtils.wrap(step.getDescription(), 50, "\\n", false);
             Label label = new Label(_label, null);
             if (interface1.getProtocol() != null) {
                 label.addMetadata(KEY_PROTOCOL, interface1.getProtocol().getName());
             }
-            Edge edge = new Edge(id, interface1.getSource().getId(), interface1.getTarget().getId(), label, false);
+            Edge edge = new Edge(id, source.getId(), target.getId(), label, false);
             graph.addEdge(edge);
         }
         graph.consolidateEdges();
@@ -70,16 +69,30 @@ public class GraphBuilder {
     public GraphDTO createGraph(SortedSet<FlowInterfaceLight> interfaces) {
         GraphDTO graph = new GraphDTO();
         for (FlowInterfaceLight interface1 : interfaces) {
-            graph.addApplication(new Application(interface1.getSource().getId(), interface1.getSource().getName()));
-            graph.addApplication(new Application(interface1.getTarget().getId(), interface1.getTarget().getName()));
+            Application source = getApplication(interface1.getSource(), interface1.getSourceComponent());
+            graph.addApplication(source);
+            Application target = getApplication(interface1.getTarget(), interface1.getTargetComponent());
+            graph.addApplication(target);
             Long id = interface1.getId();
             String label = interface1.getAlias();
             String url = "/flow-interface/" + interface1.getId() + "/view";
-            Edge edge = new Edge("" + id, interface1.getSource().getId(), interface1.getTarget().getId(), new Label(label, url), false);
+            Edge edge = new Edge("" + id, source.getId(), target.getId(), new Label(label, url), false);
             graph.addEdge(edge);
         }
         graph.consolidateEdges();
         return graph;
+    }
+
+    private Application getApplication(com.mauvaisetroupe.eadesignit.domain.Application application, ApplicationComponent component) {
+        if (component != null && component.getDisplayInLandscape() != null && component.getDisplayInLandscape()) {
+            return new Application(
+                component.getId(),
+                application.getName() + " / " + component.getName(),
+                "/application-component/" + component.getId() + "/view"
+            );
+        } else {
+            return new Application(application.getId(), application.getName(), "/application/" + application.getId() + "/view");
+        }
     }
 
     public GraphDTO createGraph(Document doc) throws XPathExpressionException {
@@ -98,7 +111,7 @@ public class GraphBuilder {
             String elementIdValue = ((Element) nodeList.item(i)).getAttribute("elementId");
             Long id = Long.parseLong(elementIdValue.replace(MXFileSerializer.APP_ID_PREFIX, ""));
             String applicationName = ((Element) nodeList.item(i)).getAttribute("value");
-            Application application = new Application(id, applicationName);
+            Application application = new Application(id, applicationName, null);
             graph.addApplication(application);
             aMap.put(application.getId(), application);
         }

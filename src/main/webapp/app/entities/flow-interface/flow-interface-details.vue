@@ -64,16 +64,6 @@
             </div>
           </dd>
           <dt>
-            <span>Target</span>
-          </dt>
-          <dd>
-            <div v-if="flowInterface.target">
-              <router-link :to="{ name: 'ApplicationView', params: { applicationId: flowInterface.target.id } }">{{
-                flowInterface.target.name
-              }}</router-link>
-            </div>
-          </dd>
-          <dt>
             <span>Source Component</span>
           </dt>
           <dd>
@@ -82,6 +72,16 @@
                 :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: flowInterface.sourceComponent.id } }"
                 >{{ flowInterface.sourceComponent.name }}</router-link
               >
+            </div>
+          </dd>
+          <dt>
+            <span>Target</span>
+          </dt>
+          <dd>
+            <div v-if="flowInterface.target">
+              <router-link :to="{ name: 'ApplicationView', params: { applicationId: flowInterface.target.id } }">{{
+                flowInterface.target.name
+              }}</router-link>
             </div>
           </dd>
           <dt>

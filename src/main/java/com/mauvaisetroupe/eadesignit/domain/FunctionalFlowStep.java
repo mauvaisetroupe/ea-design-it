@@ -34,7 +34,7 @@ public class FunctionalFlowStep implements Serializable, Comparable<FunctionalFl
     @ManyToOne(optional = false)
     @JoinColumn(name = "interfaces_id")
     @NotNull
-    @JsonIgnoreProperties(value = { "sourceComponent", "targetComponent", "owner", "steps" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "owner", "steps" }, allowSetters = true)
     private FlowInterface flowInterface;
 
     @ManyToOne(optional = false)

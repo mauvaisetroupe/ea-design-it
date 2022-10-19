@@ -195,6 +195,13 @@
                   >
                     {{ step.flowInterface.source.name }}
                   </router-link>
+                  <span v-if="step.flowInterface.id && step.flowInterface.sourceComponent">
+                    /
+                    <router-link
+                      :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: step.flowInterface.sourceComponent.id } }"
+                      >{{ step.flowInterface.sourceComponent.name }}</router-link
+                    >
+                  </span>
                 </td>
                 <td>
                   <router-link
@@ -203,6 +210,13 @@
                   >
                     {{ step.flowInterface.target.name }}
                   </router-link>
+                  <span v-if="step.flowInterface.id && step.flowInterface.targetComponent">
+                    /
+                    <router-link
+                      :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: step.flowInterface.targetComponent.id } }"
+                      >{{ step.flowInterface.targetComponent.name }}</router-link
+                    >
+                  </span>
                 </td>
 
                 <td>

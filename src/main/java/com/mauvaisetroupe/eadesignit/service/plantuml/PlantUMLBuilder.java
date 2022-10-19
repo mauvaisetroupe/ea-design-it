@@ -122,7 +122,7 @@ public class PlantUMLBuilder {
         } else {
             plantUMLSource.append("component [" + application.getName() + "] as C" + application.getId() + "\n");
         }
-        plantUMLSource.append("url of C" + application.getId() + " is [[/application/" + application.getId() + "/view]]\n");
+        plantUMLSource.append("url of C" + application.getId() + " is [[" + application.getUrl() + "]]\n");
     }
 
     public void getPlantumlFooter(StringBuilder plantUMLSource) {
