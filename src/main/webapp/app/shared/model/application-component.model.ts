@@ -15,6 +15,7 @@ export interface IApplicationComponent {
   endDate?: Date | null;
   applicationType?: ApplicationType | null;
   softwareType?: SoftwareType | null;
+  displayInLandscape?: boolean | null;
   application?: IApplication;
   categories?: IApplicationCategory[] | null;
   technologies?: ITechnology[] | null;
@@ -32,8 +33,11 @@ export class ApplicationComponent implements IApplicationComponent {
     public endDate?: Date | null,
     public applicationType?: ApplicationType | null,
     public softwareType?: SoftwareType | null,
+    public displayInLandscape?: boolean | null,
     public application?: IApplication,
     public categories?: IApplicationCategory[] | null,
     public technologies?: ITechnology[] | null
-  ) {}
+  ) {
+    this.displayInLandscape = this.displayInLandscape ?? false;
+  }
 }

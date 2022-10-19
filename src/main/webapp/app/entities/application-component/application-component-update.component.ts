@@ -37,6 +37,7 @@ const validations: any = {
     endDate: {},
     applicationType: {},
     softwareType: {},
+    displayInLandscape: {},
     application: {
       required,
     },

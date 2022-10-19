@@ -16,7 +16,7 @@ describe('ApplicationComponent e2e test', () => {
   const applicationComponentPageUrlPattern = new RegExp('/application-component(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const applicationComponentSample = { name: 'Fresh' };
+  const applicationComponentSample = { name: 'Internal' };
 
   let applicationComponent: any;
   let application: any;
@@ -219,6 +219,9 @@ describe('ApplicationComponent e2e test', () => {
       cy.get(`[data-cy="applicationType"]`).select('PARTNER');
 
       cy.get(`[data-cy="softwareType"]`).select('CLOUD_CUSTOM');
+
+      cy.get(`[data-cy="displayInLandscape"]`).should('not.be.checked');
+      cy.get(`[data-cy="displayInLandscape"]`).click().should('be.checked');
 
       cy.get(`[data-cy="application"]`).select(1);
 

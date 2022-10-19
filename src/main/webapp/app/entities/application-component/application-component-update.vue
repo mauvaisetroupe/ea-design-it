@@ -181,6 +181,21 @@
             </select>
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-component-displayInLandscape">Display In Landscape</label>
+            <input
+              type="checkbox"
+              class="form-check"
+              name="displayInLandscape"
+              id="application-component-displayInLandscape"
+              data-cy="displayInLandscape"
+              :class="{
+                valid: !$v.applicationComponent.displayInLandscape.$invalid,
+                invalid: $v.applicationComponent.displayInLandscape.$invalid,
+              }"
+              v-model="$v.applicationComponent.displayInLandscape.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="application-component-application">Application</label>
             <select
               class="form-control"

@@ -69,6 +69,9 @@ class ApplicationComponentResourceIT {
     private static final SoftwareType DEFAULT_SOFTWARE_TYPE = SoftwareType.ON_PREMISE_COTS;
     private static final SoftwareType UPDATED_SOFTWARE_TYPE = SoftwareType.ON_PREMISE_CUSTOM;
 
+    private static final Boolean DEFAULT_DISPLAY_IN_LANDSCAPE = false;
+    private static final Boolean UPDATED_DISPLAY_IN_LANDSCAPE = true;
+
     private static final String ENTITY_API_URL = "/api/application-components";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -105,7 +108,8 @@ class ApplicationComponentResourceIT {
             .startDate(DEFAULT_START_DATE)
             .endDate(DEFAULT_END_DATE)
             .applicationType(DEFAULT_APPLICATION_TYPE)
-            .softwareType(DEFAULT_SOFTWARE_TYPE);
+            .softwareType(DEFAULT_SOFTWARE_TYPE)
+            .displayInLandscape(DEFAULT_DISPLAY_IN_LANDSCAPE);
         // Add required entity
         Application application;
         if (TestUtil.findAll(em, Application.class).isEmpty()) {
@@ -135,7 +139,8 @@ class ApplicationComponentResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .applicationType(UPDATED_APPLICATION_TYPE)
-            .softwareType(UPDATED_SOFTWARE_TYPE);
+            .softwareType(UPDATED_SOFTWARE_TYPE)
+            .displayInLandscape(UPDATED_DISPLAY_IN_LANDSCAPE);
         // Add required entity
         Application application;
         if (TestUtil.findAll(em, Application.class).isEmpty()) {
@@ -180,6 +185,7 @@ class ApplicationComponentResourceIT {
         assertThat(testApplicationComponent.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testApplicationComponent.getApplicationType()).isEqualTo(DEFAULT_APPLICATION_TYPE);
         assertThat(testApplicationComponent.getSoftwareType()).isEqualTo(DEFAULT_SOFTWARE_TYPE);
+        assertThat(testApplicationComponent.getDisplayInLandscape()).isEqualTo(DEFAULT_DISPLAY_IN_LANDSCAPE);
     }
 
     @Test
@@ -245,7 +251,8 @@ class ApplicationComponentResourceIT {
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].applicationType").value(hasItem(DEFAULT_APPLICATION_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].softwareType").value(hasItem(DEFAULT_SOFTWARE_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].softwareType").value(hasItem(DEFAULT_SOFTWARE_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].displayInLandscape").value(hasItem(DEFAULT_DISPLAY_IN_LANDSCAPE.booleanValue())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -286,7 +293,8 @@ class ApplicationComponentResourceIT {
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
             .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
             .andExpect(jsonPath("$.applicationType").value(DEFAULT_APPLICATION_TYPE.toString()))
-            .andExpect(jsonPath("$.softwareType").value(DEFAULT_SOFTWARE_TYPE.toString()));
+            .andExpect(jsonPath("$.softwareType").value(DEFAULT_SOFTWARE_TYPE.toString()))
+            .andExpect(jsonPath("$.displayInLandscape").value(DEFAULT_DISPLAY_IN_LANDSCAPE.booleanValue()));
     }
 
     @Test
@@ -317,7 +325,8 @@ class ApplicationComponentResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .applicationType(UPDATED_APPLICATION_TYPE)
-            .softwareType(UPDATED_SOFTWARE_TYPE);
+            .softwareType(UPDATED_SOFTWARE_TYPE)
+            .displayInLandscape(UPDATED_DISPLAY_IN_LANDSCAPE);
 
         restApplicationComponentMockMvc
             .perform(
@@ -340,6 +349,7 @@ class ApplicationComponentResourceIT {
         assertThat(testApplicationComponent.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testApplicationComponent.getApplicationType()).isEqualTo(UPDATED_APPLICATION_TYPE);
         assertThat(testApplicationComponent.getSoftwareType()).isEqualTo(UPDATED_SOFTWARE_TYPE);
+        assertThat(testApplicationComponent.getDisplayInLandscape()).isEqualTo(UPDATED_DISPLAY_IN_LANDSCAPE);
     }
 
     @Test
@@ -439,6 +449,7 @@ class ApplicationComponentResourceIT {
         assertThat(testApplicationComponent.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testApplicationComponent.getApplicationType()).isEqualTo(DEFAULT_APPLICATION_TYPE);
         assertThat(testApplicationComponent.getSoftwareType()).isEqualTo(UPDATED_SOFTWARE_TYPE);
+        assertThat(testApplicationComponent.getDisplayInLandscape()).isEqualTo(DEFAULT_DISPLAY_IN_LANDSCAPE);
     }
 
     @Test
@@ -462,7 +473,8 @@ class ApplicationComponentResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .applicationType(UPDATED_APPLICATION_TYPE)
-            .softwareType(UPDATED_SOFTWARE_TYPE);
+            .softwareType(UPDATED_SOFTWARE_TYPE)
+            .displayInLandscape(UPDATED_DISPLAY_IN_LANDSCAPE);
 
         restApplicationComponentMockMvc
             .perform(
@@ -485,6 +497,7 @@ class ApplicationComponentResourceIT {
         assertThat(testApplicationComponent.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testApplicationComponent.getApplicationType()).isEqualTo(UPDATED_APPLICATION_TYPE);
         assertThat(testApplicationComponent.getSoftwareType()).isEqualTo(UPDATED_SOFTWARE_TYPE);
+        assertThat(testApplicationComponent.getDisplayInLandscape()).isEqualTo(UPDATED_DISPLAY_IN_LANDSCAPE);
     }
 
     @Test

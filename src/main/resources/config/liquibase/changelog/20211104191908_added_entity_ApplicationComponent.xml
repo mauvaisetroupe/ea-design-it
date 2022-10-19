@@ -41,6 +41,9 @@
             <column name="software_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="display_in_landscape" type="boolean">
+                <constraints nullable="true" />
+            </column>
             <column name="application_id" type="bigint">
                 <constraints nullable="false" />
             </column>
