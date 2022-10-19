@@ -153,6 +153,9 @@ public class ApplicationComponentResource {
                 if (applicationComponent.getSoftwareType() != null) {
                     existingApplicationComponent.setSoftwareType(applicationComponent.getSoftwareType());
                 }
+                if (applicationComponent.getDisplayInLandscape() != null) {
+                    existingApplicationComponent.setDisplayInLandscape(applicationComponent.getDisplayInLandscape());
+                }
 
                 return existingApplicationComponent;
             })

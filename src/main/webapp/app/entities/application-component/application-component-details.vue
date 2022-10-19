@@ -63,6 +63,12 @@
             <span>{{ applicationComponent.softwareType }}</span>
           </dd>
           <dt>
+            <span>Display In Landscape</span>
+          </dt>
+          <dd>
+            <span>{{ applicationComponent.displayInLandscape }}</span>
+          </dd>
+          <dt>
             <span>Application</span>
           </dt>
           <dd>

@@ -37,6 +37,7 @@
             <th scope="row"><span>End Date</span></th>
             <th scope="row"><span>Application Type</span></th>
             <th scope="row"><span>Software Type</span></th>
+            <th scope="row"><span>Display In Landscape</span></th>
             <th scope="row"><span>Application</span></th>
             <th scope="row"><span>Categories</span></th>
             <th scope="row"><span>Technologies</span></th>
@@ -61,6 +62,7 @@
             <td>{{ applicationComponent.endDate }}</td>
             <td>{{ applicationComponent.applicationType }}</td>
             <td>{{ applicationComponent.softwareType }}</td>
+            <td>{{ applicationComponent.displayInLandscape }}</td>
             <td>
               <div v-if="applicationComponent.application">
                 <router-link :to="{ name: 'ApplicationView', params: { applicationId: applicationComponent.application.id } }">{{

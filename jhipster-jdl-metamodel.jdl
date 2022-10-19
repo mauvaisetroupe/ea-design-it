@@ -144,7 +144,8 @@ entity ApplicationComponent(component) {
     startDate LocalDate
     endDate LocalDate
 	applicationType ApplicationType
-	softwareType SoftwareType    
+	softwareType SoftwareType  
+    displayInLandscape Boolean
 }
 
 entity DataFormat {

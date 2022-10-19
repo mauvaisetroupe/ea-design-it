@@ -61,6 +61,9 @@ public class ApplicationComponent implements Serializable {
     @Column(name = "software_type")
     private SoftwareType softwareType;
 
+    @Column(name = "display_in_landscape")
+    private Boolean displayInLandscape;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "owner", "categories", "technologies", "capabilities", "applicationsLists" }, allowSetters = true)
@@ -218,6 +221,19 @@ public class ApplicationComponent implements Serializable {
         this.softwareType = softwareType;
     }
 
+    public Boolean getDisplayInLandscape() {
+        return this.displayInLandscape;
+    }
+
+    public ApplicationComponent displayInLandscape(Boolean displayInLandscape) {
+        this.setDisplayInLandscape(displayInLandscape);
+        return this;
+    }
+
+    public void setDisplayInLandscape(Boolean displayInLandscape) {
+        this.displayInLandscape = displayInLandscape;
+    }
+
     public Application getApplication() {
         return this.application;
     }
@@ -314,6 +330,7 @@ public class ApplicationComponent implements Serializable {
             ", endDate='" + getEndDate() + "'" +
             ", applicationType='" + getApplicationType() + "'" +
             ", softwareType='" + getSoftwareType() + "'" +
+            ", displayInLandscape='" + getDisplayInLandscape() + "'" +
             "}";
     }
 }

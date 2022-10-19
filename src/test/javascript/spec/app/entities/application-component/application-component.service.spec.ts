@@ -45,7 +45,8 @@ describe('Service Tests', () => {
         currentDate,
         currentDate,
         ApplicationType.SOFTWARE,
-        SoftwareType.ON_PREMISE_COTS
+        SoftwareType.ON_PREMISE_COTS,
+        false
       );
     });
 
@@ -121,6 +122,7 @@ describe('Service Tests', () => {
             endDate: dayjs(currentDate).format(DATE_FORMAT),
             applicationType: 'BBBBBB',
             softwareType: 'BBBBBB',
+            displayInLandscape: true,
           },
           elemDefault
         );
@@ -157,6 +159,7 @@ describe('Service Tests', () => {
             comment: 'BBBBBB',
             documentationURL: 'BBBBBB',
             startDate: dayjs(currentDate).format(DATE_FORMAT),
+            displayInLandscape: true,
           },
           new ApplicationComponent()
         );
@@ -199,6 +202,7 @@ describe('Service Tests', () => {
             endDate: dayjs(currentDate).format(DATE_FORMAT),
             applicationType: 'BBBBBB',
             softwareType: 'BBBBBB',
+            displayInLandscape: true,
           },
           elemDefault
         );

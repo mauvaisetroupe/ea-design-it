@@ -222,6 +222,9 @@ describe('ApplicationComponent e2e test', () => {
 
       cy.get(`[data-cy="softwareType"]`).select('CLOUD_CUSTOM');
 
+      cy.get(`[data-cy="displayInLandscape"]`).should('not.be.checked');
+      cy.get(`[data-cy="displayInLandscape"]`).click().should('be.checked');
+
       cy.get(`[data-cy="application"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
