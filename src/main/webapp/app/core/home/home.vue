@@ -51,6 +51,10 @@
           </li>
           <li>
             Import Excel
+            <router-link to="/component-import-upload-file" data-cy="import-excel-component">Application Components</router-link> file
+          </li>
+          <li>
+            Import Excel
             <router-link to="flow-import-upload-file" data-cy="import-excel-flows">Functional Flows &amp; Interfaces </router-link> file
           </li>
           <li>

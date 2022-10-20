@@ -27,6 +27,7 @@ import '../content/scss/vendor.scss';
 /* tslint:disable */
 
 import ApplicationImportService from '@/entities/application-import/application-import.service';
+import ComponentImportService from '@/entities/component-import/component-import.service';
 import FlowImportService from '@/entities/flow-import/flow-import.service';
 import DataFlowImportService from '@/entities/data-flow-import/data-flow-import.service';
 import SequenceDiagramService from '@/eadesignit/sequence-diagram/import.service';
@@ -103,6 +104,7 @@ new Vue({
     metricsService: () => new MetricsService(),
 
     applicationImportService: () => new ApplicationImportService(),
+    componentImportService: () => new ComponentImportService(),
     flowImportService: () => new FlowImportService(),
     dataFlowImportService: () => new DataFlowImportService(),
     sequenceDiagramService: () => new SequenceDiagramService(),

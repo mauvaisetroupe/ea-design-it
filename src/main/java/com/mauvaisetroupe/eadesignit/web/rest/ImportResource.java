@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
+import com.mauvaisetroupe.eadesignit.domain.ApplicationComponentImport;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.domain.DataFlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
@@ -9,6 +10,7 @@ import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationCapabilityImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.CapabilityImportService;
+import com.mauvaisetroupe.eadesignit.service.importfile.ComponentImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.DataFlowImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ExcelReader;
 import com.mauvaisetroupe.eadesignit.service.importfile.FlowImportService;
@@ -52,6 +54,9 @@ public class ImportResource {
     private ApplicationImportService applicationImportService;
 
     @Autowired
+    private ComponentImportService componentImportService;
+
+    @Autowired
     private FlowImportService flowImportService;
 
     @Autowired
@@ -81,6 +86,11 @@ public class ImportResource {
     @PostMapping("/import/application/upload-file")
     public List<ApplicationImport> uploadFile(@RequestPart MultipartFile file) throws Exception {
         return applicationImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+    }
+
+    @PostMapping("/import/component/upload-file")
+    public List<ApplicationComponentImport> uploadComponentFile(@RequestPart MultipartFile file) throws Exception {
+        return componentImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
     }
 
     @PostMapping("/import/flow/upload-files")

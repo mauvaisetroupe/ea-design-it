@@ -4,6 +4,8 @@ import { Authority } from '@/shared/security/authority';
 // prettier-ignore
 const ApplicationImportUploadFile = () => import('@/entities/application-import/application-import-upload-file.vue');
 // prettier-ignore
+const ComponentImportUploadFile = () => import('@/entities/component-import/component-import-upload-file.vue');
+// prettier-ignore
 const FlowImportUploadFile = () => import('@/entities/flow-import/flow-import-upload-file.vue');
 // prettier-ignore
 const EventImportUploadFile = () => import('@/entities/data-flow-import/data-flow-import-upload-file.vue');
@@ -23,6 +25,12 @@ export default [
     path: '/application-import-upload-file',
     name: 'ApplicationImportUploadFile',
     component: ApplicationImportUploadFile,
+    meta: { authorities: [Authority.WRITE] },
+  },
+  {
+    path: '/component-import-upload-file',
+    name: 'ComponentImportUploadFile',
+    component: ComponentImportUploadFile,
     meta: { authorities: [Authority.WRITE] },
   },
   {

@@ -29,4 +29,8 @@ public interface ApplicationComponentRepository extends JpaRepository<Applicatio
         "select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.categories left join fetch applicationComponent.technologies where applicationComponent.id =:id"
     )
     Optional<ApplicationComponent> findOneWithEagerRelationships(@Param("id") Long id);
+
+    ApplicationComponent findByNameIgnoreCase(String name);
+
+    Optional<ApplicationComponent> findByAlias(String alias);
 }
