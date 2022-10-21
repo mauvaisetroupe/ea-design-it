@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
+import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.domain.DataFormat;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
@@ -13,6 +14,7 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ViewPoint;
 import com.mauvaisetroupe.eadesignit.domain.util.DataFlowComparator;
+import com.mauvaisetroupe.eadesignit.repository.ApplicationComponentRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFormatRepository;
@@ -87,6 +89,9 @@ public class FlowImportService {
 
     @Autowired
     private ApplicationRepository applicationRepository;
+
+    @Autowired
+    private ApplicationComponentRepository applicationComponentRepository;
 
     @Autowired
     private DataFlowRepository dataFlowRepository;
@@ -336,7 +341,8 @@ public class FlowImportService {
                 flowImport.setImportInterfaceStatus(ImportStatus.EXISTING);
                 flowInterface = flowInterfaceOption.get();
                 Assert.isTrue(
-                    flowInterface.getSource().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase()),
+                    flowInterface.getSource().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase()) ||
+                    flowInterface.getSourceComponent().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase()),
                     "Source of interface doesn't match for interface Id='" +
                     flowInterface.getId() +
                     "', source= [" +
@@ -347,7 +353,8 @@ public class FlowImportService {
                 );
 
                 Assert.isTrue(
-                    flowInterface.getTarget().getName().toLowerCase().equals(flowImport.getTargetElement().toLowerCase()),
+                    flowInterface.getTarget().getName().toLowerCase().equals(flowImport.getTargetElement().toLowerCase()) ||
+                    flowInterface.getTargetComponent().getName().toLowerCase().equals(flowImport.getTargetElement().toLowerCase()),
                     "Target of interface doesn't match for interface Id='" +
                     flowInterface.getId() +
                     "', target= [" +
@@ -516,11 +523,27 @@ public class FlowImportService {
 
     private FlowInterface mapToFlowInterface(FlowImport flowImport) {
         Application source = applicationRepository.findByNameIgnoreCase(flowImport.getSourceElement());
+        ApplicationComponent sourceComponent = null;
+        if (source == null) {
+            sourceComponent = applicationComponentRepository.findByNameIgnoreCase(flowImport.getSourceElement());
+            if (sourceComponent != null) {
+                source = sourceComponent.getApplication();
+            }
+        }
         Application target = applicationRepository.findByNameIgnoreCase(flowImport.getTargetElement());
+        ApplicationComponent targetComponent = null;
+        if (target == null) {
+            targetComponent = applicationComponentRepository.findByNameIgnoreCase(flowImport.getTargetElement());
+            if (targetComponent != null) {
+                target = targetComponent.getApplication();
+            }
+        }
         FlowInterface flowInterface = new FlowInterface();
         flowInterface.setAlias(flowImport.getIdFlowFromExcel());
         flowInterface.setSource(source);
+        flowInterface.setSourceComponent(sourceComponent);
         flowInterface.setTarget(target);
+        flowInterface.setTargetComponent(targetComponent);
         if (StringUtils.hasText(flowImport.getIntegrationPattern())) {
             Protocol protocol = protocolRepository.findByNameIgnoreCase(flowImport.getIntegrationPattern());
             if (protocol != null) {
