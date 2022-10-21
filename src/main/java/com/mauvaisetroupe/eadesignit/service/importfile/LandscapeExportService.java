@@ -98,8 +98,16 @@ public class LandscapeExportService {
                 column = 0;
                 row.createCell(column++).setCellValue(interface1.getAlias());
                 row.createCell(column++).setCellValue(flow.getAlias());
-                row.createCell(column++).setCellValue(interface1.getSource().getName());
-                row.createCell(column++).setCellValue(interface1.getTarget().getName());
+                if (interface1.getSourceComponent() != null) {
+                    row.createCell(column++).setCellValue(interface1.getSourceComponent().getName());
+                } else {
+                    row.createCell(column++).setCellValue(interface1.getSource().getName());
+                }
+                if (interface1.getTargetComponent() != null) {
+                    row.createCell(column++).setCellValue(interface1.getTargetComponent().getName());
+                } else {
+                    row.createCell(column++).setCellValue(interface1.getTarget().getName());
+                }
                 row.createCell(column++).setCellValue(flow.getDescription());
                 row.createCell(column++).setCellValue(step.getStepOrder());
                 row.createCell(column++).setCellValue(step.getDescription());
