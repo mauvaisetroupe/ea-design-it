@@ -138,11 +138,13 @@ public class ApplicationImportService {
             application = optional.get();
             Assert.isTrue(
                 application.getName().toLowerCase().equals(applicationImport.getName().toLowerCase()),
-                "Cannot change application name (" +
+                "Cannot change name for application '" +
+                application.getAlias() +
+                "' : '" +
                 application.getName() +
-                "/" +
+                "' in database, and '" +
                 applicationImport.getName() +
-                "), please  correrct your Excel file"
+                "' in your Excel file. Please correct your Excel file or modify database."
             );
         } else {
             application = new Application();

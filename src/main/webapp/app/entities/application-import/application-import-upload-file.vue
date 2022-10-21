@@ -16,13 +16,19 @@
           <label class="custom-file-label" for="customFile">{{ excelFileName }}</label>
         </div>
       </div>
+
+      <div class="alert alert-warning">
+        Application name and alias are foreign keys for many others assets. You cannot change application name for a given alias, so please
+        edit database and Excel file to be synchronized for such a change. If an error occurs, the entire import will be rejected.
+      </div>
+
       <div class="form-group" v-if="excelFile">
         <button type="submit" class="btn btn-primary mb-2" v-on:click="submitFile()">Submit File</button>
       </div>
     </div>
 
     <br />
-    <div class="alert alert-warning" v-if="!isFetching && applicationImports && applicationImports.length === 0">
+    <div class="alert alert-warning" v-if="rowsLoaded && applicationImports && applicationImports.length === 0">
       <span>No applicationImports found</span>
     </div>
 

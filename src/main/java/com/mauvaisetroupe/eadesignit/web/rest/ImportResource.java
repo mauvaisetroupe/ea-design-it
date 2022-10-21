@@ -19,6 +19,7 @@ import com.mauvaisetroupe.eadesignit.service.importfile.PlantumlImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.FlowImportDTO;
+import com.mauvaisetroupe.eadesignit.web.rest.errors.ApplicationImportException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -85,7 +86,11 @@ public class ImportResource {
 
     @PostMapping("/import/application/upload-file")
     public List<ApplicationImport> uploadFile(@RequestPart MultipartFile file) throws Exception {
-        return applicationImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+        try {
+            return applicationImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+        } catch (Exception e) {
+            throw new ApplicationImportException(e.getMessage());
+        }
     }
 
     @PostMapping("/import/component/upload-file")
