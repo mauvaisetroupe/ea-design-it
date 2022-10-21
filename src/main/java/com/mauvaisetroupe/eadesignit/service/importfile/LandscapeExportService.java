@@ -1,12 +1,14 @@
 package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
+import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
+import com.mauvaisetroupe.eadesignit.repository.ApplicationComponentRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import java.io.ByteArrayOutputStream;
@@ -36,17 +38,23 @@ public class LandscapeExportService {
     ApplicationRepository applicationRepository;
 
     @Autowired
+    ApplicationComponentRepository applicationComponentRepository;
+
+    @Autowired
     LandscapeViewRepository landscapeViewRepository;
 
     public ByteArrayOutputStream getLandscapeExcel(Long landscapeId) throws IOException {
         Workbook workbook = new XSSFWorkbook();
         Sheet appliSheet = workbook.createSheet("Application");
+        Sheet componentSheet = workbook.createSheet("Component");
         Sheet flowSheet = workbook.createSheet("Message_Flow");
 
         writeFlows(flowSheet, landscapeId);
         autoSizeAllColumns(flowSheet);
         writeApplication(appliSheet);
         autoSizeAllColumns(appliSheet);
+        writeComponent(componentSheet);
+        autoSizeAllColumns(componentSheet);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         workbook.write(stream);
@@ -117,7 +125,9 @@ public class LandscapeExportService {
         }
         // Add conditional formatting if Application doesn't exist
         SheetConditionalFormatting sheetCF = sheet.getSheetConditionalFormatting();
-        ConditionalFormattingRule rule = sheetCF.createConditionalFormattingRule("COUNTIF(Application!$B$2:$B$1000,c2)<=0");
+        ConditionalFormattingRule rule = sheetCF.createConditionalFormattingRule(
+            "COUNTIF(Application!$B$2:$B$1000,c2) + COUNTIF(Component!$B$2:$B$1000,c2)<=0"
+        );
         FontFormatting fontFmt = rule.createFontFormatting();
         fontFmt.setFontStyle(false, true);
         fontFmt.setFontColorIndex(IndexedColors.RED.index);
@@ -157,6 +167,24 @@ public class LandscapeExportService {
             Row row = sheet.createRow(rownb++);
             row.createCell(column++).setCellValue(application.getAlias());
             row.createCell(column++).setCellValue(application.getName());
+        }
+    }
+
+    private void writeComponent(Sheet sheet) {
+        List<ApplicationComponent> components = applicationComponentRepository.findAll();
+        int column = 0;
+        int rownb = 0;
+        Row headerRow = sheet.createRow(rownb++);
+        headerRow.createCell(column++).setCellValue("component.id");
+        headerRow.createCell(column++).setCellValue("component.name");
+        headerRow.createCell(column++).setCellValue("application.name");
+
+        for (ApplicationComponent component : components) {
+            column = 0;
+            Row row = sheet.createRow(rownb++);
+            row.createCell(column++).setCellValue(component.getAlias());
+            row.createCell(column++).setCellValue(component.getName());
+            row.createCell(column++).setCellValue(component.getApplication().getName());
         }
     }
 }
