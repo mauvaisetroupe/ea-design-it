@@ -88,10 +88,11 @@ export default class LandscapeViewService {
     });
   }
 
-  public getPlantUML(id: number) {
+  public getPlantUML(id: number, layout: string) {
     return new Promise<any>((resolve, reject) => {
+      let params = { layout: layout };
       axios
-        .get(`${basePlantUMLApiUrl}/get-svg/${id}`)
+        .get(`${basePlantUMLApiUrl}/get-svg/${id}`, { params })
         .then(res => {
           resolve(res);
         })

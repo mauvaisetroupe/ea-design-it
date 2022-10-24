@@ -40,6 +40,9 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
 
   public reorderAlias = false;
 
+  public layout = 'smetana';
+  public refreshingPlantuml = false;
+
   //for description update
   public reorderAliasflowToSave: IFunctionalFlow[] = [];
   //for reordering update
@@ -82,11 +85,13 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   }
 
   public getPlantUML(landscapeViewId) {
+    this.refreshingPlantuml = true;
     this.landscapeViewService()
-      .getPlantUML(landscapeViewId)
+      .getPlantUML(landscapeViewId, this.layout)
       .then(
         res => {
           this.plantUMLImage = res.data;
+          this.refreshingPlantuml = false;
         },
         err => {
           console.log(err);
@@ -387,5 +392,14 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
         document.body.appendChild(link);
         link.click();
       });
+  }
+
+  public changeLayout() {
+    if (this.layout == 'smetana') {
+      this.layout = 'elk';
+    } else {
+      this.layout = 'smetana';
+    }
+    this.getPlantUML(this.landscapeView.id);
   }
 }

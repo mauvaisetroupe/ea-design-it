@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.SortedSet;
 import net.sourceforge.plantuml.BlockUml;
@@ -32,9 +31,18 @@ public class PlantUMLBuilder {
     private final Logger log = LoggerFactory.getLogger(PlantUMLSerializer.class);
     public static final String PLANTUML_SVG_CACHE = "com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer.svg";
 
+    public enum Layout {
+        smetana,
+        elk,
+    }
+
     public void getPlantumlHeader(StringBuilder plantUMLSource) {
+        getPlantumlHeader(plantUMLSource, Layout.smetana);
+    }
+
+    public void getPlantumlHeader(StringBuilder plantUMLSource, Layout layout) {
         plantUMLSource.append("@startuml\n");
-        plantUMLSource.append("!pragma layout smetana\n");
+        plantUMLSource.append("!pragma layout " + layout.toString() + "\n");
         plantUMLSource.append("skinparam componentStyle rectangle\n");
         plantUMLSource.append("skinparam hyperlinkColor #000000\n");
         plantUMLSource.append("skinparam hyperlinkUnderline false\n");

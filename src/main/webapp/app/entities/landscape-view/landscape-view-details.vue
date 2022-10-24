@@ -84,6 +84,15 @@
           >
             <span>Export plantuml</span>
           </button>
+          <button
+            class="btn btn-secondary"
+            v-on:click="changeLayout()"
+            style="font-size: 0.7em; padding: 3px; margin: 3px"
+            v-if="plantUMLImage"
+            :disabled="refreshingPlantuml"
+          >
+            <span>Change Layout ({{ layout }})</span>
+          </button>
           <br /><br />
         </div>
       </div>

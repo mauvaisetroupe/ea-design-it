@@ -11,6 +11,7 @@ import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import com.mauvaisetroupe.eadesignit.service.dto.PlantumlDTO;
+import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLBuilder.Layout;
 import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer;
 import io.undertow.util.BadRequestException;
 import java.io.ByteArrayInputStream;
@@ -72,11 +73,12 @@ public class PlantUMLResource {
     @GetMapping(value = "plantuml/landscape-view/get-svg/{id}")
     public @ResponseBody String getLandscapeSVG(
         @PathVariable Long id,
-        @RequestParam(required = false, defaultValue = "false") boolean sequenceDiagram
+        @RequestParam(required = false, defaultValue = "false") boolean sequenceDiagram,
+        @RequestParam(required = false, defaultValue = "smetana") Layout layout
     ) throws IOException, BadRequestException {
         Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
         if (landscapeViewOptional.isPresent()) {
-            return this.plantUMLSerializer.getSVG(landscapeViewOptional.get(), sequenceDiagram);
+            return this.plantUMLSerializer.getSVG(landscapeViewOptional.get(), sequenceDiagram, layout);
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }

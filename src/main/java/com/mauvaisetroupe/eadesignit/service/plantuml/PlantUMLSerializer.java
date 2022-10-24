@@ -10,6 +10,7 @@ import com.mauvaisetroupe.eadesignit.service.drawio.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.GraphDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
+import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLBuilder.Layout;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,9 +54,9 @@ public class PlantUMLSerializer {
         return plantUMLSource.toString();
     }
 
-    public String getSVG(LandscapeView landscapeView, boolean sequenceDiagram) throws IOException {
+    public String getSVG(LandscapeView landscapeView, boolean sequenceDiagram, Layout layout) throws IOException {
         StringBuilder plantUMLSource = new StringBuilder();
-        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
+        plantUMLBuilder.getPlantumlHeader(plantUMLSource, layout);
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(landscapeView);
 
