@@ -66,59 +66,6 @@ public class PlantumlImportService {
     @Autowired
     private LandscapeViewRepository landscapeViewRepository;
 
-    public static void main(String[] args) throws IOException {
-        String plantUMLSource =
-            "@startuml\n" +
-            "!pragma layout smetana\n" +
-            "participant APP1 as C1231\n" +
-            "participant APP2 as C1103\n" +
-            "C1231 --> C1103 : POPOPOPO\n" +
-            "@enduml";
-
-        SourceStringReader reader = new SourceStringReader(plantUMLSource);
-        System.out.println(reader);
-        DiagramDescription diagramDescription = reader.generateDiagramDescription();
-        System.out.println(diagramDescription.getDescription());
-        BlockUml blockUml = reader.getBlocks().get(0);
-        System.out.println(blockUml);
-        Diagram diagram = blockUml.getDiagram();
-        System.out.println(diagram);
-        SequenceDiagram sequenceDiagram = (SequenceDiagram) diagram;
-        Collection<Participant> participants = sequenceDiagram.participants();
-        for (Participant participant : participants) {
-            System.out.println(participant.getCode());
-            System.out.println(participant.getDisplay(true));
-            System.out.println(participant.getDisplay(false));
-        }
-
-        System.out.println("PARTICIPANTS");
-        List<Event> events = sequenceDiagram.events();
-        for (Event event : events) {
-            Message message = (Message) event;
-            System.out.print(message.getParticipant1().getDisplay(false).get(0));
-            System.out.print(" ");
-            System.out.print(message.getParticipant1().getCode());
-            System.out.print(" ----------> ");
-            System.out.print(message.getParticipant2().getDisplay(false).get(0));
-            System.out.print(" ");
-            System.out.print(message.getParticipant2().getCode());
-            System.out.print(" : ");
-            System.out.print(message.getLabel().get(0));
-            System.out.println("");
-
-            List<Note> notes = message.getNoteOnMessages();
-            for (Note note : notes) {
-                System.out.println(note);
-            }
-        }
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        diagram.exportDiagram(byteArrayOutputStream, 0, new FileFormatOption(FileFormat.SVG));
-        //diagramDescription = reader.outputImage(byteArrayOutputStream, new FileFormatOption(FileFormat.SVG));
-        byteArrayOutputStream.close();
-        System.out.println(new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8")));
-    }
-
     public FlowImport importPlantuml(String plantUMLSource) {
         FlowImport flowImport = new FlowImport();
 
