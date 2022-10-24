@@ -166,11 +166,25 @@
                 <router-link :to="{ name: 'ApplicationView', params: { applicationId: inter.source.id } }">
                   {{ inter.source.name }}
                 </router-link>
+                <span v-if="step.flowInterface.id && step.flowInterface.sourceComponent">
+                  /
+                  <router-link
+                    :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: step.flowInterface.sourceComponent.id } }"
+                    >{{ step.flowInterface.sourceComponent.name }}</router-link
+                  >
+                </span>
               </td>
               <td>
                 <router-link :to="{ name: 'ApplicationView', params: { applicationId: inter.target.id } }">
                   {{ inter.target.name }}
                 </router-link>
+                <span v-if="step.flowInterface.id && step.flowInterface.targetComponent">
+                  /
+                  <router-link
+                    :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: step.flowInterface.targetComponent.id } }"
+                    >{{ step.flowInterface.targetComponent.name }}</router-link
+                  >
+                </span>
               </td>
               <td>
                 <router-link v-if="inter.protocol" :to="{ name: 'ProtocolView', params: { protocolId: inter.protocol.id } }">
