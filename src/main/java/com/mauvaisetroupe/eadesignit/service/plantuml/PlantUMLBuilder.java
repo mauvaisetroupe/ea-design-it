@@ -5,6 +5,7 @@ import com.mauvaisetroupe.eadesignit.service.drawio.GraphBuilder;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Label;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
+import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer.DiagramType;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -34,6 +35,7 @@ public class PlantUMLBuilder {
     public enum Layout {
         smetana,
         elk,
+        none,
     }
 
     public void getPlantumlHeader(StringBuilder plantUMLSource) {
@@ -42,7 +44,9 @@ public class PlantUMLBuilder {
 
     public void getPlantumlHeader(StringBuilder plantUMLSource, Layout layout) {
         plantUMLSource.append("@startuml\n");
-        plantUMLSource.append("!pragma layout " + layout.toString() + "\n");
+        if (layout != Layout.none) {
+            plantUMLSource.append("!pragma layout " + layout.toString() + "\n");
+        }
         plantUMLSource.append("skinparam componentStyle rectangle\n");
         plantUMLSource.append("skinparam hyperlinkColor #000000\n");
         plantUMLSource.append("skinparam hyperlinkUnderline false\n");
@@ -57,10 +61,12 @@ public class PlantUMLBuilder {
         Application source,
         Application target,
         SortedSet<Label> labels,
-        boolean sequenceDiagram,
+        DiagramType diagramType,
         boolean useID
     ) {
-        plantUMLSource.append(get(source, useID, sequenceDiagram) + " --> " + get(target, useID, sequenceDiagram));
+        plantUMLSource.append(
+            getComponentByNameOrId(source, useID, diagramType) + " --> " + getComponentByNameOrId(target, useID, diagramType)
+        );
         if (!isEmpty(labels)) {
             plantUMLSource.append(" :");
             String sepaString = "";
@@ -76,7 +82,7 @@ public class PlantUMLBuilder {
             }
         }
         plantUMLSource.append("\n");
-        if (sequenceDiagram) {
+        if (diagramType == DiagramType.SEQUENCE_DIAGRAM) {
             if (hasMetadata(labels)) {
                 plantUMLSource.append("note right\n");
                 for (Label label : labels) {
@@ -115,17 +121,17 @@ public class PlantUMLBuilder {
         return false;
     }
 
-    private String get(Application application, boolean useID, boolean sequenceDiagram) {
+    private String getComponentByNameOrId(Application application, boolean useID, DiagramType diagramType) {
         if (useID) {
             return "C" + application.getId();
         }
-        String open = sequenceDiagram ? "\"" : "[";
-        String close = sequenceDiagram ? "\"" : "]";
+        String open = (diagramType == DiagramType.SEQUENCE_DIAGRAM) ? "\"" : "[";
+        String close = (diagramType == DiagramType.SEQUENCE_DIAGRAM) ? "\"" : "]";
         return open + application.getName() + close;
     }
 
-    public void createComponent(StringBuilder plantUMLSource, Application application, boolean sequenceDiagram) {
-        if (sequenceDiagram) {
+    public void createComponentWithId(StringBuilder plantUMLSource, Application application, DiagramType diagramType) {
+        if (diagramType == DiagramType.SEQUENCE_DIAGRAM) {
             plantUMLSource.append("participant \"" + application.getName() + "\" as C" + application.getId() + "\n");
         } else {
             plantUMLSource.append("component [" + application.getName() + "] as C" + application.getId() + "\n");

@@ -13,6 +13,7 @@ import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import com.mauvaisetroupe.eadesignit.service.dto.PlantumlDTO;
 import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLBuilder.Layout;
 import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer;
+import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer.DiagramType;
 import io.undertow.util.BadRequestException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -73,25 +74,21 @@ public class PlantUMLResource {
     @GetMapping(value = "plantuml/landscape-view/get-svg/{id}")
     public @ResponseBody String getLandscapeSVG(
         @PathVariable Long id,
-        @RequestParam(required = false, defaultValue = "false") boolean sequenceDiagram,
         @RequestParam(required = false, defaultValue = "smetana") Layout layout
     ) throws IOException, BadRequestException {
         Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
         if (landscapeViewOptional.isPresent()) {
-            return this.plantUMLSerializer.getSVG(landscapeViewOptional.get(), sequenceDiagram, layout);
+            return this.plantUMLSerializer.getLandscapeDiagramSVG(landscapeViewOptional.get(), layout);
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }
     }
 
     @GetMapping(value = "plantuml/landscape-view/get-source/{id}")
-    public ResponseEntity<Resource> getLandscapeSource(
-        @PathVariable Long id,
-        @RequestParam(required = false, defaultValue = "false") boolean sequenceDiagram
-    ) throws IOException, BadRequestException {
+    public ResponseEntity<Resource> getLandscapeSource(@PathVariable Long id) throws IOException, BadRequestException {
         Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
         if (landscapeViewOptional.isPresent()) {
-            String source = this.plantUMLSerializer.getSource(landscapeViewOptional.get(), sequenceDiagram);
+            String source = this.plantUMLSerializer.getLandscapeDiagramSource(landscapeViewOptional.get());
             InputStreamResource inputStreamResource = new InputStreamResource(new ByteArrayInputStream(source.getBytes()));
             return ResponseEntity
                 .ok()
@@ -106,12 +103,12 @@ public class PlantUMLResource {
     @GetMapping(value = "plantuml/functional-flow/get-svg/{id}")
     public @ResponseBody String getFunctionalFlowSVG(
         @PathVariable Long id,
-        @RequestParam(required = false, defaultValue = "true") boolean sequenceDiagram
+        @RequestParam(required = false, defaultValue = "true") DiagramType diagramType
     ) throws IOException, BadRequestException {
         Optional<FunctionalFlow> functionalFlowOptional = functionalFlowRepository.findById(id);
 
         if (functionalFlowOptional.isPresent()) {
-            return this.plantUMLSerializer.getSVG(functionalFlowOptional.get(), sequenceDiagram);
+            return this.plantUMLSerializer.getFunctionalFlowDiagramSVG(functionalFlowOptional.get(), diagramType);
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }
@@ -120,12 +117,12 @@ public class PlantUMLResource {
     @GetMapping(value = "plantuml/functional-flow/get-source/{id}")
     public ResponseEntity<Resource> getFunctionalFlowSource(
         @PathVariable Long id,
-        @RequestParam(required = false, defaultValue = "true") boolean sequenceDiagram
+        @RequestParam(required = false, defaultValue = "true") DiagramType diagramType
     ) throws IOException, BadRequestException {
         Optional<FunctionalFlow> functionalFlowOptional = functionalFlowRepository.findById(id);
 
         if (functionalFlowOptional.isPresent()) {
-            String source = this.plantUMLSerializer.getSource(functionalFlowOptional.get(), sequenceDiagram);
+            String source = this.plantUMLSerializer.getFunctionalFlowDiagramSource(functionalFlowOptional.get(), diagramType);
             InputStreamResource inputStreamResource = new InputStreamResource(new ByteArrayInputStream(source.getBytes()));
             return ResponseEntity
                 .ok()
@@ -138,10 +135,7 @@ public class PlantUMLResource {
     }
 
     @GetMapping(value = "plantuml/application/get-svg/{id}")
-    public @ResponseBody PlantumlDTO getApplicationSVG(
-        @PathVariable Long id,
-        @RequestParam(required = false, defaultValue = "false") boolean sequenceDiagram
-    ) throws IOException, BadRequestException {
+    public @ResponseBody PlantumlDTO getApplicationSVG(@PathVariable Long id) throws IOException, BadRequestException {
         Optional<Application> optional = applicationRepository.findById(id);
 
         if (optional.isPresent()) {
@@ -149,7 +143,7 @@ public class PlantUMLResource {
                 optional.get().getName(),
                 optional.get().getName()
             );
-            return new PlantumlDTO(this.plantUMLSerializer.getSVG(interfaces, sequenceDiagram), interfaces);
+            return new PlantumlDTO(this.plantUMLSerializer.getInterfacesCollectionDiagramSVG(interfaces), interfaces);
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }
@@ -166,21 +160,15 @@ public class PlantUMLResource {
     }
 
     @GetMapping(value = "plantuml/applications/get-svg")
-    public @ResponseBody String getApplicationsSVG(
-        @RequestParam(value = "ids[]") Long[] ids,
-        @RequestParam(required = false, defaultValue = "false") boolean sequenceDiagram
-    ) throws IOException, BadRequestException {
+    public @ResponseBody String getApplicationsSVG(@RequestParam(value = "ids[]") Long[] ids) throws IOException, BadRequestException {
         SortedSet<FlowInterfaceLight> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
-        return this.plantUMLSerializer.getSVG(interfaces, sequenceDiagram);
+        return this.plantUMLSerializer.getInterfacesCollectionDiagramSVG(interfaces);
     }
 
     @GetMapping(value = "plantuml/applications/get-source")
-    public @ResponseBody String getApplicationsSource(
-        @RequestParam(value = "ids[]") Long[] ids,
-        @RequestParam(required = false, defaultValue = "false") boolean sequenceDiagram
-    ) throws IOException, BadRequestException {
+    public @ResponseBody String getApplicationsSource(@RequestParam(value = "ids[]") Long[] ids) throws IOException, BadRequestException {
         SortedSet<FlowInterfaceLight> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
-        return this.plantUMLSerializer.getSource(interfaces, sequenceDiagram);
+        return this.plantUMLSerializer.getInterfacesCollectionDiagramSource(interfaces);
     }
 
     @GetMapping(value = "plantuml/capabilities/get-svg/{id}")
@@ -200,6 +188,6 @@ public class PlantUMLResource {
     public @ResponseBody String getSequenceDiagramSVG(@RequestBody String plantumlSource) throws IOException {
         plantumlSource = URLDecoder.decode(plantumlSource, StandardCharsets.UTF_8);
         plantumlSource = plantumlSource.replace("###CR##", "\n");
-        return this.plantUMLSerializer.getSVG(plantumlSource);
+        return this.plantUMLSerializer.getSVGFromSource(plantumlSource);
     }
 }

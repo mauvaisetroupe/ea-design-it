@@ -26,136 +26,71 @@ public class PlantUMLSerializer {
 
     private final Logger log = LoggerFactory.getLogger(PlantUMLSerializer.class);
 
+    public enum DiagramType {
+        COMPONENT_DIAGRAM,
+        SEQUENCE_DIAGRAM,
+    }
+
     @Autowired
     private PlantUMLBuilder plantUMLBuilder;
 
-    public String getSource(LandscapeView landscapeView, boolean sequenceDiagram) throws IOException {
-        GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graph = graphBuilder.createGraph(landscapeView);
-
-        List<String[]> legend = new ArrayList<>();
-        legend.add(new String[] { "Flows", "Description" });
-        for (FunctionalFlow functionalFlow : landscapeView.getFlows()) {
-            legend.add(new String[] { functionalFlow.getAlias(), functionalFlow.getDescription() });
-        }
-
-        StringBuilder plantUMLSource = new StringBuilder();
-        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
-
-        for (Edge edge : graph.getConsolidatedEdges()) {
-            Application source = graph.getApplication(edge.getSourceId());
-            Application target = graph.getApplication(edge.getTargetId());
-            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), sequenceDiagram, false);
-        }
-
-        plantUMLBuilder.getLegend(plantUMLSource, legend);
-        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
-
-        return plantUMLSource.toString();
-    }
-
-    public String getSVG(LandscapeView landscapeView, boolean sequenceDiagram, Layout layout) throws IOException {
+    private String createPlantUMLSource(GraphDTO graph, DiagramType sequenceDiagram, boolean addURL, Layout layout) {
         StringBuilder plantUMLSource = new StringBuilder();
         plantUMLBuilder.getPlantumlHeader(plantUMLSource, layout);
-        GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graph = graphBuilder.createGraph(landscapeView);
-
-        for (Application application : graph.getApplications()) {
-            plantUMLBuilder.createComponent(plantUMLSource, application, sequenceDiagram);
+        if (addURL) {
+            for (Application application : graph.getApplications()) {
+                // itś not possible to add an URL for an Application or an ApplicationComponent inside a reliation [A] -> [B]
+                // so we need to create a component for each Application / ApplicationComponent
+                // and associate the URL to that componnet
+                plantUMLBuilder.createComponentWithId(plantUMLSource, application, sequenceDiagram);
+            }
         }
-
         for (Edge edge : graph.getConsolidatedEdges()) {
             Application source = graph.getApplication(edge.getSourceId());
             Application target = graph.getApplication(edge.getTargetId());
-            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), sequenceDiagram, true);
-        }
-        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
-
-        return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
-    }
-
-    public String getSVG(FunctionalFlow functionalFlow, boolean sequenceDiagram) throws IOException {
-        StringBuilder plantUMLSource = new StringBuilder();
-        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
-
-        GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graph = graphBuilder.createGraph(functionalFlow);
-
-        for (Application application : graph.getApplications()) {
-            plantUMLBuilder.createComponent(plantUMLSource, application, sequenceDiagram);
-        }
-
-        for (Edge edge : graph.getEdges()) {
-            Application source = graph.getApplication(edge.getSourceId());
-            Application target = graph.getApplication(edge.getTargetId());
-            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), sequenceDiagram, true);
-        }
-        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
-        return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
-    }
-
-    public String getSource(FunctionalFlow functionalFlow, boolean sequenceDiagram) throws IOException {
-        StringBuilder plantUMLSource = new StringBuilder();
-        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
-
-        GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graph = graphBuilder.createGraph(functionalFlow);
-
-        for (Edge edge : graph.getEdges()) {
-            Application source = graph.getApplication(edge.getSourceId());
-            Application target = graph.getApplication(edge.getTargetId());
-            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), sequenceDiagram, false);
+            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), sequenceDiagram, addURL);
         }
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
         return plantUMLSource.toString();
     }
 
-    public String getSVG(SortedSet<FlowInterfaceLight> interfaces, boolean sequenceDiagram) throws IOException {
+    public String getLandscapeDiagramSVG(LandscapeView landscapeView, Layout layout) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graph = graphBuilder.createGraph(interfaces);
-
-        StringBuilder plantUMLSource = new StringBuilder();
-        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
-
-        for (Application application : graph.getApplications()) {
-            plantUMLBuilder.createComponent(plantUMLSource, application, sequenceDiagram);
-        }
-
-        for (Edge edge : graph.getConsolidatedEdges()) {
-            Application source = graph.getApplication(edge.getSourceId());
-            Application target = graph.getApplication(edge.getTargetId());
-            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), sequenceDiagram, true);
-        }
-        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        GraphDTO graph = graphBuilder.createGraph(landscapeView);
+        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, layout);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
-    public String getSource(SortedSet<FlowInterfaceLight> interfaces, boolean sequenceDiagram) {
-        List<String[]> legend = new ArrayList<>();
-        legend.add(new String[] { "Interface", "Source", "Target", "Protocol" });
-        for (FlowInterfaceLight flowInterface : interfaces) {
-            legend.add(
-                new String[] {
-                    flowInterface.getAlias(),
-                    flowInterface.getSource().getName(),
-                    flowInterface.getTarget().getName(),
-                    flowInterface.getProtocol() != null ? flowInterface.getProtocol().getName() : "",
-                }
-            );
-        }
+    public String getLandscapeDiagramSource(LandscapeView landscapeView) throws IOException {
+        GraphBuilder graphBuilder = new GraphBuilder();
+        GraphDTO graph = graphBuilder.createGraph(landscapeView);
+        return createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, false, Layout.none);
+    }
 
-        StringBuilder plantUMLSource = new StringBuilder();
-        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
+    public String getFunctionalFlowDiagramSVG(FunctionalFlow functionalFlow, DiagramType diagramType) throws IOException {
+        GraphBuilder graphBuilder = new GraphBuilder();
+        GraphDTO graph = graphBuilder.createGraph(functionalFlow);
+        String plantUMLSource = createPlantUMLSource(graph, diagramType, true, Layout.smetana);
+        return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
+    }
+
+    public String getFunctionalFlowDiagramSource(FunctionalFlow functionalFlow, DiagramType diagramType) throws IOException {
+        GraphBuilder graphBuilder = new GraphBuilder();
+        GraphDTO graph = graphBuilder.createGraph(functionalFlow);
+        return createPlantUMLSource(graph, diagramType, true, Layout.smetana);
+    }
+
+    public String getInterfacesCollectionDiagramSVG(SortedSet<FlowInterfaceLight> interfaces) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(interfaces);
-        for (Edge edge : graph.getConsolidatedEdges()) {
-            Application source = graph.getApplication(edge.getSourceId());
-            Application target = graph.getApplication(edge.getTargetId());
-            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), sequenceDiagram, false);
-        }
+        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, Layout.smetana);
+        return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
+    }
 
-        plantUMLBuilder.getLegend(plantUMLSource, legend);
-        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+    public String getInterfacesCollectionDiagramSource(SortedSet<FlowInterfaceLight> interfaces) {
+        GraphBuilder graphBuilder = new GraphBuilder();
+        GraphDTO graph = graphBuilder.createGraph(interfaces);
+        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, false, Layout.none);
         return plantUMLSource.toString();
     }
 
@@ -180,7 +115,7 @@ public class PlantUMLSerializer {
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
-    public String getSVG(String plantUMLSource) throws IOException {
+    public String getSVGFromSource(String plantUMLSource) throws IOException {
         return plantUMLBuilder.getSVGFromSource(plantUMLSource);
     }
 }
