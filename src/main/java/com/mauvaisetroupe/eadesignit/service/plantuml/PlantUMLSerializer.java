@@ -12,9 +12,7 @@ import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
 import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLBuilder.Layout;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.SortedSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,18 +35,20 @@ public class PlantUMLSerializer {
     private String createPlantUMLSource(GraphDTO graph, DiagramType sequenceDiagram, boolean addURL, Layout layout) {
         StringBuilder plantUMLSource = new StringBuilder();
         plantUMLBuilder.getPlantumlHeader(plantUMLSource, layout);
+        boolean useID = false;
         if (addURL) {
             for (Application application : graph.getApplications()) {
                 // itś not possible to add an URL for an Application or an ApplicationComponent inside a reliation [A] -> [B]
                 // so we need to create a component for each Application / ApplicationComponent
                 // and associate the URL to that componnet
                 plantUMLBuilder.createComponentWithId(plantUMLSource, application, sequenceDiagram);
+                useID = true;
             }
         }
         for (Edge edge : graph.getConsolidatedEdges()) {
             Application source = graph.getApplication(edge.getSourceId());
             Application target = graph.getApplication(edge.getTargetId());
-            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), sequenceDiagram, addURL);
+            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), sequenceDiagram, useID);
         }
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
         return plantUMLSource.toString();
