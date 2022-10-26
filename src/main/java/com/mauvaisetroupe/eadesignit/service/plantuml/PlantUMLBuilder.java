@@ -52,6 +52,7 @@ public class PlantUMLBuilder {
         plantUMLSource.append("skinparam hyperlinkUnderline false\n");
         plantUMLSource.append("skinparam monochrome true\n");
         plantUMLSource.append("skinparam shadowing false\n");
+        plantUMLSource.append("skinparam padding 5\n");
         //plantUMLSource.append("skinparam svgDimensionStyle false\n");
         plantUMLSource.append("hide footbox\n");
     }
@@ -228,5 +229,18 @@ public class PlantUMLBuilder {
             plantUMLSource.append(" |\n");
         }
         plantUMLSource.append("End Legend\n");
+    }
+
+    public void getPlantumlPackage(StringBuilder plantUMLSource, String packageName, List<Application> applications, boolean useID) {
+        plantUMLSource.append("package \"" + packageName + "\" {\n");
+        for (Application application : applications) {
+            if (useID) {
+                createComponentWithId(plantUMLSource, application, DiagramType.COMPONENT_DIAGRAM);
+            } else {
+                plantUMLSource.append(getComponentByNameOrId(application, useID, DiagramType.COMPONENT_DIAGRAM));
+                plantUMLSource.append("\n");
+            }
+        }
+        plantUMLSource.append("}\n");
     }
 }

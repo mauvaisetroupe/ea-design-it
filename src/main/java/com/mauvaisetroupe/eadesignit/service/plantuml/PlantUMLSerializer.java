@@ -13,6 +13,8 @@ import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
 import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLBuilder.Layout;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.SortedSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,68 +31,89 @@ public class PlantUMLSerializer {
         SEQUENCE_DIAGRAM,
     }
 
+    public enum ShowSubComponent {
+        KEEP_DEFAULT,
+        FORCE_SHOW,
+        FORCE_HIDE,
+    }
+
+    public enum GroupSubComponent {
+        GROUP,
+        DO_NOT_GROUP,
+    }
+
     @Autowired
     private PlantUMLBuilder plantUMLBuilder;
 
-    private String createPlantUMLSource(GraphDTO graph, DiagramType sequenceDiagram, boolean addURL, Layout layout) {
+    private String createPlantUMLSource(GraphDTO graph, DiagramType diagramType, boolean addURL, Layout layout, boolean groupComponents) {
         StringBuilder plantUMLSource = new StringBuilder();
         plantUMLBuilder.getPlantumlHeader(plantUMLSource, layout);
         boolean useID = false;
         if (addURL) {
-            for (Application application : graph.getApplications()) {
+            // Declare application without the ones included in packages
+            // Will be declared in package, including url declaretaion
+            for (Application application : groupComponents ? graph.getApplicationsWithoutGroups() : graph.getApplications()) {
                 // itś not possible to add an URL for an Application or an ApplicationComponent inside a reliation [A] -> [B]
                 // so we need to create a component for each Application / ApplicationComponent
                 // and associate the URL to that componnet
-                plantUMLBuilder.createComponentWithId(plantUMLSource, application, sequenceDiagram);
+                plantUMLBuilder.createComponentWithId(plantUMLSource, application, diagramType);
                 useID = true;
             }
         }
+        if (groupComponents) {
+            // crerate groups (packages)
+            for (Entry<String, List<Application>> groupEntry : graph.getGroups().entrySet()) {
+                plantUMLBuilder.getPlantumlPackage(plantUMLSource, groupEntry.getKey(), groupEntry.getValue(), useID);
+            }
+        }
+
         for (Edge edge : graph.getConsolidatedEdges()) {
             Application source = graph.getApplication(edge.getSourceId());
             Application target = graph.getApplication(edge.getTargetId());
-            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), sequenceDiagram, useID);
+            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), diagramType, useID);
         }
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        System.out.println(plantUMLSource.toString());
         return plantUMLSource.toString();
     }
 
-    public String getLandscapeDiagramSVG(LandscapeView landscapeView, Layout layout) throws IOException {
+    public String getLandscapeDiagramSVG(LandscapeView landscapeView, Layout layout, boolean groupComponents) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(landscapeView);
-        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, layout);
+        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, layout, groupComponents);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getLandscapeDiagramSource(LandscapeView landscapeView) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(landscapeView);
-        return createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, false, Layout.none);
+        return createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, false, Layout.none, false);
     }
 
     public String getFunctionalFlowDiagramSVG(FunctionalFlow functionalFlow, DiagramType diagramType) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(functionalFlow);
-        String plantUMLSource = createPlantUMLSource(graph, diagramType, true, Layout.smetana);
+        String plantUMLSource = createPlantUMLSource(graph, diagramType, true, Layout.smetana, false);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getFunctionalFlowDiagramSource(FunctionalFlow functionalFlow, DiagramType diagramType) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(functionalFlow);
-        return createPlantUMLSource(graph, diagramType, true, Layout.smetana);
+        return createPlantUMLSource(graph, diagramType, true, Layout.smetana, false);
     }
 
     public String getInterfacesCollectionDiagramSVG(SortedSet<FlowInterfaceLight> interfaces) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(interfaces);
-        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, Layout.smetana);
+        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, Layout.smetana, false);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getInterfacesCollectionDiagramSource(SortedSet<FlowInterfaceLight> interfaces) {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(interfaces);
-        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, false, Layout.none);
+        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, false, Layout.none, false);
         return plantUMLSource.toString();
     }
 

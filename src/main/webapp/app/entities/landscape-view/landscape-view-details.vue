@@ -91,7 +91,18 @@
             v-if="plantUMLImage"
             :disabled="refreshingPlantuml"
           >
+            <font-awesome-icon icon="sync" :spin="refreshingPlantuml"></font-awesome-icon>
             <span>Change Layout ({{ layout }})</span>
+          </button>
+          <button
+            class="btn btn-secondary"
+            v-on:click="doGroupComponents()"
+            style="font-size: 0.7em; padding: 3px; margin: 3px"
+            v-if="plantUMLImage"
+            :disabled="refreshingPlantuml"
+          >
+            <font-awesome-icon icon="sync" :spin="refreshingPlantuml"></font-awesome-icon>
+            <span>{{ groupComponents ? 'Ungroup Components' : 'Group components' }} </span>
           </button>
           <br /><br />
         </div>

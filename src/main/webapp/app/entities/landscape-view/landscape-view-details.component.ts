@@ -42,6 +42,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
 
   public layout = 'smetana';
   public refreshingPlantuml = false;
+  public groupComponents = true;
 
   //for description update
   public reorderAliasflowToSave: IFunctionalFlow[] = [];
@@ -87,7 +88,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public getPlantUML(landscapeViewId) {
     this.refreshingPlantuml = true;
     this.landscapeViewService()
-      .getPlantUML(landscapeViewId, this.layout)
+      .getPlantUML(landscapeViewId, this.layout, this.groupComponents)
       .then(
         res => {
           this.plantUMLImage = res.data;
@@ -400,6 +401,12 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     } else {
       this.layout = 'smetana';
     }
+    this.getPlantUML(this.landscapeView.id);
+  }
+
+  public doGroupComponents() {
+    this.refreshingPlantuml = true;
+    this.groupComponents = !this.groupComponents;
     this.getPlantUML(this.landscapeView.id);
   }
 }

@@ -74,11 +74,12 @@ public class PlantUMLResource {
     @GetMapping(value = "plantuml/landscape-view/get-svg/{id}")
     public @ResponseBody String getLandscapeSVG(
         @PathVariable Long id,
-        @RequestParam(required = false, defaultValue = "smetana") Layout layout
+        @RequestParam(required = false, defaultValue = "smetana") Layout layout,
+        @RequestParam(required = false, defaultValue = "true") boolean groupComponents
     ) throws IOException, BadRequestException {
         Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
         if (landscapeViewOptional.isPresent()) {
-            return this.plantUMLSerializer.getLandscapeDiagramSVG(landscapeViewOptional.get(), layout);
+            return this.plantUMLSerializer.getLandscapeDiagramSVG(landscapeViewOptional.get(), layout, groupComponents);
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }

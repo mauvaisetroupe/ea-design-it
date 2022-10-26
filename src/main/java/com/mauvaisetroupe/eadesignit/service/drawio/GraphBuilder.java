@@ -39,6 +39,20 @@ public class GraphBuilder {
                 String url = "/functional-flow/" + flow.getId() + "/view";
                 Edge edge = new Edge(id, source.getId(), target.getId(), new Label(flow.getAlias(), url), false);
                 graph.addEdge(edge);
+                addInGroup(
+                    graph,
+                    "System " + interface1.getSource().getName(),
+                    source,
+                    interface1.getSource(),
+                    interface1.getSourceComponent()
+                );
+                addInGroup(
+                    graph,
+                    "System " + interface1.getTarget().getName(),
+                    target,
+                    interface1.getTarget(),
+                    interface1.getTargetComponent()
+                );
             }
         }
         graph.consolidateEdges();
@@ -78,6 +92,20 @@ public class GraphBuilder {
             String url = "/flow-interface/" + interface1.getId() + "/view";
             Edge edge = new Edge("" + id, source.getId(), target.getId(), new Label(label, url), false);
             graph.addEdge(edge);
+            addInGroup(
+                graph,
+                "System " + interface1.getSource().getName(),
+                source,
+                interface1.getSource(),
+                interface1.getSourceComponent()
+            );
+            addInGroup(
+                graph,
+                "System " + interface1.getTarget().getName(),
+                target,
+                interface1.getTarget(),
+                interface1.getTargetComponent()
+            );
         }
         graph.consolidateEdges();
         return graph;
@@ -91,7 +119,28 @@ public class GraphBuilder {
                 "/application-component/" + component.getId() + "/view"
             );
         } else {
-            return new Application(application.getId(), application.getName(), "/application/" + application.getId() + "/view");
+            return getApplication(application);
+        }
+    }
+
+    private Application getApplication(com.mauvaisetroupe.eadesignit.domain.Application application) {
+        return new Application(application.getId(), application.getName(), "/application/" + application.getId() + "/view");
+    }
+
+    private void addInGroup(
+        GraphDTO graph,
+        String groupName,
+        Application application,
+        com.mauvaisetroupe.eadesignit.domain.Application myApplication,
+        ApplicationComponent component
+    ) {
+        if (component != null && component.getDisplayInLandscape() != null && component.getDisplayInLandscape()) {
+            // Add in group the component
+            graph.addIngroup(groupName, getApplication(myApplication));
+            // Add in group the application itself
+            // Bug in smetana, cannont add link from/to package,
+            // so add the application itself in the package as a subcomponent
+            graph.addIngroup(groupName, application);
         }
     }
 

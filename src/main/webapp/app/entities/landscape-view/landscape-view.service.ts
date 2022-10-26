@@ -88,9 +88,9 @@ export default class LandscapeViewService {
     });
   }
 
-  public getPlantUML(id: number, layout: string) {
+  public getPlantUML(id: number, layout: string, groupComponents: boolean) {
     return new Promise<any>((resolve, reject) => {
-      let params = { layout: layout };
+      let params = { layout: layout, groupComponents: groupComponents };
       axios
         .get(`${basePlantUMLApiUrl}/get-svg/${id}`, { params })
         .then(res => {

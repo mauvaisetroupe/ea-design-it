@@ -10,6 +10,7 @@ import java.util.Map;
 public class GraphDTO {
 
     private Map<Long, Application> applications = new LinkedHashMap<>();
+    private Map<String, List<Application>> groups = new HashMap<>();
 
     // A - alias1 -> B
     // A - alias2 -> B
@@ -90,10 +91,31 @@ public class GraphDTO {
         return bidirectionalConsolidatedMap.values();
     }
 
+    public Map<String, List<Application>> getGroups() {
+        return groups;
+    }
+
+    public Collection<Application> getApplicationsWithoutGroups() {
+        List<Application> tmp = new ArrayList<>(this.applications.values());
+        for (List<Application> tmp2 : this.groups.values()) {
+            tmp.removeAll(tmp2);
+        }
+        return tmp;
+    }
+
     // Helpers
 
     public void addApplication(Application application) {
         this.applications.put(application.getId(), application);
+    }
+
+    public void addIngroup(String group, Application application) {
+        List<Application> applicationsInGroup = new ArrayList<>();
+        if (this.groups.containsKey(group)) {
+            applicationsInGroup = this.groups.get(group);
+        }
+        applicationsInGroup.add(application);
+        this.groups.put(group, applicationsInGroup);
     }
 
     public void addEdge(Edge edge) {
