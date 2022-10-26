@@ -18,6 +18,10 @@ export default class ApplicationDetails extends Vue {
   public interfaces: IFlowInterface[] = [];
   public consolidatedCapabilities: ICapability[] = [];
 
+  public layout = 'smetana';
+  public refreshingPlantuml = false;
+  public groupComponents = true;
+
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (to.params.applicationId) {
@@ -47,11 +51,12 @@ export default class ApplicationDetails extends Vue {
 
   public getPlantUML(applicationId) {
     this.applicationService()
-      .getPlantUML(applicationId)
+      .getPlantUML(applicationId, this.layout, this.groupComponents)
       .then(
         res => {
           this.plantUMLImage = res.data.svg;
           this.interfaces = res.data.interfaces;
+          this.refreshingPlantuml = false;
         },
         err => {
           console.log(err);
@@ -83,5 +88,37 @@ export default class ApplicationDetails extends Vue {
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
       });
+  }
+
+  public exportPlantUML() {
+    this.applicationService()
+      .getPlantUMLSource(this.landscapeView.id)
+      .then(response => {
+        const url = URL.createObjectURL(
+          new Blob([response.data], {
+            type: 'text/plain',
+          })
+        );
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', this.landscapeView.diagramName + '-plantuml.txt');
+        document.body.appendChild(link);
+        link.click();
+      });
+  }
+
+  public changeLayout() {
+    if (this.layout == 'smetana') {
+      this.layout = 'elk';
+    } else {
+      this.layout = 'smetana';
+    }
+    this.getPlantUML(this.application.id);
+  }
+
+  public doGroupComponents() {
+    this.refreshingPlantuml = true;
+    this.groupComponents = !this.groupComponents;
+    this.getPlantUML(this.application.id);
   }
 }

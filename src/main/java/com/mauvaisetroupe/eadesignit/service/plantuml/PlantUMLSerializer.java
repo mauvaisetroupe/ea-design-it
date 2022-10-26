@@ -103,10 +103,11 @@ public class PlantUMLSerializer {
         return createPlantUMLSource(graph, diagramType, true, Layout.smetana, false);
     }
 
-    public String getInterfacesCollectionDiagramSVG(SortedSet<FlowInterfaceLight> interfaces) throws IOException {
+    public String getInterfacesCollectionDiagramSVG(SortedSet<FlowInterfaceLight> interfaces, Layout layout, boolean groupComponents)
+        throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(interfaces);
-        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, Layout.smetana, false);
+        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, layout, groupComponents);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 

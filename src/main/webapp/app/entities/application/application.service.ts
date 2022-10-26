@@ -86,10 +86,11 @@ export default class ApplicationService {
     });
   }
 
-  public getPlantUML(id: number) {
+  public getPlantUML(id: number, layout: string, groupComponents: boolean) {
+    let params = { layout: layout, groupComponents: groupComponents };
     return new Promise<any>((resolve, reject) => {
       axios
-        .get(`${basePlantUMLApiUrl}/${id}`)
+        .get(`${basePlantUMLApiUrl}/${id}`, { params })
         .then(res => {
           resolve(res);
         })

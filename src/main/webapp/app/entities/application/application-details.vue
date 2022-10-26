@@ -106,6 +106,37 @@
       <br />
       <h2>Interfaces for {{ application.name }}</h2>
       <div v-html="plantUMLImage" class="table-responsive"></div>
+      <div class="col-12">
+        <button
+          class="btn btn-warning"
+          v-on:click="exportPlantUML()"
+          style="font-size: 0.7em; padding: 3px; margin: 3px"
+          v-if="plantUMLImage"
+        >
+          <span>Export plantuml</span>
+        </button>
+        <button
+          class="btn btn-secondary"
+          v-on:click="changeLayout()"
+          style="font-size: 0.7em; padding: 3px; margin: 3px"
+          v-if="plantUMLImage"
+          :disabled="refreshingPlantuml"
+        >
+          <font-awesome-icon icon="sync" :spin="refreshingPlantuml"></font-awesome-icon>
+          <span>Change Layout ({{ layout }})</span>
+        </button>
+        <button
+          class="btn btn-secondary"
+          v-on:click="doGroupComponents()"
+          style="font-size: 0.7em; padding: 3px; margin: 3px"
+          v-if="plantUMLImage"
+          :disabled="refreshingPlantuml"
+        >
+          <font-awesome-icon icon="sync" :spin="refreshingPlantuml"></font-awesome-icon>
+          <span>{{ groupComponents ? 'Ungroup Components' : 'Group components' }} </span>
+        </button>
+        <br /><br />
+      </div>
       <table class="table">
         <thead>
           <tr>
