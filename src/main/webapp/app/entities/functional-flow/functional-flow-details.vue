@@ -101,21 +101,21 @@
           </button>         -->
           <button
             class="btn btn-warning"
-            v-on:click="changeDiagram()"
-            style="font-size: 0.7em; padding: 3px; margin: 3px"
-            :disabled="isFetching"
-          >
-            <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon>
-            <span v-text="sequenceDiagram ? 'component diagram' : 'sequence diagram'" />
-          </button>
-          <button
-            class="btn btn-warning"
             v-on:click="exportPlantUML()"
             style="font-size: 0.7em; padding: 3px; margin: 3px"
             v-if="plantUMLImage"
             :disabled="isFetching"
           >
             <span>Export plantuml</span>
+          </button>
+          <button
+            class="btn btn-secondary"
+            v-on:click="changeDiagram()"
+            style="font-size: 0.7em; padding: 3px; margin: 3px"
+            :disabled="isFetching"
+          >
+            <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon>
+            <span v-text="sequenceDiagram ? 'component diagram' : 'sequence diagram'" />
           </button>
         </div>
       </div>
