@@ -45,7 +45,14 @@ public class PlantUMLSerializer {
     @Autowired
     private PlantUMLBuilder plantUMLBuilder;
 
-    private String createPlantUMLSource(GraphDTO graph, DiagramType diagramType, boolean addURL, Layout layout, boolean groupComponents) {
+    private String createPlantUMLSource(
+        GraphDTO graph,
+        DiagramType diagramType,
+        boolean consolidatedEdge,
+        boolean addURL,
+        Layout layout,
+        boolean groupComponents
+    ) {
         StringBuilder plantUMLSource = new StringBuilder();
         plantUMLBuilder.getPlantumlHeader(plantUMLSource, layout);
         boolean useID = false;
@@ -67,7 +74,7 @@ public class PlantUMLSerializer {
             }
         }
 
-        for (Edge edge : graph.getConsolidatedEdges()) {
+        for (Edge edge : consolidatedEdge ? graph.getConsolidatedEdges() : graph.getEdges()) {
             Application source = graph.getApplication(edge.getSourceId());
             Application target = graph.getApplication(edge.getTargetId());
             plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), diagramType, useID);
@@ -80,41 +87,41 @@ public class PlantUMLSerializer {
     public String getLandscapeDiagramSVG(LandscapeView landscapeView, Layout layout, boolean groupComponents) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(landscapeView);
-        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, layout, groupComponents);
+        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, true, layout, groupComponents);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getLandscapeDiagramSource(LandscapeView landscapeView) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(landscapeView);
-        return createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, false, Layout.none, false);
+        return createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, false, Layout.none, false);
     }
 
     public String getFunctionalFlowDiagramSVG(FunctionalFlow functionalFlow, DiagramType diagramType) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(functionalFlow);
-        String plantUMLSource = createPlantUMLSource(graph, diagramType, true, Layout.smetana, false);
+        String plantUMLSource = createPlantUMLSource(graph, diagramType, false, true, Layout.smetana, false);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getFunctionalFlowDiagramSource(FunctionalFlow functionalFlow, DiagramType diagramType) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(functionalFlow);
-        return createPlantUMLSource(graph, diagramType, true, Layout.smetana, false);
+        return createPlantUMLSource(graph, diagramType, false, true, Layout.smetana, false);
     }
 
     public String getInterfacesCollectionDiagramSVG(SortedSet<FlowInterfaceLight> interfaces, Layout layout, boolean groupComponents)
         throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(interfaces);
-        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, layout, groupComponents);
+        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, true, layout, groupComponents);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getInterfacesCollectionDiagramSource(SortedSet<FlowInterfaceLight> interfaces) {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(interfaces);
-        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, false, Layout.none, false);
+        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, false, Layout.none, false);
         return plantUMLSource.toString();
     }
 
