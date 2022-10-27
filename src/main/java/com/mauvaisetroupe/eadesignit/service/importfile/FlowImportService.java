@@ -342,7 +342,10 @@ public class FlowImportService {
                 flowInterface = flowInterfaceOption.get();
                 Assert.isTrue(
                     flowInterface.getSource().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase()) ||
-                    flowInterface.getSourceComponent().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase()),
+                    (
+                        flowInterface.getSourceComponent() != null &&
+                        flowInterface.getSourceComponent().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase())
+                    ),
                     "Source of interface doesn't match for interface Id='" +
                     flowInterface.getId() +
                     "', source= [" +
@@ -354,7 +357,10 @@ public class FlowImportService {
 
                 Assert.isTrue(
                     flowInterface.getTarget().getName().toLowerCase().equals(flowImport.getTargetElement().toLowerCase()) ||
-                    flowInterface.getTargetComponent().getName().toLowerCase().equals(flowImport.getTargetElement().toLowerCase()),
+                    (
+                        flowInterface.getTargetComponent() != null &&
+                        flowInterface.getTargetComponent().getName().toLowerCase().equals(flowImport.getTargetElement().toLowerCase())
+                    ),
                     "Target of interface doesn't match for interface Id='" +
                     flowInterface.getId() +
                     "', target= [" +
@@ -367,7 +373,7 @@ public class FlowImportService {
 
             validateBean(flowInterface);
         } catch (Exception e) {
-            log.error("Error with row " + flowImport + " " + e.getMessage());
+            log.error("Error with row " + flowImport + " " + e.getMessage(), e);
             flowInterface = null;
             flowImport.setImportInterfaceStatus(ImportStatus.ERROR);
             addError(flowImport, e);
