@@ -1,11 +1,9 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
-import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
-import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
-import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.drawio.MXFileSerializer;
+import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLBuilder.Layout;
 import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer;
 import io.undertow.util.BadRequestException;
 import java.io.IOException;
@@ -29,11 +27,13 @@ import org.xml.sax.SAXException;
 public class DrawIOResource {
 
     private final LandscapeViewRepository landscapeViewRepository;
+    private final PlantUMLSerializer plantUMLSerializer;
 
     private final Logger log = LoggerFactory.getLogger(DrawIOResource.class);
 
-    public DrawIOResource(LandscapeViewRepository landscapeViewRepository) {
+    public DrawIOResource(LandscapeViewRepository landscapeViewRepository, PlantUMLSerializer plantUMLSerializer) {
         this.landscapeViewRepository = landscapeViewRepository;
+        this.plantUMLSerializer = plantUMLSerializer;
     }
 
     @GetMapping(value = "drawio/landscape-view/get-xml/{id}")
@@ -53,7 +53,8 @@ public class DrawIOResource {
         } else {
             // check if drawio is uptodate, if not remove SVG from database
             // and send updated xml
-            return fileSerializer.createMXFileXML();
+            String svgXML = plantUMLSerializer.getLandscapeDiagramSVG(landscapeView.get(), Layout.elk, false);
+            return fileSerializer.createMXFileXML(svgXML);
         }
     }
 }

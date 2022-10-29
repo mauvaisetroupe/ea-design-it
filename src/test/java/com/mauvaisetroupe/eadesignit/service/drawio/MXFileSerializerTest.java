@@ -41,7 +41,7 @@ public class MXFileSerializerTest {
         landscapeView.addFlows(functionalFlow);
 
         MXFileSerializer mxFileSerializer = new MXFileSerializer(landscapeView);
-        System.out.println(mxFileSerializer.createMXFileXML());
+        System.out.println(mxFileSerializer.createMXFileXML(null));
     }
 
     @Test

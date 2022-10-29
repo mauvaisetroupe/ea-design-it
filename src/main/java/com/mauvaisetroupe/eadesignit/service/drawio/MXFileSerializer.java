@@ -4,6 +4,7 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.drawio.dto.GraphDTO;
+import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -47,7 +48,7 @@ public class MXFileSerializer {
         this.landscapeView = landscapeView;
     }
 
-    public String createMXFileXML() throws ParserConfigurationException {
+    public String createMXFileXML(String svgXML) throws ParserConfigurationException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graphDTO = graphBuilder.createGraph(landscapeView);
 
@@ -73,6 +74,8 @@ public class MXFileSerializer {
             createRectangle(doc, root, application.getId().toString(), application.getName());
         }
 
+        PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner();
+        doc = drawioPositioner.addPositions(doc, svgXML);
         return getStringFromDocument(doc);
     }
 
