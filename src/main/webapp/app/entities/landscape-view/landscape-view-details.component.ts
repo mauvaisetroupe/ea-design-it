@@ -40,7 +40,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
 
   public reorderAlias = false;
 
-  public layout = 'smetana';
+  public layout = 'elk';
   public refreshingPlantuml = false;
   public groupComponents = true;
 
