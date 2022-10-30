@@ -1,7 +1,7 @@
 package com.mauvaisetroupe.eadesignit.config;
 
-import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLBuilder;
-import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer;
+import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder;
+import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLSerializer;
 import java.time.Duration;
 import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;

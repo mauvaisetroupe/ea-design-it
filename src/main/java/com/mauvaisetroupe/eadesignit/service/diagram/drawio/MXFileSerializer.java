@@ -1,10 +1,11 @@
-package com.mauvaisetroupe.eadesignit.service.drawio;
+package com.mauvaisetroupe.eadesignit.service.diagram.drawio;
 
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.Application;
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.Edge;
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.GraphDTO;
-import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.Edge;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphBuilder;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphDTO;
+import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLSerializer;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -36,8 +37,8 @@ public class MXFileSerializer {
 
     private static final String COLOR_GREEN = "#00FF00";
     private static final String COLOR_RED = "#FF0000";
-    protected static final String EDGE_ID_PREFIX = "edge_";
-    protected static final String APP_ID_PREFIX = "app_";
+    public static final String EDGE_ID_PREFIX = "edge_";
+    public static final String APP_ID_PREFIX = "app_";
 
     private static final String CELL_DEFAULT_WIDTH = "70";
     private static final String CELL_DEFAULT_HEIGHT = "50";

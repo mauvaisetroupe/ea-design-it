@@ -1,16 +1,16 @@
-package com.mauvaisetroupe.eadesignit.service.plantuml;
+package com.mauvaisetroupe.eadesignit.service.diagram.plantuml;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
-import com.mauvaisetroupe.eadesignit.service.drawio.GraphBuilder;
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.Application;
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.Edge;
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.GraphDTO;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.Edge;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphBuilder;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphDTO;
+import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.Layout;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
-import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLBuilder.Layout;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;

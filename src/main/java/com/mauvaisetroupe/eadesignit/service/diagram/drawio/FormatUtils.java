@@ -1,4 +1,4 @@
-package com.mauvaisetroupe.eadesignit.service.drawio;
+package com.mauvaisetroupe.eadesignit.service.diagram.drawio;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

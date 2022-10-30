@@ -4,7 +4,7 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.view.LandscapeLight;
 import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
-import com.mauvaisetroupe.eadesignit.service.drawio.MXFileSerializer;
+import com.mauvaisetroupe.eadesignit.service.diagram.drawio.MXFileSerializer;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.io.IOException;
 import java.net.URI;

@@ -1,11 +1,11 @@
-package com.mauvaisetroupe.eadesignit.service.plantuml;
+package com.mauvaisetroupe.eadesignit.service.diagram.plantuml;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
-import com.mauvaisetroupe.eadesignit.service.drawio.GraphBuilder;
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.Application;
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.Label;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphBuilder;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.Label;
+import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLSerializer.DiagramType;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
-import com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer.DiagramType;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;

@@ -1,6 +1,6 @@
-package com.mauvaisetroupe.eadesignit.service.drawio;
+package com.mauvaisetroupe.eadesignit.service.diagram.drawio;
 
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.PositionAndSize;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.PositionAndSize;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;

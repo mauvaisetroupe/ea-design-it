@@ -1,4 +1,4 @@
-package com.mauvaisetroupe.eadesignit.service.drawio.dto;
+package com.mauvaisetroupe.eadesignit.service.diagram.dto;
 
 import java.util.ArrayList;
 import java.util.Collection;

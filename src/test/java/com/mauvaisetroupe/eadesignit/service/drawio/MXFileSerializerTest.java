@@ -7,6 +7,7 @@ import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.service.diagram.drawio.MXFileSerializer;
 import java.io.IOException;
 import java.io.StringReader;
 import javax.xml.parsers.ParserConfigurationException;

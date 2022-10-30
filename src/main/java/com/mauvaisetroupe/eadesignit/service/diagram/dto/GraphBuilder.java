@@ -1,4 +1,4 @@
-package com.mauvaisetroupe.eadesignit.service.drawio;
+package com.mauvaisetroupe.eadesignit.service.diagram.dto;
 
 import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
@@ -6,10 +6,7 @@ import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.Application;
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.Edge;
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.GraphDTO;
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.Label;
+import com.mauvaisetroupe.eadesignit.service.diagram.drawio.MXFileSerializer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedSet;
