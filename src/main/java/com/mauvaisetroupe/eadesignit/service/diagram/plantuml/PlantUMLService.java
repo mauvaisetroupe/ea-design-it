@@ -85,7 +85,7 @@ public class PlantUMLService {
         for (Edge edge : consolidatedEdge ? graph.getConsolidatedEdges() : graph.getEdges()) {
             Application source = graph.getApplication(edge.getSourceId());
             Application target = graph.getApplication(edge.getTargetId());
-            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), diagramType, useID);
+            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), diagramType, useID, addURL);
         }
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
         System.out.println(plantUMLSource.toString());
@@ -121,7 +121,7 @@ public class PlantUMLService {
     public String getFunctionalFlowDiagramSource(FunctionalFlow functionalFlow, DiagramType diagramType) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(functionalFlow);
-        return createPlantUMLSource(graph, diagramType, false, true, Layout.smetana, false, false);
+        return createPlantUMLSource(graph, diagramType, false, false, Layout.smetana, false, false);
     }
 
     public String getInterfacesCollectionDiagramSVG(SortedSet<FlowInterfaceLight> interfaces, Layout layout, boolean groupComponents)
