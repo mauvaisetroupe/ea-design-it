@@ -57,7 +57,7 @@ public class PlantUMLService {
         if (adaptWidth) {
             for (Application application : groupComponents ? graph.getApplicationsWithoutGroups() : graph.getApplications()) {
                 String space = getSpaces(application.getName(), graph.getNbConnection(application), layout);
-                application.setName(space + application.getName() + graph.getNbConnection(application) + space);
+                application.setName(space + application.getName() + space);
             }
         }
 
