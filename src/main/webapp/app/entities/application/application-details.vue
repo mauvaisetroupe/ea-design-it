@@ -108,14 +108,6 @@
       <div v-html="plantUMLImage" class="table-responsive"></div>
       <div class="col-12">
         <button
-          class="btn btn-warning"
-          v-on:click="exportPlantUML()"
-          style="font-size: 0.7em; padding: 3px; margin: 3px"
-          v-if="plantUMLImage"
-        >
-          <span>Export plantuml</span>
-        </button>
-        <button
           class="btn btn-secondary"
           v-on:click="changeLayout()"
           style="font-size: 0.7em; padding: 3px; margin: 3px"
