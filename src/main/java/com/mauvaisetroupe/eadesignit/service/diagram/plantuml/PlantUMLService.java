@@ -22,9 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PlantUMLSerializer {
+public class PlantUMLService {
 
-    private final Logger log = LoggerFactory.getLogger(PlantUMLSerializer.class);
+    private final Logger log = LoggerFactory.getLogger(PlantUMLService.class);
 
     public enum DiagramType {
         COMPONENT_DIAGRAM,

@@ -11,8 +11,8 @@ import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.Layout;
-import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLSerializer;
-import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLSerializer.DiagramType;
+import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService;
+import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService.DiagramType;
 import com.mauvaisetroupe.eadesignit.service.dto.PlantumlDTO;
 import io.undertow.util.BadRequestException;
 import java.io.ByteArrayInputStream;
@@ -51,7 +51,7 @@ public class PlantUMLResource {
     private final ApplicationRepository applicationRepository;
     private final CapabilityRepository capabilityRepository;
 
-    private final PlantUMLSerializer plantUMLSerializer;
+    private final PlantUMLService plantUMLSerializer;
 
     private final Logger log = LoggerFactory.getLogger(PlantUMLResource.class);
 
@@ -61,7 +61,7 @@ public class PlantUMLResource {
         ApplicationRepository applicationRepository,
         FlowInterfaceRepository flowInterfaceRepository,
         CapabilityRepository capabilityRepository,
-        PlantUMLSerializer plantUMLSerializer
+        PlantUMLService plantUMLSerializer
     ) {
         this.landscapeViewRepository = landscapeViewRepository;
         this.functionalFlowRepository = functionalFlowRepository;

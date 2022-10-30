@@ -5,7 +5,6 @@ import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphBuilder;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphDTO;
-import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLSerializer;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;

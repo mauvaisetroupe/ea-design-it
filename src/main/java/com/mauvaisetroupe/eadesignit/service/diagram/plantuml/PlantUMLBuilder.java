@@ -4,7 +4,7 @@ import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphBuilder;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Label;
-import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLSerializer.DiagramType;
+import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService.DiagramType;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import org.springframework.util.StringUtils;
 @Component
 public class PlantUMLBuilder {
 
-    private final Logger log = LoggerFactory.getLogger(PlantUMLSerializer.class);
+    private final Logger log = LoggerFactory.getLogger(PlantUMLService.class);
     public static final String PLANTUML_SVG_CACHE = "com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer.svg";
 
     public enum Layout {

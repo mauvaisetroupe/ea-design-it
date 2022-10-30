@@ -4,7 +4,7 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.diagram.drawio.MXFileSerializer;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.Layout;
-import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLSerializer;
+import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService;
 import io.undertow.util.BadRequestException;
 import java.io.IOException;
 import java.util.Optional;
@@ -27,11 +27,11 @@ import org.xml.sax.SAXException;
 public class DrawIOResource {
 
     private final LandscapeViewRepository landscapeViewRepository;
-    private final PlantUMLSerializer plantUMLSerializer;
+    private final PlantUMLService plantUMLSerializer;
 
     private final Logger log = LoggerFactory.getLogger(DrawIOResource.class);
 
-    public DrawIOResource(LandscapeViewRepository landscapeViewRepository, PlantUMLSerializer plantUMLSerializer) {
+    public DrawIOResource(LandscapeViewRepository landscapeViewRepository, PlantUMLService plantUMLSerializer) {
         this.landscapeViewRepository = landscapeViewRepository;
         this.plantUMLSerializer = plantUMLSerializer;
     }
