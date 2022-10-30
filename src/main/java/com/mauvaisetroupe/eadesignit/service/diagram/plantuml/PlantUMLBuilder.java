@@ -63,7 +63,8 @@ public class PlantUMLBuilder {
         Application target,
         SortedSet<Label> labels,
         DiagramType diagramType,
-        boolean useID
+        boolean useID,
+        boolean addURL
     ) {
         plantUMLSource.append(
             getComponentByNameOrId(source, useID, diagramType) + " --> " + getComponentByNameOrId(target, useID, diagramType)
@@ -75,9 +76,11 @@ public class PlantUMLBuilder {
                 if (StringUtils.hasText(label.getLabel())) {
                     String _label = label.getLabel().replaceAll("\n", "\\\\n");
                     plantUMLSource.append(sepaString);
-                    if (label.getUrl() == null) plantUMLSource.append(" " + _label); else plantUMLSource.append(
-                        "[[ " + label.getUrl() + " " + _label + " ]]"
-                    );
+                    if (label.getUrl() == null || !addURL) {
+                        plantUMLSource.append(" " + _label);
+                    } else {
+                        plantUMLSource.append("[[ " + label.getUrl() + " " + _label + " ]]");
+                    }
                     sepaString = ",\\n";
                 }
             }
