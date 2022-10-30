@@ -1,21 +1,13 @@
 package com.mauvaisetroupe.eadesignit.service.drawio;
 
-import com.mauvaisetroupe.eadesignit.service.drawio.dto.Point;
-import java.io.File;
-import java.io.FileOutputStream;
+import com.mauvaisetroupe.eadesignit.service.drawio.dto.PositionAndSize;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -66,7 +58,7 @@ public class PLantumlToDrawioPositioner {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document docSvgXML = db.parse(new InputSource(new StringReader(svgXML)));
 
-            Map<String, Point> pointFromSVGMap = getPointFromSVG(docSvgXML);
+            Map<String, PositionAndSize> pointFromSVGMap = getPointFromSVG(docSvgXML);
             addPositions(copiedDocument, pointFromSVGMap);
             return copiedDocument;
         } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
@@ -75,7 +67,7 @@ public class PLantumlToDrawioPositioner {
         }
     }
 
-    private void addPositions(Document doc, Map<String, Point> pointFromSVGMap) throws XPathExpressionException {
+    private void addPositions(Document doc, Map<String, PositionAndSize> pointFromSVGMap) throws XPathExpressionException {
         XPathFactory xpathfactory = XPathFactory.newInstance();
         XPath xpath = xpathfactory.newXPath();
         NodeList nodeList = (NodeList) xpath.evaluate(
@@ -86,13 +78,15 @@ public class PLantumlToDrawioPositioner {
         for (int i = 0; i < nodeList.getLength(); i++) {
             Element mxcellElement = ((Element) nodeList.item(i));
             String applicationName = mxcellElement.getAttribute("value");
-            Point position = pointFromSVGMap.get(applicationName);
+            PositionAndSize position = pointFromSVGMap.get(applicationName);
 
             NodeList textNodeList = mxcellElement.getElementsByTagName("mxGeometry");
             Element mxGeometryElement = extractFirstChild(textNodeList);
             if (mxGeometryElement != null && position != null) {
                 mxGeometryElement.setAttribute("x", position.getX());
                 mxGeometryElement.setAttribute("y", position.getY());
+                mxGeometryElement.setAttribute("width", position.getWidth());
+                mxGeometryElement.setAttribute("height", position.getHeight());
             }
         }
     }
@@ -105,8 +99,8 @@ public class PLantumlToDrawioPositioner {
     //     return doc;
     // }
 
-    private Map<String, Point> getPointFromSVG(Document doc) throws XPathExpressionException {
-        Map<String, Point> map = new HashMap<>();
+    private Map<String, PositionAndSize> getPointFromSVG(Document doc) throws XPathExpressionException {
+        Map<String, PositionAndSize> map = new HashMap<>();
 
         XPathFactory xpathfactory = XPathFactory.newInstance();
         XPath xpath = xpathfactory.newXPath();
@@ -124,11 +118,12 @@ public class PLantumlToDrawioPositioner {
         populateMap(map, nodeList);
         // Find all groups <a>
         nodeList = (NodeList) xpath.evaluate("//a", doc, XPathConstants.NODESET);
+        populateMap(map, nodeList);
         System.out.println(map);
         return map;
     }
 
-    private void populateMap(Map<String, Point> map, NodeList nodeList) {
+    private void populateMap(Map<String, PositionAndSize> map, NodeList nodeList) {
         for (int i = 0; i < nodeList.getLength(); i++) {
             Element groupelement = ((Element) nodeList.item(i));
             String idValue = groupelement.getAttribute("id");
@@ -142,7 +137,9 @@ public class PLantumlToDrawioPositioner {
             if (rectElement != null) {
                 String _x = rectElement.getAttribute("x");
                 String _y = rectElement.getAttribute("y");
-                map.put(applicationName, new Point(_x, _y));
+                String _width = rectElement.getAttribute("width");
+                String _height = rectElement.getAttribute("height");
+                map.put(applicationName, new PositionAndSize(_x, _y, _width, _height));
             }
         }
     }
