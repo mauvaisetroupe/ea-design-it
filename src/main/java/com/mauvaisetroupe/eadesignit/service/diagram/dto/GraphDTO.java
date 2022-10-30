@@ -3,9 +3,11 @@ package com.mauvaisetroupe.eadesignit.service.diagram.dto;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class GraphDTO {
 
@@ -140,5 +142,20 @@ public class GraphDTO {
     public Edge getBidirectionalConsolidatedEdge(Edge edge) {
         Edge _edge = bidirectionalConsolidatedMap.get(getConsolidatedKey(edge));
         return _edge;
+    }
+
+    public int getNbConnection(Application application) {
+        Set<String> connections = new HashSet<>();
+        for (Edge edge : edges) {
+            if (!edge.getSourceId().equals(edge.getTargetId())) {
+                if (edge.getSourceId().equals(application.getId())) {
+                    connections.add("OUT_" + edge.getTargetId());
+                }
+                if (edge.getTargetId().equals(application.getId())) {
+                    connections.add("IN_" + edge.getSourceId());
+                }
+            }
+        }
+        return connections.size();
     }
 }

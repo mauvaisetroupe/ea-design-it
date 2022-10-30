@@ -79,7 +79,7 @@ public class PlantUMLResource {
     ) throws IOException, BadRequestException {
         Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
         if (landscapeViewOptional.isPresent()) {
-            return this.plantUMLSerializer.getLandscapeDiagramSVG(landscapeViewOptional.get(), layout, groupComponents);
+            return this.plantUMLSerializer.getLandscapeDiagramSVG(landscapeViewOptional.get(), layout, groupComponents, true);
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }
@@ -89,7 +89,7 @@ public class PlantUMLResource {
     public ResponseEntity<Resource> getLandscapeSource(@PathVariable Long id) throws IOException, BadRequestException {
         Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
         if (landscapeViewOptional.isPresent()) {
-            String source = this.plantUMLSerializer.getLandscapeDiagramSource(landscapeViewOptional.get());
+            String source = this.plantUMLSerializer.getLandscapeDiagramSource(landscapeViewOptional.get(), Layout.elk);
             InputStreamResource inputStreamResource = new InputStreamResource(new ByteArrayInputStream(source.getBytes()));
             return ResponseEntity
                 .ok()
