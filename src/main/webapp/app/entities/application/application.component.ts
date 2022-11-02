@@ -56,6 +56,7 @@ export default class Application extends Vue {
   }
 
   public clear(): void {
+    sessionStorage.removeItem('applications');
     this.retrieveAllApplications();
   }
 

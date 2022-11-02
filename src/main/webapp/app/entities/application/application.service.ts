@@ -23,18 +23,33 @@ export default class ApplicationService {
 
   public retrieve(): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      axios
-        .get(baseApiUrl)
-        .then(res => {
-          resolve(res);
-        })
-        .catch(err => {
-          reject(err);
-        });
+      if (sessionStorage.getItem('applications')) {
+        try {
+          const parsedJSON = JSON.parse(sessionStorage.getItem('applications'));
+          console.log('retrieving applications from localStorage');
+          resolve(parsedJSON);
+        } catch (e) {
+          sessionStorage.removeItem('applications');
+          reject(e);
+        }
+      } else {
+        axios
+          .get(baseApiUrl)
+          .then(res => {
+            let json = JSON.stringify(res);
+            console.log('storing applications in localStorage');
+            sessionStorage.setItem('applications', json);
+            resolve(res);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      }
     });
   }
 
   public delete(id: number): Promise<any> {
+    sessionStorage.removeItem('applications');
     return new Promise<any>((resolve, reject) => {
       axios
         .delete(`${baseApiUrl}/${id}`)
@@ -48,6 +63,7 @@ export default class ApplicationService {
   }
 
   public create(entity: IApplication): Promise<IApplication> {
+    sessionStorage.removeItem('applications');
     return new Promise<IApplication>((resolve, reject) => {
       axios
         .post(`${baseApiUrl}`, entity)
@@ -61,6 +77,7 @@ export default class ApplicationService {
   }
 
   public update(entity: IApplication): Promise<IApplication> {
+    sessionStorage.removeItem('applications');
     return new Promise<IApplication>((resolve, reject) => {
       axios
         .put(`${baseApiUrl}/${entity.id}`, entity)
@@ -74,6 +91,7 @@ export default class ApplicationService {
   }
 
   public partialUpdate(entity: IApplication): Promise<IApplication> {
+    sessionStorage.removeItem('applications');
     return new Promise<IApplication>((resolve, reject) => {
       axios
         .patch(`${baseApiUrl}/${entity.id}`, entity)

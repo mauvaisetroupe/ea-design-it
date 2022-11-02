@@ -33,6 +33,7 @@ import DataFlowImportService from '@/entities/data-flow-import/data-flow-import.
 import SequenceDiagramService from '@/eadesignit/sequence-diagram/import.service';
 import ApplicationsDiagramService from '@/eadesignit/applications-diagram/applications-diagram.service';
 import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
+import ApplicationService from '@/entities/application/application.service';
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
@@ -55,6 +56,7 @@ const store = config.initVueXStore(Vue);
 
 const loginService = new LoginService();
 const accountService = new AccountService(store, router);
+const applicationService = new ApplicationService();
 
 router.beforeEach(async (to, from, next) => {
   // Check if anonymous read is allowed
@@ -117,6 +119,13 @@ new Vue({
     reportingService: () => new ReportingService(),
     capabilityImportService: () => new CapabilityImportService(),
     landscapeViewService: () => new LandscapeViewService(),
+
+    applicationService: () => new ApplicationService(),
   },
   store,
+  created: function () {
+    applicationService.retrieve().then(res => {
+      console.log('Applications loaded');
+    });
+  },
 });
