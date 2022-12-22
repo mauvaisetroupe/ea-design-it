@@ -34,6 +34,10 @@ relationship ManyToOne {
     DataFlow{format(name)} to DataFormat
     
     FunctionalFlowStep{flowInterface(alias) required} to FlowInterface{steps}
+    
+    FunctionalFlowStep{group(alias)} to FlowGroup{steps required}
+	FlowGroup{flow(alias) required} to FunctionalFlow
+
 }
 
 relationship OneToMany {
@@ -44,6 +48,12 @@ relationship OneToMany {
 
 }
 
+
+entity FlowGroup {
+	order Integer required
+    title String maxlength(100)
+    url String maxlength(500)
+}
 
 entity LandscapeView {
     viewpoint ViewPoint

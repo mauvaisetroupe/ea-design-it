@@ -31,6 +31,7 @@
             <th scope="row"><span>Description</span></th>
             <th scope="row"><span>Step Order</span></th>
             <th scope="row"><span>Flow Interface</span></th>
+            <th scope="row"><span>Group</span></th>
             <th scope="row"><span>Flow</span></th>
             <th scope="row"></th>
           </tr>
@@ -48,6 +49,13 @@
               <div v-if="functionalFlowStep.flowInterface">
                 <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: functionalFlowStep.flowInterface.id } }">{{
                   functionalFlowStep.flowInterface.alias
+                }}</router-link>
+              </div>
+            </td>
+            <td>
+              <div v-if="functionalFlowStep.group">
+                <router-link :to="{ name: 'FlowGroupView', params: { flowGroupId: functionalFlowStep.group.id } }">{{
+                  functionalFlowStep.group.alias
                 }}</router-link>
               </div>
             </td>

@@ -67,6 +67,23 @@
             <small class="form-text text-danger" v-if="!$v.functionalFlowStep.flowInterface.required"> This field is required. </small>
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="functional-flow-step-group">Group</label>
+            <select class="form-control" id="functional-flow-step-group" data-cy="group" name="group" v-model="functionalFlowStep.group">
+              <option v-bind:value="null"></option>
+              <option
+                v-bind:value="
+                  functionalFlowStep.group && flowGroupOption.id === functionalFlowStep.group.id
+                    ? functionalFlowStep.group
+                    : flowGroupOption
+                "
+                v-for="flowGroupOption in flowGroups"
+                :key="flowGroupOption.id"
+              >
+                {{ flowGroupOption.alias }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="functional-flow-step-flow">Flow</label>
             <select
               class="form-control"

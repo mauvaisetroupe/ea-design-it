@@ -11,16 +11,16 @@ import {
   entityConfirmDeleteButtonSelector,
 } from '../../support/entity';
 
-describe('FunctionalFlowStep e2e test', () => {
-  const functionalFlowStepPageUrl = '/functional-flow-step';
-  const functionalFlowStepPageUrlPattern = new RegExp('/functional-flow-step(\\?.*)?$');
+describe('FlowGroup e2e test', () => {
+  const flowGroupPageUrl = '/flow-group';
+  const flowGroupPageUrlPattern = new RegExp('/flow-group(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const functionalFlowStepSample = {};
+  const flowGroupSample = { order: 88204 };
 
-  let functionalFlowStep: any;
-  //let flowInterface: any;
+  let flowGroup: any;
   //let functionalFlow: any;
+  //let functionalFlowStep: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -31,50 +31,65 @@ describe('FunctionalFlowStep e2e test', () => {
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
-      url: '/api/flow-interfaces',
-      body: {"alias":"collaborative","status":"index virtual","documentationURL":"Loan Cambridgeshire Fish","documentationURL2":"International","description":"didactic","startDate":"2021-11-03","endDate":"2021-11-04"},
+      url: '/api/functional-flows',
+      body: {"alias":"Throughway","description":"JSON Intelligent","comment":"Sharable AI","status":"hard Buckinghamshire","documentationURL":"software Human","documentationURL2":"Cotton pink","startDate":"2021-11-03","endDate":"2021-11-04"},
     }).then(({ body }) => {
-      flowInterface = body;
+      functionalFlow = body;
     });
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
-      url: '/api/functional-flows',
-      body: {"alias":"markets systemic","description":"Plastic deposit","comment":"Alabama","status":"quantify Fall","documentationURL":"Operations Computer engineer","documentationURL2":"microchip content","startDate":"2021-11-04","endDate":"2021-11-04"},
+      url: '/api/functional-flow-steps',
+      body: {"description":"Devolved","stepOrder":20724},
     }).then(({ body }) => {
-      functionalFlow = body;
+      functionalFlowStep = body;
     });
   });
    */
 
   beforeEach(() => {
-    cy.intercept('GET', '/api/functional-flow-steps+(?*|)').as('entitiesRequest');
-    cy.intercept('POST', '/api/functional-flow-steps').as('postEntityRequest');
-    cy.intercept('DELETE', '/api/functional-flow-steps/*').as('deleteEntityRequest');
+    cy.intercept('GET', '/api/flow-groups+(?*|)').as('entitiesRequest');
+    cy.intercept('POST', '/api/flow-groups').as('postEntityRequest');
+    cy.intercept('DELETE', '/api/flow-groups/*').as('deleteEntityRequest');
   });
 
   /* Disabled due to incompatibility
   beforeEach(() => {
     // Simulate relationships api for better performance and reproducibility.
-    cy.intercept('GET', '/api/flow-interfaces', {
-      statusCode: 200,
-      body: [flowInterface],
-    });
-
-    cy.intercept('GET', '/api/flow-groups', {
-      statusCode: 200,
-      body: [],
-    });
-
     cy.intercept('GET', '/api/functional-flows', {
       statusCode: 200,
       body: [functionalFlow],
+    });
+
+    cy.intercept('GET', '/api/functional-flow-steps', {
+      statusCode: 200,
+      body: [functionalFlowStep],
     });
 
   });
    */
 
   afterEach(() => {
+    if (flowGroup) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/flow-groups/${flowGroup.id}`,
+      }).then(() => {
+        flowGroup = undefined;
+      });
+    }
+  });
+
+  /* Disabled due to incompatibility
+  afterEach(() => {
+    if (functionalFlow) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/functional-flows/${functionalFlow.id}`,
+      }).then(() => {
+        functionalFlow = undefined;
+      });
+    }
     if (functionalFlowStep) {
       cy.authenticatedRequest({
         method: 'DELETE',
@@ -84,31 +99,11 @@ describe('FunctionalFlowStep e2e test', () => {
       });
     }
   });
-
-  /* Disabled due to incompatibility
-  afterEach(() => {
-    if (flowInterface) {
-      cy.authenticatedRequest({
-        method: 'DELETE',
-        url: `/api/flow-interfaces/${flowInterface.id}`,
-      }).then(() => {
-        flowInterface = undefined;
-      });
-    }
-    if (functionalFlow) {
-      cy.authenticatedRequest({
-        method: 'DELETE',
-        url: `/api/functional-flows/${functionalFlow.id}`,
-      }).then(() => {
-        functionalFlow = undefined;
-      });
-    }
-  });
    */
 
-  it('FunctionalFlowSteps menu should load FunctionalFlowSteps page', () => {
+  it('FlowGroups menu should load FlowGroups page', () => {
     cy.visit('/');
-    cy.clickOnEntityMenuItem('functional-flow-step');
+    cy.clickOnEntityMenuItem('flow-group');
     cy.wait('@entitiesRequest').then(({ response }) => {
       if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
@@ -116,27 +111,27 @@ describe('FunctionalFlowStep e2e test', () => {
         cy.get(entityTableSelector).should('exist');
       }
     });
-    cy.getEntityHeading('FunctionalFlowStep').should('exist');
-    cy.url().should('match', functionalFlowStepPageUrlPattern);
+    cy.getEntityHeading('FlowGroup').should('exist');
+    cy.url().should('match', flowGroupPageUrlPattern);
   });
 
-  describe('FunctionalFlowStep page', () => {
+  describe('FlowGroup page', () => {
     describe('create button click', () => {
       beforeEach(() => {
-        cy.visit(functionalFlowStepPageUrl);
+        cy.visit(flowGroupPageUrl);
         cy.wait('@entitiesRequest');
       });
 
-      it('should load create FunctionalFlowStep page', () => {
+      it('should load create FlowGroup page', () => {
         cy.get(entityCreateButtonSelector).click();
-        cy.url().should('match', new RegExp('/functional-flow-step/new$'));
-        cy.getEntityCreateUpdateHeading('FunctionalFlowStep');
+        cy.url().should('match', new RegExp('/flow-group/new$'));
+        cy.getEntityCreateUpdateHeading('FlowGroup');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(200);
         });
-        cy.url().should('match', functionalFlowStepPageUrlPattern);
+        cy.url().should('match', flowGroupPageUrlPattern);
       });
     });
 
@@ -145,36 +140,36 @@ describe('FunctionalFlowStep e2e test', () => {
       beforeEach(() => {
         cy.authenticatedRequest({
           method: 'POST',
-          url: '/api/functional-flow-steps',
+          url: '/api/flow-groups',
           body: {
-            ...functionalFlowStepSample,
-            flowInterface: flowInterface,
+            ...flowGroupSample,
             flow: functionalFlow,
+            steps: functionalFlowStep,
           },
         }).then(({ body }) => {
-          functionalFlowStep = body;
+          flowGroup = body;
 
           cy.intercept(
             {
               method: 'GET',
-              url: '/api/functional-flow-steps+(?*|)',
+              url: '/api/flow-groups+(?*|)',
               times: 1,
             },
             {
               statusCode: 200,
-              body: [functionalFlowStep],
+              body: [flowGroup],
             }
           ).as('entitiesRequestInternal');
         });
 
-        cy.visit(functionalFlowStepPageUrl);
+        cy.visit(flowGroupPageUrl);
 
         cy.wait('@entitiesRequestInternal');
       });
        */
 
       beforeEach(function () {
-        cy.visit(functionalFlowStepPageUrl);
+        cy.visit(flowGroupPageUrl);
 
         cy.wait('@entitiesRequest').then(({ response }) => {
           if (response!.body.length === 0) {
@@ -183,30 +178,30 @@ describe('FunctionalFlowStep e2e test', () => {
         });
       });
 
-      it('detail button click should load details FunctionalFlowStep page', () => {
+      it('detail button click should load details FlowGroup page', () => {
         cy.get(entityDetailsButtonSelector).first().click();
-        cy.getEntityDetailsHeading('functionalFlowStep');
+        cy.getEntityDetailsHeading('flowGroup');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(200);
         });
-        cy.url().should('match', functionalFlowStepPageUrlPattern);
+        cy.url().should('match', flowGroupPageUrlPattern);
       });
 
-      it('edit button click should load edit FunctionalFlowStep page', () => {
+      it('edit button click should load edit FlowGroup page', () => {
         cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('FunctionalFlowStep');
+        cy.getEntityCreateUpdateHeading('FlowGroup');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(200);
         });
-        cy.url().should('match', functionalFlowStepPageUrlPattern);
+        cy.url().should('match', flowGroupPageUrlPattern);
       });
 
-      it.skip('last delete button click should delete instance of FunctionalFlowStep', () => {
+      it.skip('last delete button click should delete instance of FlowGroup', () => {
         cy.get(entityDeleteButtonSelector).last().click();
-        cy.getEntityDeleteDialogHeading('functionalFlowStep').should('exist');
+        cy.getEntityDeleteDialogHeading('flowGroup').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(204);
@@ -214,38 +209,40 @@ describe('FunctionalFlowStep e2e test', () => {
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(200);
         });
-        cy.url().should('match', functionalFlowStepPageUrlPattern);
+        cy.url().should('match', flowGroupPageUrlPattern);
 
-        functionalFlowStep = undefined;
+        flowGroup = undefined;
       });
     });
   });
 
-  describe('new FunctionalFlowStep page', () => {
+  describe('new FlowGroup page', () => {
     beforeEach(() => {
-      cy.visit(`${functionalFlowStepPageUrl}`);
+      cy.visit(`${flowGroupPageUrl}`);
       cy.get(entityCreateButtonSelector).click();
-      cy.getEntityCreateUpdateHeading('FunctionalFlowStep');
+      cy.getEntityCreateUpdateHeading('FlowGroup');
     });
 
-    it.skip('should create an instance of FunctionalFlowStep', () => {
-      cy.get(`[data-cy="description"]`).type('capacitor CSS').should('have.value', 'capacitor CSS');
+    it.skip('should create an instance of FlowGroup', () => {
+      cy.get(`[data-cy="order"]`).type('34544').should('have.value', '34544');
 
-      cy.get(`[data-cy="stepOrder"]`).type('22585').should('have.value', '22585');
+      cy.get(`[data-cy="title"]`).type('matrix').should('have.value', 'matrix');
 
-      cy.get(`[data-cy="flowInterface"]`).select(1);
+      cy.get(`[data-cy="url"]`).type('http://valerie.biz').should('have.value', 'http://valerie.biz');
+
       cy.get(`[data-cy="flow"]`).select(1);
+      cy.get(`[data-cy="steps"]`).select([0]);
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
         expect(response!.statusCode).to.equal(201);
-        functionalFlowStep = response!.body;
+        flowGroup = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
         expect(response!.statusCode).to.equal(200);
       });
-      cy.url().should('match', functionalFlowStepPageUrlPattern);
+      cy.url().should('match', flowGroupPageUrlPattern);
     });
   });
 });

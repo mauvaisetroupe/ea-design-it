@@ -7,23 +7,20 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <!--
-        Added the entity FunctionalFlowStep.
+        Added the entity FlowGroup.
     -->
-    <changeSet id="20220118113150-1" author="jhipster">
-        <createTable tableName="flowstep">
+    <changeSet id="20221222092421-1" author="jhipster">
+        <createTable tableName="flow_group">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="description" type="varchar(500)">
-                <constraints nullable="true" />
-            </column>
-            <column name="step_order" type="integer">
-                <constraints nullable="true" />
-            </column>
-            <column name="flow_interface_id" type="bigint">
+            <column name="jhi_order" type="integer">
                 <constraints nullable="false" />
             </column>
-            <column name="group_id" type="bigint">
+            <column name="title" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="url" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
             <column name="flow_id" type="bigint">

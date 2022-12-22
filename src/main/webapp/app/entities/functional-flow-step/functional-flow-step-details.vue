@@ -29,6 +29,16 @@
             </div>
           </dd>
           <dt>
+            <span>Group</span>
+          </dt>
+          <dd>
+            <div v-if="functionalFlowStep.group">
+              <router-link :to="{ name: 'FlowGroupView', params: { flowGroupId: functionalFlowStep.group.id } }">{{
+                functionalFlowStep.group.alias
+              }}</router-link>
+            </div>
+          </dd>
+          <dt>
             <span>Flow</span>
           </dt>
           <dd>

@@ -56,7 +56,7 @@ public class FunctionalFlow implements Serializable {
 
     @OneToMany(mappedBy = "flow")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "flowInterface", "flow" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "flowInterface", "group", "flow" }, allowSetters = true)
     private Set<FunctionalFlowStep> steps = new HashSet<>();
 
     @ManyToOne
