@@ -2,79 +2,49 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import java.io.Serializable;
-import javax.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A ApplicationImport.
  */
-@Entity
-@Table(name = "tmp_import_application_import")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ApplicationImport implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "import_id")
     private String importId;
 
-    @Column(name = "excel_file_name")
     private String excelFileName;
 
-    @Column(name = "id_from_excel")
     private String idFromExcel;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "jhi_type")
     private String type;
 
-    @Column(name = "software_type")
     private String softwareType;
 
-    @Column(name = "category_1")
     private String category1;
 
-    @Column(name = "category_2")
     private String category2;
 
-    @Column(name = "category_3")
     private String category3;
 
-    @Column(name = "technology")
     private String technology;
 
-    @Column(name = "documentation")
     private String documentation;
 
-    @Column(name = "jhi_comment")
     private String comment;
 
-    @Column(name = "owner")
     private String owner;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "import_status")
     private ImportStatus importStatus;
 
-    @Column(name = "import_status_message")
     private String importStatusMessage;
 
-    @Column(name = "existing_application_id")
     private String existingApplicationID;
-
-    // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
         return this.id;
@@ -308,49 +278,5 @@ public class ApplicationImport implements Serializable {
 
     public void setExistingApplicationID(String existingApplicationID) {
         this.existingApplicationID = existingApplicationID;
-    }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof ApplicationImport)) {
-            return false;
-        }
-        return id != null && id.equals(((ApplicationImport) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
-        return getClass().hashCode();
-    }
-
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "ApplicationImport{" +
-            "id=" + getId() +
-            ", importId='" + getImportId() + "'" +
-            ", excelFileName='" + getExcelFileName() + "'" +
-            ", idFromExcel='" + getIdFromExcel() + "'" +
-            ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", type='" + getType() + "'" +
-            ", softwareType='" + getSoftwareType() + "'" +
-            ", category1='" + getCategory1() + "'" +
-            ", category2='" + getCategory2() + "'" +
-            ", category3='" + getCategory3() + "'" +
-            ", technology='" + getTechnology() + "'" +
-            ", documentation='" + getDocumentation() + "'" +
-            ", comment='" + getComment() + "'" +
-            ", owner='" + getOwner() + "'" +
-            ", importStatus='" + getImportStatus() + "'" +
-            ", importStatusMessage='" + getImportStatusMessage() + "'" +
-            ", existingApplicationID='" + getExistingApplicationID() + "'" +
-            "}";
     }
 }

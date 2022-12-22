@@ -2,80 +2,50 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import java.io.Serializable;
-import javax.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A DataFlowImport.
  */
-@Entity
-@Table(name = "tmp_import_dataflows")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class DataFlowImport implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "data_id")
     private String dataId;
 
-    @Column(name = "data_parent_id")
     private String dataParentId;
 
-    @Column(name = "data_parent_name")
     private String dataParentName;
 
-    @Column(name = "functional_flow_id")
     private String functionalFlowId;
 
-    @Column(name = "flow_interface_id")
     private String flowInterfaceId;
 
-    @Column(name = "data_type")
     private String dataType;
 
-    @Column(name = "data_resource_name")
     private String dataResourceName;
 
-    @Column(name = "data_resource_type")
     private String dataResourceType;
 
-    @Column(name = "data_description")
     private String dataDescription;
 
-    @Column(name = "data_frequency")
     private String dataFrequency;
 
-    @Column(name = "data_format")
     private String dataFormat;
 
-    @Column(name = "data_contract_url")
     private String dataContractURL;
 
-    @Column(name = "data_documentation_url")
     private String dataDocumentationURL;
 
-    @Column(name = "source")
     private String source;
 
-    @Column(name = "target")
     private String target;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "import_data_status")
     private ImportStatus importDataStatus;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "import_data_item_status")
     private ImportStatus importDataItemStatus;
 
-    @Column(name = "import_status_message")
     private String importStatusMessage;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -325,50 +295,5 @@ public class DataFlowImport implements Serializable {
 
     public void setImportStatusMessage(String importStatusMessage) {
         this.importStatusMessage = importStatusMessage;
-    }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof DataFlowImport)) {
-            return false;
-        }
-        return id != null && id.equals(((DataFlowImport) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
-        return getClass().hashCode();
-    }
-
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "DataFlowImport{" +
-            "id=" + getId() +
-            ", dataId='" + getDataId() + "'" +
-            ", dataParentId='" + getDataParentId() + "'" +
-            ", dataParentName='" + getDataParentName() + "'" +
-            ", functionalFlowId='" + getFunctionalFlowId() + "'" +
-            ", flowInterfaceId='" + getFlowInterfaceId() + "'" +
-            ", dataType='" + getDataType() + "'" +
-            ", dataResourceName='" + getDataResourceName() + "'" +
-            ", dataResourceType='" + getDataResourceType() + "'" +
-            ", dataDescription='" + getDataDescription() + "'" +
-            ", dataFrequency='" + getDataFrequency() + "'" +
-            ", dataFormat='" + getDataFormat() + "'" +
-            ", dataContractURL='" + getDataContractURL() + "'" +
-            ", dataDocumentationURL='" + getDataDocumentationURL() + "'" +
-            ", source='" + getSource() + "'" +
-            ", target='" + getTarget() + "'" +
-            ", importDataStatus='" + getImportDataStatus() + "'" +
-            ", importDataItemStatus='" + getImportDataItemStatus() + "'" +
-            ", importStatusMessage='" + getImportStatusMessage() + "'" +
-            "}";
     }
 }

@@ -2,93 +2,58 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import java.io.Serializable;
-import javax.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A FlowImport.
  */
-@Entity
-@Table(name = "tmp_import_flows")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class FlowImport implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "id_flow_from_excel")
     private String idFlowFromExcel;
 
-    @Column(name = "flow_alias")
     private String flowAlias;
 
-    @Column(name = "source_element")
     private String sourceElement;
 
-    @Column(name = "target_element")
     private String targetElement;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "step_description")
     private String stepDescription;
 
-    @Column(name = "integration_pattern")
     private String integrationPattern;
 
-    @Column(name = "frequency")
     private String frequency;
 
-    @Column(name = "format")
     private String format;
 
-    @Column(name = "swagger")
     private String swagger;
 
-    @Column(name = "source_url_documentation")
     private String sourceURLDocumentation;
 
-    @Column(name = "target_url_documentation")
     private String targetURLDocumentation;
 
-    @Column(name = "source_documentation_status")
     private String sourceDocumentationStatus;
 
-    @Column(name = "target_documentation_status")
     private String targetDocumentationStatus;
 
-    @Column(name = "flow_status")
     private String flowStatus;
 
-    @Column(name = "jhi_comment")
     private String comment;
 
-    @Column(name = "document_name")
     private String documentName;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "import_interface_status")
     private ImportStatus importInterfaceStatus;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "import_functional_flow_status")
     private ImportStatus importFunctionalFlowStatus;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "import_data_flow_status")
     private ImportStatus importDataFlowStatus;
 
-    @Column(name = "import_status_message")
     private String importStatusMessage;
 
-    @Transient
     private boolean external;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -385,53 +350,5 @@ public class FlowImport implements Serializable {
 
     public void setImportStatusMessage(String importStatusMessage) {
         this.importStatusMessage = importStatusMessage;
-    }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof FlowImport)) {
-            return false;
-        }
-        return id != null && id.equals(((FlowImport) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
-        return getClass().hashCode();
-    }
-
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "FlowImport{" +
-            "id=" + getId() +
-            ", idFlowFromExcel='" + getIdFlowFromExcel() + "'" +
-            ", flowAlias='" + getFlowAlias() + "'" +
-            ", sourceElement='" + getSourceElement() + "'" +
-            ", targetElement='" + getTargetElement() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", stepDescription='" + getStepDescription() + "'" +
-            ", integrationPattern='" + getIntegrationPattern() + "'" +
-            ", frequency='" + getFrequency() + "'" +
-            ", format='" + getFormat() + "'" +
-            ", swagger='" + getSwagger() + "'" +
-            ", sourceURLDocumentation='" + getSourceURLDocumentation() + "'" +
-            ", targetURLDocumentation='" + getTargetURLDocumentation() + "'" +
-            ", sourceDocumentationStatus='" + getSourceDocumentationStatus() + "'" +
-            ", targetDocumentationStatus='" + getTargetDocumentationStatus() + "'" +
-            ", flowStatus='" + getFlowStatus() + "'" +
-            ", comment='" + getComment() + "'" +
-            ", documentName='" + getDocumentName() + "'" +
-            ", importInterfaceStatus='" + getImportInterfaceStatus() + "'" +
-            ", importFunctionalFlowStatus='" + getImportFunctionalFlowStatus() + "'" +
-            ", importDataFlowStatus='" + getImportDataFlowStatus() + "'" +
-            ", importStatusMessage='" + getImportStatusMessage() + "'" +
-            "}";
     }
 }
