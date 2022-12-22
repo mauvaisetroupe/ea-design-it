@@ -18,6 +18,7 @@ import DataFlowImportService from './data-flow-import/data-flow-import.service';
 import TechnologyService from './technology/technology.service';
 import CapabilityService from './capability/capability.service';
 import FunctionalFlowStepService from './functional-flow-step/functional-flow-step.service';
+import FlowGroupService from './flow-group/flow-group.service';
 // jhipster-needle-add-entity-service-to-entities-component-import - JHipster will import entities services here
 
 @Component
@@ -40,5 +41,6 @@ export default class Entities extends Vue {
   @Provide('technologyService') private technologyService = () => new TechnologyService();
   @Provide('capabilityService') private capabilityService = () => new CapabilityService();
   @Provide('functionalFlowStepService') private functionalFlowStepService = () => new FunctionalFlowStepService();
+  @Provide('flowGroupService') private flowGroupService = () => new FlowGroupService();
   // jhipster-needle-add-entity-service-to-entities-component - JHipster will import entities services here
 }

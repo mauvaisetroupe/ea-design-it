@@ -36,7 +36,8 @@
       "DataFlowImport",
       "Technology",
       "Capability",
-      "FunctionalFlowStep"
+      "FunctionalFlowStep",
+      "FlowGroup"
     ],
     "entitySuffix": "",
     "herokuAppName": "ea-design-it",
@@ -46,7 +47,7 @@
     "jhipsterVersion": "7.6.0",
     "jwtSecretKey": "ZGNhMjhiMjkyMzk0YzhmYzgwODlmNGFjY2ZhNGI5ODJkNDg1OWUyMmU4MGVhMzJiMjQyZTlmNGNkYjdlNjgxYzY0Njg2NDUzODg3NjJiNGUwZDZmOTVlYjk4ODYwZGM4MjJhNjY5MDhlMTI0YWMyMzE5ZTZiNzhhZGIzNzJkYmQ=",
     "languages": ["en", "fr"],
-    "lastLiquibaseTimestamp": 1642010220000,
+    "lastLiquibaseTimestamp": 1671701061000,
     "messageBroker": false,
     "nativeLanguage": "en",
     "otherModules": [],

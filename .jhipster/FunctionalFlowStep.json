@@ -32,6 +32,13 @@
     },
     {
       "otherEntityField": "alias",
+      "otherEntityName": "flowGroup",
+      "otherEntityRelationshipName": "steps",
+      "relationshipName": "group",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "alias",
       "otherEntityName": "functionalFlow",
       "otherEntityRelationshipName": "steps",
       "relationshipName": "flow",

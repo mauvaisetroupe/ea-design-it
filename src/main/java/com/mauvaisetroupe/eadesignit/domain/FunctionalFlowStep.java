@@ -37,6 +37,10 @@ public class FunctionalFlowStep implements Serializable, Comparable<FunctionalFl
     @JsonIgnoreProperties(value = { "owner", "steps" }, allowSetters = true)
     private FlowInterface flowInterface;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "flow", "steps" }, allowSetters = true)
+    private FlowGroup group;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = { "steps", "owner", "dataFlows" }, allowSetters = true)
@@ -93,6 +97,19 @@ public class FunctionalFlowStep implements Serializable, Comparable<FunctionalFl
 
     public FunctionalFlowStep flowInterface(FlowInterface flowInterface) {
         this.setFlowInterface(flowInterface);
+        return this;
+    }
+
+    public FlowGroup getGroup() {
+        return this.group;
+    }
+
+    public void setGroup(FlowGroup flowGroup) {
+        this.group = flowGroup;
+    }
+
+    public FunctionalFlowStep group(FlowGroup flowGroup) {
+        this.setGroup(flowGroup);
         return this;
     }
 

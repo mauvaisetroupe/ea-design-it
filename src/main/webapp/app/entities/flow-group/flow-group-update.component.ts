@@ -1,31 +1,34 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import { maxLength, required } from 'vuelidate/lib/validators';
+import { numeric, required, maxLength } from 'vuelidate/lib/validators';
 
 import AlertService from '@/shared/alert/alert.service';
-
-import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
-import { IFlowInterface } from '@/shared/model/flow-interface.model';
-
-import FlowGroupService from '@/entities/flow-group/flow-group.service';
-import { IFlowGroup } from '@/shared/model/flow-group.model';
 
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
-import { IFunctionalFlowStep, FunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
-import FunctionalFlowStepService from './functional-flow-step.service';
+import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
+import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+
+import { IFlowGroup, FlowGroup } from '@/shared/model/flow-group.model';
+import FlowGroupService from './flow-group.service';
 
 const validations: any = {
-  functionalFlowStep: {
-    description: {
+  flowGroup: {
+    order: {
+      required,
+      numeric,
+    },
+    title: {
+      maxLength: maxLength(100),
+    },
+    url: {
       maxLength: maxLength(500),
     },
-    stepOrder: {},
-    flowInterface: {
+    flow: {
       required,
     },
-    flow: {
+    steps: {
       required,
     },
   },
@@ -34,30 +37,26 @@ const validations: any = {
 @Component({
   validations,
 })
-export default class FunctionalFlowStepUpdate extends Vue {
-  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
+export default class FlowGroupUpdate extends Vue {
+  @Inject('flowGroupService') private flowGroupService: () => FlowGroupService;
   @Inject('alertService') private alertService: () => AlertService;
 
-  public functionalFlowStep: IFunctionalFlowStep = new FunctionalFlowStep();
-
-  @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
-
-  public flowInterfaces: IFlowInterface[] = [];
-
-  @Inject('flowGroupService') private flowGroupService: () => FlowGroupService;
-
-  public flowGroups: IFlowGroup[] = [];
+  public flowGroup: IFlowGroup = new FlowGroup();
 
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
 
   public functionalFlows: IFunctionalFlow[] = [];
+
+  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
+
+  public functionalFlowSteps: IFunctionalFlowStep[] = [];
   public isSaving = false;
   public currentLanguage = '';
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      if (to.params.functionalFlowStepId) {
-        vm.retrieveFunctionalFlowStep(to.params.functionalFlowStepId);
+      if (to.params.flowGroupId) {
+        vm.retrieveFlowGroup(to.params.flowGroupId);
       }
       vm.initRelationships();
     });
@@ -75,13 +74,13 @@ export default class FunctionalFlowStepUpdate extends Vue {
 
   public save(): void {
     this.isSaving = true;
-    if (this.functionalFlowStep.id) {
-      this.functionalFlowStepService()
-        .update(this.functionalFlowStep)
+    if (this.flowGroup.id) {
+      this.flowGroupService()
+        .update(this.flowGroup)
         .then(param => {
           this.isSaving = false;
           this.$router.go(-1);
-          const message = 'A FunctionalFlowStep is updated with identifier ' + param.id;
+          const message = 'A FlowGroup is updated with identifier ' + param.id;
           return this.$root.$bvToast.toast(message.toString(), {
             toaster: 'b-toaster-top-center',
             title: 'Info',
@@ -95,12 +94,12 @@ export default class FunctionalFlowStepUpdate extends Vue {
           this.alertService().showHttpError(this, error.response);
         });
     } else {
-      this.functionalFlowStepService()
-        .create(this.functionalFlowStep)
+      this.flowGroupService()
+        .create(this.flowGroup)
         .then(param => {
           this.isSaving = false;
           this.$router.go(-1);
-          const message = 'A FunctionalFlowStep is created with identifier ' + param.id;
+          const message = 'A FlowGroup is created with identifier ' + param.id;
           this.$root.$bvToast.toast(message.toString(), {
             toaster: 'b-toaster-top-center',
             title: 'Success',
@@ -116,11 +115,11 @@ export default class FunctionalFlowStepUpdate extends Vue {
     }
   }
 
-  public retrieveFunctionalFlowStep(functionalFlowStepId): void {
-    this.functionalFlowStepService()
-      .find(functionalFlowStepId)
+  public retrieveFlowGroup(flowGroupId): void {
+    this.flowGroupService()
+      .find(flowGroupId)
       .then(res => {
-        this.functionalFlowStep = res;
+        this.flowGroup = res;
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
@@ -132,20 +131,15 @@ export default class FunctionalFlowStepUpdate extends Vue {
   }
 
   public initRelationships(): void {
-    this.flowInterfaceService()
-      .retrieve()
-      .then(res => {
-        this.flowInterfaces = res.data;
-      });
-    this.flowGroupService()
-      .retrieve()
-      .then(res => {
-        this.flowGroups = res.data;
-      });
     this.functionalFlowService()
       .retrieve()
       .then(res => {
         this.functionalFlows = res.data;
+      });
+    this.functionalFlowStepService()
+      .retrieve()
+      .then(res => {
+        this.functionalFlowSteps = res.data;
       });
   }
 }

@@ -59,6 +59,12 @@ const FunctionalFlowStep = () => import('@/entities/functional-flow-step/functio
 const FunctionalFlowStepUpdate = () => import('@/entities/functional-flow-step/functional-flow-step-update.vue');
 const FunctionalFlowStepDetails = () => import('@/entities/functional-flow-step/functional-flow-step-details.vue');
 
+// prettier-ignore
+const FlowGroup = () => import('@/entities/flow-group/flow-group.vue');
+// prettier-ignore
+const FlowGroupUpdate = () => import('@/entities/flow-group/flow-group-update.vue');
+// prettier-ignore
+const FlowGroupDetails = () => import('@/entities/flow-group/flow-group-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default {
@@ -400,6 +406,30 @@ export default {
       name: 'FunctionalFlowStepView',
       component: FunctionalFlowStepDetails,
       meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
+    },
+    {
+      path: 'flow-group',
+      name: 'FlowGroup',
+      component: FlowGroup,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'flow-group/new',
+      name: 'FlowGroupCreate',
+      component: FlowGroupUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'flow-group/:flowGroupId/edit',
+      name: 'FlowGroupEdit',
+      component: FlowGroupUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'flow-group/:flowGroupId/view',
+      name: 'FlowGroupView',
+      component: FlowGroupDetails,
+      meta: { authorities: [Authority.USER] },
     },
     // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
   ],

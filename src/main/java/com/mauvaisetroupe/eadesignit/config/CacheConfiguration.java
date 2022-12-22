@@ -92,6 +92,8 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.FunctionalFlow.class.getName() + ".steps");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.FlowInterface.class.getName() + ".steps");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.FlowGroup.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.FlowGroup.class.getName() + ".steps");
             // jhipster-needle-ehcache-add-entry
 
             createCache(cm, PlantUMLBuilder.PLANTUML_SVG_CACHE);
