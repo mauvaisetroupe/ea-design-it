@@ -1,0 +1,36 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="lionel (generated)" id="1671701951284-2">
+        <createTable tableName="flow_group">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="flow_groupPK"/>
+            </column>
+            <column name="jhi_order" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(100)"/>
+            <column name="url" type="VARCHAR(500)"/>
+            <column name="flow_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1671701951284-3">
+        <addColumn tableName="rel_flow__interfaces">
+            <column name="group_id" type="bigint"/>
+        </addColumn>
+    </changeSet>
+    <!-- not sure this is useful, delete few month ago...
+    /media/data/development/jhipster/EADesignIt/src/main/resources/config/liquibase/changelog/20220122065125_changelog.xml
+
+    <changeSet author="lionel (generated)" id="1671701951284-4">
+        <addUniqueConstraint columnNames="interfaces_id, flow_id" constraintName="UK6ks4jp1q7ndk8wurqrwvb8jmu" tableName="rel_flow__interfaces"/>
+    </changeSet>
+    -->
+    <changeSet author="lionel (generated)" id="1671701951284-5">
+        <addForeignKeyConstraint baseColumnNames="flow_id" baseTableName="flow_group" constraintName="FK49yknng65ji1269txvy8ykoh2" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="flow" validate="true"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1671701951284-6">
+        <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="rel_flow__interfaces" constraintName="FKjlur1xbn94smywtx347md14ms" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="flow_group" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
