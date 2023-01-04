@@ -28,7 +28,6 @@
         <thead>
           <tr>
             <th scope="row"><span>ID</span></th>
-            <th scope="row"><span>Order</span></th>
             <th scope="row"><span>Title</span></th>
             <th scope="row"><span>Url</span></th>
             <th scope="row"><span>Flow</span></th>
@@ -40,7 +39,6 @@
             <td>
               <router-link :to="{ name: 'FlowGroupView', params: { flowGroupId: flowGroup.id } }">{{ flowGroup.id }}</router-link>
             </td>
-            <td>{{ flowGroup.order }}</td>
             <td>{{ flowGroup.title }}</td>
             <td>{{ flowGroup.url }}</td>
             <td>

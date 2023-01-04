@@ -2,4 +2,5 @@
     "java.dependency.packagePresentation": "hierarchical",
     "maven.view": "hierarchical",
     "java.configuration.updateBuildConfiguration": "interactive",
+    "java.compile.nullAnalysis.mode": "automatic",
 }

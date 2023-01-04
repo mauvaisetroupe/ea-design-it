@@ -50,7 +50,6 @@ relationship OneToMany {
 
 
 entity FlowGroup {
-	order Integer required
     title String maxlength(100)
     url String maxlength(500)
 }

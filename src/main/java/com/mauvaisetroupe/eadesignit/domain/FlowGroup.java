@@ -25,10 +25,6 @@ public class FlowGroup implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotNull
-    @Column(name = "jhi_order", nullable = false)
-    private Integer order;
-
     @Size(max = 100)
     @Column(name = "title", length = 100)
     private String title;
@@ -60,19 +56,6 @@ public class FlowGroup implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getOrder() {
-        return this.order;
-    }
-
-    public FlowGroup order(Integer order) {
-        this.setOrder(order);
-        return this;
-    }
-
-    public void setOrder(Integer order) {
-        this.order = order;
     }
 
     public String getTitle() {
@@ -169,7 +152,6 @@ public class FlowGroup implements Serializable {
     public String toString() {
         return "FlowGroup{" +
             "id=" + getId() +
-            ", order=" + getOrder() +
             ", title='" + getTitle() + "'" +
             ", url='" + getUrl() + "'" +
             "}";

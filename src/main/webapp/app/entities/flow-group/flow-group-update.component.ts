@@ -1,6 +1,6 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import { numeric, required, maxLength } from 'vuelidate/lib/validators';
+import { maxLength, required } from 'vuelidate/lib/validators';
 
 import AlertService from '@/shared/alert/alert.service';
 
@@ -15,10 +15,6 @@ import FlowGroupService from './flow-group.service';
 
 const validations: any = {
   flowGroup: {
-    order: {
-      required,
-      numeric,
-    },
     title: {
       maxLength: maxLength(100),
     },

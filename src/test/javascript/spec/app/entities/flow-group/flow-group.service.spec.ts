@@ -29,7 +29,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       service = new FlowGroupService();
-      elemDefault = new FlowGroup(123, 0, 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new FlowGroup(123, 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -81,7 +81,6 @@ describe('Service Tests', () => {
       it('should update a FlowGroup', async () => {
         const returnedFromService = Object.assign(
           {
-            order: 1,
             title: 'BBBBBB',
             url: 'BBBBBB',
           },
@@ -110,7 +109,7 @@ describe('Service Tests', () => {
       it('should partial update a FlowGroup', async () => {
         const patchObject = Object.assign(
           {
-            order: 1,
+            title: 'BBBBBB',
           },
           new FlowGroup()
         );
@@ -138,7 +137,6 @@ describe('Service Tests', () => {
       it('should return a list of FlowGroup', async () => {
         const returnedFromService = Object.assign(
           {
-            order: 1,
             title: 'BBBBBB',
             url: 'BBBBBB',
           },

@@ -9,23 +9,6 @@
             <input type="text" class="form-control" id="id" name="id" v-model="flowGroup.id" readonly />
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="flow-group-order">Order</label>
-            <input
-              type="number"
-              class="form-control"
-              name="order"
-              id="flow-group-order"
-              data-cy="order"
-              :class="{ valid: !$v.flowGroup.order.$invalid, invalid: $v.flowGroup.order.$invalid }"
-              v-model.number="$v.flowGroup.order.$model"
-              required
-            />
-            <div v-if="$v.flowGroup.order.$anyDirty && $v.flowGroup.order.$invalid">
-              <small class="form-text text-danger" v-if="!$v.flowGroup.order.required"> This field is required. </small>
-              <small class="form-text text-danger" v-if="!$v.flowGroup.order.numeric"> This field should be a number. </small>
-            </div>
-          </div>
-          <div class="form-group">
             <label class="form-control-label" for="flow-group-title">Title</label>
             <input
               type="text"

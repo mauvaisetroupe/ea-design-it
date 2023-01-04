@@ -6,11 +6,6 @@
   "entityTableName": "flow_group",
   "fields": [
     {
-      "fieldName": "order",
-      "fieldType": "Integer",
-      "fieldValidateRules": ["required"]
-    },
-    {
       "fieldName": "title",
       "fieldType": "String",
       "fieldValidateRules": ["maxlength"],

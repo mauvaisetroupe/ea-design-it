@@ -5,9 +5,6 @@
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="flow_groupPK"/>
             </column>
-            <column name="jhi_order" type="INT">
-                <constraints nullable="false"/>
-            </column>
             <column name="title" type="VARCHAR(100)"/>
             <column name="url" type="VARCHAR(500)"/>
             <column name="flow_id" type="BIGINT">

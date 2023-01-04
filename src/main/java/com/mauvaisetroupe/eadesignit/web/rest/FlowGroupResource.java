@@ -125,9 +125,6 @@ public class FlowGroupResource {
         Optional<FlowGroup> result = flowGroupRepository
             .findById(flowGroup.getId())
             .map(existingFlowGroup -> {
-                if (flowGroup.getOrder() != null) {
-                    existingFlowGroup.setOrder(flowGroup.getOrder());
-                }
                 if (flowGroup.getTitle() != null) {
                     existingFlowGroup.setTitle(flowGroup.getTitle());
                 }
