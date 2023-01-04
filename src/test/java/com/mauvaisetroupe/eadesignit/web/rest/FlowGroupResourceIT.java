@@ -401,6 +401,7 @@ class FlowGroupResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE" })
     void deleteFlowGroup() throws Exception {
         // Initialize the database
         flowGroupRepository.saveAndFlush(flowGroup);
