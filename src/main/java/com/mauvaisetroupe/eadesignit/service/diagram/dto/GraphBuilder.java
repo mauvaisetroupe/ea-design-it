@@ -36,14 +36,14 @@ public class GraphBuilder {
                 String url = "/functional-flow/" + flow.getId() + "/view";
                 Edge edge = new Edge(id, source.getId(), target.getId(), new Label(flow.getAlias(), url), false);
                 graph.addEdge(edge);
-                addInGroup(
+                addInApplicationsGroup(
                     graph,
                     "System " + interface1.getSource().getName(),
                     source,
                     interface1.getSource(),
                     interface1.getSourceComponent()
                 );
-                addInGroup(
+                addInApplicationsGroup(
                     graph,
                     "System " + interface1.getTarget().getName(),
                     target,
@@ -73,8 +73,24 @@ public class GraphBuilder {
             Edge edge = new Edge(id, source.getId(), target.getId(), label, false);
             graph.addEdge(edge);
         }
+
+        for (FunctionalFlowStep step : flow.getSteps()) {
+            if (step.getGroup() != null) {
+                addGroupInGraph(graph, step);
+            }
+        }
         graph.consolidateEdges();
         return graph;
+    }
+
+    private void addGroupInGraph(GraphDTO graph, FunctionalFlowStep step) {
+        String groupUrl = step.getGroup().getUrl();
+        String title = step.getGroup().getTitle();
+        if (step.getGroup().getFlow() != null) {
+            groupUrl = "/functional-flow/" + step.getGroup().getFlow().getId() + "/view";
+            title = step.getGroup().getFlow().getDescription();
+        }
+        graph.addEdgeIngroup(step.getGroup(), title, groupUrl);
     }
 
     public GraphDTO createGraph(SortedSet<FlowInterfaceLight> interfaces) {
@@ -89,14 +105,14 @@ public class GraphBuilder {
             String url = "/flow-interface/" + interface1.getId() + "/view";
             Edge edge = new Edge("" + id, source.getId(), target.getId(), new Label(label, url), false);
             graph.addEdge(edge);
-            addInGroup(
+            addInApplicationsGroup(
                 graph,
                 "System " + interface1.getSource().getName(),
                 source,
                 interface1.getSource(),
                 interface1.getSourceComponent()
             );
-            addInGroup(
+            addInApplicationsGroup(
                 graph,
                 "System " + interface1.getTarget().getName(),
                 target,
@@ -124,7 +140,7 @@ public class GraphBuilder {
         return new Application(application.getId(), application.getName(), "/application/" + application.getId() + "/view");
     }
 
-    private void addInGroup(
+    private void addInApplicationsGroup(
         GraphDTO graph,
         String groupName,
         Application application,
@@ -133,11 +149,11 @@ public class GraphBuilder {
     ) {
         if (component != null && component.getDisplayInLandscape() != null && component.getDisplayInLandscape()) {
             // Add in group the component
-            graph.addIngroup(groupName, getApplication(myApplication));
+            graph.addApplicationIngroup(groupName, getApplication(myApplication));
             // Add in group the application itself
             // Bug in smetana, cannont add link from/to package,
             // so add the application itself in the package as a subcomponent
-            graph.addIngroup(groupName, application);
+            graph.addApplicationIngroup(groupName, application);
         }
     }
 

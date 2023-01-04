@@ -56,6 +56,14 @@ public class FlowImport implements Serializable {
 
     private boolean external;
 
+    private Integer groupOrder;
+
+    private String groupFlowAlias;
+
+    private String groupTitle;
+
+    private String groupURL;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public boolean isExternal() {
@@ -350,5 +358,37 @@ public class FlowImport implements Serializable {
 
     public void setImportStatusMessage(String importStatusMessage) {
         this.importStatusMessage = importStatusMessage;
+    }
+
+    public Integer getGroupOrder() {
+        return groupOrder;
+    }
+
+    public void setGroupOrder(Integer groupOrder) {
+        this.groupOrder = groupOrder;
+    }
+
+    public String getGroupFlowAlias() {
+        return groupFlowAlias;
+    }
+
+    public void setGroupFlowAlias(String groupFlowAlias) {
+        this.groupFlowAlias = groupFlowAlias;
+    }
+
+    public String getGroupTitle() {
+        return groupTitle;
+    }
+
+    public void setGroupTitle(String groupTitle) {
+        this.groupTitle = groupTitle;
+    }
+
+    public String getGroupURL() {
+        return groupURL;
+    }
+
+    public void setGroupURL(String groupURL) {
+        this.groupURL = groupURL;
     }
 }

@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.service.diagram.dto;
 
+import com.mauvaisetroupe.eadesignit.domain.FlowGroup;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -7,12 +8,16 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class GraphDTO {
 
     private Map<Long, Application> applications = new LinkedHashMap<>();
-    private Map<String, List<Application>> groups = new HashMap<>();
+    // groupName : List<appli>
+    private Map<String, List<Application>> applicationGroups = new HashMap<>();
+    // idGroup : List<edge>
+    private Map<Long, EdgeGroup> edgesGroups = new HashMap<>();
 
     // A - alias1 -> B
     // A - alias2 -> B
@@ -93,13 +98,17 @@ public class GraphDTO {
         return bidirectionalConsolidatedMap.values();
     }
 
-    public Map<String, List<Application>> getGroups() {
-        return groups;
+    public Map<String, List<Application>> getApplicationGroups() {
+        return applicationGroups;
+    }
+
+    public Map<Long, EdgeGroup> getEdgesGroups() {
+        return edgesGroups;
     }
 
     public Collection<Application> getApplicationsWithoutGroups() {
         List<Application> tmp = new ArrayList<>(this.applications.values());
-        for (List<Application> tmp2 : this.groups.values()) {
+        for (List<Application> tmp2 : this.applicationGroups.values()) {
             tmp.removeAll(tmp2);
         }
         return tmp;
@@ -111,13 +120,29 @@ public class GraphDTO {
         this.applications.put(application.getId(), application);
     }
 
-    public void addIngroup(String group, Application application) {
+    public void addApplicationIngroup(String groupName, Application application) {
         List<Application> applicationsInGroup = new ArrayList<>();
-        if (this.groups.containsKey(group)) {
-            applicationsInGroup = this.groups.get(group);
+        if (this.applicationGroups.containsKey(groupName)) {
+            applicationsInGroup = this.applicationGroups.get(groupName);
         }
         applicationsInGroup.add(application);
-        this.groups.put(group, applicationsInGroup);
+        this.applicationGroups.put(groupName, applicationsInGroup);
+    }
+
+    public void addEdgeIngroup(FlowGroup flowGroup, String title, String url) {
+        if (!this.edgesGroups.containsKey(flowGroup.getId())) {
+            List<Edge> edgesInGroup = new ArrayList<>();
+            flowGroup
+                .getSteps()
+                .stream()
+                .forEach(f -> {
+                    Edge tmpEdge = getEdge(f.getFlowInterface().getSource().getId(), f.getFlowInterface().getTarget().getId());
+                    if (tmpEdge != null) {
+                        edgesInGroup.add(tmpEdge);
+                    }
+                });
+            this.edgesGroups.put(flowGroup.getId(), new EdgeGroup(edgesInGroup, title, url));
+        }
     }
 
     public void addEdge(Edge edge) {
@@ -139,6 +164,22 @@ public class GraphDTO {
         }
     }
 
+    /**
+     * @param sourceId
+     * @param targetId
+     * @return
+     */
+    public Edge getEdge(Long sourceId, Long targetId) {
+        System.out.println(sourceId + "-" + targetId);
+        for (Edge edge : this.getEdges()) {
+            System.out.println(edge.getSourceId() + "-" + edge.getTargetId() + " ////////");
+            if ((edge.getSourceId()).equals(sourceId) && (edge.getTargetId()).equals(targetId)) {
+                return edge;
+            }
+        }
+        return null;
+    }
+
     public Edge getBidirectionalConsolidatedEdge(Edge edge) {
         Edge _edge = bidirectionalConsolidatedMap.get(getConsolidatedKey(edge));
         return _edge;
@@ -157,5 +198,20 @@ public class GraphDTO {
             }
         }
         return connections.size();
+    }
+
+    public EdgeGroup isStartingGroup(Edge edge) {
+        for (Entry<Long, EdgeGroup> _edge : this.getEdgesGroups().entrySet()) {
+            if (_edge.getValue().getEdges().get(0).getId().equals(edge.getId())) return _edge.getValue();
+        }
+        return null;
+    }
+
+    public EdgeGroup isEndingGroup(Edge edge) {
+        for (Entry<Long, EdgeGroup> _edge : this.getEdgesGroups().entrySet()) {
+            int lastIndex = _edge.getValue().getEdges().size() - 1;
+            if (_edge.getValue().getEdges().get(lastIndex).getId().equals(edge.getId())) return _edge.getValue();
+        }
+        return null;
     }
 }

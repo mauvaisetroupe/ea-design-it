@@ -4,6 +4,7 @@ import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.domain.DataFormat;
+import com.mauvaisetroupe.eadesignit.domain.FlowGroup;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
@@ -18,6 +19,7 @@ import com.mauvaisetroupe.eadesignit.repository.ApplicationComponentRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFormatRepository;
+import com.mauvaisetroupe.eadesignit.repository.FlowGroupRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowStepRepository;
@@ -71,9 +73,13 @@ public class FlowImportService {
     protected static final String FLOW_STATUS_FLOW = "Status flow";
     protected static final String FLOW_COMMENT = "Comment";
     protected static final String FLOW_ADD_CORRESPONDENT_ID = "ADD correspondent ID";
-    protected static final String FLOW_STEP_NUMBER = "";
+    protected static final String FLOW_STEP_NUMBER = "Step";
     protected static final String FLOW_STEP_DESCRIPTION = "Step description";
     protected static final String FLOW_EXTERNAL = "External";
+    protected static final String FLOW_GROUP_FLOW_ALIAS = "Group.flow";
+    protected static final String FLOW_GROUP_ORDER = "Group.order";
+    protected static final String FLOW_GROUP_TITLE = "Group.title";
+    protected static final String FLOW_GROUP_URL = "Group.url";
 
     private final List<String> columnsArray = new ArrayList<String>();
 
@@ -110,6 +116,9 @@ public class FlowImportService {
 
     @Autowired
     private FunctionalflowService functionalflowService;
+
+    @Autowired
+    private FlowGroupRepository flowGroupRepository;
 
     public FlowImportService() {
         this.columnsArray.add(FLOW_ID_FLOW);
@@ -174,11 +183,15 @@ public class FlowImportService {
         }
 
         // Delete all steps from all FunctionalFlows except the ones markes as external
+        Set<FlowGroup> groupsToDelete = new HashSet<>();
         for (FunctionalFlow functionalFlow : allFlows) {
             if (functionalFlow.getAlias() == null || !externalFlows.contains(functionalFlow.getAlias())) {
                 ArrayList<FunctionalFlowStep> list = new ArrayList<>();
                 list.addAll(functionalFlow.getSteps());
                 for (FunctionalFlowStep step : list) {
+                    if (step.getGroup() != null) {
+                        groupsToDelete.add(step.getGroup());
+                    }
                     FunctionalFlow flow = step.getFlow();
                     flow.removeSteps(step);
                     flowRepository.save(flow);
@@ -191,6 +204,12 @@ public class FlowImportService {
             }
         }
 
+        // Delete associated FlowGroups
+        for (FlowGroup flowGroup : groupsToDelete) {
+            flowGroupRepository.delete(flowGroup);
+        }
+
+        FlowGroup flowGroup = null;
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);
 
@@ -232,6 +251,28 @@ public class FlowImportService {
                     step.setFlowInterface(flowInterface);
                     functionalFlow.addSteps(step);
                     functionalFlowStepRepository.save(step);
+
+                    if (flowImport.getGroupOrder() != null && flowImport.getGroupOrder().intValue() == 1) {
+                        //start the group
+                        flowGroup = new FlowGroup();
+                    }
+                    if (flowGroup != null && flowImport.getGroupOrder() == null) {
+                        // close de group
+                        flowGroup = null;
+                    }
+                    if (flowImport.getGroupOrder() != null) {
+                        flowGroup.setTitle(flowImport.getGroupTitle());
+                        flowGroup.setUrl(flowImport.getGroupURL());
+                        if (flowImport.getGroupFlowAlias() != null) {
+                            Optional<FunctionalFlow> option = flowRepository.findByAlias(flowImport.getGroupFlowAlias());
+                            if (option.isPresent()) {
+                                flowGroup.setFlow(option.get());
+                                flowGroup.addSteps(step);
+                                flowGroupRepository.save(flowGroup);
+                                functionalFlowStepRepository.save(step);
+                            }
+                        }
+                    }
 
                     landscapeViewRepository.save(landscapeView);
                     if (dataFlow != null) {
@@ -524,7 +565,20 @@ public class FlowImportService {
         } else {
             flowImport.setExternal(false);
         }
+        flowImport.setGroupOrder(getIntValue(map.get(FLOW_GROUP_ORDER)));
+        flowImport.setGroupTitle((String) map.get(FLOW_GROUP_TITLE));
+        flowImport.setGroupURL((String) map.get(FLOW_GROUP_URL));
+        flowImport.setGroupFlowAlias((String) map.get(FLOW_GROUP_FLOW_ALIAS));
+
         return flowImport;
+    }
+
+    private Integer getIntValue(Object object) {
+        if (object == null) return null;
+        if (object instanceof Integer) return (Integer) object;
+        if (object instanceof Double) return ((Double) object).intValue();
+
+        throw new IllegalArgumentException();
     }
 
     private FlowInterface mapToFlowInterface(FlowImport flowImport) {

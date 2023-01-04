@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.service.diagram.plantuml;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.EdgeGroup;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphBuilder;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Label;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService.DiagramType;
@@ -64,8 +65,13 @@ public class PlantUMLBuilder {
         SortedSet<Label> labels,
         DiagramType diagramType,
         boolean useID,
-        boolean addURL
+        boolean addURL,
+        EdgeGroup startGroup,
+        EdgeGroup endGroup
     ) {
+        if (diagramType == DiagramType.SEQUENCE_DIAGRAM && startGroup != null) {
+            plantUMLSource.append("group [[\"" + startGroup.getUrl() + "\" " + startGroup.getTitle() + "]] group\n");
+        }
         plantUMLSource.append(
             getComponentByNameOrId(source, useID, diagramType) + " --> " + getComponentByNameOrId(target, useID, diagramType)
         );
@@ -102,6 +108,9 @@ public class PlantUMLBuilder {
                 }
                 plantUMLSource.append("end note\n");
             }
+        }
+        if (diagramType == DiagramType.SEQUENCE_DIAGRAM && endGroup != null) {
+            plantUMLSource.append("end \n");
         }
     }
 

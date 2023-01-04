@@ -6,6 +6,7 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Edge;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.EdgeGroup;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphBuilder;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphDTO;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.Layout;
@@ -77,7 +78,7 @@ public class PlantUMLService {
         }
         if (groupComponents) {
             // crerate groups (packages)
-            for (Entry<String, List<Application>> groupEntry : graph.getGroups().entrySet()) {
+            for (Entry<String, List<Application>> groupEntry : graph.getApplicationGroups().entrySet()) {
                 plantUMLBuilder.getPlantumlPackage(plantUMLSource, groupEntry.getKey(), groupEntry.getValue(), useID);
             }
         }
@@ -85,7 +86,19 @@ public class PlantUMLService {
         for (Edge edge : consolidatedEdge ? graph.getConsolidatedEdges() : graph.getEdges()) {
             Application source = graph.getApplication(edge.getSourceId());
             Application target = graph.getApplication(edge.getTargetId());
-            plantUMLBuilder.getPlantumlRelationShip(plantUMLSource, source, target, edge.getLabels(), diagramType, useID, addURL);
+            EdgeGroup startGroup = graph.isStartingGroup(edge);
+            EdgeGroup endGroup = graph.isEndingGroup(edge);
+            plantUMLBuilder.getPlantumlRelationShip(
+                plantUMLSource,
+                source,
+                target,
+                edge.getLabels(),
+                diagramType,
+                useID,
+                addURL,
+                startGroup,
+                endGroup
+            );
         }
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
         System.out.println(plantUMLSource.toString());

@@ -83,6 +83,10 @@ public class LandscapeExportService {
         stepNumberHeader.setCellValue(FlowImportService.FLOW_STEP_NUMBER);
         addComment(sheet, stepNumberHeader, "Not used during import process, only display helper");
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_STEP_DESCRIPTION);
+        headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_GROUP_FLOW_ALIAS);
+        headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_GROUP_ORDER);
+        headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_GROUP_TITLE);
+        headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_GROUP_URL);
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_INTEGRATION_PATTERN);
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_FREQUENCY);
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_FORMAT);
@@ -92,6 +96,7 @@ public class LandscapeExportService {
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_COMMENT);
 
         for (FunctionalFlow flow : landscapeView.getFlows()) {
+            int currentGroupOrder = 1;
             for (FunctionalFlowStep step : flow.getSteps()) {
                 FlowInterface interface1 = step.getFlowInterface();
                 Row row = sheet.createRow(rownb++);
@@ -111,6 +116,20 @@ public class LandscapeExportService {
                 row.createCell(column++).setCellValue(flow.getDescription());
                 row.createCell(column++).setCellValue(step.getStepOrder());
                 row.createCell(column++).setCellValue(step.getDescription());
+
+                if (step.getGroup() != null) {
+                    if (step.getGroup().getFlow() != null) {
+                        row.createCell(column).setCellValue(step.getGroup().getFlow().getAlias());
+                    }
+                    column++;
+                    row.createCell(column++).setCellValue(currentGroupOrder++);
+                    row.createCell(column++).setCellValue(step.getGroup().getTitle());
+                    row.createCell(column++).setCellValue(step.getGroup().getUrl());
+                } else {
+                    currentGroupOrder = 1;
+                    column = column + 4;
+                }
+
                 row.createCell(column++).setCellValue(interface1.getProtocol() != null ? interface1.getProtocol().getName() : "");
                 if (interface1.getDataFlows() != null && interface1.getDataFlows().size() == 1) {
                     DataFlow dataFlow = interface1.getDataFlows().iterator().next();
