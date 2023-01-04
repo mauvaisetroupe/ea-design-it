@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class FlowGroupResourceIT {
 
     private static final String DEFAULT_TITLE = "AAAAAAAAAA";
