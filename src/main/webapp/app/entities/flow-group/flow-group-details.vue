@@ -5,12 +5,6 @@
         <h2 class="jh-entity-heading" data-cy="flowGroupDetailsHeading"><span>FlowGroup</span> {{ flowGroup.id }}</h2>
         <dl class="row jh-entity-details">
           <dt>
-            <span>Order</span>
-          </dt>
-          <dd>
-            <span>{{ flowGroup.order }}</span>
-          </dd>
-          <dt>
             <span>Title</span>
           </dt>
           <dd>

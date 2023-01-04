@@ -16,7 +16,7 @@ describe('FlowGroup e2e test', () => {
   const flowGroupPageUrlPattern = new RegExp('/flow-group(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const flowGroupSample = { order: 88204 };
+  const flowGroupSample = {};
 
   let flowGroup: any;
   //let functionalFlow: any;
@@ -224,11 +224,9 @@ describe('FlowGroup e2e test', () => {
     });
 
     it.skip('should create an instance of FlowGroup', () => {
-      cy.get(`[data-cy="order"]`).type('34544').should('have.value', '34544');
+      cy.get(`[data-cy="title"]`).type('Handmade Paradigm').should('have.value', 'Handmade Paradigm');
 
-      cy.get(`[data-cy="title"]`).type('matrix').should('have.value', 'matrix');
-
-      cy.get(`[data-cy="url"]`).type('http://valerie.biz').should('have.value', 'http://valerie.biz');
+      cy.get(`[data-cy="url"]`).type('http://constance.com').should('have.value', 'http://constance.com');
 
       cy.get(`[data-cy="flow"]`).select(1);
       cy.get(`[data-cy="steps"]`).select([0]);

@@ -31,9 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class FlowGroupResourceIT {
 
-    private static final Integer DEFAULT_ORDER = 1;
-    private static final Integer UPDATED_ORDER = 2;
-
     private static final String DEFAULT_TITLE = "AAAAAAAAAA";
     private static final String UPDATED_TITLE = "BBBBBBBBBB";
 
@@ -64,7 +61,7 @@ class FlowGroupResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static FlowGroup createEntity(EntityManager em) {
-        FlowGroup flowGroup = new FlowGroup().order(DEFAULT_ORDER).title(DEFAULT_TITLE).url(DEFAULT_URL);
+        FlowGroup flowGroup = new FlowGroup().title(DEFAULT_TITLE).url(DEFAULT_URL);
         // Add required entity
         FunctionalFlow functionalFlow;
         if (TestUtil.findAll(em, FunctionalFlow.class).isEmpty()) {
@@ -95,7 +92,7 @@ class FlowGroupResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static FlowGroup createUpdatedEntity(EntityManager em) {
-        FlowGroup flowGroup = new FlowGroup().order(UPDATED_ORDER).title(UPDATED_TITLE).url(UPDATED_URL);
+        FlowGroup flowGroup = new FlowGroup().title(UPDATED_TITLE).url(UPDATED_URL);
         // Add required entity
         FunctionalFlow functionalFlow;
         if (TestUtil.findAll(em, FunctionalFlow.class).isEmpty()) {
@@ -137,7 +134,6 @@ class FlowGroupResourceIT {
         List<FlowGroup> flowGroupList = flowGroupRepository.findAll();
         assertThat(flowGroupList).hasSize(databaseSizeBeforeCreate + 1);
         FlowGroup testFlowGroup = flowGroupList.get(flowGroupList.size() - 1);
-        assertThat(testFlowGroup.getOrder()).isEqualTo(DEFAULT_ORDER);
         assertThat(testFlowGroup.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testFlowGroup.getUrl()).isEqualTo(DEFAULT_URL);
     }
@@ -162,23 +158,6 @@ class FlowGroupResourceIT {
 
     @Test
     @Transactional
-    void checkOrderIsRequired() throws Exception {
-        int databaseSizeBeforeTest = flowGroupRepository.findAll().size();
-        // set the field null
-        flowGroup.setOrder(null);
-
-        // Create the FlowGroup, which fails.
-
-        restFlowGroupMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(flowGroup)))
-            .andExpect(status().isBadRequest());
-
-        List<FlowGroup> flowGroupList = flowGroupRepository.findAll();
-        assertThat(flowGroupList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllFlowGroups() throws Exception {
         // Initialize the database
         flowGroupRepository.saveAndFlush(flowGroup);
@@ -189,7 +168,6 @@ class FlowGroupResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(flowGroup.getId().intValue())))
-            .andExpect(jsonPath("$.[*].order").value(hasItem(DEFAULT_ORDER)))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL)));
     }
@@ -206,7 +184,6 @@ class FlowGroupResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(flowGroup.getId().intValue()))
-            .andExpect(jsonPath("$.order").value(DEFAULT_ORDER))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.url").value(DEFAULT_URL));
     }
@@ -230,7 +207,7 @@ class FlowGroupResourceIT {
         FlowGroup updatedFlowGroup = flowGroupRepository.findById(flowGroup.getId()).get();
         // Disconnect from session so that the updates on updatedFlowGroup are not directly saved in db
         em.detach(updatedFlowGroup);
-        updatedFlowGroup.order(UPDATED_ORDER).title(UPDATED_TITLE).url(UPDATED_URL);
+        updatedFlowGroup.title(UPDATED_TITLE).url(UPDATED_URL);
 
         restFlowGroupMockMvc
             .perform(
@@ -244,7 +221,6 @@ class FlowGroupResourceIT {
         List<FlowGroup> flowGroupList = flowGroupRepository.findAll();
         assertThat(flowGroupList).hasSize(databaseSizeBeforeUpdate);
         FlowGroup testFlowGroup = flowGroupList.get(flowGroupList.size() - 1);
-        assertThat(testFlowGroup.getOrder()).isEqualTo(UPDATED_ORDER);
         assertThat(testFlowGroup.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testFlowGroup.getUrl()).isEqualTo(UPDATED_URL);
     }
@@ -317,7 +293,7 @@ class FlowGroupResourceIT {
         FlowGroup partialUpdatedFlowGroup = new FlowGroup();
         partialUpdatedFlowGroup.setId(flowGroup.getId());
 
-        partialUpdatedFlowGroup.order(UPDATED_ORDER).title(UPDATED_TITLE).url(UPDATED_URL);
+        partialUpdatedFlowGroup.title(UPDATED_TITLE).url(UPDATED_URL);
 
         restFlowGroupMockMvc
             .perform(
@@ -331,7 +307,6 @@ class FlowGroupResourceIT {
         List<FlowGroup> flowGroupList = flowGroupRepository.findAll();
         assertThat(flowGroupList).hasSize(databaseSizeBeforeUpdate);
         FlowGroup testFlowGroup = flowGroupList.get(flowGroupList.size() - 1);
-        assertThat(testFlowGroup.getOrder()).isEqualTo(UPDATED_ORDER);
         assertThat(testFlowGroup.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testFlowGroup.getUrl()).isEqualTo(UPDATED_URL);
     }
@@ -348,7 +323,7 @@ class FlowGroupResourceIT {
         FlowGroup partialUpdatedFlowGroup = new FlowGroup();
         partialUpdatedFlowGroup.setId(flowGroup.getId());
 
-        partialUpdatedFlowGroup.order(UPDATED_ORDER).title(UPDATED_TITLE).url(UPDATED_URL);
+        partialUpdatedFlowGroup.title(UPDATED_TITLE).url(UPDATED_URL);
 
         restFlowGroupMockMvc
             .perform(
@@ -362,7 +337,6 @@ class FlowGroupResourceIT {
         List<FlowGroup> flowGroupList = flowGroupRepository.findAll();
         assertThat(flowGroupList).hasSize(databaseSizeBeforeUpdate);
         FlowGroup testFlowGroup = flowGroupList.get(flowGroupList.size() - 1);
-        assertThat(testFlowGroup.getOrder()).isEqualTo(UPDATED_ORDER);
         assertThat(testFlowGroup.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testFlowGroup.getUrl()).isEqualTo(UPDATED_URL);
     }

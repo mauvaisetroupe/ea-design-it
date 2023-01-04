@@ -14,9 +14,6 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="jhi_order" type="integer">
-                <constraints nullable="false" />
-            </column>
             <column name="title" type="varchar(100)">
                 <constraints nullable="true" />
             </column>
