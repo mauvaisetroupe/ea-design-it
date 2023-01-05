@@ -32,7 +32,7 @@ public class GraphBuilder {
                 graph.addApplication(source);
                 Application target = getApplication(interface1.getTarget(), interface1.getTargetComponent());
                 graph.addApplication(target);
-                String id = flow.getId() + "-" + interface1.getId();
+                String id = flow.getId() + "-" + step.getStepOrder();
                 String url = "/functional-flow/" + flow.getId() + "/view";
                 Edge edge = new Edge(id, source.getId(), target.getId(), new Label(flow.getAlias(), url), false);
                 graph.addEdge(edge);
@@ -64,7 +64,7 @@ public class GraphBuilder {
             graph.addApplication(source);
             Application target = getApplication(interface1.getTarget(), interface1.getTargetComponent());
             graph.addApplication(target);
-            String id = flow.getId() + "-" + interface1.getId();
+            String id = flow.getId() + "-" + step.getStepOrder();
             String _label = step.getStepOrder() + ". " + WordUtils.wrap(step.getDescription(), 50, "\\n", false);
             Label label = new Label(_label, null);
             if (interface1.getProtocol() != null) {

@@ -136,7 +136,7 @@ public class GraphDTO {
                 .getSteps()
                 .stream()
                 .forEach(f -> {
-                    Edge tmpEdge = getEdge(f.getFlowInterface().getSource().getId(), f.getFlowInterface().getTarget().getId());
+                    Edge tmpEdge = getEdge(f.getFlow().getId() + "-" + f.getStepOrder());
                     if (tmpEdge != null) {
                         edgesInGroup.add(tmpEdge);
                     }
@@ -169,11 +169,9 @@ public class GraphDTO {
      * @param targetId
      * @return
      */
-    public Edge getEdge(Long sourceId, Long targetId) {
-        System.out.println(sourceId + "-" + targetId);
+    public Edge getEdge(String edgeId) {
         for (Edge edge : this.getEdges()) {
-            System.out.println(edge.getSourceId() + "-" + edge.getTargetId() + " ////////");
-            if ((edge.getSourceId()).equals(sourceId) && (edge.getTargetId()).equals(targetId)) {
+            if (edge.getId().equals(edgeId)) {
                 return edge;
             }
         }

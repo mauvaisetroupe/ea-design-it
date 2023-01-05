@@ -6,7 +6,13 @@ import java.util.TreeSet;
 
 public class Edge {
 
-    // for edge, key = flow.id + interface.id
+    // for edge
+    //  - landascape : key = flow.id + step.order
+    //    but not used because we are
+    //  - FunctionalFlow, key = flow.id + step.order
+    //    but not used because we are using "bidirectional consolidated" edges
+    //  - Set<Interfaces>, interface.id
+    //    but not used because we are using "consolidated" edges
     // for consolidated = source.id + target.id
     // for bidirectional consolidated = min(source,target).id + max(source,target).id
     private String id;
