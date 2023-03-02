@@ -164,7 +164,7 @@ public class LandscapeViewResource {
     @GetMapping("/landscape-views")
     public List<LandscapeLight> getAllLandscapeViews(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all LandscapeViews");
-        return landscapeViewRepository.findAllProjectedBy();
+        return landscapeViewRepository.findAllByOrderByDiagramNameAsc();
     }
 
     /**

@@ -33,5 +33,5 @@ public interface LandscapeViewRepository extends JpaRepository<LandscapeView, Lo
 
     LandscapeView findByDiagramNameIgnoreCase(String diagramName);
 
-    List<LandscapeLight> findAllProjectedBy();
+    List<LandscapeLight> findAllByOrderByDiagramNameAsc();
 }
