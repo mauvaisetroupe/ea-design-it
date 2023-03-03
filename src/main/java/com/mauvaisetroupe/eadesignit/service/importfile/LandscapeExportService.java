@@ -11,6 +11,7 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationComponentRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.importfile.util.ExcelUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -50,23 +51,20 @@ public class LandscapeExportService {
         Sheet flowSheet = workbook.createSheet("Message_Flow");
 
         writeFlows(flowSheet, landscapeId);
-        autoSizeAllColumns(flowSheet);
+        ExcelUtils.autoSizeAllColumns(flowSheet);
+        ExcelUtils.addHeaderColorAndFilte(workbook, flowSheet);
         writeApplication(appliSheet);
-        autoSizeAllColumns(appliSheet);
+        ExcelUtils.autoSizeAllColumns(appliSheet);
         writeComponent(componentSheet);
-        autoSizeAllColumns(componentSheet);
+        ExcelUtils.autoSizeAllColumns(componentSheet);
+
+        ExcelUtils.alternateColors(workbook, flowSheet, 1);
+        workbook.setActiveSheet(2);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         workbook.write(stream);
         workbook.close();
         return stream;
-    }
-
-    private void autoSizeAllColumns(Sheet sheet) {
-        int nbColumns = sheet.getRow(0).getPhysicalNumberOfCells();
-        for (int i = 0; i < nbColumns; i++) {
-            sheet.autoSizeColumn(i);
-        }
     }
 
     private void writeFlows(Sheet sheet, Long landscapeId) {
@@ -131,19 +129,26 @@ public class LandscapeExportService {
                 }
 
                 row.createCell(column++).setCellValue(interface1.getProtocol() != null ? interface1.getProtocol().getName() : "");
-                if (interface1.getDataFlows() != null && interface1.getDataFlows().size() == 1) {
-                    DataFlow dataFlow = interface1.getDataFlows().iterator().next();
-                    row.createCell(column++).setCellValue(dataFlow.getFrequency() != null ? dataFlow.getFrequency().toString() : "");
-                    row.createCell(column++).setCellValue(dataFlow.getFormat() != null ? dataFlow.getFormat().getName() : "");
-                    if (interface1.getProtocol() != null && interface1.getProtocol().getType().equals(ProtocolType.API)) {
-                        row.createCell(column++).setCellValue(dataFlow.getContractURL());
-                    } else {
-                        row.createCell(column++).setCellValue("N/A");
-                    }
-                } else {
-                    row.createCell(column++).setCellValue("multiple");
-                    row.createCell(column++).setCellValue("multiple");
-                    row.createCell(column++).setCellValue("multiple");
+                int nbDataFlows = (interface1.getDataFlows() == null) ? 0 : interface1.getDataFlows().size();
+                switch (nbDataFlows) {
+                    case 0:
+                        column = column + 3;
+                        break;
+                    case 1:
+                        DataFlow dataFlow = interface1.getDataFlows().iterator().next();
+                        row.createCell(column++).setCellValue(dataFlow.getFrequency() != null ? dataFlow.getFrequency().toString() : "");
+                        row.createCell(column++).setCellValue(dataFlow.getFormat() != null ? dataFlow.getFormat().getName() : "");
+                        if (interface1.getProtocol() != null && interface1.getProtocol().getType().equals(ProtocolType.API)) {
+                            row.createCell(column++).setCellValue(dataFlow.getContractURL());
+                        } else {
+                            row.createCell(column++).setCellValue("N/A");
+                        }
+                        break;
+                    default:
+                        row.createCell(column++).setCellValue("multiple");
+                        row.createCell(column++).setCellValue("multiple");
+                        row.createCell(column++).setCellValue("multiple");
+                        break;
                 }
                 row.createCell(column++).setCellValue(flow.getDocumentationURL());
                 row.createCell(column++).setCellValue(flow.getDocumentationURL2());
