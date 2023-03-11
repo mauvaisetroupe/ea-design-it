@@ -1,14 +1,20 @@
 package com.mauvaisetroupe.eadesignit.service.importfile.dto;
 
-import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ApplicationCapabilityDTO {
 
     private String sheetname;
-    private List<String> applicationNames;
-    private CapabilityImportDTO capabilityImportDTO;
-    private ImportStatus importStatus;
+    private List<ApplicationCapabilityItemDTO> dtos = new ArrayList<>();
+
+    public List<ApplicationCapabilityItemDTO> getDtos() {
+        return dtos;
+    }
+
+    public void setDtos(List<ApplicationCapabilityItemDTO> dtos) {
+        this.dtos = dtos;
+    }
 
     public String getSheetname() {
         return sheetname;
@@ -16,29 +22,5 @@ public class ApplicationCapabilityDTO {
 
     public void setSheetname(String sheetname) {
         this.sheetname = sheetname;
-    }
-
-    public List<String> getApplicationNames() {
-        return applicationNames;
-    }
-
-    public void setApplicationNames(List<String> applicationNames) {
-        this.applicationNames = applicationNames;
-    }
-
-    public CapabilityImportDTO getCapabilityImportDTO() {
-        return capabilityImportDTO;
-    }
-
-    public void setCapabilityImportDTO(CapabilityImportDTO capabilityImportDTO) {
-        this.capabilityImportDTO = capabilityImportDTO;
-    }
-
-    public ImportStatus getImportStatus() {
-        return importStatus;
-    }
-
-    public void setImportStatus(ImportStatus importStatus) {
-        this.importStatus = importStatus;
     }
 }

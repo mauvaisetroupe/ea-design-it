@@ -42,41 +42,27 @@
       <span>No capabilitiesImports found</span>
     </div>
 
-    <div class="table-responsive" v-if="capabilitiesImports && capabilitiesImports.length > 0">
-      <table class="table table-striped" aria-describedby="capabilitiesImports">
+    <div v-for="capabilitiesImport in capabilitiesImports">
+      <h4>{{ capabilitiesImport.sheetname }}</h4>
+
+      <table class="table table-striped" aria-describedby="value">
         <thead>
           <tr>
-            <th scope="row"><span>Sheet</span></th>
             <th scope="row"><span>Status</span></th>
-
             <th scope="row"><span>L0 Name</span></th>
-            <th scope="row"><span>L0 Description</span></th>
-            <th scope="row"><span>L0 Level</span></th>
-
             <th scope="row"><span>L1 Name</span></th>
-            <th scope="row"><span>L1 Description</span></th>
-            <th scope="row"><span>L1 Level</span></th>
-
             <th scope="row"><span>L2 Name</span></th>
-            <th scope="row"><span>L2 Description</span></th>
-            <th scope="row"><span>L2 Level</span></th>
-
             <th scope="row"><span>L3 Name</span></th>
-            <th scope="row"><span>L3 Description</span></th>
-            <th scope="row"><span>L3 Level</span></th>
-
             <th scope="row"><span>Application</span></th>
             <th scope="row"><span>Application</span></th>
             <th scope="row"><span>Application</span></th>
             <th scope="row"><span>Application</span></th>
             <th scope="row"><span>Application</span></th>
+            <th scope="row"><span>Error</span></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="dto in capabilitiesImports" :key="dto">
-            <td>
-              <span :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{ dto.sheetname }}</span>
-            </td>
+          <tr v-for="(dto, idx) of capabilitiesImport.dtos" :key="idx">
             <td>
               <span :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{ dto.importStatus }}</span>
             </td>
@@ -86,65 +72,25 @@
               }}</span>
             </td>
             <td>
-              <span v-if="dto.capabilityImportDTO.l0" :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{
-                dto.capabilityImportDTO.l0.description
-              }}</span>
-            </td>
-            <td>
-              <span v-if="dto.capabilityImportDTO.l0" :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{
-                dto.capabilityImportDTO.l0.level
-              }}</span>
-            </td>
-
-            <td>
               <span v-if="dto.capabilityImportDTO.l1" :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{
                 dto.capabilityImportDTO.l1.name
               }}</span>
             </td>
-            <td>
-              <span v-if="dto.capabilityImportDTO.l1" :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{
-                dto.capabilityImportDTO.l1.description
-              }}</span>
-            </td>
-            <td>
-              <span v-if="dto.capabilityImportDTO.l1" :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{
-                dto.capabilityImportDTO.l1.level
-              }}</span>
-            </td>
-
             <td>
               <span v-if="dto.capabilityImportDTO.l2" :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{
                 dto.capabilityImportDTO.l2.name
               }}</span>
             </td>
             <td>
-              <span v-if="dto.capabilityImportDTO.l2" :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{
-                dto.capabilityImportDTO.l2.description
-              }}</span>
-            </td>
-            <td>
-              <span v-if="dto.capabilityImportDTO.l2" :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{
-                dto.capabilityImportDTO.l2.level
-              }}</span>
-            </td>
-
-            <td>
               <span v-if="dto.capabilityImportDTO.l3" :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{
                 dto.capabilityImportDTO.l3.name
               }}</span>
             </td>
-            <td>
-              <span v-if="dto.capabilityImportDTO.l3" :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{
-                dto.capabilityImportDTO.l3.description
-              }}</span>
-            </td>
-            <td>
-              <span v-if="dto.capabilityImportDTO.l3" :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{
-                dto.capabilityImportDTO.l3.level
-              }}</span>
-            </td>
             <td v-for="application in dto.applicationNames" :key="application">
               <span :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{ application }}</span>
+            </td>
+            <td>
+              <span :class="[dto.importStatus === 'ERROR' ? 'rederror' : '']">{{ dto.errorMessage }}</span>
             </td>
           </tr>
         </tbody>

@@ -94,6 +94,6 @@ public class CapabilityDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "CapabilityDTO [comment=" + comment + ", description=" + description + ", level=" + level + ", name=" + name + "]";
+        return level + "." + name;
     }
 }
