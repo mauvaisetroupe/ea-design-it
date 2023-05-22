@@ -15,8 +15,12 @@
         <h2>Main concepts</h2>
         <ul>
           <li>
-            A <router-link to="landscape-view">Landscape</router-link> is an architecture diagram that represents a subset of
-            <router-link to="application">Applications</router-link>, and their Functional Flows
+            A <router-link to="landscape-view">Landscape</router-link> is an architecture diagram that represents a subset of Applications,
+            and their Functional Flows
+          </li>
+          <li>
+            An <router-link to="application">Application</router-link> could be composed of
+            <router-link to="application-component">Application Component</router-link>
           </li>
           <li>
             In the context of a Landscape, a <router-link to="functional-flow">Functional Flow</router-link> represents a functional
@@ -46,33 +50,37 @@
         <h2>Import</h2>
         <ul>
           <li>
-            Import Excel
-            <router-link to="/application-import-upload-file" data-cy="import-excel-applications">Applications</router-link> file
+            Import
+            <router-link to="/application-import-upload-file" data-cy="import-excel-applications">Applications</router-link> Excel file
           </li>
           <li>
-            Import Excel
-            <router-link to="/component-import-upload-file" data-cy="import-excel-component">Application Components</router-link> file
+            Import
+            <router-link to="/component-import-upload-file" data-cy="import-excel-component">Application Components</router-link> Excel file
           </li>
           <li>
-            Import Excel
-            <router-link to="flow-import-upload-file" data-cy="import-excel-flows">Functional Flows &amp; Interfaces </router-link> file
+            Import
+            <router-link to="flow-import-upload-file" data-cy="import-excel-flows">Landscape</router-link> (including Functional Flows &amp;
+            Interfaces) Excel file
           </li>
           <li>
-            Import Excel
-            <router-link to="event-import-upload-file" data-cy="import-excel-data">Data Flows &amp; Dat Flow Items</router-link> file
+            Import
+            <router-link to="event-import-upload-file" data-cy="import-excel-data">Data Flows &amp; Dat Flow Items</router-link> Excel file
           </li>
           <li>
-            Import Excel <router-link to="/capability-import-upload-file" data-cy="import-excel-capabilities">Capabilities</router-link>
+            Import <router-link to="/capability-import-upload-file" data-cy="import-excel-capabilities">Capabilities</router-link> Excel
+            file
           </li>
           <li>
-            Import Excel mapping
+            Import
             <router-link to="/application-capability-import-upload-file" data-cy="import-excel-capabilities-mapping"
-              >Applications/Capabilities</router-link
+              >Applications/Capabilities mapping</router-link
             >
+            Excel file
           </li>
           <li>
-            Import Plantuml
-            <router-link to="/sequence-diagram/import" data-cy="import-sequence-diagram-mapping">Sequence diagram</router-link>
+            Import
+            <router-link to="/sequence-diagram/import" data-cy="import-sequence-diagram-mapping">Sequence diagram</router-link> Plantuml
+            file
           </li>
         </ul>
         <p>Please, refer to <a href="https://mauvaisetroupe.github.io/ea-design-it/import/">documentation</a> for more explanation</p>
