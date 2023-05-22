@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.FlowGroup;
-import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.repository.FlowGroupRepository;
 import java.util.List;
@@ -37,6 +36,9 @@ class FlowGroupResourceIT {
     private static final String DEFAULT_URL = "AAAAAAAAAA";
     private static final String UPDATED_URL = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/flow-groups";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -61,17 +63,7 @@ class FlowGroupResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static FlowGroup createEntity(EntityManager em) {
-        FlowGroup flowGroup = new FlowGroup().title(DEFAULT_TITLE).url(DEFAULT_URL);
-        // Add required entity
-        FunctionalFlow functionalFlow;
-        if (TestUtil.findAll(em, FunctionalFlow.class).isEmpty()) {
-            functionalFlow = FunctionalFlowResourceIT.createEntity(em);
-            em.persist(functionalFlow);
-            em.flush();
-        } else {
-            functionalFlow = TestUtil.findAll(em, FunctionalFlow.class).get(0);
-        }
-        flowGroup.setFlow(functionalFlow);
+        FlowGroup flowGroup = new FlowGroup().title(DEFAULT_TITLE).url(DEFAULT_URL).description(DEFAULT_DESCRIPTION);
         // Add required entity
         FunctionalFlowStep functionalFlowStep;
         if (TestUtil.findAll(em, FunctionalFlowStep.class).isEmpty()) {
@@ -92,17 +84,7 @@ class FlowGroupResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static FlowGroup createUpdatedEntity(EntityManager em) {
-        FlowGroup flowGroup = new FlowGroup().title(UPDATED_TITLE).url(UPDATED_URL);
-        // Add required entity
-        FunctionalFlow functionalFlow;
-        if (TestUtil.findAll(em, FunctionalFlow.class).isEmpty()) {
-            functionalFlow = FunctionalFlowResourceIT.createUpdatedEntity(em);
-            em.persist(functionalFlow);
-            em.flush();
-        } else {
-            functionalFlow = TestUtil.findAll(em, FunctionalFlow.class).get(0);
-        }
-        flowGroup.setFlow(functionalFlow);
+        FlowGroup flowGroup = new FlowGroup().title(UPDATED_TITLE).url(UPDATED_URL).description(UPDATED_DESCRIPTION);
         // Add required entity
         FunctionalFlowStep functionalFlowStep;
         if (TestUtil.findAll(em, FunctionalFlowStep.class).isEmpty()) {
@@ -136,6 +118,7 @@ class FlowGroupResourceIT {
         FlowGroup testFlowGroup = flowGroupList.get(flowGroupList.size() - 1);
         assertThat(testFlowGroup.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testFlowGroup.getUrl()).isEqualTo(DEFAULT_URL);
+        assertThat(testFlowGroup.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
 
     @Test
@@ -169,7 +152,8 @@ class FlowGroupResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(flowGroup.getId().intValue())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
-            .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL)));
+            .andExpect(jsonPath("$.[*].url").value(hasItem(DEFAULT_URL)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
 
     @Test
@@ -185,7 +169,8 @@ class FlowGroupResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(flowGroup.getId().intValue()))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
-            .andExpect(jsonPath("$.url").value(DEFAULT_URL));
+            .andExpect(jsonPath("$.url").value(DEFAULT_URL))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
     }
 
     @Test
@@ -207,7 +192,7 @@ class FlowGroupResourceIT {
         FlowGroup updatedFlowGroup = flowGroupRepository.findById(flowGroup.getId()).get();
         // Disconnect from session so that the updates on updatedFlowGroup are not directly saved in db
         em.detach(updatedFlowGroup);
-        updatedFlowGroup.title(UPDATED_TITLE).url(UPDATED_URL);
+        updatedFlowGroup.title(UPDATED_TITLE).url(UPDATED_URL).description(UPDATED_DESCRIPTION);
 
         restFlowGroupMockMvc
             .perform(
@@ -223,6 +208,7 @@ class FlowGroupResourceIT {
         FlowGroup testFlowGroup = flowGroupList.get(flowGroupList.size() - 1);
         assertThat(testFlowGroup.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testFlowGroup.getUrl()).isEqualTo(UPDATED_URL);
+        assertThat(testFlowGroup.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 
     @Test
@@ -293,7 +279,7 @@ class FlowGroupResourceIT {
         FlowGroup partialUpdatedFlowGroup = new FlowGroup();
         partialUpdatedFlowGroup.setId(flowGroup.getId());
 
-        partialUpdatedFlowGroup.title(UPDATED_TITLE).url(UPDATED_URL);
+        partialUpdatedFlowGroup.title(UPDATED_TITLE).url(UPDATED_URL).description(UPDATED_DESCRIPTION);
 
         restFlowGroupMockMvc
             .perform(
@@ -309,6 +295,7 @@ class FlowGroupResourceIT {
         FlowGroup testFlowGroup = flowGroupList.get(flowGroupList.size() - 1);
         assertThat(testFlowGroup.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testFlowGroup.getUrl()).isEqualTo(UPDATED_URL);
+        assertThat(testFlowGroup.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 
     @Test
@@ -323,7 +310,7 @@ class FlowGroupResourceIT {
         FlowGroup partialUpdatedFlowGroup = new FlowGroup();
         partialUpdatedFlowGroup.setId(flowGroup.getId());
 
-        partialUpdatedFlowGroup.title(UPDATED_TITLE).url(UPDATED_URL);
+        partialUpdatedFlowGroup.title(UPDATED_TITLE).url(UPDATED_URL).description(UPDATED_DESCRIPTION);
 
         restFlowGroupMockMvc
             .perform(
@@ -339,6 +326,7 @@ class FlowGroupResourceIT {
         FlowGroup testFlowGroup = flowGroupList.get(flowGroupList.size() - 1);
         assertThat(testFlowGroup.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testFlowGroup.getUrl()).isEqualTo(UPDATED_URL);
+        assertThat(testFlowGroup.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
     }
 
     @Test

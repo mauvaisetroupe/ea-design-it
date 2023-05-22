@@ -16,6 +16,10 @@
       "fieldType": "String",
       "fieldValidateRules": ["maxlength"],
       "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
     }
   ],
   "fluentMethods": true,
@@ -29,8 +33,7 @@
       "otherEntityName": "functionalFlow",
       "otherEntityRelationshipName": "flowGroup",
       "relationshipName": "flow",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": "required"
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "functionalFlowStep",

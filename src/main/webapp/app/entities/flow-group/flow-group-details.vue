@@ -17,6 +17,12 @@
             <span>{{ flowGroup.url }}</span>
           </dd>
           <dt>
+            <span>Description</span>
+          </dt>
+          <dd>
+            <span>{{ flowGroup.description }}</span>
+          </dd>
+          <dt>
             <span>Flow</span>
           </dt>
           <dd>

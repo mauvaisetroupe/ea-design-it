@@ -43,9 +43,21 @@
             </div>
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="flow-group-description">Description</label>
+            <input
+              type="text"
+              class="form-control"
+              name="description"
+              id="flow-group-description"
+              data-cy="description"
+              :class="{ valid: !$v.flowGroup.description.$invalid, invalid: $v.flowGroup.description.$invalid }"
+              v-model="$v.flowGroup.description.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="flow-group-flow">Flow</label>
-            <select class="form-control" id="flow-group-flow" data-cy="flow" name="flow" v-model="flowGroup.flow" required>
-              <option v-if="!flowGroup.flow" v-bind:value="null" selected></option>
+            <select class="form-control" id="flow-group-flow" data-cy="flow" name="flow" v-model="flowGroup.flow">
+              <option v-bind:value="null"></option>
               <option
                 v-bind:value="flowGroup.flow && functionalFlowOption.id === flowGroup.flow.id ? flowGroup.flow : functionalFlowOption"
                 v-for="functionalFlowOption in functionalFlows"
@@ -54,9 +66,6 @@
                 {{ functionalFlowOption.alias }}
               </option>
             </select>
-          </div>
-          <div v-if="$v.flowGroup.flow.$anyDirty && $v.flowGroup.flow.$invalid">
-            <small class="form-text text-danger" v-if="!$v.flowGroup.flow.required"> This field is required. </small>
           </div>
           <div v-if="$v.flowGroup.steps.$anyDirty && $v.flowGroup.steps.$invalid">
             <small class="form-text text-danger" v-if="!$v.flowGroup.steps.required"> This field is required. </small>

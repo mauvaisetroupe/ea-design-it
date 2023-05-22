@@ -19,7 +19,6 @@ describe('FlowGroup e2e test', () => {
   const flowGroupSample = {};
 
   let flowGroup: any;
-  //let functionalFlow: any;
   //let functionalFlowStep: any;
 
   beforeEach(() => {
@@ -28,14 +27,6 @@ describe('FlowGroup e2e test', () => {
 
   /* Disabled due to incompatibility
   beforeEach(() => {
-    // create an instance at the required relationship entity:
-    cy.authenticatedRequest({
-      method: 'POST',
-      url: '/api/functional-flows',
-      body: {"alias":"Throughway","description":"JSON Intelligent","comment":"Sharable AI","status":"hard Buckinghamshire","documentationURL":"software Human","documentationURL2":"Cotton pink","startDate":"2021-11-03","endDate":"2021-11-04"},
-    }).then(({ body }) => {
-      functionalFlow = body;
-    });
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
@@ -58,7 +49,7 @@ describe('FlowGroup e2e test', () => {
     // Simulate relationships api for better performance and reproducibility.
     cy.intercept('GET', '/api/functional-flows', {
       statusCode: 200,
-      body: [functionalFlow],
+      body: [],
     });
 
     cy.intercept('GET', '/api/functional-flow-steps', {
@@ -82,14 +73,6 @@ describe('FlowGroup e2e test', () => {
 
   /* Disabled due to incompatibility
   afterEach(() => {
-    if (functionalFlow) {
-      cy.authenticatedRequest({
-        method: 'DELETE',
-        url: `/api/functional-flows/${functionalFlow.id}`,
-      }).then(() => {
-        functionalFlow = undefined;
-      });
-    }
     if (functionalFlowStep) {
       cy.authenticatedRequest({
         method: 'DELETE',
@@ -143,7 +126,6 @@ describe('FlowGroup e2e test', () => {
           url: '/api/flow-groups',
           body: {
             ...flowGroupSample,
-            flow: functionalFlow,
             steps: functionalFlowStep,
           },
         }).then(({ body }) => {
@@ -228,7 +210,8 @@ describe('FlowGroup e2e test', () => {
 
       cy.get(`[data-cy="url"]`).type('http://constance.com').should('have.value', 'http://constance.com');
 
-      cy.get(`[data-cy="flow"]`).select(1);
+      cy.get(`[data-cy="description"]`).type('drive heuristic').should('have.value', 'drive heuristic');
+
       cy.get(`[data-cy="steps"]`).select([0]);
 
       cy.get(entityCreateSaveButtonSelector).click();

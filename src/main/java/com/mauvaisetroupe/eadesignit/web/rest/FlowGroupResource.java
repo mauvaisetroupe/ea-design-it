@@ -131,6 +131,9 @@ public class FlowGroupResource {
                 if (flowGroup.getUrl() != null) {
                     existingFlowGroup.setUrl(flowGroup.getUrl());
                 }
+                if (flowGroup.getDescription() != null) {
+                    existingFlowGroup.setDescription(flowGroup.getDescription());
+                }
 
                 return existingFlowGroup;
             })

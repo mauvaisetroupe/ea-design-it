@@ -36,7 +36,7 @@ relationship ManyToOne {
     FunctionalFlowStep{flowInterface(alias) required} to FlowInterface{steps}
     
     FunctionalFlowStep{group(alias)} to FlowGroup{steps required}
-	FlowGroup{flow(alias) required} to FunctionalFlow
+	FlowGroup{flow(alias)} to FunctionalFlow
 
 }
 
@@ -52,6 +52,7 @@ relationship OneToMany {
 entity FlowGroup {
     title String maxlength(100)
     url String maxlength(500)
+    description String
 }
 
 entity LandscapeView {
