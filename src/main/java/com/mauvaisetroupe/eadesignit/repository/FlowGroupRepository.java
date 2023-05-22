@@ -1,6 +1,8 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.FlowGroup;
+import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
+import java.util.Set;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface FlowGroupRepository extends JpaRepository<FlowGroup, Long> {}
+public interface FlowGroupRepository extends JpaRepository<FlowGroup, Long> {
+    Set<FlowGroup> findByFlowId(Long flowId);
+}

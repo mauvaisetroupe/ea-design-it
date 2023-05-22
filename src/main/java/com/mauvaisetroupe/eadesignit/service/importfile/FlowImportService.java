@@ -141,6 +141,15 @@ public class FlowImportService {
         this.columnsArray.add(FLOW_EXTERNAL);
     }
 
+    /**
+     *
+     * Unlike the delete method in LandscapeViewService, this method do not delete all FunctionalFlows
+     * and associated objects (DataFlow, Groups, etc.)
+     * Instead it empties flows (deleting steps)
+     * That mean that groups in other Landscapes are not detached from FunctionalFlows
+     * that could significantly change during import
+     *
+     **/
     @Transactional
     public List<FlowImport> importExcel(InputStream file, String filename) throws EncryptedDocumentException, IOException {
         List<FlowImport> result = new ArrayList<FlowImport>();
@@ -256,20 +265,24 @@ public class FlowImportService {
                         //start the group
                         flowGroup = new FlowGroup();
                     }
-                    if (flowGroup != null && flowImport.getGroupOrder() == null) {
-                        // close de group
-                        flowGroup = null;
-                    }
-                    if (flowImport.getGroupOrder() != null) {
-                        flowGroup.setTitle(flowImport.getGroupTitle());
-                        flowGroup.setUrl(flowImport.getGroupURL());
-                        if (flowImport.getGroupFlowAlias() != null) {
-                            Optional<FunctionalFlow> option = flowRepository.findByAlias(flowImport.getGroupFlowAlias());
-                            if (option.isPresent()) {
-                                flowGroup.setFlow(option.get());
-                                flowGroup.addSteps(step);
-                                flowGroupRepository.save(flowGroup);
-                                functionalFlowStepRepository.save(step);
+                    if (flowGroup != null) {
+                        if (flowImport.getGroupOrder() == null) {
+                            // close de group
+                            flowGroup = null;
+                        } else {
+                            flowGroup.setTitle(flowImport.getGroupTitle());
+                            flowGroup.setUrl(flowImport.getGroupURL());
+                            flowGroup.addSteps(step);
+                            functionalFlowStepRepository.save(step);
+                            flowGroupRepository.save(flowGroup);
+
+                            if (flowImport.getGroupFlowAlias() != null) {
+                                Optional<FunctionalFlow> option = flowRepository.findByAlias(flowImport.getGroupFlowAlias());
+                                if (option.isPresent()) {
+                                    flowGroup.setFlow(option.get());
+                                    functionalFlowStepRepository.save(step);
+                                    flowGroupRepository.save(flowGroup);
+                                }
                             }
                         }
                     }
