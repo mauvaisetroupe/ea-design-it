@@ -29,7 +29,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       service = new FlowGroupService();
-      elemDefault = new FlowGroup(123, 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new FlowGroup(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -83,6 +83,7 @@ describe('Service Tests', () => {
           {
             title: 'BBBBBB',
             url: 'BBBBBB',
+            description: 'BBBBBB',
           },
           elemDefault
         );
@@ -139,6 +140,7 @@ describe('Service Tests', () => {
           {
             title: 'BBBBBB',
             url: 'BBBBBB',
+            description: 'BBBBBB',
           },
           elemDefault
         );

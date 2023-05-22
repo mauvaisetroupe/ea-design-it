@@ -5,7 +5,8 @@ export interface IFlowGroup {
   id?: number;
   title?: string | null;
   url?: string | null;
-  flow?: IFunctionalFlow;
+  description?: string | null;
+  flow?: IFunctionalFlow | null;
   steps?: IFunctionalFlowStep[];
 }
 
@@ -14,7 +15,8 @@ export class FlowGroup implements IFlowGroup {
     public id?: number,
     public title?: string | null,
     public url?: string | null,
-    public flow?: IFunctionalFlow,
+    public description?: string | null,
+    public flow?: IFunctionalFlow | null,
     public steps?: IFunctionalFlowStep[]
   ) {}
 }

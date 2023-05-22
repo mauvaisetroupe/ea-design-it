@@ -30,6 +30,7 @@
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Title</span></th>
             <th scope="row"><span>Url</span></th>
+            <th scope="row"><span>Description</span></th>
             <th scope="row"><span>Flow</span></th>
             <th scope="row"></th>
           </tr>
@@ -41,6 +42,7 @@
             </td>
             <td>{{ flowGroup.title }}</td>
             <td>{{ flowGroup.url }}</td>
+            <td>{{ flowGroup.description }}</td>
             <td>
               <div v-if="flowGroup.flow">
                 <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flowGroup.flow.id } }">{{

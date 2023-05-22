@@ -21,9 +21,7 @@ const validations: any = {
     url: {
       maxLength: maxLength(500),
     },
-    flow: {
-      required,
-    },
+    description: {},
     steps: {
       required,
     },

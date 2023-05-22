@@ -46,6 +46,18 @@
         </ul>
         <p>Please, refer to <a href="https://mauvaisetroupe.github.io/ea-design-it/">documentation</a> for more explanation</p>
       </div>
+
+      <div class="alert alert-success" v-if="authenticated">
+        <span v-if="username">You are logged in as user "{{ username }}"</span>
+      </div>
+      <div class="alert alert-warning" v-if="!authenticated">
+        <span>Please </span><a class="alert-link" v-on:click="openLogin()">sign in</a>.
+      </div>
+      <div class="alert alert-warning" v-if="!authenticated">
+        <span>You don't have an account yet?</span>&nbsp;
+        <router-link class="alert-link" to="/register">Register a new account</router-link>
+      </div>
+
       <div v-if="$store.getters.writeAuthority">
         <h2>Import</h2>
         <ul>
@@ -84,16 +96,6 @@
           </li>
         </ul>
         <p>Please, refer to <a href="https://mauvaisetroupe.github.io/ea-design-it/import/">documentation</a> for more explanation</p>
-      </div>
-      <div class="alert alert-success" v-if="authenticated">
-        <span v-if="username">You are logged in as user "{{ username }}"</span>
-      </div>
-      <div class="alert alert-warning" v-if="!authenticated">
-        <span>Please </span><a class="alert-link" v-on:click="openLogin()">sign in</a>.
-      </div>
-      <div class="alert alert-warning" v-if="!authenticated">
-        <span>You don't have an account yet?</span>&nbsp;
-        <router-link class="alert-link" to="/register">Register a new account</router-link>
       </div>
     </div>
   </div>

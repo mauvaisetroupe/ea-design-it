@@ -33,8 +33,10 @@ public class FlowGroup implements Serializable {
     @Column(name = "url", length = 500)
     private String url;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @Column(name = "description")
+    private String description;
+
+    @ManyToOne
     @JsonIgnoreProperties(value = { "steps", "owner", "landscapes", "dataFlows" }, allowSetters = true)
     private FunctionalFlow flow;
 
@@ -82,6 +84,19 @@ public class FlowGroup implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public FlowGroup description(String description) {
+        this.setDescription(description);
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public FunctionalFlow getFlow() {
@@ -154,6 +169,7 @@ public class FlowGroup implements Serializable {
             "id=" + getId() +
             ", title='" + getTitle() + "'" +
             ", url='" + getUrl() + "'" +
+            ", description='" + getDescription() + "'" +
             "}";
     }
 }
