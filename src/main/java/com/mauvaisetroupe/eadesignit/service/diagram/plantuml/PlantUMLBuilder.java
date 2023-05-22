@@ -70,7 +70,16 @@ public class PlantUMLBuilder {
         EdgeGroup endGroup
     ) {
         if (diagramType == DiagramType.SEQUENCE_DIAGRAM && startGroup != null) {
-            plantUMLSource.append("group [[\"" + startGroup.getUrl() + "\" " + startGroup.getTitle() + "]] group\n");
+            String title = "";
+            if (startGroup.getTitle() != null) {
+                title = startGroup.getTitle();
+            }
+
+            if (startGroup.getUrl() != null) {
+                plantUMLSource.append("group [[\"" + startGroup.getUrl() + "\" " + title + "]] group\n");
+            } else {
+                plantUMLSource.append("group " + title + " group\n");
+            }
         }
         plantUMLSource.append(
             getComponentByNameOrId(source, useID, diagramType) + " --> " + getComponentByNameOrId(target, useID, diagramType)

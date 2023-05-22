@@ -1,11 +1,13 @@
 package com.mauvaisetroupe.eadesignit.service;
 
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
+import com.mauvaisetroupe.eadesignit.domain.FlowGroup;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
+import com.mauvaisetroupe.eadesignit.repository.FlowGroupRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowStepRepository;
@@ -26,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class LandscapeViewService {
 
+    public static final String WAS_LINKED_TO = "WAS LINKED TO ";
+
     private final Logger log = LoggerFactory.getLogger(LandscapeViewService.class);
 
     @Autowired
@@ -42,6 +46,9 @@ public class LandscapeViewService {
 
     @Autowired
     private DataFlowRepository dataFlowRepository;
+
+    @Autowired
+    private FlowGroupRepository flowGroupRepository;
 
     /**
      * Delete the landscapeView by id.
@@ -87,10 +94,33 @@ public class LandscapeViewService {
 
         // if flow is not referenced in another landscape, delete flow
         if (deleteFunctionalFlow) {
+            //Detach groups that refeence a flow that will be deleted
+            for (FunctionalFlow flow : allFlows) {
+                Set<FlowGroup> groups = flowGroupRepository.findByFlowId(flow.getId());
+                for (FlowGroup group : groups) {
+                    group.setFlow(null);
+                    if (group.getDescription() == null) {
+                        group.setDescription(WAS_LINKED_TO + flow.getAlias());
+                    }
+                    flowGroupRepository.save(group);
+                }
+            }
+
             for (FunctionalFlow flow : allFlows) {
                 if (flow.getLandscapes() == null || flow.getLandscapes().isEmpty()) {
                     // detach and delete steps
+                    Set<FlowGroup> groupsToDelete = new HashSet<>();
                     for (FunctionalFlowStep step : new HashSet<>(flow.getSteps())) {
+                        // Delete Group inside current FunctionlaFlow
+                        FlowGroup group = step.getGroup();
+                        if (group != null) {
+                            // Detach group from steps
+                            group.removeSteps(step);
+                            // Detach group from Flow
+                            group.setFlow(null);
+                            groupsToDelete.add(group);
+                        }
+
                         FlowInterface interface1 = step.getFlowInterface();
                         interface1.removeSteps(step);
                         flow.removeSteps(step);
@@ -98,6 +128,11 @@ public class LandscapeViewService {
                         functionalFlowRepository.save(flow);
                         functionalFlowStepRepository.delete(step);
                     }
+                    // delete group
+                    for (FlowGroup group : groupsToDelete) {
+                        flowGroupRepository.delete(group);
+                    }
+
                     // detach dataflow
                     for (DataFlow dataFlow : new HashSet<>(flow.getDataFlows())) {
                         flow.removeDataFlows(dataFlow);
@@ -126,6 +161,7 @@ public class LandscapeViewService {
             }
         }
 
+        // delete dataflows not linked to flow or interfaces
         if (deleteFunctionalFlow && deleteFlowInterface && deleteDatas) {
             for (DataFlow dataFlow : allData) {
                 if (
