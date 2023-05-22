@@ -89,6 +89,7 @@ public class ImportResource {
         try {
             return applicationImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ApplicationImportException(e.getMessage());
         }
     }
