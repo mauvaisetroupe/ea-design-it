@@ -160,3 +160,6 @@ Desktop.ini
 /coverage/
 /.nyc_output/
 .fuse_hidden*
+
+release.properties
+pom.xml.releaseBackup
