@@ -26,6 +26,7 @@ import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowStepRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
 import com.mauvaisetroupe.eadesignit.service.FunctionalflowService;
+import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -282,6 +283,8 @@ public class FlowImportService {
                                     flowGroup.setFlow(option.get());
                                     functionalFlowStepRepository.save(step);
                                     flowGroupRepository.save(flowGroup);
+                                } else {
+                                    flowGroup.setDescription(LandscapeViewService.SHOULD_BE_LINKED_TO + flowImport.getGroupFlowAlias());
                                 }
                             }
                         }

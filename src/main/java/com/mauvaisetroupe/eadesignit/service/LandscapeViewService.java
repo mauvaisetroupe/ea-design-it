@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class LandscapeViewService {
 
     public static final String WAS_LINKED_TO = "WAS LINKED TO ";
+    public static final String SHOULD_BE_LINKED_TO = "SHOULD BE LINKED TO ";
 
     private final Logger log = LoggerFactory.getLogger(LandscapeViewService.class);
 
