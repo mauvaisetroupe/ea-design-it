@@ -29,12 +29,18 @@
           <tr v-for="flowGroup in flowGroups" :key="flowGroup.id" data-cy="entityTable">
             <td>{{ flowGroup.id }}</td>
             <td>
-              <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flowGroup.steps[0].flow.id } }">
+              <router-link
+                :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flowGroup.steps[0].flow.id } }"
+                v-if="flowGroup.steps && flowGroup.steps[0] && flowGroup.steps[0].flow"
+              >
                 {{ flowGroup.steps[0].flow.alias }} {{ flowGroup.steps[0].flow.description }}
               </router-link>
             </td>
             <td>
-              <span v-for="landscape in flowGroup.steps[0].flow.landscapes">
+              <span
+                v-for="landscape in flowGroup.steps[0].flow.landscapes"
+                v-if="flowGroup.steps && flowGroup.steps[0] && flowGroup.steps[0].flow"
+              >
                 {{ landscape.diagramName }}
               </span>
             </td>
