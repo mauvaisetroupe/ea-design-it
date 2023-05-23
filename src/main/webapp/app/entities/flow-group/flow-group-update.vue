@@ -63,7 +63,7 @@
                 v-for="functionalFlowOption in functionalFlows"
                 :key="functionalFlowOption.id"
               >
-                {{ functionalFlowOption.alias }}
+                {{ functionalFlowOption.alias }} - {{ functionalFlowOption.description }}
               </option>
             </select>
           </div>

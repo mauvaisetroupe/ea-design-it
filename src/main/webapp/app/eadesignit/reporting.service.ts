@@ -31,4 +31,17 @@ export default class ReportingService {
     });
     return null;
   }
+
+  public retrieveOrphanFlowGroup(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .get(baseApiUrl + '/orphan-flowgroup/')
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
 }

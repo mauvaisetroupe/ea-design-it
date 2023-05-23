@@ -42,7 +42,7 @@ public class FlowGroup implements Serializable {
 
     @OneToMany(mappedBy = "group")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "flowInterface", "group", "flow" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "flowInterface", "group" }, allowSetters = true)
     private Set<FunctionalFlowStep> steps = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

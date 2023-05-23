@@ -85,6 +85,10 @@
             <font-awesome-icon icon="asterisk" />
             <span>Empty protocols</span>
           </b-dropdown-item>
+          <b-dropdown-item to="/reporting/orphan-flow-group">
+            <font-awesome-icon icon="asterisk" />
+            <span>Orphan Functional Flow Groups</span>
+          </b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
           <span slot="button-content" class="navbar-dropdown-menu">

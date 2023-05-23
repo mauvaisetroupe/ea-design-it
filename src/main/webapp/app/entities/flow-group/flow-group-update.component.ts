@@ -22,9 +22,7 @@ const validations: any = {
       maxLength: maxLength(500),
     },
     description: {},
-    steps: {
-      required,
-    },
+    steps: {},
   },
 };
 

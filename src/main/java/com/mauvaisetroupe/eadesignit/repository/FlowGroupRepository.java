@@ -13,4 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FlowGroupRepository extends JpaRepository<FlowGroup, Long> {
     Set<FlowGroup> findByFlowId(Long flowId);
+
+    @Query("select g from FlowGroup g left join fetch g.steps s left join fetch s.flow f where g.flow is null")
+    Set<FlowGroup> findByFlowIsNull();
 }
