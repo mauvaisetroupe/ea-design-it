@@ -89,6 +89,8 @@ public class GraphBuilder {
         if (step.getGroup().getFlow() != null) {
             groupUrl = "/functional-flow/" + step.getGroup().getFlow().getId() + "/view";
             title = step.getGroup().getFlow().getDescription();
+        } else if (title == null) {
+            title = "Ophan group ID=" + step.getGroup().getId();
         }
         graph.addEdgeIngroup(step.getGroup(), title, groupUrl);
     }

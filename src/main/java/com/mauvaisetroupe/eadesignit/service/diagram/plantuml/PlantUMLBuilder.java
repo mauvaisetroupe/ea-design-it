@@ -78,7 +78,7 @@ public class PlantUMLBuilder {
             if (startGroup.getUrl() != null) {
                 plantUMLSource.append("group [[\"" + startGroup.getUrl() + "\" " + title + "]] group\n");
             } else {
-                plantUMLSource.append("group " + title + " group\n");
+                plantUMLSource.append("group " + title + "\n");
             }
         }
         plantUMLSource.append(
