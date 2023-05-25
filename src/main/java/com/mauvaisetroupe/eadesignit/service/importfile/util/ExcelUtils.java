@@ -40,6 +40,11 @@ public class ExcelUtils {
         CellStyle style2 = createStyle(sheet, "d5e5ed");
 
         CellStyle currenStyle = style1;
+
+        if (sheet == null || sheet.getRow(1) == null || sheet.getRow(1).getCell(columnNumberForPattern) == null) {
+            return;
+        }
+
         String currentvalue = sheet.getRow(1).getCell(columnNumberForPattern).getStringCellValue();
 
         int nbColumns = sheet.getRow(0).getPhysicalNumberOfCells();
