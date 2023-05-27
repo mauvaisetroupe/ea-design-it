@@ -2,6 +2,8 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A ApplicationImport.
@@ -26,13 +28,9 @@ public class ApplicationImport implements Serializable {
 
     private String softwareType;
 
-    private String category1;
+    private Set<String> categories = new HashSet<>();
 
-    private String category2;
-
-    private String category3;
-
-    private String technology;
+    private Set<String> technologies = new HashSet<>();
 
     private String documentation;
 
@@ -47,12 +45,7 @@ public class ApplicationImport implements Serializable {
     private String existingApplicationID;
 
     public Long getId() {
-        return this.id;
-    }
-
-    public ApplicationImport id(Long id) {
-        this.setId(id);
-        return this;
+        return id;
     }
 
     public void setId(Long id) {
@@ -60,12 +53,7 @@ public class ApplicationImport implements Serializable {
     }
 
     public String getImportId() {
-        return this.importId;
-    }
-
-    public ApplicationImport importId(String importId) {
-        this.setImportId(importId);
-        return this;
+        return importId;
     }
 
     public void setImportId(String importId) {
@@ -73,12 +61,7 @@ public class ApplicationImport implements Serializable {
     }
 
     public String getExcelFileName() {
-        return this.excelFileName;
-    }
-
-    public ApplicationImport excelFileName(String excelFileName) {
-        this.setExcelFileName(excelFileName);
-        return this;
+        return excelFileName;
     }
 
     public void setExcelFileName(String excelFileName) {
@@ -86,12 +69,7 @@ public class ApplicationImport implements Serializable {
     }
 
     public String getIdFromExcel() {
-        return this.idFromExcel;
-    }
-
-    public ApplicationImport idFromExcel(String idFromExcel) {
-        this.setIdFromExcel(idFromExcel);
-        return this;
+        return idFromExcel;
     }
 
     public void setIdFromExcel(String idFromExcel) {
@@ -99,12 +77,7 @@ public class ApplicationImport implements Serializable {
     }
 
     public String getName() {
-        return this.name;
-    }
-
-    public ApplicationImport name(String name) {
-        this.setName(name);
-        return this;
+        return name;
     }
 
     public void setName(String name) {
@@ -112,12 +85,7 @@ public class ApplicationImport implements Serializable {
     }
 
     public String getDescription() {
-        return this.description;
-    }
-
-    public ApplicationImport description(String description) {
-        this.setDescription(description);
-        return this;
+        return description;
     }
 
     public void setDescription(String description) {
@@ -125,12 +93,7 @@ public class ApplicationImport implements Serializable {
     }
 
     public String getType() {
-        return this.type;
-    }
-
-    public ApplicationImport type(String type) {
-        this.setType(type);
-        return this;
+        return type;
     }
 
     public void setType(String type) {
@@ -138,77 +101,31 @@ public class ApplicationImport implements Serializable {
     }
 
     public String getSoftwareType() {
-        return this.softwareType;
-    }
-
-    public ApplicationImport softwareType(String softwareType) {
-        this.setSoftwareType(softwareType);
-        return this;
+        return softwareType;
     }
 
     public void setSoftwareType(String softwareType) {
         this.softwareType = softwareType;
     }
 
-    public String getCategory1() {
-        return this.category1;
+    public Set<String> getCategories() {
+        return categories;
     }
 
-    public ApplicationImport category1(String category1) {
-        this.setCategory1(category1);
-        return this;
+    public void setCategories(Set<String> categories) {
+        this.categories = categories;
     }
 
-    public void setCategory1(String category1) {
-        this.category1 = category1;
+    public Set<String> getTechnologies() {
+        return technologies;
     }
 
-    public String getCategory2() {
-        return this.category2;
-    }
-
-    public ApplicationImport category2(String category2) {
-        this.setCategory2(category2);
-        return this;
-    }
-
-    public void setCategory2(String category2) {
-        this.category2 = category2;
-    }
-
-    public String getCategory3() {
-        return this.category3;
-    }
-
-    public ApplicationImport category3(String category3) {
-        this.setCategory3(category3);
-        return this;
-    }
-
-    public void setCategory3(String category3) {
-        this.category3 = category3;
-    }
-
-    public String getTechnology() {
-        return this.technology;
-    }
-
-    public ApplicationImport technology(String technology) {
-        this.setTechnology(technology);
-        return this;
-    }
-
-    public void setTechnology(String technology) {
-        this.technology = technology;
+    public void setTechnologies(Set<String> technologies) {
+        this.technologies = technologies;
     }
 
     public String getDocumentation() {
-        return this.documentation;
-    }
-
-    public ApplicationImport documentation(String documentation) {
-        this.setDocumentation(documentation);
-        return this;
+        return documentation;
     }
 
     public void setDocumentation(String documentation) {
@@ -216,12 +133,7 @@ public class ApplicationImport implements Serializable {
     }
 
     public String getComment() {
-        return this.comment;
-    }
-
-    public ApplicationImport comment(String comment) {
-        this.setComment(comment);
-        return this;
+        return comment;
     }
 
     public void setComment(String comment) {
@@ -229,12 +141,7 @@ public class ApplicationImport implements Serializable {
     }
 
     public String getOwner() {
-        return this.owner;
-    }
-
-    public ApplicationImport owner(String owner) {
-        this.setOwner(owner);
-        return this;
+        return owner;
     }
 
     public void setOwner(String owner) {
@@ -242,12 +149,7 @@ public class ApplicationImport implements Serializable {
     }
 
     public ImportStatus getImportStatus() {
-        return this.importStatus;
-    }
-
-    public ApplicationImport importStatus(ImportStatus importStatus) {
-        this.setImportStatus(importStatus);
-        return this;
+        return importStatus;
     }
 
     public void setImportStatus(ImportStatus importStatus) {
@@ -255,12 +157,7 @@ public class ApplicationImport implements Serializable {
     }
 
     public String getImportStatusMessage() {
-        return this.importStatusMessage;
-    }
-
-    public ApplicationImport importStatusMessage(String importStatusMessage) {
-        this.setImportStatusMessage(importStatusMessage);
-        return this;
+        return importStatusMessage;
     }
 
     public void setImportStatusMessage(String importStatusMessage) {
@@ -268,12 +165,7 @@ public class ApplicationImport implements Serializable {
     }
 
     public String getExistingApplicationID() {
-        return this.existingApplicationID;
-    }
-
-    public ApplicationImport existingApplicationID(String existingApplicationID) {
-        this.setExistingApplicationID(existingApplicationID);
-        return this;
+        return existingApplicationID;
     }
 
     public void setExistingApplicationID(String existingApplicationID) {

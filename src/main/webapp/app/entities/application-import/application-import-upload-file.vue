@@ -44,10 +44,8 @@
             <th scope="row"><span>Description</span></th>
             <th scope="row"><span>Type</span></th>
             <th scope="row"><span>Software Type</span></th>
-            <th scope="row"><span>Category 1</span></th>
-            <th scope="row"><span>Category 2</span></th>
-            <th scope="row"><span>Category 3</span></th>
-            <th scope="row"><span>Technology</span></th>
+            <th scope="row"><span>Categories</span></th>
+            <th scope="row"><span>Technologies</span></th>
             <th scope="row"><span>Documentation</span></th>
             <th scope="row"><span>Comment</span></th>
             <th scope="row"><span>Owner</span></th>
@@ -67,10 +65,8 @@
             <td>{{ applicationImport.description }}</td>
             <td>{{ applicationImport.type }}</td>
             <td>{{ applicationImport.softwareType }}</td>
-            <td>{{ applicationImport.category1 }}</td>
-            <td>{{ applicationImport.category2 }}</td>
-            <td>{{ applicationImport.category3 }}</td>
-            <td>{{ applicationImport.technology }}</td>
+            <td>{{ applicationImport.categories }}</td>
+            <td>{{ applicationImport.technologies }}</td>
             <td>{{ applicationImport.documentation }}</td>
             <td>{{ applicationImport.comment }}</td>
             <td>{{ applicationImport.owner }}</td>
