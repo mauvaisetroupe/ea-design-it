@@ -24,6 +24,10 @@
             <span> Create a new Application </span>
           </button>
         </router-link>
+        &nbsp;
+        <button class="btn btn-success mr-2" v-on:click="exportExcel()" :disabled="isFetching">
+          <font-awesome-icon icon="file-excel"></font-awesome-icon> <span>&nbsp;Export Excel</span>
+        </button>
       </div>
     </h2>
     <br />

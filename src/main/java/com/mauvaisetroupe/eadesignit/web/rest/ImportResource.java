@@ -8,6 +8,7 @@ import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationCapabilityImportService;
+import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationExportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.CapabilityImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ComponentImportService;
@@ -53,6 +54,9 @@ public class ImportResource {
 
     @Autowired
     private ApplicationImportService applicationImportService;
+
+    @Autowired
+    private ApplicationExportService applicationExportService;
 
     @Autowired
     private ComponentImportService componentImportService;
@@ -151,6 +155,18 @@ public class ImportResource {
         return ResponseEntity
             .ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + landscapeView.getDiagramName() + "xlsx")
+            .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+            .body(byteArrayResource);
+    }
+
+    @GetMapping(value = "export/applications")
+    public ResponseEntity<Resource> downloadApplications() throws IOException {
+        ByteArrayOutputStream file = applicationExportService.getApplications();
+        ByteArrayResource byteArrayResource = new ByteArrayResource(file.toByteArray());
+
+        return ResponseEntity
+            .ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=applications.xlsx")
             .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
             .body(byteArrayResource);
     }

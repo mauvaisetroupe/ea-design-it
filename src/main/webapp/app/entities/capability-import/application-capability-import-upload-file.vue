@@ -27,7 +27,7 @@
           [<a @click="selectAll">Select All</a>] [<a @click="selectNone">Select None</a>]
         </div>
 
-        <div v-for="sheet in sheetnames" class="col-md-3" :key="sheet">
+        <div v-for="sheet in sheetnames" class="col-md-4" :key="sheet">
           <input type="checkbox" v-model="checkedNames" :value="sheet" :id="sheet" />
           <label :for="sheet">{{ sheet }}</label>
         </div>

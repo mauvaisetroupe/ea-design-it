@@ -4,6 +4,7 @@ import { IApplicationImport } from '@/shared/model/application-import.model';
 
 const baseApiUrl = 'api/application-imports';
 const apiForImportUrl = 'api/import';
+const apiForExportUrl = 'api/export';
 
 export default class ApplicationImportService {
   public find(id: number): Promise<IApplicationImport> {
@@ -96,6 +97,21 @@ export default class ApplicationImportService {
         })
         .catch(err => {
           console.log(err);
+          reject(err);
+        });
+    });
+  }
+
+  public downloadFile(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .get(`${apiForExportUrl}/applications`, {
+          responseType: 'blob',
+        })
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
           reject(err);
         });
     });

@@ -5,7 +5,7 @@ import { IApplication } from '@/shared/model/application.model';
 import ApplicationService from './application.service';
 import AlertService from '@/shared/alert/alert.service';
 import AccountService from '@/account/account.service';
-import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
+import ApplicationImportService from '@/entities/application-import/application-import.service';
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -39,6 +39,7 @@ import FunctionalFlowService from '@/entities/functional-flow/functional-flow.se
 })
 export default class Application extends Vue {
   @Inject('applicationService') private applicationService: () => ApplicationService;
+  @Inject('applicationImportService') private applicationImportService: () => ApplicationImportService;
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('accountService') private accountService: () => AccountService;
   private removeId: number = null;
@@ -125,5 +126,22 @@ export default class Application extends Vue {
       }
     }
     return false;
+  }
+
+  public exportExcel() {
+    this.applicationImportService()
+      .downloadFile()
+      .then(response => {
+        const url = URL.createObjectURL(
+          new Blob([response.data], {
+            type: 'application/vnd.ms-excel',
+          })
+        );
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'applications-export.xlsx');
+        document.body.appendChild(link);
+        link.click();
+      });
   }
 }
