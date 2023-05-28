@@ -1,6 +1,5 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
-import com.mauvaisetroupe.eadesignit.domain.ApplicationComponentImport;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.domain.DataFlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
@@ -99,8 +98,13 @@ public class ImportResource {
     }
 
     @PostMapping("/import/component/upload-file")
-    public List<ApplicationComponentImport> uploadComponentFile(@RequestPart MultipartFile file) throws Exception {
-        return componentImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+    public List<ApplicationImport> uploadComponentFile(@RequestPart MultipartFile file) throws Exception {
+        try {
+            return componentImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApplicationImportException(e.getMessage());
+        }
     }
 
     @PostMapping("/import/flow/upload-files")

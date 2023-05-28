@@ -12,15 +12,13 @@ public class ApplicationImport implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
-
-    private String importId;
-
-    private String excelFileName;
-
     private String idFromExcel;
 
     private String name;
+
+    private String parentId;
+
+    private String parentName;
 
     private String description;
 
@@ -44,28 +42,14 @@ public class ApplicationImport implements Serializable {
 
     private String existingApplicationID;
 
-    public Long getId() {
-        return id;
+    private Boolean displayInLandscape;
+
+    public Boolean getDisplayInLandscape() {
+        return displayInLandscape;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getImportId() {
-        return importId;
-    }
-
-    public void setImportId(String importId) {
-        this.importId = importId;
-    }
-
-    public String getExcelFileName() {
-        return excelFileName;
-    }
-
-    public void setExcelFileName(String excelFileName) {
-        this.excelFileName = excelFileName;
+    public void setDisplayInLandscape(Boolean displayInLandscape) {
+        this.displayInLandscape = displayInLandscape;
     }
 
     public String getIdFromExcel() {
@@ -74,6 +58,22 @@ public class ApplicationImport implements Serializable {
 
     public void setIdFromExcel(String idFromExcel) {
         this.idFromExcel = idFromExcel;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 
     public String getName() {
