@@ -16,7 +16,7 @@ describe('Owner e2e test', () => {
   const ownerPageUrlPattern = new RegExp('/owner(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const ownerSample = {};
+  const ownerSample = { name: 'Computer Shores' };
 
   let owner: any;
 
@@ -149,6 +149,12 @@ describe('Owner e2e test', () => {
 
     it('should create an instance of Owner', () => {
       cy.get(`[data-cy="name"]`).type('Albania sensor copy').should('have.value', 'Albania sensor copy');
+
+      cy.get(`[data-cy="firstname"]`).type('program program').should('have.value', 'program program');
+
+      cy.get(`[data-cy="lastname"]`).type('COM Credit Netherlands').should('have.value', 'COM Credit Netherlands');
+
+      cy.get(`[data-cy="email"]`).type('e~!CT@rk%t.%*g9').should('have.value', 'e~!CT@rk%t.%*g9');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

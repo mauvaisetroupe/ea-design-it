@@ -65,6 +65,14 @@ public class Application implements Serializable, Ownershipable {
     @ManyToOne
     private Owner owner;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
+    private Owner itOwner;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
+    private Owner businessOwner;
+
     @ManyToMany
     @JoinTable(
         name = "rel_application__categories",
@@ -242,6 +250,32 @@ public class Application implements Serializable, Ownershipable {
 
     public Application owner(Owner owner) {
         this.setOwner(owner);
+        return this;
+    }
+
+    public Owner getItOwner() {
+        return this.itOwner;
+    }
+
+    public void setItOwner(Owner owner) {
+        this.itOwner = owner;
+    }
+
+    public Application itOwner(Owner owner) {
+        this.setItOwner(owner);
+        return this;
+    }
+
+    public Owner getBusinessOwner() {
+        return this.businessOwner;
+    }
+
+    public void setBusinessOwner(Owner owner) {
+        this.businessOwner = owner;
+    }
+
+    public Application businessOwner(Owner owner) {
+        this.setBusinessOwner(owner);
         return this;
     }
 

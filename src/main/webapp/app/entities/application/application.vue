@@ -55,6 +55,8 @@
             <th scope="row"><span>Application Type</span></th>
             <th scope="row"><span>Software Type</span></th>
             <th scope="row"><span>Owner</span></th>
+            <th scope="row"><span>It Owner</span></th>
+            <th scope="row"><span>Business Owner</span></th>
             <th scope="row"><span>Categories</span></th>
             <th scope="row"><span>Technologies</span></th>
             <th scope="row"></th>
@@ -89,6 +91,20 @@
               <div v-if="application.owner">
                 <router-link :to="{ name: 'OwnerView', params: { ownerId: application.owner.id } }">{{
                   application.owner.name
+                }}</router-link>
+              </div>
+            </td>
+            <td>
+              <div v-if="application.itOwner">
+                <router-link :to="{ name: 'OwnerView', params: { ownerId: application.itOwner.id } }">{{
+                  application.itOwner.name
+                }}</router-link>
+              </div>
+            </td>
+            <td>
+              <div v-if="application.businessOwner">
+                <router-link :to="{ name: 'OwnerView', params: { ownerId: application.businessOwner.id } }">{{
+                  application.businessOwner.name
                 }}</router-link>
               </div>
             </td>

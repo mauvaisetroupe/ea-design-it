@@ -1,5 +1,7 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
+import { required } from 'vuelidate/lib/validators';
+
 import AlertService from '@/shared/alert/alert.service';
 
 import UserService from '@/entities/user/user.service';
@@ -9,7 +11,12 @@ import OwnerService from './owner.service';
 
 const validations: any = {
   owner: {
-    name: {},
+    name: {
+      required,
+    },
+    firstname: {},
+    lastname: {},
+    email: {},
   },
 };
 

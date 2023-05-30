@@ -8,6 +8,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +48,7 @@ public class OwnerResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/owners")
-    public ResponseEntity<Owner> createOwner(@RequestBody Owner owner) throws URISyntaxException {
+    public ResponseEntity<Owner> createOwner(@Valid @RequestBody Owner owner) throws URISyntaxException {
         log.debug("REST request to save Owner : {}", owner);
         if (owner.getId() != null) {
             throw new BadRequestAlertException("A new owner cannot already have an ID", ENTITY_NAME, "idexists");
@@ -69,7 +71,7 @@ public class OwnerResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/owners/{id}")
-    public ResponseEntity<Owner> updateOwner(@PathVariable(value = "id", required = false) final Long id, @RequestBody Owner owner)
+    public ResponseEntity<Owner> updateOwner(@PathVariable(value = "id", required = false) final Long id, @Valid @RequestBody Owner owner)
         throws URISyntaxException {
         log.debug("REST request to update Owner : {}, {}", id, owner);
         if (owner.getId() == null) {
@@ -102,8 +104,10 @@ public class OwnerResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/owners/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<Owner> partialUpdateOwner(@PathVariable(value = "id", required = false) final Long id, @RequestBody Owner owner)
-        throws URISyntaxException {
+    public ResponseEntity<Owner> partialUpdateOwner(
+        @PathVariable(value = "id", required = false) final Long id,
+        @NotNull @RequestBody Owner owner
+    ) throws URISyntaxException {
         log.debug("REST request to partial update Owner partially : {}, {}", id, owner);
         if (owner.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -121,6 +125,15 @@ public class OwnerResource {
             .map(existingOwner -> {
                 if (owner.getName() != null) {
                     existingOwner.setName(owner.getName());
+                }
+                if (owner.getFirstname() != null) {
+                    existingOwner.setFirstname(owner.getFirstname());
+                }
+                if (owner.getLastname() != null) {
+                    existingOwner.setLastname(owner.getLastname());
+                }
+                if (owner.getEmail() != null) {
+                    existingOwner.setEmail(owner.getEmail());
                 }
 
                 return existingOwner;
