@@ -18,7 +18,50 @@
               data-cy="name"
               :class="{ valid: !$v.owner.name.$invalid, invalid: $v.owner.name.$invalid }"
               v-model="$v.owner.name.$model"
+              required
             />
+            <div v-if="$v.owner.name.$anyDirty && $v.owner.name.$invalid">
+              <small class="form-text text-danger" v-if="!$v.owner.name.required"> This field is required. </small>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="owner-firstname">Firstname</label>
+            <input
+              type="text"
+              class="form-control"
+              name="firstname"
+              id="owner-firstname"
+              data-cy="firstname"
+              :class="{ valid: !$v.owner.firstname.$invalid, invalid: $v.owner.firstname.$invalid }"
+              v-model="$v.owner.firstname.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="owner-lastname">Lastname</label>
+            <input
+              type="text"
+              class="form-control"
+              name="lastname"
+              id="owner-lastname"
+              data-cy="lastname"
+              :class="{ valid: !$v.owner.lastname.$invalid, invalid: $v.owner.lastname.$invalid }"
+              v-model="$v.owner.lastname.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="owner-email">Email</label>
+            <input
+              type="text"
+              class="form-control"
+              name="email"
+              id="owner-email"
+              data-cy="email"
+              :class="{ valid: !$v.owner.email.$invalid, invalid: $v.owner.email.$invalid }"
+              v-model="$v.owner.email.$model"
+            />
+            <div v-if="$v.owner.email.$anyDirty && $v.owner.email.$invalid">
+              <small class="form-text text-danger" v-if="!$v.owner.email.pattern"> This field should follow pattern for "Email". </small>
+            </div>
           </div>
           <div class="form-group">
             <label for="owner-users">Users</label>

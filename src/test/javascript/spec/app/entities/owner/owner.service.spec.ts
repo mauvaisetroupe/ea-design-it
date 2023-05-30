@@ -29,7 +29,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       service = new OwnerService();
-      elemDefault = new Owner(123, 'AAAAAAA');
+      elemDefault = new Owner(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -82,6 +82,9 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             name: 'BBBBBB',
+            firstname: 'BBBBBB',
+            lastname: 'BBBBBB',
+            email: 'BBBBBB',
           },
           elemDefault
         );
@@ -106,7 +109,12 @@ describe('Service Tests', () => {
       });
 
       it('should partial update a Owner', async () => {
-        const patchObject = Object.assign({}, new Owner());
+        const patchObject = Object.assign(
+          {
+            lastname: 'BBBBBB',
+          },
+          new Owner()
+        );
         const returnedFromService = Object.assign(patchObject, elemDefault);
 
         const expected = Object.assign({}, returnedFromService);
@@ -132,6 +140,9 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             name: 'BBBBBB',
+            firstname: 'BBBBBB',
+            lastname: 'BBBBBB',
+            email: 'BBBBBB',
           },
           elemDefault
         );

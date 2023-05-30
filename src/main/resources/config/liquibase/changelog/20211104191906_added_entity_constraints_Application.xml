@@ -14,6 +14,18 @@
                                  referencedColumnNames="id"
                                  referencedTableName="owner"/>
 
+        <addForeignKeyConstraint baseColumnNames="it_owner_id"
+                                 baseTableName="application"
+                                 constraintName="fk_application__it_owner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="owner"/>
+
+        <addForeignKeyConstraint baseColumnNames="business_owner_id"
+                                 baseTableName="application"
+                                 constraintName="fk_application__business_owner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="owner"/>
+
         <addForeignKeyConstraint baseColumnNames="application_id"
                                  baseTableName="rel_application__categories"
                                  constraintName="fk_rel_application__categories__application_id"

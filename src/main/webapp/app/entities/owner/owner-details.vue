@@ -11,6 +11,24 @@
             <span>{{ owner.name }}</span>
           </dd>
           <dt>
+            <span>Firstname</span>
+          </dt>
+          <dd>
+            <span>{{ owner.firstname }}</span>
+          </dd>
+          <dt>
+            <span>Lastname</span>
+          </dt>
+          <dd>
+            <span>{{ owner.lastname }}</span>
+          </dd>
+          <dt>
+            <span>Email</span>
+          </dt>
+          <dd>
+            <span>{{ owner.email }}</span>
+          </dd>
+          <dt>
             <span>Users</span>
           </dt>
           <dd>

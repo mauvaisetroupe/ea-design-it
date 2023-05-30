@@ -67,6 +67,20 @@
     },
     {
       "otherEntityField": "name",
+      "otherEntityName": "owner",
+      "otherEntityRelationshipName": "application",
+      "relationshipName": "itOwner",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "owner",
+      "otherEntityRelationshipName": "application",
+      "relationshipName": "businessOwner",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "name",
       "otherEntityName": "applicationCategory",
       "otherEntityRelationshipName": "applications",
       "ownerSide": true,

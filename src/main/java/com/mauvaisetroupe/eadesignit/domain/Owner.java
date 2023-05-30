@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -23,8 +24,19 @@ public class Owner implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
+    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "firstname")
+    private String firstname;
+
+    @Column(name = "lastname")
+    private String lastname;
+
+    @Pattern(regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
+    @Column(name = "email")
+    private String email;
 
     @ManyToMany
     @JoinTable(name = "rel_owner__users", joinColumns = @JoinColumn(name = "owner_id"), inverseJoinColumns = @JoinColumn(name = "users_id"))
@@ -57,6 +69,45 @@ public class Owner implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFirstname() {
+        return this.firstname;
+    }
+
+    public Owner firstname(String firstname) {
+        this.setFirstname(firstname);
+        return this;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return this.lastname;
+    }
+
+    public Owner lastname(String lastname) {
+        this.setLastname(lastname);
+        return this;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public Owner email(String email) {
+        this.setEmail(email);
+        return this;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Set<User> getUsers() {
@@ -107,6 +158,9 @@ public class Owner implements Serializable {
         return "Owner{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", firstname='" + getFirstname() + "'" +
+            ", lastname='" + getLastname() + "'" +
+            ", email='" + getEmail() + "'" +
             "}";
     }
 }

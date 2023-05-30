@@ -18,6 +18,8 @@ export interface IApplication {
   applicationType?: ApplicationType | null;
   softwareType?: SoftwareType | null;
   owner?: IOwner | null;
+  itOwner?: IOwner | null;
+  businessOwner?: IOwner | null;
   categories?: IApplicationCategory[] | null;
   technologies?: ITechnology[] | null;
   capabilities?: ICapability[] | null;
@@ -37,6 +39,8 @@ export class Application implements IApplication {
     public applicationType?: ApplicationType | null,
     public softwareType?: SoftwareType | null,
     public owner?: IOwner | null,
+    public itOwner?: IOwner | null,
+    public businessOwner?: IOwner | null,
     public categories?: IApplicationCategory[] | null,
     public technologies?: ITechnology[] | null,
     public capabilities?: ICapability[] | null,

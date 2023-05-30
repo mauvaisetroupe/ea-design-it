@@ -67,6 +67,26 @@
             </div>
           </dd>
           <dt>
+            <span>It Owner</span>
+          </dt>
+          <dd>
+            <div v-if="application.itOwner">
+              <router-link :to="{ name: 'OwnerView', params: { ownerId: application.itOwner.id } }">{{
+                application.itOwner.name
+              }}</router-link>
+            </div>
+          </dd>
+          <dt>
+            <span>Business Owner</span>
+          </dt>
+          <dd>
+            <div v-if="application.businessOwner">
+              <router-link :to="{ name: 'OwnerView', params: { ownerId: application.businessOwner.id } }">{{
+                application.businessOwner.name
+              }}</router-link>
+            </div>
+          </dd>
+          <dt>
             <span>Categories</span>
           </dt>
           <dd>

@@ -186,6 +186,40 @@
             </select>
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-itOwner">It Owner</label>
+            <select class="form-control" id="application-itOwner" data-cy="itOwner" name="itOwner" v-model="application.itOwner">
+              <option v-bind:value="null"></option>
+              <option
+                v-bind:value="application.itOwner && ownerOption.id === application.itOwner.id ? application.itOwner : ownerOption"
+                v-for="ownerOption in owners"
+                :key="ownerOption.id"
+              >
+                {{ ownerOption.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="application-businessOwner">Business Owner</label>
+            <select
+              class="form-control"
+              id="application-businessOwner"
+              data-cy="businessOwner"
+              name="businessOwner"
+              v-model="application.businessOwner"
+            >
+              <option v-bind:value="null"></option>
+              <option
+                v-bind:value="
+                  application.businessOwner && ownerOption.id === application.businessOwner.id ? application.businessOwner : ownerOption
+                "
+                v-for="ownerOption in owners"
+                :key="ownerOption.id"
+              >
+                {{ ownerOption.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="application-categories">Categories</label>
             <select
               class="form-control"

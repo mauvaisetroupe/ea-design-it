@@ -40,6 +40,15 @@ class OwnerResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_FIRSTNAME = "AAAAAAAAAA";
+    private static final String UPDATED_FIRSTNAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_LASTNAME = "AAAAAAAAAA";
+    private static final String UPDATED_LASTNAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_EMAIL = "ytq@.8't.6";
+    private static final String UPDATED_EMAIL = "G@s${.w";
+
     private static final String ENTITY_API_URL = "/api/owners";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -67,7 +76,7 @@ class OwnerResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Owner createEntity(EntityManager em) {
-        Owner owner = new Owner().name(DEFAULT_NAME);
+        Owner owner = new Owner().name(DEFAULT_NAME).firstname(DEFAULT_FIRSTNAME).lastname(DEFAULT_LASTNAME).email(DEFAULT_EMAIL);
         return owner;
     }
 
@@ -78,7 +87,7 @@ class OwnerResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Owner createUpdatedEntity(EntityManager em) {
-        Owner owner = new Owner().name(UPDATED_NAME);
+        Owner owner = new Owner().name(UPDATED_NAME).firstname(UPDATED_FIRSTNAME).lastname(UPDATED_LASTNAME).email(UPDATED_EMAIL);
         return owner;
     }
 
@@ -101,6 +110,9 @@ class OwnerResourceIT {
         assertThat(ownerList).hasSize(databaseSizeBeforeCreate + 1);
         Owner testOwner = ownerList.get(ownerList.size() - 1);
         assertThat(testOwner.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testOwner.getFirstname()).isEqualTo(DEFAULT_FIRSTNAME);
+        assertThat(testOwner.getLastname()).isEqualTo(DEFAULT_LASTNAME);
+        assertThat(testOwner.getEmail()).isEqualTo(DEFAULT_EMAIL);
     }
 
     @Test
@@ -123,6 +135,23 @@ class OwnerResourceIT {
 
     @Test
     @Transactional
+    void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = ownerRepository.findAll().size();
+        // set the field null
+        owner.setName(null);
+
+        // Create the Owner, which fails.
+
+        restOwnerMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(owner)))
+            .andExpect(status().isBadRequest());
+
+        List<Owner> ownerList = ownerRepository.findAll();
+        assertThat(ownerList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllOwners() throws Exception {
         // Initialize the database
         ownerRepository.saveAndFlush(owner);
@@ -133,7 +162,10 @@ class OwnerResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(owner.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].firstname").value(hasItem(DEFAULT_FIRSTNAME)))
+            .andExpect(jsonPath("$.[*].lastname").value(hasItem(DEFAULT_LASTNAME)))
+            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -166,7 +198,10 @@ class OwnerResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(owner.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.firstname").value(DEFAULT_FIRSTNAME))
+            .andExpect(jsonPath("$.lastname").value(DEFAULT_LASTNAME))
+            .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL));
     }
 
     @Test
@@ -188,7 +223,7 @@ class OwnerResourceIT {
         Owner updatedOwner = ownerRepository.findById(owner.getId()).get();
         // Disconnect from session so that the updates on updatedOwner are not directly saved in db
         em.detach(updatedOwner);
-        updatedOwner.name(UPDATED_NAME);
+        updatedOwner.name(UPDATED_NAME).firstname(UPDATED_FIRSTNAME).lastname(UPDATED_LASTNAME).email(UPDATED_EMAIL);
 
         restOwnerMockMvc
             .perform(
@@ -203,6 +238,9 @@ class OwnerResourceIT {
         assertThat(ownerList).hasSize(databaseSizeBeforeUpdate);
         Owner testOwner = ownerList.get(ownerList.size() - 1);
         assertThat(testOwner.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testOwner.getFirstname()).isEqualTo(UPDATED_FIRSTNAME);
+        assertThat(testOwner.getLastname()).isEqualTo(UPDATED_LASTNAME);
+        assertThat(testOwner.getEmail()).isEqualTo(UPDATED_EMAIL);
     }
 
     @Test
@@ -273,6 +311,8 @@ class OwnerResourceIT {
         Owner partialUpdatedOwner = new Owner();
         partialUpdatedOwner.setId(owner.getId());
 
+        partialUpdatedOwner.firstname(UPDATED_FIRSTNAME).lastname(UPDATED_LASTNAME);
+
         restOwnerMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedOwner.getId())
@@ -286,6 +326,9 @@ class OwnerResourceIT {
         assertThat(ownerList).hasSize(databaseSizeBeforeUpdate);
         Owner testOwner = ownerList.get(ownerList.size() - 1);
         assertThat(testOwner.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testOwner.getFirstname()).isEqualTo(UPDATED_FIRSTNAME);
+        assertThat(testOwner.getLastname()).isEqualTo(UPDATED_LASTNAME);
+        assertThat(testOwner.getEmail()).isEqualTo(DEFAULT_EMAIL);
     }
 
     @Test
@@ -300,7 +343,7 @@ class OwnerResourceIT {
         Owner partialUpdatedOwner = new Owner();
         partialUpdatedOwner.setId(owner.getId());
 
-        partialUpdatedOwner.name(UPDATED_NAME);
+        partialUpdatedOwner.name(UPDATED_NAME).firstname(UPDATED_FIRSTNAME).lastname(UPDATED_LASTNAME).email(UPDATED_EMAIL);
 
         restOwnerMockMvc
             .perform(
@@ -315,6 +358,9 @@ class OwnerResourceIT {
         assertThat(ownerList).hasSize(databaseSizeBeforeUpdate);
         Owner testOwner = ownerList.get(ownerList.size() - 1);
         assertThat(testOwner.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testOwner.getFirstname()).isEqualTo(UPDATED_FIRSTNAME);
+        assertThat(testOwner.getLastname()).isEqualTo(UPDATED_LASTNAME);
+        assertThat(testOwner.getEmail()).isEqualTo(UPDATED_EMAIL);
     }
 
     @Test

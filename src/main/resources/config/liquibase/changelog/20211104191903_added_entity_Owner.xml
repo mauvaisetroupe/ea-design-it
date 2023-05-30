@@ -15,6 +15,15 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="firstname" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="lastname" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="email" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->

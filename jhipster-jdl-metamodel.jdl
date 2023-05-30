@@ -30,6 +30,8 @@ relationship ManyToOne {
     FunctionalFlow{owner(name)} to Owner
 	FlowInterface{owner(name)} to Owner
     Application{owner(name)} to Owner
+    Application{itOwner(name)} to Owner
+    Application{businessOwner(name)} to Owner
 	
     DataFlow{format(name)} to DataFormat
     
@@ -63,7 +65,10 @@ entity LandscapeView {
 }
 
 entity Owner {
-	name String
+	name String required
+	firstname String
+	lastname String
+    email String pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
 }
 
 entity FunctionalFlow(flow) {
