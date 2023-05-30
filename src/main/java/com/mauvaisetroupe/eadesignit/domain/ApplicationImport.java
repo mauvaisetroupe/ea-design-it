@@ -36,6 +36,10 @@ public class ApplicationImport implements Serializable {
 
     private String owner;
 
+    private String itOwner;
+
+    private String businessOwner;
+
     private ImportStatus importStatus;
 
     private String importStatusMessage;
@@ -146,6 +150,22 @@ public class ApplicationImport implements Serializable {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getItOwner() {
+        return itOwner;
+    }
+
+    public void setItOwner(String itOwner) {
+        this.itOwner = itOwner;
+    }
+
+    public String getBusinessOwner() {
+        return businessOwner;
+    }
+
+    public void setBusinessOwner(String businessOwner) {
+        this.businessOwner = businessOwner;
     }
 
     public ImportStatus getImportStatus() {

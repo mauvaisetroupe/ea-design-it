@@ -16,6 +16,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -32,11 +34,18 @@ public class ApplicationMapperUtil {
     public static final String APPLICATION_CATEGORY_ = "application.category.";
     public static final String APPLICATION_TECHNOLOGY_ = "application.technology.";
     public static final String APPLICATION_DOCUMENTATION = "application.documentation";
-    public static final String APPLICATION_OWNER = "application.owner";
+    public static final String APPLICATION_OWNER = "owner";
+    public static final String BUSINESS_OWNER = "business.owner";
+    public static final String IT_OWNER = "it.owner";
 
     public static final String COMPONENT_ID = "component.id";
     public static final String COMPONENT_NAME = "component.name";
     public static final String COMPONENT_DISPLAY_IN_LANDSCAPE = "Display in Landscape";
+
+    public static final String OWNER_NAME = "owner.name";
+    public static final String OWNER_FIRSTNAME = "owner.firstname";
+    public static final String OWNER_LASTNAME = "owner.lastname";
+    public static final String OWNER_EMAIL = "owner.email";
 
     private final ApplicationCategoryRepository applicationCategoryRepository;
     private final TechnologyRepository technologyRepository;
@@ -61,6 +70,8 @@ public class ApplicationMapperUtil {
         applicationImport.setType((String) map.get(APPLICATION_TYPE));
         applicationImport.setSoftwareType((String) map.get(SOFTWARE_TYPE));
         applicationImport.setOwner((String) map.get(APPLICATION_OWNER));
+        applicationImport.setItOwner((String) map.get(IT_OWNER));
+        applicationImport.setBusinessOwner((String) map.get(BUSINESS_OWNER));
         applicationImport.setDocumentation((String) map.get(APPLICATION_DOCUMENTATION));
         for (String columnName : map.keySet().stream().filter(Objects::nonNull).collect(Collectors.toList())) {
             if (map.get(columnName) != null) {
@@ -102,7 +113,9 @@ public class ApplicationMapperUtil {
         application.setSoftwareType(getSoftwareType(applicationImport));
         application.setTechnologies(getTechnologies(applicationImport));
         application.setCategories(getCategories(applicationImport));
-        application.setOwner(getOwner(applicationImport));
+        application.setOwner(getOwner(applicationImport.getOwner()));
+        application.setItOwner(getOwner(applicationImport.getItOwner()));
+        application.setBusinessOwner(getOwner(applicationImport.getBusinessOwner()));
     }
 
     public void mapApplicationImportToComponent(ApplicationImport applicationImport, final ApplicationComponent application) {
@@ -162,16 +175,37 @@ public class ApplicationMapperUtil {
         return categories;
     }
 
-    private Owner getOwner(ApplicationImport applicationImport) {
+    private Owner getOwner(String ownerName) {
         Owner owner = null;
-        if (StringUtils.hasText(applicationImport.getOwner())) {
-            owner = ownerRepository.findByNameIgnoreCase(applicationImport.getOwner());
+        if (StringUtils.hasText(ownerName)) {
+            owner = ownerRepository.findByNameIgnoreCase(ownerName);
             if (owner == null) {
                 owner = new Owner();
-                owner.setName(applicationImport.getOwner());
+                owner.setName(ownerName);
                 ownerRepository.save(owner);
             }
         }
         return owner;
+    }
+
+    public void mapArrayToOwner(Map<String, Object> map) {
+        String ownerName = (String) map.get(OWNER_NAME);
+        Owner owner = ownerRepository.findByNameIgnoreCase(ownerName);
+        if (owner == null) {
+            owner = new Owner();
+        }
+        owner.setName(ownerName);
+        if (StringUtils.hasText((String) map.get(OWNER_FIRSTNAME))) owner.setFirstname((String) map.get(OWNER_FIRSTNAME));
+        if (StringUtils.hasText((String) map.get(OWNER_LASTNAME))) owner.setLastname((String) map.get(OWNER_LASTNAME));
+        if (StringUtils.hasText((String) map.get(OWNER_EMAIL))) {
+            String potentialEmail = (String) map.get(OWNER_EMAIL);
+            String regex = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(potentialEmail);
+            if (matcher.matches()) {
+                owner.setEmail(potentialEmail);
+            }
+        }
+        ownerRepository.save(owner);
     }
 }

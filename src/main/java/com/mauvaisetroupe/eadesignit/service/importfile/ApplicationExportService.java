@@ -3,9 +3,11 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationCategory;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
+import com.mauvaisetroupe.eadesignit.domain.Owner;
 import com.mauvaisetroupe.eadesignit.domain.Technology;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationComponentRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ApplicationMapperUtil;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ExcelUtils;
 import java.io.ByteArrayOutputStream;
@@ -27,15 +29,20 @@ public class ApplicationExportService {
     @Autowired
     ApplicationComponentRepository applicationComponentRepository;
 
+    @Autowired
+    OwnerRepository ownerRepository;
+
     public ByteArrayOutputStream getApplications() throws IOException {
         Workbook workbook = new XSSFWorkbook();
         Sheet appliSheet = workbook.createSheet("Application");
         Sheet componentSheet = workbook.createSheet("Component");
+        Sheet ownerSheet = workbook.createSheet("Owner");
 
         writeApplication(appliSheet);
         ExcelUtils.autoSizeAllColumns(appliSheet);
         writeComponent(componentSheet);
         ExcelUtils.autoSizeAllColumns(componentSheet);
+        writeOwner(ownerSheet);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         workbook.write(stream);
@@ -66,6 +73,8 @@ public class ApplicationExportService {
         }
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_DOCUMENTATION);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_OWNER);
+        headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.IT_OWNER);
+        headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.BUSINESS_OWNER);
 
         for (Application application : applications) {
             column = 0;
@@ -93,11 +102,19 @@ public class ApplicationExportService {
             column = column + maxTechnologies;
 
             row.createCell(column++).setCellValue(application.getDocumentationURL());
+
             if (application.getOwner() != null) {
-                row.createCell(column++).setCellValue(application.getOwner().getName());
-            } else {
-                column++;
+                row.createCell(column).setCellValue(application.getOwner().getName());
             }
+            column++;
+            if (application.getItOwner() != null) {
+                row.createCell(column).setCellValue(application.getItOwner().getName());
+            }
+            column++;
+            if (application.getBusinessOwner() != null) {
+                row.createCell(column).setCellValue(application.getBusinessOwner().getName());
+            }
+            column++;
         }
     }
 
@@ -154,6 +171,27 @@ public class ApplicationExportService {
             column = column + maxTechnologies;
 
             row.createCell(column++).setCellValue(application.getDocumentationURL());
+        }
+    }
+
+    private void writeOwner(Sheet sheet) {
+        int column = 0;
+        int rownb = 0;
+        Row headerRow = sheet.createRow(rownb++);
+
+        headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.OWNER_NAME);
+        headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.OWNER_FIRSTNAME);
+        headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.OWNER_LASTNAME);
+        headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.OWNER_EMAIL);
+
+        List<Owner> owners = ownerRepository.findAll();
+        for (Owner owner : owners) {
+            column = 0;
+            Row row = sheet.createRow(rownb++);
+            row.createCell(column++).setCellValue(owner.getName());
+            row.createCell(column++).setCellValue(owner.getFirstname());
+            row.createCell(column++).setCellValue(owner.getLastname());
+            row.createCell(column++).setCellValue(owner.getEmail());
         }
     }
 }

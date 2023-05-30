@@ -22,6 +22,7 @@ import org.springframework.util.Assert;
 public class ApplicationImportService {
 
     private static final String APPLICATION_SHEET_NAME = "Application";
+    private static final String OWNER_SHEET_NAME = "Owner";
 
     private final Logger log = LoggerFactory.getLogger(ApplicationImportService.class);
 
@@ -37,6 +38,12 @@ public class ApplicationImportService {
     public List<ApplicationImport> importExcel(InputStream inputStream, String originalFilename)
         throws EncryptedDocumentException, IOException {
         ExcelReader excelReader = new ExcelReader(inputStream);
+
+        List<Map<String, Object>> ownerDF = excelReader.getSheet(OWNER_SHEET_NAME);
+        for (Map<String, Object> map : ownerDF) {
+            applicationMapperUtil.mapArrayToOwner(map);
+        }
+
         List<Map<String, Object>> applicationDF = excelReader.getSheet(APPLICATION_SHEET_NAME);
         log.info("Found Excel sheet " + applicationDF);
 
