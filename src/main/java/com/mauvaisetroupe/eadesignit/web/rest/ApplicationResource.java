@@ -152,6 +152,9 @@ public class ApplicationResource {
                 if (application.getSoftwareType() != null) {
                     existingApplication.setSoftwareType(application.getSoftwareType());
                 }
+                if (application.getNickname() != null) {
+                    existingApplication.setNickname(application.getNickname());
+                }
 
                 return existingApplication;
             })

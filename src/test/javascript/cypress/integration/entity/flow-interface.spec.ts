@@ -40,6 +40,7 @@ describe('FlowInterface e2e test', () => {
         endDate: '2021-11-03',
         applicationType: 'HARDWARE',
         softwareType: 'CLOUD_CUSTOM',
+        nickname: 'Antillian',
       },
     }).then(({ body }) => {
       application = body;

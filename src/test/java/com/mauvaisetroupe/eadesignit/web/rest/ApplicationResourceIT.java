@@ -68,6 +68,9 @@ class ApplicationResourceIT {
     private static final SoftwareType DEFAULT_SOFTWARE_TYPE = SoftwareType.ON_PREMISE_COTS;
     private static final SoftwareType UPDATED_SOFTWARE_TYPE = SoftwareType.ON_PREMISE_CUSTOM;
 
+    private static final String DEFAULT_NICKNAME = "AAAAAAAAAA";
+    private static final String UPDATED_NICKNAME = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/applications";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -104,7 +107,8 @@ class ApplicationResourceIT {
             .startDate(DEFAULT_START_DATE)
             .endDate(DEFAULT_END_DATE)
             .applicationType(DEFAULT_APPLICATION_TYPE)
-            .softwareType(DEFAULT_SOFTWARE_TYPE);
+            .softwareType(DEFAULT_SOFTWARE_TYPE)
+            .nickname(DEFAULT_NICKNAME);
         return application;
     }
 
@@ -124,7 +128,8 @@ class ApplicationResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .applicationType(UPDATED_APPLICATION_TYPE)
-            .softwareType(UPDATED_SOFTWARE_TYPE);
+            .softwareType(UPDATED_SOFTWARE_TYPE)
+            .nickname(UPDATED_NICKNAME);
         return application;
     }
 
@@ -155,6 +160,7 @@ class ApplicationResourceIT {
         assertThat(testApplication.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testApplication.getApplicationType()).isEqualTo(DEFAULT_APPLICATION_TYPE);
         assertThat(testApplication.getSoftwareType()).isEqualTo(DEFAULT_SOFTWARE_TYPE);
+        assertThat(testApplication.getNickname()).isEqualTo(DEFAULT_NICKNAME);
     }
 
     @Test
@@ -212,7 +218,8 @@ class ApplicationResourceIT {
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].applicationType").value(hasItem(DEFAULT_APPLICATION_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].softwareType").value(hasItem(DEFAULT_SOFTWARE_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].softwareType").value(hasItem(DEFAULT_SOFTWARE_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].nickname").value(hasItem(DEFAULT_NICKNAME)));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -253,7 +260,8 @@ class ApplicationResourceIT {
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
             .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
             .andExpect(jsonPath("$.applicationType").value(DEFAULT_APPLICATION_TYPE.toString()))
-            .andExpect(jsonPath("$.softwareType").value(DEFAULT_SOFTWARE_TYPE.toString()));
+            .andExpect(jsonPath("$.softwareType").value(DEFAULT_SOFTWARE_TYPE.toString()))
+            .andExpect(jsonPath("$.nickname").value(DEFAULT_NICKNAME));
     }
 
     @Test
@@ -284,7 +292,8 @@ class ApplicationResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .applicationType(UPDATED_APPLICATION_TYPE)
-            .softwareType(UPDATED_SOFTWARE_TYPE);
+            .softwareType(UPDATED_SOFTWARE_TYPE)
+            .nickname(UPDATED_NICKNAME);
 
         restApplicationMockMvc
             .perform(
@@ -307,6 +316,7 @@ class ApplicationResourceIT {
         assertThat(testApplication.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testApplication.getApplicationType()).isEqualTo(UPDATED_APPLICATION_TYPE);
         assertThat(testApplication.getSoftwareType()).isEqualTo(UPDATED_SOFTWARE_TYPE);
+        assertThat(testApplication.getNickname()).isEqualTo(UPDATED_NICKNAME);
     }
 
     @Test
@@ -377,7 +387,7 @@ class ApplicationResourceIT {
         Application partialUpdatedApplication = new Application();
         partialUpdatedApplication.setId(application.getId());
 
-        partialUpdatedApplication.name(UPDATED_NAME).endDate(UPDATED_END_DATE);
+        partialUpdatedApplication.name(UPDATED_NAME).endDate(UPDATED_END_DATE).nickname(UPDATED_NICKNAME);
 
         restApplicationMockMvc
             .perform(
@@ -400,6 +410,7 @@ class ApplicationResourceIT {
         assertThat(testApplication.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testApplication.getApplicationType()).isEqualTo(DEFAULT_APPLICATION_TYPE);
         assertThat(testApplication.getSoftwareType()).isEqualTo(DEFAULT_SOFTWARE_TYPE);
+        assertThat(testApplication.getNickname()).isEqualTo(UPDATED_NICKNAME);
     }
 
     @Test
@@ -423,7 +434,8 @@ class ApplicationResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .applicationType(UPDATED_APPLICATION_TYPE)
-            .softwareType(UPDATED_SOFTWARE_TYPE);
+            .softwareType(UPDATED_SOFTWARE_TYPE)
+            .nickname(UPDATED_NICKNAME);
 
         restApplicationMockMvc
             .perform(
@@ -446,6 +458,7 @@ class ApplicationResourceIT {
         assertThat(testApplication.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testApplication.getApplicationType()).isEqualTo(UPDATED_APPLICATION_TYPE);
         assertThat(testApplication.getSoftwareType()).isEqualTo(UPDATED_SOFTWARE_TYPE);
+        assertThat(testApplication.getNickname()).isEqualTo(UPDATED_NICKNAME);
     }
 
     @Test

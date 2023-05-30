@@ -107,6 +107,7 @@ entity Application {
     endDate LocalDate
     applicationType ApplicationType
 	softwareType SoftwareType
+	nickname String
 }
 
 entity Protocol {

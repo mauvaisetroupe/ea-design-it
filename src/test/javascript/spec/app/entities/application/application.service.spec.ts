@@ -45,7 +45,8 @@ describe('Service Tests', () => {
         currentDate,
         currentDate,
         ApplicationType.SOFTWARE,
-        SoftwareType.ON_PREMISE_COTS
+        SoftwareType.ON_PREMISE_COTS,
+        'AAAAAAA'
       );
     });
 
@@ -121,6 +122,7 @@ describe('Service Tests', () => {
             endDate: dayjs(currentDate).format(DATE_FORMAT),
             applicationType: 'BBBBBB',
             softwareType: 'BBBBBB',
+            nickname: 'BBBBBB',
           },
           elemDefault
         );
@@ -197,6 +199,7 @@ describe('Service Tests', () => {
             endDate: dayjs(currentDate).format(DATE_FORMAT),
             applicationType: 'BBBBBB',
             softwareType: 'BBBBBB',
+            nickname: 'BBBBBB',
           },
           elemDefault
         );

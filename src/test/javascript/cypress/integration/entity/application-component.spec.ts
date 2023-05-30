@@ -40,6 +40,7 @@ describe('ApplicationComponent e2e test', () => {
         endDate: '2021-11-04',
         applicationType: 'HARDWARE',
         softwareType: 'ON_PREMISE_CUSTOM',
+        nickname: 'interface attitude-oriented Account',
       },
     }).then(({ body }) => {
       application = body;

@@ -37,6 +37,7 @@
             <th scope="row"><span>End Date</span></th>
             <th scope="row"><span>Application Type</span></th>
             <th scope="row"><span>Software Type</span></th>
+            <th scope="row"><span>Nickname</span></th>
             <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>It Owner</span></th>
             <th scope="row"><span>Business Owner</span></th>
@@ -60,6 +61,7 @@
             <td>{{ application.endDate }}</td>
             <td>{{ application.applicationType }}</td>
             <td>{{ application.softwareType }}</td>
+            <td>{{ application.nickname }}</td>
             <td>
               <div v-if="application.owner">
                 <router-link :to="{ name: 'OwnerView', params: { ownerId: application.owner.id } }">{{

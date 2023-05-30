@@ -43,6 +43,7 @@ const validations: any = {
     endDate: {},
     applicationType: {},
     softwareType: {},
+    nickname: {},
   },
 };
 

@@ -16,7 +16,7 @@ describe('Application e2e test', () => {
   const applicationPageUrlPattern = new RegExp('/application(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const applicationSample = { name: 'port Architect override' };
+  const applicationSample = { name: 'COM cross-platform Carolina' };
 
   let application: any;
 
@@ -165,6 +165,8 @@ describe('Application e2e test', () => {
       cy.get(`[data-cy="applicationType"]`).select('MIDDLEWARE');
 
       cy.get(`[data-cy="softwareType"]`).select('ON_PREMISE_COTS');
+
+      cy.get(`[data-cy="nickname"]`).type('port Architect override').should('have.value', 'port Architect override');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

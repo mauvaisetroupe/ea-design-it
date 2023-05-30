@@ -59,6 +59,12 @@
             <span>{{ application.softwareType }}</span>
           </dd>
           <dt>
+            <span>Nickname</span>
+          </dt>
+          <dd>
+            <span>{{ application.nickname }}</span>
+          </dd>
+          <dt>
             <span>Owner</span>
           </dt>
           <dd>

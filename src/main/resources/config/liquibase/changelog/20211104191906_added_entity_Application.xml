@@ -41,6 +41,9 @@
             <column name="software_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="nickname" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="owner_id" type="bigint">
                 <constraints nullable="true" />
             </column>
