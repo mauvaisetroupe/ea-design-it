@@ -16,6 +16,8 @@ public class ApplicationImport implements Serializable {
 
     private String name;
 
+    private String nickname;
+
     private String parentId;
 
     private String parentName;
@@ -86,6 +88,14 @@ public class ApplicationImport implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getDescription() {

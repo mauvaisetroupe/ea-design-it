@@ -27,6 +27,7 @@ public class ApplicationMapperUtil {
 
     public static final String APPLICATION_ID = "application.id";
     public static final String APPLICATION_NAME = "application.name";
+    public static final String APPLICATION_NICKNAME = "application.nickname";
     public static final String APPLICATION_DESCRIPTION = "application.description";
     public static final String APPLICATION_COMMENT = "application.comment";
     public static final String APPLICATION_TYPE = "application.type";
@@ -65,6 +66,7 @@ public class ApplicationMapperUtil {
         ApplicationImport applicationImport = new ApplicationImport();
         applicationImport.setIdFromExcel((String) map.get(APPLICATION_ID));
         applicationImport.setName((String) map.get(APPLICATION_NAME));
+        applicationImport.setNickname((String) map.get(APPLICATION_NICKNAME));
         applicationImport.setDescription((String) map.get(APPLICATION_DESCRIPTION));
         applicationImport.setComment((String) map.get(APPLICATION_COMMENT));
         applicationImport.setType((String) map.get(APPLICATION_TYPE));
@@ -108,6 +110,7 @@ public class ApplicationMapperUtil {
         application.setComment(applicationImport.getComment());
         application.setDescription(applicationImport.getDescription());
         application.setName(applicationImport.getName());
+        application.setNickname(applicationImport.getNickname());
         application.setAlias(applicationImport.getIdFromExcel());
         application.setApplicationType(getApplicationType(applicationImport));
         application.setSoftwareType(getSoftwareType(applicationImport));

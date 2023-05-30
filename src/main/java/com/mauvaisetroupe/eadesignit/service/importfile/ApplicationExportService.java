@@ -71,6 +71,7 @@ public class ApplicationExportService {
         for (int i = 1; i <= maxTechnologies; i++) {
             headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_TECHNOLOGY_ + i);
         }
+        headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_NICKNAME);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_DOCUMENTATION);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_OWNER);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.IT_OWNER);
@@ -101,6 +102,7 @@ public class ApplicationExportService {
             }
             column = column + maxTechnologies;
 
+            row.createCell(column++).setCellValue(application.getNickname());
             row.createCell(column++).setCellValue(application.getDocumentationURL());
 
             if (application.getOwner() != null) {
