@@ -34,7 +34,7 @@ public class Owner implements Serializable {
     @Column(name = "lastname")
     private String lastname;
 
-    @Pattern(regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
+    @Pattern(regexp = "\\s*|(^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$)")
     @Column(name = "email")
     private String email;
 
