@@ -37,6 +37,9 @@ public class ExcelReader {
 
     public List<Map<String, Object>> getSheet(String sheetName) {
         Sheet sheet = workbook.getSheet(sheetName);
+        if (sheet == null) {
+            return new ArrayList<>();
+        }
         List<Map<String, Object>> rowAsArrayList = new ArrayList<>();
         // First row is header
         Row firstRow = sheet.getRow(0);
