@@ -168,6 +168,8 @@ describe('Application e2e test', () => {
 
       cy.get(`[data-cy="softwareType"]`).select('ON_PREMISE_COTS');
 
+      cy.get(`[data-cy="nickname"]`).type('port Architect override').should('have.value', 'port Architect override');
+
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {

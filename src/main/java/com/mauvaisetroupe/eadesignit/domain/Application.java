@@ -62,6 +62,9 @@ public class Application implements Serializable, Ownershipable {
     @Column(name = "software_type")
     private SoftwareType softwareType;
 
+    @Column(name = "nickname")
+    private String nickname;
+
     @ManyToOne
     private Owner owner;
 
@@ -238,6 +241,19 @@ public class Application implements Serializable, Ownershipable {
 
     public void setSoftwareType(SoftwareType softwareType) {
         this.softwareType = softwareType;
+    }
+
+    public String getNickname() {
+        return this.nickname;
+    }
+
+    public Application nickname(String nickname) {
+        this.setNickname(nickname);
+        return this;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public Owner getOwner() {
@@ -418,6 +434,7 @@ public class Application implements Serializable, Ownershipable {
             ", endDate='" + getEndDate() + "'" +
             ", applicationType='" + getApplicationType() + "'" +
             ", softwareType='" + getSoftwareType() + "'" +
+            ", nickname='" + getNickname() + "'" +
             "}";
     }
 }

@@ -173,6 +173,18 @@
             </select>
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-nickname">Nickname</label>
+            <input
+              type="text"
+              class="form-control"
+              name="nickname"
+              id="application-nickname"
+              data-cy="nickname"
+              :class="{ valid: !$v.application.nickname.$invalid, invalid: $v.application.nickname.$invalid }"
+              v-model="$v.application.nickname.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="application-owner">Owner</label>
             <select class="form-control" id="application-owner" data-cy="owner" name="owner" v-model="application.owner">
               <option v-bind:value="null"></option>

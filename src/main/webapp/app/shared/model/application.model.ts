@@ -17,6 +17,7 @@ export interface IApplication {
   endDate?: Date | null;
   applicationType?: ApplicationType | null;
   softwareType?: SoftwareType | null;
+  nickname?: string | null;
   owner?: IOwner | null;
   itOwner?: IOwner | null;
   businessOwner?: IOwner | null;
@@ -38,6 +39,7 @@ export class Application implements IApplication {
     public endDate?: Date | null,
     public applicationType?: ApplicationType | null,
     public softwareType?: SoftwareType | null,
+    public nickname?: string | null,
     public owner?: IOwner | null,
     public itOwner?: IOwner | null,
     public businessOwner?: IOwner | null,
