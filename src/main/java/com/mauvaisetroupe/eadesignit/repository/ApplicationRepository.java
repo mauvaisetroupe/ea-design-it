@@ -18,7 +18,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
         value = "select distinct application from Application application" +
         " left join fetch application.categories" +
         " left join fetch application.technologies" +
-        " left join fetch application.capabilities" +
         " left join fetch application.owner" +
         " left join fetch application.itOwner" +
         " left join fetch application.businessOwner" +
@@ -31,7 +30,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
         "select distinct application from Application application" +
         " left join fetch application.categories" +
         " left join fetch application.technologies" +
-        " left join fetch application.capabilities" +
         " left join fetch application.owner" +
         " left join fetch application.itOwner" +
         " left join fetch application.businessOwner" +
