@@ -113,12 +113,12 @@ public class Application implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "externalids_id")
     )
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "externalSystem", "applications" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "externalSystem", "applications", "components" }, allowSetters = true)
     private Set<ExternalReference> externalIDS = new HashSet<>();
 
     @OneToMany(mappedBy = "application")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "application", "categories", "technologies" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "application", "categories", "technologies", "externalIDS" }, allowSetters = true)
     private Set<ApplicationComponent> applicationsLists = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

@@ -13,6 +13,9 @@ import { IApplicationCategory } from '@/shared/model/application-category.model'
 import TechnologyService from '@/entities/technology/technology.service';
 import { ITechnology } from '@/shared/model/technology.model';
 
+import ExternalReferenceService from '@/entities/external-reference/external-reference.service';
+import { IExternalReference } from '@/shared/model/external-reference.model';
+
 import { IApplicationComponent, ApplicationComponent } from '@/shared/model/application-component.model';
 import ApplicationComponentService from './application-component.service';
 import { ApplicationType } from '@/shared/model/enumerations/application-type.model';
@@ -64,6 +67,10 @@ export default class ApplicationComponentUpdate extends Vue {
   @Inject('technologyService') private technologyService: () => TechnologyService;
 
   public technologies: ITechnology[] = [];
+
+  @Inject('externalReferenceService') private externalReferenceService: () => ExternalReferenceService;
+
+  public externalReferences: IExternalReference[] = [];
   public applicationTypeValues: string[] = Object.keys(ApplicationType);
   public softwareTypeValues: string[] = Object.keys(SoftwareType);
   public isSaving = false;
@@ -88,6 +95,7 @@ export default class ApplicationComponentUpdate extends Vue {
     );
     this.applicationComponent.categories = [];
     this.applicationComponent.technologies = [];
+    this.applicationComponent.externalIDS = [];
   }
 
   public save(): void {
@@ -163,6 +171,11 @@ export default class ApplicationComponentUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.technologies = res.data;
+      });
+    this.externalReferenceService()
+      .retrieve()
+      .then(res => {
+        this.externalReferences = res.data;
       });
   }
 

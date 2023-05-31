@@ -97,6 +97,8 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.ExternalReference.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.ExternalReference.class.getName() + ".applications");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.ExternalSystem.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.ApplicationComponent.class.getName() + ".externalIDS");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.ExternalReference.class.getName() + ".components");
             // jhipster-needle-ehcache-add-entry
         };
     }

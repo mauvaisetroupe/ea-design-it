@@ -262,6 +262,26 @@
               </option>
             </select>
           </div>
+          <div class="form-group">
+            <label for="application-component-externalIDS">External IDS</label>
+            <select
+              class="form-control"
+              id="application-component-externalIDS"
+              data-cy="externalIDS"
+              multiple
+              name="externalIDS"
+              v-if="applicationComponent.externalIDS !== undefined"
+              v-model="applicationComponent.externalIDS"
+            >
+              <option
+                v-bind:value="getSelected(applicationComponent.externalIDS, externalReferenceOption)"
+                v-for="externalReferenceOption in externalReferences"
+                :key="externalReferenceOption.id"
+              >
+                {{ externalReferenceOption.externalID }}
+              </option>
+            </select>
+          </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">

@@ -12,6 +12,8 @@ import ExternalReferenceService from '@/entities/external-reference/external-ref
 import ExternalSystemService from '@/entities/external-system/external-system.service';
 
 import ApplicationService from '@/entities/application/application.service';
+
+import ApplicationComponentService from '@/entities/application-component/application-component.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -51,6 +53,11 @@ describe('Component Tests', () => {
 
           applicationService: () =>
             sinon.createStubInstance<ApplicationService>(ApplicationService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
+
+          applicationComponentService: () =>
+            sinon.createStubInstance<ApplicationComponentService>(ApplicationComponentService, {
               retrieve: sinon.stub().resolves({}),
             } as any),
         },

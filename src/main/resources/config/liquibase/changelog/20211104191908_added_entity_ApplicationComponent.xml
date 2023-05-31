@@ -74,6 +74,17 @@
         </createTable>
 
         <addPrimaryKey columnNames="component_id, technologies_id" tableName="rel_component__technologies"/>
+
+        <createTable tableName="rel_component__externalids">
+            <column name="externalids_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="component_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="component_id, externalids_id" tableName="rel_component__externalids"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

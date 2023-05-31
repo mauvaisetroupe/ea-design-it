@@ -73,11 +73,11 @@ public class FlowInterface implements Serializable {
     private Application target;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "application", "categories", "technologies" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "application", "categories", "technologies", "externalIDS" }, allowSetters = true)
     private ApplicationComponent sourceComponent;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "application", "categories", "technologies" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "application", "categories", "technologies", "externalIDS" }, allowSetters = true)
     private ApplicationComponent targetComponent;
 
     @ManyToOne

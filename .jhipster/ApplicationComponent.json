@@ -85,6 +85,14 @@
       "ownerSide": true,
       "relationshipName": "technologies",
       "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "externalID",
+      "otherEntityName": "externalReference",
+      "otherEntityRelationshipName": "components",
+      "ownerSide": true,
+      "relationshipName": "externalIDS",
+      "relationshipType": "many-to-many"
     }
   ],
   "service": "no"

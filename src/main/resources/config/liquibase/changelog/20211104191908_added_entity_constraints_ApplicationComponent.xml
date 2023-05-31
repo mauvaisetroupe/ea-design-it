@@ -37,5 +37,17 @@
                                  constraintName="fk_rel_component__technologies__technologies_id"
                                  referencedColumnNames="id"
                                  referencedTableName="technology"/>
+
+        <addForeignKeyConstraint baseColumnNames="component_id"
+                                 baseTableName="rel_component__externalids"
+                                 constraintName="fk_rel_component__externalids__component_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="component"/>
+
+        <addForeignKeyConstraint baseColumnNames="externalids_id"
+                                 baseTableName="rel_component__externalids"
+                                 constraintName="fk_rel_component__externalids__externalids_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="external_reference"/>
     </changeSet>
 </databaseChangeLog>

@@ -38,6 +38,11 @@ public class ExternalReference implements Serializable {
     )
     private Set<Application> applications = new HashSet<>();
 
+    @ManyToMany(mappedBy = "externalIDS")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "application", "categories", "technologies", "externalIDS" }, allowSetters = true)
+    private Set<ApplicationComponent> components = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -107,6 +112,37 @@ public class ExternalReference implements Serializable {
     public ExternalReference removeApplications(Application application) {
         this.applications.remove(application);
         application.getExternalIDS().remove(this);
+        return this;
+    }
+
+    public Set<ApplicationComponent> getComponents() {
+        return this.components;
+    }
+
+    public void setComponents(Set<ApplicationComponent> applicationComponents) {
+        if (this.components != null) {
+            this.components.forEach(i -> i.removeExternalIDS(this));
+        }
+        if (applicationComponents != null) {
+            applicationComponents.forEach(i -> i.addExternalIDS(this));
+        }
+        this.components = applicationComponents;
+    }
+
+    public ExternalReference components(Set<ApplicationComponent> applicationComponents) {
+        this.setComponents(applicationComponents);
+        return this;
+    }
+
+    public ExternalReference addComponents(ApplicationComponent applicationComponent) {
+        this.components.add(applicationComponent);
+        applicationComponent.getExternalIDS().add(this);
+        return this;
+    }
+
+    public ExternalReference removeComponents(ApplicationComponent applicationComponent) {
+        this.components.remove(applicationComponent);
+        applicationComponent.getExternalIDS().remove(this);
         return this;
     }
 
