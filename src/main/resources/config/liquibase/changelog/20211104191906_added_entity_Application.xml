@@ -91,6 +91,17 @@
         </createTable>
 
         <addPrimaryKey columnNames="application_id, capabilities_id" tableName="rel_application__capabilities"/>
+
+        <createTable tableName="rel_application__externalids">
+            <column name="externalids_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="application_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="application_id, externalids_id" tableName="rel_application__externalids"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

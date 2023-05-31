@@ -61,5 +61,17 @@
                                  constraintName="fk_rel_application__capabilities__capabilities_id"
                                  referencedColumnNames="id"
                                  referencedTableName="capability"/>
+
+        <addForeignKeyConstraint baseColumnNames="application_id"
+                                 baseTableName="rel_application__externalids"
+                                 constraintName="fk_rel_application__externalids__application_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application"/>
+
+        <addForeignKeyConstraint baseColumnNames="externalids_id"
+                                 baseTableName="rel_application__externalids"
+                                 constraintName="fk_rel_application__externalids__externalids_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="external_reference"/>
     </changeSet>
 </databaseChangeLog>

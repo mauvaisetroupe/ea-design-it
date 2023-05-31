@@ -2,6 +2,7 @@ import { IOwner } from '@/shared/model/owner.model';
 import { IApplicationCategory } from '@/shared/model/application-category.model';
 import { ITechnology } from '@/shared/model/technology.model';
 import { ICapability } from '@/shared/model/capability.model';
+import { IExternalReference } from '@/shared/model/external-reference.model';
 import { IApplicationComponent } from '@/shared/model/application-component.model';
 
 import { ApplicationType } from '@/shared/model/enumerations/application-type.model';
@@ -24,6 +25,7 @@ export interface IApplication {
   categories?: IApplicationCategory[] | null;
   technologies?: ITechnology[] | null;
   capabilities?: ICapability[] | null;
+  externalIDS?: IExternalReference[] | null;
   applicationsLists?: IApplicationComponent[] | null;
 }
 
@@ -46,6 +48,7 @@ export class Application implements IApplication {
     public categories?: IApplicationCategory[] | null,
     public technologies?: ITechnology[] | null,
     public capabilities?: ICapability[] | null,
+    public externalIDS?: IExternalReference[] | null,
     public applicationsLists?: IApplicationComponent[] | null
   ) {}
 }

@@ -59,7 +59,7 @@ public class FlowInterface implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "owner", "itOwner", "businessOwner", "categories", "technologies", "capabilities", "applicationsLists" },
+        value = { "owner", "itOwner", "businessOwner", "categories", "technologies", "capabilities", "externalIDS", "applicationsLists" },
         allowSetters = true
     )
     private Application source;
@@ -67,7 +67,7 @@ public class FlowInterface implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(
-        value = { "owner", "itOwner", "businessOwner", "categories", "technologies", "capabilities", "applicationsLists" },
+        value = { "owner", "itOwner", "businessOwner", "categories", "technologies", "capabilities", "externalIDS", "applicationsLists" },
         allowSetters = true
     )
     private Application target;

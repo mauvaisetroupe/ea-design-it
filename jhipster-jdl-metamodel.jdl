@@ -14,6 +14,8 @@ relationship ManyToMany {
     LandscapeView{capabilities(name)} to Capability{landscapes(diagramName)}
     
     Owner{users(login)} to User 
+
+    Application{externalIDS(externalID)} to ExternalReference{applications(alias)}
 }
 
 relationship ManyToOne {
@@ -40,6 +42,8 @@ relationship ManyToOne {
     FunctionalFlowStep{group(alias)} to FlowGroup{steps required}
 	FlowGroup{flow(alias)} to FunctionalFlow
 
+    ExternalReference{externalSystem(externalSystemID)} to ExternalSystem
+
 }
 
 relationship OneToMany {
@@ -48,6 +52,14 @@ relationship OneToMany {
     Capability{subCapabilities(name)} to Capability{parent(name)}
     FunctionalFlow{steps} to FunctionalFlowStep{flow(alias) required}
 
+}
+
+entity ExternalReference {
+    externalID String
+}
+
+entity ExternalSystem {
+    externalSystemID String
 }
 
 

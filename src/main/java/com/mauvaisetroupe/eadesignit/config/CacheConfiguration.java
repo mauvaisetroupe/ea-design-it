@@ -93,6 +93,10 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.FlowGroup.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.FlowGroup.class.getName() + ".steps");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Application.class.getName() + ".externalIDS");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.ExternalReference.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.ExternalReference.class.getName() + ".applications");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.ExternalSystem.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

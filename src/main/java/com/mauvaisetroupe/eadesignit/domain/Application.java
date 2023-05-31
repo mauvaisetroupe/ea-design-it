@@ -106,6 +106,16 @@ public class Application implements Serializable {
     @JsonIgnoreProperties(value = { "subCapabilities", "parent", "applications", "landscapes" }, allowSetters = true)
     private Set<Capability> capabilities = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_application__externalids",
+        joinColumns = @JoinColumn(name = "application_id"),
+        inverseJoinColumns = @JoinColumn(name = "externalids_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "externalSystem", "applications" }, allowSetters = true)
+    private Set<ExternalReference> externalIDS = new HashSet<>();
+
     @OneToMany(mappedBy = "application")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "application", "categories", "technologies" }, allowSetters = true)
@@ -367,6 +377,31 @@ public class Application implements Serializable {
     public Application removeCapabilities(Capability capability) {
         this.capabilities.remove(capability);
         capability.getApplications().remove(this);
+        return this;
+    }
+
+    public Set<ExternalReference> getExternalIDS() {
+        return this.externalIDS;
+    }
+
+    public void setExternalIDS(Set<ExternalReference> externalReferences) {
+        this.externalIDS = externalReferences;
+    }
+
+    public Application externalIDS(Set<ExternalReference> externalReferences) {
+        this.setExternalIDS(externalReferences);
+        return this;
+    }
+
+    public Application addExternalIDS(ExternalReference externalReference) {
+        this.externalIDS.add(externalReference);
+        externalReference.getApplications().add(this);
+        return this;
+    }
+
+    public Application removeExternalIDS(ExternalReference externalReference) {
+        this.externalIDS.remove(externalReference);
+        externalReference.getApplications().remove(this);
         return this;
     }
 

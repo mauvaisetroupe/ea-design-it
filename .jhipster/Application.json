@@ -108,6 +108,14 @@
       "relationshipType": "many-to-many"
     },
     {
+      "otherEntityField": "externalID",
+      "otherEntityName": "externalReference",
+      "otherEntityRelationshipName": "applications",
+      "ownerSide": true,
+      "relationshipName": "externalIDS",
+      "relationshipType": "many-to-many"
+    },
+    {
       "otherEntityField": "name",
       "otherEntityName": "applicationComponent",
       "otherEntityRelationshipName": "application",

@@ -121,6 +121,17 @@
               <router-link :to="{ name: 'CapabilityView', params: { capabilityId: capabilities.id } }">{{ capabilities.name }}</router-link>
             </span>
           </dd>
+          <dt>
+            <span>External IDS</span>
+          </dt>
+          <dd>
+            <span v-for="(externalIDS, i) in application.externalIDS" :key="externalIDS.id"
+              >{{ i > 0 ? ', ' : '' }}
+              <router-link :to="{ name: 'ExternalReferenceView', params: { externalReferenceId: externalIDS.id } }">{{
+                externalIDS.externalID
+              }}</router-link>
+            </span>
+          </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>

@@ -72,6 +72,14 @@
       <font-awesome-icon icon="asterisk" />
       <span>Flow Group</span>
     </b-dropdown-item>
+    <b-dropdown-item to="/external-reference">
+      <font-awesome-icon icon="asterisk" />
+      <span>External Reference</span>
+    </b-dropdown-item>
+    <b-dropdown-item to="/external-system">
+      <font-awesome-icon icon="asterisk" />
+      <span>External System</span>
+    </b-dropdown-item>
     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
   </div>
 </template>
