@@ -1,0 +1,19 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="lionel (generated)" id="1685547839570-2">
+        <createTable tableName="rel_component__externalids">
+            <column name="component_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="externalids_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1685547839570-4">
+        <addForeignKeyConstraint baseColumnNames="component_id" baseTableName="rel_component__externalids" constraintName="FKflj5ykjk1gn1avtrgtxp31mw9" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="component" validate="true"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1685547839570-5">
+        <addForeignKeyConstraint baseColumnNames="externalids_id" baseTableName="rel_component__externalids" constraintName="FKhpm0jx5tkmvyfvnwg0i40au4y" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="external_reference" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
