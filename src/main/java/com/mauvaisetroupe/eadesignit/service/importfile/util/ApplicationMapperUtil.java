@@ -16,15 +16,12 @@ import com.mauvaisetroupe.eadesignit.repository.ExternalReferenceRepository;
 import com.mauvaisetroupe.eadesignit.repository.ExternalSystemRepository;
 import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
 import com.mauvaisetroupe.eadesignit.repository.TechnologyRepository;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -64,8 +61,6 @@ public class ApplicationMapperUtil {
     private final ExternalSystemRepository externalSystemRepository;
     private final ExternalReferenceRepository externalReferenceRepository;
 
-    Map<String, ExternalSystem> externalSystemsMap = new HashMap<>();
-
     public ApplicationMapperUtil(
         ApplicationCategoryRepository applicationCategoryRepository,
         TechnologyRepository technologyRepository,
@@ -78,9 +73,6 @@ public class ApplicationMapperUtil {
         this.ownerRepository = ownerRepository;
         this.externalSystemRepository = externalSystemRepository;
         this.externalReferenceRepository = externalReferenceRepository;
-
-        List<ExternalSystem> externalSystems = externalSystemRepository.findAll();
-        externalSystemsMap = externalSystems.stream().collect(Collectors.toMap(ExternalSystem::getExternalSystemID, Function.identity()));
     }
 
     public ApplicationImport mapArrayToImportApplication(Map<String, Object> map) {
@@ -170,10 +162,11 @@ public class ApplicationMapperUtil {
     }
 
     private ExternalSystem checkAndGetSystem(String externalSystemID) {
-        if (!externalSystemsMap.containsKey(externalSystemID)) {
+        Optional<ExternalSystem> optional = externalSystemRepository.findByExternalSystemID(externalSystemID);
+        if (!optional.isPresent()) {
             throw new RuntimeException("External System should exist : " + externalSystemID);
         }
-        return externalSystemsMap.get(externalSystemID);
+        return optional.get();
     }
 
     public void mapApplicationImportToComponent(ApplicationImport applicationImport, final ApplicationComponent application) {
