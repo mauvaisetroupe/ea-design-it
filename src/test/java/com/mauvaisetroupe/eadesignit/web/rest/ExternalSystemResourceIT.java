@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class ExternalSystemResourceIT {
 
     private static final String DEFAULT_EXTERNAL_SYSTEM_ID = "AAAAAAAAAA";
@@ -354,6 +354,7 @@ class ExternalSystemResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE", "ROLE_ADMIN", "ROLE_WRITE" })
     void deleteExternalSystem() throws Exception {
         // Initialize the database
         externalSystemRepository.saveAndFlush(externalSystem);

@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class ExternalReferenceResourceIT {
 
     private static final String DEFAULT_EXTERNAL_ID = "AAAAAAAAAA";
@@ -356,6 +356,7 @@ class ExternalReferenceResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "admin", authorities = { "ROLE_HARD_DELETE", "ROLE_ADMIN", "ROLE_WRITE" })
     void deleteExternalReference() throws Exception {
         // Initialize the database
         externalReferenceRepository.saveAndFlush(externalReference);
