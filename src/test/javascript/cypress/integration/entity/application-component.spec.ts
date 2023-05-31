@@ -69,6 +69,11 @@ describe('ApplicationComponent e2e test', () => {
       statusCode: 200,
       body: [],
     });
+
+    cy.intercept('GET', '/api/external-references', {
+      statusCode: 200,
+      body: [],
+    });
   });
 
   afterEach(() => {

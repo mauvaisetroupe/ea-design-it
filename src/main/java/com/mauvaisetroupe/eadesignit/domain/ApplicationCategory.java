@@ -46,7 +46,7 @@ public class ApplicationCategory implements Serializable {
 
     @ManyToMany(mappedBy = "categories")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "application", "categories", "technologies" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "application", "categories", "technologies", "externalIDS" }, allowSetters = true)
     private Set<ApplicationComponent> components = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

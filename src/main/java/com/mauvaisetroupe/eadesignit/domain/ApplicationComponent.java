@@ -92,6 +92,16 @@ public class ApplicationComponent implements Serializable {
     @JsonIgnoreProperties(value = { "applications", "components" }, allowSetters = true)
     private Set<Technology> technologies = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+        name = "rel_component__externalids",
+        joinColumns = @JoinColumn(name = "component_id"),
+        inverseJoinColumns = @JoinColumn(name = "externalids_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "externalSystem", "applications", "components" }, allowSetters = true)
+    private Set<ExternalReference> externalIDS = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -297,6 +307,31 @@ public class ApplicationComponent implements Serializable {
     public ApplicationComponent removeTechnologies(Technology technology) {
         this.technologies.remove(technology);
         technology.getComponents().remove(this);
+        return this;
+    }
+
+    public Set<ExternalReference> getExternalIDS() {
+        return this.externalIDS;
+    }
+
+    public void setExternalIDS(Set<ExternalReference> externalReferences) {
+        this.externalIDS = externalReferences;
+    }
+
+    public ApplicationComponent externalIDS(Set<ExternalReference> externalReferences) {
+        this.setExternalIDS(externalReferences);
+        return this;
+    }
+
+    public ApplicationComponent addExternalIDS(ExternalReference externalReference) {
+        this.externalIDS.add(externalReference);
+        externalReference.getComponents().add(this);
+        return this;
+    }
+
+    public ApplicationComponent removeExternalIDS(ExternalReference externalReference) {
+        this.externalIDS.remove(externalReference);
+        externalReference.getComponents().remove(this);
         return this;
     }
 

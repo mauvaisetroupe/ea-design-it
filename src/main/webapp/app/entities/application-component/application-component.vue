@@ -41,6 +41,7 @@
             <th scope="row"><span>Application</span></th>
             <th scope="row"><span>Categories</span></th>
             <th scope="row"><span>Technologies</span></th>
+            <th scope="row"><span>External IDS</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -86,6 +87,16 @@
                 <router-link class="form-control-static" :to="{ name: 'TechnologyView', params: { technologyId: technologies.id } }">{{
                   technologies.name
                 }}</router-link>
+              </span>
+            </td>
+            <td>
+              <span v-for="(externalIDS, i) in applicationComponent.externalIDS" :key="externalIDS.id"
+                >{{ i > 0 ? ', ' : '' }}
+                <router-link
+                  class="form-control-static"
+                  :to="{ name: 'ExternalReferenceView', params: { externalReferenceId: externalIDS.id } }"
+                  >{{ externalIDS.externalID }}</router-link
+                >
               </span>
             </td>
             <td class="text-right">

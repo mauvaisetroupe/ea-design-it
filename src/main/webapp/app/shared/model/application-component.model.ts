@@ -1,6 +1,7 @@
 import { IApplication } from '@/shared/model/application.model';
 import { IApplicationCategory } from '@/shared/model/application-category.model';
 import { ITechnology } from '@/shared/model/technology.model';
+import { IExternalReference } from '@/shared/model/external-reference.model';
 
 import { ApplicationType } from '@/shared/model/enumerations/application-type.model';
 import { SoftwareType } from '@/shared/model/enumerations/software-type.model';
@@ -19,6 +20,7 @@ export interface IApplicationComponent {
   application?: IApplication;
   categories?: IApplicationCategory[] | null;
   technologies?: ITechnology[] | null;
+  externalIDS?: IExternalReference[] | null;
 }
 
 export class ApplicationComponent implements IApplicationComponent {
@@ -36,7 +38,8 @@ export class ApplicationComponent implements IApplicationComponent {
     public displayInLandscape?: boolean | null,
     public application?: IApplication,
     public categories?: IApplicationCategory[] | null,
-    public technologies?: ITechnology[] | null
+    public technologies?: ITechnology[] | null,
+    public externalIDS?: IExternalReference[] | null
   ) {
     this.displayInLandscape = this.displayInLandscape ?? false;
   }

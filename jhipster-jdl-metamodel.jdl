@@ -16,6 +16,8 @@ relationship ManyToMany {
     Owner{users(login)} to User 
 
     Application{externalIDS(externalID)} to ExternalReference{applications(alias)}
+    ApplicationComponent{externalIDS(externalID)} to ExternalReference{components(alias)}
+    
 }
 
 relationship ManyToOne {

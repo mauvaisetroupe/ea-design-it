@@ -8,6 +8,9 @@ import { IExternalSystem } from '@/shared/model/external-system.model';
 import ApplicationService from '@/entities/application/application.service';
 import { IApplication } from '@/shared/model/application.model';
 
+import ApplicationComponentService from '@/entities/application-component/application-component.service';
+import { IApplicationComponent } from '@/shared/model/application-component.model';
+
 import { IExternalReference, ExternalReference } from '@/shared/model/external-reference.model';
 import ExternalReferenceService from './external-reference.service';
 
@@ -33,6 +36,10 @@ export default class ExternalReferenceUpdate extends Vue {
   @Inject('applicationService') private applicationService: () => ApplicationService;
 
   public applications: IApplication[] = [];
+
+  @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
+
+  public applicationComponents: IApplicationComponent[] = [];
   public isSaving = false;
   public currentLanguage = '';
 
@@ -123,6 +130,11 @@ export default class ExternalReferenceUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.applications = res.data;
+      });
+    this.applicationComponentService()
+      .retrieve()
+      .then(res => {
+        this.applicationComponents = res.data;
       });
   }
 }
