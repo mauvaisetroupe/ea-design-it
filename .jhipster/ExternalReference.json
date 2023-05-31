@@ -1,0 +1,36 @@
+{
+  "applications": "*",
+  "changelogDate": "20230530161117",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "external_reference",
+  "fields": [
+    {
+      "fieldName": "externalID",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "ExternalReference",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "externalSystemID",
+      "otherEntityName": "externalSystem",
+      "otherEntityRelationshipName": "externalReference",
+      "relationshipName": "externalSystem",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "alias",
+      "otherEntityName": "application",
+      "otherEntityRelationshipName": "externalIDS",
+      "ownerSide": false,
+      "relationshipName": "applications",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "no"
+}

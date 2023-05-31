@@ -52,7 +52,7 @@ public class Capability implements Serializable {
     @ManyToMany(mappedBy = "capabilities", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "owner", "itOwner", "businessOwner", "categories", "technologies", "capabilities", "applicationsLists" },
+        value = { "owner", "itOwner", "businessOwner", "categories", "technologies", "capabilities", "externalIDS", "applicationsLists" },
         allowSetters = true
     )
     private Set<Application> applications = new HashSet<>();

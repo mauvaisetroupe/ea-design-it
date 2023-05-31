@@ -39,7 +39,7 @@ public class ApplicationCategory implements Serializable {
     @ManyToMany(mappedBy = "categories")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "owner", "itOwner", "businessOwner", "categories", "technologies", "capabilities", "applicationsLists" },
+        value = { "owner", "itOwner", "businessOwner", "categories", "technologies", "capabilities", "externalIDS", "applicationsLists" },
         allowSetters = true
     )
     private Set<Application> applications = new HashSet<>();

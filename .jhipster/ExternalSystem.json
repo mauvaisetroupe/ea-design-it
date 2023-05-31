@@ -1,0 +1,20 @@
+{
+  "applications": "*",
+  "changelogDate": "20230530161118",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "external_system",
+  "fields": [
+    {
+      "fieldName": "externalSystemID",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "ExternalSystem",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
+}

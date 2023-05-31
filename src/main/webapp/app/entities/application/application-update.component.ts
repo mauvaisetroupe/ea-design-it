@@ -16,6 +16,9 @@ import { ITechnology } from '@/shared/model/technology.model';
 import CapabilityService from '@/entities/capability/capability.service';
 import { ICapability } from '@/shared/model/capability.model';
 
+import ExternalReferenceService from '@/entities/external-reference/external-reference.service';
+import { IExternalReference } from '@/shared/model/external-reference.model';
+
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
 import { IApplicationComponent } from '@/shared/model/application-component.model';
 
@@ -72,6 +75,10 @@ export default class ApplicationUpdate extends Vue {
 
   public capabilities: ICapability[] = [];
 
+  @Inject('externalReferenceService') private externalReferenceService: () => ExternalReferenceService;
+
+  public externalReferences: IExternalReference[] = [];
+
   @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
 
   public applicationComponents: IApplicationComponent[] = [];
@@ -100,6 +107,7 @@ export default class ApplicationUpdate extends Vue {
     this.application.categories = [];
     this.application.technologies = [];
     this.application.capabilities = [];
+    this.application.externalIDS = [];
   }
 
   public save(): void {
@@ -180,6 +188,11 @@ export default class ApplicationUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.capabilities = res.data;
+      });
+    this.externalReferenceService()
+      .retrieve()
+      .then(res => {
+        this.externalReferences = res.data;
       });
     this.applicationComponentService()
       .retrieve()

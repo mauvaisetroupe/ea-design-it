@@ -21,7 +21,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
         " left join fetch application.capabilities" +
         " left join fetch application.owner" +
         " left join fetch application.itOwner" +
-        " left join fetch application.businessOwner",
+        " left join fetch application.businessOwner" +
+        " left join fetch application.externalIDS ",
         countQuery = "select count(distinct application) from Application application"
     )
     Page<Application> findAllWithEagerRelationships(Pageable pageable);
@@ -33,7 +34,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
         " left join fetch application.capabilities" +
         " left join fetch application.owner" +
         " left join fetch application.itOwner" +
-        " left join fetch application.businessOwner"
+        " left join fetch application.businessOwner" +
+        " left join fetch application.externalIDS "
     )
     List<Application> findAllWithEagerRelationships();
 
@@ -45,6 +47,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
         " left join fetch application.owner" +
         " left join fetch application.itOwner" +
         " left join fetch application.businessOwner" +
+        " left join fetch application.externalIDS " +
         " where application.id =:id"
     )
     Optional<Application> findOneWithEagerRelationships(@Param("id") Long id);

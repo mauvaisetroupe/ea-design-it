@@ -17,6 +17,8 @@ import TechnologyService from '@/entities/technology/technology.service';
 
 import CapabilityService from '@/entities/capability/capability.service';
 
+import ExternalReferenceService from '@/entities/external-reference/external-reference.service';
+
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
 import AlertService from '@/shared/alert/alert.service';
 
@@ -67,6 +69,11 @@ describe('Component Tests', () => {
 
           capabilityService: () =>
             sinon.createStubInstance<CapabilityService>(CapabilityService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
+
+          externalReferenceService: () =>
+            sinon.createStubInstance<ExternalReferenceService>(ExternalReferenceService, {
               retrieve: sinon.stub().resolves({}),
             } as any),
 

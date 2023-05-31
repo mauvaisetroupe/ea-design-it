@@ -61,12 +61,18 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "owner", "itOwner", "businessOwner", "capabilities", "applicationsLists" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "owner", "itOwner", "businessOwner", "capabilities", "externalIDS", "applicationsLists" },
+        allowSetters = true
+    )
     private Application source;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "owner", "itOwner", "businessOwner", "capabilities", "applicationsLists" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "owner", "itOwner", "businessOwner", "capabilities", "externalIDS", "applicationsLists" },
+        allowSetters = true
+    )
     private Application target;
 
     @ManyToOne

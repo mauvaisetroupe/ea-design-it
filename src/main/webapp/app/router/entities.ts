@@ -65,6 +65,18 @@ const FlowGroup = () => import('@/entities/flow-group/flow-group.vue');
 const FlowGroupUpdate = () => import('@/entities/flow-group/flow-group-update.vue');
 // prettier-ignore
 const FlowGroupDetails = () => import('@/entities/flow-group/flow-group-details.vue');
+// prettier-ignore
+const ExternalReference = () => import('@/entities/external-reference/external-reference.vue');
+// prettier-ignore
+const ExternalReferenceUpdate = () => import('@/entities/external-reference/external-reference-update.vue');
+// prettier-ignore
+const ExternalReferenceDetails = () => import('@/entities/external-reference/external-reference-details.vue');
+// prettier-ignore
+const ExternalSystem = () => import('@/entities/external-system/external-system.vue');
+// prettier-ignore
+const ExternalSystemUpdate = () => import('@/entities/external-system/external-system-update.vue');
+// prettier-ignore
+const ExternalSystemDetails = () => import('@/entities/external-system/external-system-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default {
@@ -429,6 +441,54 @@ export default {
       path: 'flow-group/:flowGroupId/view',
       name: 'FlowGroupView',
       component: FlowGroupDetails,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'external-reference',
+      name: 'ExternalReference',
+      component: ExternalReference,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'external-reference/new',
+      name: 'ExternalReferenceCreate',
+      component: ExternalReferenceUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'external-reference/:externalReferenceId/edit',
+      name: 'ExternalReferenceEdit',
+      component: ExternalReferenceUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'external-reference/:externalReferenceId/view',
+      name: 'ExternalReferenceView',
+      component: ExternalReferenceDetails,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'external-system',
+      name: 'ExternalSystem',
+      component: ExternalSystem,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'external-system/new',
+      name: 'ExternalSystemCreate',
+      component: ExternalSystemUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'external-system/:externalSystemId/edit',
+      name: 'ExternalSystemEdit',
+      component: ExternalSystemUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'external-system/:externalSystemId/view',
+      name: 'ExternalSystemView',
+      component: ExternalSystemDetails,
       meta: { authorities: [Authority.USER] },
     },
     // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
