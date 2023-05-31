@@ -64,7 +64,7 @@
     <div class="col-8">
       <div class="mt-5">
         <h2>Graphical view</h2>
-        <div class="common" :class="capability.subCapabilities.length > 0 ? 'alpha' : 'beta'">
+        <div class="common" :class="capability.subCapabilities.length > 0 ? 'alpha' : 'beta'" v-if="capability.subCapabilities">
           <div :title="capability.description">{{ capability.level }}. {{ capability.name }}</div>
           <div v-if="capability.subCapabilities" class="d-flex flex-wrap">
             <div
