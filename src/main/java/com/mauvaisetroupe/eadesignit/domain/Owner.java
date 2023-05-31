@@ -38,7 +38,7 @@ public class Owner implements Serializable {
     @Column(name = "email")
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "rel_owner__users", joinColumns = @JoinColumn(name = "owner_id"), inverseJoinColumns = @JoinColumn(name = "users_id"))
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<User> users = new HashSet<>();

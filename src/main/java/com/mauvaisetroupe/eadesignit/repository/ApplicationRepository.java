@@ -15,18 +15,37 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
     @Query(
-        value = "select distinct application from Application application left join fetch application.categories left join fetch application.technologies left join fetch application.capabilities",
+        value = "select distinct application from Application application" +
+        " left join fetch application.categories" +
+        " left join fetch application.technologies" +
+        " left join fetch application.capabilities" +
+        " left join fetch application.owner" +
+        " left join fetch application.itOwner" +
+        " left join fetch application.businessOwner",
         countQuery = "select count(distinct application) from Application application"
     )
     Page<Application> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct application from Application application left join fetch application.categories left join fetch application.technologies left join fetch application.capabilities"
+        "select distinct application from Application application" +
+        " left join fetch application.categories" +
+        " left join fetch application.technologies" +
+        " left join fetch application.capabilities" +
+        " left join fetch application.owner" +
+        " left join fetch application.itOwner" +
+        " left join fetch application.businessOwner"
     )
     List<Application> findAllWithEagerRelationships();
 
     @Query(
-        "select application from Application application left join fetch application.categories left join fetch application.technologies left join fetch application.capabilities where application.id =:id"
+        "select application from Application application " +
+        " left join fetch application.categories" +
+        " left join fetch application.technologies" +
+        " left join fetch application.capabilities" +
+        " left join fetch application.owner" +
+        " left join fetch application.itOwner" +
+        " left join fetch application.businessOwner" +
+        " where application.id =:id"
     )
     Optional<Application> findOneWithEagerRelationships(@Param("id") Long id);
 

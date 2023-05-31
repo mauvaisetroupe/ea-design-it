@@ -65,14 +65,14 @@ public class Application implements Serializable, Ownershipable {
     @Column(name = "nickname")
     private String nickname;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Owner owner;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner itOwner;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner businessOwner;
 
