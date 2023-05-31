@@ -1,0 +1,39 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="lionel (generated)" id="1685525127127-2">
+        <createTable tableName="external_reference">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="external_referencePK"/>
+            </column>
+            <column name="external_id" type="VARCHAR(255)"/>
+            <column name="external_system_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1685525127127-3">
+        <createTable tableName="external_system">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="external_systemPK"/>
+            </column>
+            <column name="external_system_id" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1685525127127-4">
+        <createTable tableName="rel_application__externalids">
+            <column name="application_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="externalids_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1685525127127-6">
+        <addForeignKeyConstraint baseColumnNames="application_id" baseTableName="rel_application__externalids" constraintName="FKd9125e37c0530megr1b531fiu" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application" validate="true"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1685525127127-7">
+        <addForeignKeyConstraint baseColumnNames="externalids_id" baseTableName="rel_application__externalids" constraintName="FKj8pugnk1adhh5ycdhinxhetp8" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="external_reference" validate="true"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1685525127127-8">
+        <addForeignKeyConstraint baseColumnNames="external_system_id" baseTableName="external_reference" constraintName="FKlx4ndhauonnn74mynjh5oj455" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="external_system" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
