@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -84,15 +85,8 @@ public class ApplicationExportService {
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_OWNER);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.IT_OWNER);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.BUSINESS_OWNER);
-        Map<String, Integer> externalOrder = new HashMap<>();
 
-        int i = 0;
-        for (ExternalSystem externalSystem : externalSystemRepository.findAll()) {
-            headerRow
-                .createCell(column++)
-                .setCellValue(ApplicationMapperUtil.APPLICATION_EXTERNALID_ + externalSystem.getExternalSystemID());
-            externalOrder.put(externalSystem.getExternalSystemID(), i++);
-        }
+        Map<String, Integer> externalOrder = writeExternalSystemHeader(column, headerRow);
 
         for (Application application : applications) {
             column = 0;
@@ -134,11 +128,8 @@ public class ApplicationExportService {
                 row.createCell(column).setCellValue(application.getBusinessOwner().getName());
             }
             column++;
-            for (ExternalReference externalReference : application.getExternalIDS()) {
-                row
-                    .createCell(column + externalOrder.get(externalReference.getExternalSystem().getExternalSystemID()))
-                    .setCellValue(externalReference.getExternalID());
-            }
+
+            writeExternalSytem(column, externalOrder, application.getExternalIDS(), row);
             column = column + externalOrder.entrySet().size();
         }
     }
@@ -168,6 +159,8 @@ public class ApplicationExportService {
         }
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_DOCUMENTATION);
 
+        Map<String, Integer> externalOrder = writeExternalSystemHeader(column, headerRow);
+
         for (ApplicationComponent application : applications) {
             column = 0;
             Row row = sheet.createRow(rownb++);
@@ -196,6 +189,9 @@ public class ApplicationExportService {
             column = column + maxTechnologies;
 
             row.createCell(column++).setCellValue(application.getDocumentationURL());
+
+            writeExternalSytem(column, externalOrder, application.getExternalIDS(), row);
+            column = column + externalOrder.entrySet().size();
         }
     }
 
@@ -218,5 +214,25 @@ public class ApplicationExportService {
             row.createCell(column++).setCellValue(owner.getLastname());
             row.createCell(column++).setCellValue(owner.getEmail());
         }
+    }
+
+    private void writeExternalSytem(int column, Map<String, Integer> externalOrder, Set<ExternalReference> set, Row row) {
+        for (ExternalReference externalReference : set) {
+            row
+                .createCell(column + externalOrder.get(externalReference.getExternalSystem().getExternalSystemID()))
+                .setCellValue(externalReference.getExternalID());
+        }
+    }
+
+    private Map<String, Integer> writeExternalSystemHeader(int column, Row headerRow) {
+        int i = 0;
+        Map<String, Integer> externalOrder = new HashMap<>();
+        for (ExternalSystem externalSystem : externalSystemRepository.findAll()) {
+            headerRow
+                .createCell(column++)
+                .setCellValue(ApplicationMapperUtil.APPLICATION_EXTERNALID_ + externalSystem.getExternalSystemID());
+            externalOrder.put(externalSystem.getExternalSystemID(), i++);
+        }
+        return externalOrder;
     }
 }

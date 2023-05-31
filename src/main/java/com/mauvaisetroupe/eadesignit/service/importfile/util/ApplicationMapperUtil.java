@@ -137,36 +137,8 @@ public class ApplicationMapperUtil {
         application.setItOwner(getOwner(applicationImport.getItOwner()));
         application.setBusinessOwner(getOwner(applicationImport.getBusinessOwner()));
 
-        Set<ExternalReference> references = new HashSet<>();
-        for (Entry<String, String> entry : applicationImport.getExternalIDS().entrySet()) {
-            ExternalSystem externalSystem = checkAndGetSystem(entry.getKey());
-
-            Optional<ExternalReference> externalIdOption = externalReferenceRepository.findByExternalSystemAndExternalID(
-                externalSystem,
-                entry.getValue()
-            );
-
-            ExternalReference externalReference = null;
-            if (!externalIdOption.isPresent()) {
-                externalReference = new ExternalReference();
-                externalReference.setExternalSystem(externalSystem);
-                externalReference.setExternalID(entry.getValue());
-                externalReferenceRepository.save(externalReference);
-            } else {
-                externalReference = externalIdOption.get();
-            }
-            references.add(externalReference);
-            externalSystemRepository.findByExternalSystemID(entry.getKey());
-        }
+        Set<ExternalReference> references = getExternalReferencesFromImport(applicationImport);
         application.setExternalIDS(references);
-    }
-
-    private ExternalSystem checkAndGetSystem(String externalSystemID) {
-        Optional<ExternalSystem> optional = externalSystemRepository.findByExternalSystemID(externalSystemID);
-        if (!optional.isPresent()) {
-            throw new RuntimeException("External System should exist : " + externalSystemID);
-        }
-        return optional.get();
     }
 
     public void mapApplicationImportToComponent(ApplicationImport applicationImport, final ApplicationComponent application) {
@@ -178,6 +150,9 @@ public class ApplicationMapperUtil {
         application.setSoftwareType(getSoftwareType(applicationImport));
         application.setTechnologies(getTechnologies(applicationImport));
         application.setCategories(getCategories(applicationImport));
+
+        Set<ExternalReference> references = getExternalReferencesFromImport(applicationImport);
+        application.setExternalIDS(references);
     }
 
     private SoftwareType getSoftwareType(ApplicationImport applicationImport) {
@@ -258,5 +233,40 @@ public class ApplicationMapperUtil {
             }
         }
         ownerRepository.save(owner);
+    }
+
+    // External Systems private methods
+
+    private Set<ExternalReference> getExternalReferencesFromImport(ApplicationImport applicationImport) {
+        Set<ExternalReference> references = new HashSet<>();
+        for (Entry<String, String> entry : applicationImport.getExternalIDS().entrySet()) {
+            ExternalSystem externalSystem = checkAndGetSystem(entry.getKey());
+
+            Optional<ExternalReference> externalIdOption = externalReferenceRepository.findByExternalSystemAndExternalID(
+                externalSystem,
+                entry.getValue()
+            );
+
+            ExternalReference externalReference = null;
+            if (!externalIdOption.isPresent()) {
+                externalReference = new ExternalReference();
+                externalReference.setExternalSystem(externalSystem);
+                externalReference.setExternalID(entry.getValue());
+                externalReferenceRepository.save(externalReference);
+            } else {
+                externalReference = externalIdOption.get();
+            }
+            references.add(externalReference);
+            externalSystemRepository.findByExternalSystemID(entry.getKey());
+        }
+        return references;
+    }
+
+    private ExternalSystem checkAndGetSystem(String externalSystemID) {
+        Optional<ExternalSystem> optional = externalSystemRepository.findByExternalSystemID(externalSystemID);
+        if (!optional.isPresent()) {
+            throw new RuntimeException("External System should exist : " + externalSystemID);
+        }
+        return optional.get();
     }
 }
