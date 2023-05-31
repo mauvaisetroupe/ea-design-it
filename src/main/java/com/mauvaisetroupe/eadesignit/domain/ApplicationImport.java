@@ -2,7 +2,9 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -49,6 +51,16 @@ public class ApplicationImport implements Serializable {
     private String existingApplicationID;
 
     private Boolean displayInLandscape;
+
+    private Map<String, String> externalIDS = new HashMap<>();
+
+    public Map<String, String> getExternalIDS() {
+        return externalIDS;
+    }
+
+    public void setExternalIDS(Map<String, String> externalIDS) {
+        this.externalIDS = externalIDS;
+    }
 
     public Boolean getDisplayInLandscape() {
         return displayInLandscape;

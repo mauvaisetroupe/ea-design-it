@@ -4,18 +4,27 @@ import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationCategory;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
+import com.mauvaisetroupe.eadesignit.domain.ExternalReference;
+import com.mauvaisetroupe.eadesignit.domain.ExternalSystem;
 import com.mauvaisetroupe.eadesignit.domain.Owner;
 import com.mauvaisetroupe.eadesignit.domain.Technology;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
 import com.mauvaisetroupe.eadesignit.domain.util.EnumUtil;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationCategoryRepository;
+import com.mauvaisetroupe.eadesignit.repository.ExternalReferenceRepository;
+import com.mauvaisetroupe.eadesignit.repository.ExternalSystemRepository;
 import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
 import com.mauvaisetroupe.eadesignit.repository.TechnologyRepository;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -38,6 +47,7 @@ public class ApplicationMapperUtil {
     public static final String APPLICATION_OWNER = "owner";
     public static final String BUSINESS_OWNER = "business.owner";
     public static final String IT_OWNER = "it.owner";
+    public static final String APPLICATION_EXTERNALID_ = "externalID.";
 
     public static final String COMPONENT_ID = "component.id";
     public static final String COMPONENT_NAME = "component.name";
@@ -51,15 +61,26 @@ public class ApplicationMapperUtil {
     private final ApplicationCategoryRepository applicationCategoryRepository;
     private final TechnologyRepository technologyRepository;
     private final OwnerRepository ownerRepository;
+    private final ExternalSystemRepository externalSystemRepository;
+    private final ExternalReferenceRepository externalReferenceRepository;
+
+    Map<String, ExternalSystem> externalSystemsMap = new HashMap<>();
 
     public ApplicationMapperUtil(
         ApplicationCategoryRepository applicationCategoryRepository,
         TechnologyRepository technologyRepository,
-        OwnerRepository ownerRepository
+        OwnerRepository ownerRepository,
+        ExternalSystemRepository externalSystemRepository,
+        ExternalReferenceRepository externalReferenceRepository
     ) {
         this.applicationCategoryRepository = applicationCategoryRepository;
         this.technologyRepository = technologyRepository;
         this.ownerRepository = ownerRepository;
+        this.externalSystemRepository = externalSystemRepository;
+        this.externalReferenceRepository = externalReferenceRepository;
+
+        List<ExternalSystem> externalSystems = externalSystemRepository.findAll();
+        externalSystemsMap = externalSystems.stream().collect(Collectors.toMap(ExternalSystem::getExternalSystemID, Function.identity()));
     }
 
     public ApplicationImport mapArrayToImportApplication(Map<String, Object> map) {
@@ -81,6 +102,10 @@ public class ApplicationMapperUtil {
                     applicationImport.getCategories().add((String) map.get(columnName));
                 } else if (columnName.startsWith(APPLICATION_TECHNOLOGY_)) {
                     applicationImport.getTechnologies().add((String) map.get(columnName));
+                } else if (columnName.startsWith(APPLICATION_EXTERNALID_)) {
+                    applicationImport
+                        .getExternalIDS()
+                        .put(columnName.substring(APPLICATION_EXTERNALID_.length()), (String) map.get(columnName));
                 }
             }
         }
@@ -119,6 +144,36 @@ public class ApplicationMapperUtil {
         application.setOwner(getOwner(applicationImport.getOwner()));
         application.setItOwner(getOwner(applicationImport.getItOwner()));
         application.setBusinessOwner(getOwner(applicationImport.getBusinessOwner()));
+
+        Set<ExternalReference> references = new HashSet<>();
+        for (Entry<String, String> entry : applicationImport.getExternalIDS().entrySet()) {
+            ExternalSystem externalSystem = checkAndGetSystem(entry.getKey());
+
+            Optional<ExternalReference> externalIdOption = externalReferenceRepository.findByExternalSystemAndExternalID(
+                externalSystem,
+                entry.getValue()
+            );
+
+            ExternalReference externalReference = null;
+            if (!externalIdOption.isPresent()) {
+                externalReference = new ExternalReference();
+                externalReference.setExternalSystem(externalSystem);
+                externalReference.setExternalID(entry.getValue());
+                externalReferenceRepository.save(externalReference);
+            } else {
+                externalReference = externalIdOption.get();
+            }
+            references.add(externalReference);
+            externalSystemRepository.findByExternalSystemID(entry.getKey());
+        }
+        application.setExternalIDS(references);
+    }
+
+    private ExternalSystem checkAndGetSystem(String externalSystemID) {
+        if (!externalSystemsMap.containsKey(externalSystemID)) {
+            throw new RuntimeException("External System should exist : " + externalSystemID);
+        }
+        return externalSystemsMap.get(externalSystemID);
     }
 
     public void mapApplicationImportToComponent(ApplicationImport applicationImport, final ApplicationComponent application) {

@@ -3,16 +3,21 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationCategory;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
+import com.mauvaisetroupe.eadesignit.domain.ExternalReference;
+import com.mauvaisetroupe.eadesignit.domain.ExternalSystem;
 import com.mauvaisetroupe.eadesignit.domain.Owner;
 import com.mauvaisetroupe.eadesignit.domain.Technology;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationComponentRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.repository.ExternalSystemRepository;
 import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ApplicationMapperUtil;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ExcelUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -31,6 +36,9 @@ public class ApplicationExportService {
 
     @Autowired
     OwnerRepository ownerRepository;
+
+    @Autowired
+    ExternalSystemRepository externalSystemRepository;
 
     public ByteArrayOutputStream getApplications() throws IOException {
         Workbook workbook = new XSSFWorkbook();
@@ -76,6 +84,15 @@ public class ApplicationExportService {
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_OWNER);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.IT_OWNER);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.BUSINESS_OWNER);
+        Map<String, Integer> externalOrder = new HashMap<>();
+
+        int i = 0;
+        for (ExternalSystem externalSystem : externalSystemRepository.findAll()) {
+            headerRow
+                .createCell(column++)
+                .setCellValue(ApplicationMapperUtil.APPLICATION_EXTERNALID_ + externalSystem.getExternalSystemID());
+            externalOrder.put(externalSystem.getExternalSystemID(), i++);
+        }
 
         for (Application application : applications) {
             column = 0;
@@ -117,6 +134,12 @@ public class ApplicationExportService {
                 row.createCell(column).setCellValue(application.getBusinessOwner().getName());
             }
             column++;
+            for (ExternalReference externalReference : application.getExternalIDS()) {
+                row
+                    .createCell(column + externalOrder.get(externalReference.getExternalSystem().getExternalSystemID()))
+                    .setCellValue(externalReference.getExternalID());
+            }
+            column = column + externalOrder.entrySet().size();
         }
     }
 
