@@ -194,11 +194,6 @@ public class MXFileSerializer {
             diagram.setTextContent(null);
             Node newNode = doc.importNode(builder.parse(new InputSource(new StringReader(xml))).getFirstChild(), true);
             diagram.appendChild(newNode);
-        } else {
-            Assert.isTrue(
-                diagram.getFirstChild() != null && diagram.getFirstChild().getNodeName().equals("mxGraphModel"),
-                "Non encoded mxFile should contain mxGraphModel " + getStringFromDocument(doc)
-            );
         }
         String newXML = getStringFromDocument(doc);
         System.out.println(newXML);
