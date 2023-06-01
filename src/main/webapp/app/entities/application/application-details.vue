@@ -183,9 +183,21 @@
             </td>
             <td>
               <a v-on:click="retrieveApplication(caption.source.id)">{{ caption.source.name }}</a>
+              <span v-if="caption.id && caption.sourceComponent">
+                /
+                <router-link :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: caption.sourceComponent.id } }">{{
+                  caption.sourceComponent.name
+                }}</router-link>
+              </span>
             </td>
             <td>
               <a v-on:click="retrieveApplication(caption.target.id)">{{ caption.target.name }}</a>
+              <span v-if="caption.id && caption.targetComponent">
+                /
+                <router-link :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: caption.targetComponent.id } }">{{
+                  caption.targetComponent.name
+                }}</router-link>
+              </span>
             </td>
             <td>
               <router-link v-if="caption.protocol" :to="{ name: 'ProtocolView', params: { protocolId: caption.protocol.id } }">
