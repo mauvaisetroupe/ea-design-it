@@ -17,8 +17,8 @@ import AccountService from '@/account/account.service';
         const id = row.id.toString().toLowerCase();
         const description = row.description ? row.description.toString().toLowerCase() : '';
         const alias = row.alias ? row.alias.toString().toLowerCase() : '';
-        const source = row.source.name.toString().toLowerCase();
-        const target = row.target.name.toString().toLowerCase();
+        const source = row.source ? row.source.name.toString().toLowerCase() : '';
+        const target = row.source ? row.target.name.toString().toLowerCase() : '';
         const proto = row.protocol ? row.protocol.name.toString().toLowerCase() : '';
         if (searchTerm == 'protocol::empty') {
           return proto === '';
