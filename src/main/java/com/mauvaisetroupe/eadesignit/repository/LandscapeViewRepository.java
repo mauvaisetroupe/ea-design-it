@@ -27,7 +27,19 @@ public interface LandscapeViewRepository extends JpaRepository<LandscapeView, Lo
     List<LandscapeView> findAllWithEagerRelationships();
 
     @Query(
-        "select landscapeView from LandscapeView landscapeView left join fetch landscapeView.flows left join fetch landscapeView.capabilities where landscapeView.id =:id"
+        "select landscapeView " +
+        " from LandscapeView landscapeView " +
+        " left join fetch landscapeView.flows flows" +
+        " left join fetch landscapeView.capabilities " +
+        " left join fetch flows.steps steps " +
+        " left join fetch steps.flowInterface i " +
+        " left join fetch i.source" +
+        " left join fetch i.target" +
+        " left join fetch i.sourceComponent" +
+        " left join fetch i.targetComponent " +
+        " left join fetch i.protocol" +
+        " left join fetch i.dataFlows" +
+        " where landscapeView.id =:id"
     )
     Optional<LandscapeView> findOneWithEagerRelationships(@Param("id") Long id);
 

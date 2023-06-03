@@ -1,7 +1,6 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
-import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -14,6 +13,7 @@ import org.apache.xmlbeans.impl.xb.xmlconfig.Extensionconfig.Interface;
 import org.hibernate.query.NativeQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -37,19 +37,64 @@ public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Lo
     )
     public List<FlowInterface> getDuplicatedInterface();
 
-    public List<FlowInterface> findBySourceIdAndTargetIdAndProtocolId(Long sourceId, Long targetId, Long protocolId);
-
-    public List<FlowInterface> findBySourceIdAndTargetId(Long sourceId, Long targetId);
-
-    public List<FlowInterfaceLight> findProjectedBySourceIdAndTargetIdAndProtocolId(Long sourceId, Long targetId, Long protocolId);
-
-    public List<FlowInterfaceLight> findProjectedBySourceIdAndTargetId(Long sourceId, Long targetId);
-
     @Query(value = "select distinct(i.alias) from FlowInterface i")
     public List<String> findAlias();
 
-    // FlowInterface light (without DataFlows, neithers steps and FunctionalFlow)
-    List<FlowInterfaceLight> findAllProjectedBy();
-    SortedSet<FlowInterfaceLight> findBySource_NameOrTarget_Name(String sourceName, String targetName);
-    SortedSet<FlowInterfaceLight> findBySourceIdInAndTargetIdIn(Long[] sourceIds, Long[] targetIds);
+    @Query(
+        value = "select i from FlowInterface i" +
+        " left join fetch i.source" +
+        " left join fetch i.target" +
+        " left join fetch i.sourceComponent" +
+        " left join fetch i.protocol" +
+        " left join fetch i.targetComponent" +
+        " left join fetch i.owner"
+    )
+    public List<FlowInterface> findAll();
+
+    @Query(
+        value = "select i from FlowInterface i" +
+        " left join fetch i.source" +
+        " left join fetch i.target" +
+        " left join fetch i.sourceComponent" +
+        " left join fetch i.protocol" +
+        " left join fetch i.targetComponent " +
+        " left join fetch i.owner" +
+        " left join fetch i.dataFlows" +
+        " where i.id=:id"
+    )
+    Optional<FlowInterface> findById(@Param("id") Long id);
+
+    @Query(
+        value = "select i from FlowInterface i" +
+        " left join fetch i.source" +
+        " left join fetch i.target" +
+        " left join fetch i.sourceComponent" +
+        " left join fetch i.targetComponent " +
+        " left join fetch i.protocol" +
+        " left join fetch i.owner" +
+        " left join fetch i.dataFlows" +
+        " where i.source.id=:sourceId and i.target.id=:targetId and i.protocol.id=:protocolId"
+    )
+    public List<FlowInterface> findBySourceIdAndTargetIdAndProtocolId(
+        @Param("sourceId") Long sourceId,
+        @Param("targetId") Long targetId,
+        @Param("protocolId") Long protocolId
+    );
+
+    @Query(
+        value = "select i from FlowInterface i" +
+        " left join fetch i.source" +
+        " left join fetch i.target" +
+        " left join fetch i.sourceComponent" +
+        " left join fetch i.targetComponent " +
+        " left join fetch i.protocol" +
+        " left join fetch i.owner" +
+        " left join fetch i.dataFlows" +
+        " where i.source.id=:sourceId and i.target.id=:targetId"
+    )
+    public List<FlowInterface> findBySourceIdAndTargetId(@Param("sourceId") Long sourceId, @Param("targetId") Long targetId);
+
+    public SortedSet<FlowInterface> findBySource_NameOrTarget_Name(String sourceName, String targetName);
+
+    public SortedSet<FlowInterface> findBySourceIdInAndTargetIdIn(Long[] sourceIds, Long[] targetIds);
 }

@@ -36,7 +36,8 @@ public class ReportingResource {
 
     @GetMapping(value = "reporting/duplicate-interface/")
     public List<FlowInterface> getDuplicatedInterfaces() {
-        return flowInterfaceRepository.getDuplicatedInterface();
+        List<FlowInterface> interfaces = flowInterfaceRepository.getDuplicatedInterface();
+        return interfaces;
     }
 
     @PostMapping(value = "reporting/merge-duplicate-interface/{id}")

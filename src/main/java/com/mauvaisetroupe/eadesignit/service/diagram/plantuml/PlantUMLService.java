@@ -1,9 +1,9 @@
 package com.mauvaisetroupe.eadesignit.service.diagram.plantuml;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
+import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
-import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.EdgeGroup;
@@ -137,7 +137,7 @@ public class PlantUMLService {
         return createPlantUMLSource(graph, diagramType, false, false, Layout.smetana, false, false);
     }
 
-    public String getInterfacesCollectionDiagramSVG(SortedSet<FlowInterfaceLight> interfaces, Layout layout, boolean groupComponents)
+    public String getInterfacesCollectionDiagramSVG(SortedSet<FlowInterface> interfaces, Layout layout, boolean groupComponents)
         throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(interfaces);
@@ -145,7 +145,7 @@ public class PlantUMLService {
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
-    public String getInterfacesCollectionDiagramSource(SortedSet<FlowInterfaceLight> interfaces) {
+    public String getInterfacesCollectionDiagramSource(SortedSet<FlowInterface> interfaces) {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(interfaces);
         String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, false, Layout.none, false, false);

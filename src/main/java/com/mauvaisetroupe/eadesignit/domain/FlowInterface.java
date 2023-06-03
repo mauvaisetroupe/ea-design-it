@@ -54,12 +54,12 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "flowInterface", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "flowInterface", fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "functionalFlows", "flowInterface" }, allowSetters = true)
     private Set<DataFlow> dataFlows = new HashSet<>();
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @NotNull
     @JsonIgnoreProperties(
         value = { "owner", "itOwner", "businessOwner", "capabilities", "externalIDS", "applicationsLists" },
@@ -67,7 +67,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
     )
     private Application source;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @NotNull
     @JsonIgnoreProperties(
         value = { "owner", "itOwner", "businessOwner", "capabilities", "externalIDS", "applicationsLists" },
@@ -75,21 +75,21 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
     )
     private Application target;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "application", "externalIDS" }, allowSetters = true)
     private ApplicationComponent sourceComponent;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "application", "externalIDS" }, allowSetters = true)
     private ApplicationComponent targetComponent;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Protocol protocol;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Owner owner;
 
-    @OneToMany(mappedBy = "flowInterface", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "flowInterface", fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "flowInterface", "group" }, allowSetters = true)
     private Set<FunctionalFlowStep> steps = new HashSet<>();

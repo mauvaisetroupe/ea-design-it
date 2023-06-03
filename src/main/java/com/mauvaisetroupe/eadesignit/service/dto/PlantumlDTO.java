@@ -1,14 +1,14 @@
 package com.mauvaisetroupe.eadesignit.service.dto;
 
-import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
+import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import java.util.Set;
 
 public class PlantumlDTO {
 
     private String svg;
-    private Set<FlowInterfaceLight> interfaces;
+    private Set<FlowInterface> interfaces;
 
-    public PlantumlDTO(String svg, Set<FlowInterfaceLight> interfaces) {
+    public PlantumlDTO(String svg, Set<FlowInterface> interfaces) {
         this.svg = svg;
         this.interfaces = interfaces;
     }
@@ -21,11 +21,11 @@ public class PlantumlDTO {
         this.svg = svg;
     }
 
-    public Set<FlowInterfaceLight> getInterfaces() {
+    public Set<FlowInterface> getInterfaces() {
         return interfaces;
     }
 
-    public void setInterfaces(Set<FlowInterfaceLight> interfaces) {
+    public void setInterfaces(Set<FlowInterface> interfaces) {
         this.interfaces = interfaces;
     }
 }

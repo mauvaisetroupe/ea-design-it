@@ -24,4 +24,19 @@ public interface FunctionalFlowRepository extends JpaRepository<FunctionalFlow, 
     List<String> findAlias();
 
     List<FunctionalFlowLight> findAllProjectedBy();
+
+    @Query(
+        value = "select f from FunctionalFlow f" +
+        " left join fetch f.steps s " +
+        " left join fetch s.flowInterface i " +
+        " left join fetch i.source" +
+        " left join fetch i.target" +
+        " left join fetch i.sourceComponent" +
+        " left join fetch i.targetComponent " +
+        " left join fetch i.protocol" +
+        " left join fetch i.owner" +
+        " left join fetch i.dataFlows" +
+        " where f.id=:id"
+    )
+    Optional<FunctionalFlow> findOneWithEagerRelationships(@Param("id") Long id);
 }

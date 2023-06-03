@@ -302,7 +302,7 @@ public class FlowImportService {
                     if (protocol != null) {
                         flowInterface.setProtocol(protocol);
                         // validate here beacause relationship should not be null
-                        validateBean(protocol);
+                        //validateBean(protocol);
                         protocolRepository.save(protocol);
                         interfaceRepository.save(flowInterface);
                     }
@@ -447,6 +447,10 @@ public class FlowImportService {
                 protocol.setName(flowImport.getIntegrationPattern());
                 protocol.setType(guessPtotocolType(flowImport.getIntegrationPattern()));
                 protocolRepository.save(protocol);
+            } else {
+                System.out.println(protocol);
+                System.out.println(protocol.getId());
+                System.out.println(protocol.getName());
             }
         }
         return protocol;

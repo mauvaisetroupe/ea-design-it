@@ -2,7 +2,6 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
-import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import com.mauvaisetroupe.eadesignit.service.FlowInterfaceService;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -180,7 +179,7 @@ public class FlowInterfaceResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of flowInterfaces in body.
      */
     @GetMapping("/flow-interfaces")
-    public List<FlowInterfaceLight> getAllFlowInterfaces(@RequestParam(value = "search", required = false) String search) {
+    public List<FlowInterface> getAllFlowInterfaces(@RequestParam(value = "search", required = false) String search) {
         if (search != null) {
             Long sourceId = null, targetId = null, protocolId = null;
             Pattern pattern = Pattern.compile("(\\w+?)(:)(\\w+?),");
@@ -205,13 +204,13 @@ public class FlowInterfaceResource {
                 }
             }
             if (protocolId == null) {
-                return flowInterfaceRepository.findProjectedBySourceIdAndTargetId(sourceId, targetId);
+                return flowInterfaceRepository.findBySourceIdAndTargetId(sourceId, targetId);
             } else {
-                return flowInterfaceRepository.findProjectedBySourceIdAndTargetIdAndProtocolId(sourceId, targetId, protocolId);
+                return flowInterfaceRepository.findBySourceIdAndTargetIdAndProtocolId(sourceId, targetId, protocolId);
             }
         } else {
             log.debug("REST request to get all FlowInterfaces");
-            return flowInterfaceRepository.findAllProjectedBy();
+            return flowInterfaceRepository.findAll();
         }
     }
 
