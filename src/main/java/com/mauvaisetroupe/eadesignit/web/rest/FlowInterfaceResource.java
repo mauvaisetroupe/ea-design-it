@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
+import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceDAO;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import com.mauvaisetroupe.eadesignit.service.FlowInterfaceService;
@@ -51,6 +52,9 @@ public class FlowInterfaceResource {
 
     @Autowired
     private FlowInterfaceRepository flowInterfaceRepository;
+
+    @Autowired
+    private FlowInterfaceDAO flowInterfaceDAO;
 
     @Autowired
     private FlowInterfaceService flowInterfaceService;
@@ -211,7 +215,7 @@ public class FlowInterfaceResource {
             }
         } else {
             log.debug("REST request to get all FlowInterfaces");
-            return flowInterfaceRepository.findAllProjectedBy();
+            return flowInterfaceDAO.findAllInterfaceLight();
         }
     }
 
