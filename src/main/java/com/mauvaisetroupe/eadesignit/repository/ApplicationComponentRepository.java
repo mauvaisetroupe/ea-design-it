@@ -21,7 +21,12 @@ public interface ApplicationComponentRepository extends JpaRepository<Applicatio
     Page<ApplicationComponent> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.categories left join fetch applicationComponent.technologies left join fetch applicationComponent.externalIDS"
+        "select distinct applicationComponent " +
+        " from ApplicationComponent applicationComponent " +
+        " left join fetch applicationComponent.application " +
+        " left join fetch applicationComponent.categories " +
+        " left join fetch applicationComponent.technologies " +
+        " left join fetch applicationComponent.externalIDS"
     )
     List<ApplicationComponent> findAllWithEagerRelationships();
 
