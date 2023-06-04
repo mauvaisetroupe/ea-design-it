@@ -15,29 +15,28 @@
         <h2>Main concepts</h2>
         <ul>
           <li>
-            A <router-link to="landscape-view">Landscape</router-link> is an architecture diagram that represents a subset of Applications,
-            and their Functional Flows
+            <router-link to="landscape-view">Landscape</router-link> : architecture diagram that represents a subset of Applications, and
+            their Functional Flows
           </li>
           <li>
-            An <router-link to="application">Application</router-link> could be composed of
+            <router-link to="application">Application</router-link> : could be composed of
             <router-link to="application-component">Application Component</router-link>
           </li>
           <li>
-            In the context of a Landscape, a <router-link to="functional-flow">Functional Flow</router-link> represents a functional
-            information exchange between two ore more applications
+            <router-link to="functional-flow">Functional Flow</router-link> : in the context of a Landscape, a Functional Flow represents a
+            functional information exchange between two ore more applications
           </li>
           <li>
-            A Functional Flow is implemented through one or more <router-link to="flow-interface">Interfaces</router-link> to transfer
-            information between a source and a target Application.
+            <router-link to="flow-interface">Interfaces</router-link> : a Functional Flow is implemented through one or more Interfaces to
+            transfer information between a source and a target Application.
           </li>
           <li>
-            Interface is a "pipeline" between two applications and it's fully defined by a source and a target Application and a
-            <router-link to="protocol">Protocol</router-link>
+            <router-link to="protocol">Protocol</router-link> : Interface is a "pipeline" between two applications and it's fully defined by
+            a source and a target Application and a Protocol
           </li>
           <li>
-            In the context of a Function Flow, exchange data through a specific Interface is implemented by a
-            <router-link to="data-flow">Data Flow</router-link> (concretly, DataFlow is a File, an Event in a topic or API call of a
-            swagger)
+            <router-link to="data-flow">Data Flow</router-link> : in the context of a Function Flow, exchange data through a specific
+            Interface is implemented by a Data Flow (File, Event, API call)
           </li>
           <li>
             <router-link to="data-flow-item">Data Flow Item</router-link> is used for model a more fined-grained data exchange (operation of
