@@ -6,33 +6,25 @@ import ApplicationService from './application.service';
 import AlertService from '@/shared/alert/alert.service';
 import AccountService from '@/account/account.service';
 import ApplicationImportService from '@/entities/application-import/application-import.service';
+import { ApplicationType } from '@/shared/model/enumerations/application-type.model';
+import { SoftwareType } from '@/shared/model/enumerations/software-type.model';
 
 @Component({
   mixins: [Vue2Filters.mixin],
 })
 @Component({
   computed: {
-    filteredRows() {
-      return this.applications.filter(row => {
-        const name = row.name.toString().toLowerCase();
-        const app_id = row.id.toString().toLowerCase();
-        const technology = row.technology ? row.technology.toString().toLowerCase() : '';
-        const description = row.description ? row.description.toString().toLowerCase() : '';
-        const type = row.type ? row.type.toString().toLowerCase() : '';
-        const comment = row.comment ? row.comment.toString().toLowerCase() : '';
-        const owner = row.owner ? row.owner.toString().toLowerCase() : '';
-
-        const searchTerm = this.filter.toLowerCase();
-
-        return (
-          name.includes(searchTerm) ||
-          app_id.includes(searchTerm) ||
-          technology.includes(searchTerm) ||
-          description.includes(searchTerm) ||
-          type.includes(searchTerm) ||
-          comment.includes(searchTerm) ||
-          owner.includes(searchTerm)
-        );
+    filteredApplications() {
+      return this.applications.filter(app => {
+        var appType: boolean = true;
+        if (this.applicationTypeSelected) {
+          appType = app.applicationType && app.applicationType.valueOf() == this.applicationTypeSelected;
+        }
+        var softwareType: boolean = true;
+        if (this.softwareTypeSelected) {
+          softwareType = app.softwareType && app.softwareType.valueOf() == this.softwareTypeSelected;
+        }
+        return appType && softwareType;
       });
     },
   },
@@ -51,6 +43,47 @@ export default class Application extends Vue {
   public filter = '';
 
   public selectedApplicationIds: number[] = [];
+
+  public showAdvanced = false;
+
+  public fields = [
+    { key: 'CHECKBOX', sortable: false, label: '' },
+    { key: 'id', sortable: false },
+    { key: 'alias', sortable: true },
+    { key: 'name', sortable: true },
+    { key: 'description', sortable: false, formatter: 'formatLongText' },
+    // {key:'comment', sortable: false},
+    // {key:'documentationURL', sortable: false},
+    // {key:'startDate', sortable: false},
+    // {key:'endDate', sortable: false},
+    { key: 'applicationType', sortable: false },
+    { key: 'softwareType', sortable: false },
+    { key: 'nickname', sortable: false },
+    { key: 'owner.name', sortable: false, label: 'Owner' },
+    { key: 'itOwner.name', sortable: false, label: 'IT Owner' },
+    { key: 'businessOwner.name', sortable: false, label: 'Business Owner' },
+    { key: 'categories', sortable: false },
+    { key: 'technologies', sortable: false },
+    { key: 'capabilities', sortable: false },
+    // {key:'externalIDS', sortable: false},
+    // {key:'applicationsLists', sortable: false},
+  ];
+  public sortBy = 'name';
+  public sortDesc = false;
+  public filterOn = ['alias', 'name', 'description'];
+  public formatLongText(value, key, item) {
+    var max = 600;
+    if (value && value.length > max) {
+      return value.substring(0, max) + '...';
+    } else {
+      return value;
+    }
+  }
+  public applicationTypeValues: string[] = Object.keys(ApplicationType);
+  public softwareTypeValues: string[] = Object.keys(SoftwareType);
+
+  public applicationTypeSelected = '';
+  public softwareTypeSelected = '';
 
   public mounted(): void {
     this.retrieveAllApplications();

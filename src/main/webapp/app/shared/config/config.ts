@@ -48,6 +48,7 @@ import { faWindowMaximize } from '@fortawesome/free-solid-svg-icons/faWindowMaxi
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import { faFileExcel } from '@fortawesome/free-solid-svg-icons/faFileExcel';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
 
 import VueCookie from 'vue-cookie';
 import Vuelidate from 'vuelidate';
@@ -114,7 +115,8 @@ export function initFortAwesome(vue) {
     faWindowMaximize,
     faChevronUp,
     faChevronDown,
-    faFileExcel
+    faFileExcel,
+    faAngleDown
   );
 }
 

@@ -35,171 +35,123 @@
       <span>No applications found</span>
     </div>
 
-    <div>
+    <div class="border p-2 m-1">
       <input type="text" placeholder="Filter by text" v-model="filter" />
+      <a @click="showAdvanced = !showAdvanced" href="javascript:" class="text-decoration-none"
+        ><span class="small">Advanced Filters <font-awesome-icon icon="angle-down"></font-awesome-icon></span
+      ></a>
+      <div v-show="showAdvanced" class="p-2 m-1">
+        <div class="row p-2">
+          <div class="col-2">Text filter on :</div>
+          <div class="col-3">
+            <input type="checkbox" id="alias" value="alias" v-model="filterOn" />
+            <label for="alias">alias</label>
+            <input type="checkbox" id="name" value="name" v-model="filterOn" />
+            <label for="name">name</label>
+            <input type="checkbox" id="description" value="description" v-model="filterOn" />
+            <label for="description">description</label>
+          </div>
+        </div>
+        <div class="row p-2">
+          <div class="col-2">Application type:</div>
+          <div class="col-3">
+            <select class="form-control form-control-sm" v-model="applicationTypeSelected">
+              <option :value="undefined">--</option>
+              <option :value="option" v-for="option in applicationTypeValues" :key="option">{{ option }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row p-2">
+          <div class="col-2">Software type:</div>
+          <div class="col-3">
+            <select class="form-control form-control-sm" v-model="softwareTypeSelected">
+              <option :value="undefined">--</option>
+              <option :value="option" v-for="option in softwareTypeValues" :key="option">{{ option }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="table-responsive" v-if="applications && applications.length > 0">
-      <table class="table table-striped" aria-describedby="applications">
-        <thead>
-          <tr>
-            <th></th>
-            <th scope="row"><span>ID</span></th>
-            <th scope="row"><span>Alias</span></th>
-            <th scope="row"><span>Name</span></th>
-            <th scope="row"><span>Description</span></th>
-            <th scope="row"><span>Comment</span></th>
-            <th scope="row"><span>Documentation URL</span></th>
-            <th scope="row"><span>Start Date</span></th>
-            <th scope="row"><span>End Date</span></th>
-            <th scope="row"><span>Application Type</span></th>
-            <th scope="row"><span>Software Type</span></th>
-            <th scope="row"><span>Nickname</span></th>
-            <th scope="row"><span>Owner</span></th>
-            <th scope="row"><span>It Owner</span></th>
-            <th scope="row"><span>Business Owner</span></th>
-            <th scope="row"><span>Categories</span></th>
-            <th scope="row"><span>Technologies</span></th>
-            <th scope="row"><span>External IDS</span></th>
-            <th scope="row"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="application in filteredRows" :key="application.id" data-cy="entityTable">
-            <td>
-              <input
-                type="checkbox"
-                name="selectedAppliation"
-                :id="application.id"
-                :value="application.id"
-                v-model="selectedApplicationIds"
-              />
-            </td>
-            <td>
-              <router-link :to="{ name: 'ApplicationView', params: { applicationId: application.id } }">{{ application.id }}</router-link>
-            </td>
-            <td>{{ application.alias }}</td>
-            <td>{{ application.name }}</td>
-            <td>{{ application.description }}</td>
-            <td>{{ application.comment }}</td>
-            <td>
-              <a v-bind:href="application.documentationURL"> {{ application.documentationURL }}</a>
-            </td>
-            <td>{{ application.startDate }}</td>
-            <td>{{ application.endDate }}</td>
-            <td>{{ application.applicationType }}</td>
-            <td>{{ application.softwareType }}</td>
-            <td>{{ application.nickname }}</td>
-            <td>
-              <div v-if="application.owner">
-                <router-link :to="{ name: 'OwnerView', params: { ownerId: application.owner.id } }">{{
-                  application.owner.name
-                }}</router-link>
-              </div>
-            </td>
-            <td>
-              <div v-if="application.itOwner">
-                <router-link :to="{ name: 'OwnerView', params: { ownerId: application.itOwner.id } }">{{
-                  application.itOwner.name
-                }}</router-link>
-              </div>
-            </td>
-            <td>
-              <div v-if="application.businessOwner">
-                <router-link :to="{ name: 'OwnerView', params: { ownerId: application.businessOwner.id } }">{{
-                  application.businessOwner.name
-                }}</router-link>
-              </div>
-            </td>
-            <td>
-              <span v-for="(categories, i) in application.categories" :key="categories.id"
-                >{{ i > 0 ? ', ' : '' }}
-                <router-link
-                  class="form-control-static"
-                  :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: categories.id } }"
-                  >{{ categories.name }}</router-link
-                >
-              </span>
-            </td>
-            <td>
-              <span v-for="(technologies, i) in application.technologies" :key="technologies.id"
-                >{{ i > 0 ? ', ' : '' }}
-                <router-link class="form-control-static" :to="{ name: 'TechnologyView', params: { technologyId: technologies.id } }">{{
-                  technologies.name
-                }}</router-link>
-              </span>
-            </td>
-            <td>
-              <span v-for="(externalIDS, i) in application.externalIDS" :key="externalIDS.id"
-                >{{ i > 0 ? ', ' : '' }}
-                <router-link
-                  class="form-control-static"
-                  :to="{ name: 'ExternalReferenceView', params: { externalReferenceId: externalIDS.id } }"
-                  >{{ externalIDS.externalID }}</router-link
-                >
-              </span>
-            </td>
-            <td class="text-right">
-              <div class="btn-group">
-                <router-link :to="{ name: 'ApplicationView', params: { applicationId: application.id } }" custom v-slot="{ navigate }">
-                  <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
-                    <font-awesome-icon icon="eye"></font-awesome-icon>
-                    <span class="d-none d-md-inline">View</span>
-                  </button>
-                </router-link>
-                <router-link
-                  v-if="accountService().writeOrContributor"
-                  :to="{ name: 'ApplicationEdit', params: { applicationId: application.id } }"
-                  custom
-                  v-slot="{ navigate }"
-                >
-                  <button
-                    @click="navigate"
-                    class="btn btn-primary btn-sm edit"
-                    data-cy="entityEditButton"
-                    :disabled="!isOwner(application)"
-                  >
-                    <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                    <span class="d-none d-md-inline">Edit</span>
-                  </button>
-                </router-link>
-                <b-button
-                  v-if="accountService().deleteAuthorities"
-                  v-on:click="prepareRemove(application)"
-                  variant="danger"
-                  class="btn btn-sm"
-                  data-cy="entityDeleteButton"
-                  v-b-modal.removeEntity
-                >
-                  <font-awesome-icon icon="times"></font-awesome-icon>
-                  <span class="d-none d-md-inline">Delete</span>
-                </b-button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.application.delete.question" data-cy="applicationDeleteDialogHeading">Confirm delete operation</span></span
-      >
-      <div class="modal-body">
-        <p id="jhi-delete-application-heading">Are you sure you want to delete this Application?</p>
-      </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-application"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeApplication()"
-        >
-          Delete
-        </button>
-      </div>
-    </b-modal>
+    <br />
+
+    <b-table
+      :items="filteredApplications"
+      :fields="fields"
+      :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
+      sort-icon-left
+      responsive
+      :filter="filter"
+      :filter-included-fields="filterOn"
+    >
+      <!-- <template #thead-top="data">
+        <TR>
+          <td colspan="5">
+            <div>
+              <input type="text" placeholder="Filter by text" v-model="filter" />
+              <input type="checkbox" id="alias" value="alias" v-model="filterOn">
+              <label for="alias">alias</label>
+              <input type="checkbox" id="name" value="name" v-model="filterOn">
+              <label for="name">name</label>
+              <input type="checkbox" id="description" value="description" v-model="filterOn">
+              <label for="description">description</label>
+            </div>
+          </td>
+          <td>
+            <select class="form-control form-control-sm" v-model="applicationTypeSelected" >
+              <option :value="undefined">--</option>
+              <option :value="option" v-for="option in applicationTypeValues" :key="option">{{ option }}</option> 
+            </select>
+          </td>
+          <td>
+            <select class="form-control form-control-sm" v-model="softwareTypeSelected" >
+              <option :value="undefined">--</option>
+              <option :value="option" v-for="option in softwareTypeValues" :key="option">{{ option }}</option> 
+            </select>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </TR>
+      </template> -->
+
+      <template #cell(CHECKBOX)="row">
+        <input type="checkbox" name="selectedAppliation" :id="row.item.id" :value="row.item.id" v-model="selectedApplicationIds" />
+      </template>
+
+      <template #cell(id)="PP">
+        <router-link :to="{ name: 'ApplicationView', params: { applicationId: PP.item.id } }">{{ PP.item.id }}</router-link>
+      </template>
+
+      <template #cell(alias)="PP">
+        <router-link :to="{ name: 'ApplicationView', params: { applicationId: PP.item.id } }">{{ PP.item.alias }}</router-link>
+      </template>
+
+      <template #cell(technologies)="PP">
+        <span v-for="(technologies, i) in PP.item.technologies" :key="technologies.id"
+          >{{ i > 0 ? ', ' : '' }}
+          <router-link class="form-control-static" :to="{ name: 'TechnologyView', params: { technologyId: technologies.id } }">{{
+            technologies.name
+          }}</router-link>
+        </span>
+      </template>
+
+      <template #cell(categories)="PP">
+        <span v-for="(categories, i) in PP.item.categories" :key="categories.id"
+          >{{ i > 0 ? ', ' : '' }}
+          <router-link
+            class="form-control-static"
+            :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: categories.id } }"
+            >{{ categories.name }}</router-link
+          >
+        </span>
+      </template>
+    </b-table>
   </div>
 </template>
 
