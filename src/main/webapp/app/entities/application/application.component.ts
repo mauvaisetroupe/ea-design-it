@@ -48,7 +48,7 @@ export default class Application extends Vue {
 
   public fields = [
     { key: 'CHECKBOX', sortable: false, label: '' },
-    { key: 'id', sortable: false },
+    // { key: 'id', sortable: false },
     { key: 'alias', sortable: true },
     { key: 'name', sortable: true },
     { key: 'description', sortable: false, formatter: 'formatLongText' },
@@ -64,7 +64,7 @@ export default class Application extends Vue {
     { key: 'businessOwner.name', sortable: false, label: 'Business Owner' },
     { key: 'categories', sortable: false },
     { key: 'technologies', sortable: false },
-    { key: 'capabilities', sortable: false },
+    //{ key: 'capabilities', sortable: false },
     // {key:'externalIDS', sortable: false},
     // {key:'applicationsLists', sortable: false},
   ];

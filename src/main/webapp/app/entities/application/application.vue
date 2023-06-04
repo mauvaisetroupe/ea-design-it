@@ -37,19 +37,53 @@
 
     <div class="border p-2 m-1">
       <input type="text" placeholder="Filter by text" v-model="filter" />
+      <br />
       <a @click="showAdvanced = !showAdvanced" href="javascript:" class="text-decoration-none"
-        ><span class="small">Advanced Filters <font-awesome-icon icon="angle-down"></font-awesome-icon></span
+        ><span class="small">Advance Filters <font-awesome-icon icon="angle-down"></font-awesome-icon></span
       ></a>
       <div v-show="showAdvanced" class="p-2 m-1">
         <div class="row p-2">
           <div class="col-2">Text filter on :</div>
-          <div class="col-3">
-            <input type="checkbox" id="alias" value="alias" v-model="filterOn" />
-            <label for="alias">alias</label>
-            <input type="checkbox" id="name" value="name" v-model="filterOn" />
-            <label for="name">name</label>
-            <input type="checkbox" id="description" value="description" v-model="filterOn" />
-            <label for="description">description</label>
+          <div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="alias" value="alias" v-model="filterOn" />
+              <label class="form-check-label" for="alias">alias</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="name" value="name" v-model="filterOn" />
+              <label class="form-check-label" for="name">name</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="description" value="description" v-model="filterOn" />
+              <label class="form-check-label" for="description">description</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="categories" value="categories" v-model="filterOn" />
+              <label class="form-check-label" for="categories">categories</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="technologies" value="technologies" v-model="filterOn" />
+              <label class="form-check-label" for="technologies">technologies</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="owner" value="owner" v-model="filterOn" />
+              <label class="form-check-label" for="owner">owner</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="itOwner" value="itOwner" v-model="filterOn" />
+              <label class="form-check-label" for="itOwner">IT Owner</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="businessOwner" value="businessOwner" v-model="filterOn" />
+              <label class="form-check-label" for="businessOwner">Business Owner</label>
+            </div>
           </div>
         </div>
         <div class="row p-2">
