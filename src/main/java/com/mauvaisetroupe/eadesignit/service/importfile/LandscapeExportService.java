@@ -67,7 +67,7 @@ public class LandscapeExportService {
         return stream;
     }
 
-    private void writeFlows(Sheet sheet, Long landscapeId) {
+    protected void writeFlows(Sheet sheet, Long landscapeId) {
         LandscapeView landscapeView = landscapeViewRepository.getById(landscapeId);
         int column = 0;
         int rownb = 0;

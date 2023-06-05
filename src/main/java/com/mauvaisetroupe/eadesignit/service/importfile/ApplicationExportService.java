@@ -47,11 +47,7 @@ public class ApplicationExportService {
         Sheet componentSheet = workbook.createSheet("Component");
         Sheet ownerSheet = workbook.createSheet("Owner");
 
-        writeApplication(appliSheet);
-        ExcelUtils.autoSizeAllColumns(appliSheet);
-        writeComponent(componentSheet);
-        ExcelUtils.autoSizeAllColumns(componentSheet);
-        writeOwner(ownerSheet);
+        writeSheets(appliSheet, componentSheet, ownerSheet, workbook);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         workbook.write(stream);
@@ -59,7 +55,19 @@ public class ApplicationExportService {
         return stream;
     }
 
-    private void writeApplication(Sheet sheet) {
+    protected void writeSheets(Sheet appliSheet, Sheet componentSheet, Sheet ownerSheet, Workbook workbook) {
+        writeApplication(appliSheet);
+        ExcelUtils.autoSizeAllColumns(appliSheet);
+        ExcelUtils.addHeaderColorAndFilte(workbook, appliSheet);
+        writeComponent(componentSheet);
+        ExcelUtils.autoSizeAllColumns(componentSheet);
+        ExcelUtils.addHeaderColorAndFilte(workbook, componentSheet);
+        writeOwner(ownerSheet);
+        ExcelUtils.autoSizeAllColumns(ownerSheet);
+        ExcelUtils.addHeaderColorAndFilte(workbook, ownerSheet);
+    }
+
+    protected void writeApplication(Sheet sheet) {
         List<Application> applications = applicationRepository.findAll();
         int column = 0;
         int rownb = 0;
@@ -134,7 +142,7 @@ public class ApplicationExportService {
         }
     }
 
-    private void writeComponent(Sheet sheet) {
+    protected void writeComponent(Sheet sheet) {
         List<ApplicationComponent> applications = applicationComponentRepository.findAll();
         int column = 0;
         int rownb = 0;
@@ -195,7 +203,7 @@ public class ApplicationExportService {
         }
     }
 
-    private void writeOwner(Sheet sheet) {
+    protected void writeOwner(Sheet sheet) {
         int column = 0;
         int rownb = 0;
         Row headerRow = sheet.createRow(rownb++);
@@ -224,7 +232,7 @@ public class ApplicationExportService {
         }
     }
 
-    private Map<String, Integer> writeExternalSystemHeader(int column, Row headerRow) {
+    protected Map<String, Integer> writeExternalSystemHeader(int column, Row headerRow) {
         int i = 0;
         Map<String, Integer> externalOrder = new HashMap<>();
         for (ExternalSystem externalSystem : externalSystemRepository.findAll()) {

@@ -94,6 +94,11 @@
             file
           </li>
         </ul>
+
+        <h2>Export</h2>
+        <ul>
+          <li><a @click="exportExcel" href="javascript:">Full Export</a></li>
+        </ul>
         <p>Please, refer to <a href="https://mauvaisetroupe.github.io/ea-design-it/import/">documentation</a> for more explanation</p>
       </div>
     </div>

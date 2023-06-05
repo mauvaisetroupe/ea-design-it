@@ -34,6 +34,7 @@ import SequenceDiagramService from '@/eadesignit/sequence-diagram/import.service
 import ApplicationsDiagramService from '@/eadesignit/applications-diagram/applications-diagram.service';
 import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
 import ApplicationService from '@/entities/application/application.service';
+import ExportService from '@/eadesignit/export.service';
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
@@ -121,6 +122,8 @@ new Vue({
     landscapeViewService: () => new LandscapeViewService(),
 
     applicationService: () => new ApplicationService(),
+
+    exportService: () => new ExportService(),
   },
   store,
   created: function () {

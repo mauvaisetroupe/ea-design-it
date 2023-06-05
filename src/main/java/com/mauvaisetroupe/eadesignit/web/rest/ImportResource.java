@@ -13,6 +13,7 @@ import com.mauvaisetroupe.eadesignit.service.importfile.CapabilityImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ComponentImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.DataFlowImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ExcelReader;
+import com.mauvaisetroupe.eadesignit.service.importfile.ExportFullDataService;
 import com.mauvaisetroupe.eadesignit.service.importfile.FlowImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.LandscapeExportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.PlantumlImportService;
@@ -24,7 +25,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +59,9 @@ public class ImportResource {
 
     @Autowired
     private ApplicationExportService applicationExportService;
+
+    @Autowired
+    private ExportFullDataService exportFullDataService;
 
     @Autowired
     private ComponentImportService componentImportService;
@@ -171,6 +177,21 @@ public class ImportResource {
         return ResponseEntity
             .ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=applications.xlsx")
+            .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+            .body(byteArrayResource);
+    }
+
+    @GetMapping(value = "export/all")
+    public ResponseEntity<Resource> downloadAllData() throws IOException {
+        ByteArrayOutputStream file = exportFullDataService.getallData();
+        ByteArrayResource byteArrayResource = new ByteArrayResource(file.toByteArray());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-h-m-s");
+        String date = sdf.format(new Date());
+
+        return ResponseEntity
+            .ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=all-data-" + date + ".xlsx")
             .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
             .body(byteArrayResource);
     }
