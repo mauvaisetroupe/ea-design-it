@@ -54,6 +54,7 @@ const TechnologyDetails = () => import('@/entities/technology/technology-details
 const Capability = () => import('@/entities/capability/capability.vue');
 const CapabilityUpdate = () => import('@/entities/capability/capability-update.vue');
 const CapabilityDetails = () => import('@/entities/capability/capability-details.vue');
+const CapabilityNavigate = () => import('@/entities/capability/capability-navigate.vue');
 
 const FunctionalFlowStep = () => import('@/entities/functional-flow-step/functional-flow-step.vue');
 const FunctionalFlowStepUpdate = () => import('@/entities/functional-flow-step/functional-flow-step-update.vue');
@@ -393,6 +394,12 @@ export default {
       path: 'capability/:capabilityId/view',
       name: 'CapabilityView',
       component: CapabilityDetails,
+      meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
+    },
+    {
+      path: 'capability/:capabilityId/navigate',
+      name: 'CapabilityNavigate',
+      component: CapabilityNavigate,
       meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
     },
     {

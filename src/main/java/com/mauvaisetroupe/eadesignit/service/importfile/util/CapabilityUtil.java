@@ -16,7 +16,13 @@ public class CapabilityUtil {
 
     private final Logger log = LoggerFactory.getLogger(CapabilityUtil.class);
 
-    public CapabilityDTO mapArrayToCapability(Map<String, Object> map, String nameColumn, String descriptionColumn, Integer level) {
+    public CapabilityDTO mapArrayToCapability(
+        Map<String, Object> map,
+        String nameColumn,
+        String descriptionColumn,
+        Integer level,
+        String surDomainKey
+    ) {
         CapabilityDTO capability = null;
         try {
             Object cellValue = map.get(nameColumn);
@@ -26,6 +32,13 @@ public class CapabilityUtil {
                 capability.setName(name);
                 capability.setDescription((String) map.get(descriptionColumn));
                 capability.setLevel(level);
+                String surDomain = "UNKNOWN";
+                if (map.get(surDomainKey) != null) {
+                    surDomain = (String) map.get(surDomainKey);
+                }
+                capability.setSurDomain(surDomain);
+            } else {
+                System.out.println("");
             }
         } catch (Exception e) {
             log.error(e.toString());

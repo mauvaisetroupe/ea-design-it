@@ -20,6 +20,16 @@ public class CapabilityDTO implements Serializable {
     @JsonIgnoreProperties(value = { "parent" }, allowSetters = true)
     private Set<CapabilityDTO> subCapabilities = new HashSet<>();
 
+    private String surDomain;
+
+    public String getSurDomain() {
+        return surDomain;
+    }
+
+    public void setSurDomain(String surDomain) {
+        this.surDomain = surDomain;
+    }
+
     private CapabilityDTO parent;
 
     public String getName() {

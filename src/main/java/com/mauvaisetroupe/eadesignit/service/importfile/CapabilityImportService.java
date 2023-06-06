@@ -34,6 +34,7 @@ public class CapabilityImportService {
     private static final String L2_DESCRIPTION = "L2 - Description";
     private static final String L3_NAME = "Capability L3";
     private static final String L3_DESCRIPTION = "L3 - Description";
+    private static final String SUR_DOMAIN = "Sur-domaine";
 
     public List<CapabilityImportDTO> importExcel(InputStream excel, String originalFilename)
         throws EncryptedDocumentException, IOException {
@@ -43,16 +44,43 @@ public class CapabilityImportService {
 
         List<CapabilityImportDTO> result = new ArrayList<CapabilityImportDTO>();
         CapabilityUtil capabilityUtil = new CapabilityUtil();
+        CapabilityDTO rootCapabilityDTO = new CapabilityDTO();
+        rootCapabilityDTO.setName("ROOT");
+        rootCapabilityDTO.setLevel(-2);
+        Capability rootCapability = findOrCreateCapability(rootCapabilityDTO, null);
+
         for (Map<String, Object> map : capabilitiesDF) {
             CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO();
             // new capability created from excel, without parent assigned
-            CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, L0_DESCRIPTION, 0);
-            CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, L1_DESCRIPTION, 1);
-            CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, L2_DESCRIPTION, 2);
-            CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, L3_DESCRIPTION, 3);
+            CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, L0_DESCRIPTION, 0, SUR_DOMAIN);
+            CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, L1_DESCRIPTION, 1, SUR_DOMAIN);
+            CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, L2_DESCRIPTION, 2, SUR_DOMAIN);
+            CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, L3_DESCRIPTION, 3, SUR_DOMAIN);
             capabilityImportDTO = capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import);
-            Capability l0 = findOrCreateCapability(l0Import, null);
+
+            CapabilityDTO surdomainDTO = new CapabilityDTO();
+            if (l0Import != null) {
+                surdomainDTO.setName(l0Import.getSurDomain());
+            } else if (l1Import != null) {
+                surdomainDTO.setName(l1Import.getSurDomain());
+            } else if (l2Import != null) {
+                surdomainDTO.setName(l2Import.getSurDomain());
+            } else if (l3Import != null) {
+                surdomainDTO.setName(l3Import.getSurDomain());
+            } else {
+                surdomainDTO.setName("UNKNOWN");
+            }
+            surdomainDTO.setLevel(-1);
+
+            Capability surdomain = findOrCreateCapability(surdomainDTO, rootCapabilityDTO);
+            Capability l0 = findOrCreateCapability(l0Import, surdomainDTO);
+
             if (l0 != null) {
+                if (l0.getId() == null) {
+                    surdomain.addSubCapabilities(l0);
+                }
+                rootCapability.addSubCapabilities(surdomain);
+                surdomain.addSubCapabilities(l0);
                 // at least one capability not null
                 result.add(capabilityImportDTO);
                 if (l1Import != null) {

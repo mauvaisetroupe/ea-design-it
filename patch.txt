@@ -1,0 +1,400 @@
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ApplicationCapabilityImportService.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ApplicationCapabilityImportService.java
+index b2062c4..9adc0da 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ApplicationCapabilityImportService.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ApplicationCapabilityImportService.java
+@@ -55,10 +55,10 @@ public class ApplicationCapabilityImportService {
+             for (Map<String, Object> map : capabilitiesDF) {
+                 ApplicationCapabilityItemDTO itemDTO = new ApplicationCapabilityItemDTO();
+
+-                CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, null, 0);
+-                CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, null, 1);
+-                CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, null, 2);
+-                CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, null, 3);
++                CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, null, 0, null);
++                CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, null, 1, null);
++                CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, null, 2, null);
++                CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, null, 3, null);
+                 itemDTO.setCapabilityImportDTO(capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import));
+
+                 itemDTO.setApplicationNames(mapArrayToString(map));
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/CapabilityImportService.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/CapabilityImportService.java
+index 3e34ef9..9d9fd6c 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/CapabilityImportService.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/CapabilityImportService.java
+@@ -34,6 +34,8 @@ public class CapabilityImportService {
+     private static final String L2_DESCRIPTION = "L2 - Description";
+     private static final String L3_NAME = "Capability L3";
+     private static final String L3_DESCRIPTION = "L3 - Description";
++    private static final String SUR_DOMAIN = "Sur-domaine";
++
+
+     public List<CapabilityImportDTO> importExcel(InputStream excel, String originalFilename)
+         throws EncryptedDocumentException, IOException {
+@@ -43,16 +45,44 @@ public class CapabilityImportService {
+
+         List<CapabilityImportDTO> result = new ArrayList<CapabilityImportDTO>();
+         CapabilityUtil capabilityUtil = new CapabilityUtil();
++        CapabilityDTO rootCapabilityDTO = new CapabilityDTO();
++        rootCapabilityDTO.setName("ROOT");
++        rootCapabilityDTO.setLevel(-2);
++        Capability rootCapability = findOrCreateCapability(rootCapabilityDTO, null);
++
+         for (Map<String, Object> map : capabilitiesDF) {
+             CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO();
+             // new capability created from excel, without parent assigned
+-            CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, L0_DESCRIPTION, 0);
+-            CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, L1_DESCRIPTION, 1);
+-            CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, L2_DESCRIPTION, 2);
+-            CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, L3_DESCRIPTION, 3);
++            CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, L0_DESCRIPTION, 0, SUR_DOMAIN );
++            CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, L1_DESCRIPTION, 1, SUR_DOMAIN);
++            CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, L2_DESCRIPTION, 2, SUR_DOMAIN);
++            CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, L3_DESCRIPTION, 3, SUR_DOMAIN);
+             capabilityImportDTO = capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import);
+-            Capability l0 = findOrCreateCapability(l0Import, null);
++
++            CapabilityDTO surdomainDTO = new CapabilityDTO();
++            if (l0Import!=null) {
++                surdomainDTO.setName(l0Import.getSurDomain());
++            }
++            else if (l1Import!=null) {
++                surdomainDTO.setName(l1Import.getSurDomain());
++            }
++            else if (l2Import!=null) {
++                surdomainDTO.setName(l2Import.getSurDomain());
++            }
++            else if (l3Import!=null) {
++                surdomainDTO.setName(l3Import.getSurDomain());
++            }
++            else {
++                surdomainDTO.setName("UNKNOWN");
++            }
++            surdomainDTO.setLevel(-1);
++
++            Capability surdomain = findOrCreateCapability(surdomainDTO, rootCapabilityDTO);
++            Capability l0 = findOrCreateCapability(l0Import, surdomainDTO);
++
+             if (l0 != null) {
++                rootCapability.addSubCapabilities(surdomain);
++                surdomain.addSubCapabilities(l0);
+                 // at least one capability not null
+                 result.add(capabilityImportDTO);
+                 if (l1Import != null) {
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/dto/CapabilityDTO.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/dto/CapabilityDTO.java
+index dab729d..a795ea8 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/dto/CapabilityDTO.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/dto/CapabilityDTO.java
+@@ -16,9 +16,17 @@ public class CapabilityDTO implements Serializable {
+     private String comment;
+     private Integer level;
+     private ImportStatus importStatus;
+-
+     @JsonIgnoreProperties(value = { "parent" }, allowSetters = true)
+     private Set<CapabilityDTO> subCapabilities = new HashSet<>();
++    private String surDomain;
++
++    public String getSurDomain() {
++        return surDomain;
++    }
++
++    public void setSurDomain(String surDomain) {
++        this.surDomain = surDomain;
++    }
+
+     private CapabilityDTO parent;
+
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/util/CapabilityUtil.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/util/CapabilityUtil.java
+index 5c19f0a..04f85ed 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/util/CapabilityUtil.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/util/CapabilityUtil.java
+@@ -16,7 +16,7 @@ public class CapabilityUtil {
+
+     private final Logger log = LoggerFactory.getLogger(CapabilityUtil.class);
+
+-    public CapabilityDTO mapArrayToCapability(Map<String, Object> map, String nameColumn, String descriptionColumn, Integer level) {
++    public CapabilityDTO mapArrayToCapability(Map<String, Object> map, String nameColumn, String descriptionColumn, Integer level, String surDomainKey) {
+         CapabilityDTO capability = null;
+         try {
+             Object cellValue = map.get(nameColumn);
+@@ -26,6 +26,14 @@ public class CapabilityUtil {
+                 capability.setName(name);
+                 capability.setDescription((String) map.get(descriptionColumn));
+                 capability.setLevel(level);
++                String surDomain = "UNKNOWN";
++                if (map.get(surDomainKey)!=null) {
++                    surDomain = (String) map.get(surDomainKey);
++                }
++                capability.setSurDomain(surDomain);
++            }
++            else {
++                System.out.println("");
+             }
+         } catch (Exception e) {
+             log.error(e.toString());
+diff --git a/src/main/webapp/app/entities/capability/capability-details.component.ts b/src/main/webapp/app/entities/capability/capability-details.component.ts
+index 7089876..01ab7d0 100644
+--- a/src/main/webapp/app/entities/capability/capability-details.component.ts
++++ b/src/main/webapp/app/entities/capability/capability-details.component.ts
+@@ -9,6 +9,8 @@ export default class CapabilityDetails extends Vue {
+   @Inject('capabilityService') private capabilityService: () => CapabilityService;
+   @Inject('alertService') private alertService: () => AlertService;
+
++  public desiredLevel: number = 2;
++
+   public capability: ICapability = {};
+   public capabilitiesPlantUMLImage = '';
+
+diff --git a/src/main/webapp/app/entities/capability/capability-details.vue b/src/main/webapp/app/entities/capability/capability-details.vue
+index df1e2e9..65095b6 100644
+--- a/src/main/webapp/app/entities/capability/capability-details.vue
++++ b/src/main/webapp/app/entities/capability/capability-details.vue
+@@ -1,103 +1,39 @@
+ <template>
+-  <div class="row justify-content-center">
+-    <div class="col-8">
+-      <div v-if="capability">
+-        <h2 class="jh-entity-heading" data-cy="capabilityDetailsHeading"><span>Capability</span> {{ capability.name }}</h2>
+-        <dl class="row jh-entity-details">
+-          <dt>
+-            <span>Id</span>
+-          </dt>
+-          <dd>
+-            <span>{{ capability.id }}</span>
+-          </dd>
+-          <dt>
+-            <span>Description</span>
+-          </dt>
+-          <dd>
+-            <span>{{ capability.description }}</span>
+-          </dd>
+-          <dt>
+-            <span>Comment</span>
+-          </dt>
+-          <dd>
+-            <span>{{ capability.comment }}</span>
+-          </dd>
+-          <dt>
+-            <span>Level</span>
+-          </dt>
+-          <dd>
+-            <span>{{ capability.level }}</span>
+-          </dd>
+-          <dt>
+-            <span>Parent</span>
+-          </dt>
+-          <dd>
+-            <div v-if="capability.parent">
+-              <a @click="retrieveCapability(capability.parent.id)">{{ capability.parent.name }}</a>
++<div>
++<!--   <select v-model="desiredLevel">
++    <option value="1">1</option>
++    <option value="2">2</option>
++    <option value="3">3</option>
++  </select> -->
++  <div  :class="'capa-top c' + capability.level">
++    <div :title="capability.description">{{ capability.name }}</div>
++    <div v-if="capability.subCapabilities" class="d-flex flex-wrap">
++      <div
++        v-for="child1 in capability.subCapabilities"
++        :key="child1.id"
++        :class="'capa-child-1 c' + child1.level"
++      >
++        <div :title="child1.description">
++          <a @click="retrieveCapability(child1.id)">{{ child1.name }}</a>
++        </div>
++        <div v-if="child1.subCapabilities" class="d-flex flex-wrap">
++          <div
++            v-for="child2 in child1.subCapabilities"
++            :key="child2.id"
++            :class="'capa-child-2 c' + child2.level"
++
++          >
++            <div :title="child2.description">
++              <a @click="retrieveCapability(child2.id)">{{ child2.name }}</a>
+             </div>
+-          </dd>
+-          <dt>
+-            <span>Applications</span>
+-          </dt>
+-          <dd>
+-            <span v-for="(application, i) in capability.applications" :key="application.id"
+-              >{{ i > 0 ? ', ' : '' }}
+-              <router-link :to="{ name: 'ApplicationView', params: { applicationId: application.id } }">{{ application.name }}</router-link>
+-            </span>
+-          </dd>
+-        </dl>
+-        <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+-          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
+-        </button>
+-        <router-link
+-          v-if="capability.id"
+-          :to="{ name: 'CapabilityEdit', params: { capabilityId: capability.id } }"
+-          custom
+-          v-slot="{ navigate }"
+-        >
+-          <button @click="navigate" class="btn btn-primary">
+-            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
+-          </button>
+-        </router-link>
+-      </div>
+-    </div>
+-    <div class="col-8">
+-      <div class="mt-5">
+-        <h2>Graphical view</h2>
+-        <div class="common" :class="capability.subCapabilities.length > 0 ? 'alpha' : 'beta'" v-if="capability.subCapabilities">
+-          <div :title="capability.description">{{ capability.level }}. {{ capability.name }}</div>
+-          <div v-if="capability.subCapabilities" class="d-flex flex-wrap">
+-            <div
+-              v-for="child1 in capability.subCapabilities"
+-              :key="child1.id"
+-              class="common"
+-              :class="child1.subCapabilities.length > 0 ? 'alpha' : 'beta'"
+-            >
+-              <div :title="child1.description">
+-                {{ child1.level }}. <a @click="retrieveCapability(child1.id)">{{ child1.name }}</a>
+-              </div>
+-              <div v-if="child1.subCapabilities" class="d-flex flex-wrap">
+-                <div
+-                  v-for="child2 in child1.subCapabilities"
+-                  :key="child2.id"
+-                  class="common"
+-                  :class="child2.subCapabilities.length > 0 ? 'alpha' : 'beta'"
+-                >
+-                  <div :title="child2.description">
+-                    {{ child2.level }}. <a @click="retrieveCapability(child2.id)">{{ child2.name }}</a>
+-                  </div>
+-                  <div v-if="child2.subCapabilities" class="d-flex flex-wrap">
+-                    <div
+-                      v-for="child3 in child2.subCapabilities"
+-                      :key="child3.id"
+-                      class="common"
+-                      :class="child3.subCapabilities.length > 0 ? 'alpha' : 'beta'"
+-                    >
+-                      <div>
+-                        {{ child3.level }}. <a @click="retrieveCapability(child3.id)">{{ child3.name }}</a>
+-                      </div>
+-                    </div>
+-                  </div>
++            <div v-if="child2.subCapabilities" class="d-flex flex-wrap">
++              <div
++                v-for="child3 in child2.subCapabilities"
++                :key="child3.id"
++                :class="'capa-child-3 c' + child3.level"
++              >
++                <div>
++                   <a @click="retrieveCapability(child3.id)">{{ child3.name }}</a>
+                 </div>
+               </div>
+             </div>
+@@ -106,26 +42,100 @@
+       </div>
+     </div>
+   </div>
++</div>
+ </template>
+
+ <style scoped>
+-.common {
+-  font-weight: bold;
+-  border: solid;
+-  border-color: black;
+-  border-width: 3px;
++
++
++.capa-top {
++  font-weight: normal;
++  padding: 5px;
++  margin: 0px 0px 50px 0px;
++  width: 100%;
++}
++
++.capa-child-1 {
++  font-weight: normal;
++  padding: 5px;
++  margin: 5px;
++  width: 100%;
++
++}
++
++.capa-child-2 {
++  font-weight: normal;
++  padding: 5px;
++  margin: 5px;
++  width: 16%
++}
++
++.capa-child-3 {
++  font-weight: normal;
+   padding: 5px;
+-  margin: 10px;
+-  box-shadow: 8px 8px 12px #aaa;
++  margin: 5px;
++  width: 45%;
++}
++.c-2 { /* ROOT */
++  color:white;
++}
++
++.c-1 { /* SUR DOMAIN GREY */
++  font-weight: normal;
++  border: solid;
++  border-color: rgb(110, 110, 110);
++  border-width: 1px;
++  box-shadow: 1px 1px 2px #aaa;
++  background-color: #E6E6E6;
++  color:black;
++}
++
++.c0 { /* L0 BLUE */
++  font-weight: normal;
++  border: solid;
++  border-color: rgb(110, 110, 110);
++  border-width: 1px;
++  box-shadow: 1px 1px 2px #aaa;
++  background-color: #DEEBF7;
++}
++
++
++.c1 { /* PURPLE */
++  font-weight: normal;
++  font-size: 9px;
++  border: solid;
++  border-color: rgb(110, 110, 110);
++  border-width: 1px;
++  box-shadow: 1px 1px 2px #aaa;
++  background-color: #E5CFEE;
++
+ }
+
+-.alpha {
++.c2 {
++  font-weight: normal;
++  border: solid;
++  border-color: rgb(110, 110, 110);
++  border-width: 1px;
++  padding: 5px;
++  margin: 5px;
++  box-shadow: 1px 1px 2px #aaa;
+   background-color: white;
+ }
+
+-.beta {
+-  background-color: #fefece;
+-  max-width: 300px;
++.c3 {
++  font-weight: normal;
++  border: solid;
++  border-color: rgb(110, 110, 110);
++  border-width: 1px;
++  padding: 5px;
++  margin: 5px;
++  box-shadow: 1px 1px 2px #aaa;
++  background-color: green;
++}
++
++.capatext {
++  font-weight: normal;
++  color: rgb(59, 59, 59);
+ }
+ </style>
+

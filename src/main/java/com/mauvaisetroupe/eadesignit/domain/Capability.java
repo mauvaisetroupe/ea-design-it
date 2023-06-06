@@ -3,11 +3,16 @@ package com.mauvaisetroupe.eadesignit.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.SortNatural;
 
 /**
  * A Capability.
@@ -15,7 +20,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "capability")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Capability implements Serializable {
+public class Capability implements Serializable, Comparable<Capability> {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,11 +47,12 @@ public class Capability implements Serializable {
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "parent", "applications", "landscapes" }, allowSetters = true)
-    private Set<Capability> subCapabilities = new HashSet<>();
+    @SortNatural
+    @JsonIgnoreProperties(value = { "applications", "landscapes" }, allowSetters = true)
+    private SortedSet<Capability> subCapabilities = new TreeSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "subCapabilities", "parent", "applications", "landscapes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "subCapabilities", "applications", "landscapes" }, allowSetters = true)
     private Capability parent;
 
     @ManyToMany(mappedBy = "capabilities", fetch = FetchType.EAGER)
@@ -133,7 +139,7 @@ public class Capability implements Serializable {
         return this.subCapabilities;
     }
 
-    public void setSubCapabilities(Set<Capability> capabilities) {
+    public void setSubCapabilities(SortedSet<Capability> capabilities) {
         if (this.subCapabilities != null) {
             this.subCapabilities.forEach(i -> i.setParent(null));
         }
@@ -143,7 +149,7 @@ public class Capability implements Serializable {
         this.subCapabilities = capabilities;
     }
 
-    public Capability subCapabilities(Set<Capability> capabilities) {
+    public Capability subCapabilities(SortedSet<Capability> capabilities) {
         this.setSubCapabilities(capabilities);
         return this;
     }
@@ -155,7 +161,17 @@ public class Capability implements Serializable {
     }
 
     public Capability removeSubCapabilities(Capability capability) {
-        this.subCapabilities.remove(capability);
+        if (this.subCapabilities.contains(capability)) {
+            this.subCapabilities.remove(capability);
+        } else {
+            // hibernate bug due to hashcode ?
+            for (Iterator<Capability> iterator = this.subCapabilities.iterator(); iterator.hasNext();) {
+                Capability capa = iterator.next();
+                if (capa.getId() != null && capa.getId().equals(capability.getId())) {
+                    iterator.remove();
+                }
+            }
+        }
         capability.setParent(null);
         return this;
     }
@@ -264,5 +280,25 @@ public class Capability implements Serializable {
             ", comment='" + getComment() + "'" +
             ", level=" + getLevel() +
             "}";
+    }
+
+    @Override
+    public int compareTo(Capability o) {
+        int result = -1;
+        if (o == null) {
+            result = -1;
+        }
+        // compare alias is one is not null
+        else if (this.name != null || o.name != null) {
+            result = ObjectUtils.compare(this.name, o.name, true);
+        }
+        // compare id is one is not null
+        else if (this.id != null || o.id != null) {
+            result = ObjectUtils.compare(this.id, o.id, true);
+        } else {
+            // alias and id are both null
+            result = 0;
+        }
+        return result;
     }
 }
