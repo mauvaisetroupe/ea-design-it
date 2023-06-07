@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
@@ -8,6 +9,7 @@ import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.apache.poi.EncryptedDocumentException;
@@ -38,6 +40,8 @@ public class CapabilityImportService {
 
     public List<CapabilityImportDTO> importExcel(InputStream excel, String originalFilename)
         throws EncryptedDocumentException, IOException {
+        capabilityRepository.deleteByApplicationsIsEmpty();
+
         ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
 
         List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(CAPABILITY_SHEET_NAME);
@@ -48,57 +52,90 @@ public class CapabilityImportService {
         rootCapabilityDTO.setName("ROOT");
         rootCapabilityDTO.setLevel(-2);
         Capability rootCapability = findOrCreateCapability(rootCapabilityDTO, null);
+        capabilityRepository.save(rootCapability);
 
         for (Map<String, Object> map : capabilitiesDF) {
             CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO();
             // new capability created from excel, without parent assigned
-            CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, L0_DESCRIPTION, 0, SUR_DOMAIN);
-            CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, L1_DESCRIPTION, 1, SUR_DOMAIN);
-            CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, L2_DESCRIPTION, 2, SUR_DOMAIN);
-            CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, L3_DESCRIPTION, 3, SUR_DOMAIN);
+            CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, L0_DESCRIPTION, 0);
+            CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, L1_DESCRIPTION, 1);
+            CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, L2_DESCRIPTION, 2);
+            CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, L3_DESCRIPTION, 3);
             capabilityImportDTO = capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import);
+            capabilityImportDTO.setDomain((String) map.get(SUR_DOMAIN));
 
-            CapabilityDTO surdomainDTO = new CapabilityDTO();
-            if (l0Import != null) {
-                surdomainDTO.setName(l0Import.getSurDomain());
-            } else if (l1Import != null) {
-                surdomainDTO.setName(l1Import.getSurDomain());
-            } else if (l2Import != null) {
-                surdomainDTO.setName(l2Import.getSurDomain());
-            } else if (l3Import != null) {
-                surdomainDTO.setName(l3Import.getSurDomain());
-            } else {
-                surdomainDTO.setName("UNKNOWN");
-            }
-            surdomainDTO.setLevel(-1);
+            boolean lineIsValid = checLineIsValid(l0Import, l1Import, l2Import, l3Import, capabilityImportDTO.getDomain());
 
-            Capability surdomain = findOrCreateCapability(surdomainDTO, rootCapabilityDTO);
-            Capability l0 = findOrCreateCapability(l0Import, surdomainDTO);
+            if (lineIsValid) {
+                try {
+                    // Find L0 without parent (sur-domaine) to find goo L0 even if Sur-domaine not completed correctly
+                    // Assumption : one L0 has a unique name
+                    Capability l0 = findOrCreateCapability(l0Import, null);
+                    CapabilityDTO surdomainDTO = new CapabilityDTO();
+                    surdomainDTO.setName(capabilityImportDTO.getDomain() != null ? capabilityImportDTO.getDomain() : "UNKNOWN");
+                    surdomainDTO.setLevel(-1);
+                    Capability surDomainCapability = findOrCreateCapability(surdomainDTO, rootCapabilityDTO);
+                    if (surDomainCapability.getParent() == null) {
+                        rootCapability.addSubCapabilities(surDomainCapability);
+                    }
+                    if (l0.getParent() == null) {
+                        // If L0 is created, then we need to assign a surDomain as parent
+                        surDomainCapability.addSubCapabilities(l0);
+                    }
+                    capabilityRepository.save(rootCapability);
+                    capabilityRepository.save(surDomainCapability);
+                    capabilityRepository.save(l0);
 
-            if (l0 != null) {
-                if (l0.getId() == null) {
-                    surdomain.addSubCapabilities(l0);
-                }
-                rootCapability.addSubCapabilities(surdomain);
-                surdomain.addSubCapabilities(l0);
-                // at least one capability not null
-                result.add(capabilityImportDTO);
-                if (l1Import != null) {
-                    Capability l1 = findOrCreateCapability(l1Import, l0Import);
-                    l0.addSubCapabilities(l1);
-                    if (l2Import != null) {
-                        Capability l2 = findOrCreateCapability(l2Import, l1Import);
-                        l1.addSubCapabilities(l2);
-                        if (l3Import != null) {
-                            Capability l3 = findOrCreateCapability(l3Import, l2Import);
-                            l2.addSubCapabilities(l3);
+                    // at least one capability not null
+                    Capability parent = l0;
+                    CapabilityDTO parentDTO = l0Import;
+                    for (CapabilityDTO capabilityDTO : Arrays.asList(new CapabilityDTO[] { l1Import, l2Import, l3Import })) {
+                        if (capabilityDTO != null) {
+                            capabilityRepository.save(parent);
+                            Capability capability = findOrCreateCapability(capabilityDTO, parentDTO);
+                            parent.addSubCapabilities(capability);
+                            capabilityRepository.save(capability);
+                            capabilityRepository.save(parent);
+                            parent = capability;
+                            parentDTO = capabilityDTO;
                         }
                     }
+
+                    capabilityImportDTO.setStatus(ImportStatus.NEW);
+                } catch (Exception e) {
+                    capabilityImportDTO.setStatus(ImportStatus.ERROR);
+                    capabilityImportDTO.setError(e.toString());
+                    e.printStackTrace();
                 }
+            } else {
+                capabilityImportDTO.setStatus(ImportStatus.ERROR);
+                capabilityImportDTO.setError("Line is not valid");
             }
-            //save is automatically done by @Transactional
+            result.add(capabilityImportDTO);
         }
         return result;
+    }
+
+    private boolean checLineIsValid(
+        CapabilityDTO l0Import,
+        CapabilityDTO l1Import,
+        CapabilityDTO l2Import,
+        CapabilityDTO l3Import,
+        String surDomain
+    ) {
+        // If a level exist, inferior level should exist
+        if (l0Import == null) {
+            return false;
+        } else if (l3Import != null) {
+            if (l2Import == null || l1Import == null) {
+                return false;
+            }
+        } else if (l2Import != null) {
+            if (l1Import == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private Capability findOrCreateCapability(CapabilityDTO capabilityImport, CapabilityDTO parentImport) {
@@ -116,7 +153,6 @@ public class CapabilityImportService {
         }
         if (potentials.size() == 0) {
             Capability capability = createCapability(capabilityImport);
-            capabilityRepository.save(capability);
             return capability;
         }
         if (potentials.size() == 1) {
