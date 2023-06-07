@@ -15,4 +15,5 @@ public interface CapabilityRepository extends JpaRepository<Capability, Long> {
     List<Capability> findByNameIgnoreCaseAndLevel(String name, Integer level);
     List<Capability> findByNameIgnoreCaseAndParentNameIgnoreCaseAndLevel(String name, String parent, Integer level);
     void deleteByApplicationsIsEmpty();
+    List<Capability> findByLevel(int i);
 }

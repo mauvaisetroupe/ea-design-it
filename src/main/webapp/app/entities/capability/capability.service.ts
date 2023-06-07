@@ -19,6 +19,19 @@ export default class CapabilityService {
     });
   }
 
+  public findRoot(): Promise<ICapability> {
+    return new Promise<ICapability>((resolve, reject) => {
+      axios
+        .get(`${baseApiUrl}/find-root`)
+        .then(res => {
+          resolve(res.data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
   public retrieve(): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios

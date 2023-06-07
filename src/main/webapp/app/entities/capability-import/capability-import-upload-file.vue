@@ -30,57 +30,74 @@
       <table class="table table-striped" aria-describedby="capabilitiesImports">
         <thead>
           <tr>
+            <th scope="row"><span>Status</span></th>
+
+            <th scope="row"><span>Error</span></th>
+
+            <th scope="row"><span>Domain</span></th>
+
+            <th scope="row"><span>L0 Level</span></th>
             <th scope="row"><span>L0 Name</span></th>
             <th scope="row"><span>L0 Description</span></th>
-            <th scope="row"><span>L0 Level</span></th>
 
+            <th scope="row"><span>L1 Level</span></th>
             <th scope="row"><span>L1 Name</span></th>
             <th scope="row"><span>L1 Description</span></th>
-            <th scope="row"><span>L1 Level</span></th>
 
+            <th scope="row"><span>L2 Level</span></th>
             <th scope="row"><span>L2 Name</span></th>
             <th scope="row"><span>L2 Description</span></th>
-            <th scope="row"><span>L2 Level</span></th>
 
+            <th scope="row"><span>L3 Level</span></th>
             <th scope="row"><span>L3 Name</span></th>
             <th scope="row"><span>L3 Description</span></th>
-            <th scope="row"><span>L3 Level</span></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="dto in capabilitiesImports" :key="dto">
-            <td>{{ dto.l0.name }}</td>
-            <td>{{ dto.l0.description }}</td>
-            <td>{{ dto.l0.level }}</td>
+            <td>
+              <span v-bind:class="[dto.status === 'ERROR' ? 'rederror' : '']">{{ dto.status }} </span>
+            </td>
+            <td>{{ dto.error }}</td>
+            <td>{{ dto.domain }}</td>
+            <td>
+              <span v-if="dto.l0">{{ dto.l0.level }}</span>
+            </td>
+            <td>
+              <span v-if="dto.l0">{{ dto.l0.name }}</span>
+            </td>
+            <td>
+              <span v-if="dto.l0">{{ dto.l0.description }}</span>
+            </td>
 
+            <td>
+              <span v-if="dto.l1">{{ dto.l1.level }}</span>
+            </td>
             <td>
               <span v-if="dto.l1">{{ dto.l1.name }}</span>
             </td>
             <td>
               <span v-if="dto.l1">{{ dto.l1.description }}</span>
             </td>
-            <td>
-              <span v-if="dto.l1">{{ dto.l1.level }}</span>
-            </td>
 
+            <td>
+              <span v-if="dto.l2">{{ dto.l2.level }}</span>
+            </td>
             <td>
               <span v-if="dto.l2">{{ dto.l2.name }}</span>
             </td>
             <td>
               <span v-if="dto.l2">{{ dto.l2.description }}</span>
             </td>
-            <td>
-              <span v-if="dto.l2">{{ dto.l2.level }}</span>
-            </td>
 
+            <td>
+              <span v-if="dto.l3">{{ dto.l3.level }}</span>
+            </td>
             <td>
               <span v-if="dto.l3">{{ dto.l3.name }}</span>
             </td>
             <td>
               <span v-if="dto.l3">{{ dto.l3.description }}</span>
-            </td>
-            <td>
-              <span v-if="dto.l3">{{ dto.l3.level }}</span>
             </td>
           </tr>
         </tbody>
@@ -90,3 +107,9 @@
 </template>
 
 <script lang="ts" src="./capability-import-upload-file.component.ts"></script>
+<style>
+.rederror {
+  background-color: red;
+  color: white;
+}
+</style>

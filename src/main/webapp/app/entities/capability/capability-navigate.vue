@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ol class="breadcrumb">
+    <ol class="breadcrumb" v-if="capability.level > -2">
       <li class="breadcrumb-item" v-for="mycap in path" key="id">
         <a @click="retrieveCapability(mycap.id)" class="router-link-exact-active router-link-active" target="_self">
           {{ mycap.name }}
@@ -14,17 +14,20 @@
       <div v-if="capability.subCapabilities" class="d-flex flex-wrap">
         <div v-for="child1 in capability.subCapabilities" :key="child1.id" :class="'capa-child-1 c' + child1.level">
           <div :title="child1.description">
-            <a @click="retrieveCapability(child1.id)">{{ child1.name }}</a>
+            <a @click="retrieveCapability(child1.id)" v-if="child1.level <= 0">{{ child1.name }}</a>
+            <span v-else>{{ child1.name }}</span>
           </div>
           <div v-if="child1.subCapabilities" class="d-flex flex-wrap">
             <div v-for="child2 in child1.subCapabilities" :key="child2.id" :class="'capa-child-2 c' + child2.level">
               <div :title="child2.description">
-                <a @click="retrieveCapability(child2.id)">{{ child2.name }}</a>
+                <a @click="retrieveCapability(child2.id)" v-if="child2.level <= 0">{{ child2.name }}</a>
+                <span v-else>{{ child2.name }}</span>
               </div>
               <div v-if="child2.subCapabilities" class="d-flex flex-wrap">
                 <div v-for="child3 in child2.subCapabilities" :key="child3.id" :class="'capa-child-3 c' + child3.level">
                   <div>
-                    <a @click="retrieveCapability(child3.id)">{{ child3.name }}</a>
+                    <a @click="retrieveCapability(child3.id)" v-if="child3.level <= 0">{{ child3.name }}</a>
+                    <span v-else>{{ child3.name }}</span>
                   </div>
                 </div>
               </div>
@@ -42,6 +45,13 @@ a {
   font-weight: normal;
   cursor: pointer;
 }
+
+.capa-top,
+.capa-child-1,
+.capa-child-2 {
+  min-height: 70px;
+}
+
 .capa-top {
   font-weight: normal;
   padding: 5px;
@@ -117,4 +127,4 @@ a {
 }
 </style>
 
-<script lang="ts" src="./capability-details.component.ts"></script>
+<script lang="ts" src="./capability-navigate.component.ts"></script>

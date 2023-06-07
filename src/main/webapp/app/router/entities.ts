@@ -55,6 +55,7 @@ const Capability = () => import('@/entities/capability/capability.vue');
 const CapabilityUpdate = () => import('@/entities/capability/capability-update.vue');
 const CapabilityDetails = () => import('@/entities/capability/capability-details.vue');
 const CapabilityNavigate = () => import('@/entities/capability/capability-navigate.vue');
+const CapabilityRootNavigate = () => import('@/entities/capability/capability-navigate.vue');
 
 const FunctionalFlowStep = () => import('@/entities/functional-flow-step/functional-flow-step.vue');
 const FunctionalFlowStepUpdate = () => import('@/entities/functional-flow-step/functional-flow-step-update.vue');
@@ -400,6 +401,12 @@ export default {
       path: 'capability/:capabilityId/navigate',
       name: 'CapabilityNavigate',
       component: CapabilityNavigate,
+      meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
+    },
+    {
+      path: 'capability/navigate',
+      name: 'CapabilityRootNavigate',
+      component: CapabilityRootNavigate,
       meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
     },
     {

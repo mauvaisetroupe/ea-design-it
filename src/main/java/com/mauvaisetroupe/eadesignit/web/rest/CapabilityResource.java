@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -170,6 +171,13 @@ public class CapabilityResource {
         log.debug("REST request to get Capability : {}", id);
         Optional<Capability> capability = capabilityRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(capability);
+    }
+
+    @GetMapping("/capabilities/find-root")
+    public Capability getRootCapability() {
+        List<Capability> capabilities = capabilityRepository.findByLevel(-2);
+        Assert.isTrue(capabilities.size() == 1, "Should exist");
+        return capabilities.get(0);
     }
 
     /**

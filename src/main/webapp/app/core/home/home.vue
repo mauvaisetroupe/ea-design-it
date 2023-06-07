@@ -42,6 +42,9 @@
             <router-link to="data-flow-item">Data Flow Item</router-link> is used for model a more fined-grained data exchange (operation of
             swagger, substructure in the File, event of a topic)
           </li>
+          <li>
+            <router-link to="capability/navigate">Capability Map</router-link>
+          </li>
         </ul>
         <p>Please, refer to <a href="https://mauvaisetroupe.github.io/ea-design-it/">documentation</a> for more explanation</p>
       </div>
