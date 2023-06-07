@@ -55,10 +55,10 @@ public class ApplicationCapabilityImportService {
             for (Map<String, Object> map : capabilitiesDF) {
                 ApplicationCapabilityItemDTO itemDTO = new ApplicationCapabilityItemDTO();
 
-                CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, null, 0, null);
-                CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, null, 1, null);
-                CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, null, 2, null);
-                CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, null, 3, null);
+                CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, null, 0);
+                CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, null, 1);
+                CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, null, 2);
+                CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, null, 3);
                 itemDTO.setCapabilityImportDTO(capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import));
 
                 itemDTO.setApplicationNames(mapArrayToString(map));
