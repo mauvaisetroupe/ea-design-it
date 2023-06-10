@@ -176,8 +176,9 @@ public class CapabilityResource {
     @GetMapping("/capabilities/find-root")
     public Capability getRootCapability() {
         List<Capability> capabilities = capabilityRepository.findByLevel(-2);
-        Assert.isTrue(capabilities.size() == 1, "Should exist");
-        return capabilities.get(0);
+        Assert.isTrue(capabilities.size() == 1, "Should exist and be unique");
+        Optional<Capability> rootCapabilityOptional = capabilityRepository.findById(capabilities.get(0).getId());
+        return rootCapabilityOptional.get();
     }
 
     /**
