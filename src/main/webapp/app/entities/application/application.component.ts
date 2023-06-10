@@ -33,7 +33,7 @@ export default class Application extends Vue {
   @Inject('applicationService') private applicationService: () => ApplicationService;
   @Inject('applicationImportService') private applicationImportService: () => ApplicationImportService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
   private removeId: number = null;
 
   public applications: IApplication[] = [];

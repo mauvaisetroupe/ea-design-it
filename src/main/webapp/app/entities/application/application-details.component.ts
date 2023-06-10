@@ -11,7 +11,7 @@ import { ICapability } from '@/shared/model/capability.model';
 export default class ApplicationDetails extends Vue {
   @Inject('applicationService') private applicationService: () => ApplicationService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
   public application: IApplication = {};
   public plantUMLImage = '';
   public capabilitiesPlantUMLImage = '';

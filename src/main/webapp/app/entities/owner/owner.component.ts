@@ -12,7 +12,7 @@ import AccountService from '@/account/account.service';
 export default class Owner extends Vue {
   @Inject('ownerService') private ownerService: () => OwnerService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
   private removeId: number = null;
 
   public owners: IOwner[] = [];

@@ -15,7 +15,7 @@ import AccountService from '@/account/account.service';
 export default class LandscapeView extends mixins(JhiDataUtils) {
   @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
   private removeId: number = null;
 
   public landscapeViews: ILandscapeView[] = [];

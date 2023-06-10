@@ -39,7 +39,7 @@ import AccountService from '@/account/account.service';
 export default class FlowInterface extends Vue {
   @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
   private removeId: number = null;
 
   public flowInterfaces: IFlowInterface[] = [];

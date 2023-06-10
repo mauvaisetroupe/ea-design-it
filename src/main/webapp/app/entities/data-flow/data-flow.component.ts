@@ -40,7 +40,7 @@ import AccountService from '@/account/account.service';
 export default class DataFlow extends Vue {
   @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
   private removeId: number = null;
 
   public dataFlows: IDataFlow[] = [];
