@@ -9,32 +9,30 @@ import AccountService from '@/account/account.service';
 @Component({
   mixins: [Vue2Filters.mixin],
 })
-@Component({
-  computed: {
-    filteredRows() {
-      return this.functionalFlows.filter(row => {
-        const alias = row.alias ? row.alias.toString().toLowerCase() : '';
-        const id = row.id.toString().toLowerCase();
-        const description = row.description ? row.description.toString().toLowerCase() : '';
-        const inFFF = row.steps
-          ? row.steps
-              .map(i => i.flowInterface)
-              .map(i => i.alias)
-              .join(' ')
-              .toString()
-              .toLowerCase()
-          : '';
-        const searchTerm = this.filter.toLowerCase();
-
-        return alias.includes(searchTerm) || id.includes(searchTerm) || inFFF.includes(searchTerm) || description.includes(searchTerm);
-      });
-    },
-  },
-})
 export default class FunctionalFlow extends Vue {
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('accountService') public accountService: () => AccountService;
+
+  get filteredRows() {
+    return this.functionalFlows.filter(row => {
+      const alias = row.alias ? row.alias.toString().toLowerCase() : '';
+      const id = row.id.toString().toLowerCase();
+      const description = row.description ? row.description.toString().toLowerCase() : '';
+      const inFFF = row.steps
+        ? row.steps
+            .map(i => i.flowInterface)
+            .map(i => i.alias)
+            .join(' ')
+            .toString()
+            .toLowerCase()
+        : '';
+      const searchTerm = this.filter.toLowerCase();
+
+      return alias.includes(searchTerm) || id.includes(searchTerm) || inFFF.includes(searchTerm) || description.includes(searchTerm);
+    });
+  }
+
   private removeId: number = null;
 
   public functionalFlows: IFunctionalFlow[] = [];

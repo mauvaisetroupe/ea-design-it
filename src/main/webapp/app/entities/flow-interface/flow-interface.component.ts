@@ -9,37 +9,35 @@ import AccountService from '@/account/account.service';
 @Component({
   mixins: [Vue2Filters.mixin],
 })
-@Component({
-  computed: {
-    filteredRows() {
-      return this.flowInterfaces.filter(row => {
-        const searchTerm = this.filter.toLowerCase();
-        const id = row.id.toString().toLowerCase();
-        const description = row.description ? row.description.toString().toLowerCase() : '';
-        const alias = row.alias ? row.alias.toString().toLowerCase() : '';
-        const source = row.source ? row.source.name.toString().toLowerCase() : '';
-        const target = row.source ? row.target.name.toString().toLowerCase() : '';
-        const proto = row.protocol ? row.protocol.name.toString().toLowerCase() : '';
-        if (searchTerm == 'protocol::empty') {
-          return proto === '';
-        } else {
-          return (
-            id.includes(searchTerm) ||
-            description.includes(searchTerm) ||
-            alias.includes(searchTerm) ||
-            source.includes(searchTerm) ||
-            target.includes(searchTerm) ||
-            proto.includes(searchTerm)
-          );
-        }
-      });
-    },
-  },
-})
 export default class FlowInterface extends Vue {
   @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('accountService') public accountService: () => AccountService;
+
+  get filteredRows() {
+    return this.flowInterfaces.filter(row => {
+      const searchTerm = this.filter.toLowerCase();
+      const id = row.id.toString().toLowerCase();
+      const description = row.description ? row.description.toString().toLowerCase() : '';
+      const alias = row.alias ? row.alias.toString().toLowerCase() : '';
+      const source = row.source ? row.source.name.toString().toLowerCase() : '';
+      const target = row.source ? row.target.name.toString().toLowerCase() : '';
+      const proto = row.protocol ? row.protocol.name.toString().toLowerCase() : '';
+      if (searchTerm == 'protocol::empty') {
+        return proto === '';
+      } else {
+        return (
+          id.includes(searchTerm) ||
+          description.includes(searchTerm) ||
+          alias.includes(searchTerm) ||
+          source.includes(searchTerm) ||
+          target.includes(searchTerm) ||
+          proto.includes(searchTerm)
+        );
+      }
+    });
+  }
+
   private removeId: number = null;
 
   public flowInterfaces: IFlowInterface[] = [];
