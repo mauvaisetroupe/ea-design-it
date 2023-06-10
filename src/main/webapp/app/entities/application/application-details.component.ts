@@ -6,8 +6,13 @@ import AccountService from '@/account/account.service';
 import AlertService from '@/shared/alert/alert.service';
 import { IFlowInterface } from '@/shared/model/flow-interface.model';
 import { ICapability } from '@/shared/model/capability.model';
+import CapabilityComponent from '@/entities/capability/component/capability.vue';
 
-@Component
+@Component({
+  components: {
+    CapabilityComponent,
+  },
+})
 export default class ApplicationDetails extends Vue {
   @Inject('applicationService') private applicationService: () => ApplicationService;
   @Inject('alertService') private alertService: () => AlertService;
@@ -21,6 +26,8 @@ export default class ApplicationDetails extends Vue {
   public layout = 'smetana';
   public refreshingPlantuml = false;
   public groupComponents = true;
+
+  public lco: ICapability = {};
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -84,10 +91,15 @@ export default class ApplicationDetails extends Vue {
       .getCapabilities(applicationId)
       .then(res => {
         this.consolidatedCapabilities = res;
+        this.lco = this.consolidatedCapabilities[0];
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
       });
+  }
+
+  public routeToCapability(capId: string) {
+    this.$router.push({ name: 'CapabilityView', params: { capabilityId: capId } });
   }
 
   public changeLayout() {

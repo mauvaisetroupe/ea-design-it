@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-12">
       <div v-if="application">
         <h2 class="jh-entity-heading" data-cy="applicationDetailsHeading"><span>Application</span> - {{ application.name }}</h2>
         <dl class="row jh-entity-details">
@@ -208,74 +208,9 @@
         </tbody>
       </table>
     </div>
-    <div class="col-8" v-if="consolidatedCapabilities.length > 0">
+    <div class="col-12" v-if="consolidatedCapabilities.length > 0">
       <h2>Capabilities for {{ application.name }}</h2>
-      <div
-        v-for="capability in consolidatedCapabilities"
-        :key="capability.id"
-        class="common"
-        :class="capability.subCapabilities.length > 0 ? 'alpha' : 'beta'"
-      >
-        <div :title="capability.description">
-          <router-link
-            :to="{ name: 'CapabilityView', params: { capabilityId: capability.id } }"
-            :title="capability.description"
-            class="capatext"
-            >{{ capability.name }}</router-link
-          >
-        </div>
-        <div v-if="capability.subCapabilities" class="d-flex flex-wrap">
-          <div
-            v-for="child1 in capability.subCapabilities"
-            :key="child1.id"
-            class="common"
-            :class="child1.subCapabilities.length > 0 ? 'alpha' : 'beta'"
-          >
-            <div :title="child1.description">
-              <router-link
-                :to="{ name: 'CapabilityView', params: { capabilityId: child1.id } }"
-                :title="child1.description"
-                class="capatext"
-                >{{ child1.name }}</router-link
-              >
-            </div>
-            <div v-if="child1.subCapabilities" class="d-flex flex-wrap">
-              <div
-                v-for="child2 in child1.subCapabilities"
-                :key="child2.id"
-                class="common"
-                :class="child2.subCapabilities.length > 0 ? 'alpha' : 'beta'"
-              >
-                <div>
-                  <router-link
-                    :to="{ name: 'CapabilityView', params: { capabilityId: child2.id } }"
-                    :title="child2.description"
-                    class="capatext"
-                    >{{ child2.name }}</router-link
-                  >
-                </div>
-                <div v-if="child2.subCapabilities" class="d-flex flex-wrap">
-                  <div
-                    v-for="child3 in child2.subCapabilities"
-                    :key="child3.id"
-                    class="common"
-                    :class="child3.subCapabilities.length > 0 ? 'alpha' : 'beta'"
-                  >
-                    <div>
-                      <router-link
-                        :to="{ name: 'CapabilityView', params: { capabilityId: child3.id } }"
-                        :title="child3.description"
-                        class="capatext"
-                        >{{ child3.name }}</router-link
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <CapabilityComponent test="lco" :capability="lco" @retrieveCapability="routeToCapability"></CapabilityComponent>
     </div>
   </div>
 </template>

@@ -4,7 +4,13 @@ import { ICapability } from '@/shared/model/capability.model';
 import CapabilityService from './capability.service';
 import AlertService from '@/shared/alert/alert.service';
 
-@Component
+import CapabilityComponent from '@/entities/capability/component/capability.vue';
+
+@Component({
+  components: {
+    CapabilityComponent,
+  },
+})
 export default class CapabilityDetails extends Vue {
   @Inject('capabilityService') private capabilityService: () => CapabilityService;
   @Inject('alertService') private alertService: () => AlertService;
