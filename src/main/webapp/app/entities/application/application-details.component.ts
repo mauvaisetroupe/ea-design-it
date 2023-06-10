@@ -90,23 +90,6 @@ export default class ApplicationDetails extends Vue {
       });
   }
 
-  public exportPlantUML() {
-    this.applicationService()
-      .getPlantUMLSource(this.landscapeView.id)
-      .then(response => {
-        const url = URL.createObjectURL(
-          new Blob([response.data], {
-            type: 'text/plain',
-          })
-        );
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', this.landscapeView.diagramName + '-plantuml.txt');
-        document.body.appendChild(link);
-        link.click();
-      });
-  }
-
   public changeLayout() {
     if (this.layout == 'smetana') {
       this.layout = 'elk';
