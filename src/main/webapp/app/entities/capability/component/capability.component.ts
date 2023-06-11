@@ -16,5 +16,5 @@ const CapabilityProps = Vue.extend({
 
 @Component
 export default class CapabilityComponent extends CapabilityProps {
-  public showApplication: boolean = false;
+  public showApplication: boolean = true;
 }

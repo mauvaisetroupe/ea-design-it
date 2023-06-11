@@ -22,7 +22,7 @@
         </span>
       </li>
     </ol>
-    <div class="capa-top"><input type="checkbox" v-model="showApplication" /> Show applications</div>
+    <span style="margin-left: 5px"><input type="checkbox" v-model="showApplication" /> Show applications</span>
     <div :class="'capa-top c' + capability.level">
       <!-- 0 title -->
       <div :title="capability.description" v-if="capability.level > -2">{{ capability.name }}</div>
@@ -61,6 +61,9 @@
                   </div>
                   <!-- 3 appli -->
                   <div v-for="appli in child3.applications" class="appli" v-if="showApplication">{{ appli.name }}</div>
+
+                  <!-- 4 and more -->
+                  <div v-for="appli in child3.inheritedApplications" class="appli2" v-if="showApplication">{{ appli.name }}</div>
                 </div>
               </div>
             </div>
@@ -71,11 +74,13 @@
 
     <div class="row border p-2 m-2">
       <div class="p-1 m-2">Legend</div>
-      <div class="c-1 p-1 m-2" style="width: 80px">Domain</div>
-      <div class="c0 p-1 m-2" style="width: 80px">L0</div>
-      <div class="c1 p-1 m-2" style="width: 80px">L1</div>
-      <div class="c2 p-1 m-2" style="width: 80px">L2</div>
-      <div class="c3 p-1 m-2" style="width: 80px">L3</div>
+      <div class="c-1 p-1 m-2" style="width: 100px; font-size: 10px">Domain</div>
+      <div class="c0 p-1 m-2" style="width: 100px; font-size: 10px">Capability L0</div>
+      <div class="c1 p-1 m-2" style="width: 100px; font-size: 10px">Capability L1</div>
+      <div class="c2 p-1 m-2" style="width: 100px; font-size: 10px">Capability L2</div>
+      <div class="c3 p-1 m-2" style="width: 100px; font-size: 10px">Capability L3</div>
+      <div class="appli p-1 m-2" style="width: 120px">Application mapped on capability</div>
+      <div class="appli2 p-1 m-2" style="width: 120px">Application mapped on sub-capability</div>
     </div>
   </div>
 </template>
@@ -169,6 +174,18 @@ a {
 
 .appli {
   background-color: blueviolet;
+  color: white;
+  max-width: 200px;
+  margin: 5px;
+  font-size: 11px;
+  text-align: center;
+  border: #aaa;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.appli2 {
+  background-color: chocolate;
   color: white;
   max-width: 200px;
   margin: 5px;

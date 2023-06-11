@@ -11,6 +11,7 @@ export interface ICapability {
   parent?: ICapability | null;
   applications?: IApplication[] | null;
   landscapes?: ILandscapeView[] | null;
+  inheritedApplications?: IApplication[] | null; // calculated
 }
 
 export class Capability implements ICapability {
