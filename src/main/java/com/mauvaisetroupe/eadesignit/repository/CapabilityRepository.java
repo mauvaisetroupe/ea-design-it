@@ -24,11 +24,15 @@ public interface CapabilityRepository extends JpaRepository<Capability, Long> {
         " left join fetch s1.subCapabilities s2 " +
         " left join fetch s2.subCapabilities s3 " +
         " left join fetch s3.subCapabilities s4 " +
+        " left join fetch s4.subCapabilities s5 " +
+        " left join fetch s5.subCapabilities s6 " +
         " left join fetch c.applications " +
         " left join fetch s1.applications " +
         " left join fetch s2.applications " +
         " left join fetch s3.applications " +
         " left join fetch s4.applications " +
+        " left join fetch s5.applications " +
+        " left join fetch s6.applications " +
         " where c.id=:id"
     )
     // c = ROOT level =-2

@@ -218,7 +218,7 @@ public class ApplicationResource {
     @GetMapping("/applications/{id}/capabilities")
     public Collection<CapabilityDTO> getApplicationCapabilities(@PathVariable Long id) {
         log.debug("REST request to get Application : {}", id);
-        Optional<Application> application = applicationRepository.findById(id);
+        Optional<Application> application = applicationRepository.findOneWithEagerRelationships(id);
         CapabilityUtil capabilityUtil = new CapabilityUtil();
         Collection<CapabilityDTO> result = capabilityUtil.getRoot(application.get().getCapabilities());
         return result;

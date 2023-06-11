@@ -2,6 +2,7 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import { Capability } from '@/shared/model/capability.model';
 import { ICapability } from '@/shared/model/capability.model';
 import { PropType } from 'vue';
+import CapabilityComponentItem from '@/entities/capability/component/capability-item.vue';
 
 const CapabilityProps = Vue.extend({
   props: {
@@ -11,10 +12,29 @@ const CapabilityProps = Vue.extend({
     path: {
       type: Array as PropType<ICapability[]>,
     },
+    nbLevel: {
+      type: Number,
+      default: 1,
+    },
+    menu: {
+      type: Boolean,
+      default: true,
+    },
+    showApplications: {
+      type: Boolean,
+      default: true,
+    },
   },
 });
 
-@Component
+@Component({
+  components: {
+    CapabilityComponentItem,
+  },
+})
 export default class CapabilityComponent extends CapabilityProps {
-  public showApplication: boolean = true;
+  public retrieveCapability(capId: number) {
+    console.log(capId);
+    this.$emit('retrieveCapability', capId);
+  }
 }

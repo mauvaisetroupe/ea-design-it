@@ -20,7 +20,8 @@ export default class CapabilityDetails extends Vue {
 
   public capability: ICapability = {};
   public capabilitiesPlantUMLImage = '';
-  public maxLevel: number;
+  public maxLevel = 0;
+  public nbLevel = 0;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -63,6 +64,7 @@ export default class CapabilityDetails extends Vue {
     // inherited
     console.log(this.capability.name + ' ' + this.capability.level);
     this.addInheritedApplications(this.capability);
+    this.nbLevel = Math.max(3, this.capability.level + 3);
 
     // PATH for breadcrumb
     var tmp = this.capability;

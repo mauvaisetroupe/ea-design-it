@@ -210,7 +210,13 @@
     </div>
     <div class="col-12" v-if="consolidatedCapabilities.length > 0">
       <h2>Capabilities for {{ application.name }}</h2>
-      <CapabilityComponent test="lco" :capability="lco" @retrieveCapability="routeToCapability"></CapabilityComponent>
+      <CapabilityComponent
+        :capability="lco"
+        @retrieveCapability="routeToCapability"
+        :menu="true"
+        :nbLevel="4"
+        :showApplications="false"
+      ></CapabilityComponent>
     </div>
   </div>
 </template>

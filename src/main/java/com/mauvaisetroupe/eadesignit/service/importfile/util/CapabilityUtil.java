@@ -56,6 +56,7 @@ public class CapabilityUtil {
         Map<Long, CapabilityDTO> capabilityById = new HashMap<>();
 
         for (Capability applicationCapability : inputs) {
+            applicationCapability.getApplications();
             boolean found = false;
             Capability tmpCapability = applicationCapability;
             CapabilityDTO childDTO = null;
@@ -64,8 +65,10 @@ public class CapabilityUtil {
                 if (capabilityById.containsKey(tmpCapability.getId())) {
                     found = true;
                     dto = capabilityById.get(tmpCapability.getId());
+                    dto.setApplications(tmpCapability.getApplications());
                 } else {
                     dto = mapper.clone(tmpCapability);
+                    dto.setApplications(tmpCapability.getApplications());
                     capabilityById.put(dto.getId(), dto);
                 }
                 if (childDTO != null) {
