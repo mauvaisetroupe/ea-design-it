@@ -64,7 +64,7 @@ export default class CapabilityDetails extends Vue {
     // inherited
     console.log(this.capability.name + ' ' + this.capability.level);
     this.addInheritedApplications(this.capability);
-    this.nbLevel = Math.max(3, this.capability.level + 3);
+    this.nbLevel = Math.min(3, this.capability.level + 3);
 
     // PATH for breadcrumb
     var tmp = this.capability;
