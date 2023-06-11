@@ -4,6 +4,8 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import CapabilityImportService from './capability-import.service';
 import AlertService from '@/shared/alert/alert.service';
+import { ILandscapeView, LandscapeView } from '@/shared/model/landscape-view.model';
+import LandscapeViewService from '../landscape-view/landscape-view.service';
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -11,6 +13,31 @@ import AlertService from '@/shared/alert/alert.service';
 export default class CapabilityImport extends Vue {
   @Inject('capabilityImportService') private capabilityImportService: () => CapabilityImportService;
   @Inject('alertService') private alertService: () => AlertService;
+  @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
+
+  public existingLandscapes: ILandscapeView[] = null;
+  public potentialLandscape: String[] = [];
+  public selectedLandscape: String[] = [];
+
+  public mounted(): void {
+    this.retrieveAllLandscapeViews();
+  }
+
+  public retrieveAllLandscapeViews(): void {
+    this.isFetching = true;
+    this.landscapeViewService()
+      .retrieve()
+      .then(
+        res => {
+          this.existingLandscapes = res.data;
+          this.isFetching = false;
+        },
+        err => {
+          this.isFetching = false;
+          this.alertService().showHttpError(this, err.response);
+        }
+      );
+  }
 
   public capabilitiesImports = [];
   public excelFile: File = null;

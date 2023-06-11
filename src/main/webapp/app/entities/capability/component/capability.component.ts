@@ -5,12 +5,16 @@ import { PropType } from 'vue';
 
 const CapabilityProps = Vue.extend({
   props: {
-    capability: Capability,
+    capability: {
+      type: Object as PropType<ICapability>,
+    },
     path: {
-      type: Object as PropType<Capability[]>,
+      type: Array as PropType<ICapability[]>,
     },
   },
 });
 
 @Component
-export default class CapabilityComponent extends CapabilityProps {}
+export default class CapabilityComponent extends CapabilityProps {
+  public showApplication: boolean = false;
+}
