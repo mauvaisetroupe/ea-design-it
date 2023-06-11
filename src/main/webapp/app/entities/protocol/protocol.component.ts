@@ -12,7 +12,7 @@ import AccountService from '@/account/account.service';
 export default class Protocol extends Vue {
   @Inject('protocolService') private protocolService: () => ProtocolService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
   private removeId: number = null;
 
   public protocols: IProtocol[] = [];

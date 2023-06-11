@@ -12,28 +12,26 @@ import { SoftwareType } from '@/shared/model/enumerations/software-type.model';
 @Component({
   mixins: [Vue2Filters.mixin],
 })
-@Component({
-  computed: {
-    filteredApplications() {
-      return this.applications.filter(app => {
-        var appType: boolean = true;
-        if (this.applicationTypeSelected) {
-          appType = app.applicationType && app.applicationType.valueOf() == this.applicationTypeSelected;
-        }
-        var softwareType: boolean = true;
-        if (this.softwareTypeSelected) {
-          softwareType = app.softwareType && app.softwareType.valueOf() == this.softwareTypeSelected;
-        }
-        return appType && softwareType;
-      });
-    },
-  },
-})
 export default class Application extends Vue {
   @Inject('applicationService') private applicationService: () => ApplicationService;
   @Inject('applicationImportService') private applicationImportService: () => ApplicationImportService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
+
+  get filteredApplications() {
+    return this.applications.filter(app => {
+      var appType: boolean = true;
+      if (this.applicationTypeSelected) {
+        appType = app.applicationType && app.applicationType.valueOf() == this.applicationTypeSelected;
+      }
+      var softwareType: boolean = true;
+      if (this.softwareTypeSelected) {
+        softwareType = app.softwareType && app.softwareType.valueOf() == this.softwareTypeSelected;
+      }
+      return appType && softwareType;
+    });
+  }
+
   private removeId: number = null;
 
   public applications: IApplication[] = [];

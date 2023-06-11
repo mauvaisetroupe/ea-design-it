@@ -18,7 +18,7 @@ export default class FunctionalFlowDetails extends Vue {
   @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
 
   @Inject('applicationService') private applicationService: () => ApplicationService;
   public applications: IApplication[] = [];

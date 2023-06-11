@@ -9,7 +9,7 @@ import AccountService from '@/account/account.service';
 export default class DataFlowDetails extends Vue {
   @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
   public dataFlow: IDataFlow = {};
 
   beforeRouteEnter(to, from, next) {

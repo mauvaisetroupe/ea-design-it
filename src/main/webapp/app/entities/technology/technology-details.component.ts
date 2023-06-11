@@ -9,7 +9,7 @@ import AccountService from '@/account/account.service';
 export default class TechnologyDetails extends Vue {
   @Inject('technologyService') private technologyService: () => TechnologyService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
   public technology: ITechnology = {};
 
   beforeRouteEnter(to, from, next) {

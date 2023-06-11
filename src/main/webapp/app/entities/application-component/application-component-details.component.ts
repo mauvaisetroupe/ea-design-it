@@ -9,7 +9,7 @@ import AccountService from '@/account/account.service';
 export default class ApplicationComponentDetails extends Vue {
   @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
   public applicationComponent: IApplicationComponent = {};
 
   beforeRouteEnter(to, from, next) {

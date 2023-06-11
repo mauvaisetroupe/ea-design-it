@@ -45,17 +45,17 @@ public class Capability implements Serializable, Comparable<Capability> {
     @Column(name = "jhi_level")
     private Integer level;
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @SortNatural
-    @JsonIgnoreProperties(value = { "applications", "landscapes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "landscapes" }, allowSetters = true)
     private SortedSet<Capability> subCapabilities = new TreeSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "subCapabilities", "applications", "landscapes" }, allowSetters = true)
     private Capability parent;
 
-    @ManyToMany(mappedBy = "capabilities", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "capabilities", fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = { "owner", "itOwner", "businessOwner", "categories", "technologies", "capabilities", "externalIDS", "applicationsLists" },

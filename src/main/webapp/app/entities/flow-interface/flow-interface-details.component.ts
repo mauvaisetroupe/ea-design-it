@@ -11,7 +11,7 @@ import { IDataFlow } from '@/shared/model/data-flow.model';
 export default class FlowInterfaceDetails extends Vue {
   @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
   @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
 
   public flowInterface: IFlowInterface = {};

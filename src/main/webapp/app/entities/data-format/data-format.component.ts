@@ -12,7 +12,7 @@ import AccountService from '@/account/account.service';
 export default class DataFormat extends Vue {
   @Inject('dataFormatService') private dataFormatService: () => DataFormatService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
   private removeId: number = null;
 
   public dataFormats: IDataFormat[] = [];

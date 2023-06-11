@@ -9,7 +9,7 @@ export default class Home extends Vue {
   @Inject('loginService')
   private loginService: () => LoginService;
 
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
 
   @Inject('exportService') private exportService: () => ExportService;
 

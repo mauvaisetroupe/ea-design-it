@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-12">
       <div v-if="applicationComponent">
         <h2 class="jh-entity-heading" data-cy="applicationComponentDetailsHeading">
           <span>ApplicationComponent</span> {{ applicationComponent.id }}

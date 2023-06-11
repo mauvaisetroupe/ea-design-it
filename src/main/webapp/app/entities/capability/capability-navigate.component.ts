@@ -4,7 +4,13 @@ import { ICapability } from '@/shared/model/capability.model';
 import CapabilityService from './capability.service';
 import AlertService from '@/shared/alert/alert.service';
 
-@Component
+import CapabilityComponent from '@/entities/capability/component/capability.vue';
+
+@Component({
+  components: {
+    CapabilityComponent,
+  },
+})
 export default class CapabilityDetails extends Vue {
   @Inject('capabilityService') private capabilityService: () => CapabilityService;
   @Inject('alertService') private alertService: () => AlertService;
@@ -22,6 +28,7 @@ export default class CapabilityDetails extends Vue {
   }
 
   public retrieveCapability(capabilityId) {
+    console.log('Finding capabilty : ' + capabilityId);
     if (!capabilityId) {
       this.capabilityService()
         .findRoot()
@@ -29,7 +36,8 @@ export default class CapabilityDetails extends Vue {
           this.init(res);
         })
         .catch(error => {
-          this.alertService().showHttpError(this, error.response);
+          console.log('Something wrong when finding root');
+          console.log(error);
         });
     } else {
       this.capabilityService()
@@ -38,7 +46,8 @@ export default class CapabilityDetails extends Vue {
           this.init(res);
         })
         .catch(error => {
-          this.alertService().showHttpError(this, error.response);
+          console.log('Something wrong when capability ' + capabilityId);
+          console.log(error);
         });
     }
   }
@@ -64,16 +73,17 @@ export default class CapabilityDetails extends Vue {
   }
 
   public calulateMax(capability: ICapability, arg1: number): number {
-    console.log('IN : ' + arg1);
-
+    // console.log('IN : ' + arg1);
     var max = 0;
-    for (const cap of capability.subCapabilities) {
-      var tmp = this.calulateMax(cap, arg1 + 1);
-      if (tmp > max) {
-        max = tmp;
+    if (capability && capability.subCapabilities) {
+      for (const cap of capability.subCapabilities) {
+        var tmp = this.calulateMax(cap, arg1 + 1);
+        if (tmp > max) {
+          max = tmp;
+        }
       }
     }
-    console.log('OUT : ' + max);
+    // console.log('OUT : ' + max);
     return max + 1;
   }
 }

@@ -21,7 +21,7 @@ import FlowImportService from '@/entities/flow-import/flow-import.service';
 export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') private accountService: () => AccountService;
+  @Inject('accountService') public accountService: () => AccountService;
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
   @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
   @Inject('flowImportService') private flowImportService: () => FlowImportService;

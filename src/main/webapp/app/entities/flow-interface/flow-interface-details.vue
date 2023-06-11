@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-12">
       <div v-if="flowInterface">
         <h2 class="jh-entity-heading" data-cy="flowInterfaceDetailsHeading">
           <font-awesome-icon icon="grip-lines" style="color: Tomato; font-size: 0.9em"></font-awesome-icon> <span>Interface</span> -
