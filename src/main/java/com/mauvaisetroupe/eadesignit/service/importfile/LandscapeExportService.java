@@ -112,7 +112,10 @@ public class LandscapeExportService {
                     row.createCell(column++).setCellValue(interface1.getTarget().getName());
                 }
                 row.createCell(column++).setCellValue(flow.getDescription());
-                row.createCell(column++).setCellValue(step.getStepOrder());
+                if (step.getStepOrder() != null) {
+                    row.createCell(column).setCellValue(step.getStepOrder());
+                }
+                column++;
                 row.createCell(column++).setCellValue(step.getDescription());
 
                 if (step.getGroup() != null) {
