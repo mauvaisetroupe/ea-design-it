@@ -37,9 +37,8 @@ export default class Home extends Vue {
         const link = document.createElement('a');
         link.href = url;
         var today = new Date().toISOString().split('T')[0];
-        console.log(today);
-
-        link.setAttribute('download', 'full-data-export-' + today + '.xlsx');
+        var time = new Date().toLocaleTimeString().replace(' ', '_');
+        link.setAttribute('download', 'full-data-export-' + today + '-' + time + '.xlsx');
         document.body.appendChild(link);
         link.click();
       });
