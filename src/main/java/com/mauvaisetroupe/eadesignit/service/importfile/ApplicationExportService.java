@@ -46,8 +46,9 @@ public class ApplicationExportService {
         Sheet appliSheet = workbook.createSheet("Application");
         Sheet componentSheet = workbook.createSheet("Component");
         Sheet ownerSheet = workbook.createSheet("Owner");
+        Sheet externalSystemSheet = workbook.createSheet("externalSystem");
 
-        writeSheets(appliSheet, componentSheet, ownerSheet, workbook);
+        writeSheets(appliSheet, componentSheet, ownerSheet, externalSystemSheet, workbook);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         workbook.write(stream);
@@ -55,7 +56,7 @@ public class ApplicationExportService {
         return stream;
     }
 
-    protected void writeSheets(Sheet appliSheet, Sheet componentSheet, Sheet ownerSheet, Workbook workbook) {
+    protected void writeSheets(Sheet appliSheet, Sheet componentSheet, Sheet ownerSheet, Sheet externalSystemSheet, Workbook workbook) {
         writeApplication(appliSheet);
         ExcelUtils.autoSizeAllColumns(appliSheet);
         ExcelUtils.addHeaderColorAndFilte(workbook, appliSheet);
@@ -65,6 +66,8 @@ public class ApplicationExportService {
         writeOwner(ownerSheet);
         ExcelUtils.autoSizeAllColumns(ownerSheet);
         ExcelUtils.addHeaderColorAndFilte(workbook, ownerSheet);
+        writeExternalSytem(externalSystemSheet);
+        ExcelUtils.autoSizeAllColumns(externalSystemSheet);
     }
 
     protected void writeApplication(Sheet sheet) {
@@ -137,7 +140,7 @@ public class ApplicationExportService {
             }
             column++;
 
-            writeExternalSytem(column, externalOrder, application.getExternalIDS(), row);
+            writeExternalSytemRow(column, externalOrder, application.getExternalIDS(), row);
             column = column + externalOrder.entrySet().size();
         }
     }
@@ -198,7 +201,7 @@ public class ApplicationExportService {
 
             row.createCell(column++).setCellValue(application.getDocumentationURL());
 
-            writeExternalSytem(column, externalOrder, application.getExternalIDS(), row);
+            writeExternalSytemRow(column, externalOrder, application.getExternalIDS(), row);
             column = column + externalOrder.entrySet().size();
         }
     }
@@ -224,7 +227,21 @@ public class ApplicationExportService {
         }
     }
 
-    private void writeExternalSytem(int column, Map<String, Integer> externalOrder, Set<ExternalReference> set, Row row) {
+    private void writeExternalSytem(Sheet sheet) {
+        int column = 0;
+        int rownb = 0;
+        Row headerRow = sheet.createRow(rownb++);
+        headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.EXTERNAL_SYSTEM_ID);
+
+        List<ExternalSystem> externalSystems = externalSystemRepository.findAll();
+        for (ExternalSystem externalSystem : externalSystems) {
+            column = 0;
+            Row row = sheet.createRow(rownb++);
+            row.createCell(column++).setCellValue(externalSystem.getExternalSystemID());
+        }
+    }
+
+    private void writeExternalSytemRow(int column, Map<String, Integer> externalOrder, Set<ExternalReference> set, Row row) {
         for (ExternalReference externalReference : set) {
             row
                 .createCell(column + externalOrder.get(externalReference.getExternalSystem().getExternalSystemID()))
