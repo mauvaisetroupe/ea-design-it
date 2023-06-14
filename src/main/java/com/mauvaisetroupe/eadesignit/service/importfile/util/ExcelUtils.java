@@ -31,7 +31,6 @@ public class ExcelUtils {
         int nbColumns = sheet.getRow(0).getPhysicalNumberOfCells();
         sheet.setAutoFilter(new CellRangeAddress(0, 0, 0, nbColumns - 1));
         for (int i = 0; i < nbColumns; i++) {
-            System.out.println(i + " - " + sheet.getRow(0).getCell(i).getStringCellValue());
             sheet.getRow(0).getCell(i).setCellStyle(style);
         }
     }
