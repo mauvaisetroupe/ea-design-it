@@ -213,9 +213,9 @@
       <CapabilityComponent
         :capability="lco"
         @retrieveCapability="routeToCapability"
-        :menu="true"
+        :menu="false"
         :nbLevel="4"
-        :showApplications="false"
+        :defaultShowApplications="false"
       ></CapabilityComponent>
     </div>
   </div>

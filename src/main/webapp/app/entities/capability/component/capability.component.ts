@@ -20,7 +20,7 @@ const CapabilityProps = Vue.extend({
       type: Boolean,
       default: true,
     },
-    showApplications: {
+    defaultShowApplications: {
       type: Boolean,
       default: true,
     },
@@ -33,6 +33,8 @@ const CapabilityProps = Vue.extend({
   },
 })
 export default class CapabilityComponent extends CapabilityProps {
+  public showApplications: Boolean = this.defaultShowApplications;
+
   public retrieveCapability(capId: number) {
     console.log(capId);
     this.$emit('retrieveCapability', capId);

@@ -7,7 +7,7 @@
       @retrieveCapability="retrieveCapability"
       :path="path"
       :nbLevel="nbLevel"
-      :showApplications="false"
+      :defaultShowApplications="true"
     />
   </div>
 </template>
