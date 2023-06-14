@@ -29,8 +29,9 @@ public class ExcelUtils {
     public static void addHeaderColorAndFilte(Workbook workbook, Sheet sheet) {
         CellStyle style = createStyle(sheet, "aab3f2");
         int nbColumns = sheet.getRow(0).getPhysicalNumberOfCells();
-        sheet.setAutoFilter(new CellRangeAddress(0, 0, 0, nbColumns));
+        sheet.setAutoFilter(new CellRangeAddress(0, 0, 0, nbColumns - 1));
         for (int i = 0; i < nbColumns; i++) {
+            System.out.println(i + " - " + sheet.getRow(0).getCell(i).getStringCellValue());
             sheet.getRow(0).getCell(i).setCellStyle(style);
         }
     }
