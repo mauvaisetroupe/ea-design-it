@@ -2,9 +2,9 @@
   <div>
     <h2 id="page-heading" data-cy="capabilityImportHeading">
       <span id="capability-import-heading">Application/Capabilities Imports</span>
-      <div class="d-flex justify-content-end">
-        <button class="btn btn-info mr-2" v-if="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refreshing</span>
+      <div class="d-flex justify-content-end" v-if="rowsLoaded || isFetching">
+        <button class="btn btn-info mr-2" v-on:click="filterErrors" :disabled="isFetching">
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Filter Errors</span>
         </button>
       </div>
     </h2>

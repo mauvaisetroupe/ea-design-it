@@ -64,7 +64,7 @@ public class CapabilityImportService {
             capabilityImportDTO = capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import);
             capabilityImportDTO.setDomain((String) map.get(SUR_DOMAIN));
 
-            boolean lineIsValid = checLineIsValid(l0Import, l1Import, l2Import, l3Import, capabilityImportDTO.getDomain());
+            boolean lineIsValid = checkLineIsValid(capabilityImportDTO);
 
             if (lineIsValid) {
                 try {
@@ -109,29 +109,25 @@ public class CapabilityImportService {
                 }
             } else {
                 capabilityImportDTO.setStatus(ImportStatus.ERROR);
-                capabilityImportDTO.setError("Line is not valid");
             }
             result.add(capabilityImportDTO);
         }
         return result;
     }
 
-    private boolean checLineIsValid(
-        CapabilityDTO l0Import,
-        CapabilityDTO l1Import,
-        CapabilityDTO l2Import,
-        CapabilityDTO l3Import,
-        String surDomain
-    ) {
+    private boolean checkLineIsValid(CapabilityImportDTO capabilityImportDTO) {
         // If a level exist, inferior level should exist
-        if (l0Import == null) {
+        if (capabilityImportDTO.getL0() == null) {
+            capabilityImportDTO.setError("L0 should not be null");
             return false;
-        } else if (l3Import != null) {
-            if (l2Import == null || l1Import == null) {
+        } else if (capabilityImportDTO.getL3() != null) {
+            if (capabilityImportDTO.getL2() == null || capabilityImportDTO.getL1() == null) {
+                capabilityImportDTO.setError("L3 is not null, both L0, L1 & L2 should not be null");
                 return false;
             }
-        } else if (l2Import != null) {
-            if (l1Import == null) {
+        } else if (capabilityImportDTO.getL2() != null) {
+            if (capabilityImportDTO.getL1() == null) {
+                capabilityImportDTO.setError("L2 is not null, both L0 and L1 should not be null");
                 return false;
             }
         }

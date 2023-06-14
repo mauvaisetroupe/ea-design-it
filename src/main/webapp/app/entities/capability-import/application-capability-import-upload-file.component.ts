@@ -6,6 +6,7 @@ import CapabilityImportService from './capability-import.service';
 import AlertService from '@/shared/alert/alert.service';
 import { ILandscapeView, LandscapeView } from '@/shared/model/landscape-view.model';
 import LandscapeViewService from '../landscape-view/landscape-view.service';
+import { IApplicationCapabilityImport, IApplicationCapabilityImportItem } from '@/shared/model/application-capability-import.model';
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -39,7 +40,9 @@ export default class CapabilityImport extends Vue {
       );
   }
 
-  public capabilitiesImports = [];
+  public capabilitiesImports: IApplicationCapabilityImport[] = [];
+  public filteredCapabilitiesImports: IApplicationCapabilityImport[] = [];
+
   public excelFile: File = null;
   public isFetching = false;
   public fileSubmited = false;
@@ -61,6 +64,7 @@ export default class CapabilityImport extends Vue {
       .then(
         res => {
           this.capabilitiesImports = res.data;
+          this.filteredCapabilitiesImports = this.capabilitiesImports;
           this.isFetching = false;
           this.rowsLoaded = true;
         },
@@ -99,5 +103,9 @@ export default class CapabilityImport extends Vue {
 
   public selectNone() {
     this.checkedNames = [];
+  }
+
+  public filterErrors() {
+    this.filteredCapabilitiesImports.forEach(c => (c.dtos = c.dtos.filter(d => d.importStatus === 'ERROR')));
   }
 }
