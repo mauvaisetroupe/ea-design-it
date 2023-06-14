@@ -21,29 +21,30 @@
         <button type="submit" class="btn btn-primary mb-2" v-on:click="getSheetnames()">Submit File</button>
       </div>
 
-      <div v-if="sheetnames.length > 0">
-        <div class="col-md-12 mb-3">
+      <div v-if="sheetnames.length > 0" class="col-md-12">
+        <div>
           <span class="h3">Choose sheets to import</span>
           [<a @click="selectAll">Select All</a>] [<a @click="selectNone">Select None</a>]
         </div>
-
-        <div class="container col-12">
-          <div v-for="sheet in sheetnames" class="row">
-            <div class="col-3">
+        <div class="row">
+          <template v-for="sheet in sheetnames">
+            <div class="col-2">
               <input type="checkbox" v-model="checkedNames" :value="sheet" :id="sheet" />
-              <label :for="sheet">{{ sheet }}</label>
+              <label :for="sheet" class="">{{ sheet }}</label>
             </div>
-            <div class="col-4">
-              <select>
-                <option value=""></option>
-                <option v-for="landscape in existingLandscapes" :value="landscape.diagramName" :key="landscape.id">
-                  {{ landscape.diagramName }}
-                </option>
-              </select>
+            <div class="col-2">
+              <!--
+                <select>
+                  <option value=""></option>
+                  <option v-for="landscape in existingLandscapes" :value="landscape.diagramName" :key="landscape.id">
+                    {{ landscape.diagramName }}
+                  </option>
+                </select>
+              -->
             </div>
-          </div>
+            <div class="col-2"></div>
+          </template>
         </div>
-
         <div class="form-group col-md-12" v-if="excelFile">
           <button type="submit" class="btn btn-primary mb-2" v-on:click="submitFile()">Submit File</button>
         </div>
