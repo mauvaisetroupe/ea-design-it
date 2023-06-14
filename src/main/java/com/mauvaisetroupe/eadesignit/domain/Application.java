@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -98,16 +99,6 @@ public class Application implements Serializable, Ownershipable {
 
     @ManyToMany
     @JoinTable(
-        name = "rel_application__capabilities",
-        joinColumns = @JoinColumn(name = "application_id"),
-        inverseJoinColumns = @JoinColumn(name = "capabilities_id")
-    )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "parent", "applications", "landscapes" }, allowSetters = true)
-    private Set<Capability> capabilities = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
         name = "rel_application__externalids",
         joinColumns = @JoinColumn(name = "application_id"),
         inverseJoinColumns = @JoinColumn(name = "externalids_id")
@@ -120,6 +111,11 @@ public class Application implements Serializable, Ownershipable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "application", "categories", "technologies", "externalIDS" }, allowSetters = true)
     private Set<ApplicationComponent> applicationsLists = new HashSet<>();
+
+    @OneToMany(mappedBy = "application")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "capability", "application", "landscapes" }, allowSetters = true)
+    private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -356,28 +352,7 @@ public class Application implements Serializable, Ownershipable {
     }
 
     public Set<Capability> getCapabilities() {
-        return this.capabilities;
-    }
-
-    public void setCapabilities(Set<Capability> capabilities) {
-        this.capabilities = capabilities;
-    }
-
-    public Application capabilities(Set<Capability> capabilities) {
-        this.setCapabilities(capabilities);
-        return this;
-    }
-
-    public Application addCapabilities(Capability capability) {
-        this.capabilities.add(capability);
-        capability.getApplications().add(this);
-        return this;
-    }
-
-    public Application removeCapabilities(Capability capability) {
-        this.capabilities.remove(capability);
-        capability.getApplications().remove(this);
-        return this;
+        return this.getCapabilityApplicationMappings().stream().map(c -> c.getCapability()).collect(Collectors.toSet());
     }
 
     public Set<ExternalReference> getExternalIDS() {
@@ -433,6 +408,37 @@ public class Application implements Serializable, Ownershipable {
     public Application removeApplicationsList(ApplicationComponent applicationComponent) {
         this.applicationsLists.remove(applicationComponent);
         applicationComponent.setApplication(null);
+        return this;
+    }
+
+    public Set<CapabilityApplicationMapping> getCapabilityApplicationMappings() {
+        return this.capabilityApplicationMappings;
+    }
+
+    public void setCapabilityApplicationMappings(Set<CapabilityApplicationMapping> capabilityApplicationMappings) {
+        if (this.capabilityApplicationMappings != null) {
+            this.capabilityApplicationMappings.forEach(i -> i.setApplication(null));
+        }
+        if (capabilityApplicationMappings != null) {
+            capabilityApplicationMappings.forEach(i -> i.setApplication(this));
+        }
+        this.capabilityApplicationMappings = capabilityApplicationMappings;
+    }
+
+    public Application capabilityApplicationMappings(Set<CapabilityApplicationMapping> capabilityApplicationMappings) {
+        this.setCapabilityApplicationMappings(capabilityApplicationMappings);
+        return this;
+    }
+
+    public Application addCapabilityApplicationMapping(CapabilityApplicationMapping capabilityApplicationMapping) {
+        this.capabilityApplicationMappings.add(capabilityApplicationMapping);
+        capabilityApplicationMapping.setApplication(this);
+        return this;
+    }
+
+    public Application removeCapabilityApplicationMapping(CapabilityApplicationMapping capabilityApplicationMapping) {
+        this.capabilityApplicationMappings.remove(capabilityApplicationMapping);
+        capabilityApplicationMapping.setApplication(null);
         return this;
     }
 

@@ -40,7 +40,7 @@ public class CapabilityImportService {
 
     public List<CapabilityImportDTO> importExcel(InputStream excel, String originalFilename)
         throws EncryptedDocumentException, IOException {
-        capabilityRepository.deleteByApplicationsIsEmpty();
+        capabilityRepository.deleteByCapabilityApplicationMappingsIsEmpty();
 
         ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
 

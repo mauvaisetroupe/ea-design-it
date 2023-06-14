@@ -100,6 +100,13 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.ExternalSystem.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.ApplicationComponent.class.getName() + ".externalIDS");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.ExternalReference.class.getName() + ".components");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.LandscapeView.class.getName() + ".capabilityApplicationMappings");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Application.class.getName() + ".applicationMappings");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Capability.class.getName() + ".applicationMappings");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping.class.getName() + ".landscapes");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Application.class.getName() + ".capabilityApplicationMappings");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Capability.class.getName() + ".capabilityApplicationMappings");
             // jhipster-needle-ehcache-add-entry
 
             createCache(cm, PlantUMLBuilder.PLANTUML_SVG_CACHE);

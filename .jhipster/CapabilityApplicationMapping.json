@@ -1,0 +1,36 @@
+{
+  "applications": "*",
+  "changelogDate": "20230614182406",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "capability_application_mapping",
+  "fields": [],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "CapabilityApplicationMapping",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "capability",
+      "otherEntityRelationshipName": "capabilityApplicationMapping",
+      "relationshipName": "capability",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "application",
+      "otherEntityRelationshipName": "capabilityApplicationMapping",
+      "relationshipName": "application",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "diagramName",
+      "otherEntityName": "landscapeView",
+      "otherEntityRelationshipName": "capabilityApplicationMapping",
+      "ownerSide": true,
+      "relationshipName": "landscape",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "no"
+}

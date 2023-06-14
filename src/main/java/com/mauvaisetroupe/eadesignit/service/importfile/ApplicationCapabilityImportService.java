@@ -2,8 +2,10 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
+import com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.repository.CapabilityApplicationMappingRepository;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityItemDTO;
@@ -31,6 +33,9 @@ public class ApplicationCapabilityImportService {
 
     @Autowired
     private ApplicationRepository applicationRepository;
+
+    @Autowired
+    private CapabilityApplicationMappingRepository capabilityApplicationMappingRepository;
 
     private static final String APP_NAME_1 = "ApplicationName";
     private static final String APP_NAME_2 = "ApplicationName2";
@@ -74,7 +79,15 @@ public class ApplicationCapabilityImportService {
                     log.error(error);
                 } else {
                     for (Application application : applications) {
-                        application.addCapabilities(capability.get());
+                        CapabilityApplicationMapping capabilityApplicationMapping = capabilityApplicationMappingRepository.findByApplicationAndCapability(
+                            application,
+                            capability.get()
+                        );
+                        if (capabilityApplicationMapping == null) {
+                            capabilityApplicationMapping = new CapabilityApplicationMapping();
+                            capabilityApplicationMappingRepository.save(capabilityApplicationMapping);
+                        }
+                        application.addCapabilityApplicationMapping(capabilityApplicationMapping);
                     }
                     if (itemDTO.getImportStatus() == null) {
                         itemDTO.setImportStatus(ImportStatus.NEW);

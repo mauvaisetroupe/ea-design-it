@@ -11,8 +11,8 @@ import { IOwner } from '@/shared/model/owner.model';
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
-import CapabilityService from '@/entities/capability/capability.service';
-import { ICapability } from '@/shared/model/capability.model';
+import CapabilityApplicationMappingService from '@/entities/capability-application-mapping/capability-application-mapping.service';
+import { ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
 
 import { ILandscapeView, LandscapeView } from '@/shared/model/landscape-view.model';
 import LandscapeViewService from './landscape-view.service';
@@ -44,9 +44,9 @@ export default class LandscapeViewUpdate extends mixins(JhiDataUtils) {
 
   public functionalFlows: IFunctionalFlow[] = [];
 
-  @Inject('capabilityService') private capabilityService: () => CapabilityService;
+  @Inject('capabilityApplicationMappingService') private capabilityApplicationMappingService: () => CapabilityApplicationMappingService;
 
-  public capabilities: ICapability[] = [];
+  public capabilityApplicationMappings: ICapabilityApplicationMapping[] = [];
   public viewPointValues: string[] = Object.keys(ViewPoint);
   public isSaving = false;
   public currentLanguage = '';
@@ -69,7 +69,6 @@ export default class LandscapeViewUpdate extends mixins(JhiDataUtils) {
       }
     );
     this.landscapeView.flows = [];
-    this.landscapeView.capabilities = [];
   }
 
   public save(): void {
@@ -141,10 +140,10 @@ export default class LandscapeViewUpdate extends mixins(JhiDataUtils) {
       .then(res => {
         this.functionalFlows = res.data;
       });
-    this.capabilityService()
+    this.capabilityApplicationMappingService()
       .retrieve()
       .then(res => {
-        this.capabilities = res.data;
+        this.capabilityApplicationMappings = res.data;
       });
   }
 

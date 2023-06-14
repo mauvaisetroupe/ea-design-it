@@ -4,11 +4,8 @@ import { required, maxLength } from 'vuelidate/lib/validators';
 
 import AlertService from '@/shared/alert/alert.service';
 
-import ApplicationService from '@/entities/application/application.service';
-import { IApplication } from '@/shared/model/application.model';
-
-import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
+import CapabilityApplicationMappingService from '@/entities/capability-application-mapping/capability-application-mapping.service';
+import { ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
 
 import { ICapability, Capability } from '@/shared/model/capability.model';
 import CapabilityService from './capability.service';
@@ -39,13 +36,9 @@ export default class CapabilityUpdate extends Vue {
 
   public capabilities: ICapability[] = [];
 
-  @Inject('applicationService') private applicationService: () => ApplicationService;
+  @Inject('capabilityApplicationMappingService') private capabilityApplicationMappingService: () => CapabilityApplicationMappingService;
 
-  public applications: IApplication[] = [];
-
-  @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
-
-  public landscapeViews: ILandscapeView[] = [];
+  public capabilityApplicationMappings: ICapabilityApplicationMapping[] = [];
   public isSaving = false;
   public currentLanguage = '';
 
@@ -132,15 +125,10 @@ export default class CapabilityUpdate extends Vue {
       .then(res => {
         this.capabilities = res.data;
       });
-    this.applicationService()
+    this.capabilityApplicationMappingService()
       .retrieve()
       .then(res => {
-        this.applications = res.data;
-      });
-    this.landscapeViewService()
-      .retrieve()
-      .then(res => {
-        this.landscapeViews = res.data;
+        this.capabilityApplicationMappings = res.data;
       });
   }
 }

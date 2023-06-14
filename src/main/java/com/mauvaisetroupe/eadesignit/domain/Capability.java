@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.apache.commons.lang3.ObjectUtils;
@@ -48,25 +49,17 @@ public class Capability implements Serializable, Comparable<Capability> {
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @SortNatural
-    @JsonIgnoreProperties(value = { "landscapes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "landscapes", "capabilityApplicationMappings" }, allowSetters = true)
     private SortedSet<Capability> subCapabilities = new TreeSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "subCapabilities", "applications", "landscapes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "subCapabilities", "applications", "landscapes", "capabilityApplicationMappings" }, allowSetters = true)
     private Capability parent;
 
-    @ManyToMany(mappedBy = "capabilities", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "capability", fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = { "owner", "itOwner", "businessOwner", "categories", "technologies", "capabilities", "externalIDS", "applicationsLists" },
-        allowSetters = true
-    )
-    private Set<Application> applications = new HashSet<>();
-
-    @ManyToMany(mappedBy = "capabilities")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "owner", "flows", "capabilities" }, allowSetters = true)
-    private Set<LandscapeView> landscapes = new HashSet<>();
+    @JsonIgnoreProperties(value = { "capability", "application", "landscapes" }, allowSetters = true)
+    private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -189,65 +182,38 @@ public class Capability implements Serializable, Comparable<Capability> {
         return this;
     }
 
+    public Set<CapabilityApplicationMapping> getCapabilityApplicationMappings() {
+        return this.capabilityApplicationMappings;
+    }
+
     public Set<Application> getApplications() {
-        return this.applications;
+        return this.getCapabilityApplicationMappings().stream().map(c -> c.getApplication()).collect(Collectors.toSet());
     }
 
-    public void setApplications(Set<Application> applications) {
-        if (this.applications != null) {
-            this.applications.forEach(i -> i.removeCapabilities(this));
+    public void setCapabilityApplicationMappings(Set<CapabilityApplicationMapping> capabilityApplicationMappings) {
+        if (this.capabilityApplicationMappings != null) {
+            this.capabilityApplicationMappings.forEach(i -> i.setCapability(null));
         }
-        if (applications != null) {
-            applications.forEach(i -> i.addCapabilities(this));
+        if (capabilityApplicationMappings != null) {
+            capabilityApplicationMappings.forEach(i -> i.setCapability(this));
         }
-        this.applications = applications;
+        this.capabilityApplicationMappings = capabilityApplicationMappings;
     }
 
-    public Capability applications(Set<Application> applications) {
-        this.setApplications(applications);
+    public Capability capabilityApplicationMappings(Set<CapabilityApplicationMapping> capabilityApplicationMappings) {
+        this.setCapabilityApplicationMappings(capabilityApplicationMappings);
         return this;
     }
 
-    public Capability addApplications(Application application) {
-        this.applications.add(application);
-        application.getCapabilities().add(this);
+    public Capability addCapabilityApplicationMapping(CapabilityApplicationMapping capabilityApplicationMapping) {
+        this.capabilityApplicationMappings.add(capabilityApplicationMapping);
+        capabilityApplicationMapping.setCapability(this);
         return this;
     }
 
-    public Capability removeApplications(Application application) {
-        this.applications.remove(application);
-        application.getCapabilities().remove(this);
-        return this;
-    }
-
-    public Set<LandscapeView> getLandscapes() {
-        return this.landscapes;
-    }
-
-    public void setLandscapes(Set<LandscapeView> landscapeViews) {
-        if (this.landscapes != null) {
-            this.landscapes.forEach(i -> i.removeCapabilities(this));
-        }
-        if (landscapeViews != null) {
-            landscapeViews.forEach(i -> i.addCapabilities(this));
-        }
-        this.landscapes = landscapeViews;
-    }
-
-    public Capability landscapes(Set<LandscapeView> landscapeViews) {
-        this.setLandscapes(landscapeViews);
-        return this;
-    }
-
-    public Capability addLandscapes(LandscapeView landscapeView) {
-        this.landscapes.add(landscapeView);
-        landscapeView.getCapabilities().add(this);
-        return this;
-    }
-
-    public Capability removeLandscapes(LandscapeView landscapeView) {
-        this.landscapes.remove(landscapeView);
-        landscapeView.getCapabilities().remove(this);
+    public Capability removeCapabilityApplicationMapping(CapabilityApplicationMapping capabilityApplicationMapping) {
+        this.capabilityApplicationMappings.remove(capabilityApplicationMapping);
+        capabilityApplicationMapping.setCapability(null);
         return this;
     }
 

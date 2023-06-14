@@ -41,7 +41,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
         "select application from Application application " +
         " left join fetch application.categories" +
         " left join fetch application.technologies" +
-        " left join fetch application.capabilities" +
+        " left join fetch application.capabilityApplicationMappings" +
         " left join fetch application.owner" +
         " left join fetch application.itOwner" +
         " left join fetch application.businessOwner" +

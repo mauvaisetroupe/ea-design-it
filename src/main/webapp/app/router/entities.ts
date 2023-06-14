@@ -79,6 +79,12 @@ const ExternalSystem = () => import('@/entities/external-system/external-system.
 const ExternalSystemUpdate = () => import('@/entities/external-system/external-system-update.vue');
 // prettier-ignore
 const ExternalSystemDetails = () => import('@/entities/external-system/external-system-details.vue');
+// prettier-ignore
+const CapabilityApplicationMapping = () => import('@/entities/capability-application-mapping/capability-application-mapping.vue');
+// prettier-ignore
+const CapabilityApplicationMappingUpdate = () => import('@/entities/capability-application-mapping/capability-application-mapping-update.vue');
+// prettier-ignore
+const CapabilityApplicationMappingDetails = () => import('@/entities/capability-application-mapping/capability-application-mapping-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default {
@@ -503,6 +509,30 @@ export default {
       path: 'external-system/:externalSystemId/view',
       name: 'ExternalSystemView',
       component: ExternalSystemDetails,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'capability-application-mapping',
+      name: 'CapabilityApplicationMapping',
+      component: CapabilityApplicationMapping,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'capability-application-mapping/new',
+      name: 'CapabilityApplicationMappingCreate',
+      component: CapabilityApplicationMappingUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'capability-application-mapping/:capabilityApplicationMappingId/edit',
+      name: 'CapabilityApplicationMappingEdit',
+      component: CapabilityApplicationMappingUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'capability-application-mapping/:capabilityApplicationMappingId/view',
+      name: 'CapabilityApplicationMappingView',
+      component: CapabilityApplicationMappingDetails,
       meta: { authorities: [Authority.USER] },
     },
     // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

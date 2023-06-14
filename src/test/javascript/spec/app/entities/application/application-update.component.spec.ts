@@ -15,11 +15,11 @@ import ApplicationCategoryService from '@/entities/application-category/applicat
 
 import TechnologyService from '@/entities/technology/technology.service';
 
-import CapabilityService from '@/entities/capability/capability.service';
-
 import ExternalReferenceService from '@/entities/external-reference/external-reference.service';
 
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
+
+import CapabilityApplicationMappingService from '@/entities/capability-application-mapping/capability-application-mapping.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -67,11 +67,6 @@ describe('Component Tests', () => {
               retrieve: sinon.stub().resolves({}),
             } as any),
 
-          capabilityService: () =>
-            sinon.createStubInstance<CapabilityService>(CapabilityService, {
-              retrieve: sinon.stub().resolves({}),
-            } as any),
-
           externalReferenceService: () =>
             sinon.createStubInstance<ExternalReferenceService>(ExternalReferenceService, {
               retrieve: sinon.stub().resolves({}),
@@ -79,6 +74,11 @@ describe('Component Tests', () => {
 
           applicationComponentService: () =>
             sinon.createStubInstance<ApplicationComponentService>(ApplicationComponentService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
+
+          capabilityApplicationMappingService: () =>
+            sinon.createStubInstance<CapabilityApplicationMappingService>(CapabilityApplicationMappingService, {
               retrieve: sinon.stub().resolves({}),
             } as any),
         },

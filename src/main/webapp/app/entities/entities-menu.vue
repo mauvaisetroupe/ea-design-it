@@ -68,6 +68,10 @@
       <font-awesome-icon icon="asterisk" />
       <span>External System</span>
     </b-dropdown-item>
+    <b-dropdown-item to="/capability-application-mapping">
+      <font-awesome-icon icon="asterisk" />
+      <span>Capability Application Mapping</span>
+    </b-dropdown-item>
     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
   </div>
 </template>

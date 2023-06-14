@@ -1,0 +1,52 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="lionel (generated)" id="1686772222966-2">
+        <createTable tableName="capability_application_mapping">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="capability_application_mappingPK"/>
+            </column>
+            <column name="application_id" type="BIGINT"/>
+            <column name="capability_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1686772222966-3">
+        <createTable tableName="rel_capability_ap__landscap_b2">
+            <column name="capability_application_mapping_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="landscape_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1686772222966-5">
+        <addForeignKeyConstraint baseColumnNames="application_id" baseTableName="capability_application_mapping" constraintName="FK79vba0uuvb97dyx2424dqrnh2" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="application" validate="true"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1686772222966-6">
+        <addForeignKeyConstraint baseColumnNames="capability_id" baseTableName="capability_application_mapping" constraintName="FK8ld0hfwr1t9qj66r0by2v0ffm" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="capability" validate="true"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1686772222966-7">
+        <addForeignKeyConstraint baseColumnNames="landscape_id" baseTableName="rel_capability_ap__landscap_b2" constraintName="FKbn7qdeoqwrbm19qyx64v70m0m" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="landscape_view" validate="true"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1686772222966-8">
+        <addForeignKeyConstraint baseColumnNames="capability_application_mapping_id" baseTableName="rel_capability_ap__landscap_b2" constraintName="FKrxv7qmi6g56fjjv43j0b2m6jc" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="capability_application_mapping" validate="true"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1686772222966-9">
+        <dropForeignKeyConstraint baseTableName="REL_LANDSCAPE_VIE__CAPABILI_21" constraintName="FK7BAFW6EYQOIO0LLMR1R5PG7EW"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1686772222966-10">
+        <dropForeignKeyConstraint baseTableName="REL_APPLICATION__CAPABILITIES" constraintName="FKEC99PC78XPS7LDTXCQF7M0UM"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1686772222966-11">
+        <dropForeignKeyConstraint baseTableName="REL_LANDSCAPE_VIE__CAPABILI_21" constraintName="FKEDSFJRADPXKJ2BG2GC40QH27W"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1686772222966-12">
+        <dropForeignKeyConstraint baseTableName="REL_APPLICATION__CAPABILITIES" constraintName="FKR2PWC4JSCAMW0MIS3KRU3ST4J"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1686772222966-13">
+        <dropTable tableName="REL_APPLICATION__CAPABILITIES"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1686772222966-14">
+        <dropTable tableName="REL_LANDSCAPE_VIE__CAPABILI_21"/>
+    </changeSet>
+</databaseChangeLog>

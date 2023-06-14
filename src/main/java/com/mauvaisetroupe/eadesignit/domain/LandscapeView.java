@@ -58,15 +58,10 @@ public class LandscapeView implements Serializable {
     @JsonIgnoreProperties(value = { "landscapes", "dataFlows" }, allowSetters = true)
     private SortedSet<FunctionalFlow> flows = new TreeSet<>();
 
-    @ManyToMany
-    @JoinTable(
-        name = "rel_landscape_vie__capabili_21",
-        joinColumns = @JoinColumn(name = "landscape_view_id"),
-        inverseJoinColumns = @JoinColumn(name = "capabilities_id")
-    )
+    @ManyToMany(mappedBy = "landscapes")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "subCapabilities", "parent", "applications", "landscapes" }, allowSetters = true)
-    private Set<Capability> capabilities = new HashSet<>();
+    @JsonIgnoreProperties(value = { "capability", "application", "landscapes" }, allowSetters = true)
+    private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -193,28 +188,34 @@ public class LandscapeView implements Serializable {
         return this;
     }
 
-    public Set<Capability> getCapabilities() {
-        return this.capabilities;
+    public Set<CapabilityApplicationMapping> getCapabilityApplicationMappings() {
+        return this.capabilityApplicationMappings;
     }
 
-    public void setCapabilities(Set<Capability> capabilities) {
-        this.capabilities = capabilities;
+    public void setCapabilityApplicationMappings(Set<CapabilityApplicationMapping> capabilityApplicationMappings) {
+        if (this.capabilityApplicationMappings != null) {
+            this.capabilityApplicationMappings.forEach(i -> i.removeLandscape(this));
+        }
+        if (capabilityApplicationMappings != null) {
+            capabilityApplicationMappings.forEach(i -> i.addLandscape(this));
+        }
+        this.capabilityApplicationMappings = capabilityApplicationMappings;
     }
 
-    public LandscapeView capabilities(Set<Capability> capabilities) {
-        this.setCapabilities(capabilities);
+    public LandscapeView capabilityApplicationMappings(Set<CapabilityApplicationMapping> capabilityApplicationMappings) {
+        this.setCapabilityApplicationMappings(capabilityApplicationMappings);
         return this;
     }
 
-    public LandscapeView addCapabilities(Capability capability) {
-        this.capabilities.add(capability);
-        capability.getLandscapes().add(this);
+    public LandscapeView addCapabilityApplicationMapping(CapabilityApplicationMapping capabilityApplicationMapping) {
+        this.capabilityApplicationMappings.add(capabilityApplicationMapping);
+        capabilityApplicationMapping.getLandscapes().add(this);
         return this;
     }
 
-    public LandscapeView removeCapabilities(Capability capability) {
-        this.capabilities.remove(capability);
-        capability.getLandscapes().remove(this);
+    public LandscapeView removeCapabilityApplicationMapping(CapabilityApplicationMapping capabilityApplicationMapping) {
+        this.capabilityApplicationMappings.remove(capabilityApplicationMapping);
+        capabilityApplicationMapping.getLandscapes().remove(this);
         return this;
     }
 

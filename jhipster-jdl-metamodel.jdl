@@ -10,14 +10,13 @@ relationship ManyToMany {
     Application{technologies(name)} to Technology{applications(name)}
 	ApplicationComponent{technologies(name)} to Technology{components(name)}
     
-    Application{capabilities(name)} to Capability{applications(name)}
-    LandscapeView{capabilities(name)} to Capability{landscapes(diagramName)}
-    
     Owner{users(login)} to User 
 
     Application{externalIDS(externalID)} to ExternalReference{applications(alias)}
     ApplicationComponent{externalIDS(externalID)} to ExternalReference{components(alias)}
     
+    CapabilityApplicationMapping{landscape(diagramName)} to LandscapeView{capabilityApplicationMapping}
+
 }
 
 relationship ManyToOne {
@@ -46,6 +45,11 @@ relationship ManyToOne {
 
     ExternalReference{externalSystem(externalSystemID)} to ExternalSystem
 
+	CapabilityApplicationMapping to Capability
+    CapabilityApplicationMapping to Application
+    
+    
+	
 }
 
 relationship OneToMany {
@@ -199,6 +203,10 @@ entity Capability {
 	description String maxlength(1500)
 	comment String maxlength(1500)
     level Integer
+}
+
+entity CapabilityApplicationMapping{
+
 }
 
 enum ViewPoint {

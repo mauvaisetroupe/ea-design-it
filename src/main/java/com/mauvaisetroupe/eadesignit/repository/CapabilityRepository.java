@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 public interface CapabilityRepository extends JpaRepository<Capability, Long> {
     List<Capability> findByNameIgnoreCaseAndLevel(String name, Integer level);
     List<Capability> findByNameIgnoreCaseAndParentNameIgnoreCaseAndLevel(String name, String parent, Integer level);
-    void deleteByApplicationsIsEmpty();
+    void deleteByCapabilityApplicationMappingsIsEmpty();
     List<Capability> findByLevel(int i);
 
     @Query(
@@ -26,13 +26,13 @@ public interface CapabilityRepository extends JpaRepository<Capability, Long> {
         " left join fetch s3.subCapabilities s4 " +
         " left join fetch s4.subCapabilities s5 " +
         " left join fetch s5.subCapabilities s6 " +
-        " left join fetch c.applications " +
-        " left join fetch s1.applications " +
-        " left join fetch s2.applications " +
-        " left join fetch s3.applications " +
-        " left join fetch s4.applications " +
-        " left join fetch s5.applications " +
-        " left join fetch s6.applications " +
+        " left join fetch c.capabilityApplicationMappings  m1" +
+        " left join fetch s1.capabilityApplicationMappings m2" +
+        " left join fetch s2.capabilityApplicationMappings m3" +
+        " left join fetch s3.capabilityApplicationMappings m4 " +
+        " left join fetch s4.capabilityApplicationMappings m5 " +
+        " left join fetch s5.capabilityApplicationMappings m6 " +
+        " left join fetch s6.capabilityApplicationMappings m7 " +
         " where c.id=:id"
     )
     // c = ROOT level =-2
@@ -50,13 +50,13 @@ public interface CapabilityRepository extends JpaRepository<Capability, Long> {
         " left join fetch s3.subCapabilities s4 " +
         " left join fetch s4.subCapabilities s5 " +
         " left join fetch s5.subCapabilities s6 " +
-        " left join fetch c.applications " +
-        " left join fetch s1.applications " +
-        " left join fetch s2.applications " +
-        " left join fetch s3.applications " +
-        " left join fetch s4.applications " +
-        " left join fetch s5.applications " +
-        " left join fetch s6.applications " +
+        " left join fetch c.capabilityApplicationMappings  m1 " +
+        " left join fetch s1.capabilityApplicationMappings m2 " +
+        " left join fetch s2.capabilityApplicationMappings m3 " +
+        " left join fetch s3.capabilityApplicationMappings m4 " +
+        " left join fetch s4.capabilityApplicationMappings m5 " +
+        " left join fetch s5.capabilityApplicationMappings m6 " +
+        " left join fetch s6.capabilityApplicationMappings m7 " +
         " where c.id=:id"
     )
     // c = ROOT level =-2
