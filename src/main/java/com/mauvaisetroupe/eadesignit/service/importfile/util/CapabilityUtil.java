@@ -20,7 +20,7 @@ public class CapabilityUtil {
         CapabilityDTO capability = null;
         try {
             Object cellValue = map.get(nameColumn);
-            if (cellValue != null && cellValue.toString().trim().length() > 2) {
+            if (cellValue != null && cellValue.toString().trim().length() > 1) {
                 capability = new CapabilityDTO();
                 String name = map.get(nameColumn).toString();
                 capability.setName(name);
