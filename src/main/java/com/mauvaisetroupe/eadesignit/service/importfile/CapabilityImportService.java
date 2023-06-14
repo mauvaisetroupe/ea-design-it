@@ -28,15 +28,15 @@ public class CapabilityImportService {
     @Autowired
     private CapabilityRepository capabilityRepository;
 
-    private static final String L0_NAME = "Capability L0";
-    private static final String L0_DESCRIPTION = "L0 - Description";
-    private static final String L1_NAME = "Capability L1";
-    private static final String L1_DESCRIPTION = "L1 - Description";
-    private static final String L2_NAME = "Capability L2";
-    private static final String L2_DESCRIPTION = "L2 - Description";
-    private static final String L3_NAME = "Capability L3";
-    private static final String L3_DESCRIPTION = "L3 - Description";
-    private static final String SUR_DOMAIN = "Sur-domaine";
+    public static final String L0_NAME = "Capability L0";
+    public static final String L0_DESCRIPTION = "L0 - Description";
+    public static final String L1_NAME = "Capability L1";
+    public static final String L1_DESCRIPTION = "L1 - Description";
+    public static final String L2_NAME = "Capability L2";
+    public static final String L2_DESCRIPTION = "L2 - Description";
+    public static final String L3_NAME = "Capability L3";
+    public static final String L3_DESCRIPTION = "L3 - Description";
+    public static final String SUR_DOMAIN = "Sur-domaine";
 
     public List<CapabilityImportDTO> importExcel(InputStream excel, String originalFilename)
         throws EncryptedDocumentException, IOException {
