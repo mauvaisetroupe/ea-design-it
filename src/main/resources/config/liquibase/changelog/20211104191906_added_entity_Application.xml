@@ -81,17 +81,6 @@
 
         <addPrimaryKey columnNames="application_id, technologies_id" tableName="rel_application__technologies"/>
 
-        <createTable tableName="rel_application__capabilities">
-            <column name="capabilities_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="application_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addPrimaryKey columnNames="application_id, capabilities_id" tableName="rel_application__capabilities"/>
-
         <createTable tableName="rel_application__externalids">
             <column name="externalids_id" type="bigint">
                 <constraints nullable="false"/>

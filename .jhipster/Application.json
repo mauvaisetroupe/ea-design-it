@@ -100,14 +100,6 @@
       "relationshipType": "many-to-many"
     },
     {
-      "otherEntityField": "name",
-      "otherEntityName": "capability",
-      "otherEntityRelationshipName": "applications",
-      "ownerSide": true,
-      "relationshipName": "capabilities",
-      "relationshipType": "many-to-many"
-    },
-    {
       "otherEntityField": "externalID",
       "otherEntityName": "externalReference",
       "otherEntityRelationshipName": "applications",
@@ -120,6 +112,12 @@
       "otherEntityName": "applicationComponent",
       "otherEntityRelationshipName": "application",
       "relationshipName": "applicationsList",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "capabilityApplicationMapping",
+      "otherEntityRelationshipName": "application",
+      "relationshipName": "capabilityApplicationMapping",
       "relationshipType": "one-to-many"
     }
   ],

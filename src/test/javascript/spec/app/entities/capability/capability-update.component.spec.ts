@@ -9,9 +9,7 @@ import CapabilityUpdateComponent from '@/entities/capability/capability-update.v
 import CapabilityClass from '@/entities/capability/capability-update.component';
 import CapabilityService from '@/entities/capability/capability.service';
 
-import ApplicationService from '@/entities/application/application.service';
-
-import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
+import CapabilityApplicationMappingService from '@/entities/capability-application-mapping/capability-application-mapping.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -44,13 +42,8 @@ describe('Component Tests', () => {
           capabilityService: () => capabilityServiceStub,
           alertService: () => new AlertService(),
 
-          applicationService: () =>
-            sinon.createStubInstance<ApplicationService>(ApplicationService, {
-              retrieve: sinon.stub().resolves({}),
-            } as any),
-
-          landscapeViewService: () =>
-            sinon.createStubInstance<LandscapeViewService>(LandscapeViewService, {
+          capabilityApplicationMappingService: () =>
+            sinon.createStubInstance<CapabilityApplicationMappingService>(CapabilityApplicationMappingService, {
               retrieve: sinon.stub().resolves({}),
             } as any),
         },

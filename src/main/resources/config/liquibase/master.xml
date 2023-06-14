@@ -35,6 +35,7 @@
     <include file="config/liquibase/changelog/20221222092421_added_entity_FlowGroup.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230530161117_added_entity_ExternalReference.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230530161118_added_entity_ExternalSystem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230614182406_added_entity_CapabilityApplicationMapping.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20211104191902_added_entity_constraints_LandscapeView.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20211104191904_added_entity_constraints_FunctionalFlow.xml" relativeToChangelogFile="false"/>
@@ -48,6 +49,7 @@
     <include file="config/liquibase/changelog/20220118113150_added_entity_constraints_FunctionalFlowStep.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20221222092421_added_entity_constraints_FlowGroup.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230530161117_added_entity_constraints_ExternalReference.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230614182406_added_entity_constraints_CapabilityApplicationMapping.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 

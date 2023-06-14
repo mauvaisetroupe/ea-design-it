@@ -13,7 +13,7 @@ import OwnerService from '@/entities/owner/owner.service';
 
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 
-import CapabilityService from '@/entities/capability/capability.service';
+import CapabilityApplicationMappingService from '@/entities/capability-application-mapping/capability-application-mapping.service';
 import AlertService from '@/shared/alert/alert.service';
 
 const localVue = createLocalVue();
@@ -56,8 +56,8 @@ describe('Component Tests', () => {
               retrieve: sinon.stub().resolves({}),
             } as any),
 
-          capabilityService: () =>
-            sinon.createStubInstance<CapabilityService>(CapabilityService, {
+          capabilityApplicationMappingService: () =>
+            sinon.createStubInstance<CapabilityApplicationMappingService>(CapabilityApplicationMappingService, {
               retrieve: sinon.stub().resolves({}),
             } as any),
         },

@@ -13,14 +13,14 @@ import { IApplicationCategory } from '@/shared/model/application-category.model'
 import TechnologyService from '@/entities/technology/technology.service';
 import { ITechnology } from '@/shared/model/technology.model';
 
-import CapabilityService from '@/entities/capability/capability.service';
-import { ICapability } from '@/shared/model/capability.model';
-
 import ExternalReferenceService from '@/entities/external-reference/external-reference.service';
 import { IExternalReference } from '@/shared/model/external-reference.model';
 
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
 import { IApplicationComponent } from '@/shared/model/application-component.model';
+
+import CapabilityApplicationMappingService from '@/entities/capability-application-mapping/capability-application-mapping.service';
+import { ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
 
 import { IApplication, Application } from '@/shared/model/application.model';
 import ApplicationService from './application.service';
@@ -71,10 +71,6 @@ export default class ApplicationUpdate extends Vue {
 
   public technologies: ITechnology[] = [];
 
-  @Inject('capabilityService') private capabilityService: () => CapabilityService;
-
-  public capabilities: ICapability[] = [];
-
   @Inject('externalReferenceService') private externalReferenceService: () => ExternalReferenceService;
 
   public externalReferences: IExternalReference[] = [];
@@ -82,6 +78,10 @@ export default class ApplicationUpdate extends Vue {
   @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
 
   public applicationComponents: IApplicationComponent[] = [];
+
+  @Inject('capabilityApplicationMappingService') private capabilityApplicationMappingService: () => CapabilityApplicationMappingService;
+
+  public capabilityApplicationMappings: ICapabilityApplicationMapping[] = [];
   public applicationTypeValues: string[] = Object.keys(ApplicationType);
   public softwareTypeValues: string[] = Object.keys(SoftwareType);
   public isSaving = false;
@@ -106,7 +106,6 @@ export default class ApplicationUpdate extends Vue {
     );
     this.application.categories = [];
     this.application.technologies = [];
-    this.application.capabilities = [];
     this.application.externalIDS = [];
   }
 
@@ -184,11 +183,6 @@ export default class ApplicationUpdate extends Vue {
       .then(res => {
         this.technologies = res.data;
       });
-    this.capabilityService()
-      .retrieve()
-      .then(res => {
-        this.capabilities = res.data;
-      });
     this.externalReferenceService()
       .retrieve()
       .then(res => {
@@ -198,6 +192,11 @@ export default class ApplicationUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.applicationComponents = res.data;
+      });
+    this.capabilityApplicationMappingService()
+      .retrieve()
+      .then(res => {
+        this.capabilityApplicationMappings = res.data;
       });
   }
 

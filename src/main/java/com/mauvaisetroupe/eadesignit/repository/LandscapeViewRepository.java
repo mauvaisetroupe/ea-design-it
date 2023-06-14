@@ -15,18 +15,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LandscapeViewRepository extends JpaRepository<LandscapeView, Long> {
     @Query(
-        value = "select distinct landscapeView from LandscapeView landscapeView left join fetch landscapeView.flows left join fetch landscapeView.capabilities",
+        value = "select distinct landscapeView from LandscapeView landscapeView left join fetch landscapeView.flows",
         countQuery = "select count(distinct landscapeView) from LandscapeView landscapeView"
     )
     Page<LandscapeView> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query(
-        "select distinct landscapeView from LandscapeView landscapeView left join fetch landscapeView.flows left join fetch landscapeView.capabilities"
-    )
+    @Query("select distinct landscapeView from LandscapeView landscapeView left join fetch landscapeView.flows")
     List<LandscapeView> findAllWithEagerRelationships();
 
-    @Query(
-        "select landscapeView from LandscapeView landscapeView left join fetch landscapeView.flows left join fetch landscapeView.capabilities where landscapeView.id =:id"
-    )
+    @Query("select landscapeView from LandscapeView landscapeView left join fetch landscapeView.flows where landscapeView.id =:id")
     Optional<LandscapeView> findOneWithEagerRelationships(@Param("id") Long id);
 }

@@ -15,18 +15,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
     @Query(
-        value = "select distinct application from Application application left join fetch application.categories left join fetch application.technologies left join fetch application.capabilities left join fetch application.externalIDS",
+        value = "select distinct application from Application application left join fetch application.categories left join fetch application.technologies left join fetch application.externalIDS",
         countQuery = "select count(distinct application) from Application application"
     )
     Page<Application> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct application from Application application left join fetch application.categories left join fetch application.technologies left join fetch application.capabilities left join fetch application.externalIDS"
+        "select distinct application from Application application left join fetch application.categories left join fetch application.technologies left join fetch application.externalIDS"
     )
     List<Application> findAllWithEagerRelationships();
 
     @Query(
-        "select application from Application application left join fetch application.categories left join fetch application.technologies left join fetch application.capabilities left join fetch application.externalIDS where application.id =:id"
+        "select application from Application application left join fetch application.categories left join fetch application.technologies left join fetch application.externalIDS where application.id =:id"
     )
     Optional<Application> findOneWithEagerRelationships(@Param("id") Long id);
 }

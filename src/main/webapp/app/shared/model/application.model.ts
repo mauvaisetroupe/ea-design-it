@@ -1,9 +1,9 @@
 import { IOwner } from '@/shared/model/owner.model';
 import { IApplicationCategory } from '@/shared/model/application-category.model';
 import { ITechnology } from '@/shared/model/technology.model';
-import { ICapability } from '@/shared/model/capability.model';
 import { IExternalReference } from '@/shared/model/external-reference.model';
 import { IApplicationComponent } from '@/shared/model/application-component.model';
+import { ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
 
 import { ApplicationType } from '@/shared/model/enumerations/application-type.model';
 import { SoftwareType } from '@/shared/model/enumerations/software-type.model';
@@ -24,9 +24,9 @@ export interface IApplication {
   businessOwner?: IOwner | null;
   categories?: IApplicationCategory[] | null;
   technologies?: ITechnology[] | null;
-  capabilities?: ICapability[] | null;
   externalIDS?: IExternalReference[] | null;
   applicationsLists?: IApplicationComponent[] | null;
+  capabilityApplicationMappings?: ICapabilityApplicationMapping[] | null;
 }
 
 export class Application implements IApplication {
@@ -47,8 +47,8 @@ export class Application implements IApplication {
     public businessOwner?: IOwner | null,
     public categories?: IApplicationCategory[] | null,
     public technologies?: ITechnology[] | null,
-    public capabilities?: ICapability[] | null,
     public externalIDS?: IExternalReference[] | null,
-    public applicationsLists?: IApplicationComponent[] | null
+    public applicationsLists?: IApplicationComponent[] | null,
+    public capabilityApplicationMappings?: ICapabilityApplicationMapping[] | null
   ) {}
 }

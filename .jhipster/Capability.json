@@ -48,20 +48,10 @@
       "relationshipType": "many-to-one"
     },
     {
-      "otherEntityField": "name",
-      "otherEntityName": "application",
-      "otherEntityRelationshipName": "capabilities",
-      "ownerSide": false,
-      "relationshipName": "applications",
-      "relationshipType": "many-to-many"
-    },
-    {
-      "otherEntityField": "diagramName",
-      "otherEntityName": "landscapeView",
-      "otherEntityRelationshipName": "capabilities",
-      "ownerSide": false,
-      "relationshipName": "landscapes",
-      "relationshipType": "many-to-many"
+      "otherEntityName": "capabilityApplicationMapping",
+      "otherEntityRelationshipName": "capability",
+      "relationshipName": "capabilityApplicationMapping",
+      "relationshipType": "one-to-many"
     }
   ],
   "service": "no"

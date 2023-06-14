@@ -272,26 +272,6 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="application-capabilities">Capabilities</label>
-            <select
-              class="form-control"
-              id="application-capabilities"
-              data-cy="capabilities"
-              multiple
-              name="capabilities"
-              v-if="application.capabilities !== undefined"
-              v-model="application.capabilities"
-            >
-              <option
-                v-bind:value="getSelected(application.capabilities, capabilityOption)"
-                v-for="capabilityOption in capabilities"
-                :key="capabilityOption.id"
-              >
-                {{ capabilityOption.name }}
-              </option>
-            </select>
-          </div>
-          <div class="form-group">
             <label for="application-externalIDS">External IDS</label>
             <select
               class="form-control"

@@ -7,44 +7,35 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <!--
-        Added the entity LandscapeView.
+        Added the entity CapabilityApplicationMapping.
     -->
-    <changeSet id="20211104191902-1" author="jhipster">
-        <createTable tableName="landscape_view">
+    <changeSet id="20230614182406-1" author="jhipster">
+        <createTable tableName="capability_application_mapping">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="viewpoint" type="varchar(255)">
+            <column name="capability_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="diagram_name" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="compressed_draw_xml" type="${clobType}">
-                <constraints nullable="true" />
-            </column>
-            <column name="compressed_draw_svg" type="${clobType}">
-                <constraints nullable="true" />
-            </column>
-            <column name="owner_id" type="bigint">
+            <column name="application_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
 
-    <changeSet id="20211104191902-1-relations" author="jhipster">
+    <changeSet id="20230614182406-1-relations" author="jhipster">
 
-        <createTable tableName="rel_landscape_view__flows">
-            <column name="flows_id" type="bigint">
+        <createTable tableName="rel_capability_ap__landscap_b2">
+            <column name="landscape_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="landscape_view_id" type="bigint">
+            <column name="capability_application_mapping_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="landscape_view_id, flows_id" tableName="rel_landscape_view__flows"/>
+        <addPrimaryKey columnNames="capability_application_mapping_id, landscape_id" tableName="rel_capability_ap__landscap_b2"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

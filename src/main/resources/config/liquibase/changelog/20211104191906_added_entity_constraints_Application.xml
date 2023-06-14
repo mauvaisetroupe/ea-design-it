@@ -51,18 +51,6 @@
                                  referencedTableName="technology"/>
 
         <addForeignKeyConstraint baseColumnNames="application_id"
-                                 baseTableName="rel_application__capabilities"
-                                 constraintName="fk_rel_application__capabilities__application_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="application"/>
-
-        <addForeignKeyConstraint baseColumnNames="capabilities_id"
-                                 baseTableName="rel_application__capabilities"
-                                 constraintName="fk_rel_application__capabilities__capabilities_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="capability"/>
-
-        <addForeignKeyConstraint baseColumnNames="application_id"
                                  baseTableName="rel_application__externalids"
                                  constraintName="fk_rel_application__externalids__application_id"
                                  referencedColumnNames="id"

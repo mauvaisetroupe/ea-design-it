@@ -21,6 +21,7 @@ import FunctionalFlowStepService from './functional-flow-step/functional-flow-st
 import FlowGroupService from './flow-group/flow-group.service';
 import ExternalReferenceService from './external-reference/external-reference.service';
 import ExternalSystemService from './external-system/external-system.service';
+import CapabilityApplicationMappingService from './capability-application-mapping/capability-application-mapping.service';
 // jhipster-needle-add-entity-service-to-entities-component-import - JHipster will import entities services here
 
 @Component
@@ -46,5 +47,9 @@ export default class Entities extends Vue {
   @Provide('flowGroupService') private flowGroupService = () => new FlowGroupService();
   @Provide('externalReferenceService') private externalReferenceService = () => new ExternalReferenceService();
   @Provide('externalSystemService') private externalSystemService = () => new ExternalSystemService();
+  @Provide('capabilityApplicationMappingService') private capabilityApplicationMappingService = () =>
+    new CapabilityApplicationMappingService();
+  @Provide('capabilityApplicationMappingService') private capabilityApplicationMappingService = () =>
+    new CapabilityApplicationMappingService();
   // jhipster-needle-add-entity-service-to-entities-component - JHipster will import entities services here
 }

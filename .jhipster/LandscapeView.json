@@ -47,11 +47,10 @@
       "relationshipType": "many-to-many"
     },
     {
-      "otherEntityField": "name",
-      "otherEntityName": "capability",
-      "otherEntityRelationshipName": "landscapes",
-      "ownerSide": true,
-      "relationshipName": "capabilities",
+      "otherEntityName": "capabilityApplicationMapping",
+      "otherEntityRelationshipName": "landscape",
+      "ownerSide": false,
+      "relationshipName": "capabilityApplicationMapping",
       "relationshipType": "many-to-many"
     }
   ],
