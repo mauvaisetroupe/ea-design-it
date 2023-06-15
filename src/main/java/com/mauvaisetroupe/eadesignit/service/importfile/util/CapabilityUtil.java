@@ -65,11 +65,11 @@ public class CapabilityUtil {
                 if (capabilityById.containsKey(tmpCapability.getId())) {
                     found = true;
                     dto = capabilityById.get(tmpCapability.getId());
-                    dto.setApplications(tmpCapability.getApplications());
+                    dto.setCapabilityApplicationMappings(tmpCapability.getCapabilityApplicationMappings());
                 } else {
                     dto = mapper.clone(tmpCapability);
-                    dto.setApplications(tmpCapability.getApplications());
                     capabilityById.put(dto.getId(), dto);
+                    dto.setCapabilityApplicationMappings(tmpCapability.getCapabilityApplicationMappings());
                 }
                 if (childDTO != null) {
                     dto.addSubCapabilities(childDTO);
