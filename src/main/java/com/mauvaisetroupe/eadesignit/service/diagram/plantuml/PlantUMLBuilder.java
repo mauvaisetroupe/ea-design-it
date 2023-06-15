@@ -167,8 +167,6 @@ public class PlantUMLBuilder {
 
     @Cacheable(cacheNames = PLANTUML_SVG_CACHE)
     public String getSVGFromSource(String plantUMLSource) throws IOException {
-        System.out.println(plantUMLSource);
-
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         SourceStringReader reader = new SourceStringReader(plantUMLSource);
         DiagramDescription diagramDescription = reader.outputImage(byteArrayOutputStream, new FileFormatOption(FileFormat.SVG));

@@ -101,7 +101,6 @@ public class PlantUMLService {
             );
         }
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
-        System.out.println(plantUMLSource.toString());
         return plantUMLSource.toString();
     }
 
@@ -160,7 +159,6 @@ public class PlantUMLService {
         Collection<CapabilityDTO> rootDTO = capabilityUtil.getRoot(capabilities);
         plantUMLBuilder.getPlantumlCapabilitiesDTO(plantUMLSource, rootDTO);
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
-        System.out.println(plantUMLSource);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
@@ -169,7 +167,6 @@ public class PlantUMLService {
         plantUMLBuilder.getPlantumlHeader(plantUMLSource);
         plantUMLBuilder.getPlantumlCapabilities(plantUMLSource, capabilities);
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
-        System.out.println(plantUMLSource);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 

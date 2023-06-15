@@ -119,7 +119,6 @@ public class PLantumlToDrawioPositioner {
         // Find all groups <a>
         nodeList = (NodeList) xpath.evaluate("//a", doc, XPathConstants.NODESET);
         populateMap(map, nodeList);
-        System.out.println(map);
         return map;
     }
 
