@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
@@ -351,6 +352,8 @@ public class Application implements Serializable, Ownershipable {
         return this;
     }
 
+    //@JsonIgnore
+    @JsonIgnore
     public Set<Capability> getCapabilities() {
         return this.getCapabilityApplicationMappings().stream().map(c -> c.getCapability()).collect(Collectors.toSet());
     }

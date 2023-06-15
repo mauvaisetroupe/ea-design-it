@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -49,16 +50,16 @@ public class Capability implements Serializable, Comparable<Capability> {
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @SortNatural
-    @JsonIgnoreProperties(value = { "landscapes", "capabilityApplicationMappings" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "landscapes" }, allowSetters = true)
     private SortedSet<Capability> subCapabilities = new TreeSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "subCapabilities", "applications", "landscapes", "capabilityApplicationMappings" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "subCapabilities", "applications", "landscapes" }, allowSetters = true)
     private Capability parent;
 
     @OneToMany(mappedBy = "capability", fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "capability", "application", "landscapes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "landscapes" }, allowSetters = true)
     private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -186,6 +187,8 @@ public class Capability implements Serializable, Comparable<Capability> {
         return this.capabilityApplicationMappings;
     }
 
+    //Called by jackson - failed to lazily initialize
+    @JsonIgnore
     public Set<Application> getApplications() {
         return this.getCapabilityApplicationMappings().stream().map(c -> c.getApplication()).collect(Collectors.toSet());
     }
