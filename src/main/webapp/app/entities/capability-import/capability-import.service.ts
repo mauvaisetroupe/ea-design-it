@@ -20,12 +20,16 @@ export default class CapabilityImportService {
     });
   }
 
-  public uploadMappingFile(file: File, sheetname: string[]): Promise<any> {
+  public uploadMappingFile(file: File, sheetname: string[], sheetnameMap: Map<string, string>): Promise<any> {
     const formData: FormData = new FormData();
     formData.append('file', file);
-    for (var i = 0; i < sheetname.length; i++) {
-      formData.append('sheetname', sheetname[i]);
-    }
+    sheetname.forEach(sheetname => {
+      formData.append('sheetname', sheetname);
+    });
+    sheetname.forEach(sheetname => {
+      formData.append('landscape', sheetnameMap.get(sheetname));
+    });
+
     return new Promise<any>((resolve, reject) => {
       axios
         .post(`${apiForImportUrl}/application/capability/upload-file`, formData)

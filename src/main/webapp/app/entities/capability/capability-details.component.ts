@@ -35,6 +35,7 @@ export default class CapabilityDetails extends Vue {
           tmp = tmp.parent;
         }
         this.path.reverse();
+        console.log(this.path);
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);

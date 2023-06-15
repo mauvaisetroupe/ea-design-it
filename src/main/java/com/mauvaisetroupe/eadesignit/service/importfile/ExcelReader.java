@@ -52,7 +52,6 @@ public class ExcelReader {
                     labels[j] = removeParenthesis(CellUtil.getCell(firstRow, j).getStringCellValue());
                 }
             }
-            System.out.println(sheet.getSheetName());
             for (int rownum = 1; rownum <= sheet.getLastRowNum(); rownum++) {
                 Row row = sheet.getRow(rownum);
                 Map<String, Object> rowAsArray = new HashMap<>();
@@ -78,7 +77,6 @@ public class ExcelReader {
                     if (!isEmpty) rowAsArrayList.add(rowAsArray);
                 }
             }
-            // System.out.println("Excel Util : " + rowAsArrayList);
         }
         return rowAsArrayList;
     }

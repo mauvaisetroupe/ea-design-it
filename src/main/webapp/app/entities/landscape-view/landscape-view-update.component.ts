@@ -118,7 +118,7 @@ export default class LandscapeViewUpdate extends mixins(JhiDataUtils) {
     this.landscapeViewService()
       .find(landscapeViewId)
       .then(res => {
-        this.landscapeView = res;
+        this.landscapeView = res.landscape;
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);

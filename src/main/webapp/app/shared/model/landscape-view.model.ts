@@ -3,6 +3,7 @@ import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 import { ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
 
 import { ViewPoint } from '@/shared/model/enumerations/view-point.model';
+import { ICapability } from './capability.model';
 export interface ILandscapeView {
   id?: number;
   viewpoint?: ViewPoint | null;
@@ -12,6 +13,11 @@ export interface ILandscapeView {
   owner?: IOwner | null;
   flows?: IFunctionalFlow[] | null;
   capabilityApplicationMappings?: ICapabilityApplicationMapping[] | null;
+}
+
+export interface ILandscapeDTO {
+  landscape: ILandscapeView;
+  consolidatedCapability: ICapability[];
 }
 
 export class LandscapeView implements ILandscapeView {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ol class="breadcrumb" v-if="menu">
+    <ol class="breadcrumb" v-if="showPath">
       <li class="breadcrumb-item" v-for="(mycap, i) in path" key="id">
         <a @click="$emit('retrieveCapability', mycap.id)" class="router-link-exact-active router-link-active" target="_self">
           <span v-if="i == 0">
@@ -22,11 +22,11 @@
         </span>
       </li>
     </ol>
-    <div v-if="menu">
+    <div v-if="showSliders">
       <span style="margin: 5px"><input type="checkbox" v-model="showApplications" /> Show applications</span>
       <span style="margin: 5px">
         <label for="range">Nb level</label>
-        <input type="range" :min="Math.max(0, capability.level)" max="3" class="slider" v-model="nbLevel" />{{ nbLevel }}
+        <input type="range" :min="Math.max(0, capability.level)" max="3" class="slider" v-model="nbLevelAsString" />{{ nbLevelAsString }}
       </span>
     </div>
     <div>

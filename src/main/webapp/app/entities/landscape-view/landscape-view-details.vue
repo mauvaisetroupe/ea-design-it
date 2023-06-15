@@ -528,6 +528,26 @@
         </button>
       </div>
     </b-modal>
+
+    <div class="col-12" v-if="consolidatedCapability && consolidatedCapability.length > 0">
+      <h2>Capabilities for {{ landscapeView.diagramName }}</h2>
+      <CapabilityComponent
+        :capability="consolidatedCapability[0]"
+        :showSliders="true"
+        :showPath="false"
+        :nbLevel="4"
+        :defaultShowApplications="false"
+      ></CapabilityComponent>
+    </div>
+
+    ++
+    <div class="row">
+      <div v-for="cm in landscapeView.capabilityApplicationMappings" class="col-12">
+        {{ cm.capability.name }} --- {{ cm.application.name }}
+      </div>
+    </div>
+
+    ++
   </div>
 </template>
 <style>

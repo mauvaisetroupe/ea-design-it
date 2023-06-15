@@ -27,20 +27,23 @@
           [<a @click="selectAll">Select All</a>] [<a @click="selectNone">Select None</a>]
         </div>
         <div class="row">
-          <template v-for="sheet in sheetnames">
+          <template v-for="(sheet, i) in sheetnames">
             <div class="col-2">
-              <input type="checkbox" v-model="checkedNames" :value="sheet" :id="sheet" />
+              <input type="checkbox" v-model="checkedNames" :value="sheet" :id="'CHK-' + sheet" />
               <label :for="sheet" class="">{{ sheet }}</label>
             </div>
             <div class="col-2">
-              <!--
-                <select>
-                  <option value=""></option>
-                  <option v-for="landscape in existingLandscapes" :value="landscape.diagramName" :key="landscape.id">
-                    {{ landscape.diagramName }}
-                  </option>
-                </select>
-              -->
+              <select v-model="selectedLandscape[i]" :disabled="!checkedNames.includes(sheet)">
+                <option value=""></option>
+                <option
+                  v-for="landscape in existingLandscapes"
+                  :value="landscape.diagramName"
+                  :key="landscape.id"
+                  :selected="landscape.diagramName === selectedLandscape[i]"
+                >
+                  {{ landscape.diagramName }}
+                </option>
+              </select>
             </div>
             <div class="col-2"></div>
           </template>

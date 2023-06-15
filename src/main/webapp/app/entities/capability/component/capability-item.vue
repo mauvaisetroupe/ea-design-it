@@ -1,13 +1,22 @@
 <template>
-  <div :class="'capa-child-' + childStyle + ' c' + capability.level" v-if="capability.level <= nbLevel">
+  <div
+    :class="'capa-child-' + childStyle + ' c' + capability.level"
+    v-if="capability.level <= nbLevel"
+    :key="childStyle + '-' + capability.id"
+  >
     <div :title="capability.description" v-if="capability.level > -2">
       <!--do not display ROOT-->
       <a @click="$emit('retrieveCapability', capability.id)" v-if="childStyle != 'top' && capability.level < 2">{{ capability.name }}</a>
       <span v-else>{{ capability.name }}</span>
     </div>
     <div v-else>Corporate capabilities</div>
-    <div v-for="appli in capability.applications" class="appli" v-if="showApplications">{{ appli.name }}</div>
-    <div v-if="showApplications && capability.level == nbLevel" v-for="appli in capability.inheritedApplications" class="appli2">
+    <div v-for="appli in getApplications()" class="appli" v-if="showApplications" :key="'APP-' + appli.id">{{ appli.name }}</div>
+    <div
+      v-if="showApplications && capability.level == nbLevel"
+      v-for="appli in getInheritedApplications()"
+      class="appli2"
+      :key="'INH-' + appli.id"
+    >
       {{ appli.name }}
     </div>
     <div v-if="capability.subCapabilities">

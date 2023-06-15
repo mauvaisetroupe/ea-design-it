@@ -10,9 +10,6 @@ export interface ICapability {
   level?: number | null;
   subCapabilities?: ICapability[] | null;
   parent?: ICapability | null;
-  //  applications?: IApplication[] | null;
-  //  landscapes?: ILandscapeView[] | null;
-  inheritedApplications?: IApplication[] | null; // calculated
   capabilityApplicationMappings?: ICapabilityApplicationMapping[] | null;
 }
 
@@ -26,7 +23,5 @@ export class Capability implements ICapability {
     public subCapabilities?: ICapability[] | null,
     public parent?: ICapability | null,
     public capabilityApplicationMappings?: ICapabilityApplicationMapping[] | null
-  ) //    public applications?: IApplication[] | null,
-  //    public landscapes?: ILandscapeView[] | null
-  {}
+  ) {}
 }

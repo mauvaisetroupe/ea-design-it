@@ -20,8 +20,6 @@ export default class CapabilityDetails extends Vue {
 
   public capability: ICapability = {};
   public capabilitiesPlantUMLImage = '';
-  public maxLevel = 0;
-  public nbLevel = 0;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -61,11 +59,6 @@ export default class CapabilityDetails extends Vue {
   private init(res: ICapability) {
     this.capability = res;
 
-    // inherited
-    console.log(this.capability.name + ' ' + this.capability.level);
-    this.addInheritedApplications(this.capability);
-    this.nbLevel = Math.min(3, this.capability.level + 3);
-
     // PATH for breadcrumb
     var tmp = this.capability;
     this.path = [];
@@ -75,44 +68,5 @@ export default class CapabilityDetails extends Vue {
       tmp = tmp.parent;
     }
     this.path.reverse();
-    // Maximum level
-    this.maxLevel = this.calulateMax(this.capability, 0);
-  }
-
-  private addInheritedApplications(capability: ICapability) {
-    if (capability.subCapabilities) {
-      capability.subCapabilities.forEach(c => this.addInheritedApplications(c));
-    }
-    let inheritedApplication: IApplication[] = [];
-    this.findInheritedApplication(capability, inheritedApplication);
-    const ids = inheritedApplication.map(({ id }) => id);
-    const filtered = inheritedApplication.filter(({ id }, index) => !ids.includes(id, index + 1));
-    capability.inheritedApplications = filtered;
-  }
-
-  private findInheritedApplication(capability: ICapability, inheritedApplication: IApplication[]) {
-    if (capability.subCapabilities) {
-      capability.subCapabilities.forEach(c => {
-        if (c.applications) {
-          c.applications.forEach(a => inheritedApplication.push(a));
-        }
-        this.findInheritedApplication(c, inheritedApplication);
-      });
-    }
-  }
-
-  public calulateMax(capability: ICapability, arg1: number): number {
-    // console.log('IN : ' + arg1);
-    var max = 0;
-    if (capability && capability.subCapabilities) {
-      for (const cap of capability.subCapabilities) {
-        var tmp = this.calulateMax(cap, arg1 + 1);
-        if (tmp > max) {
-          max = tmp;
-        }
-      }
-    }
-    // console.log('OUT : ' + max);
-    return max + 1;
   }
 }

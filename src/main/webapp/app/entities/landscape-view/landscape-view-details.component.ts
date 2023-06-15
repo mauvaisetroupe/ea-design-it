@@ -16,8 +16,14 @@ import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 import { IFunctionalFlowStep, FunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
 import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
 import FlowImportService from '@/entities/flow-import/flow-import.service';
+import { ICapability } from '@/shared/model/capability.model';
+import CapabilityComponent from '@/entities/capability/component/capability.vue';
 
-@Component
+@Component({
+  components: {
+    CapabilityComponent,
+  },
+})
 export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
   @Inject('alertService') private alertService: () => AlertService;
@@ -27,6 +33,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   @Inject('flowImportService') private flowImportService: () => FlowImportService;
 
   public landscapeView: ILandscapeView = {};
+  public consolidatedCapability: ICapability[] = [];
   public plantUMLImage = '';
 
   public drawIoSVG = '';
@@ -70,7 +77,9 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     this.landscapeViewService()
       .find(landscapeViewId)
       .then(res => {
-        this.landscapeView = res;
+        console.log(res);
+        this.landscapeView = res.landscape;
+        this.consolidatedCapability = res.consolidatedCapability;
         if (this.landscapeView.compressedDrawSVG) {
           this.drawIoSVG = decodeURIComponent(escape(window.atob(this.landscapeView.compressedDrawSVG)));
         }
@@ -319,7 +328,8 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     this.landscapeViewService()
       .find(this.landscapeView.id)
       .then(res => {
-        this.landscapeView = res;
+        this.landscapeView = res.landscape;
+        this.consolidatedCapabilities = res.capabilities;
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);

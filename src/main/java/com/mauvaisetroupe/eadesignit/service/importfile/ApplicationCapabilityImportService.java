@@ -3,10 +3,12 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping;
+import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityApplicationMappingRepository;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
+import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityItemDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
@@ -37,6 +39,9 @@ public class ApplicationCapabilityImportService {
     @Autowired
     private CapabilityApplicationMappingRepository capabilityApplicationMappingRepository;
 
+    @Autowired
+    private LandscapeViewRepository landscapeViewRepository;
+
     private static final String APP_NAME_1 = "ApplicationName";
     private static final String APP_NAME_2 = "ApplicationName2";
     private static final String APP_NAME_3 = "ApplicationName3";
@@ -48,12 +53,21 @@ public class ApplicationCapabilityImportService {
     private static final String L2_NAME = "CapabilityL2";
     private static final String L3_NAME = "CapabilityL3";
 
-    public List<ApplicationCapabilityDTO> importExcel(InputStream excel, String originalFilename, String[] sheetnames)
-        throws EncryptedDocumentException, IOException {
+    public List<ApplicationCapabilityDTO> importExcel(
+        InputStream excel,
+        String originalFilename,
+        String[] sheetnames,
+        String[] landscapeName
+    ) throws EncryptedDocumentException, IOException {
         ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
         List<ApplicationCapabilityDTO> result = new ArrayList<ApplicationCapabilityDTO>();
         CapabilityUtil capabilityUtil = new CapabilityUtil();
+        int i = 0;
         for (String sheetname : sheetnames) {
+            LandscapeView landscape = null;
+            if (landscapeName != null && landscapeName.length > i) {
+                landscape = landscapeViewRepository.findByDiagramNameIgnoreCase(landscapeName[i]);
+            }
             List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(sheetname);
             ApplicationCapabilityDTO applicationCapabilityDTO = new ApplicationCapabilityDTO();
             applicationCapabilityDTO.setSheetname(sheetname);
@@ -68,26 +82,31 @@ public class ApplicationCapabilityImportService {
 
                 itemDTO.setApplicationNames(mapArrayToString(map));
 
-                Optional<Capability> capability = findCapability(l0Import, l1Import, l2Import, l3Import, itemDTO);
+                Optional<Capability> capabilityOptional = findCapability(l0Import, l1Import, l2Import, l3Import, itemDTO);
                 List<Application> applications = findApplication(map, itemDTO);
 
                 if (applications.isEmpty()) {
                     String error = "No application found : " + map;
                     log.error(error);
-                } else if (capability.isEmpty()) {
+                } else if (capabilityOptional.isEmpty()) {
                     String error = "No Capaility found : " + map;
                     log.error(error);
                 } else {
+                    Capability capability = capabilityOptional.get();
                     for (Application application : applications) {
                         CapabilityApplicationMapping capabilityApplicationMapping = capabilityApplicationMappingRepository.findByApplicationAndCapability(
                             application,
-                            capability.get()
+                            capability
                         );
                         if (capabilityApplicationMapping == null) {
                             capabilityApplicationMapping = new CapabilityApplicationMapping();
                             capabilityApplicationMappingRepository.save(capabilityApplicationMapping);
                         }
                         application.addCapabilityApplicationMapping(capabilityApplicationMapping);
+                        capability.addCapabilityApplicationMapping(capabilityApplicationMapping);
+                        if (landscape != null) {
+                            landscape.addCapabilityApplicationMapping(capabilityApplicationMapping);
+                        }
                     }
                     if (itemDTO.getImportStatus() == null) {
                         itemDTO.setImportStatus(ImportStatus.NEW);
@@ -96,6 +115,7 @@ public class ApplicationCapabilityImportService {
                 applicationCapabilityDTO.getDtos().add(itemDTO);
             }
             result.add(applicationCapabilityDTO);
+            i++;
         }
         return result;
     }

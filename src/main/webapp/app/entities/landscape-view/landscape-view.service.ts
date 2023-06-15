@@ -1,14 +1,14 @@
 import axios from 'axios';
 
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
+import { ILandscapeDTO, ILandscapeView } from '@/shared/model/landscape-view.model';
 
 const baseApiUrl = 'api/landscape-views';
 const basePlantUMLApiUrl = 'api/plantuml/landscape-view';
 const baseDrawIOApiUrl = 'api/drawio/landscape-view/get-xml';
 
 export default class LandscapeViewService {
-  public find(id: number): Promise<ILandscapeView> {
-    return new Promise<ILandscapeView>((resolve, reject) => {
+  public find(id: number): Promise<ILandscapeDTO> {
+    return new Promise<ILandscapeDTO>((resolve, reject) => {
       axios
         .get(`${baseApiUrl}/${id}`)
         .then(res => {

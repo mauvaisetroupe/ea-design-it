@@ -213,7 +213,8 @@
       <CapabilityComponent
         :capability="lco"
         @retrieveCapability="routeToCapability"
-        :menu="false"
+        :showSliders="true"
+        :showPath="false"
         :nbLevel="4"
         :defaultShowApplications="false"
       ></CapabilityComponent>

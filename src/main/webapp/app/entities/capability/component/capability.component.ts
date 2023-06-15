@@ -12,11 +12,11 @@ const CapabilityProps = Vue.extend({
     path: {
       type: Array as PropType<ICapability[]>,
     },
-    nbLevel: {
-      type: Number,
-      default: 1,
+    showPath: {
+      type: Boolean,
+      default: true,
     },
-    menu: {
+    showSliders: {
       type: Boolean,
       default: true,
     },
@@ -34,6 +34,10 @@ const CapabilityProps = Vue.extend({
 })
 export default class CapabilityComponent extends CapabilityProps {
   public showApplications: Boolean = this.defaultShowApplications;
+  public get nbLevel() {
+    return parseInt(this.nbLevelAsString);
+  }
+  public nbLevelAsString: string = '1'; // input type range send string
 
   public retrieveCapability(capId: number) {
     console.log(capId);

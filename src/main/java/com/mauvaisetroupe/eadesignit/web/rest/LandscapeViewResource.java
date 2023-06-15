@@ -5,13 +5,18 @@ import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.view.LandscapeLight;
 import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
 import com.mauvaisetroupe.eadesignit.service.diagram.drawio.MXFileSerializer;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
+import com.mauvaisetroupe.eadesignit.web.rest.dto.LandscapeDTO;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import org.slf4j.Logger;
@@ -174,11 +179,20 @@ public class LandscapeViewResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the landscapeView, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/landscape-views/{id}")
-    public ResponseEntity<LandscapeView> getLandscapeView(@PathVariable Long id) {
+    public LandscapeDTO getLandscapeView(@PathVariable Long id) {
         log.debug("REST request to get LandscapeView : {}", id);
+
+        LandscapeDTO landscapeDTO = new LandscapeDTO();
+
         Optional<LandscapeView> landscapeView = landscapeViewRepository.findOneWithEagerRelationships(id);
 
+        CapabilityUtil capabilityUtil = new CapabilityUtil();
+
         if (landscapeView.isPresent()) {
+            Collection<CapabilityDTO> result = capabilityUtil.getRoot(
+                landscapeView.get().getCapabilityApplicationMappings().stream().map(cp -> cp.getCapability()).collect(Collectors.toList())
+            );
+
             try {
                 MXFileSerializer fileSerializer = new MXFileSerializer(landscapeView.get());
                 if (StringUtils.hasText(landscapeView.get().getCompressedDrawXML())) {
@@ -193,9 +207,11 @@ public class LandscapeViewResource {
             } catch (ParserConfigurationException | XPathExpressionException | SAXException | IOException e) {
                 e.printStackTrace();
             }
+            landscapeDTO.setLandscape(landscapeView.get());
+            landscapeDTO.setConsolidatedCapability(result);
         }
 
-        return ResponseUtil.wrapOrNotFound(landscapeView);
+        return landscapeDTO;
     }
 
     /**

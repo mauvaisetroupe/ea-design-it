@@ -1,400 +1,639 @@
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/domain/Application.java b/src/main/java/com/mauvaisetroupe/eadesignit/domain/Application.java
+index 7c5e008..32b86be 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/domain/Application.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/domain/Application.java
+@@ -1,5 +1,6 @@
+ package com.mauvaisetroupe.eadesignit.domain;
+
++import com.fasterxml.jackson.annotation.JsonIgnore;
+ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+ import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
+ import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
+@@ -351,6 +352,8 @@ public class Application implements Serializable, Ownershipable {
+         return this;
+     }
+
++    //@JsonIgnore
++    @JsonIgnore
+     public Set<Capability> getCapabilities() {
+         return this.getCapabilityApplicationMappings().stream().map(c -> c.getCapability()).collect(Collectors.toSet());
+     }
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/domain/Capability.java b/src/main/java/com/mauvaisetroupe/eadesignit/domain/Capability.java
+index 16bf884..764752d 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/domain/Capability.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/domain/Capability.java
+@@ -1,5 +1,6 @@
+ package com.mauvaisetroupe.eadesignit.domain;
+
++import com.fasterxml.jackson.annotation.JsonIgnore;
+ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+ import java.io.Serializable;
+ import java.util.HashSet;
+@@ -186,6 +187,8 @@ public class Capability implements Serializable, Comparable<Capability> {
+         return this.capabilityApplicationMappings;
+     }
+
++    //Called by jackson - use @jsonignore if you don't want
++    @JsonIgnore
+     public Set<Application> getApplications() {
+         return this.getCapabilityApplicationMappings().stream().map(c -> c.getApplication()).collect(Collectors.toSet());
+     }
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/domain/FlowInterface.java b/src/main/java/com/mauvaisetroupe/eadesignit/domain/FlowInterface.java
+index 79e800f..9da77b1 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/domain/FlowInterface.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/domain/FlowInterface.java
+@@ -62,7 +62,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
+     @ManyToOne(optional = false)
+     @NotNull
+     @JsonIgnoreProperties(
+-        value = { "owner", "itOwner", "businessOwner", "capabilities", "externalIDS", "applicationsLists" },
++        value = { "owner", "itOwner", "businessOwner", "capabilityApplicationMappings", "capabilities","externalIDS", "applicationsLists" },
+         allowSetters = true
+     )
+     private Application source;
+@@ -70,7 +70,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
+     @ManyToOne(optional = false)
+     @NotNull
+     @JsonIgnoreProperties(
+-        value = { "owner", "itOwner", "businessOwner", "capabilityApplicationMappings", "externalIDS", "applicationsLists" },
++        value = { "owner", "itOwner", "businessOwner", "capabilityApplicationMappings", "capabilities","externalIDS", "applicationsLists" },
+         allowSetters = true
+     )
+     private Application target;
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/domain/LandscapeView.java b/src/main/java/com/mauvaisetroupe/eadesignit/domain/LandscapeView.java
+index ca2d68c..4c30d0c 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/domain/LandscapeView.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/domain/LandscapeView.java
+@@ -60,7 +60,7 @@ public class LandscapeView implements Serializable {
+
+     @ManyToMany(mappedBy = "landscapes")
+     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+-    @JsonIgnoreProperties(value = { "capability", "application", "landscapes" }, allowSetters = true)
++    @JsonIgnoreProperties(value = { "landscapes" }, allowSetters = true)
+     private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
+
+     // jhipster-needle-entity-add-field - JHipster will add fields here
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/repository/LandscapeViewRepository.java b/src/main/java/com/mauvaisetroupe/eadesignit/repository/LandscapeViewRepository.java
+index b1348a7..50e569a 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/repository/LandscapeViewRepository.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/repository/LandscapeViewRepository.java
+@@ -24,7 +24,15 @@ public interface LandscapeViewRepository extends JpaRepository<LandscapeView, Lo
+     @Query("select distinct landscapeView from LandscapeView landscapeView left join fetch landscapeView.flows")
+     List<LandscapeView> findAllWithEagerRelationships();
+
+-    @Query("select landscapeView from LandscapeView landscapeView left join fetch landscapeView.flows where landscapeView.id =:id")
++    @Query(value =
++        "select l " +
++        " from LandscapeView l " +
++        " left join fetch l.flows " +
++        " left join fetch l.capabilityApplicationMappings cm " +
++        " left join fetch cm.capability c" +
++        " left join fetch cm.application a" +
++        " where l.id =:id"
++    )
+     Optional<LandscapeView> findOneWithEagerRelationships(@Param("id") Long id);
+
+     LandscapeView findByDiagramNameIgnoreCase(String diagramName);
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/PLantumlToDrawioPositioner.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/PLantumlToDrawioPositioner.java
+index 94cd368..30c2f32 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/PLantumlToDrawioPositioner.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/PLantumlToDrawioPositioner.java
+@@ -119,7 +119,6 @@ public class PLantumlToDrawioPositioner {
+         // Find all groups <a>
+         nodeList = (NodeList) xpath.evaluate("//a", doc, XPathConstants.NODESET);
+         populateMap(map, nodeList);
+-        System.out.println(map);
+         return map;
+     }
+
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLBuilder.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLBuilder.java
+index ec3bf84..1016145 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLBuilder.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLBuilder.java
+@@ -167,7 +167,6 @@ public class PlantUMLBuilder {
+
+     @Cacheable(cacheNames = PLANTUML_SVG_CACHE)
+     public String getSVGFromSource(String plantUMLSource) throws IOException {
+-        System.out.println(plantUMLSource);
+
+         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+         SourceStringReader reader = new SourceStringReader(plantUMLSource);
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLService.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLService.java
+index 31b6cb3..d00e79b 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLService.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLService.java
+@@ -101,7 +101,6 @@ public class PlantUMLService {
+             );
+         }
+         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+-        System.out.println(plantUMLSource.toString());
+         return plantUMLSource.toString();
+     }
+
+@@ -160,7 +159,6 @@ public class PlantUMLService {
+         Collection<CapabilityDTO> rootDTO = capabilityUtil.getRoot(capabilities);
+         plantUMLBuilder.getPlantumlCapabilitiesDTO(plantUMLSource, rootDTO);
+         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+-        System.out.println(plantUMLSource);
+         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
+     }
+
+@@ -169,7 +167,6 @@ public class PlantUMLService {
+         plantUMLBuilder.getPlantumlHeader(plantUMLSource);
+         plantUMLBuilder.getPlantumlCapabilities(plantUMLSource, capabilities);
+         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+-        System.out.println(plantUMLSource);
+         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
+     }
+
 diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ApplicationCapabilityImportService.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ApplicationCapabilityImportService.java
-index b2062c4..9adc0da 100644
+index 1bc75b4..a9a2bb7 100644
 --- a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ApplicationCapabilityImportService.java
 +++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ApplicationCapabilityImportService.java
-@@ -55,10 +55,10 @@ public class ApplicationCapabilityImportService {
-             for (Map<String, Object> map : capabilitiesDF) {
-                 ApplicationCapabilityItemDTO itemDTO = new ApplicationCapabilityItemDTO();
+@@ -3,10 +3,12 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
+ import com.mauvaisetroupe.eadesignit.domain.Application;
+ import com.mauvaisetroupe.eadesignit.domain.Capability;
+ import com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping;
++import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+ import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
+ import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+ import com.mauvaisetroupe.eadesignit.repository.CapabilityApplicationMappingRepository;
+ import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
++import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+ import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityDTO;
+ import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityItemDTO;
+ import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
+@@ -37,6 +39,9 @@ public class ApplicationCapabilityImportService {
+     @Autowired
+     private CapabilityApplicationMappingRepository capabilityApplicationMappingRepository;
 
--                CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, null, 0);
--                CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, null, 1);
--                CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, null, 2);
--                CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, null, 3);
-+                CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, null, 0, null);
-+                CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, null, 1, null);
-+                CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, null, 2, null);
-+                CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, null, 3, null);
-                 itemDTO.setCapabilityImportDTO(capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import));
++    @Autowired
++    private LandscapeViewRepository landscapeViewRepository;
++
+     private static final String APP_NAME_1 = "ApplicationName";
+     private static final String APP_NAME_2 = "ApplicationName2";
+     private static final String APP_NAME_3 = "ApplicationName3";
+@@ -48,12 +53,17 @@ public class ApplicationCapabilityImportService {
+     private static final String L2_NAME = "CapabilityL2";
+     private static final String L3_NAME = "CapabilityL3";
+
+-    public List<ApplicationCapabilityDTO> importExcel(InputStream excel, String originalFilename, String[] sheetnames)
++    public List<ApplicationCapabilityDTO> importExcel(InputStream excel, String originalFilename, String[] sheetnames, String[] landscapeName)
+         throws EncryptedDocumentException, IOException {
+         ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
+         List<ApplicationCapabilityDTO> result = new ArrayList<ApplicationCapabilityDTO>();
+         CapabilityUtil capabilityUtil = new CapabilityUtil();
++        int i=0;
+         for (String sheetname : sheetnames) {
++            LandscapeView landscape = null;
++            if (landscapeName!=null && landscapeName.length > i ) {
++                landscape = landscapeViewRepository.findByDiagramNameIgnoreCase(landscapeName[i]);
++            }
+             List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(sheetname);
+             ApplicationCapabilityDTO applicationCapabilityDTO = new ApplicationCapabilityDTO();
+             applicationCapabilityDTO.setSheetname(sheetname);
+@@ -68,26 +78,31 @@ public class ApplicationCapabilityImportService {
 
                  itemDTO.setApplicationNames(mapArrayToString(map));
-diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/CapabilityImportService.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/CapabilityImportService.java
-index 3e34ef9..9d9fd6c 100644
---- a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/CapabilityImportService.java
-+++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/CapabilityImportService.java
-@@ -34,6 +34,8 @@ public class CapabilityImportService {
-     private static final String L2_DESCRIPTION = "L2 - Description";
-     private static final String L3_NAME = "Capability L3";
-     private static final String L3_DESCRIPTION = "L3 - Description";
-+    private static final String SUR_DOMAIN = "Sur-domaine";
-+
 
-     public List<CapabilityImportDTO> importExcel(InputStream excel, String originalFilename)
-         throws EncryptedDocumentException, IOException {
-@@ -43,16 +45,44 @@ public class CapabilityImportService {
+-                Optional<Capability> capability = findCapability(l0Import, l1Import, l2Import, l3Import, itemDTO);
++                Optional<Capability> capabilityOptional = findCapability(l0Import, l1Import, l2Import, l3Import, itemDTO);
+                 List<Application> applications = findApplication(map, itemDTO);
 
-         List<CapabilityImportDTO> result = new ArrayList<CapabilityImportDTO>();
-         CapabilityUtil capabilityUtil = new CapabilityUtil();
-+        CapabilityDTO rootCapabilityDTO = new CapabilityDTO();
-+        rootCapabilityDTO.setName("ROOT");
-+        rootCapabilityDTO.setLevel(-2);
-+        Capability rootCapability = findOrCreateCapability(rootCapabilityDTO, null);
-+
-         for (Map<String, Object> map : capabilitiesDF) {
-             CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO();
-             // new capability created from excel, without parent assigned
--            CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, L0_DESCRIPTION, 0);
--            CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, L1_DESCRIPTION, 1);
--            CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, L2_DESCRIPTION, 2);
--            CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, L3_DESCRIPTION, 3);
-+            CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, L0_DESCRIPTION, 0, SUR_DOMAIN );
-+            CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, L1_DESCRIPTION, 1, SUR_DOMAIN);
-+            CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, L2_DESCRIPTION, 2, SUR_DOMAIN);
-+            CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, L3_DESCRIPTION, 3, SUR_DOMAIN);
-             capabilityImportDTO = capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import);
--            Capability l0 = findOrCreateCapability(l0Import, null);
-+
-+            CapabilityDTO surdomainDTO = new CapabilityDTO();
-+            if (l0Import!=null) {
-+                surdomainDTO.setName(l0Import.getSurDomain());
-+            }
-+            else if (l1Import!=null) {
-+                surdomainDTO.setName(l1Import.getSurDomain());
-+            }
-+            else if (l2Import!=null) {
-+                surdomainDTO.setName(l2Import.getSurDomain());
-+            }
-+            else if (l3Import!=null) {
-+                surdomainDTO.setName(l3Import.getSurDomain());
-+            }
-+            else {
-+                surdomainDTO.setName("UNKNOWN");
-+            }
-+            surdomainDTO.setLevel(-1);
-+
-+            Capability surdomain = findOrCreateCapability(surdomainDTO, rootCapabilityDTO);
-+            Capability l0 = findOrCreateCapability(l0Import, surdomainDTO);
-+
-             if (l0 != null) {
-+                rootCapability.addSubCapabilities(surdomain);
-+                surdomain.addSubCapabilities(l0);
-                 // at least one capability not null
-                 result.add(capabilityImportDTO);
-                 if (l1Import != null) {
-diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/dto/CapabilityDTO.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/dto/CapabilityDTO.java
-index dab729d..a795ea8 100644
---- a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/dto/CapabilityDTO.java
-+++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/dto/CapabilityDTO.java
-@@ -16,9 +16,17 @@ public class CapabilityDTO implements Serializable {
-     private String comment;
-     private Integer level;
-     private ImportStatus importStatus;
--
-     @JsonIgnoreProperties(value = { "parent" }, allowSetters = true)
-     private Set<CapabilityDTO> subCapabilities = new HashSet<>();
-+    private String surDomain;
-+
-+    public String getSurDomain() {
-+        return surDomain;
-+    }
-+
-+    public void setSurDomain(String surDomain) {
-+        this.surDomain = surDomain;
-+    }
-
-     private CapabilityDTO parent;
-
-diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/util/CapabilityUtil.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/util/CapabilityUtil.java
-index 5c19f0a..04f85ed 100644
---- a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/util/CapabilityUtil.java
-+++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/util/CapabilityUtil.java
-@@ -16,7 +16,7 @@ public class CapabilityUtil {
-
-     private final Logger log = LoggerFactory.getLogger(CapabilityUtil.class);
-
--    public CapabilityDTO mapArrayToCapability(Map<String, Object> map, String nameColumn, String descriptionColumn, Integer level) {
-+    public CapabilityDTO mapArrayToCapability(Map<String, Object> map, String nameColumn, String descriptionColumn, Integer level, String surDomainKey) {
-         CapabilityDTO capability = null;
-         try {
-             Object cellValue = map.get(nameColumn);
-@@ -26,6 +26,14 @@ public class CapabilityUtil {
-                 capability.setName(name);
-                 capability.setDescription((String) map.get(descriptionColumn));
-                 capability.setLevel(level);
-+                String surDomain = "UNKNOWN";
-+                if (map.get(surDomainKey)!=null) {
-+                    surDomain = (String) map.get(surDomainKey);
-+                }
-+                capability.setSurDomain(surDomain);
-+            }
-+            else {
-+                System.out.println("");
+                 if (applications.isEmpty()) {
+                     String error = "No application found : " + map;
+                     log.error(error);
+-                } else if (capability.isEmpty()) {
++                } else if (capabilityOptional.isEmpty()) {
+                     String error = "No Capaility found : " + map;
+                     log.error(error);
+                 } else {
++                    Capability capability = capabilityOptional.get();
+                     for (Application application : applications) {
+                         CapabilityApplicationMapping capabilityApplicationMapping = capabilityApplicationMappingRepository.findByApplicationAndCapability(
+                             application,
+-                            capability.get()
++                            capability
+                         );
+                         if (capabilityApplicationMapping == null) {
+                             capabilityApplicationMapping = new CapabilityApplicationMapping();
+                             capabilityApplicationMappingRepository.save(capabilityApplicationMapping);
+                         }
+                         application.addCapabilityApplicationMapping(capabilityApplicationMapping);
++                        capability.addCapabilityApplicationMapping(capabilityApplicationMapping);
++                        if (landscape!=null) {
++                            landscape.addCapabilityApplicationMapping(capabilityApplicationMapping);
++                        }
+                     }
+                     if (itemDTO.getImportStatus() == null) {
+                         itemDTO.setImportStatus(ImportStatus.NEW);
+@@ -96,6 +111,7 @@ public class ApplicationCapabilityImportService {
+                 applicationCapabilityDTO.getDtos().add(itemDTO);
              }
-         } catch (Exception e) {
-             log.error(e.toString());
-diff --git a/src/main/webapp/app/entities/capability/capability-details.component.ts b/src/main/webapp/app/entities/capability/capability-details.component.ts
-index 7089876..01ab7d0 100644
---- a/src/main/webapp/app/entities/capability/capability-details.component.ts
-+++ b/src/main/webapp/app/entities/capability/capability-details.component.ts
-@@ -9,6 +9,8 @@ export default class CapabilityDetails extends Vue {
-   @Inject('capabilityService') private capabilityService: () => CapabilityService;
-   @Inject('alertService') private alertService: () => AlertService;
+             result.add(applicationCapabilityDTO);
++            i++;
+         }
+         return result;
+     }
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ExcelReader.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ExcelReader.java
+index 377e8d2..71caf33 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ExcelReader.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ExcelReader.java
+@@ -52,7 +52,6 @@ public class ExcelReader {
+                     labels[j] = removeParenthesis(CellUtil.getCell(firstRow, j).getStringCellValue());
+                 }
+             }
+-            System.out.println(sheet.getSheetName());
+             for (int rownum = 1; rownum <= sheet.getLastRowNum(); rownum++) {
+                 Row row = sheet.getRow(rownum);
+                 Map<String, Object> rowAsArray = new HashMap<>();
+@@ -78,7 +77,6 @@ public class ExcelReader {
+                     if (!isEmpty) rowAsArrayList.add(rowAsArray);
+                 }
+             }
+-            // System.out.println("Excel Util : " + rowAsArrayList);
+         }
+         return rowAsArrayList;
+     }
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/web/rest/ImportResource.java b/src/main/java/com/mauvaisetroupe/eadesignit/web/rest/ImportResource.java
+index a2ebbad..4a6e71d 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/web/rest/ImportResource.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/web/rest/ImportResource.java
+@@ -151,9 +151,10 @@ public class ImportResource {
+     @PostMapping("/import/application/capability/upload-file")
+     public List<ApplicationCapabilityDTO> uploadapplicationCapabilityFile(
+         @RequestPart MultipartFile file,
+-        @RequestParam String[] sheetname
++        @RequestParam String[] sheetname,
++        @RequestParam String[] landscape
+     ) throws Exception {
+-        return applicationCapabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename(), sheetname);
++        return applicationCapabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename(), sheetname, landscape);
+     }
 
-+  public desiredLevel: number = 2;
-+
-   public capability: ICapability = {};
-   public capabilitiesPlantUMLImage = '';
+     @GetMapping(value = "export/landscape/{id}")
+diff --git a/src/main/resources/.h2.server.properties b/src/main/resources/.h2.server.properties
+index ae7188f..d56ee95 100644
+--- a/src/main/resources/.h2.server.properties
++++ b/src/main/resources/.h2.server.properties
+@@ -1,6 +1,6 @@
+ #H2 Server Properties
+-#Sun Jun 11 18:39:47 CEST 2023
++#Thu Jun 15 17:07:59 CEST 2023
+ 0=JHipster H2 (Disk)|org.h2.Driver|jdbc\:h2\:file\:./target/h2db/db/eadesignit|EADesignIt
+-webSSL=false
+ webAllowOthers=true
+ webPort=8092
++webSSL=false
+diff --git a/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.component.ts b/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.component.ts
+index edb1713..2584f7a 100644
+--- a/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.component.ts
++++ b/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.component.ts
+@@ -18,7 +18,6 @@ export default class CapabilityImport extends Vue {
 
-diff --git a/src/main/webapp/app/entities/capability/capability-details.vue b/src/main/webapp/app/entities/capability/capability-details.vue
-index df1e2e9..65095b6 100644
---- a/src/main/webapp/app/entities/capability/capability-details.vue
-+++ b/src/main/webapp/app/entities/capability/capability-details.vue
-@@ -1,103 +1,39 @@
- <template>
--  <div class="row justify-content-center">
--    <div class="col-8">
--      <div v-if="capability">
--        <h2 class="jh-entity-heading" data-cy="capabilityDetailsHeading"><span>Capability</span> {{ capability.name }}</h2>
--        <dl class="row jh-entity-details">
--          <dt>
--            <span>Id</span>
--          </dt>
--          <dd>
--            <span>{{ capability.id }}</span>
--          </dd>
--          <dt>
--            <span>Description</span>
--          </dt>
--          <dd>
--            <span>{{ capability.description }}</span>
--          </dd>
--          <dt>
--            <span>Comment</span>
--          </dt>
--          <dd>
--            <span>{{ capability.comment }}</span>
--          </dd>
--          <dt>
--            <span>Level</span>
--          </dt>
--          <dd>
--            <span>{{ capability.level }}</span>
--          </dd>
--          <dt>
--            <span>Parent</span>
--          </dt>
--          <dd>
--            <div v-if="capability.parent">
--              <a @click="retrieveCapability(capability.parent.id)">{{ capability.parent.name }}</a>
-+<div>
-+<!--   <select v-model="desiredLevel">
-+    <option value="1">1</option>
-+    <option value="2">2</option>
-+    <option value="3">3</option>
-+  </select> -->
-+  <div  :class="'capa-top c' + capability.level">
-+    <div :title="capability.description">{{ capability.name }}</div>
-+    <div v-if="capability.subCapabilities" class="d-flex flex-wrap">
-+      <div
-+        v-for="child1 in capability.subCapabilities"
-+        :key="child1.id"
-+        :class="'capa-child-1 c' + child1.level"
-+      >
-+        <div :title="child1.description">
-+          <a @click="retrieveCapability(child1.id)">{{ child1.name }}</a>
-+        </div>
-+        <div v-if="child1.subCapabilities" class="d-flex flex-wrap">
-+          <div
-+            v-for="child2 in child1.subCapabilities"
-+            :key="child2.id"
-+            :class="'capa-child-2 c' + child2.level"
-+
-+          >
-+            <div :title="child2.description">
-+              <a @click="retrieveCapability(child2.id)">{{ child2.name }}</a>
+   public existingLandscapes: ILandscapeView[] = null;
+   public potentialLandscape: String[] = [];
+-  public selectedLandscape: String[] = [];
+
+   public mounted(): void {
+     this.retrieveAllLandscapeViews();
+@@ -48,8 +47,9 @@ export default class CapabilityImport extends Vue {
+   public fileSubmited = false;
+   public rowsLoaded = false;
+   public excelFileName = 'Browse File';
+-  public sheetnames = [];
+-  public checkedNames = [];
++  public sheetnames : string[] = [];
++  public checkedNames : string[] = [];
++  public selectedLandscape : string[] = [];
+
+   public handleFileUpload(event): void {
+     this.excelFile = event.target.files[0];
+@@ -59,8 +59,12 @@ export default class CapabilityImport extends Vue {
+   public submitFile(): void {
+     this.isFetching = true;
+     this.fileSubmited = true;
++    var sheetnamesMap: Map<string,string> = new Map
++    this.selectedLandscape.forEach((landscape,i) => {
++      sheetnamesMap.set(this.sheetnames[i],landscape);
++    });
+     this.capabilityImportService()
+-      .uploadMappingFile(this.excelFile, this.checkedNames)
++      .uploadMappingFile(this.excelFile, this.checkedNames, sheetnamesMap)
+       .then(
+         res => {
+           this.capabilitiesImports = res.data;
+@@ -77,14 +81,13 @@ export default class CapabilityImport extends Vue {
+
+   public getSheetnames(): void {
+     this.isFetching = true;
+-    this.sheetnames = [];
+     this.capabilityImportService()
+       .getSheetNames(this.excelFile)
+       .then(
+         res => {
+           this.isFetching = false;
+           this.sheetnames = res.data;
+-          this.sheetnames.forEach(name => {
++          this.sheetnames.forEach((name,i) => {
+             if (name.startsWith('ADD')) {
+               this.checkedNames.push(name);
+             }
+diff --git a/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.vue b/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.vue
+index 2a5c59f..000f994 100644
+--- a/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.vue
++++ b/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.vue
+@@ -27,20 +27,19 @@
+           [<a @click="selectAll">Select All</a>] [<a @click="selectNone">Select None</a>]
+         </div>
+         <div class="row">
+-          <template v-for="sheet in sheetnames">
++          <template v-for="(sheet, i) in sheetnames">
+             <div class="col-2">
+-              <input type="checkbox" v-model="checkedNames" :value="sheet" :id="sheet" />
++              <input type="checkbox" v-model="checkedNames" :value="sheet" :id="'CHK-'+sheet" />
+               <label :for="sheet" class="">{{ sheet }}</label>
              </div>
--          </dd>
--          <dt>
--            <span>Applications</span>
--          </dt>
--          <dd>
--            <span v-for="(application, i) in capability.applications" :key="application.id"
--              >{{ i > 0 ? ', ' : '' }}
--              <router-link :to="{ name: 'ApplicationView', params: { applicationId: application.id } }">{{ application.name }}</router-link>
--            </span>
--          </dd>
--        </dl>
--        <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
--          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
--        </button>
--        <router-link
--          v-if="capability.id"
--          :to="{ name: 'CapabilityEdit', params: { capabilityId: capability.id } }"
--          custom
--          v-slot="{ navigate }"
--        >
--          <button @click="navigate" class="btn btn-primary">
--            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
--          </button>
--        </router-link>
--      </div>
--    </div>
--    <div class="col-8">
--      <div class="mt-5">
--        <h2>Graphical view</h2>
--        <div class="common" :class="capability.subCapabilities.length > 0 ? 'alpha' : 'beta'" v-if="capability.subCapabilities">
--          <div :title="capability.description">{{ capability.level }}. {{ capability.name }}</div>
--          <div v-if="capability.subCapabilities" class="d-flex flex-wrap">
--            <div
--              v-for="child1 in capability.subCapabilities"
--              :key="child1.id"
--              class="common"
--              :class="child1.subCapabilities.length > 0 ? 'alpha' : 'beta'"
--            >
--              <div :title="child1.description">
--                {{ child1.level }}. <a @click="retrieveCapability(child1.id)">{{ child1.name }}</a>
--              </div>
--              <div v-if="child1.subCapabilities" class="d-flex flex-wrap">
--                <div
--                  v-for="child2 in child1.subCapabilities"
--                  :key="child2.id"
--                  class="common"
--                  :class="child2.subCapabilities.length > 0 ? 'alpha' : 'beta'"
--                >
--                  <div :title="child2.description">
--                    {{ child2.level }}. <a @click="retrieveCapability(child2.id)">{{ child2.name }}</a>
--                  </div>
--                  <div v-if="child2.subCapabilities" class="d-flex flex-wrap">
--                    <div
--                      v-for="child3 in child2.subCapabilities"
--                      :key="child3.id"
--                      class="common"
--                      :class="child3.subCapabilities.length > 0 ? 'alpha' : 'beta'"
--                    >
--                      <div>
--                        {{ child3.level }}. <a @click="retrieveCapability(child3.id)">{{ child3.name }}</a>
--                      </div>
--                    </div>
--                  </div>
-+            <div v-if="child2.subCapabilities" class="d-flex flex-wrap">
-+              <div
-+                v-for="child3 in child2.subCapabilities"
-+                :key="child3.id"
-+                :class="'capa-child-3 c' + child3.level"
-+              >
-+                <div>
-+                   <a @click="retrieveCapability(child3.id)">{{ child3.name }}</a>
-                 </div>
-               </div>
+             <div class="col-2">
+-              <!--
+-                <select>
++                <select v-model="selectedLandscape[i]" :disabled="!checkedNames.includes(sheet)">
+                   <option value=""></option>
+-                  <option v-for="landscape in existingLandscapes" :value="landscape.diagramName" :key="landscape.id">
+-                    {{ landscape.diagramName }}
+-                  </option>
++                  <option v-for="landscape in existingLandscapes"
++                    :value="landscape.diagramName"
++                    :key="landscape.id"
++                    :selected="landscape.diagramName === selectedLandscape[i]">{{ landscape.diagramName }}</option>
+                 </select>
+-              -->
              </div>
-@@ -106,26 +42,100 @@
+             <div class="col-2"></div>
+           </template>
+@@ -51,6 +50,8 @@
        </div>
      </div>
+
++    {{ selectedLandscape }}
++
+     <br />
+     <div class="alert alert-warning" v-if="!isFetching && capabilitiesImports && capabilitiesImports.length === 0">
+       <span>No capabilitiesImports found</span>
+diff --git a/src/main/webapp/app/entities/capability-import/capability-import.service.ts b/src/main/webapp/app/entities/capability-import/capability-import.service.ts
+index f0f049a..24d7d93 100644
+--- a/src/main/webapp/app/entities/capability-import/capability-import.service.ts
++++ b/src/main/webapp/app/entities/capability-import/capability-import.service.ts
+@@ -20,12 +20,16 @@ export default class CapabilityImportService {
+     });
+   }
+
+-  public uploadMappingFile(file: File, sheetname: string[]): Promise<any> {
++  public uploadMappingFile(file: File, sheetname: string[], sheetnameMap: Map<string,string>): Promise<any> {
+     const formData: FormData = new FormData();
+     formData.append('file', file);
+-    for (var i = 0; i < sheetname.length; i++) {
+-      formData.append('sheetname', sheetname[i]);
+-    }
++    sheetname.forEach(sheetname => {
++      formData.append('sheetname', sheetname);
++    })
++    sheetname.forEach(sheetname => {
++      formData.append('landscape', sheetnameMap.get(sheetname));
++    })
++
+     return new Promise<any>((resolve, reject) => {
+       axios
+         .post(`${apiForImportUrl}/application/capability/upload-file`, formData)
+diff --git a/src/main/webapp/app/entities/capability/capability-details.component.ts b/src/main/webapp/app/entities/capability/capability-details.component.ts
+index 96e158d..980dcf6 100644
+--- a/src/main/webapp/app/entities/capability/capability-details.component.ts
++++ b/src/main/webapp/app/entities/capability/capability-details.component.ts
+@@ -35,6 +35,7 @@ export default class CapabilityDetails extends Vue {
+           tmp = tmp.parent;
+         }
+         this.path.reverse();
++        console.log(this.path)
+       })
+       .catch(error => {
+         this.alertService().showHttpError(this, error.response);
+diff --git a/src/main/webapp/app/entities/capability/capability-navigate.component.ts b/src/main/webapp/app/entities/capability/capability-navigate.component.ts
+index 808fb02..dcf0fdb 100644
+--- a/src/main/webapp/app/entities/capability/capability-navigate.component.ts
++++ b/src/main/webapp/app/entities/capability/capability-navigate.component.ts
+@@ -20,8 +20,6 @@ export default class CapabilityDetails extends Vue {
+
+   public capability: ICapability = {};
+   public capabilitiesPlantUMLImage = '';
+-  public maxLevel = 0;
+-  public nbLevel = 0;
+
+   beforeRouteEnter(to, from, next) {
+     next(vm => {
+@@ -64,7 +62,6 @@ export default class CapabilityDetails extends Vue {
+     // inherited
+     console.log(this.capability.name + ' ' + this.capability.level);
+     this.addInheritedApplications(this.capability);
+-    this.nbLevel = Math.min(3, this.capability.level + 3);
+
+     // PATH for breadcrumb
+     var tmp = this.capability;
+@@ -75,8 +72,8 @@ export default class CapabilityDetails extends Vue {
+       tmp = tmp.parent;
+     }
+     this.path.reverse();
+-    // Maximum level
+-    this.maxLevel = this.calulateMax(this.capability, 0);
++
++
+   }
+
+   private addInheritedApplications(capability: ICapability) {
+@@ -101,18 +98,5 @@ export default class CapabilityDetails extends Vue {
+     }
+   }
+
+-  public calulateMax(capability: ICapability, arg1: number): number {
+-    // console.log('IN : ' + arg1);
+-    var max = 0;
+-    if (capability && capability.subCapabilities) {
+-      for (const cap of capability.subCapabilities) {
+-        var tmp = this.calulateMax(cap, arg1 + 1);
+-        if (tmp > max) {
+-          max = tmp;
+-        }
+-      }
+-    }
+-    // console.log('OUT : ' + max);
+-    return max + 1;
+-  }
++
+ }
+diff --git a/src/main/webapp/app/entities/capability/capability-navigate.vue b/src/main/webapp/app/entities/capability/capability-navigate.vue
+index 16d256f..dc7ae13 100644
+--- a/src/main/webapp/app/entities/capability/capability-navigate.vue
++++ b/src/main/webapp/app/entities/capability/capability-navigate.vue
+@@ -6,7 +6,6 @@
+       :capability="capability"
+       @retrieveCapability="retrieveCapability"
+       :path="path"
+-      :nbLevel="nbLevel"
+       :defaultShowApplications="true"
+     />
    </div>
-+</div>
+diff --git a/src/main/webapp/app/entities/capability/component/capability-item.vue b/src/main/webapp/app/entities/capability/component/capability-item.vue
+index bfcca32..5dcd25f 100644
+--- a/src/main/webapp/app/entities/capability/component/capability-item.vue
++++ b/src/main/webapp/app/entities/capability/component/capability-item.vue
+@@ -1,13 +1,14 @@
+ <template>
+-  <div :class="'capa-child-' + childStyle + ' c' + capability.level" v-if="capability.level <= nbLevel">
++  <div :class="'capa-child-' + childStyle + ' c' + capability.level" v-if="capability.level <= nbLevel" :key="childStyle + '-' + capability.id">
+     <div :title="capability.description" v-if="capability.level > -2">
+       <!--do not display ROOT-->
+       <a @click="$emit('retrieveCapability', capability.id)" v-if="childStyle != 'top' && capability.level < 2">{{ capability.name }}</a>
+       <span v-else>{{ capability.name }}</span>
+     </div>
+     <div v-else>Corporate capabilities</div>
+-    <div v-for="appli in capability.applications" class="appli" v-if="showApplications">{{ appli.name }}</div>
+-    <div v-if="showApplications && capability.level == nbLevel" v-for="appli in capability.inheritedApplications" class="appli2">
++     [[{{ capability.capabilityApplicationMappings }}]]
++     <div v-for="appli in capability.capabilityApplicationMappings.map(cm => cm.application)" class="appli" v-if="showApplications && capability && capability.capabilityApplicationMappings" :key="'APP-' + appli.id">{{ appli.name }}</div>
++    <div v-if="showApplications && capability.level == nbLevel" v-for="appli in capability.inheritedApplications" class="appli2" :key="'INH-' + appli.id">
+       {{ appli.name }}
+     </div>
+     <div v-if="capability.subCapabilities">
+diff --git a/src/main/webapp/app/entities/capability/component/capability.component.ts b/src/main/webapp/app/entities/capability/component/capability.component.ts
+index 65a8bc2..be9caed 100644
+--- a/src/main/webapp/app/entities/capability/component/capability.component.ts
++++ b/src/main/webapp/app/entities/capability/component/capability.component.ts
+@@ -12,10 +12,6 @@ const CapabilityProps = Vue.extend({
+     path: {
+       type: Array as PropType<ICapability[]>,
+     },
+-    nbLevel: {
+-      type: Number,
+-      default: 1,
+-    },
+     menu: {
+       type: Boolean,
+       default: true,
+@@ -34,6 +30,10 @@ const CapabilityProps = Vue.extend({
+ })
+ export default class CapabilityComponent extends CapabilityProps {
+   public showApplications: Boolean = this.defaultShowApplications;
++  public get nbLevel() {
++    return parseInt(this.nbLevelAsString);
++  }
++  public nbLevelAsString: string = "1"; // input type range send string
+
+   public retrieveCapability(capId: number) {
+     console.log(capId);
+diff --git a/src/main/webapp/app/entities/capability/component/capability.vue b/src/main/webapp/app/entities/capability/component/capability.vue
+index db8c34e..75cc512 100644
+--- a/src/main/webapp/app/entities/capability/component/capability.vue
++++ b/src/main/webapp/app/entities/capability/component/capability.vue
+@@ -26,7 +26,7 @@
+       <span style="margin: 5px"><input type="checkbox" v-model="showApplications" /> Show applications</span>
+       <span style="margin: 5px">
+         <label for="range">Nb level</label>
+-        <input type="range" :min="Math.max(0, capability.level)" max="3" class="slider" v-model="nbLevel" />{{ nbLevel }}
++        <input type="range" :min="Math.max(0, capability.level)" max="3" class="slider" v-model=nbLevelAsString />{{ nbLevelAsString }}
+       </span>
+     </div>
+     <div>
+@@ -35,7 +35,7 @@
+         childStyle="top"
+         @retrieveCapability="retrieveCapability"
+         :showApplications="showApplications"
+-        :nbLevel="nbLevel"
++        :nbLevel=nbLevel
+       >
+         <div class="d-flex flex-wrap">
+           <template v-for="child1 in capability.subCapabilities">
+@@ -44,7 +44,7 @@
+               childStyle="1"
+               @retrieveCapability="retrieveCapability"
+               :showApplications="showApplications"
+-              :nbLevel="nbLevel"
++              :nbLevel=nbLevel
+             >
+               <div class="d-flex flex-wrap">
+                 <template v-for="child2 in child1.subCapabilities">
+@@ -53,7 +53,7 @@
+                     childStyle="2"
+                     @retrieveCapability="retrieveCapability"
+                     :showApplications="showApplications"
+-                    :nbLevel="nbLevel"
++                    :nbLevel=nbLevel
+                   >
+                     <div class="d-flex flex-wrap">
+                       <template v-for="child3 in child2.subCapabilities">
+@@ -62,7 +62,7 @@
+                           childStyle="3"
+                           @retrieveCapability="retrieveCapability"
+                           :showApplications="showApplications"
+-                          :nbLevel="nbLevel"
++                          :nbLevel=nbLevel
+                           :showInheritedApplications="true"
+                         >
+                           <div class="d-flex flex-wrap">
+@@ -72,7 +72,7 @@
+                                 childStyle="4"
+                                 @retrieveCapability="retrieveCapability"
+                                 :showApplications="showApplications"
+-                                :nbLevel="nbLevel"
++                                :nbLevel=nbLevel
+                                 :showInheritedApplications="true"
+                               >
+                                 <div class="d-flex flex-wrap">
+@@ -82,7 +82,7 @@
+                                       childStyle="5"
+                                       @retrieveCapability="retrieveCapability"
+                                       :showApplications="showApplications"
+-                                      :nbLevel="nbLevel"
++                                      :nbLevel=nbLevel
+                                       :showInheritedApplications="true"
+                                     >
+                                       <div class="d-flex flex-wrap">
+@@ -92,7 +92,7 @@
+                                             childStyle="6"
+                                             @retrieveCapability="retrieveCapability"
+                                             :showApplications="showApplications"
+-                                            :nbLevel="nbLevel"
++                                            :nbLevel=nbLevel
+                                             :showInheritedApplications="true"
+                                           >
+                                           </CapabilityComponentItem>
+diff --git a/src/main/webapp/app/entities/landscape-view/landscape-view-details.vue b/src/main/webapp/app/entities/landscape-view/landscape-view-details.vue
+index f1fb0a7..1a2722b 100644
+--- a/src/main/webapp/app/entities/landscape-view/landscape-view-details.vue
++++ b/src/main/webapp/app/entities/landscape-view/landscape-view-details.vue
+@@ -528,6 +528,13 @@
+         </button>
+       </div>
+     </b-modal>
++++
++    <div class="row">
++      <div v-for="cm in landscapeView.capabilityApplicationMappings" class="col-12">{{ cm.capability.name }} --- {{ cm.application.name }}</div>
++    </div>
++
++
++++
+   </div>
  </template>
-
- <style scoped>
--.common {
--  font-weight: bold;
--  border: solid;
--  border-color: black;
--  border-width: 3px;
-+
-+
-+.capa-top {
-+  font-weight: normal;
-+  padding: 5px;
-+  margin: 0px 0px 50px 0px;
-+  width: 100%;
-+}
-+
-+.capa-child-1 {
-+  font-weight: normal;
-+  padding: 5px;
-+  margin: 5px;
-+  width: 100%;
-+
-+}
-+
-+.capa-child-2 {
-+  font-weight: normal;
-+  padding: 5px;
-+  margin: 5px;
-+  width: 16%
-+}
-+
-+.capa-child-3 {
-+  font-weight: normal;
-   padding: 5px;
--  margin: 10px;
--  box-shadow: 8px 8px 12px #aaa;
-+  margin: 5px;
-+  width: 45%;
-+}
-+.c-2 { /* ROOT */
-+  color:white;
-+}
-+
-+.c-1 { /* SUR DOMAIN GREY */
-+  font-weight: normal;
-+  border: solid;
-+  border-color: rgb(110, 110, 110);
-+  border-width: 1px;
-+  box-shadow: 1px 1px 2px #aaa;
-+  background-color: #E6E6E6;
-+  color:black;
-+}
-+
-+.c0 { /* L0 BLUE */
-+  font-weight: normal;
-+  border: solid;
-+  border-color: rgb(110, 110, 110);
-+  border-width: 1px;
-+  box-shadow: 1px 1px 2px #aaa;
-+  background-color: #DEEBF7;
-+}
-+
-+
-+.c1 { /* PURPLE */
-+  font-weight: normal;
-+  font-size: 9px;
-+  border: solid;
-+  border-color: rgb(110, 110, 110);
-+  border-width: 1px;
-+  box-shadow: 1px 1px 2px #aaa;
-+  background-color: #E5CFEE;
-+
- }
-
--.alpha {
-+.c2 {
-+  font-weight: normal;
-+  border: solid;
-+  border-color: rgb(110, 110, 110);
-+  border-width: 1px;
-+  padding: 5px;
-+  margin: 5px;
-+  box-shadow: 1px 1px 2px #aaa;
-   background-color: white;
- }
-
--.beta {
--  background-color: #fefece;
--  max-width: 300px;
-+.c3 {
-+  font-weight: normal;
-+  border: solid;
-+  border-color: rgb(110, 110, 110);
-+  border-width: 1px;
-+  padding: 5px;
-+  margin: 5px;
-+  box-shadow: 1px 1px 2px #aaa;
-+  background-color: green;
-+}
-+
-+.capatext {
-+  font-weight: normal;
-+  color: rgb(59, 59, 59);
- }
- </style>
-
+ <style>
+diff --git a/src/main/webapp/app/shared/model/capability.model.ts b/src/main/webapp/app/shared/model/capability.model.ts
+index 9ed5c5b..d2aa58c 100644
+--- a/src/main/webapp/app/shared/model/capability.model.ts
++++ b/src/main/webapp/app/shared/model/capability.model.ts
+@@ -10,7 +10,7 @@ export interface ICapability {
+   level?: number | null;
+   subCapabilities?: ICapability[] | null;
+   parent?: ICapability | null;
+-  //  applications?: IApplication[] | null;
++  applications?: IApplication[] | null;
+   //  landscapes?: ILandscapeView[] | null;
+   inheritedApplications?: IApplication[] | null; // calculated
+   capabilityApplicationMappings?: ICapabilityApplicationMapping[] | null;
+   

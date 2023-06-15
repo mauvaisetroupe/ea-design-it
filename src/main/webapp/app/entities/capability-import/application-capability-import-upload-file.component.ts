@@ -18,7 +18,6 @@ export default class CapabilityImport extends Vue {
 
   public existingLandscapes: ILandscapeView[] = null;
   public potentialLandscape: String[] = [];
-  public selectedLandscape: String[] = [];
 
   public mounted(): void {
     this.retrieveAllLandscapeViews();
@@ -48,8 +47,9 @@ export default class CapabilityImport extends Vue {
   public fileSubmited = false;
   public rowsLoaded = false;
   public excelFileName = 'Browse File';
-  public sheetnames = [];
-  public checkedNames = [];
+  public sheetnames: string[] = [];
+  public checkedNames: string[] = [];
+  public selectedLandscape: string[] = [];
 
   public handleFileUpload(event): void {
     this.excelFile = event.target.files[0];
@@ -59,8 +59,12 @@ export default class CapabilityImport extends Vue {
   public submitFile(): void {
     this.isFetching = true;
     this.fileSubmited = true;
+    var sheetnamesMap: Map<string, string> = new Map();
+    this.selectedLandscape.forEach((landscape, i) => {
+      sheetnamesMap.set(this.sheetnames[i], landscape);
+    });
     this.capabilityImportService()
-      .uploadMappingFile(this.excelFile, this.checkedNames)
+      .uploadMappingFile(this.excelFile, this.checkedNames, sheetnamesMap)
       .then(
         res => {
           this.capabilitiesImports = res.data;
@@ -77,14 +81,13 @@ export default class CapabilityImport extends Vue {
 
   public getSheetnames(): void {
     this.isFetching = true;
-    this.sheetnames = [];
     this.capabilityImportService()
       .getSheetNames(this.excelFile)
       .then(
         res => {
           this.isFetching = false;
           this.sheetnames = res.data;
-          this.sheetnames.forEach(name => {
+          this.sheetnames.forEach((name, i) => {
             if (name.startsWith('ADD')) {
               this.checkedNames.push(name);
             }

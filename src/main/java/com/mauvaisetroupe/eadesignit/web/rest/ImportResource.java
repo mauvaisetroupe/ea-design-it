@@ -151,9 +151,10 @@ public class ImportResource {
     @PostMapping("/import/application/capability/upload-file")
     public List<ApplicationCapabilityDTO> uploadapplicationCapabilityFile(
         @RequestPart MultipartFile file,
-        @RequestParam String[] sheetname
+        @RequestParam String[] sheetname,
+        @RequestParam String[] landscape
     ) throws Exception {
-        return applicationCapabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename(), sheetname);
+        return applicationCapabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename(), sheetname, landscape);
     }
 
     @GetMapping(value = "export/landscape/{id}")
