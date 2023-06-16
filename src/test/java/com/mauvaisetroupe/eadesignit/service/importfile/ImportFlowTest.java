@@ -72,10 +72,10 @@ public class ImportFlowTest {
         jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.REL_APPLICATION__TECHNOLOGIES;");
         jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.REL_COMPONENT__CATEGORIES;");
         jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.REL_COMPONENT__TECHNOLOGIES;");
-        jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.REL_APPLICATION__CAPABILITIES;");
+        //jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.REL_APPLICATION__CAPABILITIES;");
         jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.REL_LANDSCAPE_VIEW__FLOWS;");
         jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.REL_DATAFLOW__FUNCTIONAL_FLOWS;");
-        jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.REL_LANDSCAPE_VIE__CAPABILI_21;");
+        //jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.REL_LANDSCAPE_VIE__CAPABILI_21;");
         jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.REL_APPLICATION__CATEGORIES;");
         jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.REL_OWNER__USERS;");
         jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.DATA_FLOW_ITEM;");
@@ -91,6 +91,8 @@ public class ImportFlowTest {
         jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.PROTOCOL;");
         jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.CAPABILITY;");
         jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.APPLICATION_CATEGORY;");
+        jdbcTemplate.execute("TRUNCATE TABLE rel_capability_ap__landscap_b2");
+        jdbcTemplate.execute("TRUNCATE TABLE capability_application_mapping");
         jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY FALSE");
         // jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.TMP_IMPORT_FLOWS;");
         // jdbcTemplate.execute("TRUNCATE TABLE PUBLIC.TMP_IMPORT_APPLICATION_IMPORT;");

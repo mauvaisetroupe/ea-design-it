@@ -539,15 +539,6 @@
         :defaultShowApplications="false"
       ></CapabilityComponent>
     </div>
-
-    ++
-    <div class="row">
-      <div v-for="cm in landscapeView.capabilityApplicationMappings" class="col-12">
-        {{ cm.capability.name }} --- {{ cm.application.name }}
-      </div>
-    </div>
-
-    ++
   </div>
 </template>
 <style>

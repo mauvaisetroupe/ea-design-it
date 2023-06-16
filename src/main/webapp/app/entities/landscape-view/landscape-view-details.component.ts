@@ -329,7 +329,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
       .find(this.landscapeView.id)
       .then(res => {
         this.landscapeView = res.landscape;
-        this.consolidatedCapabilities = res.capabilities;
+        this.consolidatedCapability = res.consolidatedCapability;
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);

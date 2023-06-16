@@ -187,8 +187,8 @@ class LandscapeViewResourceIT {
             .perform(get(ENTITY_API_URL_ID, landscapeView.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.id").value(landscapeView.getId().intValue()))
-            .andExpect(jsonPath("$.diagramName").value(DEFAULT_DIAGRAM_NAME));
+            .andExpect(jsonPath("$.landscape.id").value(landscapeView.getId().intValue()))
+            .andExpect(jsonPath("$.landscape.diagramName").value(DEFAULT_DIAGRAM_NAME));
     }
 
     @Test

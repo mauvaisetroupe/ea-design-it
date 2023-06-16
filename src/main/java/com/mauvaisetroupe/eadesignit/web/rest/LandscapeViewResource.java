@@ -179,7 +179,7 @@ public class LandscapeViewResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the landscapeView, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/landscape-views/{id}")
-    public LandscapeDTO getLandscapeView(@PathVariable Long id) {
+    public ResponseEntity<LandscapeDTO> getLandscapeView(@PathVariable Long id) {
         log.debug("REST request to get LandscapeView : {}", id);
 
         LandscapeDTO landscapeDTO = new LandscapeDTO();
@@ -210,8 +210,13 @@ public class LandscapeViewResource {
             landscapeDTO.setLandscape(landscapeView.get());
             landscapeDTO.setConsolidatedCapability(result);
         }
-
-        return landscapeDTO;
+        Optional<LandscapeDTO> landscapeDtoOptional;
+        if (landscapeView.isPresent()) {
+            landscapeDtoOptional = Optional.of(landscapeDTO);
+        } else {
+            landscapeDtoOptional = Optional.empty();
+        }
+        return ResponseUtil.wrapOrNotFound(landscapeDtoOptional);
     }
 
     /**

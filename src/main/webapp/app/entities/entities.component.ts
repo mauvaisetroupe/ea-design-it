@@ -49,7 +49,5 @@ export default class Entities extends Vue {
   @Provide('externalSystemService') private externalSystemService = () => new ExternalSystemService();
   @Provide('capabilityApplicationMappingService') private capabilityApplicationMappingService = () =>
     new CapabilityApplicationMappingService();
-  @Provide('capabilityApplicationMappingService') private capabilityApplicationMappingService = () =>
-    new CapabilityApplicationMappingService();
   // jhipster-needle-add-entity-service-to-entities-component - JHipster will import entities services here
 }
