@@ -16,8 +16,6 @@ export default class CapabilityDetails extends Vue {
   @Inject('capabilityService') private capabilityService: () => CapabilityService;
   @Inject('alertService') private alertService: () => AlertService;
 
-  public path = [];
-
   public capability: ICapability = {};
   public capabilitiesPlantUMLImage = '';
 
@@ -58,15 +56,5 @@ export default class CapabilityDetails extends Vue {
 
   private init(res: ICapability) {
     this.capability = res;
-
-    // PATH for breadcrumb
-    var tmp = this.capability;
-    this.path = [];
-    tmp = tmp.parent;
-    while (tmp) {
-      this.path.push(tmp);
-      tmp = tmp.parent;
-    }
-    this.path.reverse();
   }
 }
