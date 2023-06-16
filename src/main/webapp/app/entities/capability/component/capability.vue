@@ -2,7 +2,7 @@
   <div>
     <ol class="breadcrumb" v-if="showPath">
       <li class="breadcrumb-item" v-for="(mycap, i) in path" key="id">
-        <a @click="$emit('retrieveCapability', mycap.id)" class="router-link-exact-active router-link-active" target="_self">
+        <a @click="retrieveCapability(mycap.id)" class="router-link-exact-active router-link-active" target="_self">
           <span v-if="i == 0">
             <font-awesome-icon icon="home" />
             <span>Corporate Capabilities</span>
@@ -54,6 +54,7 @@
                     @retrieveCapability="retrieveCapability"
                     :showApplications="showApplications"
                     :nbLevel="nbLevel"
+                    :nbNode="mapNbCapabilitiesByLevel.get(child2.level)"
                   >
                     <div class="d-flex flex-wrap">
                       <template v-for="child3 in child2.subCapabilities">

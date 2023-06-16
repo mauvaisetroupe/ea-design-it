@@ -536,7 +536,8 @@
         :showSliders="true"
         :showPath="false"
         :nbLevel="4"
-        :defaultShowApplications="false"
+        :defaultShowApplications="true"
+        :defaultNbLevel="1"
       ></CapabilityComponent>
     </div>
   </div>

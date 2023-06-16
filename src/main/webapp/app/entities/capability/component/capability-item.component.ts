@@ -13,11 +13,24 @@ const CapabilityiItemProps = Vue.extend({
     showInheritedApplications: Boolean,
     childStyle: String,
     nbLevel: Number,
+    nbNode: {
+      type: Number,
+      default: 6,
+    },
   },
 });
 
 @Component
 export default class CapabilityItemComponent extends CapabilityiItemProps {
+  public get percent() {
+    if (this.capability.level >= 2) {
+      return 100;
+    } else {
+      var percent: number = Math.max(16, Math.floor(100 / this.nbNode - 1));
+      return percent;
+    }
+  }
+
   public getApplications(): IApplication[] {
     var applications: IApplication[] = [];
     if (this.capability && this.capability.capabilityApplicationMappings && this.capability.capabilityApplicationMappings.length > 0) {

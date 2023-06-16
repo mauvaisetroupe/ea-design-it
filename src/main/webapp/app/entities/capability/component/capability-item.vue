@@ -3,7 +3,10 @@
     :class="'capa-child-' + childStyle + ' c' + capability.level"
     v-if="capability.level <= nbLevel"
     :key="childStyle + '-' + capability.id"
+    :style="childStyle === '2' ? 'width: ' + percent + '%' : ''"
   >
+    <!--  :title="'capa-child-' + childStyle + ' c' + capability.level" -->
+    <!--{{ childStyle}} {{ capability.level}} {{ nbNode }} {{ (childStyle==='2')?'width: ' + percent + '%':'' }}-->
     <div :title="capability.description" v-if="capability.level > -2">
       <!--do not display ROOT-->
       <a @click="$emit('retrieveCapability', capability.id)" v-if="childStyle != 'top' && capability.level < 2">{{ capability.name }}</a>
@@ -59,7 +62,6 @@ a {
   font-weight: normal;
   padding: 5px;
   margin: 5px;
-  width: 16%;
   font-size: 15px;
 }
 
@@ -76,6 +78,7 @@ a {
   padding: 5px;
   margin: 5px;
   font-size: 11px;
+  width: 100%;
 }
 
 .capa-child-5 {
@@ -83,6 +86,7 @@ a {
   padding: 5px;
   margin: 5px;
   font-size: 11px;
+  width: 100%;
 }
 
 .c-2,
@@ -101,12 +105,14 @@ a {
   /* ROOT */
   background-color: white;
   color: black;
+  width: 100%;
 }
 
 .c-1 {
   /* SUR DOMAIN GREY */
   background-color: #e6e6e6;
   color: black;
+  width: 100%;
 }
 
 .c0 {
@@ -119,12 +125,16 @@ a {
   background-color: #e5cfee;
 }
 
+/* WHITE L2 has a max width of 300px (because they are considered as leaf...) */
 .c2 {
   background-color: white;
+  max-width: 280px;
 }
 
+/* GREEN L3 take all the width available, thy are always in a L2 displayed*/
 .c3 {
   background-color: rgb(233, 252, 233);
+  width: 100%;
 }
 
 .appli {

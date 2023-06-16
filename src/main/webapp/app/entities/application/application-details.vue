@@ -215,7 +215,7 @@
         @retrieveCapability="routeToCapability"
         :showSliders="true"
         :showPath="false"
-        :nbLevel="4"
+        :defaultNbLevel="1"
         :defaultShowApplications="false"
       ></CapabilityComponent>
     </div>
