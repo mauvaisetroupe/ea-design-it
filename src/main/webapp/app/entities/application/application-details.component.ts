@@ -99,7 +99,7 @@ export default class ApplicationDetails extends Vue {
   }
 
   public routeToCapability(capId: string) {
-    this.$router.push({ name: 'CapabilityView', params: { capabilityId: capId } });
+    this.$router.push({ name: 'CapabilityNavigate', params: { capabilityId: capId } });
   }
 
   public changeLayout() {
