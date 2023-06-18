@@ -139,7 +139,6 @@ public class PLantumlToDrawioPositioner {
             if (applicationName != null) {
                 applicationName = applicationName.replaceAll("[\n|\r]", " ").replaceAll(" +", " ");
             }
-            System.out.println("[" + applicationName + "]");
 
             if (appliNames.contains(applicationName)) {
                 String _x = textElement.getAttribute("x");
@@ -150,8 +149,6 @@ public class PLantumlToDrawioPositioner {
                 Double textLength = Double.parseDouble(_textLength);
 
                 textPostion.put(applicationName, new PositionAndSize(x + textLength / 2, y, null, null));
-            } else {
-                //System.out.println("["+applicationName+"]");
             }
         }
 
