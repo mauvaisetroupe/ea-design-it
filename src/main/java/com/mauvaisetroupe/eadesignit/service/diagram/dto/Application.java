@@ -1,15 +1,27 @@
 package com.mauvaisetroupe.eadesignit.service.diagram.dto;
 
+import java.util.Set;
+
 public class Application {
 
     private Long id;
     private String name;
     private String url;
+    private Set<String> capabilities;
 
-    public Application(Long id, String name, String url) {
+    public Set<String> getCapabilities() {
+        return capabilities;
+    }
+
+    public void setCapabilities(Set<String> capabilities) {
+        this.capabilities = capabilities;
+    }
+
+    public Application(Long id, String name, String url, Set<String> capabilities) {
         this.id = id;
         this.name = name;
         this.url = url;
+        this.capabilities = capabilities;
     }
 
     // Getter and setters

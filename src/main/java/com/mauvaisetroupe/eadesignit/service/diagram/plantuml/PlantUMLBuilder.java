@@ -54,6 +54,14 @@ public class PlantUMLBuilder {
         plantUMLSource.append("skinparam monochrome true\n");
         plantUMLSource.append("skinparam shadowing false\n");
         plantUMLSource.append("skinparam padding 5\n");
+        plantUMLSource.append("skinparam rectangle {\n");
+        plantUMLSource.append("  backgroundColor #A9DCDF\n");
+        plantUMLSource.append("}\n");
+        plantUMLSource.append("skinparam component {\n");
+        plantUMLSource.append("  backgroundColor white\n");
+        plantUMLSource.append("  borderColor black\n");
+        plantUMLSource.append("}\n");
+        plantUMLSource.append("skinparam rectangleFontSize 10\n");
         //plantUMLSource.append("skinparam svgDimensionStyle false\n");
         plantUMLSource.append("hide footbox\n");
     }
@@ -152,11 +160,26 @@ public class PlantUMLBuilder {
         return open + application.getName() + close;
     }
 
-    public void createComponentWithId(StringBuilder plantUMLSource, Application application, DiagramType diagramType) {
+    public void createComponentWithId(
+        StringBuilder plantUMLSource,
+        Application application,
+        DiagramType diagramType,
+        boolean addCapabilities
+    ) {
         if (diagramType == DiagramType.SEQUENCE_DIAGRAM) {
             plantUMLSource.append("participant \"" + application.getName() + "\" as C" + application.getId() + "\n");
         } else {
-            plantUMLSource.append("component [" + application.getName() + "] as C" + application.getId() + "\n");
+            if (!addCapabilities || application.getCapabilities() == null || application.getCapabilities().size() == 0) {
+                plantUMLSource.append("component \"" + application.getName() + "\" as C" + application.getId() + "\n");
+            } else {
+                plantUMLSource.append("component \"" + application.getName() + "\" as C" + application.getId() + "{\n");
+                application
+                    .getCapabilities()
+                    .forEach(c -> {
+                        plantUMLSource.append(" rectangle \"" + application.getId() + "." + c + "\"\n");
+                    });
+                plantUMLSource.append("}\n");
+            }
         }
         plantUMLSource.append("url of C" + application.getId() + " is [[" + application.getUrl() + "]]\n");
     }
@@ -250,11 +273,17 @@ public class PlantUMLBuilder {
         plantUMLSource.append("End Legend\n");
     }
 
-    public void getPlantumlPackage(StringBuilder plantUMLSource, String packageName, List<Application> applications, boolean useID) {
+    public void getPlantumlPackage(
+        StringBuilder plantUMLSource,
+        String packageName,
+        List<Application> applications,
+        boolean useID,
+        boolean addCapabilities
+    ) {
         plantUMLSource.append("package \"" + packageName + "\" {\n");
         for (Application application : applications) {
             if (useID) {
-                createComponentWithId(plantUMLSource, application, DiagramType.COMPONENT_DIAGRAM);
+                createComponentWithId(plantUMLSource, application, DiagramType.COMPONENT_DIAGRAM, addCapabilities);
             } else {
                 plantUMLSource.append(getComponentByNameOrId(application, useID, DiagramType.COMPONENT_DIAGRAM));
                 plantUMLSource.append("\n");
