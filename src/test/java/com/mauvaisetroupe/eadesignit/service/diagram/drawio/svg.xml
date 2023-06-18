@@ -1,0 +1,1617 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  contentscripttype="application/ecmascript" contentstyletype="text/css" height="2352px"
+  preserveAspectRatio="none" style="width:4619px;height:2352px;background:#FFFFFF;" version="1.1"
+  viewBox="0 0 4619 2352" width="4619px" zoomAndPan="magnify">
+  <defs></defs>
+  <g>
+    <rect fill="#FFFFFF" height="344.8438" style="stroke:#000000;stroke-width:1.5;" width="990.6667"
+      x="1857.5" y="22"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15"
+      x="2828.1667" y="27"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2826.1667"
+      y="29"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2826.1667"
+      y="33"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="49" x="2328.3333" y="47.9951">BILnet</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="198"
+      x="2795.5" y="546.9766"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="2973.5"
+      y="551.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2971.5"
+      y="553.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2971.5"
+      y="557.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="133" x="2828" y="572.9717">Identity manager</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="508"
+      x="1819.5" y="546.9766"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="2307.5"
+      y="551.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2305.5"
+      y="553.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2305.5"
+      y="557.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="109" x="2019" y="572.9717">IBM Campaign</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="154"
+      x="3014.5" y="546.9766"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="3148.5"
+      y="551.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="3146.5"
+      y="553.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="3146.5"
+      y="557.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="169" x="3007" y="572.9717">Report Data Collector</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="212"
+      x="1004.5" y="546.9766"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="1196.5"
+      y="551.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1194.5"
+      y="553.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1194.5"
+      y="557.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="187" x="1017" y="572.9717">PSD2 Payments Service</text>
+    <rect fill="#FFFFFF" height="189.9219" style="stroke:#000000;stroke-width:1.5;" width="343"
+      x="1872" y="835.2578"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="2195"
+      y="840.2578"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2193"
+      y="842.2578"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2193"
+      y="846.2578"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="140" x="1973.5" y="861.2529">Payments service</text>
+    <rect fill="#FFFFFF" height="241.5625" style="stroke:#000000;stroke-width:1.5;" width="573"
+      x="938.1667" y="1205.4453"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15"
+      x="1491.1667" y="1210.4453"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1489.1667"
+      y="1212.4453"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1489.1667"
+      y="1216.4453"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="138" x="1155.6667" y="1231.4404">Accounts Service</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="205"
+      x="4178.5" y="546.9766"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="4363.5"
+      y="551.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="4361.5"
+      y="553.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="4361.5"
+      y="557.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="123" x="4219.5" y="572.9717">Trading service</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="379"
+      x="391.5" y="546.9766"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="750.5"
+      y="551.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="748.5"
+      y="553.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="748.5"
+      y="557.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="140" x="511" y="572.9717">Portfolios Service</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="240"
+      x="3554.5" y="653.6172"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="3774.5"
+      y="658.6172"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="3772.5"
+      y="660.6172"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="3772.5"
+      y="664.6172"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="105" x="3622" y="679.6123">Party Service</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="169"
+      x="3487.1667" y="869.6849"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15"
+      x="3636.1667" y="874.6849"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="3634.1667"
+      y="876.6849"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="3634.1667"
+      y="880.6849"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="205" x="3469.1667" y="895.68">Secured message service</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="201"
+      x="3782.5" y="546.9766"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="3963.5"
+      y="551.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="3961.5"
+      y="553.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="3961.5"
+      y="557.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="199" x="3783.5" y="572.9717">Instant Payments service</text>
+    <rect fill="#FFFFFF" height="241.5625" style="stroke:#000000;stroke-width:1.5;" width="482"
+      x="907.5" y="1517.1406"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="1369.5"
+      y="1522.1406"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1367.5"
+      y="1524.1406"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1367.5"
+      y="1528.1406"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="125" x="1086" y="1543.1357">RT notif Service</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="480"
+      x="2380" y="886.8984"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="2840"
+      y="891.8984"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2838"
+      y="893.8984"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2838"
+      y="897.8984"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="110" x="2565" y="912.8936">Cards Service</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="202"
+      x="636" y="2141.9063"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="818"
+      y="2146.9063"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="816"
+      y="2148.9063"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="816"
+      y="2152.9063"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="245" x="614.5" y="2167.9014">Apple push notification
+      service</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="202"
+      x="414" y="2141.9063"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="596"
+      y="2146.9063"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="594"
+      y="2148.9063"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="594"
+      y="2152.9063"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="129" x="450.5" y="2167.9014">Google Firebase</text>
+    <rect fill="#FFFFFF" height="293.2031" style="stroke:#000000;stroke-width:1.5;" width="575"
+      x="780.5" y="1808.7031"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="1335.5"
+      y="1813.7031"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1333.5"
+      y="1815.7031"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1333.5"
+      y="1819.7031"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="30" x="1053" y="1834.6982">T24</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="223"
+      x="2347.5" y="546.9766"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="2550.5"
+      y="551.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2548.5"
+      y="553.9766"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2548.5"
+      y="557.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="105" x="2406.5" y="572.9717">Six Payments</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="197"
+      x="50.3333" y="1280.4063"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15"
+      x="227.3333" y="1285.4063"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="225.3333"
+      y="1287.4063"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="225.3333"
+      y="1291.4063"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="106" x="95.8333" y="1306.4014">Trust Service</text>
+    <rect fill="#FFFFFF" height="138.2813" style="stroke:#000000;stroke-width:1.5;" width="382"
+      x="12" y="2141.9063"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="374"
+      y="2146.9063"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="372"
+      y="2148.9063"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="372"
+      y="2152.9063"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="66" x="170" y="2167.9014">Luxtrust</text>
+    <rect fill="#FFFFFF" height="86.6406" style="stroke:#000000;stroke-width:1.5;" width="227"
+      x="2880" y="938.5391"></rect>
+    <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="3087"
+      y="943.5391"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="3085"
+      y="945.5391"></rect>
+    <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="3085"
+      y="949.5391"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold"
+      lengthAdjust="spacing" textLength="70" x="2958.5" y="964.5342">Kondor+</text><!--MD5=[aad1494db4ed7d68b2a75c30eeb533b8]
+entity 1661.Document handling-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="141"
+      x="2536.6667" y="62"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="121" x="2546.6667" y="81.2822">1661.Document handling</text><!--MD5=[24f202f3eecffd5a6d8141874cc59e69]
+entity 1661.Movement consultation and search-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="217"
+      x="1872.5" y="113.6406"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="197" x="1882.5" y="132.9229">1661.Movement consultation and search</text><!--MD5=[2e9026b1be1546fb158a5517d4f7ae3f]
+entity 1661.Customer authentication-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="168"
+      x="1897" y="165.2813"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="148" x="1907" y="184.5635">1661.Customer authentication</text><!--MD5=[5a3afb27a206750b2c830d6f807beeff]
+entity 1661.Account consultation-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="147"
+      x="1907.5" y="216.9219"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="127" x="1917.5" y="236.2041">1661.Account consultation</text><!--MD5=[69446b303776d2eb788c5b9969602aa9]
+entity 1661.Missing document distribution-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="190"
+      x="2535.6667" y="113.6406"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="170" x="2545.6667" y="132.9229">1661.Missing document distribution</text><!--MD5=[2921e2188613842c560008b89e2a3b9e]
+entity 1661.Standing order initiation-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="162"
+      x="2138" y="165.2813"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="142" x="2148" y="184.5635">1661.Standing order initiation</text><!--MD5=[d488cec9debce2c3f2913e87a1157db9]
+entity 1661.Cardless withdrawal at BIL ATM AKA Quick Money-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="289"
+      x="2074.5" y="216.9219"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="269" x="2084.5" y="236.2041">1661.Cardless withdrawal at BIL ATM AKA Quick Money</text><!--MD5=[f327199da94f906ee797f7cee6ffd2fc]
+entity 1661.Secured messages-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="139"
+      x="2149.5" y="268.5625"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="119" x="2159.5" y="287.8447">1661.Secured messages</text><!--MD5=[18ad147b96ec4cc1c99cc14867b638d9]
+entity 1661.Account label customization-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="181"
+      x="2571.8333" y="165.2813"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="161" x="2581.8333" y="184.5635">1661.Account label customization</text><!--MD5=[f3417ed5ce8e57e14ed4901b3289bb1e]
+entity 1661.Outward payment initiation -->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="182"
+      x="2383.5" y="216.9219"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="162" x="2393.5" y="236.2041">1661.Outward payment initiation</text><!--MD5=[503850c503efc3c1eb2bf89ccd754d75]
+entity 1661.Account debit/credit advice-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="177"
+      x="2386" y="268.5625"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="157" x="2396" y="287.8447">1661.Account debit/credit advice</text><!--MD5=[b3c2aa44a1166b928bee804a21f1b68d]
+entity 1661.Signature of transaction-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="164"
+      x="2392.5" y="320.2031"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="144" x="2402.5" y="339.4854">1661.Signature of transaction</text><!--MD5=[fc4aa71948bbc6355aee67f0bcc9214e]
+entity 1661.Non tracked document distribution-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="214"
+      x="2585.5" y="216.9219"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="194" x="2595.5" y="236.2041">1661.Non tracked document distribution</text><!--MD5=[4d7f85cce4716a4e1336c2c6cc7b8dab]
+entity 1661.Beneficiary validation & signature-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="210"
+      x="2623.1667" y="268.5625"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="190" x="2633.1667" y="287.8447">1661.Beneficiary validation &amp; signature</text><!--MD5=[04ca47a8d7474f4e0df7c04021a749d9]
+entity 1550.Customer authentication-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="168"
+      x="2810.5" y="586.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="148" x="2820.5" y="606.2588">1550.Customer authentication</text><!--MD5=[5aa6588ddb020948dc73862c93744470]
+entity 1552.Product recommendation configuration-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="237"
+      x="1834.5" y="586.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="217" x="1844.5" y="606.2588">1552.Product recommendation configuration</text><!--MD5=[70c67f58897616be67f38967695527c7]
+entity 1552.Product recommendation execution-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="221"
+      x="2091.5" y="586.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="201" x="2101.5" y="606.2588">1552.Product recommendation execution</text><!--MD5=[bef137d120233801557d81f16b3042f4]
+entity 1450.Invest reporting-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="124"
+      x="3029.5" y="586.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="104" x="3039.5" y="606.2588">1450.Invest reporting</text><!--MD5=[9173310737b1749c0e740b935ef66974]
+entity 1455.Outward payment initiation -->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="182"
+      x="1019.5" y="586.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="162" x="1029.5" y="606.2588">1455.Outward payment initiation</text><!--MD5=[e12c4d53e7d70f45e627458e2f1bffb6]
+entity 1462.Outward payment initiation -->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="182"
+      x="1973.6667" y="875.2578"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="162" x="1983.6667" y="894.54">1462.Outward payment initiation</text><!--MD5=[a21ff7c28b22d26d05d63bb678d3f91e]
+entity 1462.Beneficiary list-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="117"
+      x="1887" y="926.8984"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="97" x="1897" y="946.1807">1462.Beneficiary list</text><!--MD5=[52b033ff3d819a726a0773ceb767ff31]
+entity 1462.Beneficiary lifecycle-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="142"
+      x="2024" y="926.8984"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="122" x="2034" y="946.1807">1462.Beneficiary lifecycle</text><!--MD5=[c5bd48e73115379c7cdd01f8b1e219fe]
+entity 1462.Beneficiary validation & signature-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="210"
+      x="1990" y="978.5391"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="190" x="2000" y="997.8213">1462.Beneficiary validation &amp; signature</text><!--MD5=[1a792b75464a6d897c7d104167d9291c]
+entity 1693.Document handling-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="141"
+      x="1014.6667" y="1245.4453"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="121" x="1024.6667" y="1264.7275">1693.Document handling</text><!--MD5=[4aaede41f97cdbf061a8bcbe30fb66f7]
+entity 1693.Movement consultation and search-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="217"
+      x="953.1667" y="1297.0859"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="197" x="963.1667" y="1316.3682">1693.Movement consultation and search</text><!--MD5=[55bf1e2cf69daabbe6cd25e3f936b9ef]
+entity 1693.Account label customization-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="181"
+      x="971.1667" y="1348.7266"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="161" x="981.1667" y="1368.0088">1693.Account label customization</text><!--MD5=[4ed2f3ee3d898fb87c3d5cfd27f22cb9]
+entity 1693.Movement historization-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="161"
+      x="1207" y="1297.0859"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="141" x="1217" y="1316.3682">1693.Movement historization</text><!--MD5=[3cb81ae3a9168de1cac4c6e1d5a5280e]
+entity 1693.Account debit/credit advice-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="177"
+      x="1172.1667" y="1348.7266"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="157" x="1182.1667" y="1368.0088">1693.Account debit/credit advice</text><!--MD5=[f7c0d237641d8e0b43f2ba264281bc3e]
+entity 1693.Account consultation-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="147"
+      x="1187.1667" y="1400.3672"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="127" x="1197.1667" y="1419.6494">1693.Account consultation</text><!--MD5=[93799bfc1f3a5b8c8d16241263fd5298]
+entity 1693.Account blocking-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="127"
+      x="1369.1667" y="1348.7266"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="107" x="1379.1667" y="1368.0088">1693.Account blocking</text><!--MD5=[25128d3f71631d9e748c8761bcc7453d]
+entity 1341.Order Definition / Creation-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="175"
+      x="4193.5" y="586.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="155" x="4203.5" y="606.2588">1341.Order Definition / Creation</text><!--MD5=[2d4dcb0ee441373fd10bbf667e1cd52a]
+entity 1459.Customer and portfolio selection-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="205"
+      x="406.5" y="586.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="185" x="416.5" y="606.2588">1459.Customer and portfolio selection</text><!--MD5=[057ac6930279926453cccc278f240bb9]
+entity 1459.Invest reporting-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="124"
+      x="631.5" y="586.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="104" x="641.5" y="606.2588">1459.Invest reporting</text><!--MD5=[e777a207e915e2bfc200680719ce82fc]
+entity 1465.Customer Search & Identification-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="210"
+      x="3569.5" y="693.6172"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="190" x="3579.5" y="712.8994">1465.Customer Search &amp; Identification</text><!--MD5=[2900fc51122925ed3c7e18ccc3d75bc3]
+entity 1428.Secured messages-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="139"
+      x="3502.1667" y="909.6849"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="119" x="3512.1667" y="928.9671">1428.Secured messages</text><!--MD5=[d78f36d3237966d1ab9efd62591bd563]
+entity 1541.Instant payment initiation-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="171"
+      x="3797.5" y="586.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="151" x="3807.5" y="606.2588">1541.Instant payment initiation</text><!--MD5=[45278fae8904aa6a8500d88cbbcc0c74]
+entity 1438.Opt-in / Opt-out alert / notification-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="211"
+      x="959.6667" y="1557.1406"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="191" x="969.6667" y="1576.4229">1438.Opt-in / Opt-out alert / notification</text><!--MD5=[aded1c6f18e28457cc5363bb1dabf6cd]
+entity 1438.Alert / notification management-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="201"
+      x="929.5" y="1608.7813"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="181" x="939.5" y="1628.0635">1438.Alert / notification management</text><!--MD5=[6639ac2fc03ed415d1d424deb8b7bf45]
+entity 1438.Alert / notification sending initiation-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="215"
+      x="922.5" y="1660.4219"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="195" x="932.5" y="1679.7041">1438.Alert / notification sending initiation</text><!--MD5=[42b640ba2323958b1e61cee09628c706]
+entity 1438.Alert / Notification configuration-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="200"
+      x="1166" y="1608.7813"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="180" x="1176" y="1628.0635">1438.Alert / Notification configuration</text><!--MD5=[cc43d68bd45b7905aa63d719cff16fdc]
+entity 1438.Realtime Notification management-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="217"
+      x="1157.5" y="1660.4219"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="197" x="1167.5" y="1679.7041">1438.Realtime Notification management</text><!--MD5=[545b0ce25f43c3dbe8f86239b9ea2e89]
+entity 1438.Alert / notification display-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="168"
+      x="1182" y="1712.0625"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="148" x="1192" y="1731.3447">1438.Alert / notification display</text><!--MD5=[7e55a033294054cccfcfcd2b7c64a48c]
+entity 1649.Card referential management-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="193"
+      x="2395" y="926.8984"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="173" x="2405" y="946.1807">1649.Card referential management</text><!--MD5=[f8758433accd984536a78af0e923690a]
+entity 1649.Card administration request processing-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="237"
+      x="2608" y="926.8984"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="217" x="2618" y="946.1807">1649.Card administration request processing</text><!--MD5=[d1d36fdb6ad44a78683b8a739f8ddb9c]
+entity 1679.Alert / notification sending-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="172"
+      x="651" y="2181.9063"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="152" x="661" y="2201.1885">1679.Alert / notification sending</text><!--MD5=[42b685972297d7a3064b7edfd40fe1da]
+entity 1560.Alert / notification sending-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="172"
+      x="429" y="2181.9063"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="152" x="439" y="2201.1885">1560.Alert / notification sending</text><!--MD5=[e00d60980097155a1d7aea22bb94cba6]
+entity 1404.Document handling-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="141"
+      x="836" y="1848.7031"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="121" x="846" y="1867.9854">1404.Document handling</text><!--MD5=[56624bfe4e4bac75a3baa5e31ce63be1]
+entity 1404.Order Definition / Creation-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="175"
+      x="795.5" y="1900.3438"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="155" x="805.5" y="1919.626">1404.Order Definition / Creation</text><!--MD5=[9039c6b40659d9587d6960a7737b73f7]
+entity 1404.Movement historization-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="161"
+      x="802.5" y="1951.9844"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="141" x="812.5" y="1971.2666">1404.Movement historization</text><!--MD5=[e76274da00f66aace95ff72136dfc1b1]
+entity 1404.Outward payment initiation -->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="182"
+      x="1025.3333" y="1900.3438"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="162" x="1035.3333" y="1919.626">1404.Outward payment initiation</text><!--MD5=[e8bccfe49fb1b5afb01c7496d7bd8de7]
+entity 1404.Customer and portfolio selection-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="205"
+      x="983.5" y="1951.9844"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="185" x="993.5" y="1971.2666">1404.Customer and portfolio selection</text><!--MD5=[587ad5eafef032a32b630e8a0fd0ccd3]
+entity 1404.Account debit/credit advice-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="177"
+      x="997.5" y="2003.625"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="157" x="1007.5" y="2022.9072">1404.Account debit/credit advice</text><!--MD5=[29b69549b0bfbf5463b05c942d364a53]
+entity 1404.Invest reporting-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="124"
+      x="1208.5" y="1951.9844"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="104" x="1218.5" y="1971.2666">1404.Invest reporting</text><!--MD5=[bb17171d82d8488645f0514153219228]
+entity 1404.Limit management-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="140"
+      x="1200.5" y="2003.625"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="120" x="1210.5" y="2022.9072">1404.Limit management</text><!--MD5=[bf82b432e59fd29ae0a9b48da80630e1]
+entity 1404.Account blocking-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="127"
+      x="1207" y="2055.2656"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="107" x="1217" y="2074.5479">1404.Account blocking</text><!--MD5=[a2d314467294ea6acc5a7f666ad31dee]
+entity 1417.Card referential management-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="193"
+      x="2362.5" y="586.9766"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="173" x="2372.5" y="606.2588">1417.Card referential management</text><!--MD5=[f6ceb3e3ca3cc1bbd5bc75c64d4ed599]
+entity 1336.Certificate management-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="167"
+      x="65.3333" y="1320.4063"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="147" x="75.3333" y="1339.6885">1336.Certificate management</text><!--MD5=[34e663125f88afdf10e222b08712f094]
+entity 1510.Certificate management-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="167"
+      x="55.3333" y="2181.9063"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="147" x="65.3333" y="2201.1885">1510.Certificate management</text><!--MD5=[7ba4e06029f0d4d2a032864142fde49f]
+entity 1510.Customer authentication-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="168"
+      x="27" y="2233.5469"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="148" x="37" y="2252.8291">1510.Customer authentication</text><!--MD5=[3a392b12f7ebd7b860fdcd5c66808941]
+entity 1510.Signature of transaction-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="164"
+      x="215" y="2233.5469"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="144" x="225" y="2252.8291">1510.Signature of transaction</text><!--MD5=[0d23705949d031b95e0af662f5d5f327]
+entity 1525.Rates referential management-->
+    <rect fill="#A9DCDF" height="31.6406" style="stroke:#000000;stroke-width:1.5;" width="197"
+      x="2895" y="978.5391"></rect>
+    <text fill="#000000" font-family="sans-serif" font-size="10" lengthAdjust="spacing"
+      textLength="177" x="2905" y="997.8213">1525.Rates referential management</text><!--MD5=[bcfe7131d7308abe30ee20042c335bab]
+entity C1506-->
+    <a href="/application/1506/view" target="_top" title="/application/1506/view"
+      xlink:actuate="onRequest" xlink:href="/application/1506/view" xlink:show="new"
+      xlink:title="/application/1506/view" xlink:type="simple">
+      <rect fill="#FFFFFF" height="46.2969" style="stroke:#000000;stroke-width:1.5;" width="254"
+        x="3188.5" y="546.9766"></rect>
+      <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15"
+        x="3422.5" y="551.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="3420.5"
+        y="553.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="3420.5"
+        y="557.9766"></rect>
+      <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+        textLength="214" x="3203.5" y="579.9717">Marketing Files, Forms, FactSet</text>
+    </a><!--MD5=[fe16e7d920cc6602b3c949994325d936]
+entity C1332-->
+    <a href="/application/1332/view" target="_top" title="/application/1332/view"
+      xlink:actuate="onRequest" xlink:href="/application/1332/view" xlink:show="new"
+      xlink:title="/application/1332/view" xlink:type="simple">
+      <rect fill="#FFFFFF" height="46.2969" style="stroke:#000000;stroke-width:1.5;" width="185"
+        x="2590.5" y="546.9766"></rect>
+      <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15"
+        x="2755.5" y="551.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2753.5"
+        y="553.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="2753.5"
+        y="557.9766"></rect>
+      <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+        textLength="145" x="2605.5" y="579.9717">User settings service</text>
+    </a><!--MD5=[9e593ccaa09539db1f699a98617bf3b8]
+entity C1576-->
+    <a href="/application/1576/view" target="_top" title="/application/1576/view"
+      xlink:actuate="onRequest" xlink:href="/application/1576/view" xlink:show="new"
+      xlink:title="/application/1576/view" xlink:type="simple">
+      <rect fill="#FFFFFF" height="46.2969" style="stroke:#000000;stroke-width:1.5;" width="239"
+        x="1237.5" y="546.9766"></rect>
+      <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15"
+        x="1456.5" y="551.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1454.5"
+        y="553.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1454.5"
+        y="557.9766"></rect>
+      <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+        textLength="199" x="1252.5" y="579.9717">Financial instruments service</text>
+    </a><!--MD5=[79349c899cc3402024de20a78a00459e]
+entity C1534-->
+    <a href="/application/1534/view" target="_top" title="/application/1534/view"
+      xlink:actuate="onRequest" xlink:href="/application/1534/view" xlink:show="new"
+      xlink:title="/application/1534/view" xlink:type="simple">
+      <rect fill="#FFFFFF" height="46.2969" style="stroke:#000000;stroke-width:1.5;" width="194"
+        x="790.5" y="546.9766"></rect>
+      <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="964.5"
+        y="551.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="962.5"
+        y="553.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="962.5"
+        y="557.9766"></rect>
+      <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+        textLength="154" x="805.5" y="579.9717">Investor profile service</text>
+    </a><!--MD5=[0b6d95fa9cfc5bce1fe582e3d4680191]
+entity C1518-->
+    <a href="/application/1518/view" target="_top" title="/application/1518/view"
+      xlink:actuate="onRequest" xlink:href="/application/1518/view" xlink:show="new"
+      xlink:title="/application/1518/view" xlink:type="simple">
+      <rect fill="#FFFFFF" height="46.2969" style="stroke:#000000;stroke-width:1.5;" width="134"
+        x="1497.5" y="546.9766"></rect>
+      <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15"
+        x="1611.5" y="551.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1609.5"
+        y="553.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1609.5"
+        y="557.9766"></rect>
+      <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+        textLength="94" x="1512.5" y="579.9717">Loans service</text>
+    </a><!--MD5=[62a64a50fac61ba3a8a0bb3c12d09cba]
+entity C1463-->
+    <a href="/application/1463/view" target="_top" title="/application/1463/view"
+      xlink:actuate="onRequest" xlink:href="/application/1463/view" xlink:show="new"
+      xlink:title="/application/1463/view" xlink:type="simple">
+      <rect fill="#FFFFFF" height="46.2969" style="stroke:#000000;stroke-width:1.5;" width="155"
+        x="4003.5" y="573.8724"></rect>
+      <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15"
+        x="4138.5" y="578.8724"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="4136.5"
+        y="580.8724"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="4136.5"
+        y="584.8724"></rect>
+      <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+        textLength="115" x="4018.5" y="606.8675">Payconiq service</text>
+    </a><!--MD5=[7bd6498e139c737e03c5c785d36a6ac2]
+entity C1464-->
+    <a href="/application/1464/view" target="_top" title="/application/1464/view"
+      xlink:actuate="onRequest" xlink:href="/application/1464/view" xlink:show="new"
+      xlink:title="/application/1464/view" xlink:type="simple">
+      <rect fill="#FFFFFF" height="46.2969" style="stroke:#000000;stroke-width:1.5;" width="102"
+        x="4004.1667" y="835.2578"></rect>
+      <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15"
+        x="4086.1667" y="840.2578"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4"
+        x="4084.1667" y="842.2578"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4"
+        x="4084.1667" y="846.2578"></rect>
+      <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+        textLength="62" x="4019.1667" y="868.2529">Payconiq</text>
+    </a><!--MD5=[dbcde72455f1d7620482b253dd56d221]
+entity C1456-->
+    <a href="/application/1456/view" target="_top" title="/application/1456/view"
+      xlink:actuate="onRequest" xlink:href="/application/1456/view" xlink:show="new"
+      xlink:title="/application/1456/view" xlink:type="simple">
+      <rect fill="#FFFFFF" height="46.2969" style="stroke:#000000;stroke-width:1.5;" width="219"
+        x="820" y="2300.1875"></rect>
+      <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="1019"
+        y="2305.1875"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1017"
+        y="2307.1875"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1017"
+        y="2311.1875"></rect>
+      <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+        textLength="179" x="835" y="2333.1826">Product Mandates service</text>
+    </a><!--MD5=[46f834fcded56b1f9a65abef702d81d5]
+entity C1419-->
+    <a href="/application/1419/view" target="_top" title="/application/1419/view"
+      xlink:actuate="onRequest" xlink:href="/application/1419/view" xlink:show="new"
+      xlink:title="/application/1419/view" xlink:type="simple">
+      <rect fill="#FFFFFF" height="46.2969" style="stroke:#000000;stroke-width:1.5;" width="77"
+        x="1648" y="907.0703"></rect>
+      <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="1705"
+        y="912.0703"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1703"
+        y="914.0703"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1703"
+        y="918.0703"></rect>
+      <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+        textLength="37" x="1663" y="940.0654">Sirius</text>
+    </a><!--MD5=[f3465de7fb26260a8ed238dae937238b]
+entity C1680-->
+    <a href="/application/1680/view" target="_top" title="/application/1680/view"
+      xlink:actuate="onRequest" xlink:href="/application/1680/view" xlink:show="new"
+      xlink:title="/application/1680/view" xlink:type="simple">
+      <rect fill="#FFFFFF" height="46.2969" style="stroke:#000000;stroke-width:1.5;" width="107"
+        x="1745" y="835.2578"></rect>
+      <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15" x="1832"
+        y="840.2578"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1830"
+        y="842.2578"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1830"
+        y="846.2578"></rect>
+      <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+        textLength="67" x="1760" y="868.2529">Apple pay</text>
+    </a><!--MD5=[1856321c4ec359526b1a901360345756]
+entity C1617-->
+    <a href="/application/1617/view" target="_top" title="/application/1617/view"
+      xlink:actuate="onRequest" xlink:href="/application/1617/view" xlink:show="new"
+      xlink:title="/application/1617/view" xlink:type="simple">
+      <rect fill="#FFFFFF" height="46.2969" style="stroke:#000000;stroke-width:1.5;" width="92"
+        x="1707.5" y="546.9766"></rect>
+      <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15"
+        x="1779.5" y="551.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1777.5"
+        y="553.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="1777.5"
+        y="557.9766"></rect>
+      <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+        textLength="52" x="1722.5" y="579.9717">Decibel</text>
+    </a><!--MD5=[f5f09036eaf9a8c5d93a73d1af078560]
+entity C1561-->
+    <a href="/application/1561/view" target="_top" title="/application/1561/view"
+      xlink:actuate="onRequest" xlink:href="/application/1561/view" xlink:show="new"
+      xlink:title="/application/1561/view" xlink:type="simple">
+      <rect fill="#FFFFFF" height="46.2969" style="stroke:#000000;stroke-width:1.5;" width="154"
+        x="4459.5" y="546.9766"></rect>
+      <rect fill="#FFFFFF" height="10" style="stroke:#000000;stroke-width:1.5;" width="15"
+        x="4593.5" y="551.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="4591.5"
+        y="553.9766"></rect>
+      <rect fill="#FFFFFF" height="2" style="stroke:#000000;stroke-width:1.5;" width="4" x="4591.5"
+        y="557.9766"></rect>
+      <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing"
+        textLength="114" x="4474.5" y="579.9717">Google Analytics</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3916.5" x2="3916.5" y1="633.6172"
+      y2="643.6172"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3916.5" x2="3860.5" y1="643.6172"
+      y2="643.6172"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3860.5" x2="3860.5" y1="643.6172"
+      y2="1150.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3860.5" x2="1115.1667" y1="1150.4453"
+      y2="1150.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1115.1667" x2="1115.1667" y1="1150.4453"
+      y2="1205.4453"></line>
+    <polygon fill="#A80036"
+      points="1115.1667,1205.4453,1119.1667,1196.4453,1115.1667,1200.4453,1111.1667,1196.4453,1115.1667,1205.4453"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5093/view" target="_top" title="/functional-flow/5093/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5093/view" xlink:show="new"
+      xlink:title="/functional-flow/5093/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="3825.5" y="934.7192">A.25</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1075.1667" x2="1075.1667" y1="1447.0078"
+      y2="1457.0078"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1075.1667" x2="896.5" y1="1457.0078"
+      y2="1457.0078"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="896.5" x2="896.5" y1="1457.0078"
+      y2="1808.7031"></line>
+    <polygon fill="#A80036"
+      points="896.5,1808.7031,900.5,1799.7031,896.5,1803.7031,892.5,1799.7031,896.5,1808.7031"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5066/view" target="_top" title="/functional-flow/5066/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5066/view" xlink:show="new"
+      xlink:title="/functional-flow/5066/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="30" x="860.5" y="1479.0747">D.02</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2583" x2="2583" y1="366.8438" y2="411.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2583" x2="39.3333" y1="411.8438"
+      y2="411.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="39.3333" x2="39.3333" y1="411.8438"
+      y2="1492.1406"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="39.3333" x2="1075.1667" y1="1492.1406"
+      y2="1492.1406"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1075.1667" x2="1075.1667" y1="1492.1406"
+      y2="1517.1406"></line>
+    <polygon fill="#A80036"
+      points="1075.1667,1517.1406,1079.1667,1508.1406,1075.1667,1512.1406,1071.1667,1508.1406,1075.1667,1517.1406"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5083/view" target="_top" title="/functional-flow/5083/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5083/view" xlink:show="new"
+      xlink:title="/functional-flow/5083/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="42.3333" y="934.7192">A.13</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3571.6667" x2="3571.6667" y1="956.3255"
+      y2="1502.1406"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3571.6667" x2="1105.1667" y1="1502.1406"
+      y2="1502.1406"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1105.1667" x2="1105.1667" y1="1502.1406"
+      y2="1517.1406"></line>
+    <polygon fill="#A80036"
+      points="1105.1667,1517.1406,1109.1667,1508.1406,1105.1667,1512.1406,1101.1667,1508.1406,1105.1667,1517.1406"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5084/view" target="_top" title="/functional-flow/5084/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5084/view" xlink:show="new"
+      xlink:title="/functional-flow/5084/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="3536.6667" y="1328.2271">A.14</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="148.8333" x2="148.8333" y1="1367.0469"
+      y2="2141.9063"></line>
+    <polygon fill="#A80036"
+      points="148.8333,2141.9063,152.8333,2132.9063,148.8333,2136.9063,144.8333,2132.9063,148.8333,2141.9063"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5099/view" target="_top" title="/functional-flow/5099/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5099/view" xlink:show="new"
+      xlink:title="/functional-flow/5099/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="113.8333" y="1642.4224">A.32</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2593" x2="2593" y1="366.8438" y2="421.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2593" x2="581" y1="421.8438" y2="421.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="581" x2="581" y1="421.8438" y2="546.9766"></line>
+    <polygon fill="#A80036"
+      points="581,546.9766,585,537.9766,581,541.9766,577,537.9766,581,546.9766"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5080/view" target="_top" title="/functional-flow/5080/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5080/view" xlink:show="new"
+      xlink:title="/functional-flow/5080/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="37" x="538" y="523.9106">A.102</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2603" x2="2603" y1="366.8438" y2="431.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2603" x2="887.5" y1="431.8438" y2="431.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="887.5" x2="887.5" y1="431.8438" y2="546.9766"></line>
+    <polygon fill="#A80036"
+      points="887.5,546.9766,891.5,537.9766,887.5,541.9766,883.5,537.9766,887.5,546.9766"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5079/view" target="_top" title="/functional-flow/5079/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5079/view" xlink:show="new"
+      xlink:title="/functional-flow/5079/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="37" x="844.5" y="523.9106">A.101</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2613" x2="2613" y1="366.8438" y2="441.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2613" x2="1226.5" y1="441.8438" y2="441.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1226.5" x2="1226.5" y1="441.8438"
+      y2="1090.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1226.5" x2="148.8333" y1="1090.4453"
+      y2="1090.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="148.8333" x2="148.8333" y1="1090.4453"
+      y2="1280.4063"></line>
+    <polygon fill="#A80036"
+      points="148.8333,1280.4063,152.8333,1271.4063,148.8333,1275.4063,144.8333,1271.4063,148.8333,1280.4063"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5096/view" target="_top" title="/functional-flow/5096/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5096/view" xlink:show="new"
+      xlink:title="/functional-flow/5096/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="1191.5" y="701.438">A.28</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2623" x2="2623" y1="366.8438" y2="451.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2623" x2="1357" y1="451.8438" y2="451.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1357" x2="1357" y1="451.8438" y2="546.9766"></line>
+    <polygon fill="#A80036"
+      points="1357,546.9766,1361,537.9766,1357,541.9766,1353,537.9766,1357,546.9766"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5078/view" target="_top" title="/functional-flow/5078/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5078/view" xlink:show="new"
+      xlink:title="/functional-flow/5078/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="1322" y="523.9106">A.10</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2633" x2="2633" y1="366.8438" y2="461.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2633" x2="1486.5" y1="461.8438" y2="461.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1486.5" x2="1486.5" y1="461.8438"
+      y2="1100.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1486.5" x2="257.3333" y1="1100.4453"
+      y2="1100.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="257.3333" x2="257.3333" y1="1100.4453"
+      y2="2116.9063"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="257.3333" x2="128.8333" y1="2116.9063"
+      y2="2116.9063"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="128.8333" x2="128.8333" y1="2116.9063"
+      y2="2141.9063"></line>
+    <polygon fill="#A80036"
+      points="128.8333,2141.9063,132.8333,2132.9063,128.8333,2136.9063,124.8333,2132.9063,128.8333,2141.9063"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5098/view" target="_top" title="/functional-flow/5098/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5098/view" xlink:show="new"
+      xlink:title="/functional-flow/5098/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="1447.5" y="1062.2466">A.31</text>
+    </a>
+    <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+      textLength="4" x="1480.5" y="1062.2466">,</text>
+    <a href="/functional-flow/5100/view" target="_top" title="/functional-flow/5100/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5100/view" xlink:show="new"
+      xlink:title="/functional-flow/5100/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="1449.5" y="1077.3794">A.33</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1075.1667" x2="1075.1667" y1="633.6172"
+      y2="1205.4453"></line>
+    <polygon fill="#A80036"
+      points="1075.1667,1205.4453,1079.1667,1196.4453,1075.1667,1200.4453,1071.1667,1196.4453,1075.1667,1205.4453"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5076/view" target="_top" title="/functional-flow/5076/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5076/view" xlink:show="new"
+      xlink:title="/functional-flow/5076/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="1040.1667" y="934.7192">A.08</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2643" x2="2643" y1="366.8438" y2="471.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2643" x2="1564.5" y1="471.8438" y2="471.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1564.5" x2="1564.5" y1="471.8438"
+      y2="546.9766"></line>
+    <polygon fill="#A80036"
+      points="1564.5,546.9766,1568.5,537.9766,1564.5,541.9766,1560.5,537.9766,1564.5,546.9766"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5080/view" target="_top" title="/functional-flow/5080/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5080/view" xlink:show="new"
+      xlink:title="/functional-flow/5080/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="37" x="1521.5" y="523.9106">A.102</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2653" x2="2653" y1="366.8438" y2="481.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2653" x2="1686.5" y1="481.8438" y2="481.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1686.5" x2="1686.5" y1="481.8438"
+      y2="907.0703"></line>
+    <polygon fill="#A80036"
+      points="1686.5,907.0703,1690.5,898.0703,1686.5,902.0703,1682.5,898.0703,1686.5,907.0703"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5094/view" target="_top" title="/functional-flow/5094/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5094/view" xlink:show="new"
+      xlink:title="/functional-flow/5094/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="1651.5" y="594.7974">A.26</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2663" x2="2663" y1="366.8438" y2="491.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2663" x2="1753.5" y1="491.8438" y2="491.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1753.5" x2="1753.5" y1="491.8438"
+      y2="546.9766"></line>
+    <polygon fill="#A80036"
+      points="1753.5,546.9766,1757.5,537.9766,1753.5,541.9766,1749.5,537.9766,1753.5,546.9766"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5301/view" target="_top" title="/functional-flow/5301/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5301/view" xlink:show="new"
+      xlink:title="/functional-flow/5301/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="1718.5" y="523.9106">A.34</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="4055.1667" x2="4055.1667" y1="620.1693"
+      y2="835.2578"></line>
+    <polygon fill="#A80036"
+      points="4055.1667,835.2578,4059.1667,826.2578,4055.1667,830.2578,4051.1667,826.2578,4055.1667,835.2578"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5087/view" target="_top" title="/functional-flow/5087/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5087/view" xlink:show="new"
+      xlink:title="/functional-flow/5087/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="4020.1667" y="701.438">A.17</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="4106.8333" x2="4106.8333" y1="620.1693"
+      y2="643.6172"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="4106.8333" x2="4101.1667" y1="643.6172"
+      y2="643.6172"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="4101.1667" x2="4101.1667" y1="643.6172"
+      y2="790.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="4101.1667" x2="2084.6667" y1="790.2578"
+      y2="790.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2084.6667" x2="2084.6667" y1="790.2578"
+      y2="835.2578"></line>
+    <polygon fill="#A80036"
+      points="2084.6667,835.2578,2088.6667,826.2578,2084.6667,830.2578,2080.6667,826.2578,2084.6667,835.2578"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5087/view" target="_top" title="/functional-flow/5087/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5087/view" xlink:show="new"
+      xlink:title="/functional-flow/5087/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="4066.1667" y="701.438">A.17</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2993.5" x2="2993.5" y1="1025.1797"
+      y2="1180.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2993.5" x2="1145.1667" y1="1180.4453"
+      y2="1180.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1145.1667" x2="1145.1667" y1="1180.4453"
+      y2="1205.4453"></line>
+    <polygon fill="#A80036"
+      points="1145.1667,1205.4453,1149.1667,1196.4453,1145.1667,1200.4453,1141.1667,1196.4453,1145.1667,1205.4453"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5303/view" target="_top" title="/functional-flow/5303/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5303/view" xlink:show="new"
+      xlink:title="/functional-flow/5303/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="2958.5" y="1069.813">A.41</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1780.6667" x2="1780.6667" y1="835.2578"
+      y2="643.6172"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1780.6667" x2="2403.25" y1="643.6172"
+      y2="643.6172"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2403.25" x2="2403.25" y1="643.6172"
+      y2="633.6172"></line>
+    <polygon fill="#A80036"
+      points="2403.25,633.6172,2407.25,624.6172,2403.25,628.6172,2399.25,624.6172,2403.25,633.6172"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5094/view" target="_top" title="/functional-flow/5094/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5094/view" xlink:show="new"
+      xlink:title="/functional-flow/5094/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="1745.6667" y="701.438">A.26</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1010" x2="1010" y1="1758.7031" y2="1773.7031"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1010" x2="515" y1="1773.7031" y2="1773.7031"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="515" x2="515" y1="1773.7031" y2="2141.9063"></line>
+    <polygon fill="#A80036"
+      points="515,2141.9063,519,2132.9063,515,2136.9063,511,2132.9063,515,2141.9063"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5087/view" target="_top" title="/functional-flow/5087/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5087/view" xlink:show="new"
+      xlink:title="/functional-flow/5087/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="480" y="1959.8052">A.17</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2673" x2="2673" y1="366.8438" y2="501.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2673" x2="2073.5" y1="501.8438" y2="501.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2073.5" x2="2073.5" y1="501.8438"
+      y2="546.9766"></line>
+    <polygon fill="#A80036"
+      points="2073.5,546.9766,2077.5,537.9766,2073.5,541.9766,2069.5,537.9766,2073.5,546.9766"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5072/view" target="_top" title="/functional-flow/5072/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5072/view" xlink:show="new"
+      xlink:title="/functional-flow/5072/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="2038.5" y="523.9106">A.04</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2683" x2="2683" y1="366.8438" y2="546.9766"></line>
+    <polygon fill="#A80036"
+      points="2683,546.9766,2687,537.9766,2683,541.9766,2679,537.9766,2683,546.9766"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5077/view" target="_top" title="/functional-flow/5077/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5077/view" xlink:show="new"
+      xlink:title="/functional-flow/5077/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="2648" y="523.9106">A.09</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2693" x2="2693" y1="366.8438" y2="501.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2693" x2="2894.5" y1="501.8438" y2="501.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2894.5" x2="2894.5" y1="501.8438"
+      y2="546.9766"></line>
+    <polygon fill="#A80036"
+      points="2894.5,546.9766,2898.5,537.9766,2894.5,541.9766,2890.5,537.9766,2894.5,546.9766"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5071/view" target="_top" title="/functional-flow/5071/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5071/view" xlink:show="new"
+      xlink:title="/functional-flow/5071/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="2859.5" y="523.9106">A.03</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2703" x2="2703" y1="366.8438" y2="491.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2703" x2="3003.5" y1="491.8438" y2="491.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3003.5" x2="3003.5" y1="491.8438"
+      y2="770.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3003.5" x2="2225" y1="770.2578" y2="770.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2225" x2="2225" y1="770.2578" y2="1160.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2225" x2="1155.1667" y1="1160.4453"
+      y2="1160.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1155.1667" x2="1155.1667" y1="1160.4453"
+      y2="1205.4453"></line>
+    <polygon fill="#A80036"
+      points="1155.1667,1205.4453,1159.1667,1196.4453,1155.1667,1200.4453,1151.1667,1196.4453,1155.1667,1205.4453"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5064/view" target="_top" title="/functional-flow/5064/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5064/view" xlink:show="new"
+      xlink:title="/functional-flow/5064/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="2968.5" y="701.438">A.20</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2713" x2="2713" y1="366.8438" y2="481.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2713" x2="3091.5" y1="481.8438" y2="481.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3091.5" x2="3091.5" y1="481.8438"
+      y2="546.9766"></line>
+    <polygon fill="#A80036"
+      points="3091.5,546.9766,3095.5,537.9766,3091.5,541.9766,3087.5,537.9766,3091.5,546.9766"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5073/view" target="_top" title="/functional-flow/5073/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5073/view" xlink:show="new"
+      xlink:title="/functional-flow/5073/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="3056.5" y="523.9106">A.05</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2723" x2="2723" y1="366.8438" y2="471.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2723" x2="3315.5" y1="471.8438" y2="471.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3315.5" x2="3315.5" y1="471.8438"
+      y2="546.9766"></line>
+    <polygon fill="#A80036"
+      points="3315.5,546.9766,3319.5,537.9766,3315.5,541.9766,3311.5,537.9766,3315.5,546.9766"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5074/view" target="_top" title="/functional-flow/5074/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5074/view" xlink:show="new"
+      xlink:title="/functional-flow/5074/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="3280.5" y="523.9106">A.06</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2733" x2="2733" y1="366.8438" y2="461.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2733" x2="3497.5" y1="461.8438" y2="461.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3497.5" x2="3497.5" y1="461.8438"
+      y2="780.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3497.5" x2="2700" y1="780.2578" y2="780.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2700" x2="2700" y1="780.2578" y2="886.8984"></line>
+    <polygon fill="#A80036"
+      points="2700,886.8984,2704,877.8984,2700,881.8984,2696,877.8984,2700,886.8984"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5096/view" target="_top" title="/functional-flow/5096/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5096/view" xlink:show="new"
+      xlink:title="/functional-flow/5096/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="3462.5" y="594.7974">A.28</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2743" x2="2743" y1="366.8438" y2="451.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2743" x2="3543.5" y1="451.8438" y2="451.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3543.5" x2="3543.5" y1="451.8438"
+      y2="869.6849"></line>
+    <polygon fill="#A80036"
+      points="3543.5,869.6849,3547.5,860.6849,3543.5,864.6849,3539.5,860.6849,3543.5,869.6849"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5081/view" target="_top" title="/functional-flow/5081/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5081/view" xlink:show="new"
+      xlink:title="/functional-flow/5081/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="3508.5" y="594.7974">A.11</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1085.1667" x2="1085.1667" y1="1447.0078"
+      y2="1517.1406"></line>
+    <polygon fill="#A80036"
+      points="1085.1667,1517.1406,1089.1667,1508.1406,1085.1667,1512.1406,1081.1667,1508.1406,1085.1667,1517.1406"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5084/view" target="_top" title="/functional-flow/5084/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5084/view" xlink:show="new"
+      xlink:title="/functional-flow/5084/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="1050.1667" y="1479.0747">A.14</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3674.5" x2="3674.5" y1="740.2578"
+      y2="800.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3674.5" x2="3162" y1="800.2578" y2="800.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3162" x2="3162" y1="800.2578" y2="1120.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3162" x2="1095.1667" y1="1120.4453"
+      y2="1120.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1095.1667" x2="1095.1667" y1="1120.4453"
+      y2="1205.4453"></line>
+    <polygon fill="#A80036"
+      points="1095.1667,1205.4453,1099.1667,1196.4453,1095.1667,1200.4453,1091.1667,1196.4453,1095.1667,1205.4453"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5090/view" target="_top" title="/functional-flow/5090/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5090/view" xlink:show="new"
+      xlink:title="/functional-flow/5090/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="3127" y="934.7192">A.21</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="893" x2="893" y1="2101.9063" y2="2300.1875"></line>
+    <polygon fill="#A80036"
+      points="893,2300.1875,897,2291.1875,893,2295.1875,889,2291.1875,893,2300.1875"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5092/view" target="_top" title="/functional-flow/5092/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5092/view" xlink:show="new"
+      xlink:title="/functional-flow/5092/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="858" y="2213.0474">A.24</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1095.1667" x2="1095.1667" y1="1447.0078"
+      y2="1457.0078"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1095.1667" x2="1444.5" y1="1457.0078"
+      y2="1457.0078"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1444.5" x2="1444.5" y1="1457.0078"
+      y2="2290.1875"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1444.5" x2="966" y1="2290.1875"
+      y2="2290.1875"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="966" x2="966" y1="2290.1875" y2="2300.1875"></line>
+    <polygon fill="#A80036"
+      points="966,2300.1875,970,2291.1875,966,2295.1875,962,2291.1875,966,2300.1875"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5091/view" target="_top" title="/functional-flow/5091/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5091/view" xlink:show="new"
+      xlink:title="/functional-flow/5091/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="1409.5" y="1642.4224">A.23</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1965.5" x2="1965.5" y1="1025.1797"
+      y2="1040.1797"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1965.5" x2="1956.5" y1="1040.1797"
+      y2="1040.1797"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1956.5" x2="1956.5" y1="1040.1797"
+      y2="1130.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1956.5" x2="1105.1667" y1="1130.4453"
+      y2="1130.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1105.1667" x2="1105.1667" y1="1130.4453"
+      y2="1205.4453"></line>
+    <polygon fill="#A80036"
+      points="1105.1667,1205.4453,1109.1667,1196.4453,1105.1667,1200.4453,1101.1667,1196.4453,1105.1667,1205.4453"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5089/view" target="_top" title="/functional-flow/5089/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5089/view" xlink:show="new"
+      xlink:title="/functional-flow/5089/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="1959.5" y="1069.813">A.19</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1145.8333" x2="1145.8333" y1="633.6172"
+      y2="750.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1145.8333" x2="2074.6667" y1="750.2578"
+      y2="750.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2074.6667" x2="2074.6667" y1="750.2578"
+      y2="835.2578"></line>
+    <polygon fill="#A80036"
+      points="2074.6667,835.2578,2078.6667,826.2578,2074.6667,830.2578,2070.6667,826.2578,2074.6667,835.2578"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5075/view" target="_top" title="/functional-flow/5075/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5075/view" xlink:show="new"
+      xlink:title="/functional-flow/5075/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="1110.8333" y="701.438">A.07</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="903" x2="903" y1="2101.9063" y2="2116.9063"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="903" x2="1521.1667" y1="2116.9063"
+      y2="2116.9063"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1521.1667" x2="1521.1667" y1="2116.9063"
+      y2="1170.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1521.1667" x2="1135.1667" y1="1170.4453"
+      y2="1170.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1135.1667" x2="1135.1667" y1="1170.4453"
+      y2="1205.4453"></line>
+    <polygon fill="#A80036"
+      points="1135.1667,1205.4453,1139.1667,1196.4453,1135.1667,1200.4453,1131.1667,1196.4453,1135.1667,1205.4453"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5065/view" target="_top" title="/functional-flow/5065/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5065/view" xlink:show="new"
+      xlink:title="/functional-flow/5065/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="30" x="1485.1667" y="1479.0747">D.01</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2700" x2="2700" y1="973.5391" y2="1040.1797"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2700" x2="2586" y1="1040.1797" y2="1040.1797"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2586" x2="2586" y1="1040.1797" y2="1190.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2586" x2="1165.1667" y1="1190.4453"
+      y2="1190.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1165.1667" x2="1165.1667" y1="1190.4453"
+      y2="1205.4453"></line>
+    <polygon fill="#A80036"
+      points="1165.1667,1205.4453,1169.1667,1196.4453,1165.1667,1200.4453,1161.1667,1196.4453,1165.1667,1205.4453"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5093/view" target="_top" title="/functional-flow/5093/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5093/view" xlink:show="new"
+      xlink:title="/functional-flow/5093/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="2551" y="1069.813">A.25</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2459" x2="2459" y1="633.6172" y2="760.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2459" x2="1816.3333" y1="760.2578"
+      y2="760.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1816.3333" x2="1816.3333" y1="760.2578"
+      y2="835.2578"></line>
+    <polygon fill="#A80036"
+      points="1816.3333,835.2578,1820.3333,826.2578,1816.3333,830.2578,1812.3333,826.2578,1816.3333,835.2578"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5095/view" target="_top" title="/functional-flow/5095/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5095/view" xlink:show="new"
+      xlink:title="/functional-flow/5095/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="2462" y="701.438">A.27</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2753" x2="2753" y1="366.8438" y2="441.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2753" x2="3674.5" y1="441.8438" y2="441.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3674.5" x2="3674.5" y1="441.8438"
+      y2="653.6172"></line>
+    <polygon fill="#A80036"
+      points="3674.5,653.6172,3678.5,644.6172,3674.5,648.6172,3670.5,644.6172,3674.5,653.6172"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5080/view" target="_top" title="/functional-flow/5080/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5080/view" xlink:show="new"
+      xlink:title="/functional-flow/5080/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="37" x="3631.5" y="523.9106">A.102</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1020" x2="1020" y1="1758.7031" y2="1783.7031"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1020" x2="737" y1="1783.7031" y2="1783.7031"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="737" x2="737" y1="1783.7031" y2="2141.9063"></line>
+    <polygon fill="#A80036"
+      points="737,2141.9063,741,2132.9063,737,2136.9063,733,2132.9063,737,2141.9063"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5086/view" target="_top" title="/functional-flow/5086/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5086/view" xlink:show="new"
+      xlink:title="/functional-flow/5086/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="702" y="1959.8052">A.16</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2540" x2="2540" y1="973.5391" y2="1492.1406"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2540" x2="1095.1667" y1="1492.1406"
+      y2="1492.1406"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1095.1667" x2="1095.1667" y1="1492.1406"
+      y2="1517.1406"></line>
+    <polygon fill="#A80036"
+      points="1095.1667,1517.1406,1099.1667,1508.1406,1095.1667,1512.1406,1091.1667,1508.1406,1095.1667,1517.1406"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5085/view" target="_top" title="/functional-flow/5085/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5085/view" xlink:show="new"
+      xlink:title="/functional-flow/5085/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="2505" y="1328.2271">A.15</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2763" x2="2763" y1="366.8438" y2="431.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2763" x2="3883" y1="431.8438" y2="431.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3883" x2="3883" y1="431.8438" y2="546.9766"></line>
+    <polygon fill="#A80036"
+      points="3883,546.9766,3887,537.9766,3883,541.9766,3879,537.9766,3883,546.9766"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5302/view" target="_top" title="/functional-flow/5302/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5302/view" xlink:show="new"
+      xlink:title="/functional-flow/5302/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="3848" y="523.9106">A.38</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2773" x2="2773" y1="366.8438" y2="421.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2773" x2="4081" y1="421.8438" y2="421.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="4081" x2="4081" y1="421.8438" y2="573.8724"></line>
+    <polygon fill="#A80036"
+      points="4081,573.8724,4085,564.8724,4081,568.8724,4077,564.8724,4081,573.8724"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5087/view" target="_top" title="/functional-flow/5087/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5087/view" xlink:show="new"
+      xlink:title="/functional-flow/5087/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="4046" y="523.9106">A.17</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2783" x2="2783" y1="366.8438" y2="381.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2783" x2="2858.1667" y1="381.8438"
+      y2="381.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2858.1667" x2="2858.1667" y1="381.8438"
+      y2="12"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2858.1667" x2="2813" y1="12" y2="12"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2813" x2="2813" y1="12" y2="22"></line>
+    <polygon fill="#A80036" points="2813,22,2817,13,2813,17,2809,13,2813,22"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5097/view" target="_top" title="/functional-flow/5097/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5097/view" xlink:show="new"
+      xlink:title="/functional-flow/5097/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="2860.1667" y="198.9224">A.29</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2793" x2="2793" y1="366.8438" y2="411.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2793" x2="4281" y1="411.8438" y2="411.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="4281" x2="4281" y1="411.8438" y2="546.9766"></line>
+    <polygon fill="#A80036"
+      points="4281,546.9766,4285,537.9766,4281,541.9766,4277,537.9766,4281,546.9766"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5079/view" target="_top" title="/functional-flow/5079/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5079/view" xlink:show="new"
+      xlink:title="/functional-flow/5079/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="37" x="4238" y="523.9106">A.101</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2803" x2="2803" y1="366.8438" y2="401.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2803" x2="4438.5" y1="401.8438" y2="401.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="4438.5" x2="4438.5" y1="401.8438"
+      y2="810.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="4438.5" x2="2094.6667" y1="810.2578"
+      y2="810.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2094.6667" x2="2094.6667" y1="810.2578"
+      y2="835.2578"></line>
+    <polygon fill="#A80036"
+      points="2094.6667,835.2578,2098.6667,826.2578,2094.6667,830.2578,2090.6667,826.2578,2094.6667,835.2578"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5088/view" target="_top" title="/functional-flow/5088/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5088/view" xlink:show="new"
+      xlink:title="/functional-flow/5088/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="4403.5" y="594.7974">A.18</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2813" x2="2813" y1="366.8438" y2="391.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2813" x2="4536.5" y1="391.8438" y2="391.8438"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="4536.5" x2="4536.5" y1="391.8438"
+      y2="546.9766"></line>
+    <polygon fill="#A80036"
+      points="4536.5,546.9766,4540.5,537.9766,4536.5,541.9766,4532.5,537.9766,4536.5,546.9766"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5301/view" target="_top" title="/functional-flow/5301/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5301/view" xlink:show="new"
+      xlink:title="/functional-flow/5301/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="4501.5" y="523.9106">A.34</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1686.5" x2="1686.5" y1="953.3672"
+      y2="1140.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1686.5" x2="1125.1667" y1="1140.4453"
+      y2="1140.4453"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="1125.1667" x2="1125.1667" y1="1140.4453"
+      y2="1205.4453"></line>
+    <polygon fill="#A80036"
+      points="1125.1667,1205.4453,1129.1667,1196.4453,1125.1667,1200.4453,1121.1667,1196.4453,1125.1667,1205.4453"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5094/view" target="_top" title="/functional-flow/5094/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5094/view" xlink:show="new"
+      xlink:title="/functional-flow/5094/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="1651.5" y="1069.813">A.26</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2514.75" x2="2514.75" y1="633.6172"
+      y2="643.6172"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2514.75" x2="2540" y1="643.6172"
+      y2="643.6172"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="2540" x2="2540" y1="643.6172" y2="886.8984"></line>
+    <polygon fill="#A80036"
+      points="2540,886.8984,2544,877.8984,2540,881.8984,2536,877.8984,2540,886.8984"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5096/view" target="_top" title="/functional-flow/5096/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5096/view" xlink:show="new"
+      xlink:title="/functional-flow/5096/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="2505" y="701.438">A.28</text>
+    </a>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3849.5" x2="3849.5" y1="633.6172"
+      y2="820.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3849.5" x2="3599.8333" y1="820.2578"
+      y2="820.2578"></line>
+    <line style="stroke:#A80036;stroke-width:1.0;" x1="3599.8333" x2="3599.8333" y1="820.2578"
+      y2="869.6849"></line>
+    <polygon fill="#A80036"
+      points="3599.8333,869.6849,3603.8333,860.6849,3599.8333,864.6849,3595.8333,860.6849,3599.8333,869.6849"
+      style="stroke:#A80036;stroke-width:1.0;"></polygon>
+    <a href="/functional-flow/5082/view" target="_top" title="/functional-flow/5082/view"
+      xlink:actuate="onRequest" xlink:href="/functional-flow/5082/view" xlink:show="new"
+      xlink:title="/functional-flow/5082/view" xlink:type="simple">
+      <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing"
+        textLength="29" x="3814.5" y="701.438">A.12</text>
+    </a><!--MD5=[e73cf6d890b246e53338b8a9cc37e066]
+@startuml
+!pragma layout elk
+skinparam hyperlinkColor #000000
+skinparam hyperlinkUnderline false
+skinparam shadowing false
+skinparam rectangle {
+  backgroundColor #A9DCDF
+}
+skinparam component {
+  backgroundColor white
+  borderColor black
+}
+skinparam rectangleFontSize 10
+hide footbox
+component "                                                               BILnet                                                               " as C1661{
+ rectangle "1661.Document handling"
+ rectangle "1661.Movement consultation and search"
+ rectangle "1661.Customer authentication"
+ rectangle "1661.Account consultation"
+ rectangle "1661.Missing document distribution"
+ rectangle "1661.Standing order initiation"
+ rectangle "1661.Cardless withdrawal at BIL ATM AKA Quick Money"
+ rectangle "1661.Secured messages"
+ rectangle "1661.Account label customization"
+ rectangle "1661.Outward payment initiation "
+ rectangle "1661.Account debit/credit advice"
+ rectangle "1661.Signature of transaction"
+ rectangle "1661.Non tracked document distribution"
+ rectangle "1661.Beneficiary validation & signature"
+}
+url of C1661 is [[/application/1661/view]]
+component "Identity manager" as C1550{
+ rectangle "1550.Customer authentication"
+}
+url of C1550 is [[/application/1550/view]]
+component "IBM Campaign" as C1552{
+ rectangle "1552.Product recommendation configuration"
+ rectangle "1552.Product recommendation execution"
+}
+url of C1552 is [[/application/1552/view]]
+component "Report Data Collector" as C1450{
+ rectangle "1450.Invest reporting"
+}
+url of C1450 is [[/application/1450/view]]
+component "Marketing Files, Forms, FactSet" as C1506
+url of C1506 is [[/application/1506/view]]
+component "PSD2 Payments Service" as C1455{
+ rectangle "1455.Outward payment initiation "
+}
+url of C1455 is [[/application/1455/view]]
+component "Payments service" as C1462{
+ rectangle "1462.Outward payment initiation "
+ rectangle "1462.Beneficiary list"
+ rectangle "1462.Beneficiary lifecycle"
+ rectangle "1462.Beneficiary validation & signature"
+}
+url of C1462 is [[/application/1462/view]]
+component "                    Accounts Service                    " as C1693{
+ rectangle "1693.Document handling"
+ rectangle "1693.Movement consultation and search"
+ rectangle "1693.Account label customization"
+ rectangle "1693.Movement historization"
+ rectangle "1693.Account debit/credit advice"
+ rectangle "1693.Account consultation"
+ rectangle "1693.Account blocking"
+}
+url of C1693 is [[/application/1693/view]]
+component "User settings service" as C1332
+url of C1332 is [[/application/1332/view]]
+component "Financial instruments service" as C1576
+url of C1576 is [[/application/1576/view]]
+component "Investor profile service" as C1534
+url of C1534 is [[/application/1534/view]]
+component "Trading service" as C1341{
+ rectangle "1341.Order Definition / Creation"
+}
+url of C1341 is [[/application/1341/view]]
+component "Portfolios Service" as C1459{
+ rectangle "1459.Customer and portfolio selection"
+ rectangle "1459.Invest reporting"
+}
+url of C1459 is [[/application/1459/view]]
+component "Loans service" as C1518
+url of C1518 is [[/application/1518/view]]
+component "Party Service" as C1465{
+ rectangle "1465.Customer Search & Identification"
+}
+url of C1465 is [[/application/1465/view]]
+component "Secured message service" as C1428{
+ rectangle "1428.Secured messages"
+}
+url of C1428 is [[/application/1428/view]]
+component "Instant Payments service" as C1541{
+ rectangle "1541.Instant payment initiation"
+}
+url of C1541 is [[/application/1541/view]]
+component "  RT notif Service  " as C1438{
+ rectangle "1438.Opt-in / Opt-out alert / notification"
+ rectangle "1438.Alert / notification management"
+ rectangle "1438.Alert / notification sending initiation"
+ rectangle "1438.Alert / Notification configuration"
+ rectangle "1438.Realtime Notification management"
+ rectangle "1438.Alert / notification display"
+}
+url of C1438 is [[/application/1438/view]]
+component "Cards Service" as C1649{
+ rectangle "1649.Card referential management"
+ rectangle "1649.Card administration request processing"
+}
+url of C1649 is [[/application/1649/view]]
+component "Apple push notification service" as C1679{
+ rectangle "1679.Alert / notification sending"
+}
+url of C1679 is [[/application/1679/view]]
+component "Google Firebase" as C1560{
+ rectangle "1560.Alert / notification sending"
+}
+url of C1560 is [[/application/1560/view]]
+component "Payconiq service" as C1463
+url of C1463 is [[/application/1463/view]]
+component "Payconiq" as C1464
+url of C1464 is [[/application/1464/view]]
+component "Product Mandates service" as C1456
+url of C1456 is [[/application/1456/view]]
+component "      T24      " as C1404{
+ rectangle "1404.Document handling"
+ rectangle "1404.Order Definition / Creation"
+ rectangle "1404.Movement historization"
+ rectangle "1404.Outward payment initiation "
+ rectangle "1404.Customer and portfolio selection"
+ rectangle "1404.Account debit/credit advice"
+ rectangle "1404.Invest reporting"
+ rectangle "1404.Limit management"
+ rectangle "1404.Account blocking"
+}
+url of C1404 is [[/application/1404/view]]
+component "Sirius" as C1419
+url of C1419 is [[/application/1419/view]]
+component "Apple pay" as C1680
+url of C1680 is [[/application/1680/view]]
+component "Six Payments" as C1417{
+ rectangle "1417.Card referential management"
+}
+url of C1417 is [[/application/1417/view]]
+component "Trust Service" as C1336{
+ rectangle "1336.Certificate management"
+}
+url of C1336 is [[/application/1336/view]]
+component "Luxtrust" as C1510{
+ rectangle "1510.Certificate management"
+ rectangle "1510.Customer authentication"
+ rectangle "1510.Signature of transaction"
+}
+url of C1510 is [[/application/1510/view]]
+component "Decibel" as C1617
+url of C1617 is [[/application/1617/view]]
+component "Google Analytics" as C1561
+url of C1561 is [[/application/1561/view]]
+component "Kondor+" as C1525{
+ rectangle "1525.Rates referential management"
+}
+url of C1525 is [[/application/1525/view]]
+C1541 - -> C1693 :[[ /functional-flow/5093/view A.25 ]]
+C1693 - -> C1404 :[[ /functional-flow/5066/view D.02 ]]
+C1661 - -> C1438 :[[ /functional-flow/5083/view A.13 ]]
+C1428 - -> C1438 :[[ /functional-flow/5084/view A.14 ]]
+C1336 - -> C1510 :[[ /functional-flow/5099/view A.32 ]]
+C1661 - -> C1459 :[[ /functional-flow/5080/view A.102 ]]
+C1661 - -> C1534 :[[ /functional-flow/5079/view A.101 ]]
+C1661 - -> C1336 :[[ /functional-flow/5096/view A.28 ]]
+C1661 - -> C1576 :[[ /functional-flow/5078/view A.10 ]]
+C1661 - -> C1510 :[[ /functional-flow/5098/view A.31 ]],\n[[ /functional-flow/5100/view A.33 ]]
+C1455 - -> C1693 :[[ /functional-flow/5076/view A.08 ]]
+C1661 - -> C1518 :[[ /functional-flow/5080/view A.102 ]]
+C1661 - -> C1419 :[[ /functional-flow/5094/view A.26 ]]
+C1661 - -> C1617 :[[ /functional-flow/5301/view A.34 ]]
+C1463 - -> C1464 :[[ /functional-flow/5087/view A.17 ]]
+C1463 - -> C1462 :[[ /functional-flow/5087/view A.17 ]]
+C1525 - -> C1693 :[[ /functional-flow/5303/view A.41 ]]
+C1680 - -> C1417 :[[ /functional-flow/5094/view A.26 ]]
+C1438 - -> C1560 :[[ /functional-flow/5087/view A.17 ]]
+C1661 - -> C1552 :[[ /functional-flow/5072/view A.04 ]]
+C1661 - -> C1332 :[[ /functional-flow/5077/view A.09 ]]
+C1661 - -> C1550 :[[ /functional-flow/5071/view A.03 ]]
+C1661 - -> C1693 :[[ /functional-flow/5064/view A.20 ]]
+C1661 - -> C1450 :[[ /functional-flow/5073/view A.05 ]]
+C1661 - -> C1506 :[[ /functional-flow/5074/view A.06 ]]
+C1661 - -> C1649 :[[ /functional-flow/5096/view A.28 ]]
+C1661 - -> C1428 :[[ /functional-flow/5081/view A.11 ]]
+C1693 - -> C1438 :[[ /functional-flow/5084/view A.14 ]]
+C1465 - -> C1693 :[[ /functional-flow/5090/view A.21 ]]
+C1404 - -> C1456 :[[ /functional-flow/5092/view A.24 ]]
+C1693 - -> C1456 :[[ /functional-flow/5091/view A.23 ]]
+C1462 - -> C1693 :[[ /functional-flow/5089/view A.19 ]]
+C1455 - -> C1462 :[[ /functional-flow/5075/view A.07 ]]
+C1404 - -> C1693 :[[ /functional-flow/5065/view D.01 ]]
+C1649 - -> C1693 :[[ /functional-flow/5093/view A.25 ]]
+C1417 - -> C1680 :[[ /functional-flow/5095/view A.27 ]]
+C1661 - -> C1465 :[[ /functional-flow/5080/view A.102 ]]
+C1438 - -> C1679 :[[ /functional-flow/5086/view A.16 ]]
+C1649 - -> C1438 :[[ /functional-flow/5085/view A.15 ]]
+C1661 - -> C1541 :[[ /functional-flow/5302/view A.38 ]]
+C1661 - -> C1463 :[[ /functional-flow/5087/view A.17 ]]
+C1661 - -> C1661 :[[ /functional-flow/5097/view A.29 ]]
+C1661 - -> C1341 :[[ /functional-flow/5079/view A.101 ]]
+C1661 - -> C1462 :[[ /functional-flow/5088/view A.18 ]]
+C1661 - -> C1561 :[[ /functional-flow/5301/view A.34 ]]
+C1419 - -> C1693 :[[ /functional-flow/5094/view A.26 ]]
+C1417 - -> C1649 :[[ /functional-flow/5096/view A.28 ]]
+C1541 - -> C1428 :[[ /functional-flow/5082/view A.12 ]]
+@enduml
+
+PlantUML version 1.2022.1(Tue Feb 01 19:19:58 CET 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+-->
+  </g>
+</svg>

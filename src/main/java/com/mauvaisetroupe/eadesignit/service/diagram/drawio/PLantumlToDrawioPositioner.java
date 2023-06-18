@@ -1,10 +1,14 @@
 package com.mauvaisetroupe.eadesignit.service.diagram.drawio;
 
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.PositionAndSize;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,7 +43,7 @@ public class PLantumlToDrawioPositioner {
 
     // }
 
-    public Document addPositions(Document drawDocument, String svgXML) {
+    public Document addPositions(Document drawDocument, String svgXML, Collection<Application> applications) {
         if (svgXML == null) return drawDocument;
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -58,7 +62,7 @@ public class PLantumlToDrawioPositioner {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document docSvgXML = db.parse(new InputSource(new StringReader(svgXML)));
 
-            Map<String, PositionAndSize> pointFromSVGMap = getPointFromSVG(docSvgXML);
+            Map<String, PositionAndSize> pointFromSVGMap = getPointFromSVG(docSvgXML, applications);
             addPositions(copiedDocument, pointFromSVGMap);
             return copiedDocument;
         } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
@@ -83,10 +87,10 @@ public class PLantumlToDrawioPositioner {
             NodeList textNodeList = mxcellElement.getElementsByTagName("mxGeometry");
             Element mxGeometryElement = extractFirstChild(textNodeList);
             if (mxGeometryElement != null && position != null) {
-                mxGeometryElement.setAttribute("x", position.getX());
-                mxGeometryElement.setAttribute("y", position.getY());
-                mxGeometryElement.setAttribute("width", position.getWidth());
-                mxGeometryElement.setAttribute("height", position.getHeight());
+                mxGeometryElement.setAttribute("x", position.getX().toString());
+                mxGeometryElement.setAttribute("y", position.getY().toString());
+                mxGeometryElement.setAttribute("width", position.getWidth().toString());
+                mxGeometryElement.setAttribute("height", position.getHeight().toString());
             }
         }
     }
@@ -99,7 +103,8 @@ public class PLantumlToDrawioPositioner {
     //     return doc;
     // }
 
-    private Map<String, PositionAndSize> getPointFromSVG(Document doc) throws XPathExpressionException {
+    protected Map<String, PositionAndSize> getPointFromSVG(Document doc, Collection<Application> applications)
+        throws XPathExpressionException {
         Map<String, PositionAndSize> map = new HashMap<>();
 
         XPathFactory xpathfactory = XPathFactory.newInstance();
@@ -113,32 +118,65 @@ public class PLantumlToDrawioPositioner {
         // y="491.5381">TrustService</text>
         // </g>
 
-        // Find all groups <g>
-        NodeList nodeList = (NodeList) xpath.evaluate("//g", doc, XPathConstants.NODESET);
-        populateMap(map, nodeList);
-        // Find all groups <a>
-        nodeList = (NodeList) xpath.evaluate("//a", doc, XPathConstants.NODESET);
-        populateMap(map, nodeList);
+        NodeList textNodes = doc.getElementsByTagName("text");
+        NodeList rectNodes = doc.getElementsByTagName("rect");
+        populateMap(map, textNodes, rectNodes, applications);
         return map;
     }
 
-    private void populateMap(Map<String, PositionAndSize> map, NodeList nodeList) {
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Element groupelement = ((Element) nodeList.item(i));
-            String idValue = groupelement.getAttribute("id");
-
-            NodeList textNodeList = groupelement.getElementsByTagName("text");
-            Element textElement = extractFirstChild(textNodeList);
+    private void populateMap(
+        Map<String, PositionAndSize> mapToComplete,
+        NodeList textNodes,
+        NodeList rectNodes,
+        Collection<Application> applications
+    ) {
+        Set<String> appliNames = applications.stream().map(a -> a.getName()).collect(Collectors.toSet());
+        Map<String, PositionAndSize> textPostion = new HashMap<>();
+        for (int i = 0; i < textNodes.getLength(); i++) {
+            Element textElement = (Element) textNodes.item(i);
             String applicationName = textElement.getTextContent();
 
-            NodeList rectNodeList = groupelement.getElementsByTagName("rect");
-            Element rectElement = extractFirstChild(rectNodeList);
-            if (rectElement != null) {
+            if (applicationName != null) {
+                applicationName = applicationName.replaceAll("[\n|\r]", " ").replaceAll(" +", " ");
+            }
+            System.out.println("[" + applicationName + "]");
+
+            if (appliNames.contains(applicationName)) {
+                String _x = textElement.getAttribute("x");
+                Double x = Double.parseDouble(_x);
+                String _y = textElement.getAttribute("y");
+                Double y = Double.parseDouble(_y);
+                String _textLength = textElement.getAttribute("textLength");
+                Double textLength = Double.parseDouble(_textLength);
+
+                textPostion.put(applicationName, new PositionAndSize(x + textLength / 2, y, null, null));
+            } else {
+                //System.out.println("["+applicationName+"]");
+            }
+        }
+
+        for (String app : textPostion.keySet()) {
+            PositionAndSize txtPos = textPostion.get(app);
+
+            int i = 0;
+            boolean found = false;
+            while (i < rectNodes.getLength() && !found) {
+                Element rectElement = (Element) rectNodes.item(i);
                 String _x = rectElement.getAttribute("x");
                 String _y = rectElement.getAttribute("y");
                 String _width = rectElement.getAttribute("width");
                 String _height = rectElement.getAttribute("height");
-                map.put(applicationName, new PositionAndSize(_x, _y, _width, _height));
+                PositionAndSize rectPos = new PositionAndSize(_x, _y, _width, _height);
+
+                if (
+                    txtPos.getX() > rectPos.getX() &&
+                    txtPos.getX() < rectPos.getX() + rectPos.getWidth() &&
+                    txtPos.getY() > rectPos.getY() &&
+                    txtPos.getY() < rectPos.getY() + rectPos.getHeight()
+                ) {
+                    mapToComplete.put(app, rectPos);
+                }
+                i++;
             }
         }
     }

@@ -1,33 +1,42 @@
 package com.mauvaisetroupe.eadesignit.service.diagram.dto;
 
+import org.springframework.util.StringUtils;
+
 public class PositionAndSize {
 
-    private String x;
-    private String y;
-    private String width;
-    private String height;
+    private Double x;
+    private Double y;
+    private Double width;
+    private Double height;
 
-    public String getWidth() {
+    public Double getWidth() {
         return width;
     }
 
-    public void setWidth(String width) {
+    public void setWidth(Double width) {
         this.width = width;
     }
 
-    public String getHeight() {
+    public Double getHeight() {
         return height;
     }
 
-    public void setHeight(String height) {
+    public void setHeight(Double height) {
         this.height = height;
     }
 
-    public PositionAndSize(String x, String y, String width, String height) {
+    public PositionAndSize(Double x, Double y, Double width, Double height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+    }
+
+    public PositionAndSize(String _x, String _y, String _width, String _height) {
+        if (StringUtils.hasText(_x)) this.x = Double.parseDouble(_x);
+        if (StringUtils.hasText(_y)) this.y = Double.parseDouble(_y);
+        if (StringUtils.hasText(_width)) this.width = Double.parseDouble(_width);
+        if (StringUtils.hasText(_height)) this.height = Double.parseDouble(_height);
     }
 
     @Override
@@ -35,11 +44,11 @@ public class PositionAndSize {
         return "Point [x=" + x + ", y=" + y + "]";
     }
 
-    public String getX() {
+    public Double getX() {
         return x;
     }
 
-    public String getY() {
+    public Double getY() {
         return y;
     }
 }

@@ -75,7 +75,7 @@ public class MXFileSerializer {
         }
 
         PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner();
-        doc = drawioPositioner.addPositions(doc, svgXML);
+        doc = drawioPositioner.addPositions(doc, svgXML, graphDTO.getApplications());
         return getStringFromDocument(doc);
     }
 
