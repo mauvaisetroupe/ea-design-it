@@ -5,30 +5,27 @@ import static org.junit.Assert.assertEquals;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.PositionAndSize;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UncheckedIOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.Document;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.util.FileCopyUtils;
 import org.xml.sax.SAXException;
 
 public class PLantumlToDrawioPositionerTest {
 
     @Test
-    void testGetPosition() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        InputStream stream =
-            PLantumlToDrawioPositionerTest.class.getResourceAsStream("/com/mauvaisetroupe/eadesignit/service/diagram/drawio/svg.xml");
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setValidating(false);
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(stream);
-
+    void testGetPosition() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException, URISyntaxException {
         Collection<Application> applications = new ArrayList<>();
         applications.add(new Application(1L, "Accounts Service", null, null));
         applications.add(new Application(2L, "Apple pay", null, null));
@@ -64,8 +61,13 @@ public class PLantumlToDrawioPositionerTest {
         applications.add(new Application(32L, "Trust Service", null, null));
         applications.add(new Application(33L, "User settings service", null, null));
 
-        PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner();
-        Map<String, PositionAndSize> map = drawioPositioner.getPointFromSVG(doc, applications);
+        //InputStream stream = PLantumlToDrawioPositionerTest.class.getResourceAsStream("/com/mauvaisetroupe/eadesignit/service/diagram/drawio/svg.xml");
+        ResourceLoader resourceLoader = new DefaultResourceLoader();
+        Resource resource = resourceLoader.getResource("classpath:/com/mauvaisetroupe/eadesignit/service/diagram/drawio/svg.xml");
+        String svg = asString(resource);
+
+        PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner(svg, applications, null);
+        Map<String, PositionAndSize> map = drawioPositioner.getMapApplicationPosition();
 
         // All application should have been found in <text>
         assertEquals(applications.size(), map.size());
@@ -79,5 +81,13 @@ public class PLantumlToDrawioPositionerTest {
         assertEquals((Double) 86.6406, map.get("Trading service").getHeight());
         assertEquals((Double) 4178.5, map.get("Trading service").getX());
         assertEquals((Double) 546.9766, map.get("Trading service").getY());
+    }
+
+    public static String asString(Resource resource) {
+        try (Reader reader = new InputStreamReader(resource.getInputStream())) {
+            return FileCopyUtils.copyToString(reader);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }

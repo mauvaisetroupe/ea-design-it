@@ -24,7 +24,7 @@ import org.xml.sax.SAXException;
 public class MXFileSerializerTest {
 
     @Test
-    public void test() throws ParserConfigurationException {
+    public void test() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         LandscapeView landscapeView = new LandscapeView();
         landscapeView.setId(1L);
         landscapeView.setDiagramName("diagramName");

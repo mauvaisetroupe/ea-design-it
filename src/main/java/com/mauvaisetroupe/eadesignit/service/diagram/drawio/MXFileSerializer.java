@@ -11,6 +11,7 @@ import java.io.StringWriter;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Random;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -23,7 +24,6 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -48,7 +48,7 @@ public class MXFileSerializer {
         this.landscapeView = landscapeView;
     }
 
-    public String createMXFileXML(String svgXML) throws ParserConfigurationException {
+    public String createMXFileXML(String svgXML) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graphDTO = graphBuilder.createGraph(landscapeView);
 
@@ -74,8 +74,13 @@ public class MXFileSerializer {
             createRectangle(doc, root, application.getId().toString(), application.getName());
         }
 
-        PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner();
-        doc = drawioPositioner.addPositions(doc, svgXML, graphDTO.getApplications());
+        PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner(
+            svgXML,
+            graphDTO.getApplications(),
+            graphDTO.getBidirectionalConsolidatedEdges()
+        );
+        doc = drawioPositioner.addPositions(doc);
+        doc = drawioPositioner.addConnectionPoints(doc, graphDTO.getBidirectionalConsolidatedEdges());
         return getStringFromDocument(doc);
     }
 
@@ -225,6 +230,8 @@ public class MXFileSerializer {
     }
 
     private Element createEdge(Document doc, Element root, Edge edge) {
+        edge.getSourceId();
+
         Element mxCell = createElement(doc, root, "mxCell");
         //mxCell.setAttribute("id", EDGE_ID_PREFIX + edgeId);
         mxCell.setAttribute("elementId", EDGE_ID_PREFIX + edge.getId());

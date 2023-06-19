@@ -1,11 +1,13 @@
 package com.mauvaisetroupe.eadesignit.service.diagram.drawio;
 
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
+import com.mauvaisetroupe.eadesignit.service.diagram.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.PositionAndSize;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,27 +27,31 @@ import org.xml.sax.SAXException;
 
 public class PLantumlToDrawioPositioner {
 
-    // public static void main(String[] args) throws Exception {
+    // appliName -> PositionAndSize
+    private Map<String, PositionAndSize> mapApplicationPosition = new HashMap<>();
+    // applicationId -> Application
+    private Map<Long, Application> mapApplicationNames = new HashMap<>();
+    // Ancestors above application(ID), from left to right
+    private Map<Long, List<Long>> upAncestors = new HashMap<>();
+    // Ancestors below application(ID), from left to right
+    private Map<Long, List<Long>> downAncestors = new HashMap<>();
 
-    //     PLantumlToDrawioPositioner app = new PLantumlToDrawioPositioner();
+    public Map<String, PositionAndSize> getMapApplicationPosition() {
+        return mapApplicationPosition;
+    }
 
-    //     ClassLoader classLoader = PLantumlToDrawioPositioner.class.getClassLoader();
-    //     File svgFile = new File(classLoader.getResource("svg-formatted.svg").getFile());
-    //     Document svgDoc = createDocFromFile(svgFile);
-    //     Map<String, Point> pointFromSVGMap = app.getPointFromSVG(svgDoc);
+    public PLantumlToDrawioPositioner(String svgXML, Collection<Application> applications, Collection<Edge> edges)
+        throws SAXException, IOException, ParserConfigurationException {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document docSvgXML = db.parse(new InputSource(new StringReader(svgXML)));
+        NodeList textNodes = docSvgXML.getElementsByTagName("text");
+        NodeList rectNodes = docSvgXML.getElementsByTagName("rect");
+        populateMaps(textNodes, rectNodes, applications);
+        populateUpAndDownAncestors(applications, edges);
+    }
 
-    //     File drawioFile = new File(classLoader.getResource("draw-io.xml").getFile());
-    //     Document drawioDoc = createDocFromFile(drawioFile);
-    //     app.addPosition(drawioDoc, pointFromSVGMap);
-
-    //     FileOutputStream output = new FileOutputStream("c:\\workspaces\\staff-dom.xml");
-    //     writeXml(drawioDoc, output);
-
-    // }
-
-    public Document addPositions(Document drawDocument, String svgXML, Collection<Application> applications) {
-        if (svgXML == null) return drawDocument;
-
+    public Document addPositions(Document drawDocument) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         Document copiedDocument;
         try {
@@ -54,24 +60,15 @@ public class PLantumlToDrawioPositioner {
             copiedDocument = db.newDocument();
             Node copiedRoot = copiedDocument.importNode(originalRoot, true);
             copiedDocument.appendChild(copiedRoot);
-        } catch (ParserConfigurationException e) {
-            return drawDocument;
-        }
-
-        try {
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document docSvgXML = db.parse(new InputSource(new StringReader(svgXML)));
-
-            Map<String, PositionAndSize> pointFromSVGMap = getPointFromSVG(docSvgXML, applications);
-            addPositions(copiedDocument, pointFromSVGMap);
+            _addPositions(copiedDocument);
             return copiedDocument;
-        } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
+        } catch (XPathExpressionException | ParserConfigurationException e) {
             e.printStackTrace();
             return drawDocument;
         }
     }
 
-    private void addPositions(Document doc, Map<String, PositionAndSize> pointFromSVGMap) throws XPathExpressionException {
+    private void _addPositions(Document doc) throws XPathExpressionException {
         XPathFactory xpathfactory = XPathFactory.newInstance();
         XPath xpath = xpathfactory.newXPath();
         NodeList nodeList = (NodeList) xpath.evaluate(
@@ -82,7 +79,7 @@ public class PLantumlToDrawioPositioner {
         for (int i = 0; i < nodeList.getLength(); i++) {
             Element mxcellElement = ((Element) nodeList.item(i));
             String applicationName = mxcellElement.getAttribute("value");
-            PositionAndSize position = pointFromSVGMap.get(applicationName);
+            PositionAndSize position = this.mapApplicationPosition.get(applicationName);
 
             NodeList textNodeList = mxcellElement.getElementsByTagName("mxGeometry");
             Element mxGeometryElement = extractFirstChild(textNodeList);
@@ -95,42 +92,81 @@ public class PLantumlToDrawioPositioner {
         }
     }
 
-    // private static Document createDocFromFile(File file)
-    //         throws ParserConfigurationException, SAXException, IOException {
-    //     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-    //     DocumentBuilder db = factory.newDocumentBuilder();
-    //     Document doc = db.parse(file);
-    //     return doc;
-    // }
+    public Document addConnectionPoints(Document doc, Collection<Edge> edges) throws XPathExpressionException {
+        for (Edge edge : edges) {
+            double entryY = 0, entryX = 0, exitX = 0, exitY = 0;
 
-    protected Map<String, PositionAndSize> getPointFromSVG(Document doc, Collection<Application> applications)
-        throws XPathExpressionException {
-        Map<String, PositionAndSize> map = new HashMap<>();
+            boolean upToDown = (downAncestors.get(edge.getSourceId()).indexOf(edge.getTargetId()) > -1);
 
-        XPathFactory xpathfactory = XPathFactory.newInstance();
-        XPath xpath = xpathfactory.newXPath();
+            System.out.println(edge.getSourceId() + " -> " + mapApplicationNames.get(edge.getSourceId()).getName());
+            System.out.println(edge.getTargetId() + " -> " + mapApplicationNames.get(edge.getTargetId()).getName());
+            System.out.println(upToDown);
 
-        // <g id="elem_Trust Service">
-        // <rect fill="#F1F1F1" height="46.2969" rx="2.5" ry="2.5"
-        // style="stroke:#181818;stroke-width:0.5;" width="124" x="2986.5" y="463.543"/>
-        // <text fill="#000000" font-family="sans-serif" font-size="14"
-        // lengthAdjust="spacing" textLength="94" x="3001.5"
-        // y="491.5381">TrustService</text>
-        // </g>
+            if (upToDown) {
+                // source up
+                // target down
 
-        NodeList textNodes = doc.getElementsByTagName("text");
-        NodeList rectNodes = doc.getElementsByTagName("rect");
-        populateMap(map, textNodes, rectNodes, applications);
-        return map;
+                entryY = 0; // downside
+                exitY = 1; //upside
+
+                List<Long> upAppli = upAncestors.get(edge.getTargetId());
+                List<Long> downAppli = downAncestors.get(edge.getSourceId());
+                int indexEntry = upAppli.indexOf(edge.getSourceId()) + 1;
+                int indexExit = downAppli.indexOf(edge.getTargetId()) + 1;
+
+                exitX = (double) indexExit / (downAppli.size() + 1);
+                entryX = (double) indexEntry / (upAppli.size() + 1);
+
+                System.out.println(entryX + " " + exitX);
+            } else {
+                // source down
+                // target up
+
+                entryY = 1; // downside
+                exitY = 0; //upside
+
+                List<Long> upAppli = upAncestors.get(edge.getSourceId());
+                List<Long> downAppli = downAncestors.get(edge.getTargetId());
+                int indexEntry = downAppli.indexOf(edge.getSourceId()) + 1;
+                int indexExit = upAppli.indexOf(edge.getTargetId()) + 1;
+
+                exitX = (double) indexExit / (upAppli.size() + 1);
+                entryX = (double) indexEntry / (downAppli.size() + 1);
+
+                System.out.println(entryX + " " + exitX);
+            }
+            XPathFactory xpathfactory = XPathFactory.newInstance();
+            XPath xpath = xpathfactory.newXPath();
+            Element elem = (Element) xpath.evaluate(
+                "//mxCell[@elementId='" + MXFileSerializer.EDGE_ID_PREFIX + edge.getId() + "']",
+                doc,
+                XPathConstants.NODE
+            );
+            String styleValue = elem.getAttribute("style");
+            elem.setAttribute(
+                "style",
+                styleValue +
+                "jumpStyle=arc;edgeStyle=elbowEdgeStyle;elbow=vertical;entryX=" +
+                entryX +
+                ";entryY=" +
+                entryY +
+                ";entryDx=0;entryDy=0;exitX=" +
+                exitX +
+                ";exitY=" +
+                exitY +
+                ";exitDx=0;exitDy=0;"
+            );
+        }
+        return doc;
     }
 
-    private void populateMap(
-        Map<String, PositionAndSize> mapToComplete,
-        NodeList textNodes,
-        NodeList rectNodes,
-        Collection<Application> applications
-    ) {
+    //
+    // Init methods
+    //
+
+    private void populateMaps(NodeList textNodes, NodeList rectNodes, Collection<Application> applications) {
         Set<String> appliNames = applications.stream().map(a -> a.getName()).collect(Collectors.toSet());
+        applications.stream().forEach(a -> this.mapApplicationNames.put(a.getId(), a));
         Map<String, PositionAndSize> textPostion = new HashMap<>();
         for (int i = 0; i < textNodes.getLength(); i++) {
             Element textElement = (Element) textNodes.item(i);
@@ -171,7 +207,8 @@ public class PLantumlToDrawioPositioner {
                     txtPos.getY() > rectPos.getY() &&
                     txtPos.getY() < rectPos.getY() + rectPos.getHeight()
                 ) {
-                    mapToComplete.put(app, rectPos);
+                    this.mapApplicationPosition.put(app, rectPos);
+                    //this.mapApplicationNames.put(app.get, _height)
                 }
                 i++;
             }
@@ -184,5 +221,38 @@ public class PLantumlToDrawioPositioner {
             return element;
         }
         return null;
+    }
+
+    private void populateUpAndDownAncestors(Collection<Application> applications, Collection<Edge> edges) {
+        for (Application application : applications) {
+            PositionAndSize applicationPosition = mapApplicationPosition.get(application.getName());
+
+            List<Application> connectedApplication = edges
+                .stream()
+                .filter(e -> e.getSourceId().equals(application.getId()) || e.getTargetId().equals(application.getId())) // edges connected to appli
+                .map(e -> e.getSourceId().equals(application.getId()) ? e.getTargetId() : e.getSourceId()) // keep source or target if not appli
+                .map(id -> mapApplicationNames.get(id)) // get position
+                .collect(Collectors.toList());
+
+            List<Application> upAppli = connectedApplication
+                .stream()
+                .filter(a -> mapApplicationPosition.get(a.getName()).getY() < applicationPosition.getY())
+                .collect(Collectors.toList());
+            upAppli.sort((appli1, appli2) ->
+                mapApplicationPosition.get(appli1.getName()).getX().compareTo(mapApplicationPosition.get(appli2.getName()).getX())
+            );
+
+            this.upAncestors.put(application.getId(), upAppli.stream().map(a -> a.getId()).collect(Collectors.toList()));
+
+            List<Application> downAppli = connectedApplication
+                .stream()
+                .filter(a -> mapApplicationPosition.get(a.getName()).getY() >= applicationPosition.getY())
+                .collect(Collectors.toList());
+            downAppli.sort((appli1, appli2) ->
+                mapApplicationPosition.get(appli1.getName()).getX().compareTo(mapApplicationPosition.get(appli2.getName()).getX())
+            );
+
+            this.downAncestors.put(application.getId(), downAppli.stream().map(a -> a.getId()).collect(Collectors.toList()));
+        }
     }
 }

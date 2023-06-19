@@ -53,7 +53,7 @@ public class DrawIOResource {
         } else {
             // check if drawio is uptodate, if not remove SVG from database
             // and send updated xml
-            String svgXML = plantUMLSerializer.getLandscapeDiagramSVG(landscapeView.get(), Layout.elk, false, false);
+            String svgXML = plantUMLSerializer.getLandscapeDiagramSVG(landscapeView.get(), Layout.elk, false, true);
             return fileSerializer.createMXFileXML(svgXML);
         }
     }

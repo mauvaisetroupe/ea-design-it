@@ -1,639 +1,327 @@
-diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/domain/Application.java b/src/main/java/com/mauvaisetroupe/eadesignit/domain/Application.java
-index 7c5e008..32b86be 100644
---- a/src/main/java/com/mauvaisetroupe/eadesignit/domain/Application.java
-+++ b/src/main/java/com/mauvaisetroupe/eadesignit/domain/Application.java
-@@ -1,5 +1,6 @@
- package com.mauvaisetroupe.eadesignit.domain;
-
-+import com.fasterxml.jackson.annotation.JsonIgnore;
- import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
- import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
- import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
-@@ -351,6 +352,8 @@ public class Application implements Serializable, Ownershipable {
-         return this;
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/MXFileSerializer.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/MXFileSerializer.java
+index 913eea8..0fc3428 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/MXFileSerializer.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/MXFileSerializer.java
+@@ -11,6 +11,7 @@ import java.io.StringWriter;
+ import java.net.URLDecoder;
+ import java.nio.charset.StandardCharsets;
+ import java.util.Base64;
++import java.util.Random;
+ import javax.xml.parsers.DocumentBuilder;
+ import javax.xml.parsers.DocumentBuilderFactory;
+ import javax.xml.parsers.ParserConfigurationException;
+@@ -23,7 +24,6 @@ import javax.xml.xpath.XPath;
+ import javax.xml.xpath.XPathConstants;
+ import javax.xml.xpath.XPathExpressionException;
+ import javax.xml.xpath.XPathFactory;
+-import org.springframework.util.Assert;
+ import org.springframework.util.StringUtils;
+ import org.w3c.dom.DOMException;
+ import org.w3c.dom.Document;
+@@ -48,7 +48,7 @@ public class MXFileSerializer {
+         this.landscapeView = landscapeView;
      }
 
-+    //@JsonIgnore
-+    @JsonIgnore
-     public Set<Capability> getCapabilities() {
-         return this.getCapabilityApplicationMappings().stream().map(c -> c.getCapability()).collect(Collectors.toSet());
-     }
-diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/domain/Capability.java b/src/main/java/com/mauvaisetroupe/eadesignit/domain/Capability.java
-index 16bf884..764752d 100644
---- a/src/main/java/com/mauvaisetroupe/eadesignit/domain/Capability.java
-+++ b/src/main/java/com/mauvaisetroupe/eadesignit/domain/Capability.java
-@@ -1,5 +1,6 @@
- package com.mauvaisetroupe.eadesignit.domain;
+-    public String createMXFileXML(String svgXML) throws ParserConfigurationException {
++    public String createMXFileXML(String svgXML) throws ParserConfigurationException, SAXException, IOException {
+         GraphBuilder graphBuilder = new GraphBuilder();
+         GraphDTO graphDTO = graphBuilder.createGraph(landscapeView);
 
-+import com.fasterxml.jackson.annotation.JsonIgnore;
- import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
- import java.io.Serializable;
- import java.util.HashSet;
-@@ -186,6 +187,8 @@ public class Capability implements Serializable, Comparable<Capability> {
-         return this.capabilityApplicationMappings;
+@@ -74,8 +74,9 @@ public class MXFileSerializer {
+             createRectangle(doc, root, application.getId().toString(), application.getName());
+         }
+
+-        PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner();
+-        doc = drawioPositioner.addPositions(doc, svgXML, graphDTO.getApplications());
++        PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner(svgXML, graphDTO.getApplications(), graphDTO.getBidirectionalConsolidatedEdges());
++        doc = drawioPositioner.addPositions(doc);
++        doc = drawioPositioner.addConnectionPoints(doc, graphDTO.getBidirectionalConsolidatedEdges());
+         return getStringFromDocument(doc);
      }
 
-+    //Called by jackson - use @jsonignore if you don't want
-+    @JsonIgnore
-     public Set<Application> getApplications() {
-         return this.getCapabilityApplicationMappings().stream().map(c -> c.getApplication()).collect(Collectors.toSet());
+@@ -225,11 +226,14 @@ public class MXFileSerializer {
      }
-diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/domain/FlowInterface.java b/src/main/java/com/mauvaisetroupe/eadesignit/domain/FlowInterface.java
-index 79e800f..9da77b1 100644
---- a/src/main/java/com/mauvaisetroupe/eadesignit/domain/FlowInterface.java
-+++ b/src/main/java/com/mauvaisetroupe/eadesignit/domain/FlowInterface.java
-@@ -62,7 +62,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
-     @ManyToOne(optional = false)
-     @NotNull
-     @JsonIgnoreProperties(
--        value = { "owner", "itOwner", "businessOwner", "capabilities", "externalIDS", "applicationsLists" },
-+        value = { "owner", "itOwner", "businessOwner", "capabilityApplicationMappings", "capabilities","externalIDS", "applicationsLists" },
-         allowSetters = true
-     )
-     private Application source;
-@@ -70,7 +70,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
-     @ManyToOne(optional = false)
-     @NotNull
-     @JsonIgnoreProperties(
--        value = { "owner", "itOwner", "businessOwner", "capabilityApplicationMappings", "externalIDS", "applicationsLists" },
-+        value = { "owner", "itOwner", "businessOwner", "capabilityApplicationMappings", "capabilities","externalIDS", "applicationsLists" },
-         allowSetters = true
-     )
-     private Application target;
-diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/domain/LandscapeView.java b/src/main/java/com/mauvaisetroupe/eadesignit/domain/LandscapeView.java
-index ca2d68c..4c30d0c 100644
---- a/src/main/java/com/mauvaisetroupe/eadesignit/domain/LandscapeView.java
-+++ b/src/main/java/com/mauvaisetroupe/eadesignit/domain/LandscapeView.java
-@@ -60,7 +60,7 @@ public class LandscapeView implements Serializable {
 
-     @ManyToMany(mappedBy = "landscapes")
-     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
--    @JsonIgnoreProperties(value = { "capability", "application", "landscapes" }, allowSetters = true)
-+    @JsonIgnoreProperties(value = { "landscapes" }, allowSetters = true)
-     private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
-
-     // jhipster-needle-entity-add-field - JHipster will add fields here
-diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/repository/LandscapeViewRepository.java b/src/main/java/com/mauvaisetroupe/eadesignit/repository/LandscapeViewRepository.java
-index b1348a7..50e569a 100644
---- a/src/main/java/com/mauvaisetroupe/eadesignit/repository/LandscapeViewRepository.java
-+++ b/src/main/java/com/mauvaisetroupe/eadesignit/repository/LandscapeViewRepository.java
-@@ -24,7 +24,15 @@ public interface LandscapeViewRepository extends JpaRepository<LandscapeView, Lo
-     @Query("select distinct landscapeView from LandscapeView landscapeView left join fetch landscapeView.flows")
-     List<LandscapeView> findAllWithEagerRelationships();
-
--    @Query("select landscapeView from LandscapeView landscapeView left join fetch landscapeView.flows where landscapeView.id =:id")
-+    @Query(value =
-+        "select l " +
-+        " from LandscapeView l " +
-+        " left join fetch l.flows " +
-+        " left join fetch l.capabilityApplicationMappings cm " +
-+        " left join fetch cm.capability c" +
-+        " left join fetch cm.application a" +
-+        " where l.id =:id"
-+    )
-     Optional<LandscapeView> findOneWithEagerRelationships(@Param("id") Long id);
-
-     LandscapeView findByDiagramNameIgnoreCase(String diagramName);
+     private Element createEdge(Document doc, Element root, Edge edge) {
++
++        edge.getSourceId();
++
+         Element mxCell = createElement(doc, root, "mxCell");
+         //mxCell.setAttribute("id", EDGE_ID_PREFIX + edgeId);
+         mxCell.setAttribute("elementId", EDGE_ID_PREFIX + edge.getId());
+         mxCell.setAttribute("value", edge.getLabelsAsString());
+-        mxCell.setAttribute("style", "endArrow=classic;html=1;rounded=0;");
++        mxCell.setAttribute("style", "endArrow=classic;html=1;rounded=0;edgeStyle=elbowEdgeStyle;elbow=vertical;entryX=" + new Random().nextFloat() + ";entryY=0;entryDx=0;entryDy=0;exitX=" + new Random().nextFloat() + ";exitY=1;exitDx=0;exitDy=0;");
+         mxCell.setAttribute("parent", "1");
+         mxCell.setAttribute("edge", "1");
+         mxCell.setAttribute("source", APP_ID_PREFIX + edge.getSourceId());
 diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/PLantumlToDrawioPositioner.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/PLantumlToDrawioPositioner.java
-index 94cd368..30c2f32 100644
+index 0151024..005524f 100644
 --- a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/PLantumlToDrawioPositioner.java
 +++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/PLantumlToDrawioPositioner.java
-@@ -119,7 +119,6 @@ public class PLantumlToDrawioPositioner {
-         // Find all groups <a>
-         nodeList = (NodeList) xpath.evaluate("//a", doc, XPathConstants.NODESET);
-         populateMap(map, nodeList);
--        System.out.println(map);
-         return map;
-     }
+@@ -1,11 +1,13 @@
+ package com.mauvaisetroupe.eadesignit.service.diagram.drawio;
 
-diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLBuilder.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLBuilder.java
-index ec3bf84..1016145 100644
---- a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLBuilder.java
-+++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLBuilder.java
-@@ -167,7 +167,6 @@ public class PlantUMLBuilder {
+ import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
++import com.mauvaisetroupe.eadesignit.service.diagram.dto.Edge;
+ import com.mauvaisetroupe.eadesignit.service.diagram.dto.PositionAndSize;
+ import java.io.IOException;
+ import java.io.StringReader;
+ import java.util.Collection;
+ import java.util.HashMap;
++import java.util.List;
+ import java.util.Map;
+ import java.util.Set;
+ import java.util.stream.Collectors;
+@@ -25,27 +27,34 @@ import org.xml.sax.SAXException;
 
-     @Cacheable(cacheNames = PLANTUML_SVG_CACHE)
-     public String getSVGFromSource(String plantUMLSource) throws IOException {
--        System.out.println(plantUMLSource);
+ public class PLantumlToDrawioPositioner {
 
-         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-         SourceStringReader reader = new SourceStringReader(plantUMLSource);
-diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLService.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLService.java
-index 31b6cb3..d00e79b 100644
---- a/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLService.java
-+++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/diagram/plantuml/PlantUMLService.java
-@@ -101,7 +101,6 @@ public class PlantUMLService {
-             );
-         }
-         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
--        System.out.println(plantUMLSource.toString());
-         return plantUMLSource.toString();
-     }
-
-@@ -160,7 +159,6 @@ public class PlantUMLService {
-         Collection<CapabilityDTO> rootDTO = capabilityUtil.getRoot(capabilities);
-         plantUMLBuilder.getPlantumlCapabilitiesDTO(plantUMLSource, rootDTO);
-         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
--        System.out.println(plantUMLSource);
-         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
-     }
-
-@@ -169,7 +167,6 @@ public class PlantUMLService {
-         plantUMLBuilder.getPlantumlHeader(plantUMLSource);
-         plantUMLBuilder.getPlantumlCapabilities(plantUMLSource, capabilities);
-         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
--        System.out.println(plantUMLSource);
-         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
-     }
-
-diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ApplicationCapabilityImportService.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ApplicationCapabilityImportService.java
-index 1bc75b4..a9a2bb7 100644
---- a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ApplicationCapabilityImportService.java
-+++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ApplicationCapabilityImportService.java
-@@ -3,10 +3,12 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
- import com.mauvaisetroupe.eadesignit.domain.Application;
- import com.mauvaisetroupe.eadesignit.domain.Capability;
- import com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping;
-+import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
- import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
- import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
- import com.mauvaisetroupe.eadesignit.repository.CapabilityApplicationMappingRepository;
- import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
-+import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
- import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityDTO;
- import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityItemDTO;
- import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
-@@ -37,6 +39,9 @@ public class ApplicationCapabilityImportService {
-     @Autowired
-     private CapabilityApplicationMappingRepository capabilityApplicationMappingRepository;
-
-+    @Autowired
-+    private LandscapeViewRepository landscapeViewRepository;
+-    // public static void main(String[] args) throws Exception {
+-
+-    //     PLantumlToDrawioPositioner app = new PLantumlToDrawioPositioner();
+-
+-    //     ClassLoader classLoader = PLantumlToDrawioPositioner.class.getClassLoader();
+-    //     File svgFile = new File(classLoader.getResource("svg-formatted.svg").getFile());
+-    //     Document svgDoc = createDocFromFile(svgFile);
+-    //     Map<String, Point> pointFromSVGMap = app.getPointFromSVG(svgDoc);
+-
+-    //     File drawioFile = new File(classLoader.getResource("draw-io.xml").getFile());
+-    //     Document drawioDoc = createDocFromFile(drawioFile);
+-    //     app.addPosition(drawioDoc, pointFromSVGMap);
++    // appliName -> PositionAndSize
++    private Map<String, PositionAndSize> mapApplicationPosition= new HashMap<>();
++    // applicationId -> Application
++    private Map<Long, Application> mapApplicationNames= new HashMap<>();
++    // Ancestors above application(ID), from left to right
++    private Map<Long, List<Long>> upAncestors= new HashMap<>();
++    // Ancestors below application(ID), from left to right
++    private Map<Long, List<Long>> downAncestors= new HashMap<>();
 +
-     private static final String APP_NAME_1 = "ApplicationName";
-     private static final String APP_NAME_2 = "ApplicationName2";
-     private static final String APP_NAME_3 = "ApplicationName3";
-@@ -48,12 +53,17 @@ public class ApplicationCapabilityImportService {
-     private static final String L2_NAME = "CapabilityL2";
-     private static final String L3_NAME = "CapabilityL3";
++    public Map<String, PositionAndSize> getMapApplicationPosition() {
++        return mapApplicationPosition;
++    }
 
--    public List<ApplicationCapabilityDTO> importExcel(InputStream excel, String originalFilename, String[] sheetnames)
-+    public List<ApplicationCapabilityDTO> importExcel(InputStream excel, String originalFilename, String[] sheetnames, String[] landscapeName)
-         throws EncryptedDocumentException, IOException {
-         ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
-         List<ApplicationCapabilityDTO> result = new ArrayList<ApplicationCapabilityDTO>();
-         CapabilityUtil capabilityUtil = new CapabilityUtil();
-+        int i=0;
-         for (String sheetname : sheetnames) {
-+            LandscapeView landscape = null;
-+            if (landscapeName!=null && landscapeName.length > i ) {
-+                landscape = landscapeViewRepository.findByDiagramNameIgnoreCase(landscapeName[i]);
-+            }
-             List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(sheetname);
-             ApplicationCapabilityDTO applicationCapabilityDTO = new ApplicationCapabilityDTO();
-             applicationCapabilityDTO.setSheetname(sheetname);
-@@ -68,26 +78,31 @@ public class ApplicationCapabilityImportService {
+-    //     FileOutputStream output = new FileOutputStream("c:\\workspaces\\staff-dom.xml");
+-    //     writeXml(drawioDoc, output);
++    public PLantumlToDrawioPositioner(String svgXML, Collection<Application> applications, Collection<Edge> edges) throws SAXException, IOException, ParserConfigurationException {
++        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
++        DocumentBuilder db = dbf.newDocumentBuilder();
++        Document docSvgXML = db.parse(new InputSource(new StringReader(svgXML)));
++        NodeList textNodes = docSvgXML.getElementsByTagName("text");
++        NodeList rectNodes = docSvgXML.getElementsByTagName("rect");
++        populateMaps(textNodes, rectNodes, applications);
++        populateUpAndDownAncestors(edges);
++    }
 
-                 itemDTO.setApplicationNames(mapArrayToString(map));
+-    // }
++    private void populateUpAndDownAncestors(Collection<Edge> edges) {
 
--                Optional<Capability> capability = findCapability(l0Import, l1Import, l2Import, l3Import, itemDTO);
-+                Optional<Capability> capabilityOptional = findCapability(l0Import, l1Import, l2Import, l3Import, itemDTO);
-                 List<Application> applications = findApplication(map, itemDTO);
+-    public Document addPositions(Document drawDocument, String svgXML, Collection<Application> applications) {
+-        if (svgXML == null) return drawDocument;
++    }
 
-                 if (applications.isEmpty()) {
-                     String error = "No application found : " + map;
-                     log.error(error);
--                } else if (capability.isEmpty()) {
-+                } else if (capabilityOptional.isEmpty()) {
-                     String error = "No Capaility found : " + map;
-                     log.error(error);
-                 } else {
-+                    Capability capability = capabilityOptional.get();
-                     for (Application application : applications) {
-                         CapabilityApplicationMapping capabilityApplicationMapping = capabilityApplicationMappingRepository.findByApplicationAndCapability(
-                             application,
--                            capability.get()
-+                            capability
-                         );
-                         if (capabilityApplicationMapping == null) {
-                             capabilityApplicationMapping = new CapabilityApplicationMapping();
-                             capabilityApplicationMappingRepository.save(capabilityApplicationMapping);
-                         }
-                         application.addCapabilityApplicationMapping(capabilityApplicationMapping);
-+                        capability.addCapabilityApplicationMapping(capabilityApplicationMapping);
-+                        if (landscape!=null) {
-+                            landscape.addCapabilityApplicationMapping(capabilityApplicationMapping);
-+                        }
-                     }
-                     if (itemDTO.getImportStatus() == null) {
-                         itemDTO.setImportStatus(ImportStatus.NEW);
-@@ -96,6 +111,7 @@ public class ApplicationCapabilityImportService {
-                 applicationCapabilityDTO.getDtos().add(itemDTO);
-             }
-             result.add(applicationCapabilityDTO);
-+            i++;
-         }
-         return result;
-     }
-diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ExcelReader.java b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ExcelReader.java
-index 377e8d2..71caf33 100644
---- a/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ExcelReader.java
-+++ b/src/main/java/com/mauvaisetroupe/eadesignit/service/importfile/ExcelReader.java
-@@ -52,7 +52,6 @@ public class ExcelReader {
-                     labels[j] = removeParenthesis(CellUtil.getCell(firstRow, j).getStringCellValue());
-                 }
-             }
--            System.out.println(sheet.getSheetName());
-             for (int rownum = 1; rownum <= sheet.getLastRowNum(); rownum++) {
-                 Row row = sheet.getRow(rownum);
-                 Map<String, Object> rowAsArray = new HashMap<>();
-@@ -78,7 +77,6 @@ public class ExcelReader {
-                     if (!isEmpty) rowAsArrayList.add(rowAsArray);
-                 }
-             }
--            // System.out.println("Excel Util : " + rowAsArrayList);
-         }
-         return rowAsArrayList;
-     }
-diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/web/rest/ImportResource.java b/src/main/java/com/mauvaisetroupe/eadesignit/web/rest/ImportResource.java
-index a2ebbad..4a6e71d 100644
---- a/src/main/java/com/mauvaisetroupe/eadesignit/web/rest/ImportResource.java
-+++ b/src/main/java/com/mauvaisetroupe/eadesignit/web/rest/ImportResource.java
-@@ -151,9 +151,10 @@ public class ImportResource {
-     @PostMapping("/import/application/capability/upload-file")
-     public List<ApplicationCapabilityDTO> uploadapplicationCapabilityFile(
-         @RequestPart MultipartFile file,
--        @RequestParam String[] sheetname
-+        @RequestParam String[] sheetname,
-+        @RequestParam String[] landscape
-     ) throws Exception {
--        return applicationCapabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename(), sheetname);
-+        return applicationCapabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename(), sheetname, landscape);
-     }
-
-     @GetMapping(value = "export/landscape/{id}")
-diff --git a/src/main/resources/.h2.server.properties b/src/main/resources/.h2.server.properties
-index ae7188f..d56ee95 100644
---- a/src/main/resources/.h2.server.properties
-+++ b/src/main/resources/.h2.server.properties
-@@ -1,6 +1,6 @@
- #H2 Server Properties
--#Sun Jun 11 18:39:47 CEST 2023
-+#Thu Jun 15 17:07:59 CEST 2023
- 0=JHipster H2 (Disk)|org.h2.Driver|jdbc\:h2\:file\:./target/h2db/db/eadesignit|EADesignIt
--webSSL=false
- webAllowOthers=true
- webPort=8092
-+webSSL=false
-diff --git a/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.component.ts b/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.component.ts
-index edb1713..2584f7a 100644
---- a/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.component.ts
-+++ b/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.component.ts
-@@ -18,7 +18,6 @@ export default class CapabilityImport extends Vue {
-
-   public existingLandscapes: ILandscapeView[] = null;
-   public potentialLandscape: String[] = [];
--  public selectedLandscape: String[] = [];
-
-   public mounted(): void {
-     this.retrieveAllLandscapeViews();
-@@ -48,8 +47,9 @@ export default class CapabilityImport extends Vue {
-   public fileSubmited = false;
-   public rowsLoaded = false;
-   public excelFileName = 'Browse File';
--  public sheetnames = [];
--  public checkedNames = [];
-+  public sheetnames : string[] = [];
-+  public checkedNames : string[] = [];
-+  public selectedLandscape : string[] = [];
-
-   public handleFileUpload(event): void {
-     this.excelFile = event.target.files[0];
-@@ -59,8 +59,12 @@ export default class CapabilityImport extends Vue {
-   public submitFile(): void {
-     this.isFetching = true;
-     this.fileSubmited = true;
-+    var sheetnamesMap: Map<string,string> = new Map
-+    this.selectedLandscape.forEach((landscape,i) => {
-+      sheetnamesMap.set(this.sheetnames[i],landscape);
-+    });
-     this.capabilityImportService()
--      .uploadMappingFile(this.excelFile, this.checkedNames)
-+      .uploadMappingFile(this.excelFile, this.checkedNames, sheetnamesMap)
-       .then(
-         res => {
-           this.capabilitiesImports = res.data;
-@@ -77,14 +81,13 @@ export default class CapabilityImport extends Vue {
-
-   public getSheetnames(): void {
-     this.isFetching = true;
--    this.sheetnames = [];
-     this.capabilityImportService()
-       .getSheetNames(this.excelFile)
-       .then(
-         res => {
-           this.isFetching = false;
-           this.sheetnames = res.data;
--          this.sheetnames.forEach(name => {
-+          this.sheetnames.forEach((name,i) => {
-             if (name.startsWith('ADD')) {
-               this.checkedNames.push(name);
-             }
-diff --git a/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.vue b/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.vue
-index 2a5c59f..000f994 100644
---- a/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.vue
-+++ b/src/main/webapp/app/entities/capability-import/application-capability-import-upload-file.vue
-@@ -27,20 +27,19 @@
-           [<a @click="selectAll">Select All</a>] [<a @click="selectNone">Select None</a>]
-         </div>
-         <div class="row">
--          <template v-for="sheet in sheetnames">
-+          <template v-for="(sheet, i) in sheetnames">
-             <div class="col-2">
--              <input type="checkbox" v-model="checkedNames" :value="sheet" :id="sheet" />
-+              <input type="checkbox" v-model="checkedNames" :value="sheet" :id="'CHK-'+sheet" />
-               <label :for="sheet" class="">{{ sheet }}</label>
-             </div>
-             <div class="col-2">
--              <!--
--                <select>
-+                <select v-model="selectedLandscape[i]" :disabled="!checkedNames.includes(sheet)">
-                   <option value=""></option>
--                  <option v-for="landscape in existingLandscapes" :value="landscape.diagramName" :key="landscape.id">
--                    {{ landscape.diagramName }}
--                  </option>
-+                  <option v-for="landscape in existingLandscapes"
-+                    :value="landscape.diagramName"
-+                    :key="landscape.id"
-+                    :selected="landscape.diagramName === selectedLandscape[i]">{{ landscape.diagramName }}</option>
-                 </select>
--              -->
-             </div>
-             <div class="col-2"></div>
-           </template>
-@@ -51,6 +50,8 @@
-       </div>
-     </div>
-
-+    {{ selectedLandscape }}
-+
-     <br />
-     <div class="alert alert-warning" v-if="!isFetching && capabilitiesImports && capabilitiesImports.length === 0">
-       <span>No capabilitiesImports found</span>
-diff --git a/src/main/webapp/app/entities/capability-import/capability-import.service.ts b/src/main/webapp/app/entities/capability-import/capability-import.service.ts
-index f0f049a..24d7d93 100644
---- a/src/main/webapp/app/entities/capability-import/capability-import.service.ts
-+++ b/src/main/webapp/app/entities/capability-import/capability-import.service.ts
-@@ -20,12 +20,16 @@ export default class CapabilityImportService {
-     });
-   }
-
--  public uploadMappingFile(file: File, sheetname: string[]): Promise<any> {
-+  public uploadMappingFile(file: File, sheetname: string[], sheetnameMap: Map<string,string>): Promise<any> {
-     const formData: FormData = new FormData();
-     formData.append('file', file);
--    for (var i = 0; i < sheetname.length; i++) {
--      formData.append('sheetname', sheetname[i]);
--    }
-+    sheetname.forEach(sheetname => {
-+      formData.append('sheetname', sheetname);
-+    })
-+    sheetname.forEach(sheetname => {
-+      formData.append('landscape', sheetnameMap.get(sheetname));
-+    })
-+
-     return new Promise<any>((resolve, reject) => {
-       axios
-         .post(`${apiForImportUrl}/application/capability/upload-file`, formData)
-diff --git a/src/main/webapp/app/entities/capability/capability-details.component.ts b/src/main/webapp/app/entities/capability/capability-details.component.ts
-index 96e158d..980dcf6 100644
---- a/src/main/webapp/app/entities/capability/capability-details.component.ts
-+++ b/src/main/webapp/app/entities/capability/capability-details.component.ts
-@@ -35,6 +35,7 @@ export default class CapabilityDetails extends Vue {
-           tmp = tmp.parent;
-         }
-         this.path.reverse();
-+        console.log(this.path)
-       })
-       .catch(error => {
-         this.alertService().showHttpError(this, error.response);
-diff --git a/src/main/webapp/app/entities/capability/capability-navigate.component.ts b/src/main/webapp/app/entities/capability/capability-navigate.component.ts
-index 808fb02..dcf0fdb 100644
---- a/src/main/webapp/app/entities/capability/capability-navigate.component.ts
-+++ b/src/main/webapp/app/entities/capability/capability-navigate.component.ts
-@@ -20,8 +20,6 @@ export default class CapabilityDetails extends Vue {
-
-   public capability: ICapability = {};
-   public capabilitiesPlantUMLImage = '';
--  public maxLevel = 0;
--  public nbLevel = 0;
-
-   beforeRouteEnter(to, from, next) {
-     next(vm => {
-@@ -64,7 +62,6 @@ export default class CapabilityDetails extends Vue {
-     // inherited
-     console.log(this.capability.name + ' ' + this.capability.level);
-     this.addInheritedApplications(this.capability);
--    this.nbLevel = Math.min(3, this.capability.level + 3);
-
-     // PATH for breadcrumb
-     var tmp = this.capability;
-@@ -75,8 +72,8 @@ export default class CapabilityDetails extends Vue {
-       tmp = tmp.parent;
-     }
-     this.path.reverse();
--    // Maximum level
--    this.maxLevel = this.calulateMax(this.capability, 0);
-+
-+
-   }
-
-   private addInheritedApplications(capability: ICapability) {
-@@ -101,18 +98,5 @@ export default class CapabilityDetails extends Vue {
-     }
-   }
-
--  public calulateMax(capability: ICapability, arg1: number): number {
--    // console.log('IN : ' + arg1);
--    var max = 0;
--    if (capability && capability.subCapabilities) {
--      for (const cap of capability.subCapabilities) {
--        var tmp = this.calulateMax(cap, arg1 + 1);
--        if (tmp > max) {
--          max = tmp;
++    public Document addPositions(Document drawDocument) {
+         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+         Document copiedDocument;
+         try {
+@@ -54,24 +63,15 @@ public class PLantumlToDrawioPositioner {
+             copiedDocument = db.newDocument();
+             Node copiedRoot = copiedDocument.importNode(originalRoot, true);
+             copiedDocument.appendChild(copiedRoot);
+-        } catch (ParserConfigurationException e) {
+-            return drawDocument;
 -        }
--      }
--    }
--    // console.log('OUT : ' + max);
--    return max + 1;
--  }
-+
- }
-diff --git a/src/main/webapp/app/entities/capability/capability-navigate.vue b/src/main/webapp/app/entities/capability/capability-navigate.vue
-index 16d256f..dc7ae13 100644
---- a/src/main/webapp/app/entities/capability/capability-navigate.vue
-+++ b/src/main/webapp/app/entities/capability/capability-navigate.vue
-@@ -6,7 +6,6 @@
-       :capability="capability"
-       @retrieveCapability="retrieveCapability"
-       :path="path"
--      :nbLevel="nbLevel"
-       :defaultShowApplications="true"
-     />
-   </div>
-diff --git a/src/main/webapp/app/entities/capability/component/capability-item.vue b/src/main/webapp/app/entities/capability/component/capability-item.vue
-index bfcca32..5dcd25f 100644
---- a/src/main/webapp/app/entities/capability/component/capability-item.vue
-+++ b/src/main/webapp/app/entities/capability/component/capability-item.vue
-@@ -1,13 +1,14 @@
- <template>
--  <div :class="'capa-child-' + childStyle + ' c' + capability.level" v-if="capability.level <= nbLevel">
-+  <div :class="'capa-child-' + childStyle + ' c' + capability.level" v-if="capability.level <= nbLevel" :key="childStyle + '-' + capability.id">
-     <div :title="capability.description" v-if="capability.level > -2">
-       <!--do not display ROOT-->
-       <a @click="$emit('retrieveCapability', capability.id)" v-if="childStyle != 'top' && capability.level < 2">{{ capability.name }}</a>
-       <span v-else>{{ capability.name }}</span>
-     </div>
-     <div v-else>Corporate capabilities</div>
--    <div v-for="appli in capability.applications" class="appli" v-if="showApplications">{{ appli.name }}</div>
--    <div v-if="showApplications && capability.level == nbLevel" v-for="appli in capability.inheritedApplications" class="appli2">
-+     [[{{ capability.capabilityApplicationMappings }}]]
-+     <div v-for="appli in capability.capabilityApplicationMappings.map(cm => cm.application)" class="appli" v-if="showApplications && capability && capability.capabilityApplicationMappings" :key="'APP-' + appli.id">{{ appli.name }}</div>
-+    <div v-if="showApplications && capability.level == nbLevel" v-for="appli in capability.inheritedApplications" class="appli2" :key="'INH-' + appli.id">
-       {{ appli.name }}
-     </div>
-     <div v-if="capability.subCapabilities">
-diff --git a/src/main/webapp/app/entities/capability/component/capability.component.ts b/src/main/webapp/app/entities/capability/component/capability.component.ts
-index 65a8bc2..be9caed 100644
---- a/src/main/webapp/app/entities/capability/component/capability.component.ts
-+++ b/src/main/webapp/app/entities/capability/component/capability.component.ts
-@@ -12,10 +12,6 @@ const CapabilityProps = Vue.extend({
-     path: {
-       type: Array as PropType<ICapability[]>,
-     },
--    nbLevel: {
--      type: Number,
--      default: 1,
--    },
-     menu: {
-       type: Boolean,
-       default: true,
-@@ -34,6 +30,10 @@ const CapabilityProps = Vue.extend({
- })
- export default class CapabilityComponent extends CapabilityProps {
-   public showApplications: Boolean = this.defaultShowApplications;
-+  public get nbLevel() {
-+    return parseInt(this.nbLevelAsString);
-+  }
-+  public nbLevelAsString: string = "1"; // input type range send string
+-
+-        try {
+-            DocumentBuilder db = dbf.newDocumentBuilder();
+-            Document docSvgXML = db.parse(new InputSource(new StringReader(svgXML)));
+-
+-            Map<String, PositionAndSize> pointFromSVGMap = getPointFromSVG(docSvgXML, applications);
+-            addPositions(copiedDocument, pointFromSVGMap);
++            _addPositions(copiedDocument);
+             return copiedDocument;
+-        } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
++        } catch (XPathExpressionException | ParserConfigurationException e ) {
+             e.printStackTrace();
+             return drawDocument;
+         }
+     }
 
-   public retrieveCapability(capId: number) {
-     console.log(capId);
-diff --git a/src/main/webapp/app/entities/capability/component/capability.vue b/src/main/webapp/app/entities/capability/component/capability.vue
-index db8c34e..75cc512 100644
---- a/src/main/webapp/app/entities/capability/component/capability.vue
-+++ b/src/main/webapp/app/entities/capability/component/capability.vue
-@@ -26,7 +26,7 @@
-       <span style="margin: 5px"><input type="checkbox" v-model="showApplications" /> Show applications</span>
-       <span style="margin: 5px">
-         <label for="range">Nb level</label>
--        <input type="range" :min="Math.max(0, capability.level)" max="3" class="slider" v-model="nbLevel" />{{ nbLevel }}
-+        <input type="range" :min="Math.max(0, capability.level)" max="3" class="slider" v-model=nbLevelAsString />{{ nbLevelAsString }}
-       </span>
-     </div>
-     <div>
-@@ -35,7 +35,7 @@
-         childStyle="top"
-         @retrieveCapability="retrieveCapability"
-         :showApplications="showApplications"
--        :nbLevel="nbLevel"
-+        :nbLevel=nbLevel
-       >
-         <div class="d-flex flex-wrap">
-           <template v-for="child1 in capability.subCapabilities">
-@@ -44,7 +44,7 @@
-               childStyle="1"
-               @retrieveCapability="retrieveCapability"
-               :showApplications="showApplications"
--              :nbLevel="nbLevel"
-+              :nbLevel=nbLevel
-             >
-               <div class="d-flex flex-wrap">
-                 <template v-for="child2 in child1.subCapabilities">
-@@ -53,7 +53,7 @@
-                     childStyle="2"
-                     @retrieveCapability="retrieveCapability"
-                     :showApplications="showApplications"
--                    :nbLevel="nbLevel"
-+                    :nbLevel=nbLevel
-                   >
-                     <div class="d-flex flex-wrap">
-                       <template v-for="child3 in child2.subCapabilities">
-@@ -62,7 +62,7 @@
-                           childStyle="3"
-                           @retrieveCapability="retrieveCapability"
-                           :showApplications="showApplications"
--                          :nbLevel="nbLevel"
-+                          :nbLevel=nbLevel
-                           :showInheritedApplications="true"
-                         >
-                           <div class="d-flex flex-wrap">
-@@ -72,7 +72,7 @@
-                                 childStyle="4"
-                                 @retrieveCapability="retrieveCapability"
-                                 :showApplications="showApplications"
--                                :nbLevel="nbLevel"
-+                                :nbLevel=nbLevel
-                                 :showInheritedApplications="true"
-                               >
-                                 <div class="d-flex flex-wrap">
-@@ -82,7 +82,7 @@
-                                       childStyle="5"
-                                       @retrieveCapability="retrieveCapability"
-                                       :showApplications="showApplications"
--                                      :nbLevel="nbLevel"
-+                                      :nbLevel=nbLevel
-                                       :showInheritedApplications="true"
-                                     >
-                                       <div class="d-flex flex-wrap">
-@@ -92,7 +92,7 @@
-                                             childStyle="6"
-                                             @retrieveCapability="retrieveCapability"
-                                             :showApplications="showApplications"
--                                            :nbLevel="nbLevel"
-+                                            :nbLevel=nbLevel
-                                             :showInheritedApplications="true"
-                                           >
-                                           </CapabilityComponentItem>
-diff --git a/src/main/webapp/app/entities/landscape-view/landscape-view-details.vue b/src/main/webapp/app/entities/landscape-view/landscape-view-details.vue
-index f1fb0a7..1a2722b 100644
---- a/src/main/webapp/app/entities/landscape-view/landscape-view-details.vue
-+++ b/src/main/webapp/app/entities/landscape-view/landscape-view-details.vue
-@@ -528,6 +528,13 @@
-         </button>
-       </div>
-     </b-modal>
-+++
-+    <div class="row">
-+      <div v-for="cm in landscapeView.capabilityApplicationMappings" class="col-12">{{ cm.capability.name }} --- {{ cm.application.name }}</div>
-+    </div>
+-    private void addPositions(Document doc, Map<String, PositionAndSize> pointFromSVGMap) throws XPathExpressionException {
++    private void _addPositions(Document doc) throws XPathExpressionException {
+         XPathFactory xpathfactory = XPathFactory.newInstance();
+         XPath xpath = xpathfactory.newXPath();
+         NodeList nodeList = (NodeList) xpath.evaluate(
+@@ -82,7 +82,7 @@ public class PLantumlToDrawioPositioner {
+         for (int i = 0; i < nodeList.getLength(); i++) {
+             Element mxcellElement = ((Element) nodeList.item(i));
+             String applicationName = mxcellElement.getAttribute("value");
+-            PositionAndSize position = pointFromSVGMap.get(applicationName);
++            PositionAndSize position = this.mapApplicationPosition.get(applicationName);
+
+             NodeList textNodeList = mxcellElement.getElementsByTagName("mxGeometry");
+             Element mxGeometryElement = extractFirstChild(textNodeList);
+@@ -95,42 +95,22 @@ public class PLantumlToDrawioPositioner {
+         }
+     }
+
+-    // private static Document createDocFromFile(File file)
+-    //         throws ParserConfigurationException, SAXException, IOException {
+-    //     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+-    //     DocumentBuilder db = factory.newDocumentBuilder();
+-    //     Document doc = db.parse(file);
+-    //     return doc;
+-    // }
+-
+-    protected Map<String, PositionAndSize> getPointFromSVG(Document doc, Collection<Application> applications)
+-        throws XPathExpressionException {
+-        Map<String, PositionAndSize> map = new HashMap<>();
++    public Document addConnectionPoints(Document doc, Collection<Edge> edges) {
++        for (Edge edge : edges) {
++            Application source = mapApplicationNames.get(edge.getSourceId());
++            Application target = mapApplicationNames.get(edge.getTargetId());
+
+-        XPathFactory xpathfactory = XPathFactory.newInstance();
+-        XPath xpath = xpathfactory.newXPath();
+-
+-        // <g id="elem_Trust Service">
+-        // <rect fill="#F1F1F1" height="46.2969" rx="2.5" ry="2.5"
+-        // style="stroke:#181818;stroke-width:0.5;" width="124" x="2986.5" y="463.543"/>
+-        // <text fill="#000000" font-family="sans-serif" font-size="14"
+-        // lengthAdjust="spacing" textLength="94" x="3001.5"
+-        // y="491.5381">TrustService</text>
+-        // </g>
+-
+-        NodeList textNodes = doc.getElementsByTagName("text");
+-        NodeList rectNodes = doc.getElementsByTagName("rect");
+-        populateMap(map, textNodes, rectNodes, applications);
+-        return map;
++        }
++        return doc;
+     }
+
+-    private void populateMap(
+-        Map<String, PositionAndSize> mapToComplete,
++    private void populateMaps(
+         NodeList textNodes,
+         NodeList rectNodes,
+         Collection<Application> applications
+     ) {
+         Set<String> appliNames = applications.stream().map(a -> a.getName()).collect(Collectors.toSet());
++        applications.stream().forEach(a -> this.mapApplicationNames.put(a.getId(), a));
+         Map<String, PositionAndSize> textPostion = new HashMap<>();
+         for (int i = 0; i < textNodes.getLength(); i++) {
+             Element textElement = (Element) textNodes.item(i);
+@@ -171,7 +151,8 @@ public class PLantumlToDrawioPositioner {
+                     txtPos.getY() > rectPos.getY() &&
+                     txtPos.getY() < rectPos.getY() + rectPos.getHeight()
+                 ) {
+-                    mapToComplete.put(app, rectPos);
++                    this.mapApplicationPosition.put(app, rectPos);
++                    //this.mapApplicationNames.put(app.get, _height)
+                 }
+                 i++;
+             }
+diff --git a/src/main/java/com/mauvaisetroupe/eadesignit/web/rest/DrawIOResource.java b/src/main/java/com/mauvaisetroupe/eadesignit/web/rest/DrawIOResource.java
+index f94203d..27d7a12 100644
+--- a/src/main/java/com/mauvaisetroupe/eadesignit/web/rest/DrawIOResource.java
++++ b/src/main/java/com/mauvaisetroupe/eadesignit/web/rest/DrawIOResource.java
+@@ -53,7 +53,7 @@ public class DrawIOResource {
+         } else {
+             // check if drawio is uptodate, if not remove SVG from database
+             // and send updated xml
+-            String svgXML = plantUMLSerializer.getLandscapeDiagramSVG(landscapeView.get(), Layout.elk, false, false);
++            String svgXML = plantUMLSerializer.getLandscapeDiagramSVG(landscapeView.get(), Layout.elk, false, true);
+             return fileSerializer.createMXFileXML(svgXML);
+         }
+     }
+diff --git a/src/test/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/PLantumlToDrawioPositionerTest.java b/src/test/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/PLantumlToDrawioPositionerTest.java
+index 2234c58..025c6c0 100644
+--- a/src/test/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/PLantumlToDrawioPositionerTest.java
++++ b/src/test/java/com/mauvaisetroupe/eadesignit/service/diagram/drawio/PLantumlToDrawioPositionerTest.java
+@@ -6,6 +6,15 @@ import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
+ import com.mauvaisetroupe.eadesignit.service.diagram.dto.PositionAndSize;
+ import java.io.IOException;
+ import java.io.InputStream;
++import java.io.InputStreamReader;
++import java.io.Reader;
++import java.io.UncheckedIOException;
++import java.net.URISyntaxException;
++import java.net.URL;
++import java.nio.charset.Charset;
++import java.nio.charset.StandardCharsets;
++import java.nio.file.Files;
++import java.nio.file.Path;
+ import java.util.ArrayList;
+ import java.util.Collection;
+ import java.util.Map;
+@@ -15,20 +24,17 @@ import javax.xml.parsers.DocumentBuilderFactory;
+ import javax.xml.parsers.ParserConfigurationException;
+ import javax.xml.xpath.XPathExpressionException;
+ import org.junit.jupiter.api.Test;
++import org.springframework.core.io.DefaultResourceLoader;
++import org.springframework.core.io.ResourceLoader;
++import org.springframework.util.FileCopyUtils;
++import org.springframework.core.io.Resource;
+ import org.w3c.dom.Document;
+ import org.xml.sax.SAXException;
+
+ public class PLantumlToDrawioPositionerTest {
+
+     @Test
+-    void testGetPosition() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+-        InputStream stream =
+-            PLantumlToDrawioPositionerTest.class.getResourceAsStream("/com/mauvaisetroupe/eadesignit/service/diagram/drawio/svg.xml");
+-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+-        factory.setValidating(false);
+-        DocumentBuilder builder = factory.newDocumentBuilder();
+-        Document doc = builder.parse(stream);
+-
++    void testGetPosition() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException, URISyntaxException {
+         Collection<Application> applications = new ArrayList<>();
+         applications.add(new Application(1L, "Accounts Service", null, null));
+         applications.add(new Application(2L, "Apple pay", null, null));
+@@ -64,8 +70,14 @@ public class PLantumlToDrawioPositionerTest {
+         applications.add(new Application(32L, "Trust Service", null, null));
+         applications.add(new Application(33L, "User settings service", null, null));
+
+-        PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner();
+-        Map<String, PositionAndSize> map = drawioPositioner.getPointFromSVG(doc, applications);
++        //InputStream stream = PLantumlToDrawioPositionerTest.class.getResourceAsStream("/com/mauvaisetroupe/eadesignit/service/diagram/drawio/svg.xml");
++        ResourceLoader resourceLoader = new DefaultResourceLoader();
++        Resource resource = resourceLoader.getResource("classpath:/com/mauvaisetroupe/eadesignit/service/diagram/drawio/svg.xml");
++        String svg = asString(resource);
 +
 +
-+++
-   </div>
- </template>
- <style>
-diff --git a/src/main/webapp/app/shared/model/capability.model.ts b/src/main/webapp/app/shared/model/capability.model.ts
-index 9ed5c5b..d2aa58c 100644
---- a/src/main/webapp/app/shared/model/capability.model.ts
-+++ b/src/main/webapp/app/shared/model/capability.model.ts
-@@ -10,7 +10,7 @@ export interface ICapability {
-   level?: number | null;
-   subCapabilities?: ICapability[] | null;
-   parent?: ICapability | null;
--  //  applications?: IApplication[] | null;
-+  applications?: IApplication[] | null;
-   //  landscapes?: ILandscapeView[] | null;
-   inheritedApplications?: IApplication[] | null; // calculated
-   capabilityApplicationMappings?: ICapabilityApplicationMapping[] | null;
-   
++        PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner(svg, applications, null);
++        Map<String, PositionAndSize> map = drawioPositioner.getMapApplicationPosition();
+
+         // All application should have been found in <text>
+         assertEquals(applications.size(), map.size());
+@@ -80,4 +92,12 @@ public class PLantumlToDrawioPositionerTest {
+         assertEquals((Double) 4178.5, map.get("Trading service").getX());
+         assertEquals((Double) 546.9766, map.get("Trading service").getY());
+     }
++
++    public static String asString(Resource resource) {
++        try (Reader reader = new InputStreamReader(resource.getInputStream())) {
++            return FileCopyUtils.copyToString(reader);
++        } catch (IOException e) {
++            throw new UncheckedIOException(e);
++        }
++    }
+ }
+diff --git a/src/test/java/com/mauvaisetroupe/eadesignit/service/drawio/MXFileSerializerTest.java b/src/test/java/com/mauvaisetroupe/eadesignit/service/drawio/MXFileSerializerTest.java
+index a6e1b56..0e876cc 100644
+--- a/src/test/java/com/mauvaisetroupe/eadesignit/service/drawio/MXFileSerializerTest.java
++++ b/src/test/java/com/mauvaisetroupe/eadesignit/service/drawio/MXFileSerializerTest.java
+@@ -24,7 +24,7 @@ import org.xml.sax.SAXException;
+ public class MXFileSerializerTest {
+
+     @Test
+-    public void test() throws ParserConfigurationException {
++    public void test() throws ParserConfigurationException, SAXException, IOException {
+         LandscapeView landscapeView = new LandscapeView();
+         landscapeView.setId(1L);
+         landscapeView.setDiagramName("diagramName");
