@@ -95,6 +95,7 @@ public class PlantUMLBuilder {
         if (!isEmpty(labels)) {
             plantUMLSource.append(" :");
             String sepaString = "";
+            int nbLabel = 0;
             for (Label label : labels) {
                 if (StringUtils.hasText(label.getLabel())) {
                     String _label = label.getLabel().replaceAll("\n", "\\\\n");
@@ -104,7 +105,8 @@ public class PlantUMLBuilder {
                     } else {
                         plantUMLSource.append("[[ " + label.getUrl() + " " + _label + " ]]");
                     }
-                    sepaString = ",\\n";
+                    nbLabel++;
+                    sepaString = (nbLabel % 3 == 0) ? ",\\n" : ",";
                 }
             }
         }
