@@ -74,13 +74,15 @@ public class MXFileSerializer {
             createRectangle(doc, root, application.getId().toString(), application.getName());
         }
 
-        PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner(
-            svgXML,
-            graphDTO.getApplications(),
-            graphDTO.getBidirectionalConsolidatedEdges()
-        );
-        doc = drawioPositioner.addPositions(doc);
-        doc = drawioPositioner.addConnectionPoints(doc, graphDTO.getBidirectionalConsolidatedEdges());
+        if (svgXML != null) {
+            PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner(
+                svgXML,
+                graphDTO.getApplications(),
+                graphDTO.getBidirectionalConsolidatedEdges()
+            );
+            doc = drawioPositioner.addPositions(doc);
+            doc = drawioPositioner.addConnectionPoints(doc, graphDTO.getBidirectionalConsolidatedEdges());
+        }
         return getStringFromDocument(doc);
     }
 

@@ -49,7 +49,9 @@ public class PLantumlToDrawioPositioner {
         NodeList textNodes = docSvgXML.getElementsByTagName("text");
         NodeList rectNodes = docSvgXML.getElementsByTagName("rect");
         populateMaps(textNodes, rectNodes, applications);
-        populateUpAndDownAncestors(applications, edges);
+        if (edges != null) {
+            populateUpAndDownAncestors(applications, edges);
+        }
     }
 
     public Document addPositions(Document drawDocument) {
