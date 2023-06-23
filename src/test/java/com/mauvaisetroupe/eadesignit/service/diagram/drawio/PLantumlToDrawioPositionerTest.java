@@ -63,7 +63,7 @@ public class PLantumlToDrawioPositionerTest {
 
         //InputStream stream = PLantumlToDrawioPositionerTest.class.getResourceAsStream("/com/mauvaisetroupe/eadesignit/service/diagram/drawio/svg.xml");
         ResourceLoader resourceLoader = new DefaultResourceLoader();
-        Resource resource = resourceLoader.getResource("classpath:/com/mauvaisetroupe/eadesignit/service/diagram/drawio/svg.xml");
+        Resource resource = resourceLoader.getResource("classpath:/svg/svg.xml");
         String svg = asString(resource);
 
         PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner(svg, applications, null);
