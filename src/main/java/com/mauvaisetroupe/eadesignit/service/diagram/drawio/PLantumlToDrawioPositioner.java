@@ -5,6 +5,7 @@ import com.mauvaisetroupe.eadesignit.service.diagram.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.PositionAndSize;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -32,9 +33,9 @@ public class PLantumlToDrawioPositioner {
     // applicationId -> Application
     private Map<Long, Application> mapApplicationNames = new HashMap<>();
     // Ancestors above application(ID), from left to right
-    private Map<Long, List<Long>> upAncestors = new HashMap<>();
+    private Map<Long, List<Long>> topConnected = new HashMap<>();
     // Ancestors below application(ID), from left to right
-    private Map<Long, List<Long>> downAncestors = new HashMap<>();
+    private Map<Long, List<Long>> bottomConnected = new HashMap<>();
 
     public Map<String, PositionAndSize> getMapApplicationPosition() {
         return mapApplicationPosition;
@@ -93,48 +94,67 @@ public class PLantumlToDrawioPositioner {
     }
 
     public Document addConnectionPoints(Document doc, Collection<Edge> edges) throws XPathExpressionException {
+        //     WEBBANKING (EXIT)
+        //       |
+        //       |
+        //     ACCOUNTS   (ENTRY)
+
+        //     <mxGraphModel dx="1401" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        //     <root>
+        //       <mxCell id="7" style="
+        //              entryX=0.5;  entryY=0.0;  entryDx=0;  entryDy=0;
+        //              exitX=0.5;   exitY=1.0;   exitDx=0;   exitDy=0;"
+        //              parent="1" source="app_1661" target="app_1693" edge="1" elementId="edge_1661-1693" sourceId="app_1661" targetId="app_1693">
+        //         <mxGeometry relative="1" as="geometry">
+        //           <mxPoint as="sourcePoint" />
+        //           <mxPoint as="targetPoint" />
+        //         </mxGeometry>
+        //       </mxCell>
+        //       <mxCell id="app_1661" value="WEBBANKING" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" elementId="app_1661" vertex="1">
+        //         <mxGeometry x="185.5" y="12" width="62" height="41.6406" as="geometry" />
+        //       </mxCell>
+        //       <mxCell id="app_1693" value="ACCOUNTS" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" elementId="app_1693" vertex="1">
+        //         <mxGeometry x="160" y="150.0034" width="113" height="41.6406" as="geometry" />
+        //       </mxCell>
+        //     </root>
+        //   </mxGraphModel>
+
         for (Edge edge : edges) {
-            double entryY = 0, entryX = 0, exitX = 0, exitY = 0;
+            boolean fromTopToBottom = (bottomConnected.get(edge.getSourceId()).indexOf(edge.getTargetId()) > -1);
 
-            boolean upToDown = (downAncestors.get(edge.getSourceId()).indexOf(edge.getTargetId()) > -1);
+            // identify which of the source or target ones is the top application and the bottom application
+            Long topApplicationId = fromTopToBottom ? edge.getSourceId() : edge.getTargetId();
+            Application topApplication = mapApplicationNames.get(topApplicationId);
 
-            System.out.println(edge.getSourceId() + " -> " + mapApplicationNames.get(edge.getSourceId()).getName());
-            System.out.println(edge.getTargetId() + " -> " + mapApplicationNames.get(edge.getTargetId()).getName());
-            System.out.println(upToDown);
+            Long bottomApplicationId = fromTopToBottom ? edge.getTargetId() : edge.getSourceId();
+            Application bottomApplication = mapApplicationNames.get(bottomApplicationId);
 
-            if (upToDown) {
-                // source up
-                // target down
+            //     (0,0) --------------------------- (1,0)
+            //           |                         |
+            //           |                         |
+            //     (0,1) --------------------------- (1,1)
 
-                entryY = 0; // downside
-                exitY = 1; //upside
+            // define vertical (Y) connection point
+            double originY = fromTopToBottom ? 1 : 0;
+            double destinationY = fromTopToBottom ? 0 : 1;
 
-                List<Long> upAppli = upAncestors.get(edge.getTargetId());
-                List<Long> downAppli = downAncestors.get(edge.getSourceId());
-                int indexEntry = upAppli.indexOf(edge.getSourceId()) + 1;
-                int indexExit = downAppli.indexOf(edge.getTargetId()) + 1;
+            // sorted list of applications connected to topApplication and lower than it
+            List<Long> bottomAppliList = bottomConnected.get(topApplicationId);
+            // sorted list of applications connected to bottomApplication and higherr than it
+            List<Long> topAppliList = topConnected.get(bottomApplicationId);
 
-                exitX = (double) indexExit / (downAppli.size() + 1);
-                entryX = (double) indexEntry / (upAppli.size() + 1);
+            // Define Horiontal (X) connection points
+            int indexTop = bottomAppliList.indexOf(bottomApplicationId);
+            int totalTop = topAppliList.size();
+            int indexBottom = topAppliList.indexOf(topApplicationId);
+            int totalBottom = bottomAppliList.size();
+            double topRatio = (double) (indexTop + 1) / (totalBottom + 1);
+            double bottomRatio = (double) (indexBottom + 1) / (totalTop + 1);
 
-                System.out.println(entryX + " " + exitX);
-            } else {
-                // source down
-                // target up
+            double originX = fromTopToBottom ? topRatio : bottomRatio;
+            double destinationX = fromTopToBottom ? bottomRatio : topRatio;
 
-                entryY = 1; // downside
-                exitY = 0; //upside
-
-                List<Long> upAppli = upAncestors.get(edge.getSourceId());
-                List<Long> downAppli = downAncestors.get(edge.getTargetId());
-                int indexEntry = downAppli.indexOf(edge.getSourceId()) + 1;
-                int indexExit = upAppli.indexOf(edge.getTargetId()) + 1;
-
-                exitX = (double) indexExit / (upAppli.size() + 1);
-                entryX = (double) indexEntry / (downAppli.size() + 1);
-
-                System.out.println(entryX + " " + exitX);
-            }
+            // Write horizontal and vertical position points in XML
             XPathFactory xpathfactory = XPathFactory.newInstance();
             XPath xpath = xpathfactory.newXPath();
             Element elem = (Element) xpath.evaluate(
@@ -146,16 +166,33 @@ public class PLantumlToDrawioPositioner {
             elem.setAttribute(
                 "style",
                 styleValue +
-                "jumpStyle=arc;edgeStyle=elbowEdgeStyle;elbow=vertical;entryX=" +
-                entryX +
+                "jumpStyle=arc;edgeStyle=elbowEdgeStyle;elbow=vertical;" +
+                "entryX=" +
+                destinationX +
                 ";entryY=" +
-                entryY +
-                ";entryDx=0;entryDy=0;exitX=" +
-                exitX +
+                destinationY +
+                ";entryDx=0;entryDy=0;" +
+                "exitX=" +
+                originX +
                 ";exitY=" +
-                exitY +
+                originY +
                 ";exitDx=0;exitDy=0;"
             );
+
+            // Add Point on edge itself to avoid an alignememt on all edge
+
+            PositionAndSize topPos = mapApplicationPosition.get(topApplication.getName());
+            PositionAndSize bottomPos = mapApplicationPosition.get(bottomApplication.getName());
+
+            Element geometry = (Element) elem.getFirstChild();
+
+            Element array = (Element) geometry.appendChild(doc.createElement("Array"));
+            array.setAttribute("as", "points");
+
+            double deltaX = Math.abs((topPos.getX() + topPos.getWidth() / 2) - (bottomPos.getX() + bottomPos.getWidth() / 2));
+            Element mxPoint3 = (Element) array.appendChild(doc.createElement("mxPoint"));
+            mxPoint3.setAttribute("x", "" + (Math.min(topPos.getX(), bottomPos.getX()) + deltaX / 2));
+            mxPoint3.setAttribute("y", "" + (topPos.getY() + topPos.getHeight() + (indexTop + 1) * 10));
         }
         return doc;
     }
@@ -173,7 +210,7 @@ public class PLantumlToDrawioPositioner {
             String applicationName = textElement.getTextContent();
 
             if (applicationName != null) {
-                applicationName = applicationName.replaceAll("[\n|\r]", " ").replaceAll(" +", " ");
+                applicationName = applicationName.replaceAll("[\n|\r]", " ").replaceAll(" +", " ").replaceAll("-", "–");
             }
 
             if (appliNames.contains(applicationName)) {
@@ -185,6 +222,8 @@ public class PLantumlToDrawioPositioner {
                 Double textLength = Double.parseDouble(_textLength);
 
                 textPostion.put(applicationName, new PositionAndSize(x + textLength / 2, y, null, null));
+            } else {
+                System.out.println("Pb with : " + applicationName);
             }
         }
 
@@ -236,23 +275,29 @@ public class PLantumlToDrawioPositioner {
 
             List<Application> upAppli = connectedApplication
                 .stream()
+                .filter(a -> mapApplicationPosition.get(a.getName()) != null)
                 .filter(a -> mapApplicationPosition.get(a.getName()).getY() < applicationPosition.getY())
                 .collect(Collectors.toList());
+
             upAppli.sort((appli1, appli2) ->
                 mapApplicationPosition.get(appli1.getName()).getX().compareTo(mapApplicationPosition.get(appli2.getName()).getX())
             );
 
-            this.upAncestors.put(application.getId(), upAppli.stream().map(a -> a.getId()).collect(Collectors.toList()));
+            if (upAppli != null) {
+                this.topConnected.put(application.getId(), upAppli.stream().map(a -> a.getId()).collect(Collectors.toList()));
+            }
 
             List<Application> downAppli = connectedApplication
                 .stream()
+                .filter(a -> mapApplicationPosition.get(a.getName()) != null)
                 .filter(a -> mapApplicationPosition.get(a.getName()).getY() >= applicationPosition.getY())
                 .collect(Collectors.toList());
+
             downAppli.sort((appli1, appli2) ->
                 mapApplicationPosition.get(appli1.getName()).getX().compareTo(mapApplicationPosition.get(appli2.getName()).getX())
             );
 
-            this.downAncestors.put(application.getId(), downAppli.stream().map(a -> a.getId()).collect(Collectors.toList()));
+            this.bottomConnected.put(application.getId(), downAppli.stream().map(a -> a.getId()).collect(Collectors.toList()));
         }
     }
 }
