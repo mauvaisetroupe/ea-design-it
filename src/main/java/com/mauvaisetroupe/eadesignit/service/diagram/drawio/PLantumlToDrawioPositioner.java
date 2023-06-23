@@ -181,6 +181,16 @@ public class PLantumlToDrawioPositioner {
 
             // Add Point on edge itself to avoid an alignememt on all edge
 
+            // <mxCell id="10" style="">
+            //     <mxGeometry relative="1" as="geometry">
+            //     <mxPoint as="sourcePoint" />
+            //     <mxPoint as="targetPoint" />
+            //     <Array as="points">
+            //         <mxPoint x="160.28570000000002" y="190.414" />
+            //     </Array>
+            //     </mxGeometry>
+            // </mxCell>
+
             PositionAndSize topPos = mapApplicationPosition.get(topApplication.getName());
             PositionAndSize bottomPos = mapApplicationPosition.get(bottomApplication.getName());
 
