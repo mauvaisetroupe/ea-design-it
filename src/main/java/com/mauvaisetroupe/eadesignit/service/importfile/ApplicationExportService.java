@@ -156,8 +156,8 @@ public class ApplicationExportService {
 
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.COMPONENT_ID);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.COMPONENT_NAME);
-        headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_NAME);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_ID);
+        headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_NAME);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_DESCRIPTION);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_COMMENT);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_TYPE);

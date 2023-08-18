@@ -62,7 +62,7 @@
             </td>
             <td>
               <a v-if="dataFlow.documentationURL" v-bind:href="dataFlow.documentationURL"
-                >{{ dataFlow.documentationURL.subbstring(0, 20) }}...</a
+                >{{ dataFlow.documentationURL.substring(0, 20) }}...</a
               >
             </td>
             <td>{{ dataFlow.startDate }}</td>
