@@ -54,10 +54,6 @@ import org.springframework.util.StringUtils;
 @Service
 public class FlowImportService {
 
-    private static final String GENERIC_DATA_FLOW = "GENERIC DATAFLOW from ADD";
-    private static final String GENERIC_FILE_FROM_ADD = "GENERIC FILE from ADD";
-    private static final String GENERIC_EVENT_FROM_ADD = "GENERIC EVENT from ADD";
-
     protected static final String FLOW_ID_FLOW = "Id flow";
     protected static final String FLOW_ALIAS_FLOW = "Alias flow";
     protected static final String FLOW_SOURCE_ELEMENT = "Source Element";
@@ -108,9 +104,6 @@ public class FlowImportService {
 
     @Autowired
     private ProtocolRepository protocolRepository;
-
-    @Autowired
-    private DataFormatRepository dataFormatRepository;
 
     @Autowired
     private FunctionalFlowStepRepository functionalFlowStepRepository;
@@ -247,7 +240,6 @@ public class FlowImportService {
                 FunctionalFlow functionalFlow = findOrCreateFunctionalFlow(flowImport);
                 FlowInterface flowInterface = findOrCreateInterface(flowImport);
                 Protocol protocol = findOrCreateProtocol(flowImport);
-                DataFlow dataFlow = findOrCreateDataFlow(flowImport, protocol);
 
                 if (landscapeView != null && functionalFlow != null && flowInterface != null) {
                     // Set<>, so could add even if already associated
@@ -291,14 +283,6 @@ public class FlowImportService {
                     }
 
                     landscapeViewRepository.save(landscapeView);
-                    if (dataFlow != null) {
-                        functionalFlow.addDataFlows(dataFlow);
-                        flowInterface.addDataFlows(dataFlow);
-                        // validate here beacause relationship should not be null
-                        validateBean(dataFlow);
-                        dataFlowRepository.save(dataFlow);
-                        interfaceRepository.save(flowInterface);
-                    }
                     if (protocol != null) {
                         flowInterface.setProtocol(protocol);
                         // validate here beacause relationship should not be null
@@ -457,90 +441,6 @@ public class FlowImportService {
         flowImport.setImportStatusMessage(previous + e.getMessage() + "  \n");
     }
 
-    private DataFlow findOrCreateDataFlow(FlowImport flowImport, Protocol protocol) {
-        DataFlow dataFlow = null;
-        Set<DataFlow> potentialDataFlows = new HashSet<>();
-        DataFlowComparator comparator = new DataFlowComparator();
-        try {
-            // Find dataflows with same functional flow and same interface
-            potentialDataFlows =
-                dataFlowRepository.findByFlowInterface_AliasAndFunctionalFlows_Alias(
-                    flowImport.getIdFlowFromExcel(),
-                    flowImport.getFlowAlias()
-                );
-
-            dataFlow = comparator.findEquivalentInCollection(flowImport, potentialDataFlows);
-
-            if (dataFlow == null) {
-                // if a dataflow exist for same interface, with same characteristics,
-                // then use it adding reference to this functional flow
-                potentialDataFlows = dataFlowRepository.findByFlowInterface_Alias(flowImport.getIdFlowFromExcel());
-                dataFlow = comparator.findEquivalentInCollection(flowImport, potentialDataFlows);
-            }
-
-            if (dataFlow == null) {
-                if (!comparator.isDataFlowEmpty(flowImport)) {
-                    // Nothing found, than create a new one if necessary (frequency, format or protocol to store)
-                    dataFlow = new DataFlow();
-                    flowImport.setImportDataFlowStatus(ImportStatus.NEW);
-                }
-            } else {
-                flowImport.setImportDataFlowStatus(ImportStatus.EXISTING);
-            }
-
-            // DataFlow has been found or created, update frequency, format and protocol
-            if (dataFlow != null) {
-                // Frequency
-                if (StringUtils.hasText(flowImport.getFrequency())) {
-                    dataFlow.setFrequency(comparator.getFrequency(flowImport.getFrequency()));
-                }
-                // Format
-                if (StringUtils.hasText(flowImport.getFormat())) {
-                    DataFormat dataFormat = dataFormatRepository.findByNameIgnoreCase(flowImport.getFormat());
-                    if (dataFormat == null) {
-                        dataFormat = new DataFormat();
-                        dataFormat.setName(flowImport.getFormat());
-                        dataFormatRepository.save(dataFormat);
-                    }
-                    dataFlow.setFormat(dataFormat);
-                }
-                // Contract
-                if (StringUtils.hasText(flowImport.getSwagger())) {
-                    dataFlow.setContractURL(flowImport.getSwagger());
-                }
-
-                // add Generic resourcename depending on protocol
-                dataFlow = setGenericResourceNameIfEmpty(flowImport, protocol, dataFlow);
-            }
-        } catch (Exception e) {
-            log.error("Error with row " + flowImport + " " + e.getMessage(), e);
-            dataFlow = null;
-            flowImport.setImportDataFlowStatus(ImportStatus.ERROR);
-            addError(flowImport, e);
-        }
-        return dataFlow;
-    }
-
-    private DataFlow setGenericResourceNameIfEmpty(FlowImport flowImport, Protocol protocol, DataFlow dataFlow) {
-        if (dataFlow != null && !StringUtils.hasText(dataFlow.getResourceName())) {
-            if (protocol != null) {
-                if (protocol.getType().equals(ProtocolType.API)) {
-                    dataFlow.setResourceName("REST API Call " + flowImport.getSourceElement() + " / " + flowImport.getTargetElement());
-                } else if (protocol.getType().equals(ProtocolType.EVENT)) {
-                    dataFlow.setResourceName(GENERIC_EVENT_FROM_ADD);
-                } else if (protocol.getType().equals(ProtocolType.FILE)) {
-                    dataFlow.setResourceName(GENERIC_FILE_FROM_ADD);
-                } else {
-                    dataFlow.setResourceName(GENERIC_DATA_FLOW + " - " + protocol.getType());
-                }
-            } else {
-                // Resource name is required
-                dataFlow.setResourceName(GENERIC_DATA_FLOW);
-            }
-        }
-        return dataFlow;
-    }
-
     private FunctionalFlow mapToFunctionalFlow(FlowImport flowImport) {
         FunctionalFlow functionalFlow = new FunctionalFlow();
         functionalFlow.setAlias(flowImport.getFlowAlias());
@@ -564,9 +464,6 @@ public class FlowImportService {
         flowImport.setTargetElement((String) map.get(FLOW_TARGET_ELEMENT));
         flowImport.setDescription((String) map.get(FLOW_DESCRIPTION));
         flowImport.setIntegrationPattern((String) map.get(FLOW_INTEGRATION_PATTERN));
-        flowImport.setFrequency((String) map.get(FLOW_FREQUENCY));
-        flowImport.setFormat((String) map.get(FLOW_FORMAT));
-        flowImport.setSwagger((String) map.get(FLOW_SWAGGER));
         flowImport.setSourceURLDocumentation((String) map.get(FLOW_BLUEPRINT_SOURCE));
         flowImport.setTargetURLDocumentation((String) map.get(FLOW_BLUEPRINT_TARGET));
         flowImport.setSourceDocumentationStatus((String) map.get(FLOW_BLUEPRINT_SOURCE_STATUS));

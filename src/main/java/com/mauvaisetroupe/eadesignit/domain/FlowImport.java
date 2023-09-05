@@ -26,12 +26,6 @@ public class FlowImport implements Serializable {
 
     private String integrationPattern;
 
-    private String frequency;
-
-    private String format;
-
-    private String swagger;
-
     private String sourceURLDocumentation;
 
     private String targetURLDocumentation;
@@ -176,45 +170,6 @@ public class FlowImport implements Serializable {
 
     public void setIntegrationPattern(String integrationPattern) {
         this.integrationPattern = integrationPattern;
-    }
-
-    public String getFrequency() {
-        return this.frequency;
-    }
-
-    public FlowImport frequency(String frequency) {
-        this.setFrequency(frequency);
-        return this;
-    }
-
-    public void setFrequency(String frequency) {
-        this.frequency = frequency;
-    }
-
-    public String getFormat() {
-        return this.format;
-    }
-
-    public FlowImport format(String format) {
-        this.setFormat(format);
-        return this;
-    }
-
-    public void setFormat(String format) {
-        this.format = format;
-    }
-
-    public String getSwagger() {
-        return this.swagger;
-    }
-
-    public FlowImport swagger(String swagger) {
-        this.setSwagger(swagger);
-        return this;
-    }
-
-    public void setSwagger(String swagger) {
-        this.swagger = swagger;
     }
 
     public String getSourceURLDocumentation() {

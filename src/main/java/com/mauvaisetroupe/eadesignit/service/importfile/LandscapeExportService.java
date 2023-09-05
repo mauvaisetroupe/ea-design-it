@@ -86,9 +86,6 @@ public class LandscapeExportService {
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_GROUP_TITLE);
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_GROUP_URL);
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_INTEGRATION_PATTERN);
-        headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_FREQUENCY);
-        headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_FORMAT);
-        headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_SWAGGER);
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_BLUEPRINT_SOURCE);
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_BLUEPRINT_TARGET);
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_COMMENT);
