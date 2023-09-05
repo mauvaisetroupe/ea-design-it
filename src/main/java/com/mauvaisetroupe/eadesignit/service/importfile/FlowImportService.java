@@ -2,8 +2,6 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
-import com.mauvaisetroupe.eadesignit.domain.DataFlow;
-import com.mauvaisetroupe.eadesignit.domain.DataFormat;
 import com.mauvaisetroupe.eadesignit.domain.FlowGroup;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
@@ -14,11 +12,8 @@ import com.mauvaisetroupe.eadesignit.domain.Protocol;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ViewPoint;
-import com.mauvaisetroupe.eadesignit.domain.util.DataFlowComparator;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationComponentRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
-import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
-import com.mauvaisetroupe.eadesignit.repository.DataFormatRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowGroupRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
@@ -60,9 +55,6 @@ public class FlowImportService {
     protected static final String FLOW_TARGET_ELEMENT = "Target Element";
     protected static final String FLOW_DESCRIPTION = "Description";
     protected static final String FLOW_INTEGRATION_PATTERN = "Integration pattern";
-    protected static final String FLOW_FREQUENCY = "Frequency";
-    protected static final String FLOW_FORMAT = "Format";
-    protected static final String FLOW_SWAGGER = "Swagger";
     protected static final String FLOW_BLUEPRINT_SOURCE = "Blueprint From Source";
     protected static final String FLOW_BLUEPRINT_TARGET = "Blueprint From Target";
     protected static final String FLOW_BLUEPRINT_SOURCE_STATUS = "Status Blueprint From Source";
@@ -97,9 +89,6 @@ public class FlowImportService {
     private ApplicationComponentRepository applicationComponentRepository;
 
     @Autowired
-    private DataFlowRepository dataFlowRepository;
-
-    @Autowired
     private LandscapeViewRepository landscapeViewRepository;
 
     @Autowired
@@ -121,9 +110,6 @@ public class FlowImportService {
         this.columnsArray.add(FLOW_TARGET_ELEMENT);
         this.columnsArray.add(FLOW_DESCRIPTION);
         this.columnsArray.add(FLOW_INTEGRATION_PATTERN);
-        this.columnsArray.add(FLOW_FREQUENCY);
-        this.columnsArray.add(FLOW_FORMAT);
-        this.columnsArray.add(FLOW_SWAGGER);
         this.columnsArray.add(FLOW_BLUEPRINT_SOURCE);
         this.columnsArray.add(FLOW_BLUEPRINT_TARGET);
         this.columnsArray.add(FLOW_BLUEPRINT_SOURCE_STATUS);
@@ -133,6 +119,28 @@ public class FlowImportService {
         this.columnsArray.add(FLOW_ADD_CORRESPONDENT_ID);
         this.columnsArray.add(FLOW_STEP_DESCRIPTION);
         this.columnsArray.add(FLOW_EXTERNAL);
+    }
+
+    @Transactional
+    public List<FlowImport> importExcelWithMultiFLWSheets(InputStream file, String sheetname)
+        throws EncryptedDocumentException, IOException {
+        ExcelReader excelReader = new ExcelReader(file);
+        List<Map<String, Object>> flowsDF = excelReader.getSheet(sheetname);
+
+        // Find diagramname in Summary sheet
+        List<Map<String, Object>> summaryDF = excelReader.getSheet(ExportFullDataService.SUMMARY_SHEET);
+        String diagramName = findLandscape(summaryDF, sheetname);
+
+        return _importExcel(flowsDF, diagramName, sheetname);
+    }
+
+    private String findLandscape(List<Map<String, Object>> summaryDF, String sheetname) {
+        for (Map<String, Object> row : summaryDF) {
+            if (sheetname.equals(row.get("sheet hyperlink"))) {
+                return (String) row.get("landscape.name");
+            }
+        }
+        throw new IllegalStateException("Error with sheet name " + sheetname);
     }
 
     /**
@@ -146,11 +154,18 @@ public class FlowImportService {
      **/
     @Transactional
     public List<FlowImport> importExcel(InputStream file, String filename) throws EncryptedDocumentException, IOException {
-        List<FlowImport> result = new ArrayList<FlowImport>();
+        String sheetname = FlowImportService.FLOW_SHEET_NAME;
+        String diagramName = filename.substring(0, filename.lastIndexOf(".")).replace("_", " ").replace("-", " ");
 
         ExcelReader excelReader = new ExcelReader(file);
-        List<Map<String, Object>> flowsDF = excelReader.getSheet(FLOW_SHEET_NAME);
-        String diagramName = filename.substring(0, filename.lastIndexOf(".")).replace("_", " ").replace("-", " ");
+        List<Map<String, Object>> flowsDF = excelReader.getSheet(sheetname);
+
+        return _importExcel(flowsDF, diagramName, sheetname);
+    }
+
+    private List<FlowImport> _importExcel(List<Map<String, Object>> flowsDF, String diagramName, String sheetname)
+        throws EncryptedDocumentException, IOException {
+        List<FlowImport> result = new ArrayList<FlowImport>();
 
         // Find flows markes as external in Excel File
         Set<String> externalFlows = new TreeSet<>();

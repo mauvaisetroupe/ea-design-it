@@ -123,6 +123,16 @@ public class ImportResource {
         return dtos;
     }
 
+    @PostMapping("/import/flow/upload-multi-file")
+    public List<FlowImportDTO> uploadFlowsMultiFile(@RequestPart MultipartFile file, @RequestParam String[] sheetnames) throws Exception {
+        List<FlowImportDTO> dtos = new ArrayList<>();
+        for (String sheet : sheetnames) {
+            List<FlowImport> flowImports = flowImportService.importExcelWithMultiFLWSheets(file.getInputStream(), sheet);
+            dtos.add(new FlowImportDTO(sheet, flowImports));
+        }
+        return dtos;
+    }
+
     @PostMapping("/import/flow/sequence-diagram/pre-import")
     public com.mauvaisetroupe.eadesignit.service.dto.FlowImport uploadPlantuml(@RequestBody String plantumlSource) throws Exception {
         plantumlSource = URLDecoder.decode(plantumlSource, StandardCharsets.UTF_8);

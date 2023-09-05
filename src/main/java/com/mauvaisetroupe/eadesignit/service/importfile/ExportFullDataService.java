@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExportFullDataService {
 
+    public static final String SUMMARY_SHEET = "Summary";
+
     @Autowired
     private ApplicationExportService applicationExportService;
 
@@ -41,7 +43,7 @@ public class ExportFullDataService {
 
     public ByteArrayOutputStream getallData() throws IOException {
         Workbook workbook = new XSSFWorkbook();
-        Sheet summarySheet = workbook.createSheet("Summary");
+        Sheet summarySheet = workbook.createSheet(SUMMARY_SHEET);
         Sheet appliSheet = workbook.createSheet("Application");
         Sheet componentSheet = workbook.createSheet("Component");
         Sheet ownerSheet = workbook.createSheet("Owner");

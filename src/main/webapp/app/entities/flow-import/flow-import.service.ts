@@ -102,6 +102,27 @@ export default class FlowImportService {
     });
   }
 
+  public uploadMultipleFile(file: File, sheetnames: string[]): Promise<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    sheetnames.forEach(sheetname => {
+      formData.append('sheetnames', sheetname);
+    });
+
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .post(`${apiForImportUrl}/flow/upload-multi-file`, formData)
+        .then(res => {
+          console.log(res);
+          resolve(res);
+        })
+        .catch(err => {
+          console.log(err);
+          reject(err);
+        });
+    });
+  }
+
   public downloadFile(id: number): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios
@@ -112,6 +133,23 @@ export default class FlowImportService {
           resolve(res);
         })
         .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public getSheetNames(file: File): Promise<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .post(`${apiForImportUrl}/sheetnames`, formData)
+        .then(res => {
+          console.log(res);
+          resolve(res);
+        })
+        .catch(err => {
+          console.log(err);
           reject(err);
         });
     });
