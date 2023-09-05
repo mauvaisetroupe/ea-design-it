@@ -56,10 +56,12 @@ public class CapabilityExportService {
         headerRow.createCell(column++).setCellValue(CapabilityImportService.L3_NAME);
         headerRow.createCell(column++).setCellValue(CapabilityImportService.L3_DESCRIPTION);
 
-        List<Capability> roots = capabilityRepository.findByLevel(-2);
-        Assert.isTrue(roots.size() == 1, "Should exist and be unique");
+        if (capabilityRepository.count() > 0) {
+            List<Capability> roots = capabilityRepository.findByLevel(-2);
+            Assert.isTrue(roots.size() == 1, "Should exist and be unique");
 
-        writeRow(roots.get(0), sheet, 0);
+            writeRow(roots.get(0), sheet, 0);
+        }
     }
 
     private int writeRow(Capability capability, Sheet sheet, int rowNb) {
