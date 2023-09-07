@@ -27,12 +27,16 @@ import org.springframework.util.StringUtils;
 
 public class ExcelReader {
 
-    private static final int IGNORE_ROW_AFTER_N_EMPTY_CELL = 4;
+    private static final int IGNORE_ROW_AFTER_N_EMPTY_CELL = 15;
     private final Logger log = LoggerFactory.getLogger(ExcelReader.class);
     Workbook workbook = null;
 
     public ExcelReader(InputStream excel) throws EncryptedDocumentException, IOException {
         if (excel != null) this.workbook = WorkbookFactory.create(excel);
+    }
+
+    public ExcelReader(Workbook workbook) {
+        this.workbook = workbook;
     }
 
     public List<Map<String, Object>> getSheet(String sheetName) {

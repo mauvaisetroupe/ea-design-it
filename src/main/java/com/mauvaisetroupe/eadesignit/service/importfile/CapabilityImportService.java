@@ -37,6 +37,7 @@ public class CapabilityImportService {
     public static final String L3_NAME = "Capability L3";
     public static final String L3_DESCRIPTION = "L3 - Description";
     public static final String SUR_DOMAIN = "Sur-domaine";
+    public static final String FULL_PATH = "full.path";
 
     public List<CapabilityImportDTO> importExcel(InputStream excel, String originalFilename)
         throws EncryptedDocumentException, IOException {

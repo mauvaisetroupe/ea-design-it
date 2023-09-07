@@ -13,13 +13,30 @@ import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilit
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityItemDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.apache.poi.EmptyFileException;
 import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.DirectoryNode;
+import org.apache.poi.poifs.filesystem.FileMagic;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.ConditionalFormattingRule;
+import org.apache.poi.ss.usermodel.FontFormatting;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.SheetConditionalFormatting;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +71,68 @@ public class ApplicationCapabilityImportService {
     private static final String L3_NAME = "CapabilityL3";
 
     public List<ApplicationCapabilityDTO> importExcel(
+        InputStream excel,
+        String originalFilename,
+        String[] sheetnames,
+        String[] landscapeName
+    ) throws EncryptedDocumentException, IOException {
+        Workbook workbook = WorkbookFactory.create(excel);
+        ExcelReader excelReader = new ExcelReader(workbook);
+        CapabilityUtil capabilityUtil = new CapabilityUtil();
+
+        for (String sheetname : sheetnames) {
+            List<Map<String, Object>> df = excelReader.getSheet(sheetname);
+
+            Sheet sheet = workbook.getSheet(sheetname);
+            Row firstRow = sheet.getRow(0);
+
+            for (int rownum = 1; rownum <= df.size(); rownum++) {
+                Row row = sheet.getRow(rownum);
+                ApplicationCapabilityItemDTO itemDTO = new ApplicationCapabilityItemDTO();
+
+                Map<String, Object> map = df.get(rownum - 1);
+                CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, null, 0);
+                CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, null, 1);
+                CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, null, 2);
+                CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, null, 3);
+
+                Optional<Capability> capabilityOptional = findCapability(l0Import, l1Import, l2Import, l3Import, itemDTO);
+
+                Cell pathCell = row.createCell(firstRow.getLastCellNum());
+                if (capabilityOptional.isPresent()) {
+                    StringBuffer buffer = new StringBuffer();
+                    Capability tmp = capabilityOptional.get();
+                    String sep = "";
+                    while (tmp.getParent() != null) {
+                        buffer.insert(0, sep).insert(0, tmp.getName());
+                        tmp = tmp.getParent();
+                        sep = " > ";
+                    }
+                    pathCell.setCellValue(buffer.toString());
+                }
+            }
+            // Add conditional formatting if Application doesn't exist
+            SheetConditionalFormatting sheetCF = sheet.getSheetConditionalFormatting();
+            ConditionalFormattingRule rule = sheetCF.createConditionalFormattingRule(
+                "COUNTIF(Capabilities!$J$2:$J$2000,CONCAT(K2,\"*\"))<=0"
+            );
+            FontFormatting fontFmt = rule.createFontFormatting();
+            fontFmt.setFontStyle(false, true);
+            fontFmt.setFontColorIndex(IndexedColors.RED.index);
+            ConditionalFormattingRule[] cfRules = new ConditionalFormattingRule[] { rule };
+            CellRangeAddress[] regions = new CellRangeAddress[] { CellRangeAddress.valueOf("K2:K200") };
+            sheetCF.addConditionalFormatting(regions, cfRules);
+        }
+
+        FileOutputStream outputStream = new FileOutputStream("JavaBooks.xls");
+        workbook.write(outputStream);
+        workbook.close();
+        outputStream.close();
+
+        return null;
+    }
+
+    public List<ApplicationCapabilityDTO> importExcel2(
         InputStream excel,
         String originalFilename,
         String[] sheetnames,
@@ -182,6 +261,17 @@ public class ApplicationCapabilityImportService {
         }
         if (potentials == null || potentials.size() != 1) {
             processError(applicationCapabilityDTO, "Capability could not be found : " + capa(l0Import, l1Import, l2Import, l3Import));
+
+            String lastName = l3Import != null
+                ? l3Import.getName()
+                : l2Import != null ? l2Import.getName() : l1Import != null ? l1Import.getName() : null;
+
+            if (lastName != null) {
+                List<Capability> capas = capabilityRepository.findByNameIgnoreCase(lastName);
+                if (capas.size() == 1) {
+                    return Optional.of(capas.get(0));
+                }
+            }
         } else {
             capability = potentials.get(0);
         }

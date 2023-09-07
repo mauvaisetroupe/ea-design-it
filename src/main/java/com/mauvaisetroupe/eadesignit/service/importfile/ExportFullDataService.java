@@ -1,11 +1,13 @@
 package com.mauvaisetroupe.eadesignit.service.importfile;
 
+import com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ExcelUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -91,6 +93,11 @@ public class ExportFullDataService {
         ExcelUtils.autoSizeAllColumns(capabilitiesSheet);
         ExcelUtils.addHeaderColorAndFilte(workbook, capabilitiesSheet);
         addCapabilitiesSummary(workbook, summarySheet, capabilitiesSheet.getSheetName(), lineNb);
+
+        // Mapping Application/Capabilities by landscape
+        for (LandscapeView landscape : landscapes) {
+            Set<CapabilityApplicationMapping> capabilityMapping = landscape.getCapabilityApplicationMappings();
+        }
 
         ExcelUtils.autoSizeAllColumns(summarySheet);
         ExcelUtils.addHeaderColorAndFilte(workbook, summarySheet);

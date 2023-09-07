@@ -41,4 +41,6 @@ public interface CapabilityRepository extends JpaRepository<Capability, Long> {
     // s3 l = 1
     // s4 l = 2
     Optional<Capability> findById(@Param("id") Long id);
+
+    List<Capability> findByNameIgnoreCase(String lastName);
 }

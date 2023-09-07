@@ -8,6 +8,7 @@ import com.mauvaisetroupe.eadesignit.service.importfile.util.ExcelUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -55,6 +56,7 @@ public class CapabilityExportService {
         headerRow.createCell(column++).setCellValue(CapabilityImportService.L2_DESCRIPTION);
         headerRow.createCell(column++).setCellValue(CapabilityImportService.L3_NAME);
         headerRow.createCell(column++).setCellValue(CapabilityImportService.L3_DESCRIPTION);
+        headerRow.createCell(column++).setCellValue(CapabilityImportService.FULL_PATH);
 
         if (capabilityRepository.count() > 0) {
             List<Capability> roots = capabilityRepository.findByLevel(-2);
@@ -79,6 +81,16 @@ public class CapabilityExportService {
                 }
                 tmCapability = tmCapability.getParent();
             }
+            Cell path = row.createCell(9);
+
+            StringBuffer formula = new StringBuffer();
+            int currentRow = rowNb + 1;
+            formula.append("CONCAT(A" + currentRow + ",\" / \",B" + currentRow + ",");
+            formula.append("IF(NOT(ISBLANK(D" + currentRow + ")),CONCAT(\" > \",D" + currentRow + "),\"\"),");
+            formula.append("IF(NOT(ISBLANK(F" + currentRow + ")),CONCAT(\" > \",F" + currentRow + "),\"\"),");
+            formula.append("IF(NOT(ISBLANK(H" + currentRow + ")),CONCAT(\" > \",H" + currentRow + "),\"\")");
+            formula.append(")");
+            path.setCellFormula(formula.toString());
         }
         for (Capability subCapability : capability.getSubCapabilities()) {
             rowNb = writeRow(subCapability, sheet, rowNb++);
