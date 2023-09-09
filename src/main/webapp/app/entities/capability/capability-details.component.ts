@@ -27,7 +27,7 @@ export default class CapabilityDetails extends Vue {
       .find(capabilityId)
       .then(res => {
         this.capability = res;
-        var tmp = this.capability;
+        let tmp = this.capability;
         this.path = [];
         tmp = tmp.parent;
         while (tmp) {

@@ -7,7 +7,7 @@ export interface IApplicationCapabilityImport {
 }
 
 export interface IApplicationCapabilityImportItem {
-  applicationNames: String[];
+  applicationNames: string[];
   capabilityImportDTO: ICapabilityImport;
   importStatus: string;
   errorMessage: string;

@@ -87,7 +87,7 @@ export default class FunctionalFlowService {
 
   public getPlantUML(id: number, sequenceDiagram: boolean) {
     return new Promise<any>((resolve, reject) => {
-      let params = { diagramType: sequenceDiagram ? 'SEQUENCE_DIAGRAM' : 'COMPONENT_DIAGRAM' };
+      const params = { diagramType: sequenceDiagram ? 'SEQUENCE_DIAGRAM' : 'COMPONENT_DIAGRAM' };
       axios
         .get(`${basePlantUMLApiUrl}/get-svg/${id}`, { params })
         .then(res => {
@@ -100,7 +100,7 @@ export default class FunctionalFlowService {
   }
 
   public getPlantUMLSource(id: number, sequenceDiagram: boolean) {
-    let params = { diagramType: sequenceDiagram ? 'SEQUENCE_DIAGRAM' : 'COMPONENT_DIAGRAM' };
+    const params = { diagramType: sequenceDiagram ? 'SEQUENCE_DIAGRAM' : 'COMPONENT_DIAGRAM' };
     return new Promise<any>((resolve, reject) => {
       axios
         .get(`${basePlantUMLApiUrl}/get-source/${id}`, { params })

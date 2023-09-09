@@ -126,9 +126,9 @@ export default class FunctionalFlowUpdate extends Vue {
       this.functionalFlowService()
         .create(this.functionalFlow)
         .then(param => {
-          let createdFunctionalFlow: IFunctionalFlow = param;
+          const createdFunctionalFlow: IFunctionalFlow = param;
           // add to landscape if exist then save landscape
-          let landscapeToSave = this.assignLandscape();
+          const landscapeToSave = this.assignLandscape();
           console.log(landscapeToSave);
           if (landscapeToSave != null) {
             landscapeToSave.flows.push(createdFunctionalFlow);

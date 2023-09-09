@@ -7,7 +7,7 @@ import { IFlowInterface } from '@/shared/model/flow-interface.model';
 export default class ApplicationsDiagram extends Vue {
   @Inject('applicationsDiagramService') private applicationsDiagramService: () => applicationsDiagramService;
   public interfaces: IFlowInterface[] = [];
-  public sequenceDiagram: boolean = true;
+  public sequenceDiagram = true;
   public plantUMLImage = '';
   public applicationIds = [];
 

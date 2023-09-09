@@ -44,7 +44,7 @@ export default class FlowInterface extends Vue {
 
   public isFetching = false;
 
-  public filter: string = '';
+  public filter = '';
 
   public mounted(): void {
     this.retrieveAllFlowInterfaces();
@@ -109,7 +109,7 @@ export default class FlowInterface extends Vue {
     (<any>this.$refs.removeEntity).hide();
   }
 
-  public isOwner(flowInterface: IFlowInterface): Boolean {
+  public isOwner(flowInterface: IFlowInterface): boolean {
     const username = this.$store.getters.account?.login ?? '';
     if (this.accountService().writeAuthorities) {
       return true;

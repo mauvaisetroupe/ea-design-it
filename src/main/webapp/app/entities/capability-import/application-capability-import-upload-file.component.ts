@@ -17,7 +17,7 @@ export default class CapabilityImport extends Vue {
   @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
 
   public existingLandscapes: ILandscapeView[] = null;
-  public potentialLandscape: String[] = [];
+  public potentialLandscape: string[] = [];
 
   public mounted(): void {
     this.retrieveAllLandscapeViews();
@@ -59,7 +59,7 @@ export default class CapabilityImport extends Vue {
   public submitFile(): void {
     this.isFetching = true;
     this.fileSubmited = true;
-    var sheetnamesMap: Map<string, string> = new Map();
+    const sheetnamesMap: Map<string, string> = new Map();
     this.selectedLandscape.forEach((landscape, i) => {
       sheetnamesMap.set(this.sheetnames[i], landscape);
     });

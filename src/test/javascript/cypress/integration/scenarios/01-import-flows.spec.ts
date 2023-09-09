@@ -199,7 +199,7 @@ describe('Application Import and Flows e2e test', () => {
         cy.get(entityTableSelector).should('exist');
       });
 
-      let alias = cy.get('td').contains(_alias);
+      const alias = cy.get('td').contains(_alias);
       alias.should('be.visible');
       alias.siblings().find(entityDeleteButtonSelector).click();
       cy.getEntityDeleteDialogHeading('application').should('exist');

@@ -31,7 +31,7 @@ export default class FunctionalFlowDetails extends Vue {
 
   public checkedInterface: IFlowInterface[] = [];
 
-  public sequenceDiagram: boolean = true;
+  public sequenceDiagram = true;
 
   get searchSourceId() {
     if (!this.searchSourceName) return null;
@@ -55,7 +55,7 @@ export default class FunctionalFlowDetails extends Vue {
   public searchTargetName = '';
   public searchProtocolName = '';
 
-  public toBeSaved: boolean = false;
+  public toBeSaved = false;
   public searchDone = false;
 
   public indexStepToDetach: number;
@@ -169,7 +169,7 @@ export default class FunctionalFlowDetails extends Vue {
       }
       this.checkedInterface.forEach(inter => {
         maxStepOrder = maxStepOrder + 1;
-        let step: IFunctionalFlowStep = new FunctionalFlowStep();
+        const step: IFunctionalFlowStep = new FunctionalFlowStep();
         step.flowInterface = inter;
         step.flow = this.functionalFlow;
         step.stepOrder = maxStepOrder;
@@ -221,7 +221,7 @@ export default class FunctionalFlowDetails extends Vue {
   }
 
   public swap(i: number, j: number) {
-    let tmp = this.functionalFlow.steps[i];
+    const tmp = this.functionalFlow.steps[i];
     this.functionalFlow.steps.splice(i, 1, this.functionalFlow.steps[j]);
     this.functionalFlow.steps.splice(j, 1, tmp);
 
@@ -239,7 +239,7 @@ export default class FunctionalFlowDetails extends Vue {
   }
 
   public saveReorder() {
-    let promises = [];
+    const promises = [];
     this.reorderAliasflowToSave.forEach(flow => {
       promises.push(this.functionalFlowService().update(flow));
     });

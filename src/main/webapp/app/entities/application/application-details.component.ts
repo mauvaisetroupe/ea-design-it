@@ -71,7 +71,7 @@ export default class ApplicationDetails extends Vue {
       );
   }
 
-  public isOwner(application: IApplication): Boolean {
+  public isOwner(application: IApplication): boolean {
     const username = this.$store.getters.account?.login ?? '';
     if (this.accountService().writeAuthorities) {
       return true;

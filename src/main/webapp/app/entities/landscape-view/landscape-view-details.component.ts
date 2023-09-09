@@ -69,9 +69,9 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   }
 
   public retrieveLandscapeView(landscapeViewId) {
-    let step: FunctionalFlowStep = new FunctionalFlowStep();
+    const step: FunctionalFlowStep = new FunctionalFlowStep();
     step.description = 'EMPTYSTEP';
-    let inter: FlowInterface = new FlowInterface();
+    const inter: FlowInterface = new FlowInterface();
     step.flowInterface = inter;
     if (this.emptySteps.length == 0) this.emptySteps.push(step);
     this.landscapeViewService()
@@ -339,7 +339,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   }
 
   public saveReorder() {
-    let promises = [];
+    const promises = [];
     this.reorderAliasflowToSave.forEach(flow => {
       promises.push(this.functionalFlowService().update(flow));
     });
@@ -354,7 +354,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   }
 
   public swap(flow: IFunctionalFlow, i: number, j: number) {
-    let tmp = flow.steps[i];
+    const tmp = flow.steps[i];
     flow.steps.splice(i, 1, flow.steps[j]);
     flow.steps.splice(j, 1, tmp);
 

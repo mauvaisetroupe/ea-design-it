@@ -34,7 +34,7 @@ export default class FlowImport extends Vue {
     this.dtos = [];
     this.isFetching = true;
     this.fileSubmited = true;
-    let excelFile = this.excelFiles.shift();
+    const excelFile = this.excelFiles.shift();
     this.uploadOneFile(excelFile);
   }
 

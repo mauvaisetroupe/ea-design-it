@@ -33,14 +33,14 @@ const CapabilityProps = Vue.extend({
   },
 })
 export default class CapabilityComponent extends CapabilityProps {
-  public showApplications: Boolean = this.defaultShowApplications;
+  public showApplications: boolean = this.defaultShowApplications;
   public path = [];
   public mapNbCapabilitiesByLevel: Map<number, number> = new Map();
   public mapNbCapabilitiesByLevelAndSubLevel: Map<number, number> = new Map();
   public get nbLevel() {
     return parseInt(this.nbLevelAsString);
   }
-  public nbLevelAsString: string = ''; // input type range send string
+  public nbLevelAsString = ''; // input type range send string
 
   public retrieveCapability(capId: number) {
     this.$emit('retrieveCapability', capId);
@@ -61,7 +61,7 @@ export default class CapabilityComponent extends CapabilityProps {
     }
 
     // PATH for breadcrumb
-    var tmp = this.capability;
+    let tmp = this.capability;
     this.path = [];
     tmp = tmp.parent;
     while (tmp) {
@@ -79,7 +79,7 @@ export default class CapabilityComponent extends CapabilityProps {
   }
 
   public calculateMaxByLevel(capa: ICapability) {
-    var key = capa.level + 1;
+    const key = capa.level + 1;
     if (capa.subCapabilities) {
       var max = 0;
       if (this.mapNbCapabilitiesByLevel.get(key)) {

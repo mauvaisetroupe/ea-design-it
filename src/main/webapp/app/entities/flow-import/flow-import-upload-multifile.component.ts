@@ -41,7 +41,7 @@ export default class FlowImportUploadMultiFile extends Vue {
       .then(
         res => {
           this.isFetching = false;
-          var tmpsheetnames = res.data;
+          const tmpsheetnames = res.data;
           tmpsheetnames.forEach((name, i) => {
             if (name.startsWith('FLW')) {
               this.checkedNames.push(name);

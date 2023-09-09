@@ -174,10 +174,10 @@ export default class FlowInterfaceUpdate extends Vue {
       this.flowInterfaceService()
         .create(this.flowInterface)
         .then(param => {
-          let createdInterface: IFunctionalFlow = param;
-          let functionalFlowToSave = this.assignFunctionalFlow();
+          const createdInterface: IFunctionalFlow = param;
+          const functionalFlowToSave = this.assignFunctionalFlow();
           if (functionalFlowToSave != null) {
-            let step: IFunctionalFlowStep = new FunctionalFlowStep();
+            const step: IFunctionalFlowStep = new FunctionalFlowStep();
             step.flowInterface = createdInterface;
             step.flow = functionalFlowToSave;
             this.functionalFlowStepService()

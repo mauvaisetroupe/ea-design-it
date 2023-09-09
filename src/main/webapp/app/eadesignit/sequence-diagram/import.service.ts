@@ -6,7 +6,7 @@ const basePlantUMLApiUrl = 'api/plantuml';
 const importApiUrl = 'api/import/flow/sequence-diagram';
 
 export default class SequenceDiagramService {
-  public getPlantUML(source: String) {
+  public getPlantUML(source: string) {
     return new Promise<any>((resolve, reject) => {
       axios
         .post(`${basePlantUMLApiUrl}/sequence-diagram/get-svg`, source.replace(/[\n\r]/g, '###CR##'))
@@ -19,7 +19,7 @@ export default class SequenceDiagramService {
     });
   }
 
-  public importPlantuml(source: String) {
+  public importPlantuml(source: string) {
     return new Promise<any>((resolve, reject) => {
       axios
         .post(`${importApiUrl}/pre-import`, source.replace(/[\n\r]/g, '###CR##'))

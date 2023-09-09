@@ -19,7 +19,7 @@ export default class SequenceDiagram extends Vue {
   public previewError = '';
 
   public existingLandscapes: ILandscapeView[] = null;
-  public selectedLandscape: String = '';
+  public selectedLandscape = '';
 
   public mounted(): void {
     this.retrieveAllLandscapeViews();

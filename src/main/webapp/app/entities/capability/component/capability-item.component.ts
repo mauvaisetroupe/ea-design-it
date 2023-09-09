@@ -26,13 +26,13 @@ export default class CapabilityItemComponent extends CapabilityiItemProps {
     if (this.capability.level >= 2) {
       return 100;
     } else {
-      var percent: number = Math.max(16, Math.floor(100 / this.nbNode - 1));
+      const percent: number = Math.max(16, Math.floor(100 / this.nbNode - 1));
       return percent;
     }
   }
 
   public getApplications(): IApplication[] {
-    var applications: IApplication[] = [];
+    let applications: IApplication[] = [];
     if (this.capability && this.capability.capabilityApplicationMappings && this.capability.capabilityApplicationMappings.length > 0) {
       applications = this.capability.capabilityApplicationMappings.map(cm => cm.application);
     }
@@ -40,7 +40,7 @@ export default class CapabilityItemComponent extends CapabilityiItemProps {
   }
 
   public getInheritedApplications(): IApplication[] {
-    var inheritedApplication: IApplication[] = [];
+    const inheritedApplication: IApplication[] = [];
     this.findInheritedApplication(this.capability, inheritedApplication);
     const ids = inheritedApplication.map(({ id }) => id);
     const filtered = inheritedApplication.filter(({ id }, index) => !ids.includes(id, index + 1));

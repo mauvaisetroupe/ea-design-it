@@ -36,7 +36,7 @@ export default class ApplicationService {
         axios
           .get(baseApiUrl)
           .then(res => {
-            let json = JSON.stringify(res);
+            const json = JSON.stringify(res);
             console.log('storing applications in localStorage');
             sessionStorage.setItem('applications', json);
             resolve(res);
@@ -105,7 +105,7 @@ export default class ApplicationService {
   }
 
   public getPlantUML(id: number, layout: string, groupComponents: boolean) {
-    let params = { layout: layout, groupComponents: groupComponents };
+    const params = { layout: layout, groupComponents: groupComponents };
     return new Promise<any>((resolve, reject) => {
       axios
         .get(`${basePlantUMLApiUrl}/${id}`, { params })

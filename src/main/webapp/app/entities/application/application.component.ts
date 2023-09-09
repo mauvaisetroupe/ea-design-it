@@ -20,11 +20,11 @@ export default class Application extends Vue {
 
   get filteredApplications() {
     return this.applications.filter(app => {
-      var appType: boolean = true;
+      let appType = true;
       if (this.applicationTypeSelected) {
         appType = app.applicationType && app.applicationType.valueOf() == this.applicationTypeSelected;
       }
-      var softwareType: boolean = true;
+      let softwareType = true;
       if (this.softwareTypeSelected) {
         softwareType = app.softwareType && app.softwareType.valueOf() == this.softwareTypeSelected;
       }
@@ -70,7 +70,7 @@ export default class Application extends Vue {
   public sortDesc = false;
   public filterOn = ['alias', 'name', 'description'];
   public formatLongText(value, key, item) {
-    var max = 600;
+    const max = 600;
     if (value && value.length > max) {
       return value.substring(0, max) + '...';
     } else {
@@ -144,7 +144,7 @@ export default class Application extends Vue {
     (<any>this.$refs.removeEntity).hide();
   }
 
-  public isOwner(application: IApplication): Boolean {
+  public isOwner(application: IApplication): boolean {
     const username = this.$store.getters.account?.login ?? '';
     if (this.accountService().writeAuthorities) {
       return true;
