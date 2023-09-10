@@ -15,6 +15,7 @@ import FunctionalFlowService from '@/entities/functional-flow/functional-flow.se
 
 import CapabilityApplicationMappingService from '@/entities/capability-application-mapping/capability-application-mapping.service';
 import AlertService from '@/shared/alert/alert.service';
+import { ILandscapeDTO } from '@/shared/model/landscape-view.model';
 
 const localVue = createLocalVue();
 
@@ -101,15 +102,19 @@ describe('Component Tests', () => {
       it('Should retrieve data', async () => {
         // GIVEN
         const foundLandscapeView = { id: 123 };
-        landscapeViewServiceStub.find.resolves(foundLandscapeView);
-        landscapeViewServiceStub.retrieve.resolves([foundLandscapeView]);
+        const lanscapeDTO: ILandscapeDTO = {
+          landscape: { id: 123 },
+          consolidatedCapability: [],
+        };
+        landscapeViewServiceStub.find.resolves(lanscapeDTO);
+        landscapeViewServiceStub.retrieve.resolves([lanscapeDTO]);
 
         // WHEN
         comp.beforeRouteEnter({ params: { landscapeViewId: 123 } }, null, cb => cb(comp));
         await comp.$nextTick();
 
         // THEN
-        expect(comp.landscapeView).toBe(foundLandscapeView);
+        expect(comp.landscapeView).toStrictEqual(foundLandscapeView);
       });
     });
 

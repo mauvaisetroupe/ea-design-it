@@ -168,7 +168,7 @@ describe('Service Tests', () => {
 
       it('should delete a LandscapeView', async () => {
         axiosStub.delete.resolves({ ok: true });
-        return service.delete(123).then(res => {
+        return service.delete(123, false, false, false).then(res => {
           expect(res.ok).toBeTruthy();
         });
       });
@@ -177,7 +177,7 @@ describe('Service Tests', () => {
         axiosStub.delete.rejects(error);
 
         return service
-          .delete(123)
+          .delete(123, false, false, false)
           .then()
           .catch(err => {
             expect(err).toMatchObject(error);
