@@ -23,11 +23,13 @@ describe('Component Tests', () => {
     let wrapper: Wrapper<FlowInterfaceClass>;
     let comp: FlowInterfaceClass;
     let flowInterfaceServiceStub: SinonStubbedInstance<FlowInterfaceService>;
+    let alertServiceStub: SinonStubbedInstance<AlertService>;
 
     const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
 
     beforeEach(() => {
       flowInterfaceServiceStub = sinon.createStubInstance<FlowInterfaceService>(FlowInterfaceService);
+      alertServiceStub = sinon.createStubInstance<AlertService>(AlertService);
 
       wrapper = shallowMount<FlowInterfaceClass>(FlowInterfaceDetailComponent, {
         store,
@@ -35,7 +37,7 @@ describe('Component Tests', () => {
         router,
         provide: {
           flowInterfaceService: () => flowInterfaceServiceStub,
-          alertService: () => new AlertService(),
+          alertService: () => alertServiceStub,
           accountService: () => accountService,
         },
       });
@@ -53,6 +55,8 @@ describe('Component Tests', () => {
         await comp.$nextTick();
 
         // THEN
+        expect(alertServiceStub.showError.callCount).toBe(0);
+        expect(alertServiceStub.showHttpError.callCount).toBe(0);
         expect(comp.flowInterface).toBe(foundFlowInterface);
       });
     });
@@ -68,6 +72,8 @@ describe('Component Tests', () => {
         await comp.$nextTick();
 
         // THEN
+        expect(alertServiceStub.showError.callCount).toBe(0);
+        expect(alertServiceStub.showHttpError.callCount).toBe(0);
         expect(comp.flowInterface).toBe(foundFlowInterface);
       });
     });
@@ -77,6 +83,8 @@ describe('Component Tests', () => {
         comp.previousState();
         await comp.$nextTick();
 
+        expect(alertServiceStub.showError.callCount).toBe(0);
+        expect(alertServiceStub.showHttpError.callCount).toBe(0);
         expect(comp.$router.currentRoute.fullPath).toContain('/');
       });
     });
