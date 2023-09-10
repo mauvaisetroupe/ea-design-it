@@ -37,12 +37,11 @@
               </router-link>
             </td>
             <td>
-              <span
-                v-for="landscape in flowGroup.steps[0].flow.landscapes"
-                v-if="flowGroup.steps && flowGroup.steps[0] && flowGroup.steps[0].flow"
-              >
-                {{ landscape.diagramName }}
-              </span>
+              <template v-if="flowGroup.steps && flowGroup.steps[0] && flowGroup.steps[0].flow">
+                <span v-for="landscape in flowGroup.steps[0].flow.landscapes" :key="landscape.id">
+                  {{ landscape.diagramName }}
+                </span>
+              </template>
             </td>
             <td>{{ flowGroup.title }}</td>
             <td>{{ flowGroup.url }}</td>
