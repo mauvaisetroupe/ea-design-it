@@ -1,7 +1,7 @@
 <template>
   <div>
     <ol class="breadcrumb" v-if="showPath">
-      <li class="breadcrumb-item" v-for="(mycap, i) in path" key="id">
+      <li class="breadcrumb-item" v-for="(mycap, i) in path" :key="i">
         <a @click="retrieveCapability(mycap.id)" class="router-link-exact-active router-link-active" target="_self">
           <span v-if="i == 0">
             <font-awesome-icon icon="home" />
@@ -45,6 +45,7 @@
               @retrieveCapability="retrieveCapability"
               :showApplications="showApplications"
               :nbLevel="nbLevel"
+              :key="child1.id"
             >
               <div class="d-flex flex-wrap">
                 <template v-for="child2 in child1.subCapabilities">
@@ -55,6 +56,7 @@
                     :showApplications="showApplications"
                     :nbLevel="nbLevel"
                     :nbNode="mapNbCapabilitiesByLevel.get(child2.level)"
+                    :key="child2.id"
                   >
                     <div class="d-flex flex-wrap">
                       <template v-for="child3 in child2.subCapabilities">
@@ -65,6 +67,7 @@
                           :showApplications="showApplications"
                           :nbLevel="nbLevel"
                           :showInheritedApplications="true"
+                          :key="child3.id"
                         >
                           <div class="d-flex flex-wrap">
                             <template v-for="child4 in child3.subCapabilities">
@@ -75,6 +78,7 @@
                                 :showApplications="showApplications"
                                 :nbLevel="nbLevel"
                                 :showInheritedApplications="true"
+                                :key="child4.id"
                               >
                                 <div class="d-flex flex-wrap">
                                   <template v-for="child5 in child4.subCapabilities">
@@ -85,6 +89,7 @@
                                       :showApplications="showApplications"
                                       :nbLevel="nbLevel"
                                       :showInheritedApplications="true"
+                                      :key="child5.id"
                                     >
                                       <div class="d-flex flex-wrap">
                                         <template v-for="child6 in child5.subCapabilities">
@@ -95,6 +100,7 @@
                                             :showApplications="showApplications"
                                             :nbLevel="nbLevel"
                                             :showInheritedApplications="true"
+                                            :key="child6.id"
                                           >
                                           </CapabilityComponentItem>
                                         </template>
