@@ -40,7 +40,7 @@ public class ApplicationComponent implements Serializable {
     private String description;
 
     @Size(max = 500)
-    @Column(name = "jhi_comment", length = 500)
+    @Column(name = "comment", length = 500)
     private String comment;
 
     @Size(max = 500)

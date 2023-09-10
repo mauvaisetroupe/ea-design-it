@@ -36,8 +36,8 @@ describe('ApplicationComponent e2e test', () => {
         description: 'primary',
         comment: 'Gloves',
         documentationURL: 'Turnpike optical',
-        startDate: '2021-11-03',
-        endDate: '2021-11-04',
+        startDate: '2023-09-10',
+        endDate: '2023-09-10',
         applicationType: 'HARDWARE',
         softwareType: 'ON_PREMISE_CUSTOM',
         nickname: 'interface attitude-oriented Account',
@@ -218,9 +218,9 @@ describe('ApplicationComponent e2e test', () => {
 
       cy.get(`[data-cy="documentationURL"]`).type('Malaysia').should('have.value', 'Malaysia');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-03').should('have.value', '2021-11-03');
+      cy.get(`[data-cy="startDate"]`).type('2023-09-10').should('have.value', '2023-09-10');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-03').should('have.value', '2021-11-03');
+      cy.get(`[data-cy="endDate"]`).type('2023-09-09').should('have.value', '2023-09-09');
 
       cy.get(`[data-cy="applicationType"]`).select('PARTNER');
 

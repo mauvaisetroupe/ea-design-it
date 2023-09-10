@@ -34,10 +34,10 @@ public class Capability implements Serializable {
     private String description;
 
     @Size(max = 1500)
-    @Column(name = "jhi_comment", length = 1500)
+    @Column(name = "comment", length = 1500)
     private String comment;
 
-    @Column(name = "jhi_level")
+    @Column(name = "level")
     private Integer level;
 
     @OneToMany(mappedBy = "parent")

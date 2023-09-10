@@ -75,8 +75,6 @@ out/
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
-!.vscode/readme.txt
-
 
 ######################
 # Maven
@@ -159,4 +157,3 @@ Desktop.ini
 ######################
 /coverage/
 /.nyc_output/
-.fuse_hidden*

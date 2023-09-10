@@ -160,9 +160,9 @@ describe('FunctionalFlow e2e test', () => {
 
       cy.get(`[data-cy="documentationURL2"]`).type('Steel').should('have.value', 'Steel');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-04').should('have.value', '2021-11-04');
+      cy.get(`[data-cy="startDate"]`).type('2023-09-10').should('have.value', '2023-09-10');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-04').should('have.value', '2021-11-04');
+      cy.get(`[data-cy="endDate"]`).type('2023-09-10').should('have.value', '2023-09-10');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

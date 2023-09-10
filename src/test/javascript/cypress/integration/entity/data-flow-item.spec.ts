@@ -158,9 +158,9 @@ describe('DataFlowItem e2e test', () => {
 
       cy.get(`[data-cy="documentationURL"]`).type('pricing').should('have.value', 'pricing');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-20').should('have.value', '2021-11-20');
+      cy.get(`[data-cy="startDate"]`).type('2023-09-10').should('have.value', '2023-09-10');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-20').should('have.value', '2021-11-20');
+      cy.get(`[data-cy="endDate"]`).type('2023-09-10').should('have.value', '2023-09-10');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

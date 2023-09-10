@@ -36,8 +36,8 @@ describe('FlowInterface e2e test', () => {
         description: 'cross-platform',
         comment: 'generating override override',
         documentationURL: 'orange Program',
-        startDate: '2021-11-04',
-        endDate: '2021-11-03',
+        startDate: '2023-09-10',
+        endDate: '2023-09-09',
         applicationType: 'HARDWARE',
         softwareType: 'CLOUD_CUSTOM',
         nickname: 'Antillian',
@@ -229,9 +229,9 @@ describe('FlowInterface e2e test', () => {
 
       cy.get(`[data-cy="description"]`).type('cohesive open-source models').should('have.value', 'cohesive open-source models');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-04').should('have.value', '2021-11-04');
+      cy.get(`[data-cy="startDate"]`).type('2023-09-10').should('have.value', '2023-09-10');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-04').should('have.value', '2021-11-04');
+      cy.get(`[data-cy="endDate"]`).type('2023-09-10').should('have.value', '2023-09-10');
 
       cy.get(`[data-cy="source"]`).select(1);
       cy.get(`[data-cy="target"]`).select(1);

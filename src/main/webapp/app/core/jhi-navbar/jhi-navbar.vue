@@ -2,7 +2,7 @@
   <b-navbar data-cy="navbar" toggleable="md" type="dark" class="jh-navbar">
     <b-navbar-brand class="logo" b-link to="/">
       <span class="logo-img"></span>
-      <span class="navbar-title">EADesign-IT</span> <span class="navbar-version">{{ version }}</span>
+      <span class="navbar-title">EADesignIt</span> <span class="navbar-version">{{ version }}</span>
     </b-navbar-brand>
     <b-navbar-toggle
       right
@@ -24,46 +24,6 @@
             <span>Home</span>
           </span>
         </b-nav-item>
-        <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
-          <span slot="button-content" class="navbar-dropdown-menu">
-            <font-awesome-icon icon="th-list" />
-            <span class="no-bold">EADesignIt</span>
-          </span>
-          <b-dropdown-item to="/landscape-view">
-            <font-awesome-icon icon="asterisk" />
-            <span>Landscape</span>
-          </b-dropdown-item>
-          <b-dropdown-item to="/functional-flow">
-            <font-awesome-icon icon="asterisk" />
-            <span>Functional Flow</span>
-          </b-dropdown-item>
-          <b-dropdown-item to="/flow-interface">
-            <font-awesome-icon icon="asterisk" />
-            <span>Interface</span>
-          </b-dropdown-item>
-          <b-dropdown-item to="/application">
-            <font-awesome-icon icon="asterisk" />
-            <span>Application</span>
-          </b-dropdown-item>
-          <b-dropdown-item to="/data-flow">
-            <font-awesome-icon icon="asterisk" />
-            <span>Data Flow : Event topics, Files, Swagger</span>
-          </b-dropdown-item>
-          <b-dropdown-item to="/data-flow-item">
-            <font-awesome-icon icon="asterisk" />
-            <span>Data Flow Item : Events </span>
-          </b-dropdown-item>
-        </b-nav-item-dropdown>
-        <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
-          <span slot="button-content" class="navbar-dropdown-menu">
-            <font-awesome-icon icon="th-list" />
-            <span class="no-bold">EADesignit Report</span>
-          </span>
-          <b-dropdown-item to="/reporting/flow-interface">
-            <font-awesome-icon icon="asterisk" />
-            <span>Interface</span>
-          </b-dropdown-item>
-        </b-nav-item-dropdown>
         <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="th-list" />
@@ -251,7 +211,7 @@
 
 .logo-img {
   height: 100%;
-  background: url('../../../content/images/logo-EA-small.png') no-repeat center center;
+  background: url('../../../content/images/logo-jhipster.png') no-repeat center center;
   background-size: contain;
   width: 100%;
   filter: drop-shadow(0 0 0.05rem white);

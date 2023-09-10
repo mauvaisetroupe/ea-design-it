@@ -3,74 +3,90 @@ import { Authority } from '@/shared/security/authority';
 // prettier-ignore
 const Entities = () => import('@/entities/entities.vue');
 
+// prettier-ignore
 const LandscapeView = () => import('@/entities/landscape-view/landscape-view.vue');
+// prettier-ignore
 const LandscapeViewUpdate = () => import('@/entities/landscape-view/landscape-view-update.vue');
+// prettier-ignore
 const LandscapeViewDetails = () => import('@/entities/landscape-view/landscape-view-details.vue');
-
+// prettier-ignore
 const Owner = () => import('@/entities/owner/owner.vue');
+// prettier-ignore
 const OwnerUpdate = () => import('@/entities/owner/owner-update.vue');
+// prettier-ignore
 const OwnerDetails = () => import('@/entities/owner/owner-details.vue');
-
+// prettier-ignore
 const FunctionalFlow = () => import('@/entities/functional-flow/functional-flow.vue');
+// prettier-ignore
 const FunctionalFlowUpdate = () => import('@/entities/functional-flow/functional-flow-update.vue');
+// prettier-ignore
 const FunctionalFlowDetails = () => import('@/entities/functional-flow/functional-flow-details.vue');
-
+// prettier-ignore
 const FlowInterface = () => import('@/entities/flow-interface/flow-interface.vue');
+// prettier-ignore
 const FlowInterfaceUpdate = () => import('@/entities/flow-interface/flow-interface-update.vue');
+// prettier-ignore
 const FlowInterfaceDetails = () => import('@/entities/flow-interface/flow-interface-details.vue');
-
+// prettier-ignore
 const Application = () => import('@/entities/application/application.vue');
+// prettier-ignore
 const ApplicationUpdate = () => import('@/entities/application/application-update.vue');
+// prettier-ignore
 const ApplicationDetails = () => import('@/entities/application/application-details.vue');
-
+// prettier-ignore
 const DataFlow = () => import('@/entities/data-flow/data-flow.vue');
+// prettier-ignore
 const DataFlowUpdate = () => import('@/entities/data-flow/data-flow-update.vue');
+// prettier-ignore
 const DataFlowDetails = () => import('@/entities/data-flow/data-flow-details.vue');
-
+// prettier-ignore
 const ApplicationComponent = () => import('@/entities/application-component/application-component.vue');
+// prettier-ignore
 const ApplicationComponentUpdate = () => import('@/entities/application-component/application-component-update.vue');
+// prettier-ignore
 const ApplicationComponentDetails = () => import('@/entities/application-component/application-component-details.vue');
-
-const ApplicationImport = () => import('@/entities/application-import/application-import.vue');
-const ApplicationImportUpdate = () => import('@/entities/application-import/application-import-update.vue');
-const ApplicationImportDetails = () => import('@/entities/application-import/application-import-details.vue');
-
-const FlowImport = () => import('@/entities/flow-import/flow-import.vue');
-const FlowImportUpdate = () => import('@/entities/flow-import/flow-import-update.vue');
-const FlowImportDetails = () => import('@/entities/flow-import/flow-import-details.vue');
-
+// prettier-ignore
 const Protocol = () => import('@/entities/protocol/protocol.vue');
+// prettier-ignore
 const ProtocolUpdate = () => import('@/entities/protocol/protocol-update.vue');
+// prettier-ignore
 const ProtocolDetails = () => import('@/entities/protocol/protocol-details.vue');
-
+// prettier-ignore
 const DataFlowItem = () => import('@/entities/data-flow-item/data-flow-item.vue');
+// prettier-ignore
 const DataFlowItemUpdate = () => import('@/entities/data-flow-item/data-flow-item-update.vue');
+// prettier-ignore
 const DataFlowItemDetails = () => import('@/entities/data-flow-item/data-flow-item-details.vue');
-
+// prettier-ignore
 const DataFormat = () => import('@/entities/data-format/data-format.vue');
+// prettier-ignore
 const DataFormatUpdate = () => import('@/entities/data-format/data-format-update.vue');
+// prettier-ignore
 const DataFormatDetails = () => import('@/entities/data-format/data-format-details.vue');
-
+// prettier-ignore
 const ApplicationCategory = () => import('@/entities/application-category/application-category.vue');
+// prettier-ignore
 const ApplicationCategoryUpdate = () => import('@/entities/application-category/application-category-update.vue');
+// prettier-ignore
 const ApplicationCategoryDetails = () => import('@/entities/application-category/application-category-details.vue');
-
-const DataFlowImport = () => import('@/entities/data-flow-import/data-flow-import.vue');
-const DataFlowImportUpdate = () => import('@/entities/data-flow-import/data-flow-import-update.vue');
-const DataFlowImportDetails = () => import('@/entities/data-flow-import/data-flow-import-details.vue');
-
+// prettier-ignore
 const Technology = () => import('@/entities/technology/technology.vue');
+// prettier-ignore
 const TechnologyUpdate = () => import('@/entities/technology/technology-update.vue');
+// prettier-ignore
 const TechnologyDetails = () => import('@/entities/technology/technology-details.vue');
-
+// prettier-ignore
 const Capability = () => import('@/entities/capability/capability.vue');
+// prettier-ignore
 const CapabilityUpdate = () => import('@/entities/capability/capability-update.vue');
+// prettier-ignore
 const CapabilityDetails = () => import('@/entities/capability/capability-details.vue');
-
+// prettier-ignore
 const FunctionalFlowStep = () => import('@/entities/functional-flow-step/functional-flow-step.vue');
+// prettier-ignore
 const FunctionalFlowStepUpdate = () => import('@/entities/functional-flow-step/functional-flow-step-update.vue');
+// prettier-ignore
 const FunctionalFlowStepDetails = () => import('@/entities/functional-flow-step/functional-flow-step-details.vue');
-
 // prettier-ignore
 const FlowGroup = () => import('@/entities/flow-group/flow-group.vue');
 // prettier-ignore
@@ -270,54 +286,6 @@ export default {
       meta: { authorities: [Authority.USER] },
     },
     {
-      path: 'application-import',
-      name: 'ApplicationImport',
-      component: ApplicationImport,
-      meta: { authorities: [Authority.USER] },
-    },
-    {
-      path: 'application-import/new',
-      name: 'ApplicationImportCreate',
-      component: ApplicationImportUpdate,
-      meta: { authorities: [Authority.USER] },
-    },
-    {
-      path: 'application-import/:applicationImportId/edit',
-      name: 'ApplicationImportEdit',
-      component: ApplicationImportUpdate,
-      meta: { authorities: [Authority.USER] },
-    },
-    {
-      path: 'application-import/:applicationImportId/view',
-      name: 'ApplicationImportView',
-      component: ApplicationImportDetails,
-      meta: { authorities: [Authority.USER] },
-    },
-    {
-      path: 'flow-import',
-      name: 'FlowImport',
-      component: FlowImport,
-      meta: { authorities: [Authority.USER] },
-    },
-    {
-      path: 'flow-import/new',
-      name: 'FlowImportCreate',
-      component: FlowImportUpdate,
-      meta: { authorities: [Authority.USER] },
-    },
-    {
-      path: 'flow-import/:flowImportId/edit',
-      name: 'FlowImportEdit',
-      component: FlowImportUpdate,
-      meta: { authorities: [Authority.USER] },
-    },
-    {
-      path: 'flow-import/:flowImportId/view',
-      name: 'FlowImportView',
-      component: FlowImportDetails,
-      meta: { authorities: [Authority.USER] },
-    },
-    {
       path: 'protocol',
       name: 'Protocol',
       component: Protocol,
@@ -411,30 +379,6 @@ export default {
       path: 'application-category/:applicationCategoryId/view',
       name: 'ApplicationCategoryView',
       component: ApplicationCategoryDetails,
-      meta: { authorities: [Authority.USER] },
-    },
-    {
-      path: 'data-flow-import',
-      name: 'DataFlowImport',
-      component: DataFlowImport,
-      meta: { authorities: [Authority.USER] },
-    },
-    {
-      path: 'data-flow-import/new',
-      name: 'DataFlowImportCreate',
-      component: DataFlowImportUpdate,
-      meta: { authorities: [Authority.USER] },
-    },
-    {
-      path: 'data-flow-import/:dataFlowImportId/edit',
-      name: 'DataFlowImportEdit',
-      component: DataFlowImportUpdate,
-      meta: { authorities: [Authority.USER] },
-    },
-    {
-      path: 'data-flow-import/:dataFlowImportId/view',
-      name: 'DataFlowImportView',
-      component: DataFlowImportDetails,
       meta: { authorities: [Authority.USER] },
     },
     {

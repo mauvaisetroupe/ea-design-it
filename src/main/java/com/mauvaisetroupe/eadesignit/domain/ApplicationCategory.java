@@ -29,7 +29,7 @@ public class ApplicationCategory implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "jhi_type")
+    @Column(name = "type")
     private String type;
 
     @Size(max = 250)

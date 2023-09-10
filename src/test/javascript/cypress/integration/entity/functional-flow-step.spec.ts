@@ -32,7 +32,7 @@ describe('FunctionalFlowStep e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/flow-interfaces',
-      body: {"alias":"collaborative","status":"index virtual","documentationURL":"Loan Cambridgeshire Fish","documentationURL2":"International","description":"didactic","startDate":"2021-11-03","endDate":"2021-11-04"},
+      body: {"alias":"collaborative","status":"index virtual","documentationURL":"Loan Cambridgeshire Fish","documentationURL2":"International","description":"didactic","startDate":"2023-09-09","endDate":"2023-09-10"},
     }).then(({ body }) => {
       flowInterface = body;
     });
@@ -40,7 +40,7 @@ describe('FunctionalFlowStep e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/functional-flows',
-      body: {"alias":"markets systemic","description":"Plastic deposit","comment":"Alabama","status":"quantify Fall","documentationURL":"Operations Computer engineer","documentationURL2":"microchip content","startDate":"2021-11-04","endDate":"2021-11-04"},
+      body: {"alias":"markets systemic","description":"Plastic deposit","comment":"Alabama","status":"quantify Fall","documentationURL":"Operations Computer engineer","documentationURL2":"microchip content","startDate":"2023-09-10","endDate":"2023-09-10"},
     }).then(({ body }) => {
       functionalFlow = body;
     });

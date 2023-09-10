@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    <!--
+        Added the constraints for entity DataFlow.
+    -->
+    <changeSet id="20230910205932-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="format_id"
+                                 baseTableName="dataflow"
+                                 constraintName="fk_dataflow__format_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="data_format"/>
+
+        <addForeignKeyConstraint baseColumnNames="dataflow_id"
+                                 baseTableName="rel_dataflow__functional_flows"
+                                 constraintName="fk_rel_dataflow__functional_flows__dataflow_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="dataflow"/>
+
+        <addForeignKeyConstraint baseColumnNames="functional_flows_id"
+                                 baseTableName="rel_dataflow__functional_flows"
+                                 constraintName="fk_rel_dataflow__functional_flows__functional_flows_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="flow"/>
+
+        <addForeignKeyConstraint baseColumnNames="flow_interface_id"
+                                 baseTableName="dataflow"
+                                 constraintName="fk_dataflow__flow_interface_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="interface"/>
+    </changeSet>
+</databaseChangeLog>

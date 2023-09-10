@@ -27,9 +27,6 @@
     </root>
 -->
 
-    <logger name="com.mauvaisetroupe.eadesignit.web.rest.PlantUMLResource" level="INFO"/>
-
-
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
     <logger name="javax.management.remote" level="WARN"/>

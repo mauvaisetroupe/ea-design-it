@@ -34,7 +34,7 @@ public class FunctionalFlow implements Serializable {
     private String description;
 
     @Size(max = 1000)
-    @Column(name = "jhi_comment", length = 1000)
+    @Column(name = "comment", length = 1000)
     private String comment;
 
     @Column(name = "status")

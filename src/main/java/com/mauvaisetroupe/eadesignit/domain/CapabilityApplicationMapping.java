@@ -46,7 +46,7 @@ public class CapabilityApplicationMapping implements Serializable {
 
     @ManyToMany
     @JoinTable(
-        name = "rel_capability_ap__landscap_b2",
+        name = "rel_capability_application_mapping__landscape",
         joinColumns = @JoinColumn(name = "capability_application_mapping_id"),
         inverseJoinColumns = @JoinColumn(name = "landscape_id")
     )
