@@ -148,7 +148,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(dataFlow, i) in flowInterface.dataFlows" :key="dataFlow.id" data-cy="entityTable">
+              <tr v-for="dataFlow in flowInterface.dataFlows" :key="dataFlow.id" data-cy="entityTable">
                 <td>
                   <router-link :to="{ name: 'DataFlowView', params: { dataFlowId: dataFlow.id } }">{{ dataFlow.id }}</router-link>
                 </td>
