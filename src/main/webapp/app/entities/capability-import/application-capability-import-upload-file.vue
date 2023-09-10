@@ -28,11 +28,11 @@
         </div>
         <div class="row">
           <template v-for="(sheet, i) in sheetnames">
-            <div class="col-2">
+            <div class="col-2" :key="i">
               <input type="checkbox" v-model="checkedNames" :value="sheet" :id="'CHK-' + sheet" />
               <label :for="sheet" class="">{{ sheet }}</label>
             </div>
-            <div class="col-2">
+            <div class="col-2" :key="i">
               <select v-model="selectedLandscape[i]" :disabled="!checkedNames.includes(sheet)">
                 <option value=""></option>
                 <option
@@ -45,7 +45,7 @@
                 </option>
               </select>
             </div>
-            <div class="col-2"></div>
+            <div class="col-2" :key="i"></div>
           </template>
         </div>
         <div class="form-group col-md-12" v-if="excelFile">
@@ -59,7 +59,7 @@
       <span>No capabilitiesImports found</span>
     </div>
 
-    <div v-for="capabilitiesImport in capabilitiesImports">
+    <div v-for="capabilitiesImport in capabilitiesImports" :key="capabilitiesImport.sheetname">
       <h4>{{ capabilitiesImport.sheetname }}</h4>
 
       <table class="table table-striped" aria-describedby="value">

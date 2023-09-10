@@ -31,7 +31,7 @@
         </div>
         <div class="row">
           <template v-for="(sheet, i) in sheetnames">
-            <div class="col-2">
+            <div class="col-2" :key="i">
               <input type="checkbox" v-model="checkedNames" :value="sheet" :id="'CHK-' + sheet" />
               <label :for="sheet" class="">{{ sheet }}</label>
             </div>
@@ -48,7 +48,7 @@
                 </option>
               </select>
             </div-->
-            <div class="col-2"></div>
+            <div class="col-2" :key="i"></div>
           </template>
         </div>
         <div class="form-group col-md-12" v-if="excelFile">
