@@ -74,4 +74,8 @@ export default class FlowInterfaceDetails extends Vue {
     }
     return false;
   }
+
+  public addNew() {
+    console.log('not implemented');
+  }
 }
