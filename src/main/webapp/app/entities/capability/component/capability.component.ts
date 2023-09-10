@@ -81,11 +81,11 @@ export default class CapabilityComponent extends CapabilityProps {
   public calculateMaxByLevel(capa: ICapability) {
     const key = capa.level + 1;
     if (capa.subCapabilities) {
-      var max = 0;
+      let max = 0;
       if (this.mapNbCapabilitiesByLevel.get(key)) {
         max = this.mapNbCapabilitiesByLevel.get(key);
       }
-      var max = Math.max(max, capa.subCapabilities.length);
+      max = Math.max(max, capa.subCapabilities.length);
       this.mapNbCapabilitiesByLevel.set(key, max);
       capa.subCapabilities.forEach(c => this.calculateMaxByLevel(c));
     }

@@ -3,7 +3,7 @@ import Vue from 'vue';
 export default class AlertService {
   public showError(instance: Vue, message: string, params?: any) {
     const alertMessage = message;
-    instance.$root.$bvToast.toast(' ' + alertMessage, {
+    instance.$root.$bvToast.toast(alertMessage, {
       toaster: 'b-toaster-top-center',
       title: 'Error',
       variant: 'danger',
@@ -13,35 +13,39 @@ export default class AlertService {
   }
 
   public showHttpError(instance: Vue, httpErrorResponse: any) {
-    switch (httpErrorResponse.status) {
-      case 0:
-        this.showError(instance, 'Server not reachable');
-        break;
+    if (!httpErrorResponse) {
+      this.showError(instance, 'Unknown error - No http response');
+    } else {
+      switch (httpErrorResponse.status) {
+        case 0:
+          this.showError(instance, 'Server not reachable');
+          break;
 
-      case 400: {
-        const arr = Object.keys(httpErrorResponse.headers);
-        let errorHeader: string | null = null;
-        for (const entry of arr) {
-          if (entry.toLowerCase().endsWith('app-error')) {
-            errorHeader = httpErrorResponse.headers[entry];
+        case 400: {
+          const arr = Object.keys(httpErrorResponse.headers);
+          let errorHeader: string | null = null;
+          for (const entry of arr) {
+            if (entry.toLowerCase().endsWith('app-error')) {
+              errorHeader = httpErrorResponse.headers[entry];
+            }
           }
+          if (errorHeader) {
+            this.showError(instance, errorHeader);
+          } else if (httpErrorResponse.data !== '' && httpErrorResponse.data.fieldErrors) {
+            this.showError(instance, 'Validation error');
+          } else {
+            this.showError(instance, httpErrorResponse.data.message);
+          }
+          break;
         }
-        if (errorHeader) {
-          this.showError(instance, errorHeader);
-        } else if (httpErrorResponse.data !== '' && httpErrorResponse.data.fieldErrors) {
-          this.showError(instance, 'Validation error');
-        } else {
+
+        case 404:
+          this.showError(instance, 'Not found');
+          break;
+
+        default:
           this.showError(instance, httpErrorResponse.data.message);
-        }
-        break;
       }
-
-      case 404:
-        this.showError(instance, 'Not found');
-        break;
-
-      default:
-        this.showError(instance, httpErrorResponse.data.message);
     }
   }
 }
