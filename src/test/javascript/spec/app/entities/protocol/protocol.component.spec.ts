@@ -34,6 +34,8 @@ describe('Component Tests', () => {
     let comp: ProtocolClass;
     let protocolServiceStub: SinonStubbedInstance<ProtocolService>;
 
+    const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
+
     beforeEach(() => {
       protocolServiceStub = sinon.createStubInstance<ProtocolService>(ProtocolService);
       protocolServiceStub.retrieve.resolves({ headers: {} });
@@ -45,6 +47,7 @@ describe('Component Tests', () => {
         provide: {
           protocolService: () => protocolServiceStub,
           alertService: () => new AlertService(),
+          accountService: () => accountService,
         },
       });
       comp = wrapper.vm;

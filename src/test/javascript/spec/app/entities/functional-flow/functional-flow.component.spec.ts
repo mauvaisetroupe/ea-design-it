@@ -34,6 +34,8 @@ describe('Component Tests', () => {
     let comp: FunctionalFlowClass;
     let functionalFlowServiceStub: SinonStubbedInstance<FunctionalFlowService>;
 
+    const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
+
     beforeEach(() => {
       functionalFlowServiceStub = sinon.createStubInstance<FunctionalFlowService>(FunctionalFlowService);
       functionalFlowServiceStub.retrieve.resolves({ headers: {} });
@@ -45,6 +47,7 @@ describe('Component Tests', () => {
         provide: {
           functionalFlowService: () => functionalFlowServiceStub,
           alertService: () => new AlertService(),
+          accountService: () => accountService,
         },
       });
       comp = wrapper.vm;

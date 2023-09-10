@@ -34,6 +34,8 @@ describe('Component Tests', () => {
     let comp: OwnerClass;
     let ownerServiceStub: SinonStubbedInstance<OwnerService>;
 
+    const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
+
     beforeEach(() => {
       ownerServiceStub = sinon.createStubInstance<OwnerService>(OwnerService);
       ownerServiceStub.retrieve.resolves({ headers: {} });
@@ -45,6 +47,7 @@ describe('Component Tests', () => {
         provide: {
           ownerService: () => ownerServiceStub,
           alertService: () => new AlertService(),
+          accountService: () => accountService,
         },
       });
       comp = wrapper.vm;

@@ -34,6 +34,8 @@ describe('Component Tests', () => {
     let comp: DataFormatClass;
     let dataFormatServiceStub: SinonStubbedInstance<DataFormatService>;
 
+    const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
+
     beforeEach(() => {
       dataFormatServiceStub = sinon.createStubInstance<DataFormatService>(DataFormatService);
       dataFormatServiceStub.retrieve.resolves({ headers: {} });
@@ -45,6 +47,7 @@ describe('Component Tests', () => {
         provide: {
           dataFormatService: () => dataFormatServiceStub,
           alertService: () => new AlertService(),
+          accountService: () => accountService,
         },
       });
       comp = wrapper.vm;

@@ -34,6 +34,8 @@ describe('Component Tests', () => {
     let comp: LandscapeViewClass;
     let landscapeViewServiceStub: SinonStubbedInstance<LandscapeViewService>;
 
+    const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
+
     beforeEach(() => {
       landscapeViewServiceStub = sinon.createStubInstance<LandscapeViewService>(LandscapeViewService);
       landscapeViewServiceStub.retrieve.resolves({ headers: {} });
@@ -45,6 +47,7 @@ describe('Component Tests', () => {
         provide: {
           landscapeViewService: () => landscapeViewServiceStub,
           alertService: () => new AlertService(),
+          accountService: () => accountService,
         },
       });
       comp = wrapper.vm;

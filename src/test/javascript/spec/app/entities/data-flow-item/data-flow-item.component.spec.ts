@@ -34,6 +34,8 @@ describe('Component Tests', () => {
     let comp: DataFlowItemClass;
     let dataFlowItemServiceStub: SinonStubbedInstance<DataFlowItemService>;
 
+    const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
+
     beforeEach(() => {
       dataFlowItemServiceStub = sinon.createStubInstance<DataFlowItemService>(DataFlowItemService);
       dataFlowItemServiceStub.retrieve.resolves({ headers: {} });
@@ -45,6 +47,7 @@ describe('Component Tests', () => {
         provide: {
           dataFlowItemService: () => dataFlowItemServiceStub,
           alertService: () => new AlertService(),
+          accountService: () => accountService,
         },
       });
       comp = wrapper.vm;

@@ -34,6 +34,8 @@ describe('Component Tests', () => {
     let comp: ApplicationCategoryClass;
     let applicationCategoryServiceStub: SinonStubbedInstance<ApplicationCategoryService>;
 
+    const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
+
     beforeEach(() => {
       applicationCategoryServiceStub = sinon.createStubInstance<ApplicationCategoryService>(ApplicationCategoryService);
       applicationCategoryServiceStub.retrieve.resolves({ headers: {} });
@@ -45,6 +47,7 @@ describe('Component Tests', () => {
         provide: {
           applicationCategoryService: () => applicationCategoryServiceStub,
           alertService: () => new AlertService(),
+          accountService: () => accountService,
         },
       });
       comp = wrapper.vm;
