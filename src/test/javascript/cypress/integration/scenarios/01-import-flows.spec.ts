@@ -37,6 +37,7 @@ describe('Application Import and Flows e2e test', () => {
     cy.intercept('GET', '/api/functional-flows+(?*|)').as('flowEntitiesRequest');
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   afterEach(() => {});
 
   it('Import Applications', () => {
