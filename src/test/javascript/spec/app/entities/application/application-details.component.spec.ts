@@ -23,15 +23,23 @@ describe('Component Tests', () => {
     let wrapper: Wrapper<ApplicationClass>;
     let comp: ApplicationClass;
     let applicationServiceStub: SinonStubbedInstance<ApplicationService>;
+    let alertServiceStub: SinonStubbedInstance<AlertService>;
+
+    const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
 
     beforeEach(() => {
       applicationServiceStub = sinon.createStubInstance<ApplicationService>(ApplicationService);
+      alertServiceStub = sinon.createStubInstance<AlertService>(AlertService);
 
       wrapper = shallowMount<ApplicationClass>(ApplicationDetailComponent, {
         store,
         localVue,
         router,
-        provide: { applicationService: () => applicationServiceStub, alertService: () => new AlertService() },
+        provide: {
+          applicationService: () => applicationServiceStub,
+          alertService: () => alertServiceStub,
+          accountService: () => accountService,
+        },
       });
       comp = wrapper.vm;
     });

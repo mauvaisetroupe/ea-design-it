@@ -8,6 +8,7 @@ import * as config from '@/shared/config/config';
 import FlowInterfaceUpdateComponent from '@/entities/flow-interface/flow-interface-update.vue';
 import FlowInterfaceClass from '@/entities/flow-interface/flow-interface-update.component';
 import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
+import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 
 import DataFlowService from '@/entities/data-flow/data-flow.service';
 
@@ -79,6 +80,11 @@ describe('Component Tests', () => {
 
           functionalFlowStepService: () =>
             sinon.createStubInstance<FunctionalFlowStepService>(FunctionalFlowStepService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
+
+          functionalFlowService: () =>
+            sinon.createStubInstance<FunctionalFlowService>(FunctionalFlowService, {
               retrieve: sinon.stub().resolves({}),
             } as any),
         },
