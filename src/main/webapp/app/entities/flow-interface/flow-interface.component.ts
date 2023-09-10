@@ -48,7 +48,7 @@ export default class FlowInterface extends Vue {
 
   public mounted(): void {
     this.retrieveAllFlowInterfaces();
-    if (this.$route.query.searchTerm) {
+    if (this.$route && this.$route.query && this.$route.query.searchTerm) {
       this.filter = this.$route.query.searchTerm as string;
     }
   }
