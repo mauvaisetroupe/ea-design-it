@@ -9,6 +9,12 @@ import LandscapeViewClass from '@/entities/landscape-view/landscape-view-details
 import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
 import router from '@/router';
 import AlertService from '@/shared/alert/alert.service';
+import { ICapability } from '@/shared/model/capability.model';
+import { ILandscapeDTO } from '@/shared/model/landscape-view.model';
+import FlowImportService from '@/entities/flow-import/flow-import.service';
+import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
+import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
+import { ILandscapeView, LandscapeView } from '@/shared/model/landscape-view.model';
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
@@ -23,15 +29,32 @@ describe('Component Tests', () => {
     let wrapper: Wrapper<LandscapeViewClass>;
     let comp: LandscapeViewClass;
     let landscapeViewServiceStub: SinonStubbedInstance<LandscapeViewService>;
+    let alertServiceStub: SinonStubbedInstance<AlertService>;
+    let flowImportServiceStub: SinonStubbedInstance<FlowImportService>;
+    let functionalFlowStepServiceStub: SinonStubbedInstance<FunctionalFlowStepService>;
+    let functionalFlowServiceStub: SinonStubbedInstance<FunctionalFlowService>;
+
+    const accountService = { hasAnyAuthorityAndCheckAuth: jest.fn().mockImplementation(() => Promise.resolve(true)) };
 
     beforeEach(() => {
       landscapeViewServiceStub = sinon.createStubInstance<LandscapeViewService>(LandscapeViewService);
+      alertServiceStub = sinon.createStubInstance<AlertService>(AlertService);
+      flowImportServiceStub = sinon.createStubInstance<FlowImportService>(FlowImportService);
+      functionalFlowStepServiceStub = sinon.createStubInstance<FunctionalFlowStepService>(FunctionalFlowStepService);
+      functionalFlowServiceStub = sinon.createStubInstance<FunctionalFlowService>(FunctionalFlowService);
 
       wrapper = shallowMount<LandscapeViewClass>(LandscapeViewDetailComponent, {
         store,
         localVue,
         router,
-        provide: { landscapeViewService: () => landscapeViewServiceStub, alertService: () => new AlertService() },
+        provide: {
+          landscapeViewService: () => landscapeViewServiceStub,
+          alertService: () => alertServiceStub,
+          accountService: () => accountService,
+          flowImportService: () => flowImportServiceStub,
+          functionalFlowStepService: () => functionalFlowStepServiceStub,
+          functionalFlowService: () => functionalFlowServiceStub,
+        },
       });
       comp = wrapper.vm;
     });
@@ -39,30 +62,43 @@ describe('Component Tests', () => {
     describe('OnInit', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const foundLandscapeView = { id: 123 };
-        landscapeViewServiceStub.find.resolves(foundLandscapeView);
+        const lanscapeDTO: ILandscapeDTO = {
+          landscape: { id: 123 },
+          consolidatedCapability: [],
+        };
+        landscapeViewServiceStub.find.resolves(lanscapeDTO);
+        landscapeViewServiceStub.getPlantUML.resolves('@startuml\nAlice -> Bob: Authentication Request\n@enduml');
 
         // WHEN
         comp.retrieveLandscapeView(123);
         await comp.$nextTick();
 
         // THEN
-        expect(comp.landscapeView).toBe(foundLandscapeView);
+        expect(alertServiceStub.showError.callCount).toBe(0);
+        expect(alertServiceStub.showHttpError.callCount).toBe(0);
+        expect(comp.landscapeView.id).toBe(123);
       });
     });
 
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundLandscapeView = { id: 123 };
-        landscapeViewServiceStub.find.resolves(foundLandscapeView);
+        const lanscapeDTO: ILandscapeDTO = {
+          landscape: { id: 123 },
+          consolidatedCapability: [],
+        };
+
+        landscapeViewServiceStub.find.resolves(lanscapeDTO);
+        landscapeViewServiceStub.getPlantUML.resolves('@startuml\nAlice -> Bob: Authentication Request\n@enduml');
 
         // WHEN
         comp.beforeRouteEnter({ params: { landscapeViewId: 123 } }, null, cb => cb(comp));
         await comp.$nextTick();
 
         // THEN
-        expect(comp.landscapeView).toBe(foundLandscapeView);
+        expect(alertServiceStub.showError.callCount).toBe(0);
+        expect(alertServiceStub.showHttpError.callCount).toBe(0);
+        expect(comp.landscapeView.id).toBe(123);
       });
     });
 
@@ -71,6 +107,8 @@ describe('Component Tests', () => {
         comp.previousState();
         await comp.$nextTick();
 
+        expect(alertServiceStub.showError.callCount).toBe(0);
+        expect(alertServiceStub.showHttpError.callCount).toBe(0);
         expect(comp.$router.currentRoute.fullPath).toContain('/');
       });
     });

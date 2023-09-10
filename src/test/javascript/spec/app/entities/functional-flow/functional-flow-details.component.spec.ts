@@ -47,6 +47,7 @@ describe('Component Tests', () => {
         // GIVEN
         const foundFunctionalFlow = { id: 123 };
         functionalFlowServiceStub.find.resolves(foundFunctionalFlow);
+        functionalFlowServiceStub.getPlantUML.resolves('@startuml\nAlice -> Bob: Authentication Request\n@enduml');
 
         // WHEN
         comp.retrieveFunctionalFlow(123);
@@ -62,6 +63,7 @@ describe('Component Tests', () => {
         // GIVEN
         const foundFunctionalFlow = { id: 123 };
         functionalFlowServiceStub.find.resolves(foundFunctionalFlow);
+        functionalFlowServiceStub.getPlantUML.resolves('@startuml\nAlice -> Bob: Authentication Request\n@enduml');
 
         // WHEN
         comp.beforeRouteEnter({ params: { functionalFlowId: 123 } }, null, cb => cb(comp));
