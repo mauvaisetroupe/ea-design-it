@@ -6,20 +6,17 @@
 # To activate this configuration launch integration tests with the 'testcontainers' profile
 #
 # More information on database containers: https://www.testcontainers.org/modules/databases/
-#
-# You have to specify an Oracle image name in a classpath file named testcontainers.properties.
-# Follow the instructions at https://www.testcontainers.org/modules/databases/oraclexe/
 # ===================================================================
 
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:oracle:thin:@///ORCL?TC_TMPFS=/testtmpfs:rw
-    username: system
-    password: oracle
+    url: jdbc:tc:postgresql:14.1:///EADesignIt?TC_TMPFS=/testtmpfs:rw
+    username: EADesignIt
+    password:
     hikari:
       poolName: Hikari
       auto-commit: false
   jpa:
-    database-platform: org.hibernate.dialect.Oracle12cDialect
+    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect

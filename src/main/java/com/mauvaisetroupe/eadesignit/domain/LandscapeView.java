@@ -12,6 +12,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.SortNatural;
+import org.hibernate.annotations.Type;
 
 /**
  * A LandscapeView.
@@ -37,10 +38,12 @@ public class LandscapeView implements Serializable {
     private String diagramName;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "compressed_draw_xml")
     private String compressedDrawXML;
 
     @Lob
+    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "compressed_draw_svg")
     private String compressedDrawSVG;
 

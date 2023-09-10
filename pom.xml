@@ -325,17 +325,21 @@
             <artifactId>metrics-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
             <scope>provided</scope>
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
-
 
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -1132,12 +1136,12 @@
             <dependencies>
                 <dependency>
                     <groupId>org.testcontainers</groupId>
-                    <artifactId>oracle-xe</artifactId>
+                    <artifactId>postgresql</artifactId>
                     <scope>test</scope>
                 </dependency>
                 <dependency>
-                    <groupId>com.oracle.database.jdbc</groupId>
-                    <artifactId>ojdbc8</artifactId>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
                 </dependency>
             </dependencies>
             <build>
