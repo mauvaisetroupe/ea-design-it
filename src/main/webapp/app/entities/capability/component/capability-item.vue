@@ -13,15 +13,14 @@
       <span v-else>{{ capability.name }}</span>
     </div>
     <div v-else>Corporate capabilities</div>
-    <div v-for="appli in getApplications()" class="appli" v-if="showApplications" :key="'APP-' + appli.id">{{ appli.name }}</div>
-    <div
-      v-if="showApplications && capability.level == nbLevel"
-      v-for="appli in getInheritedApplications()"
-      class="appli2"
-      :key="'INH-' + appli.id"
-    >
-      {{ appli.name }}
-    </div>
+    <template v-if="showApplications">
+      <div v-for="appli in getApplications()" class="appli" :key="'APP-' + appli.id">{{ appli.name }}</div>
+    </template>
+    <template v-if="showApplications && capability.level == nbLevel">
+      <div v-for="appli in getInheritedApplications()" class="appli2" :key="'INH-' + appli.id">
+        {{ appli.name }}
+      </div>
+    </template>
     <div v-if="capability.subCapabilities">
       <slot> </slot>
     </div>
