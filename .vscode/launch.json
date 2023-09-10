@@ -11,7 +11,8 @@
       "name": "Launch EaDesignItApp",
       "request": "launch",
       "mainClass": "com.mauvaisetroupe.eadesignit.EaDesignItApp",
-      "projectName": "ea-design-it"
+      "projectName": "ea-design-it",
+      "vmArgs": " -Dspring.profiles.active=dev"      
     },
     {
       "type": "java",
