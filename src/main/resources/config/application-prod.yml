@@ -45,6 +45,7 @@ spring:
   jpa:
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
     properties:
+      # when schema not writen in SQL order, random bug : rlation ´flow' does not exist
       hibernate.default_schema: public
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
