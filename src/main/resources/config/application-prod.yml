@@ -18,6 +18,8 @@ logging:
     ROOT: INFO
     tech.jhipster: INFO
     com.mauvaisetroupe.eadesignit: INFO
+    org.hibernate.SQL: ERROR
+    org.hibernate.type.descriptor.sql.BasicBinder: ERROR
 
 management:
   metrics:
@@ -39,9 +41,11 @@ spring:
     hikari:
       poolName: Hikari
       auto-commit: false
-      schema: EADESIGNIT
+      schema: public
   jpa:
     database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
+    properties:
+      hibernate.default_schema: public
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod
