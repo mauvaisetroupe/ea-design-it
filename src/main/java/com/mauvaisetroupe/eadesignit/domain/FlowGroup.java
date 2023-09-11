@@ -2,12 +2,13 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.SortNatural;
 
 /**
  * A FlowGroup.
@@ -41,9 +42,10 @@ public class FlowGroup implements Serializable {
     private FunctionalFlow flow;
 
     @OneToMany(mappedBy = "group")
+    @SortNatural
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "flowInterface", "group" }, allowSetters = true)
-    private Set<FunctionalFlowStep> steps = new HashSet<>();
+    private SortedSet<FunctionalFlowStep> steps = new TreeSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -112,11 +114,11 @@ public class FlowGroup implements Serializable {
         return this;
     }
 
-    public Set<FunctionalFlowStep> getSteps() {
+    public SortedSet<FunctionalFlowStep> getSteps() {
         return this.steps;
     }
 
-    public void setSteps(Set<FunctionalFlowStep> functionalFlowSteps) {
+    public void setSteps(SortedSet<FunctionalFlowStep> functionalFlowSteps) {
         if (this.steps != null) {
             this.steps.forEach(i -> i.setGroup(null));
         }
@@ -126,7 +128,7 @@ public class FlowGroup implements Serializable {
         this.steps = functionalFlowSteps;
     }
 
-    public FlowGroup steps(Set<FunctionalFlowStep> functionalFlowSteps) {
+    public FlowGroup steps(SortedSet<FunctionalFlowStep> functionalFlowSteps) {
         this.setSteps(functionalFlowSteps);
         return this;
     }
