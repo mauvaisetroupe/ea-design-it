@@ -32,21 +32,21 @@
         <addForeignKeyConstraint baseColumnNames="capability_application_mapping_id" baseTableName="rel_capability_ap__landscap_b2" constraintName="FKrxv7qmi6g56fjjv43j0b2m6jc" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="capability_application_mapping" validate="true"/>
     </changeSet>
     <changeSet author="lionel (generated)" id="1686772222966-9">
-        <dropForeignKeyConstraint baseTableName="REL_LANDSCAPE_VIE__CAPABILI_21" constraintName="FK7BAFW6EYQOIO0LLMR1R5PG7EW"/>
+        <dropForeignKeyConstraint baseTableName="rel_landscape_vie__capabili_21" constraintName="FK7bafw6eyqoio0llmr1r5pg7ew"/>
     </changeSet>
     <changeSet author="lionel (generated)" id="1686772222966-10">
-        <dropForeignKeyConstraint baseTableName="REL_APPLICATION__CAPABILITIES" constraintName="FKEC99PC78XPS7LDTXCQF7M0UM"/>
+        <dropForeignKeyConstraint baseTableName="rel_application__capabilities" constraintName="FKec99pc78xps7ldtxcqf7m0um"/>
     </changeSet>
     <changeSet author="lionel (generated)" id="1686772222966-11">
-        <dropForeignKeyConstraint baseTableName="REL_LANDSCAPE_VIE__CAPABILI_21" constraintName="FKEDSFJRADPXKJ2BG2GC40QH27W"/>
+        <dropForeignKeyConstraint baseTableName="rel_landscape_vie__capabili_21" constraintName="FKedsfjradpxkj2bg2gc40qh27w"/>
     </changeSet>
     <changeSet author="lionel (generated)" id="1686772222966-12">
-        <dropForeignKeyConstraint baseTableName="REL_APPLICATION__CAPABILITIES" constraintName="FKR2PWC4JSCAMW0MIS3KRU3ST4J"/>
+        <dropForeignKeyConstraint baseTableName="rel_application__capabilities" constraintName="FKr2pwc4jscamw0mis3kru3st4j"/>
     </changeSet>
     <changeSet author="lionel (generated)" id="1686772222966-13">
-        <dropTable tableName="REL_APPLICATION__CAPABILITIES"/>
+        <dropTable tableName="rel_application__capabilities"/>
     </changeSet>
     <changeSet author="lionel (generated)" id="1686772222966-14">
-        <dropTable tableName="REL_LANDSCAPE_VIE__CAPABILI_21"/>
+        <dropTable tableName="rel_landscape_vie__capabili_21"/>
     </changeSet>
 </databaseChangeLog>
