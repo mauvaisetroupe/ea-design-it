@@ -1,0 +1,44 @@
+<column name="jhi_comment" type="varchar(1000)">
+<column name="comment" type="varchar(1000)">
+
+
+<column name="jhi_type" type="varchar(255)">
+<column name="type" type="varchar(255)">
+
+
+## CapabilitzApplicationMapping
+<createTable tableName="rel_capability_ap__landscap_b2">
+<createTable tableName="rel_capability_application_mapping__landscape">
+<addPrimaryKey columnNames="capability_application_mapping_id, landscape_id" tableName="rel_capability_ap__landscap_b2"/>
+<addPrimaryKey columnNames="capability_application_mapping_id, landscape_id" tableName="rel_capability_application_mapping__landscape"/>
+
+
+## 20230614182406_added_entity_constraints_CapabilityApplicationMapping.xml
+        <addForeignKeyConstraint baseColumnNames="capability_application_mapping_id"
+                                 baseTableName="rel_capability_application_mapping__landscape"
+                                 constraintName="fk_rel_capability_application_mapping__landscape__capability_application_mapping_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="capability_application_mapping"/>
+
+        <addForeignKeyConstraint baseColumnNames="landscape_id"
+                                 baseTableName="rel_capability_application_mapping__landscape"
+                                 constraintName="fk_rel_capability_application_mapping__landscape__landscape_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landscape_view"/>
+
+        <addForeignKeyConstraint baseColumnNames="capability_application_mapping_id"
+                                 baseTableName="rel_capability_ap__landscap_b2"
+                                 constraintName="fk_rel_capability_ap__landscap_b2__capability_application_mapping_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="capability_application_mapping"/>
+
+        <addForeignKeyConstraint baseColumnNames="landscape_id"
+                                 baseTableName="rel_capability_ap__landscap_b2"
+                                 constraintName="fk_rel_capability_ap__landscap_b2__landscape_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landscape_view"/>                                 
+
+
+
+<column name="scope" type="varchar(255)">
+<column name="jhi_scope" type="varchar(255)">
