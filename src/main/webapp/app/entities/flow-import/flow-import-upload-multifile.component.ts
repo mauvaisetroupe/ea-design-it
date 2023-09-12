@@ -24,8 +24,8 @@ export default class FlowImportUploadMultiFile extends Vue {
   public sheetnames: string[] = [];
   public checkedNames: string[] = [];
 
-  public dtos = null;
-  public notFilteredDtos = null;
+  public dtos = [];
+  public notFilteredDtos = [];
 
   public handleFileUpload(event): void {
     console.log(event);
@@ -69,13 +69,26 @@ export default class FlowImportUploadMultiFile extends Vue {
   public submitFile(): void {
     this.isFetching = true;
     this.fileSubmited = true;
+    // send file n times, sheet by sheet
+    // this is not optimal, but it's the easier way to have a reactive behavior and avoid time out
+    // serialized to avoid database transactional problem
+    this.uploadOneSheet();
+  }
+
+  public uploadOneSheet() {
+    const sheetToProcess: string = this.checkedNames.shift();
     this.flowImportService()
-      .uploadMultipleFile(this.excelFile, this.checkedNames)
+      .uploadMultipleFile(this.excelFile, [sheetToProcess])
       .then(
         res => {
-          this.dtos = res.data;
-          this.isFetching = false;
+          this.dtos.push(...res.data);
+          this.notFilteredDtos.push(...res.data);
           this.rowsLoaded = true;
+          if (this.checkedNames.length > 0) {
+            this.uploadOneSheet();
+          } else {
+            this.isFetching = false;
+          }
         },
         err => {
           this.isFetching = false;

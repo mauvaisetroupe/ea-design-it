@@ -31,7 +31,7 @@
         </div>
         <div class="row">
           <template v-for="(sheet, i) in sheetnames">
-            <div class="col-2" :key="i">
+            <div class="col-2" :key="'1-' + i">
               <input type="checkbox" v-model="checkedNames" :value="sheet" :id="'CHK-' + sheet" />
               <label :for="sheet" class="">{{ sheet }}</label>
             </div>
@@ -48,7 +48,7 @@
                 </option>
               </select>
             </div-->
-            <div class="col-2" :key="i"></div>
+            <div class="col-2" :key="'2-' + i"></div>
           </template>
         </div>
         <div class="form-group col-md-12" v-if="excelFile">
@@ -93,7 +93,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="flowImport in dto.flowImports" :key="flowImport.id" data-cy="entityTable">
+            <tr v-for="(flowImport, i) in dto.flowImports" :key="i + flowImport.idFlowFromExcel" data-cy="entityTable">
               <td>
                 <span v-bind:class="[flowImport.importInterfaceStatus === 'ERROR' ? 'rederror' : '']">
                   {{ flowImport.importInterfaceStatus }}</span
