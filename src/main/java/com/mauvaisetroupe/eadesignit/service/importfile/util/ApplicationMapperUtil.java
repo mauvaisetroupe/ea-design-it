@@ -54,7 +54,6 @@ public class ApplicationMapperUtil {
     public static final String OWNER_FIRSTNAME = "owner.firstname";
     public static final String OWNER_LASTNAME = "owner.lastname";
     public static final String OWNER_EMAIL = "owner.email";
-    public static final String EXTERNAL_SYSTEM_ID = "external.id";
 
     private final ApplicationCategoryRepository applicationCategoryRepository;
     private final TechnologyRepository technologyRepository;

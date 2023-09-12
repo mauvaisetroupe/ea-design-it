@@ -65,6 +65,10 @@
         <ul>
           <li>
             Import
+            <router-link to="/external-system-upload-file" data-cy="import-excel-external-system">External System</router-link> Excel file
+          </li>
+          <li>
+            Import
             <router-link to="/application-import-upload-file" data-cy="import-excel-applications">Applications</router-link> Excel file
           </li>
           <li>

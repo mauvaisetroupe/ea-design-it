@@ -43,12 +43,11 @@ public class ApplicationExportService {
 
     public ByteArrayOutputStream getApplications() throws IOException {
         Workbook workbook = new XSSFWorkbook();
-        Sheet appliSheet = workbook.createSheet("Application");
-        Sheet componentSheet = workbook.createSheet("Component");
-        Sheet ownerSheet = workbook.createSheet("Owner");
-        Sheet externalSystemSheet = workbook.createSheet("externalSystem");
+        Sheet appliSheet = workbook.createSheet(ApplicationImportService.APPLICATION_SHEET_NAME);
+        Sheet componentSheet = workbook.createSheet(ComponentImportService.COMPONENT_SHEET_NAME);
+        Sheet ownerSheet = workbook.createSheet(ApplicationImportService.OWNER_SHEET_NAME);
 
-        writeSheets(appliSheet, componentSheet, ownerSheet, externalSystemSheet, workbook);
+        writeSheets(appliSheet, componentSheet, ownerSheet, workbook);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         workbook.write(stream);
@@ -56,7 +55,7 @@ public class ApplicationExportService {
         return stream;
     }
 
-    protected void writeSheets(Sheet appliSheet, Sheet componentSheet, Sheet ownerSheet, Sheet externalSystemSheet, Workbook workbook) {
+    protected void writeSheets(Sheet appliSheet, Sheet componentSheet, Sheet ownerSheet, Workbook workbook) {
         writeApplication(appliSheet);
         ExcelUtils.autoSizeAllColumns(appliSheet);
         ExcelUtils.addHeaderColorAndFilte(workbook, appliSheet);
@@ -66,8 +65,6 @@ public class ApplicationExportService {
         writeOwner(ownerSheet);
         ExcelUtils.autoSizeAllColumns(ownerSheet);
         ExcelUtils.addHeaderColorAndFilte(workbook, ownerSheet);
-        writeExternalSytem(externalSystemSheet);
-        ExcelUtils.autoSizeAllColumns(externalSystemSheet);
     }
 
     protected void writeApplication(Sheet sheet) {
@@ -224,20 +221,6 @@ public class ApplicationExportService {
             row.createCell(column++).setCellValue(owner.getFirstname());
             row.createCell(column++).setCellValue(owner.getLastname());
             row.createCell(column++).setCellValue(owner.getEmail());
-        }
-    }
-
-    private void writeExternalSytem(Sheet sheet) {
-        int column = 0;
-        int rownb = 0;
-        Row headerRow = sheet.createRow(rownb++);
-        headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.EXTERNAL_SYSTEM_ID);
-
-        List<ExternalSystem> externalSystems = externalSystemRepository.findAll();
-        for (ExternalSystem externalSystem : externalSystems) {
-            column = 0;
-            Row row = sheet.createRow(rownb++);
-            row.createCell(column++).setCellValue(externalSystem.getExternalSystemID());
         }
     }
 

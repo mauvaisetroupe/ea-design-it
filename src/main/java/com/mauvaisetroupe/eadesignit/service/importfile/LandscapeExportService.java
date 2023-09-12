@@ -46,8 +46,8 @@ public class LandscapeExportService {
 
     public ByteArrayOutputStream getLandscapeExcel(Long landscapeId) throws IOException {
         Workbook workbook = new XSSFWorkbook();
-        Sheet appliSheet = workbook.createSheet("Application");
-        Sheet componentSheet = workbook.createSheet("Component");
+        Sheet appliSheet = workbook.createSheet(ApplicationImportService.APPLICATION_SHEET_NAME);
+        Sheet componentSheet = workbook.createSheet(ComponentImportService.COMPONENT_SHEET_NAME);
         Sheet flowSheet = workbook.createSheet("Message_Flow");
 
         writeFlows(flowSheet, landscapeId);

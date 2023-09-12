@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.domain.DataFlowImport;
+import com.mauvaisetroupe.eadesignit.domain.ExternalSystem;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
@@ -14,6 +15,7 @@ import com.mauvaisetroupe.eadesignit.service.importfile.ComponentImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.DataFlowImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ExcelReader;
 import com.mauvaisetroupe.eadesignit.service.importfile.ExportFullDataService;
+import com.mauvaisetroupe.eadesignit.service.importfile.ExternalSystemImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.FlowImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.LandscapeExportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.PlantumlImportService;
@@ -86,6 +88,9 @@ public class ImportResource {
 
     @Autowired
     private PlantumlImportService plantumlImportService;
+
+    @Autowired
+    private ExternalSystemImportService externalSystemImportService;
 
     @PostMapping("/import/sheetnames")
     public List<String> getSheetNames(@RequestPart MultipartFile file) throws Exception {
@@ -205,5 +210,10 @@ public class ImportResource {
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=all-data-" + date + ".xlsx")
             .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
             .body(byteArrayResource);
+    }
+
+    @PostMapping("/import/external-system/upload-file")
+    public List<ExternalSystem> uploadExternalSystemFile(@RequestPart MultipartFile file) throws Exception {
+        return externalSystemImportService.importExcel(file.getInputStream());
     }
 }

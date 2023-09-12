@@ -30,7 +30,7 @@ public class CapabilityExportService {
 
     public ByteArrayOutputStream getCapabilities() throws IOException {
         Workbook workbook = new XSSFWorkbook();
-        Sheet capabilitieSheet = workbook.createSheet("Capabilities");
+        Sheet capabilitieSheet = workbook.createSheet(CapabilityImportService.CAPABILITY_SHEET_NAME);
 
         writeCapabilities(capabilitieSheet);
         ExcelUtils.autoSizeAllColumns(capabilitieSheet);

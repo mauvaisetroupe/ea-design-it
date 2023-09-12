@@ -21,8 +21,8 @@ import org.springframework.util.Assert;
 @Service
 public class ApplicationImportService {
 
-    private static final String APPLICATION_SHEET_NAME = "Application";
-    private static final String OWNER_SHEET_NAME = "Owner";
+    public static final String APPLICATION_SHEET_NAME = "Application";
+    public static final String OWNER_SHEET_NAME = "Owner";
 
     private final Logger log = LoggerFactory.getLogger(ApplicationImportService.class);
 

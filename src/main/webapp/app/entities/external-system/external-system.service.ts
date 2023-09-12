@@ -3,6 +3,7 @@ import axios from 'axios';
 import { IExternalSystem } from '@/shared/model/external-system.model';
 
 const baseApiUrl = 'api/external-systems';
+const apiForImportUrl = 'api/import';
 
 export default class ExternalSystemService {
   public find(id: number): Promise<IExternalSystem> {
@@ -78,6 +79,23 @@ export default class ExternalSystemService {
           resolve(res.data);
         })
         .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public uploadFile(file: File): Promise<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .post(`${apiForImportUrl}/external-system/upload-file`, formData)
+        .then(res => {
+          console.log(res);
+          resolve(res);
+        })
+        .catch(err => {
+          console.log(err);
           reject(err);
         });
     });

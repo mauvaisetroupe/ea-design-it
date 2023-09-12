@@ -37,6 +37,9 @@ public class ExportFullDataService {
     @Autowired
     CapabilityExportService capabilityExportService;
 
+    @Autowired
+    ExternalSystemExportService externalSystemExportService;
+
     private static String ENTITY_TYPE = "entity.type";
     private static String SHEET_LINK = "sheet hyperlink";
     private static String LANDSCAPE_NAME = "landscape.name";
@@ -44,11 +47,11 @@ public class ExportFullDataService {
     public ByteArrayOutputStream getallData() throws IOException {
         Workbook workbook = new XSSFWorkbook();
         Sheet summarySheet = workbook.createSheet(SUMMARY_SHEET);
-        Sheet appliSheet = workbook.createSheet("Application");
-        Sheet componentSheet = workbook.createSheet("Component");
-        Sheet ownerSheet = workbook.createSheet("Owner");
-        Sheet externalSystemSheet = workbook.createSheet("ExternalSystem");
-        Sheet capabilitiesSheet = workbook.createSheet("Capabilities");
+        Sheet appliSheet = workbook.createSheet(ApplicationImportService.APPLICATION_SHEET_NAME);
+        Sheet componentSheet = workbook.createSheet(ComponentImportService.COMPONENT_SHEET_NAME);
+        Sheet ownerSheet = workbook.createSheet(ApplicationImportService.OWNER_SHEET_NAME);
+        Sheet externalSystemSheet = workbook.createSheet(ExternalSystemImportService.SHEET_NAME);
+        Sheet capabilitiesSheet = workbook.createSheet(CapabilityImportService.CAPABILITY_SHEET_NAME);
 
         int lineNb = 0;
         int nbcolumn = 0;
@@ -57,9 +60,11 @@ public class ExportFullDataService {
         headerRow.createCell(nbcolumn++).setCellValue(SHEET_LINK);
         headerRow.createCell(nbcolumn++).setCellValue(LANDSCAPE_NAME);
 
-        // Application, ApplicationComponent, Owner & ExternalSystem
+        // External Systems
+        externalSystemExportService.writeExternalSytemSheet(externalSystemSheet, workbook);
 
-        applicationExportService.writeSheets(appliSheet, componentSheet, ownerSheet, externalSystemSheet, workbook);
+        // Application, ApplicationComponent, Owner & ExternalSystem
+        applicationExportService.writeSheets(appliSheet, componentSheet, ownerSheet, workbook);
         addApplicationSummary(
             workbook,
             summarySheet,

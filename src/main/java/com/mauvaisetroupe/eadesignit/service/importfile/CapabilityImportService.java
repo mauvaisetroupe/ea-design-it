@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CapabilityImportService {
 
-    private static final String CAPABILITY_SHEET_NAME = "Capabilities";
+    public static final String CAPABILITY_SHEET_NAME = "Capabilities";
 
     private final Logger log = LoggerFactory.getLogger(CapabilityImportService.class);
 

@@ -24,7 +24,7 @@ import org.springframework.util.StringUtils;
 @Service
 public class ComponentImportService {
 
-    private static final String COMPONENT_SHEET_NAME = "Component";
+    public static final String COMPONENT_SHEET_NAME = "Component";
 
     private final Logger log = LoggerFactory.getLogger(ApplicationImportService.class);
 
