@@ -12,7 +12,7 @@
       </div>
     </h2>
 
-    <div v-if="!rowsLoaded">
+    <div>
       <div class="form-group">
         <div class="custom-file">
           <input type="file" class="custom-file-input" id="customFile" @change="handleFileUpload($event)" />
@@ -29,30 +29,18 @@
           <span class="h3">Choose sheets to import</span>
           [<a @click="selectAll">Select All</a>] [<a @click="selectNone">Select None</a>]
         </div>
-        <div class="row">
+
+        <div class="row m-3">
           <template v-for="(sheet, i) in sheetnames">
-            <div class="col-2" :key="'1-' + i">
-              <input type="checkbox" v-model="checkedNames" :value="sheet" :id="'CHK-' + sheet" />
-              <label :for="sheet" class="">{{ sheet }}</label>
+            <div class="col-3" :key="'1-' + i">
+              <input type="checkbox" v-model="checkedNames" :value="sheet" :id="'CHK-' + sheet" :disabled="fileSubmited" />
+              <label :for="'CHK-' + sheet" class="">{{ sheet }} {{ landscapeMap[sheet] }}</label>
             </div>
-            <!--div class="col-2">
-              <select v-model="selectedLandscape[i]" :disabled="!checkedNames.includes(sheet)">
-                <option value=""></option>
-                <option
-                  v-for="landscape in existingLandscapes"
-                  :value="landscape.diagramName"
-                  :key="landscape.id"
-                  :selected="landscape.diagramName === selectedLandscape[i]"
-                >
-                  {{ landscape.diagramName }}
-                </option>
-              </select>
-            </div-->
             <div class="col-2" :key="'2-' + i"></div>
           </template>
         </div>
         <div class="form-group col-md-12" v-if="excelFile">
-          <button type="submit" class="btn btn-primary mb-2" v-on:click="submitFile()">Submit File</button>
+          <button type="submit" class="btn btn-primary mb-2" v-on:click="submitFile()" v-if="!fileSubmited">Submit File</button>
         </div>
       </div>
     </div>

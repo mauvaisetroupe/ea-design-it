@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -96,6 +97,12 @@ public class ImportResource {
     public List<String> getSheetNames(@RequestPart MultipartFile file) throws Exception {
         ExcelReader excelReader = new ExcelReader(file.getInputStream());
         return excelReader.getSheetNames();
+    }
+
+    @PostMapping("/import/summary")
+    public List<Map<String, Object>> getSummary(@RequestPart MultipartFile file) throws Exception {
+        ExcelReader excelReader = new ExcelReader(file.getInputStream());
+        return excelReader.getSheet(ExportFullDataService.SUMMARY_SHEET);
     }
 
     @PostMapping("/import/application/upload-file")

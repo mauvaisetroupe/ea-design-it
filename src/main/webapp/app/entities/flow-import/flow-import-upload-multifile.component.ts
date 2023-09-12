@@ -23,6 +23,7 @@ export default class FlowImportUploadMultiFile extends Vue {
 
   public sheetnames: string[] = [];
   public checkedNames: string[] = [];
+  public landscapeMap = {};
 
   public dtos = [];
   public notFilteredDtos = [];
@@ -37,15 +38,18 @@ export default class FlowImportUploadMultiFile extends Vue {
   public getSheetnames(): void {
     this.isFetching = true;
     this.flowImportService()
-      .getSheetNames(this.excelFile)
+      .getSummary(this.excelFile)
       .then(
         res => {
           this.isFetching = false;
-          const tmpsheetnames = res.data;
-          tmpsheetnames.forEach((name, i) => {
-            if (name.startsWith('FLW')) {
-              this.checkedNames.push(name);
-              this.sheetnames.push(name);
+          const summary = res.data;
+          summary.forEach(row => {
+            if (row['entity.type'] === 'Landscape') {
+              const sheetname: string = row['sheet hyperlink'];
+              const landscape: string = row['landscape.name'];
+              this.checkedNames.push(sheetname);
+              this.sheetnames.push(sheetname);
+              this.landscapeMap[sheetname] = landscape;
             }
           });
         },
@@ -57,11 +61,14 @@ export default class FlowImportUploadMultiFile extends Vue {
   }
 
   public selectAll() {
-    this.checkedNames = this.sheetnames;
+    if (!this.fileSubmited) {
+      this.checkedNames = [];
+      this.checkedNames.push(...this.sheetnames);
+    }
   }
 
   public selectNone() {
-    this.checkedNames = [];
+    if (!this.fileSubmited) this.checkedNames = [];
   }
 
   // Step 2 - Submit de file and selected sheet names
