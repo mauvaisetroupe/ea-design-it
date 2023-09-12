@@ -92,7 +92,7 @@ public class ExportFullDataService {
         }
 
         // Capabilities
-        capabilityExportService.writeCapabilities(capabilitiesSheet);
+        capabilityExportService.writeCapabilities(capabilitiesSheet, workbook);
         ExcelUtils.autoSizeAllColumns(capabilitiesSheet);
         ExcelUtils.addHeaderColorAndFilte(workbook, capabilitiesSheet);
         addCapabilitiesSummary(workbook, summarySheet, capabilitiesSheet.getSheetName(), lineNb);
