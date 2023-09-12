@@ -60,7 +60,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="flowImport in dto.flowImports" :key="flowImport.id" data-cy="entityTable">
+            <tr v-for="flowImport in dto.flowImports" :key="flowImport.idFlowFromExcel" data-cy="entityTable">
               <td>
                 <span v-bind:class="[flowImport.importInterfaceStatus === 'ERROR' ? 'rederror' : '']">
                   {{ flowImport.importInterfaceStatus }}</span
