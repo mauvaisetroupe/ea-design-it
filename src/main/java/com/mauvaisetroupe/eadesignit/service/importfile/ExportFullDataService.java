@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityMappingDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ExcelUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -39,6 +40,9 @@ public class ExportFullDataService {
 
     @Autowired
     ExternalSystemExportService externalSystemExportService;
+
+    @Autowired
+    ApplicationCapabilityExportService capabilityMappingExportService;
 
     private static String ENTITY_TYPE = "entity.type";
     private static String SHEET_LINK = "sheet hyperlink";
@@ -95,8 +99,13 @@ public class ExportFullDataService {
         capabilityExportService.writeCapabilities(capabilitiesSheet, workbook);
         ExcelUtils.autoSizeAllColumns(capabilitiesSheet);
         ExcelUtils.addHeaderColorAndFilte(workbook, capabilitiesSheet);
-        addCapabilitiesSummary(workbook, summarySheet, capabilitiesSheet.getSheetName(), lineNb);
+        addCapabilitiesSummary(workbook, summarySheet, capabilitiesSheet.getSheetName(), lineNb++);
 
+        // CapabilityMapping
+        List<CapabilityMappingDTO> capabilityMappingDTOs = capabilityMappingExportService.writeApplicationCapabilitiesMapping(workbook);
+        addCapabilitieMappingsSummary(workbook, summarySheet, capabilityMappingDTOs, lineNb);
+
+        // Close stream
         ExcelUtils.autoSizeAllColumns(summarySheet);
         ExcelUtils.addHeaderColorAndFilte(workbook, summarySheet);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -160,6 +169,22 @@ public class ExportFullDataService {
         // Link to shet
         Cell cell = row.createCell(columnNb++);
         createHyperlink(workbook, capabilitySheetName, cell);
+    }
+
+    private void addCapabilitieMappingsSummary(
+        Workbook workbook,
+        Sheet summarySheet,
+        List<CapabilityMappingDTO> capabilityMappingDTOs,
+        int lineNb
+    ) {
+        for (CapabilityMappingDTO capabilityMappingDTO : capabilityMappingDTOs) {
+            Row row = summarySheet.createRow(lineNb++);
+            int columnNb = 0;
+            row.createCell(columnNb++).setCellValue("Capability Mapping");
+            Cell cell = row.createCell(columnNb++);
+            createHyperlink(workbook, capabilityMappingDTO.getSheetName(), cell);
+            row.createCell(columnNb++).setCellValue(capabilityMappingDTO.getLandscape());
+        }
     }
 
     private void createHyperlink(Workbook workbook, String sheetName, Cell cell) {
