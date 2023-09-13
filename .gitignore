@@ -164,3 +164,4 @@ Desktop.ini
 release.properties
 pom.xml.releaseBackup
 static-web-app.zip
+src/main/resources/.h2.server.properties
