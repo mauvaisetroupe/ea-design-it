@@ -36,6 +36,7 @@ import LandscapeViewService from '@/entities/landscape-view/landscape-view.servi
 import ApplicationService from '@/entities/application/application.service';
 import ExportService from '@/eadesignit/export.service';
 import ExternalSystemService from '@/entities/external-system/external-system.service';
+import FullExportService from '@/eadesignit/full-export/full-export.service';
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
@@ -126,6 +127,8 @@ new Vue({
 
     exportService: () => new ExportService(),
     externalSystemService: () => new ExternalSystemService(),
+
+    fullExportService: () => new FullExportService(),
   },
   store,
   created: function () {

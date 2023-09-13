@@ -25,6 +25,8 @@ const SequenceDiagramImport = () => import('@/eadesignit/sequence-diagram/import
 const ApplicationsDiagram = () => import('@/eadesignit/applications-diagram/applications-diagram.vue');
 // prettier-ignore
 const ExternalSystemUploadFile = () => import('@/entities/external-system/external-system-upload-file.vue');
+// prettier-ignore
+const FullExport = () => import('@/eadesignit/full-export/full-export.vue');
 
 export default [
   {
@@ -97,6 +99,12 @@ export default [
     path: '/external-system-upload-file',
     name: 'ExternalSystemUploadFile',
     component: ExternalSystemUploadFile,
+    meta: { authorities: [Authority.WRITE] },
+  },
+  {
+    path: '/full-export',
+    name: 'FullExport',
+    component: FullExport,
     meta: { authorities: [Authority.WRITE] },
   },
 ];
