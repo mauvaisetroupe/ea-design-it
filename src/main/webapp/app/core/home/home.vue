@@ -62,7 +62,7 @@
 
       <div v-if="$store.getters.writeAuthority">
         <h2>Import</h2>
-        <ul>
+        <ol>
           <li>
             Import
             <router-link to="/external-system-upload-file" data-cy="import-excel-external-system">External System</router-link> Excel file
@@ -103,11 +103,13 @@
             <router-link to="/sequence-diagram/import" data-cy="import-sequence-diagram-mapping">Sequence diagram</router-link> Plantuml
             file
           </li>
-        </ul>
+        </ol>
 
         <h2>Export</h2>
         <ul>
-          <li><a @click="exportExcel" href="javascript:">Full Export</a></li>
+          <li>
+            <router-link to="/full-export" data-cy="full-export">Full Export</router-link>
+          </li>
         </ul>
         <p>Please, refer to <a href="https://mauvaisetroupe.github.io/ea-design-it/import/">documentation</a> for more explanation</p>
       </div>

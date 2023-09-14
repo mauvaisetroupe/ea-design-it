@@ -48,7 +48,16 @@ public class ExportFullDataService {
     private static String SHEET_LINK = "sheet hyperlink";
     private static String LANDSCAPE_NAME = "landscape.name";
 
-    public ByteArrayOutputStream getallData() throws IOException {
+    public ByteArrayOutputStream getallData(
+        boolean exportApplications,
+        boolean exportComponents,
+        boolean exportOwner,
+        boolean exportExternalSystem,
+        boolean exportCapabilities,
+        List<Long> landscapesToExport,
+        List<Long> capabilitiesMappingToExport,
+        boolean exportCapabilitiesWithNoLandscape
+    ) throws IOException {
         Workbook workbook = new XSSFWorkbook();
         Sheet summarySheet = workbook.createSheet(SUMMARY_SHEET);
         Sheet appliSheet = workbook.createSheet(ApplicationImportService.APPLICATION_SHEET_NAME);
@@ -65,10 +74,28 @@ public class ExportFullDataService {
         headerRow.createCell(nbcolumn++).setCellValue(LANDSCAPE_NAME);
 
         // External Systems
-        externalSystemExportService.writeExternalSytemSheet(externalSystemSheet, workbook);
+        if (exportExternalSystem) {
+            externalSystemExportService.writeExternalSytemSheet(externalSystemSheet, workbook);
+            ExcelUtils.autoSizeAllColumns(externalSystemSheet);
+            ExcelUtils.addHeaderColorAndFilte(workbook, externalSystemSheet);
+        }
 
         // Application, ApplicationComponent, Owner & ExternalSystem
-        applicationExportService.writeSheets(appliSheet, componentSheet, ownerSheet, workbook);
+        if (exportApplications) {
+            applicationExportService.writeApplication(appliSheet);
+            ExcelUtils.autoSizeAllColumns(appliSheet);
+            ExcelUtils.addHeaderColorAndFilte(workbook, appliSheet);
+        }
+        if (exportComponents) {
+            applicationExportService.writeComponent(componentSheet);
+            ExcelUtils.autoSizeAllColumns(componentSheet);
+            ExcelUtils.addHeaderColorAndFilte(workbook, componentSheet);
+        }
+        if (exportOwner) {
+            applicationExportService.writeOwner(ownerSheet);
+            ExcelUtils.autoSizeAllColumns(ownerSheet);
+            ExcelUtils.addHeaderColorAndFilte(workbook, ownerSheet);
+        }
         addApplicationSummary(
             workbook,
             summarySheet,
@@ -85,24 +112,32 @@ public class ExportFullDataService {
         List<LandscapeView> landscapes = landscapeViewRepository.findAll();
         int landscapeNb = 1;
         for (LandscapeView landscape : landscapes) {
-            String flowSheetName = "FLW." + landscapeNb++;
-            flowSheetName = flowSheetName.substring(0, Math.min(10, flowSheetName.length()));
-            addSummryFlow(workbook, summarySheet, landscape, flowSheetName, lineNb++);
-            Sheet flowSheet = workbook.createSheet(flowSheetName);
-            landscapeExportService.writeFlows(flowSheet, landscape.getId());
-            ExcelUtils.autoSizeAllColumns(flowSheet);
-            ExcelUtils.addHeaderColorAndFilte(workbook, flowSheet);
-            ExcelUtils.alternateColors(workbook, flowSheet, 1);
+            if (landscapesToExport.contains(landscape.getId())) {
+                String flowSheetName = "FLW." + landscapeNb++;
+                flowSheetName = flowSheetName.substring(0, Math.min(10, flowSheetName.length()));
+                addSummryFlow(workbook, summarySheet, landscape, flowSheetName, lineNb++);
+                Sheet flowSheet = workbook.createSheet(flowSheetName);
+                landscapeExportService.writeFlows(flowSheet, landscape.getId());
+                ExcelUtils.autoSizeAllColumns(flowSheet);
+                ExcelUtils.addHeaderColorAndFilte(workbook, flowSheet);
+                ExcelUtils.alternateColors(workbook, flowSheet, 1);
+            }
         }
 
         // Capabilities
-        capabilityExportService.writeCapabilities(capabilitiesSheet, workbook);
-        ExcelUtils.autoSizeAllColumns(capabilitiesSheet);
-        ExcelUtils.addHeaderColorAndFilte(workbook, capabilitiesSheet);
-        addCapabilitiesSummary(workbook, summarySheet, capabilitiesSheet.getSheetName(), lineNb++);
+        if (exportCapabilities) {
+            capabilityExportService.writeCapabilities(capabilitiesSheet, workbook);
+            ExcelUtils.autoSizeAllColumns(capabilitiesSheet);
+            ExcelUtils.addHeaderColorAndFilte(workbook, capabilitiesSheet);
+            addCapabilitiesSummary(workbook, summarySheet, capabilitiesSheet.getSheetName(), lineNb++);
+        }
 
         // CapabilityMapping
-        List<CapabilityMappingDTO> capabilityMappingDTOs = capabilityMappingExportService.writeApplicationCapabilitiesMapping(workbook);
+        List<CapabilityMappingDTO> capabilityMappingDTOs = capabilityMappingExportService.writeApplicationCapabilitiesMapping(
+            workbook,
+            capabilitiesMappingToExport,
+            exportCapabilitiesWithNoLandscape
+        );
         addCapabilitieMappingsSummary(workbook, summarySheet, capabilityMappingDTOs, lineNb);
 
         // Close stream

@@ -37,7 +37,7 @@ public class ApplicationCapabilityExportService {
     public ByteArrayOutputStream getApplicationCapabilitiesMapping() throws IOException {
         Workbook workbook = new XSSFWorkbook();
 
-        writeApplicationCapabilitiesMapping(workbook);
+        writeApplicationCapabilitiesMapping(workbook, null, true);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         workbook.write(stream);
@@ -45,7 +45,11 @@ public class ApplicationCapabilityExportService {
         return stream;
     }
 
-    protected List<CapabilityMappingDTO> writeApplicationCapabilitiesMapping(Workbook workbook) {
+    protected List<CapabilityMappingDTO> writeApplicationCapabilitiesMapping(
+        Workbook workbook,
+        List<Long> capabilitiesMappingToExport,
+        boolean exportCapabilitiesWithNoLandscape
+    ) {
         List<CapabilityMappingDTO> capabilityMappingDTOs = new ArrayList<>();
 
         Map<String, Set<CapabilityApplicationMapping>> mappingByLandscape = new HashMap<>();
@@ -53,10 +57,14 @@ public class ApplicationCapabilityExportService {
         for (CapabilityApplicationMapping mapping : mappings) {
             Set<LandscapeView> landscapes = mapping.getLandscapes();
             if (landscapes == null || landscapes.isEmpty()) {
-                addCapabilityMappingToMap(mappingByLandscape, mapping, NO_LANDSCAPE);
+                if (exportCapabilitiesWithNoLandscape) {
+                    addCapabilityMappingToMap(mappingByLandscape, mapping, NO_LANDSCAPE);
+                }
             } else {
                 for (LandscapeView landscape : landscapes) {
-                    addCapabilityMappingToMap(mappingByLandscape, mapping, landscape.getDiagramName());
+                    if (capabilitiesMappingToExport == null || capabilitiesMappingToExport.contains(landscape.getId())) {
+                        addCapabilityMappingToMap(mappingByLandscape, mapping, landscape.getDiagramName());
+                    }
                 }
             }
         }
