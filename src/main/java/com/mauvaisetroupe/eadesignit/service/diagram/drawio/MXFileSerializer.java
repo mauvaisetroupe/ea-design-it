@@ -237,7 +237,7 @@ public class MXFileSerializer {
         Element mxCell = createElement(doc, root, "mxCell");
         //mxCell.setAttribute("id", EDGE_ID_PREFIX + edgeId);
         mxCell.setAttribute("elementId", EDGE_ID_PREFIX + edge.getId());
-        // mxCell.setAttribute("value", edge.getLabelsAsString());
+        mxCell.setAttribute("value", edge.getLabelsAsString());
         String style = "endArrow=classic;html=1;rounded=0;";
         if (edge.isBidirectional()) {
             style = style + "startArrow=classic;endArrow=classic;rounded=0;";
