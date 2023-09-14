@@ -400,6 +400,7 @@
           :v-if="!isHidden"
           id="myDiv"
           src="https://embed.diagrams.net/?nav=1&edit=_blank&layers=1&highlight=0000ff&embed=1&noSaveBtn=1&libraries=1&proto=json"
+          style="z-index: 999999"
         />
       </div>
     </div>
