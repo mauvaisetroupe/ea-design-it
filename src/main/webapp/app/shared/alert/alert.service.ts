@@ -2,7 +2,10 @@ import Vue from 'vue';
 
 export default class AlertService {
   public showError(instance: Vue, message: string, params?: any) {
-    const alertMessage = message;
+    let alertMessage = 'Unkown error';
+    if (message) {
+      alertMessage = message;
+    }
     instance.$root.$bvToast.toast(alertMessage, {
       toaster: 'b-toaster-top-center',
       title: 'Error',
