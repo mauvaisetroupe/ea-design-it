@@ -205,8 +205,26 @@ public class ImportResource {
     }
 
     @GetMapping(value = "export/all")
-    public ResponseEntity<Resource> downloadAllData() throws IOException {
-        ByteArrayOutputStream file = exportFullDataService.getallData();
+    public ResponseEntity<Resource> downloadAllData(
+        @RequestParam boolean applications,
+        @RequestParam boolean applicationComponents,
+        @RequestParam boolean owner,
+        @RequestParam boolean externalSystem,
+        @RequestParam boolean capabilities,
+        @RequestParam(value = "landscapes[]", required = false, defaultValue = "") List<Long> landscapes,
+        @RequestParam(value = "capabilitiesMapping[]", required = false, defaultValue = "") List<Long> capabilitiesMapping,
+        @RequestParam boolean capabilitiesMappingWithNoLandscape
+    ) throws IOException {
+        ByteArrayOutputStream file = exportFullDataService.getallData(
+            applications,
+            applicationComponents,
+            owner,
+            externalSystem,
+            capabilities,
+            landscapes,
+            capabilitiesMapping,
+            capabilitiesMappingWithNoLandscape
+        );
         ByteArrayResource byteArrayResource = new ByteArrayResource(file.toByteArray());
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-h-m-s");

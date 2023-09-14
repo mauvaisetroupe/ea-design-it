@@ -69,6 +69,7 @@ export default class FullExport extends Vue {
     if (!this.submited) {
       this.checkedCapabilitiesMapping = [];
       this.checkedCapabilitiesMapping.push(...this.capabilitiesMapping);
+      this.capabilities = true;
     }
   }
 
@@ -76,25 +77,46 @@ export default class FullExport extends Vue {
     if (!this.submited) this.checkedCapabilitiesMapping = [];
   }
 
+  public checkCapa(e) {
+    if (this.checkedCapabilitiesMapping.length > 0) {
+      this.capabilities = true;
+    }
+  }
+
   public exportExcel() {
     this.submited = true;
     this.isFetching = true;
     this.fullExportService()
-      .downloadFile()
-      .then(response => {
-        const url = URL.createObjectURL(
-          new Blob([response.data], {
-            type: 'application/vnd.ms-excel',
-          })
-        );
-        const link = document.createElement('a');
-        link.href = url;
-        const today = new Date().toISOString().split('T')[0];
-        const time = new Date().toLocaleTimeString().replace(' ', '_');
-        link.setAttribute('download', 'full-data-export-' + today + '-' + time + '.xlsx');
-        document.body.appendChild(link);
-        link.click();
-        this.isFetching = false;
-      });
+      .downloadFile(
+        this.applications,
+        this.applicationComponents,
+        this.owner,
+        this.externalSystem,
+        this.capabilities,
+        this.checkedLandscapes.map(l => l.id),
+        this.checkedCapabilitiesMapping.map(l => l.id),
+        this.capabilitiesMappingWithNoLandscape
+      )
+      .then(
+        response => {
+          const url = URL.createObjectURL(
+            new Blob([response.data], {
+              type: 'application/vnd.ms-excel',
+            })
+          );
+          const link = document.createElement('a');
+          link.href = url;
+          const today = new Date().toISOString().split('T')[0];
+          const time = new Date().toLocaleTimeString().replace(' ', '_');
+          link.setAttribute('download', 'full-data-export-' + today + '-' + time + '.xlsx');
+          document.body.appendChild(link);
+          link.click();
+          this.isFetching = false;
+        },
+        err => {
+          this.isFetching = false;
+          this.alertService().showHttpError(this, err.response);
+        }
+      );
   }
 }

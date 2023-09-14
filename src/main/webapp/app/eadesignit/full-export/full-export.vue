@@ -25,7 +25,7 @@
       [<a @click="selectAllLansdcape">Select All</a>] [<a @click="selectNoLandscape">Select None</a>]
     </div>
     <div class="row m-3">
-      <div class="col-4" v-for="landscape in landscapes" :key="landscape">
+      <div class="col-4" v-for="landscape in landscapes" :key="landscape.id">
         <input type="checkbox" v-model="checkedLandscapes" :value="landscape" />
         <label>{{ landscape.diagramName.substring(0, 40) }}</label>
       </div>
@@ -42,14 +42,14 @@
       [<a @click="selectAllMapping">Select All</a>] [<a @click="selectNoMapping">Select None</a>]
     </div>
     <div class="row m-3">
-      <div class="col-4" v-for="mapping in capabilitiesMapping" :key="mapping">
-        <input type="checkbox" v-model="checkedCapabilitiesMapping" :value="mapping" />
+      <div class="col-4" v-for="mapping in capabilitiesMapping" :key="mapping.id">
+        <input type="checkbox" v-model="checkedCapabilitiesMapping" :value="mapping" @change="checkCapa($event)" />
         <label>{{ mapping.diagramName.substring(0, 40) }}</label>
       </div>
     </div>
     <div class="row m-3">
       <div class="col-12">
-        <input type="checkbox" v-model="capabilitiesMappingWithNoLandscape" />
+        <input type="checkbox" v-model="capabilitiesMappingWithNoLandscape" @change="checkCapa($event)" />
         <label>Capabilities / Application mapping with no landscape association</label>
       </div>
     </div>
