@@ -194,13 +194,20 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   }
 
   public exportDrawIOXML() {
-    let xmlContent = 'data:text/xml;charset=utf-8,';
-    xmlContent += this.landscapeView.compressedDrawXML;
-    const data = encodeURI(xmlContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', data);
-    link.setAttribute('download', 'draw-io-export-' + this.landscapeView.diagramName.replace(/ /g, '-') + '.xml');
-    link.click();
+    const xmlContent = this.landscapeView.compressedDrawXML;
+
+    const filename = 'draw-io-export-' + this.landscapeView.diagramName.replace(/ /g, '-') + '.xml';
+    const pom = document.createElement('a');
+    const bb = new Blob([xmlContent], { type: 'text/plain' });
+
+    pom.setAttribute('href', window.URL.createObjectURL(bb));
+    pom.setAttribute('download', filename);
+
+    pom.dataset.downloadurl = ['text/plain', pom.download, pom.href].join(':');
+    pom.draggable = true;
+    pom.classList.add('dragout');
+
+    pom.click();
   }
 
   public prepareRemove(instance: ILandscapeView): void {
