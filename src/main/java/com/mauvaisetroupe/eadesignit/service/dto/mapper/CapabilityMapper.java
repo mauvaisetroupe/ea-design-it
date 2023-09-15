@@ -1,4 +1,4 @@
-package com.mauvaisetroupe.eadesignit.service.importfile.dto.mapper;
+package com.mauvaisetroupe.eadesignit.service.dto.mapper;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
