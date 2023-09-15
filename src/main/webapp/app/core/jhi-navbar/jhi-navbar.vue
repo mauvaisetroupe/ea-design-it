@@ -72,7 +72,7 @@
         <b-nav-item-dropdown
           right
           id="eadesignit-report-menu"
-          v-if="authenticated"
+          v-if="adminAuthorities"
           active-class="active"
           class="pointer"
           data-cy="eadesign-report"
@@ -94,7 +94,7 @@
             <span>Orphan Functional Flow Groups</span>
           </b-dropdown-item>
         </b-nav-item-dropdown>
-        <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
+        <b-nav-item-dropdown right id="entity-menu" v-if="adminAuthorities" active-class="active" class="pointer" data-cy="entity">
           <span slot="button-content" class="navbar-dropdown-menu">
             <font-awesome-icon icon="th-list" />
             <span class="no-bold">Entities</span>
