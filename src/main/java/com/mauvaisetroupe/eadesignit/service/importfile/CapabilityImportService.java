@@ -53,10 +53,11 @@ public class CapabilityImportService {
 
         for (Map<String, Object> map : capabilitiesDF) {
             // new capability created from excel, without parent assigned
-            CapabilityDTO l0Import = new CapabilityDTO((String) map.get(L0_NAME), 0);
-            CapabilityDTO l1Import = new CapabilityDTO((String) map.get(L1_NAME), 1);
-            CapabilityDTO l2Import = new CapabilityDTO((String) map.get(L2_NAME), 1);
-            CapabilityDTO l3Import = new CapabilityDTO((String) map.get(L3_NAME), 3);
+            CapabilityDTO l0Import = null, l1Import = null, l2Import = null, l3Import = null;
+            if (map.get(L0_NAME) != null) l0Import = new CapabilityDTO((String) map.get(L0_NAME), 0);
+            if (map.get(L1_NAME) != null) l1Import = new CapabilityDTO((String) map.get(L1_NAME), 1);
+            if (map.get(L2_NAME) != null) l2Import = new CapabilityDTO((String) map.get(L2_NAME), 2);
+            if (map.get(L3_NAME) != null) l3Import = new CapabilityDTO((String) map.get(L3_NAME), 3);
             CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO(l0Import, l1Import, l2Import, l3Import);
             capabilityImportDTO.setDomain((String) map.get(SUR_DOMAIN));
 
@@ -132,7 +133,7 @@ public class CapabilityImportService {
     }
 
     private Capability findOrCreateCapability(CapabilityDTO capabilityImport, CapabilityDTO parentImport) {
-        if (capabilityImport == null) return null;
+        if (capabilityImport == null || capabilityImport.getName() == null) return null;
         List<Capability> potentials = new ArrayList<>();
         if (parentImport == null) {
             potentials = this.capabilityRepository.findByNameIgnoreCaseAndLevel(capabilityImport.getName(), capabilityImport.getLevel());

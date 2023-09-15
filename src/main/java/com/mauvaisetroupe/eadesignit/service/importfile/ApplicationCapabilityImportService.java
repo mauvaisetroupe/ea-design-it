@@ -74,13 +74,22 @@ public class ApplicationCapabilityImportService {
             for (Map<String, Object> map : capabilitiesDF) {
                 ApplicationCapabilityItemDTO itemDTO = new ApplicationCapabilityItemDTO();
 
-                CapabilityDTO l0Import = new CapabilityDTO((String) map.get(L0_NAME), 0);
-                CapabilityDTO l1Import = new CapabilityDTO((String) map.get(L1_NAME), 1);
-                CapabilityDTO l2Import = new CapabilityDTO((String) map.get(L2_NAME), 1);
-                CapabilityDTO l3Import = new CapabilityDTO((String) map.get(L3_NAME), 3);
+                CapabilityDTO l0Import = null, l1Import = null, l2Import = null, l3Import = null;
+                if (map.containsKey(FULL_PATH)) {
+                    String fullPath = (String) map.get(FULL_PATH);
+                    String[] capabilitiesName = fullPath.split(" > ");
+                    if (capabilitiesName.length > 0) l0Import = new CapabilityDTO(capabilitiesName[0], 0);
+                    if (capabilitiesName.length > 1) l1Import = new CapabilityDTO(capabilitiesName[1], 1);
+                    if (capabilitiesName.length > 2) l2Import = new CapabilityDTO(capabilitiesName[2], 2);
+                    if (capabilitiesName.length > 3) l3Import = new CapabilityDTO(capabilitiesName[3], 3);
+                } else {
+                    if (map.get(L0_NAME) != null) l0Import = new CapabilityDTO((String) map.get(L0_NAME), 0);
+                    if (map.get(L1_NAME) != null) l1Import = new CapabilityDTO((String) map.get(L1_NAME), 1);
+                    if (map.get(L2_NAME) != null) l2Import = new CapabilityDTO((String) map.get(L2_NAME), 2);
+                    if (map.get(L3_NAME) != null) l3Import = new CapabilityDTO((String) map.get(L3_NAME), 3);
+                }
                 CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO(l0Import, l1Import, l2Import, l3Import);
                 itemDTO.setCapabilityImportDTO(capabilityImportDTO);
-
                 itemDTO.setApplicationNames(mapArrayToString(map));
 
                 Optional<Capability> capabilityOptional = findCapability(l0Import, l1Import, l2Import, l3Import, itemDTO);
