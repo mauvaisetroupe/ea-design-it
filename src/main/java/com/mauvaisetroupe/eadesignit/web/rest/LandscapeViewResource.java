@@ -6,7 +6,7 @@ import com.mauvaisetroupe.eadesignit.repository.view.LandscapeLight;
 import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
 import com.mauvaisetroupe.eadesignit.service.diagram.drawio.MXFileSerializer;
 import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
-import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
+import com.mauvaisetroupe.eadesignit.service.dto.util.CapabilityUtil;
 import com.mauvaisetroupe.eadesignit.web.rest.dto.LandscapeDTO;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.io.IOException;
