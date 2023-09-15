@@ -12,7 +12,7 @@ import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityItemDTO;
-import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -62,7 +62,6 @@ public class ApplicationCapabilityImportService {
     ) throws EncryptedDocumentException, IOException {
         ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
         List<ApplicationCapabilityDTO> result = new ArrayList<ApplicationCapabilityDTO>();
-        CapabilityUtil capabilityUtil = new CapabilityUtil();
         int i = 0;
         for (String sheetname : sheetnames) {
             LandscapeView landscape = null;
@@ -75,11 +74,12 @@ public class ApplicationCapabilityImportService {
             for (Map<String, Object> map : capabilitiesDF) {
                 ApplicationCapabilityItemDTO itemDTO = new ApplicationCapabilityItemDTO();
 
-                CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, null, 0);
-                CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, null, 1);
-                CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, null, 2);
-                CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, null, 3);
-                itemDTO.setCapabilityImportDTO(capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import));
+                CapabilityDTO l0Import = new CapabilityDTO((String) map.get(L0_NAME), 0);
+                CapabilityDTO l1Import = new CapabilityDTO((String) map.get(L1_NAME), 1);
+                CapabilityDTO l2Import = new CapabilityDTO((String) map.get(L2_NAME), 1);
+                CapabilityDTO l3Import = new CapabilityDTO((String) map.get(L3_NAME), 3);
+                CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO(l0Import, l1Import, l2Import, l3Import);
+                itemDTO.setCapabilityImportDTO(capabilityImportDTO);
 
                 itemDTO.setApplicationNames(mapArrayToString(map));
 

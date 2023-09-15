@@ -5,7 +5,6 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
-import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -48,21 +47,17 @@ public class CapabilityImportService {
         List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(CAPABILITY_SHEET_NAME);
 
         List<CapabilityImportDTO> result = new ArrayList<CapabilityImportDTO>();
-        CapabilityUtil capabilityUtil = new CapabilityUtil();
-        CapabilityDTO rootCapabilityDTO = new CapabilityDTO();
-        rootCapabilityDTO.setName("ROOT");
-        rootCapabilityDTO.setLevel(-2);
+        CapabilityDTO rootCapabilityDTO = new CapabilityDTO("ROOT", -2);
         Capability rootCapability = findOrCreateCapability(rootCapabilityDTO, null);
         capabilityRepository.save(rootCapability);
 
         for (Map<String, Object> map : capabilitiesDF) {
-            CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO();
             // new capability created from excel, without parent assigned
-            CapabilityDTO l0Import = capabilityUtil.mapArrayToCapability(map, L0_NAME, L0_DESCRIPTION, 0);
-            CapabilityDTO l1Import = capabilityUtil.mapArrayToCapability(map, L1_NAME, L1_DESCRIPTION, 1);
-            CapabilityDTO l2Import = capabilityUtil.mapArrayToCapability(map, L2_NAME, L2_DESCRIPTION, 2);
-            CapabilityDTO l3Import = capabilityUtil.mapArrayToCapability(map, L3_NAME, L3_DESCRIPTION, 3);
-            capabilityImportDTO = capabilityUtil.mappArrayToCapabilityImport(l0Import, l1Import, l2Import, l3Import);
+            CapabilityDTO l0Import = new CapabilityDTO((String) map.get(L0_NAME), 0);
+            CapabilityDTO l1Import = new CapabilityDTO((String) map.get(L1_NAME), 1);
+            CapabilityDTO l2Import = new CapabilityDTO((String) map.get(L2_NAME), 1);
+            CapabilityDTO l3Import = new CapabilityDTO((String) map.get(L3_NAME), 3);
+            CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO(l0Import, l1Import, l2Import, l3Import);
             capabilityImportDTO.setDomain((String) map.get(SUR_DOMAIN));
 
             boolean lineIsValid = checkLineIsValid(capabilityImportDTO);
@@ -72,9 +67,10 @@ public class CapabilityImportService {
                     // Find L0 without parent (sur-domaine) to find goo L0 even if Sur-domaine not completed correctly
                     // Assumption : one L0 has a unique name
                     Capability l0 = findOrCreateCapability(l0Import, null);
-                    CapabilityDTO surdomainDTO = new CapabilityDTO();
-                    surdomainDTO.setName(capabilityImportDTO.getDomain() != null ? capabilityImportDTO.getDomain() : "UNKNOWN");
-                    surdomainDTO.setLevel(-1);
+                    CapabilityDTO surdomainDTO = new CapabilityDTO(
+                        capabilityImportDTO.getDomain() != null ? capabilityImportDTO.getDomain() : "UNKNOWN",
+                        -1
+                    );
                     Capability surDomainCapability = findOrCreateCapability(surdomainDTO, rootCapabilityDTO);
                     if (surDomainCapability.getParent() == null) {
                         rootCapability.addSubCapabilities(surDomainCapability);

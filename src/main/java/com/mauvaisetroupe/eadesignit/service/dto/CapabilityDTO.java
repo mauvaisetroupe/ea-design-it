@@ -1,7 +1,6 @@
 package com.mauvaisetroupe.eadesignit.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import java.io.Serializable;
@@ -9,6 +8,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CapabilityDTO implements Serializable {
+
+    public CapabilityDTO(Long id, String name, String description, String comment, Integer level) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.comment = comment;
+        this.level = level;
+    }
+
+    public CapabilityDTO(String name, Integer level) {
+        this.name = name;
+        this.level = level;
+    }
 
     private static final long serialVersionUID = 1L;
 

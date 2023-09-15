@@ -6,12 +6,13 @@ import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
 public class CapabilityMapper {
 
     public CapabilityDTO clone(Capability capability) {
-        CapabilityDTO capabilityDTO = new CapabilityDTO();
-        capabilityDTO.setId(capability.getId());
-        capabilityDTO.setName(capability.getName());
-        capabilityDTO.setDescription(capability.getDescription());
-        capabilityDTO.setComment(capability.getComment());
-        capabilityDTO.setLevel(capability.getLevel());
+        CapabilityDTO capabilityDTO = new CapabilityDTO(
+            capability.getId(),
+            capability.getName(),
+            capability.getDescription(),
+            capability.getComment(),
+            capability.getLevel()
+        );
         return capabilityDTO;
     }
 }
