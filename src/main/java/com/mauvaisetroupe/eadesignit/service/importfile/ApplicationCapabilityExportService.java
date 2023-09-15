@@ -137,7 +137,7 @@ public class ApplicationCapabilityExportService {
     }
 
     private String getCapabilityFullPath(Capability capability) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         String sep = "";
         while (capability.getParent() != null) {
             buffer.insert(0, sep).insert(0, capability.getName());

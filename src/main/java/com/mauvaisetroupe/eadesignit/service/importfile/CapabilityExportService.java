@@ -96,7 +96,7 @@ public class CapabilityExportService {
     }
 
     private String createRule(int rowwNumber) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         String CHEVRON = "\" > \"";
         String SEP = ",";
         buffer
