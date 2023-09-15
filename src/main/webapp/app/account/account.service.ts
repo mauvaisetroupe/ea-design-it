@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 
 export default class AccountService {
   public anonymousReadAllowed = true;
+  public initialized = false;
 
   constructor(private store: Store<any>, private router: VueRouter) {
     this.init();
@@ -11,6 +12,7 @@ export default class AccountService {
 
   public init(): void {
     this.retrieveProfiles();
+    this.retrieveAnonymousProperty();
     // remember me...
     const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
     if (!this.store.getters.account && !this.store.getters.logon && token) {
@@ -30,6 +32,24 @@ export default class AccountService {
           resolve(true);
         })
         .catch(() => resolve(false));
+    });
+  }
+
+  public retrieveAnonymousProperty(): Promise<boolean> {
+    console.log('About to call api/account/anoymous-reader');
+    return new Promise(resolve => {
+      axios
+        .get<any>('api/account/anoymous-reader')
+        .then(res => {
+          this.anonymousReadAllowed = res.data;
+          this.initialized = true;
+          console.log('api/account/anoymous-reader : ' + this.anonymousReadAllowed);
+          resolve(this.anonymousReadAllowed);
+        })
+        .catch(() => {
+          this.initialized = true;
+          resolve(this.anonymousReadAllowed);
+        });
     });
   }
 

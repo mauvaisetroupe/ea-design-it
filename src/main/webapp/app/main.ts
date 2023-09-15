@@ -64,6 +64,17 @@ const applicationService = new ApplicationService();
 router.beforeEach(async (to, from, next) => {
   // Check if anonymous read is allowed
   console.log('SHOULD LOAD ANONYMOUS READING PARAMETER');
+  if (accountService.initialized) {
+    doProcess(to, from, next);
+  } else {
+    accountService.retrieveAnonymousProperty().then(() => {
+      doProcess(to, from, next);
+    });
+  }
+});
+
+function doProcess(to, from, next) {
+  console.log('accountService.anonymousReadAllowed : ' + accountService.anonymousReadAllowed);
 
   if (!to.matched.length) {
     next('/not-found');
@@ -90,7 +101,7 @@ router.beforeEach(async (to, from, next) => {
     // no authorities, so just proceed
     next();
   }
-});
+}
 
 /* tslint:disable */
 new Vue({
