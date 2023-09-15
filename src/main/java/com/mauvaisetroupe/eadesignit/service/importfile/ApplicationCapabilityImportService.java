@@ -54,80 +54,83 @@ public class ApplicationCapabilityImportService {
     public static final String L3_NAME = "CapabilityL3";
     public static final String FULL_PATH = "full.path";
 
-    public List<ApplicationCapabilityDTO> importExcel(
-        InputStream excel,
-        String originalFilename,
-        String[] sheetnames,
-        String[] landscapeName
-    ) throws EncryptedDocumentException, IOException {
+    public List<ApplicationCapabilityItemDTO> importExcel(InputStream excel, String sheetname)
+        throws EncryptedDocumentException, IOException {
         ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
-        List<ApplicationCapabilityDTO> result = new ArrayList<ApplicationCapabilityDTO>();
-        int i = 0;
-        for (String sheetname : sheetnames) {
-            LandscapeView landscape = null;
-            if (landscapeName != null && landscapeName.length > i) {
-                landscape = landscapeViewRepository.findByDiagramNameIgnoreCase(landscapeName[i]);
+        List<ApplicationCapabilityItemDTO> result = new ArrayList<ApplicationCapabilityItemDTO>();
+
+        // Find diagramname in Summary sheet
+        List<Map<String, Object>> summaryDF = capabilityFlowExcelReader.getSheet(ExportFullDataService.SUMMARY_SHEET);
+        String diagramName = findLandscape(summaryDF, sheetname);
+
+        LandscapeView landscape = landscapeViewRepository.findByDiagramNameIgnoreCase(diagramName);
+
+        List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(sheetname);
+        for (Map<String, Object> map : capabilitiesDF) {
+            ApplicationCapabilityItemDTO itemDTO = new ApplicationCapabilityItemDTO();
+
+            CapabilityDTO l0Import = null, l1Import = null, l2Import = null, l3Import = null;
+            String domain = null;
+            if (map.containsKey(FULL_PATH)) {
+                String fullPath = (String) map.get(FULL_PATH);
+                String[] capabilitiesName = fullPath.split(" > ");
+                if (capabilitiesName.length > 0) domain = capabilitiesName[0];
+                if (capabilitiesName.length > 1) l0Import = new CapabilityDTO(capabilitiesName[1], 0);
+                if (capabilitiesName.length > 2) l1Import = new CapabilityDTO(capabilitiesName[2], 1);
+                if (capabilitiesName.length > 3) l2Import = new CapabilityDTO(capabilitiesName[3], 2);
+                if (capabilitiesName.length > 4) l3Import = new CapabilityDTO(capabilitiesName[4], 3);
+            } else {
+                if (map.get(L0_NAME) != null) l0Import = new CapabilityDTO((String) map.get(L0_NAME), 0);
+                if (map.get(L1_NAME) != null) l1Import = new CapabilityDTO((String) map.get(L1_NAME), 1);
+                if (map.get(L2_NAME) != null) l2Import = new CapabilityDTO((String) map.get(L2_NAME), 2);
+                if (map.get(L3_NAME) != null) l3Import = new CapabilityDTO((String) map.get(L3_NAME), 3);
             }
-            List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(sheetname);
-            ApplicationCapabilityDTO applicationCapabilityDTO = new ApplicationCapabilityDTO();
-            applicationCapabilityDTO.setSheetname(sheetname);
-            for (Map<String, Object> map : capabilitiesDF) {
-                ApplicationCapabilityItemDTO itemDTO = new ApplicationCapabilityItemDTO();
+            CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO(l0Import, l1Import, l2Import, l3Import);
+            itemDTO.setCapabilityImportDTO(capabilityImportDTO);
+            itemDTO.setApplicationNames(mapArrayToString(map));
 
-                CapabilityDTO l0Import = null, l1Import = null, l2Import = null, l3Import = null;
-                if (map.containsKey(FULL_PATH)) {
-                    String fullPath = (String) map.get(FULL_PATH);
-                    String[] capabilitiesName = fullPath.split(" > ");
-                    if (capabilitiesName.length > 0) l0Import = new CapabilityDTO(capabilitiesName[0], 0);
-                    if (capabilitiesName.length > 1) l1Import = new CapabilityDTO(capabilitiesName[1], 1);
-                    if (capabilitiesName.length > 2) l2Import = new CapabilityDTO(capabilitiesName[2], 2);
-                    if (capabilitiesName.length > 3) l3Import = new CapabilityDTO(capabilitiesName[3], 3);
-                } else {
-                    if (map.get(L0_NAME) != null) l0Import = new CapabilityDTO((String) map.get(L0_NAME), 0);
-                    if (map.get(L1_NAME) != null) l1Import = new CapabilityDTO((String) map.get(L1_NAME), 1);
-                    if (map.get(L2_NAME) != null) l2Import = new CapabilityDTO((String) map.get(L2_NAME), 2);
-                    if (map.get(L3_NAME) != null) l3Import = new CapabilityDTO((String) map.get(L3_NAME), 3);
-                }
-                CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO(l0Import, l1Import, l2Import, l3Import);
-                itemDTO.setCapabilityImportDTO(capabilityImportDTO);
-                itemDTO.setApplicationNames(mapArrayToString(map));
+            Optional<Capability> capabilityOptional = findCapability(l0Import, l1Import, l2Import, l3Import, itemDTO);
+            List<Application> applications = findApplication(map, itemDTO);
 
-                Optional<Capability> capabilityOptional = findCapability(l0Import, l1Import, l2Import, l3Import, itemDTO);
-                List<Application> applications = findApplication(map, itemDTO);
-
-                if (applications.isEmpty()) {
-                    String error = "No application found : " + map;
-                    log.error(error);
-                } else if (capabilityOptional.isEmpty()) {
-                    String error = "No Capaility found : " + map;
-                    log.error(error);
-                } else {
-                    Capability capability = capabilityOptional.get();
-                    for (Application application : applications) {
-                        CapabilityApplicationMapping capabilityApplicationMapping = capabilityApplicationMappingRepository.findByApplicationAndCapability(
-                            application,
-                            capability
-                        );
-                        if (capabilityApplicationMapping == null) {
-                            capabilityApplicationMapping = new CapabilityApplicationMapping();
-                            capabilityApplicationMappingRepository.save(capabilityApplicationMapping);
-                        }
-                        application.addCapabilityApplicationMapping(capabilityApplicationMapping);
-                        capability.addCapabilityApplicationMapping(capabilityApplicationMapping);
-                        if (landscape != null) {
-                            landscape.addCapabilityApplicationMapping(capabilityApplicationMapping);
-                        }
+            if (applications.isEmpty()) {
+                String error = "No application found : " + map;
+                log.error(error);
+            } else if (capabilityOptional.isEmpty()) {
+                String error = "No Capaility found : " + map;
+                log.error(error);
+            } else {
+                Capability capability = capabilityOptional.get();
+                for (Application application : applications) {
+                    CapabilityApplicationMapping capabilityApplicationMapping = capabilityApplicationMappingRepository.findByApplicationAndCapability(
+                        application,
+                        capability
+                    );
+                    if (capabilityApplicationMapping == null) {
+                        capabilityApplicationMapping = new CapabilityApplicationMapping();
+                        capabilityApplicationMappingRepository.save(capabilityApplicationMapping);
                     }
-                    if (itemDTO.getImportStatus() == null) {
-                        itemDTO.setImportStatus(ImportStatus.NEW);
+                    application.addCapabilityApplicationMapping(capabilityApplicationMapping);
+                    capability.addCapabilityApplicationMapping(capabilityApplicationMapping);
+                    if (landscape != null) {
+                        landscape.addCapabilityApplicationMapping(capabilityApplicationMapping);
                     }
                 }
-                applicationCapabilityDTO.getDtos().add(itemDTO);
+                if (itemDTO.getImportStatus() == null) {
+                    itemDTO.setImportStatus(ImportStatus.NEW);
+                }
             }
-            result.add(applicationCapabilityDTO);
-            i++;
+            result.add(itemDTO);
         }
         return result;
+    }
+
+    private String findLandscape(List<Map<String, Object>> summaryDF, String sheetname) {
+        for (Map<String, Object> row : summaryDF) {
+            if (sheetname.equals(row.get("sheet hyperlink"))) {
+                return (String) row.get("landscape.name");
+            }
+        }
+        throw new IllegalStateException("Error with sheet name " + sheetname);
     }
 
     private List<Application> findApplication(Map<String, Object> map, ApplicationCapabilityItemDTO applicationCapabilityDTO) {

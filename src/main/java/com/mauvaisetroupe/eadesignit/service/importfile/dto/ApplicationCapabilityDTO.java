@@ -8,6 +8,11 @@ public class ApplicationCapabilityDTO {
     private String sheetname;
     private List<ApplicationCapabilityItemDTO> dtos = new ArrayList<>();
 
+    public ApplicationCapabilityDTO(String sheetname, List<ApplicationCapabilityItemDTO> dtos) {
+        this.sheetname = sheetname;
+        this.dtos = dtos;
+    }
+
     public List<ApplicationCapabilityItemDTO> getDtos() {
         return dtos;
     }

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2 id="page-heading" data-cy="capabilityImportHeading">
-      <span id="capability-import-heading">Application/Capabilities Imports</span>
+    <h2 id="page-heading" data-cy="FlowImportHeading">
+      <span id="flow-import-heading">Cappabilities/Application mapping Import (multi-sheet)</span>
       <div class="d-flex justify-content-end" v-if="rowsLoaded || isFetching">
         <button class="btn btn-info mr-2" v-on:click="filterErrors" :disabled="isFetching">
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Filter Errors</span>
@@ -9,7 +9,7 @@
       </div>
     </h2>
 
-    <div v-if="!rowsLoaded">
+    <div>
       <div class="form-group">
         <div class="custom-file">
           <input type="file" class="custom-file-input" id="customFile" @change="handleFileUpload($event)" />
@@ -26,40 +26,28 @@
           <span class="h3">Choose sheets to import</span>
           [<a @click="selectAll">Select All</a>] [<a @click="selectNone">Select None</a>]
         </div>
-        <div class="row">
+
+        <div class="row m-3">
           <template v-for="(sheet, i) in sheetnames">
-            <div class="col-2" :key="i">
-              <input type="checkbox" v-model="checkedNames" :value="sheet" :id="'CHK-' + sheet" />
-              <label :for="sheet" class="">{{ sheet }}</label>
+            <div class="col-3" :key="'1-' + i">
+              <input type="checkbox" v-model="checkedNames" :value="sheet" :id="'CHK-' + sheet" :disabled="fileSubmited" />
+              <label :for="'CHK-' + sheet" class="">{{ sheet }} {{ landscapeMap[sheet] }}</label>
             </div>
-            <div class="col-2" :key="i">
-              <select v-model="selectedLandscape[i]" :disabled="!checkedNames.includes(sheet)">
-                <option value=""></option>
-                <option
-                  v-for="landscape in existingLandscapes"
-                  :value="landscape.diagramName"
-                  :key="landscape.id"
-                  :selected="landscape.diagramName === selectedLandscape[i]"
-                >
-                  {{ landscape.diagramName }}
-                </option>
-              </select>
-            </div>
-            <div class="col-2" :key="i"></div>
+            <div class="col-2" :key="'2-' + i"></div>
           </template>
         </div>
         <div class="form-group col-md-12" v-if="excelFile">
-          <button type="submit" class="btn btn-primary mb-2" v-on:click="submitFile()">Submit File</button>
+          <button type="submit" class="btn btn-primary mb-2" v-on:click="submitFile()" v-if="!fileSubmited">Submit File</button>
         </div>
       </div>
     </div>
 
     <br />
-    <div class="alert alert-warning" v-if="!isFetching && capabilitiesImports && capabilitiesImports.length === 0">
+    <div class="alert alert-warning" v-if="!isFetching && dtos && dtos.length === 0">
       <span>No capabilitiesImports found</span>
     </div>
 
-    <div v-for="capabilitiesImport in capabilitiesImports" :key="capabilitiesImport.sheetname">
+    <div v-for="capabilitiesImport in dtos" :key="capabilitiesImport.sheetname">
       <h4>{{ capabilitiesImport.sheetname }}</h4>
 
       <table class="table table-striped" aria-describedby="value">

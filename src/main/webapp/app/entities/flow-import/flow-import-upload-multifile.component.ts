@@ -128,41 +128,4 @@ export default class FlowImportUploadMultiFile extends Vue {
       this.dtos.push(newdto);
     });
   }
-
-  public getErrors() {
-    const errors = [];
-    this.notFilteredDtos.forEach(dto => {
-      let line = 1;
-      dto.flowImports.forEach(elem => {
-        const flowImport = elem;
-        if (
-          flowImport.importFunctionalFlowStatus === 'ERROR' ||
-          flowImport.importInterfaceStatus === 'ERROR' ||
-          flowImport.importDataFlowStatus === 'ERROR'
-        ) {
-          flowImport.id = dto.excelFileName + '_' + line.toString();
-          const errorRow = {
-            ...flowImport,
-          };
-          errors.push(errorRow);
-          console.log(errorRow);
-        }
-        line = line + 1;
-      });
-    });
-    return errors;
-  }
-
-  public exportErrors() {
-    const errors = this.getErrors();
-    let csvContent = 'data:text/csv;charset=utf-8,';
-    csvContent += [Object.keys(errors[0]).join(';'), ...errors.map(row => Object.values(row).join(';').replace(/\n/gm, ''))]
-      .join('\n')
-      .replace(/(^\[)|(\]$)/gm, '');
-    const data = encodeURI(csvContent);
-    const link = document.createElement('a');
-    link.setAttribute('href', data);
-    link.setAttribute('download', 'export.csv');
-    link.click();
-  }
 }

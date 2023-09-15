@@ -4,8 +4,6 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import CapabilityImportService from './capability-import.service';
 import AlertService from '@/shared/alert/alert.service';
-import { ILandscapeView, LandscapeView } from '@/shared/model/landscape-view.model';
-import LandscapeViewService from '../landscape-view/landscape-view.service';
 import { IApplicationCapabilityImport, IApplicationCapabilityImportItem } from '@/shared/model/application-capability-import.model';
 
 @Component({
@@ -14,82 +12,42 @@ import { IApplicationCapabilityImport, IApplicationCapabilityImportItem } from '
 export default class CapabilityImport extends Vue {
   @Inject('capabilityImportService') private capabilityImportService: () => CapabilityImportService;
   @Inject('alertService') private alertService: () => AlertService;
-  @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
 
-  public existingLandscapes: ILandscapeView[] = null;
-  public potentialLandscape: string[] = [];
-
-  public mounted(): void {
-    this.retrieveAllLandscapeViews();
-  }
-
-  public retrieveAllLandscapeViews(): void {
-    this.isFetching = true;
-    this.landscapeViewService()
-      .retrieve()
-      .then(
-        res => {
-          this.existingLandscapes = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
-
-  public capabilitiesImports: IApplicationCapabilityImport[] = [];
-  public filteredCapabilitiesImports: IApplicationCapabilityImport[] = [];
-
+  public dtos: IApplicationCapabilityImport[] = [];
+  public notFilteredDtos: IApplicationCapabilityImport[] = [];
+  public excelFileName = 'Browse File';
   public excelFile: File = null;
   public isFetching = false;
   public fileSubmited = false;
   public rowsLoaded = false;
-  public excelFileName = 'Browse File';
+
   public sheetnames: string[] = [];
   public checkedNames: string[] = [];
-  public selectedLandscape: string[] = [];
+  public landscapeMap = {};
+
+  // STEP 1 - Upload file and retreive all sheet with name starting with FLW
 
   public handleFileUpload(event): void {
+    console.log(event);
     this.excelFile = event.target.files[0];
     this.excelFileName = this.excelFile.name;
-  }
-
-  public submitFile(): void {
-    this.isFetching = true;
-    this.fileSubmited = true;
-    const sheetnamesMap: Map<string, string> = new Map();
-    this.selectedLandscape.forEach((landscape, i) => {
-      sheetnamesMap.set(this.sheetnames[i], landscape);
-    });
-    this.capabilityImportService()
-      .uploadMappingFile(this.excelFile, this.checkedNames, sheetnamesMap)
-      .then(
-        res => {
-          this.capabilitiesImports = res.data;
-          this.filteredCapabilitiesImports = this.capabilitiesImports;
-          this.isFetching = false;
-          this.rowsLoaded = true;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
   }
 
   public getSheetnames(): void {
     this.isFetching = true;
     this.capabilityImportService()
-      .getSheetNames(this.excelFile)
+      .getSummary(this.excelFile)
       .then(
         res => {
           this.isFetching = false;
-          this.sheetnames = res.data;
-          this.sheetnames.forEach((name, i) => {
-            if (name.startsWith('ADD')) {
-              this.checkedNames.push(name);
+          const summary = res.data;
+          summary.forEach(row => {
+            if (row['entity.type'] === 'Capability Mapping') {
+              const sheetname: string = row['sheet hyperlink'];
+              const landscape: string = row['landscape.name'];
+              this.checkedNames.push(sheetname);
+              this.sheetnames.push(sheetname);
+              this.landscapeMap[sheetname] = landscape;
             }
           });
         },
@@ -101,14 +59,64 @@ export default class CapabilityImport extends Vue {
   }
 
   public selectAll() {
-    this.checkedNames = this.sheetnames;
+    if (!this.fileSubmited) {
+      this.checkedNames = [];
+      this.checkedNames.push(...this.sheetnames);
+    }
   }
 
   public selectNone() {
-    this.checkedNames = [];
+    if (!this.fileSubmited) this.checkedNames = [];
   }
 
+  // Step 2 - Submit de file and selected sheet names
+
+  public submitFile(): void {
+    this.isFetching = true;
+    this.fileSubmited = true;
+    // send file n times, sheet by sheet
+    // this is not optimal, but it's the easier way to have a reactive behavior and avoid time out
+    // serialized to avoid database transactional problem
+    this.uploadOneSheet();
+  }
+
+  public uploadOneSheet() {
+    const sheetToProcess: string = this.checkedNames.shift();
+    this.capabilityImportService()
+      .uploadMappingFile(this.excelFile, [sheetToProcess])
+      .then(
+        res => {
+          this.dtos.push(...res.data);
+          this.notFilteredDtos.push(...res.data);
+          this.rowsLoaded = true;
+          if (this.checkedNames.length > 0) {
+            this.uploadOneSheet();
+          } else {
+            this.isFetching = false;
+          }
+        },
+        err => {
+          this.isFetching = false;
+          this.alertService().showHttpError(this, err.response);
+        }
+      );
+  }
+
+  // step 3 - Give possibility to filer errors
+
   public filterErrors() {
-    this.filteredCapabilitiesImports.forEach(c => (c.dtos = c.dtos.filter(d => d.importStatus === 'ERROR')));
+    this.dtos = [];
+    this.notFilteredDtos.forEach(dto => {
+      let newitems: IApplicationCapabilityImportItem[] = [];
+      dto.dtos.forEach(item => {
+        if (item.importStatus === 'ERROR') {
+          newitems.push(item);
+        }
+      });
+      let newdto: IApplicationCapabilityImport;
+      newdto.dtos = newitems;
+      newdto.sheetname = dto.sheetname;
+      this.dtos.push(newdto);
+    });
   }
 }

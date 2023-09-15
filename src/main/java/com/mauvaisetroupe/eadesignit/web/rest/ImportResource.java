@@ -20,6 +20,7 @@ import com.mauvaisetroupe.eadesignit.service.importfile.FlowImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.LandscapeExportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.PlantumlImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityItemDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.FlowImportDTO;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.ApplicationImportException;
@@ -173,10 +174,14 @@ public class ImportResource {
     @PostMapping("/import/application/capability/upload-file")
     public List<ApplicationCapabilityDTO> uploadapplicationCapabilityFile(
         @RequestPart MultipartFile file,
-        @RequestParam String[] sheetname,
-        @RequestParam String[] landscape
+        @RequestParam String[] sheetnames
     ) throws Exception {
-        return applicationCapabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename(), sheetname, landscape);
+        List<ApplicationCapabilityDTO> dtos = new ArrayList<>();
+        for (String sheetname : sheetnames) {
+            List<ApplicationCapabilityItemDTO> items = applicationCapabilityImportService.importExcel(file.getInputStream(), sheetname);
+            dtos.add(new ApplicationCapabilityDTO(sheetname, items));
+        }
+        return dtos;
     }
 
     @GetMapping(value = "export/landscape/{id}")
