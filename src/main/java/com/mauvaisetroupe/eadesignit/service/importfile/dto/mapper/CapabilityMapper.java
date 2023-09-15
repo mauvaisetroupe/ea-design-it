@@ -1,7 +1,7 @@
 package com.mauvaisetroupe.eadesignit.service.importfile.dto.mapper;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
-import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityDTO;
+import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
 
 public class CapabilityMapper {
 

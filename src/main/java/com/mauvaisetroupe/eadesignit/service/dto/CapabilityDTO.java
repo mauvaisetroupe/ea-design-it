@@ -1,4 +1,4 @@
-package com.mauvaisetroupe.eadesignit.service.importfile.dto;
+package com.mauvaisetroupe.eadesignit.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.Application;

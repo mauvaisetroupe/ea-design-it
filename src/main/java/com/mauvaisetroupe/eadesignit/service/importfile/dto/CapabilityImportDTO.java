@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.service.importfile.dto;
 
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
+import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
 
 public class CapabilityImportDTO {
 
