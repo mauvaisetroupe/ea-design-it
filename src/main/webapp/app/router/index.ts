@@ -27,7 +27,7 @@ const router = new Router({
       path: '/',
       name: 'Home',
       component: Home,
-      meta: { authorities: [Authority.ANONYMOUS_ALLOWED] },
+      meta: { authorities: [Authority.ANONYMOUS_ALLOWED, Authority.USER] },
     },
     {
       path: '/forbidden',
