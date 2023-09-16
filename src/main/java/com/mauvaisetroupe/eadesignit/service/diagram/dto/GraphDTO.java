@@ -165,8 +165,7 @@ public class GraphDTO {
     }
 
     /**
-     * @param sourceId
-     * @param targetId
+     * @param edgeId
      * @return
      */
     public Edge getEdge(String edgeId) {
