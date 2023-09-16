@@ -107,7 +107,7 @@ export default class CapabilityImport extends Vue {
   public filterErrors() {
     this.dtos = [];
     this.notFilteredDtos.forEach(dto => {
-      let newitems: IApplicationCapabilityImportItem[] = [];
+      const newitems: IApplicationCapabilityImportItem[] = [];
       dto.dtos.forEach(item => {
         if (item.importStatus === 'ERROR') {
           newitems.push(item);
