@@ -17,6 +17,12 @@ public class CapabilityDTO implements Serializable {
         this.level = level;
     }
 
+    public CapabilityDTO(String name, Integer level, String description) {
+        this.name = name;
+        this.level = level;
+        this.description = description;
+    }
+
     public CapabilityDTO(String name, Integer level) {
         this.name = name;
         this.level = level;

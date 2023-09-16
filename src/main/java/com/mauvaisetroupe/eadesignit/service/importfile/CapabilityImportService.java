@@ -54,10 +54,10 @@ public class CapabilityImportService {
         for (Map<String, Object> map : capabilitiesDF) {
             // new capability created from excel, without parent assigned
             CapabilityDTO l0Import = null, l1Import = null, l2Import = null, l3Import = null;
-            if (map.get(L0_NAME) != null) l0Import = new CapabilityDTO((String) map.get(L0_NAME), 0);
-            if (map.get(L1_NAME) != null) l1Import = new CapabilityDTO((String) map.get(L1_NAME), 1);
-            if (map.get(L2_NAME) != null) l2Import = new CapabilityDTO((String) map.get(L2_NAME), 2);
-            if (map.get(L3_NAME) != null) l3Import = new CapabilityDTO((String) map.get(L3_NAME), 3);
+            if (map.get(L0_NAME) != null) l0Import = new CapabilityDTO((String) map.get(L0_NAME), 0, (String) map.get(L0_DESCRIPTION));
+            if (map.get(L1_NAME) != null) l1Import = new CapabilityDTO((String) map.get(L1_NAME), 1, (String) map.get(L1_DESCRIPTION));
+            if (map.get(L2_NAME) != null) l2Import = new CapabilityDTO((String) map.get(L2_NAME), 2, (String) map.get(L2_DESCRIPTION));
+            if (map.get(L3_NAME) != null) l3Import = new CapabilityDTO((String) map.get(L3_NAME), 3, (String) map.get(L3_DESCRIPTION));
             CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO(l0Import, l1Import, l2Import, l3Import);
             capabilityImportDTO.setDomain((String) map.get(SUR_DOMAIN));
 
