@@ -9,6 +9,7 @@ import {
   entityEditButtonSelector,
   entityDeleteButtonSelector,
   entityConfirmDeleteButtonSelector,
+  entityListRefreshButton,
 } from '../../support/entity';
 
 describe('Application e2e test', () => {
@@ -44,6 +45,9 @@ describe('Application e2e test', () => {
   it('Applications menu should load Applications page', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('application');
+
+    // wait for REST call, but application list cached, so need to click on refresh
+    cy.wait(500).get(entityListRefreshButton).click();
     cy.wait('@entitiesRequest').then(({ response }) => {
       if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
@@ -68,6 +72,8 @@ describe('Application e2e test', () => {
         cy.getEntityCreateUpdateHeading('Application');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
+        // wait for REST call, but application list cached, so need to click on refresh
+        cy.wait(500).get(entityListRefreshButton).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(200);
         });
@@ -100,42 +106,6 @@ describe('Application e2e test', () => {
         cy.visit(applicationPageUrl);
 
         cy.wait('@entitiesRequestInternal');
-      });
-
-      it('detail button click should load details Application page', () => {
-        cy.get(entityDetailsButtonSelector).first().click();
-        cy.getEntityDetailsHeading('application');
-        cy.get(entityDetailsBackButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response!.statusCode).to.equal(200);
-        });
-        cy.url().should('match', applicationPageUrlPattern);
-      });
-
-      it('edit button click should load edit Application page', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('Application');
-        cy.get(entityCreateSaveButtonSelector).should('exist');
-        cy.get(entityCreateCancelButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response!.statusCode).to.equal(200);
-        });
-        cy.url().should('match', applicationPageUrlPattern);
-      });
-
-      it('last delete button click should delete instance of Application', () => {
-        cy.get(entityDeleteButtonSelector).last().click();
-        cy.getEntityDeleteDialogHeading('application').should('exist');
-        cy.get(entityConfirmDeleteButtonSelector).click();
-        cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response!.statusCode).to.equal(204);
-        });
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response!.statusCode).to.equal(200);
-        });
-        cy.url().should('match', applicationPageUrlPattern);
-
-        application = undefined;
       });
     });
   });

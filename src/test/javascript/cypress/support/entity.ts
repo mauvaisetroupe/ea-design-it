@@ -17,6 +17,7 @@ export const entityDetailsBackButtonSelector = '[data-cy="entityDetailsBackButto
 export const entityEditButtonSelector = '[data-cy="entityEditButton"]';
 export const entityDeleteButtonSelector = '[data-cy="entityDeleteButton"]';
 export const entityConfirmDeleteButtonSelector = '[data-cy="entityConfirmDeleteButton"]';
+export const entityListRefreshButton = '[data-cy="entityListRefreshButton"]';
 
 // ***********************************************
 // End Specific Selector Attributes for Cypress

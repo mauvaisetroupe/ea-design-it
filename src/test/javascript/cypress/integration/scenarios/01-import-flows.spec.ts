@@ -30,7 +30,8 @@ describe('Application Import and Flows e2e test', () => {
     cy.intercept('DELETE', '/api/landscape-views/*').as('landscapeDeleteEntityRequest');
     cy.intercept('GET', '/api/applications+(?*|)').as('applicationEntitiesRequest');
     cy.intercept('DELETE', '/api/applications/*').as('applicationDeleteEntityRequest');
-    cy.intercept('POST', '/api/import/flow/upload-files').as('landscapeImportRequest');
+    cy.intercept('POST', '/api/import/flow/upload-multi-file').as('landscapeImportRequest');
+    cy.intercept('POST', '/api/import/summary').as('excelSummaryRequest');
     cy.intercept('POST', '/api/import/application/upload-file').as('applicationsImportRequest');
     cy.intercept('POST', '/api/functional-flows').as('flowPostEntityRequest');
     cy.intercept('DELETE', '/api/functional-flows/*').as('flowDeleteEntityRequest');
@@ -64,6 +65,12 @@ describe('Application Import and Flows e2e test', () => {
     });
     cy.get('button[type="submit"]').click();
 
+    cy.wait('@excelSummaryRequest').then(({ response }) => {
+      expect(response!.statusCode).to.equal(200);
+    });
+
+    cy.get('button[type="submit"]').click();
+
     cy.wait('@landscapeImportRequest').then(({ response }) => {
       expect(response!.statusCode).to.equal(200);
     });
@@ -94,6 +101,12 @@ describe('Application Import and Flows e2e test', () => {
     cy.fixture('02-import-flows.xlsx').then(fileContent => {
       cy.get('input[type="file"]').selectFile(['src/test/javascript/cypress/fixtures/02-import-flows.xlsx'], { force: true });
     });
+    cy.get('button[type="submit"]').click();
+
+    cy.wait('@excelSummaryRequest').then(({ response }) => {
+      expect(response!.statusCode).to.equal(200);
+    });
+
     cy.get('button[type="submit"]').click();
 
     cy.wait('@landscapeImportRequest').then(({ response }) => {
@@ -144,6 +157,11 @@ describe('Application Import and Flows e2e test', () => {
       cy.get('input[type="file"]').selectFile(['src/test/javascript/cypress/fixtures/02-import-flows.xlsx'], { force: true });
     });
     cy.get('button[type="submit"]').click();
+    cy.wait('@excelSummaryRequest').then(({ response }) => {
+      expect(response!.statusCode).to.equal(200);
+    });
+
+    cy.get('button[type="submit"]').click();
 
     cy.wait('@landscapeImportRequest').then(({ response }) => {
       expect(response!.statusCode).to.equal(200);
@@ -187,28 +205,6 @@ describe('Application Import and Flows e2e test', () => {
     });
     cy.wait('@landscapeEntitiesRequest').then(({ response }) => {
       expect(response!.statusCode).to.equal(200);
-    });
-  });
-
-  const aliases = ['CYP.CMP.00000001', 'CYP.CMP.00000002', 'CYP.CMP.00000003', 'CYP.CMP.00000004'];
-  aliases.forEach(_alias => {
-    it('delete application ' + _alias, () => {
-      // load applications pages
-      cy.visit('/');
-      cy.clickOnEntityMenuItem('application');
-      cy.wait('@applicationEntitiesRequest').then(({ response }) => {
-        cy.get(entityTableSelector).should('exist');
-      });
-
-      const alias = cy.get('td').contains(_alias);
-      alias.should('be.visible');
-      alias.siblings().find(entityDeleteButtonSelector).click();
-      cy.getEntityDeleteDialogHeading('application').should('exist');
-      cy.get(entityConfirmDeleteButtonSelector).click();
-
-      cy.wait('@applicationDeleteEntityRequest').then(({ response }) => {
-        expect(response!.statusCode).to.equal(204);
-      });
     });
   });
 

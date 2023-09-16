@@ -9,7 +9,7 @@
           </button>
         </router-link>
 
-        <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
+        <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching" data-cy="entityListRefreshButton">
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
         </button>
         <router-link :to="{ name: 'ApplicationCreate' }" custom v-slot="{ navigate }">
@@ -118,6 +118,7 @@
       responsive
       :filter="filter"
       :filter-included-fields="filterOn"
+      data-cy="entityTable"
     >
       <!-- <template #thead-top="data">
         <TR>
