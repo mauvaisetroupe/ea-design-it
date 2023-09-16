@@ -42,16 +42,16 @@ public class ApplicationCapabilityImportService {
     @Autowired
     private LandscapeViewRepository landscapeViewRepository;
 
-    public static final String APP_NAME_1 = "ApplicationName";
-    public static final String APP_NAME_2 = "ApplicationName2";
-    public static final String APP_NAME_3 = "ApplicationName3";
-    public static final String APP_NAME_4 = "ApplicationName4";
-    public static final String APP_NAME_5 = "ApplicationName5";
+    public static final String APP_NAME_1 = "application.name.1";
+    public static final String APP_NAME_2 = "application.name.2";
+    public static final String APP_NAME_3 = "application.name.3";
+    public static final String APP_NAME_4 = "application.name.4";
+    public static final String APP_NAME_5 = "application.name.5";
 
-    public static final String L0_NAME = "CapabilityL0";
-    public static final String L1_NAME = "CapabilityL1";
-    public static final String L2_NAME = "CapabilityL2";
-    public static final String L3_NAME = "CapabilityL3";
+    public static final String L0_NAME = "capability.L0";
+    public static final String L1_NAME = "capability.L1";
+    public static final String L2_NAME = "capability.L2";
+    public static final String L3_NAME = "capability.L3";
     public static final String FULL_PATH = "full.path";
 
     public List<ApplicationCapabilityItemDTO> importExcel(InputStream excel, String sheetname)
