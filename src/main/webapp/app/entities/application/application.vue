@@ -35,7 +35,7 @@
       <span>No applications found</span>
     </div>
 
-    <div class="border p-2 m-1">
+    <div class="border p-2 m-1" v-if="applications && applications.length > 0">
       <input type="text" placeholder="Filter by text" v-model="filter" />
       <br />
       <a @click="showAdvanced = !showAdvanced" href="javascript:" class="text-decoration-none"
@@ -110,6 +110,7 @@
     <br />
 
     <b-table
+      v-if="applications && applications.length > 0"
       :items="filteredApplications"
       :fields="fields"
       :sort-by.sync="sortBy"
