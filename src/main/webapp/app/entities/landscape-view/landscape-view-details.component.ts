@@ -44,9 +44,6 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public functionalFlows: FunctionalFlow[] = [];
   public toBeSaved = false;
   public flowToDetach: number;
-
-  public reorderAlias = false;
-
   public layout = 'elk';
   public refreshingPlantuml = false;
   public groupComponents = true;
@@ -271,111 +268,6 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
         this.closeSearchFlow();
         this.getPlantUML(this.landscapeView.id);
       });
-  }
-
-  // FLOW REORGANIZATION
-
-  public startReorder() {
-    this.reorderAlias = true;
-    this.reorderAliasflowToSave = [];
-    this.reorderStepToSave = [];
-  }
-
-  public reorder(step: IFunctionalFlowStep, functionalFlow: IFunctionalFlow, event) {
-    const newFlowId: number = parseInt(event.target.value);
-    const newFunctionalFlow: IFunctionalFlow = this.landscapeView.flows.find(f => f.id === newFlowId);
-
-    // This is only for rendering page before save...
-    // add interface in new Flow
-    newFunctionalFlow.steps.push(step);
-    // remove interface from old Flow
-    functionalFlow.steps = functionalFlow.steps.filter(i => i.id != step.id);
-
-    this.addStepToSave(newFunctionalFlow, step);
-
-    // Add old & new Flows for later update by REST call
-    // if (this.reorderAliasflowToSave.filter(e => e.id === functionalFlow.id).length === 0) {
-    //   this.reorderAliasflowToSave.push(functionalFlow);
-    // }
-    // if (this.reorderAliasflowToSave.filter(e => e.id === newFunctionalFlow.id).length === 0) {
-    //   this.reorderAliasflowToSave.push(newFunctionalFlow);
-    // }
-
-    this.reorderAllSteps(functionalFlow);
-    this.reorderAllSteps(newFunctionalFlow);
-  }
-
-  public addStepToSave(newFunctionalFlow: IFunctionalFlow, step: IFunctionalFlowStep) {
-    // remove if already exist to avoid duplicate
-    // step.flow = newFunctionalFlow this cause an erro, for looping steps?
-    let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
-    newFunctionalFlowSimplified = { ...newFunctionalFlow };
-    newFunctionalFlowSimplified.steps = [];
-    step.flow = newFunctionalFlowSimplified;
-    this.reorderStepToSave.push(step);
-  }
-
-  public changeDescription(functionalFlow: IFunctionalFlow) {
-    // Add old & new Flows for later update by REST call
-    this.reorderAliasflowToSave = this.reorderAliasflowToSave.filter(e => e.id != functionalFlow.id);
-    this.reorderAliasflowToSave.push(functionalFlow);
-  }
-
-  public changeStepDescription(functionalFlow: IFunctionalFlow, step: IFunctionalFlowStep) {
-    // Add old & new Flows for later update by REST call
-    this.reorderStepToSave = this.reorderStepToSave.filter(s => s.id != step.id);
-    let newFunctionalFlowSimplified: IFunctionalFlow = new FunctionalFlow();
-    newFunctionalFlowSimplified = { ...functionalFlow };
-    newFunctionalFlowSimplified.steps = [];
-    step.flow = newFunctionalFlowSimplified;
-    this.reorderStepToSave.push(step);
-  }
-
-  public cancelReorder() {
-    this.landscapeViewService()
-      .find(this.landscapeView.id)
-      .then(res => {
-        this.landscapeView = res.landscape;
-        this.consolidatedCapability = res.consolidatedCapability;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-    this.reorderAlias = false;
-    this.reorderAliasflowToSave = [];
-  }
-
-  public saveReorder() {
-    const promises = [];
-    this.reorderAliasflowToSave.forEach(flow => {
-      promises.push(this.functionalFlowService().update(flow));
-    });
-    this.reorderStepToSave.forEach(step => {
-      promises.push(this.functionalFlowStepService().update(step));
-    });
-    Promise.all(promises).then(res => {
-      this.retrieveLandscapeView(this.landscapeView.id);
-      this.reorderAlias = false;
-      this.reorderAliasflowToSave = [];
-    });
-  }
-
-  public swap(flow: IFunctionalFlow, i: number, j: number) {
-    const tmp = flow.steps[i];
-    flow.steps.splice(i, 1, flow.steps[j]);
-    flow.steps.splice(j, 1, tmp);
-
-    // reorder all steps in flow
-    this.reorderAllSteps(flow);
-  }
-
-  public reorderAllSteps(flow: IFunctionalFlow) {
-    flow.steps.forEach((step, i) => {
-      if (step.stepOrder !== i + 1) {
-        step.stepOrder = i + 1;
-        this.addStepToSave(flow, step);
-      }
-    });
   }
 
   public exportExcel() {

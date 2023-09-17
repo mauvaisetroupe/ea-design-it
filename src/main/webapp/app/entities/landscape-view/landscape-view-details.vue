@@ -114,8 +114,6 @@
         <thead>
           <tr>
             <th scope="row"><span>Flow</span></th>
-            <th scope="row" v-if="reorderAlias"></th>
-            <th scope="row" v-if="reorderAlias"></th>
             <th scope="row"><span>Description</span></th>
             <th scope="row"><span>Step</span></th>
             <th scope="row"><span>Interface</span></th>
@@ -133,7 +131,7 @@
             >
               <tr v-bind:key="step.id" :class="i % 2 == 0 ? 'mycolor' : ''">
                 <td>
-                  <div v-if="!reorderAlias || !step.flowInterface.id">
+                  <div>
                     <router-link
                       :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }"
                       v-if="functionalFlow && j == 0"
@@ -141,55 +139,16 @@
                       {{ functionalFlow.alias }}
                     </router-link>
                   </div>
-                  <div v-if="reorderAlias && step.flowInterface.id">
-                    <select @change="reorder(step, functionalFlow, $event)" :id="step.id" class="btn-success">
-                      <option v-for="flow in landscapeView.flows" :key="flow.id" :value="flow.id" :selected="flow.id === functionalFlow.id">
-                        {{ flow.alias ? flow.alias : flow.id }}
-                      </option>
-                    </select>
-                  </div>
-                </td>
-                <td v-if="reorderAlias">
-                  <font-awesome-icon
-                    icon="chevron-up"
-                    class="btn-success"
-                    v-if="j != 0"
-                    @click="swap(functionalFlow, j, j - 1)"
-                  ></font-awesome-icon>
-                </td>
-                <td v-if="reorderAlias">
-                  <font-awesome-icon
-                    icon="chevron-down"
-                    class="btn-success"
-                    v-if="j != functionalFlow.steps.length - 1 && functionalFlow.steps.length > 1"
-                    @click="swap(functionalFlow, j, j + 1)"
-                  ></font-awesome-icon>
                 </td>
                 <td>
                   <span v-if="j == 0">
-                    <span v-if="!reorderAlias">{{ functionalFlow.description }}</span>
-                    <span v-else>
-                      <textarea
-                        style="width: 100%; min-width: 600px"
-                        rows="1"
-                        v-model="functionalFlow.description"
-                        @change="changeDescription(functionalFlow)"
-                      ></textarea>
-                    </span>
+                    <span>{{ functionalFlow.description }}</span>
                   </span>
                 </td>
                 <td>
                   <span v-if="step.description != 'EMPTYSTEP'">
                     {{ step.stepOrder }}.
-                    <span v-if="!reorderAlias">{{ step.description }}</span>
-                    <span v-else>
-                      <textarea
-                        style="width: 100%; min-width: 600px"
-                        rows="1"
-                        v-model="step.description"
-                        @change="changeStepDescription(functionalFlow, step)"
-                      ></textarea>
-                    </span>
+                    <span>{{ step.description }}</span>
                   </span>
                 </td>
                 <td>
@@ -253,7 +212,7 @@
                   </span>
                 </td>
                 <td class="text-right">
-                  <div class="btn-group" v-if="j == 0 && !reorderAlias">
+                  <div class="btn-group" v-if="j == 0">
                     <router-link
                       :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }"
                       custom
@@ -292,43 +251,7 @@
         </tbody>
       </table>
       <div class="row">
-        <div class="col-md-6">
-          <button
-            @click="startReorder()"
-            id="jh-create-entity"
-            data-cy="entityCreateButton"
-            class="btn btn-success jh-create-entity create-functional-flow"
-            title="Edit Flow Alias in order to move interfaces from on flow to another"
-            v-if="accountService().writeAuthorities && !reorderAlias"
-          >
-            <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Organize Flows</span>
-          </button>
-
-          <button
-            @click="saveReorder()"
-            id="jh-create-entity"
-            data-cy="entityCreateButton"
-            class="btn btn-success jh-create-entity create-functional-flow"
-            title="Edit Flow Alias in order to move interfaces from on flow to another"
-            v-if="reorderAlias && (reorderAliasflowToSave.length > 0 || reorderStepToSave.length > 0)"
-          >
-            <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span>Save</span>
-          </button>
-
-          <button
-            @click="cancelReorder()"
-            id="jh-create-entity"
-            data-cy="entityCreateButton"
-            class="btn btn-success jh-create-entity create-functional-flow"
-            title="Edit Flow Alias in order to move interfaces from on flow to another"
-            v-if="reorderAlias"
-          >
-            <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span>Cancel</span>
-          </button>
-        </div>
+        <div class="col-md-6"></div>
         <div class="col-md-6 d-flex justify-content-end" v-if="!reorderAlias">
           <span>
             <button
