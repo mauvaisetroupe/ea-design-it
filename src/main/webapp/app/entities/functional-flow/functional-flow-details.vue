@@ -123,6 +123,7 @@
         <table class="table table-striped">
           <thead>
             <tr>
+              <th scope="row"><span>#</span></th>
               <th scope="row"><span>Step</span></th>
               <th scope="row" v-if="reorderAlias"></th>
               <th scope="row" v-if="reorderAlias"></th>
@@ -137,7 +138,9 @@
           <tbody>
             <tr v-for="(step, i) in functionalFlow.steps" v-bind:key="step.id" :set="(inter = step.flowInterface)">
               <td>
-                {{ step.stepOrder }}.
+                {{ step.stepOrder }}
+              </td>
+              <td>
                 <span v-if="!reorderAlias">{{ step.description }}</span>
                 <span v-else>
                   <textarea
