@@ -252,7 +252,7 @@
       </table>
       <div class="row">
         <div class="col-md-6"></div>
-        <div class="col-md-6 d-flex justify-content-end" v-if="!reorderAlias">
+        <div class="col-md-6 d-flex justify-content-end">
           <span>
             <button
               class="btn btn-primary jh-create-entity create-functional-flow"
