@@ -19,6 +19,8 @@ import { IDataFlow } from '@/shared/model/data-flow.model';
 import { IFunctionalFlow, FunctionalFlow } from '@/shared/model/functional-flow.model';
 import FunctionalFlowService from './functional-flow.service';
 
+import SequenceDiagramService from '@/eadesignit/sequence-diagram/import.service';
+
 const validations: any = {
   functionalFlow: {
     alias: {},
@@ -63,9 +65,17 @@ export default class FunctionalFlowUpdate extends Vue {
 
   @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
 
+  @Inject('sequenceDiagramService') private sequenceDiagramService: () => SequenceDiagramService;
+
   public dataFlows: IDataFlow[] = [];
   public isSaving = false;
   public currentLanguage = '';
+  public plantuml = '';
+  public plantUMLImage = '';
+  public isFetching = false;
+  public importError = '';
+  public previewError = '';
+  public functionalFlowImport = null;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -85,6 +95,108 @@ export default class FunctionalFlowUpdate extends Vue {
       }
     );
   }
+
+  ////////////////////////////////////////////////
+  // On load, retrieve
+  // - FunctionFlow,
+  // - plantUML source fron flowID
+  // - plantUML image
+  // - table with potential interfaces (should be the same than flow detail)
+  /////////////////////////////////////////////////
+
+  // STEP 1 - Retrieve FunctionalFlow
+  public retrieveFunctionalFlow(functionalFlowId) {
+    this.functionalFlowService()
+      .find(functionalFlowId)
+      .then(res => {
+        this.functionalFlow = res;
+        this.getPlantUMLSourceFromFlowId(functionalFlowId);
+      })
+      .catch(error => {
+        this.alertService().showHttpError(this, error.response);
+      });
+  }
+
+  // STEP 2 - Retrieve plantuml source from flow ID
+  public getPlantUMLSourceFromFlowId(functionalFlowId) {
+    this.functionalFlowService()
+      .getPlantUMLSource(functionalFlowId, true, true)
+      .then(
+        res => {
+          this.plantuml = res.data;
+          this.isFetching = false;
+          this.getPlantUMLImageFromString();
+        },
+        err => {
+          console.log(err);
+        }
+      );
+  }
+
+  // STEP 3 : Retrieve plantuml Image from plantuml source
+  public getPlantUMLImageFromString() {
+    this.sequenceDiagramService()
+      .getPlantUMLFromString(this.plantuml)
+      .then(
+        res => {
+          console.log('CCCCC');
+          this.plantUMLImage = res.data;
+          this.isFetching = false;
+          this.previewError = '';
+          this.importPlantuml();
+        },
+        err => {
+          console.log(err);
+          this.plantUMLImage = '';
+          this.functionalFlow = null;
+          this.previewError = err;
+        }
+      );
+  }
+
+  // STEP 3 : Retrieve interface list from plantuml Source
+  public importPlantuml() {
+    this.sequenceDiagramService()
+      .importPlantuml(this.plantuml)
+      .then(
+        res => {
+          this.functionalFlowImport = res.data;
+          this.isFetching = false;
+          this.importError = '';
+        },
+        err => {
+          this.plantUMLImage = '';
+          this.functionalFlowImport = {};
+          this.importError = err;
+        }
+      );
+  }
+
+  public saveImport() {
+    // this.getPlantUML();
+    // this.sequenceDiagramService()
+    //   .saveImport(this.functionalFlow, this.selectedLandscape)
+    //   .then(
+    //     res => {
+    //       this.$router.push({ name: 'FunctionalFlowView', params: { functionalFlowId: res.data.id } });
+    //     },
+    //     err => {
+    //       this.plantUMLImage = '';
+    //       this.functionalFlow = '';
+    //       this.importError = err;
+    //     }
+    //   );
+  }
+
+  public changeInterface(flowimportLine) {
+    if (flowimportLine.selectedInterface && flowimportLine.selectedInterface.protocol) {
+      flowimportLine.protocol = flowimportLine.selectedInterface.protocol;
+    }
+  }
+
+  //////////////////////////////////////////////////
+  // SAVE
+  //////////////////////////////////////////////////
 
   public assignLandscape(): ILandscapeView {
     // is landcaspe ID pass as param
@@ -166,17 +278,6 @@ export default class FunctionalFlowUpdate extends Vue {
           this.alertService().showHttpError(this, error.response);
         });
     }
-  }
-
-  public retrieveFunctionalFlow(functionalFlowId): void {
-    this.functionalFlowService()
-      .find(functionalFlowId)
-      .then(res => {
-        this.functionalFlow = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
   }
 
   public previousState(): void {
