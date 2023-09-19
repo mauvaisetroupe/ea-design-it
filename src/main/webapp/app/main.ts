@@ -37,6 +37,7 @@ import ApplicationService from '@/entities/application/application.service';
 import ExportService from '@/eadesignit/export.service';
 import ExternalSystemService from '@/entities/external-system/external-system.service';
 import FullExportService from '@/eadesignit/full-export/full-export.service';
+import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
@@ -140,6 +141,7 @@ new Vue({
     externalSystemService: () => new ExternalSystemService(),
 
     fullExportService: () => new FullExportService(),
+    functionalFlowService: () => new FunctionalFlowService(),
   },
   store,
   created: function () {

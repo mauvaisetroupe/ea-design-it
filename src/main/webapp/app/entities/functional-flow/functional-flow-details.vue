@@ -245,10 +245,19 @@
             title="Edit Flow Alias in order to move interfaces from on flow to another"
             v-if="accountService().writeAuthorities && !reorderAlias"
           >
-            <font-awesome-icon icon="plus"></font-awesome-icon>
+            <font-awesome-icon icon="pencil-alt"> </font-awesome-icon>
             <span> Organize Flows</span>
           </button>
-
+          <router-link
+            v-if="functionalFlow.id && !reorderAlias"
+            :to="{ name: 'SequenceDiagramImport', query: { functionalFlowId: functionalFlow.id, l: la } }"
+            custom
+            v-slot="{ navigate }"
+          >
+            <button @click="navigate" class="btn btn-primary" v-if="accountService().writeAuthorities">
+              <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit in plantML editor</span>
+            </button>
+          </router-link>
           <button
             @click="saveReorder()"
             id="jh-create-entity"
