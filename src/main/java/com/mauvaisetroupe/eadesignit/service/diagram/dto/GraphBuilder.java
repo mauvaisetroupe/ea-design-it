@@ -86,7 +86,7 @@ public class GraphBuilder {
             Application target = getApplication(interface1.getTarget(), interface1.getTargetComponent(), null);
             graph.addApplication(target);
             String id = flow.getId() + "-" + step.getStepOrder();
-            String _label = addStepOrder ? step.getStepOrder() + ". " : "" + WordUtils.wrap(step.getDescription(), 50, "\\n", false);
+            String _label = (addStepOrder ? step.getStepOrder() + ". " : "") + WordUtils.wrap(step.getDescription(), 50, "\\n", false);
             Label label = new Label(_label, null);
             if (interface1.getProtocol() != null) {
                 label.addMetadata(KEY_PROTOCOL, interface1.getProtocol().getName());
