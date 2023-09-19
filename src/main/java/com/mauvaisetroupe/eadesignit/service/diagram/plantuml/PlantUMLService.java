@@ -125,14 +125,14 @@ public class PlantUMLService {
 
     public String getFunctionalFlowDiagramSVG(FunctionalFlow functionalFlow, DiagramType diagramType) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graph = graphBuilder.createGraph(functionalFlow);
+        GraphDTO graph = graphBuilder.createGraph(functionalFlow, true);
         String plantUMLSource = createPlantUMLSource(graph, diagramType, false, true, Layout.smetana, false, true);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getFunctionalFlowDiagramSource(FunctionalFlow functionalFlow, DiagramType diagramType) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graph = graphBuilder.createGraph(functionalFlow);
+        GraphDTO graph = graphBuilder.createGraph(functionalFlow, false);
         return createPlantUMLSource(graph, diagramType, false, false, Layout.smetana, false, false);
     }
 
@@ -171,6 +171,7 @@ public class PlantUMLService {
     }
 
     public String getSVGFromSource(String plantUMLSource) throws IOException {
+        plantUMLSource = plantUMLBuilder.preparePlantUMLSource(plantUMLSource);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource);
     }
 }

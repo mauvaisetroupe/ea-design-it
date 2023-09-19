@@ -32,6 +32,8 @@ public class PlantUMLBuilder {
 
     private final Logger log = LoggerFactory.getLogger(PlantUMLService.class);
     public static final String PLANTUML_SVG_CACHE = "com.mauvaisetroupe.eadesignit.service.plantuml.PlantUMLSerializer.svg";
+    private static final String START_UML = "@startuml\n";
+    private static final String EQUAL_CHARACTER = "=";
 
     public enum Layout {
         smetana,
@@ -292,5 +294,19 @@ public class PlantUMLBuilder {
             }
         }
         plantUMLSource.append("}\n");
+    }
+
+    public String preparePlantUMLSource(String plantUMLSource) {
+        if (plantUMLSource.endsWith(EQUAL_CHARACTER)) {
+            plantUMLSource = plantUMLSource.substring(0, plantUMLSource.length() - 1);
+        }
+        if (!plantUMLSource.startsWith(START_UML)) {
+            StringBuilder builder = new StringBuilder();
+            getPlantumlHeader(builder, Layout.smetana);
+            builder.append(plantUMLSource);
+            getPlantumlFooter(builder);
+            plantUMLSource = builder.toString();
+        }
+        return plantUMLSource;
     }
 }

@@ -14,23 +14,17 @@ import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowStepRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
+import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder;
 import com.mauvaisetroupe.eadesignit.service.dto.FlowImport;
 import com.mauvaisetroupe.eadesignit.service.dto.FlowImportLine;
 import com.mauvaisetroupe.eadesignit.service.identitier.IdentifierGenerator;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import net.sourceforge.plantuml.BlockUml;
-import net.sourceforge.plantuml.FileFormat;
-import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.core.Diagram;
-import net.sourceforge.plantuml.core.DiagramDescription;
 import net.sourceforge.plantuml.cucadiagram.Display;
 import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.Message;
@@ -66,9 +60,12 @@ public class PlantumlImportService {
     @Autowired
     private LandscapeViewRepository landscapeViewRepository;
 
+    @Autowired
+    private PlantUMLBuilder plantUMLBuilder;
+
     public FlowImport importPlantuml(String plantUMLSource) {
         FlowImport flowImport = new FlowImport();
-
+        plantUMLSource = plantUMLBuilder.preparePlantUMLSource(plantUMLSource);
         SourceStringReader reader = new SourceStringReader(plantUMLSource);
         BlockUml blockUml = reader.getBlocks().get(0);
         Diagram diagram = blockUml.getDiagram();
