@@ -189,6 +189,9 @@ public class PlantUMLBuilder {
     }
 
     public void getPlantumlFooter(StringBuilder plantUMLSource) {
+        if (!plantUMLSource.toString().endsWith("\n")) {
+            plantUMLSource.append("\n");
+        }
         plantUMLSource.append("@enduml\n");
     }
 
