@@ -171,7 +171,6 @@ public class PlantUMLService {
     }
 
     public String getSVGFromSource(String plantUMLSource) throws IOException {
-        plantUMLSource = plantUMLBuilder.preparePlantUMLSource(plantUMLSource);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource);
     }
 }

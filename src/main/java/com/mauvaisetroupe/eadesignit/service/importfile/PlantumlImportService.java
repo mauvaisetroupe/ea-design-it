@@ -15,6 +15,7 @@ import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowStepRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder;
+import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.Layout;
 import com.mauvaisetroupe.eadesignit.service.dto.FlowImport;
 import com.mauvaisetroupe.eadesignit.service.dto.FlowImportLine;
 import com.mauvaisetroupe.eadesignit.service.identitier.IdentifierGenerator;
@@ -63,9 +64,51 @@ public class PlantumlImportService {
     @Autowired
     private PlantUMLBuilder plantUMLBuilder;
 
+    private static final String START_UML = "@startuml\n";
+    public static final String END_UML = "@enduml";
+    private static final String EQUAL_CHARACTER = "=";
+
+    public String getPlantUMLSourceForEdition(String plantuml, boolean removeHeaderAndFooter, boolean protocolAsComment) {
+        if (removeHeaderAndFooter) {
+            // remove header... everithing end of hedaer
+            plantuml =
+                plantuml.substring(
+                    plantuml.indexOf(PlantUMLBuilder.END_OF_HEADER) + PlantUMLBuilder.END_OF_HEADER.length(),
+                    plantuml.length()
+                );
+            //remove footer
+            plantuml = plantuml.substring(0, plantuml.indexOf(END_UML));
+        }
+        if (protocolAsComment) {
+            //remove note
+            plantuml = plantuml.replaceAll("\nnote right\n(.*)\nend note", " // $1");
+        }
+        return plantuml;
+    }
+
+    public String preparePlantUMLSource(String plantUMLSource) {
+        // Remove strange '=' at the end of the string
+        if (plantUMLSource.endsWith(EQUAL_CHARACTER)) {
+            plantUMLSource = plantUMLSource.substring(0, plantUMLSource.length() - 1);
+        }
+        // Add header and footer if needed
+
+        if (!plantUMLSource.startsWith(START_UML)) {
+            StringBuilder builder = new StringBuilder();
+            plantUMLBuilder.getPlantumlHeader(builder, Layout.smetana);
+            builder.append(plantUMLSource);
+            plantUMLBuilder.getPlantumlFooter(builder);
+            plantUMLSource = builder.toString();
+        }
+        // transform // API in note
+        plantUMLSource = plantUMLSource.replaceAll(" // (.*)\n", "\nnote right\n$1\nend note\n");
+        System.out.println(plantUMLSource);
+        return plantUMLSource;
+    }
+
     public FlowImport importPlantuml(String plantUMLSource) {
         FlowImport flowImport = new FlowImport();
-        plantUMLSource = plantUMLBuilder.preparePlantUMLSource(plantUMLSource);
+        plantUMLSource = preparePlantUMLSource(plantUMLSource);
         SourceStringReader reader = new SourceStringReader(plantUMLSource);
         BlockUml blockUml = reader.getBlocks().get(0);
         Diagram diagram = blockUml.getDiagram();

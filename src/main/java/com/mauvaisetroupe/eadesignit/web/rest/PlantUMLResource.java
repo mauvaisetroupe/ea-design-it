@@ -14,6 +14,7 @@ import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.La
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService.DiagramType;
 import com.mauvaisetroupe.eadesignit.service.dto.PlantumlDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.PlantumlImportService;
 import io.undertow.util.BadRequestException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -50,8 +51,8 @@ public class PlantUMLResource {
     private final FlowInterfaceRepository flowInterfaceRepository;
     private final ApplicationRepository applicationRepository;
     private final CapabilityRepository capabilityRepository;
-
     private final PlantUMLService plantUMLSerializer;
+    private final PlantumlImportService plantumlImportService;
 
     private final Logger log = LoggerFactory.getLogger(PlantUMLResource.class);
 
@@ -61,7 +62,8 @@ public class PlantUMLResource {
         ApplicationRepository applicationRepository,
         FlowInterfaceRepository flowInterfaceRepository,
         CapabilityRepository capabilityRepository,
-        PlantUMLService plantUMLSerializer
+        PlantUMLService plantUMLSerializer,
+        PlantumlImportService plantumlImportService
     ) {
         this.landscapeViewRepository = landscapeViewRepository;
         this.functionalFlowRepository = functionalFlowRepository;
@@ -69,6 +71,7 @@ public class PlantUMLResource {
         this.flowInterfaceRepository = flowInterfaceRepository;
         this.plantUMLSerializer = plantUMLSerializer;
         this.capabilityRepository = capabilityRepository;
+        this.plantumlImportService = plantumlImportService;
     }
 
     @GetMapping(value = "plantuml/landscape-view/get-svg/{id}")
@@ -118,12 +121,16 @@ public class PlantUMLResource {
     @GetMapping(value = "plantuml/functional-flow/get-source/{id}")
     public ResponseEntity<Resource> getFunctionalFlowSource(
         @PathVariable Long id,
-        @RequestParam(required = false, defaultValue = "true") DiagramType diagramType
+        @RequestParam(required = false, defaultValue = "true") DiagramType diagramType,
+        @RequestParam(required = false, defaultValue = "false") boolean preparedForEdition
     ) throws IOException, BadRequestException {
         Optional<FunctionalFlow> functionalFlowOptional = functionalFlowRepository.findById(id);
 
         if (functionalFlowOptional.isPresent()) {
             String source = this.plantUMLSerializer.getFunctionalFlowDiagramSource(functionalFlowOptional.get(), diagramType);
+            if (preparedForEdition) {
+                source = plantumlImportService.getPlantUMLSourceForEdition(source, true, true);
+            }
             InputStreamResource inputStreamResource = new InputStreamResource(new ByteArrayInputStream(source.getBytes()));
             return ResponseEntity
                 .ok()
@@ -196,6 +203,7 @@ public class PlantUMLResource {
     public @ResponseBody String getSequenceDiagramSVG(@RequestBody String plantumlSource) throws IOException {
         plantumlSource = URLDecoder.decode(plantumlSource, StandardCharsets.UTF_8);
         plantumlSource = plantumlSource.replace("###CR##", "\n");
+        plantumlSource = plantumlImportService.preparePlantUMLSource(plantumlSource);
         return this.plantUMLSerializer.getSVGFromSource(plantumlSource);
     }
 }
