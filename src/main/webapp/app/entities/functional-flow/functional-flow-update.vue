@@ -1,5 +1,18 @@
 <template>
-  <div class="row justify-content-center">
+  <div>
+    <div class="row">
+      <h2 id="eaDesignItApp.functionalFlow.home.createOrEditLabel" data-cy="FunctionalFlowCreateUpdateHeading">
+        <span v-if="functionalFlow">
+          <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Edit FunctionalFlow -
+          {{ functionalFlow.description }}
+          <span v-if="this.$route.query.landscapeViewId"> for landscape {{ this.$route.query.landscapeViewId }}</span>
+        </span>
+        <span v-else>
+          <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Create a FunctionalFlow
+          <span v-if="this.$route.query.landscapeViewId"> for landscape {{ this.$route.query.landscapeViewId }}</span>
+        </span>
+      </h2>
+    </div>
     <div class="col-12">
       <b-tabs content-class="mt-3" card pills>
         <b-tab title="1. Edit information" active>
@@ -173,22 +186,60 @@
           </div>
         </b-tab>
         <b-tab title="2. Modify plantuml">
-          <h2 id="page-heading" data-cy="FlowImportHeading">Import Flow from Plantuml Sequence Diagram</h2>
           <div class="row">
-            <div class="col-10">
-              <textarea style="width: 100%; min-width: 600px" rows="10" v-model="plantuml"></textarea>
+            <div class="col-10 autocomplete">
+              <!-- <b-navbar toggleable="lg" type="dark" variant="info" class="col-10">
+                <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+                <b-collapse id="nav-collapse" is-nav>
+                  <b-navbar-nav class="ml-auto">
+                    <b-nav-form>
+                      <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
+                      <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+                    </b-nav-form>
+                  </b-navbar-nav>
+                </b-collapse>
+              </b-navbar> -->
+
+              <textarea
+                style="width: 100%; min-width: 600px"
+                rows="10"
+                v-model="plantuml"
+                @focusout="focusout"
+                @focus="focus"
+                @keydown.13="chooseItem"
+                @keydown.tab="chooseItem"
+                @keydown.40="moveDown"
+                @keydown.38="moveUp"
+              ></textarea>
+
+              <ul class="autocomplete-list" v-if="searchMatch.length > 0">
+                <li
+                  :key="'li' + index"
+                  :class="{ active: selectedIndex === index }"
+                  v-for="(result, index) in searchMatch"
+                  @click="selectItem(index), chooseItem()"
+                  v-html="highlightWord(result)"
+                ></li>
+              </ul>
             </div>
-            <div>
-              <button type="submit" class="btn btn-primary" data-cy="submit" @click="getPlantUMLImageFromString">Update Diagram</button>
+            <div class="col-2">
+              <div class="row p-1">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  data-cy="submit"
+                  @click="getPlantUMLImageFromString"
+                  :disabled="!plantumlModified"
+                >
+                  Update Diagram
+                </button>
+              </div>
             </div>
           </div>
           <div v-html="plantUMLImage" class="table-responsive"></div>
-          <div v-if="importError" class="alert alert-danger">Error during import</div>
+          <div v-if="previewError" class="alert alert-danger">Error during import</div>
         </b-tab>
         <b-tab title="3. Choose interfaces">
-          <h2 v-if="functionalFlowImport">
-            {{ functionalFlow.description }}
-          </h2>
           <div
             class="table-responsive"
             v-if="functionalFlowImport && functionalFlowImport.flowImportLines && functionalFlowImport.flowImportLines.length > 0"
@@ -205,7 +256,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="step in functionalFlowImport.flowImportLines" v-bind:key="step.id">
+                <tr v-for="(step, i) in functionalFlowImport.flowImportLines" v-bind:key="step.id">
                   <td>{{ step.order }}</td>
                   <td>
                     <span>{{ step.description }}</span>
@@ -223,11 +274,19 @@
                     <span v-else class="alert alert-danger">Not imported</span>
                   </td>
                   <td>
-                    <router-link v-if="step.protocol" :to="{ name: 'ProtocolView', params: { protocolId: step.protocol.id } }">
+                    <span v-if="step.protocol">
                       {{ step.protocol.name }}
-                    </router-link>
+                    </span>
                     <span v-else class="alert alert-warning">Not imported</span>
                   </td>
+                  <!-- <td>
+                    <datalist :id="'datalist'+i">
+                      <option v-for="inter in step.potentialInterfaces" :key="inter.id" :value="inter">
+                        {{ inter.alias }} ({{ inter.protocol.name }})
+                      </option>
+                    </datalist>
+                    <input :list="'datalist'+i" v-model="searchProtocolName" />
+                  </td> -->
                   <td>
                     <select v-if="step.potentialInterfaces" v-model="step.selectedInterface" @change="changeInterface(step)">
                       <option value=""></option>
@@ -246,12 +305,6 @@
 
     <div class="col-12">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
-        <h2 id="eaDesignItApp.functionalFlow.home.createOrEditLabel" data-cy="FunctionalFlowCreateUpdateHeading">
-          <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Create or edit a
-          FunctionalFlow
-          <span v-if="this.$route.query.landscapeViewId"> for landscape {{ this.$route.query.landscapeViewId }}</span>
-        </h2>
-
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
             <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span>Cancel</span>
@@ -271,3 +324,32 @@
   </div>
 </template>
 <script lang="ts" src="./functional-flow-update.component.ts"></script>
+<style scoped>
+.autocomplete-list {
+  position: absolute;
+  z-index: 2;
+  overflow: auto;
+  min-width: 250px;
+  max-height: 200px;
+  margin: 0;
+  margin-top: 5px;
+  padding: 0;
+  border: 1px solid #000000;
+  list-style: none;
+  border-radius: 4px;
+  background-color: #f6f6f6;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+}
+.autocomplete-list li {
+  margin: 0;
+  padding: 8px 15px;
+  border-bottom: 1px solid #000000;
+}
+.autocomplete-list li:last-child {
+  border-bottom: 0;
+}
+.autocomplete-list li:hover,
+.autocomplete-list li.active {
+  background-color: #e5e10d;
+}
+</style>

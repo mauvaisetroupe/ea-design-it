@@ -20,6 +20,8 @@ import { IFunctionalFlow, FunctionalFlow } from '@/shared/model/functional-flow.
 import FunctionalFlowService from './functional-flow.service';
 
 import SequenceDiagramService from '@/eadesignit/sequence-diagram/import.service';
+import ApplicationService from '../application/application.service';
+import { IApplication } from '@/shared/model/application.model';
 
 const validations: any = {
   functionalFlow: {
@@ -44,6 +46,10 @@ const validations: any = {
 
 @Component({
   validations,
+  watch: {
+    nbLines: 'onLinesChnaged',
+    plantuml: 'plantumlChange',
+  },
 })
 export default class FunctionalFlowUpdate extends Vue {
   @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
@@ -66,6 +72,9 @@ export default class FunctionalFlowUpdate extends Vue {
   @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
 
   @Inject('sequenceDiagramService') private sequenceDiagramService: () => SequenceDiagramService;
+
+  @Inject('applicationService') private applicationService: () => ApplicationService;
+  public applications: string[] = [];
 
   public dataFlows: IDataFlow[] = [];
   public isSaving = false;
@@ -94,6 +103,14 @@ export default class FunctionalFlowUpdate extends Vue {
         this.currentLanguage = this.$store.getters.currentLanguage;
       }
     );
+  }
+
+  mounted() {
+    this.applicationService()
+      .retrieve()
+      .then(res => {
+        this.applications = res.data.map(appli => appli.name);
+      });
   }
 
   ////////////////////////////////////////////////
@@ -139,17 +156,14 @@ export default class FunctionalFlowUpdate extends Vue {
       .getPlantUMLFromString(this.plantuml)
       .then(
         res => {
-          console.log('CCCCC');
           this.plantUMLImage = res.data;
+          this.plantumlModified = false;
           this.isFetching = false;
-          this.previewError = '';
           this.importPlantuml();
         },
         err => {
           console.log(err);
           this.plantUMLImage = '';
-          this.functionalFlow = null;
-          this.previewError = err;
         }
       );
   }
@@ -162,12 +176,13 @@ export default class FunctionalFlowUpdate extends Vue {
         res => {
           this.functionalFlowImport = res.data;
           this.isFetching = false;
-          this.importError = '';
+          this.previewError = '';
         },
         err => {
           this.plantUMLImage = '';
           this.functionalFlowImport = {};
-          this.importError = err;
+          this.previewError = err;
+          this.plantumlModified = false;
         }
       );
   }
@@ -305,5 +320,109 @@ export default class FunctionalFlowUpdate extends Vue {
       .then(res => {
         this.dataFlows = res.data;
       });
+  }
+
+  ///////////////////////////////////////////////
+  // appliction autocmplete
+  ///////////////////////////////////////////////
+
+  public plantumlModified = false;
+
+  public get nbLines() {
+    return this.plantuml.split(/\r\n|\r|\n/).length;
+  }
+
+  public get lastLine() {
+    return this.plantuml.split(/\r\n|\r|\n/).slice(-1)[0];
+  }
+
+  public onLinesChnaged() {
+    this.getPlantUMLImageFromString();
+  }
+
+  public plantumlChange() {
+    this.plantumlModified = true;
+
+    //console.log(this.inputSplitted);
+    this.selectedIndex = 0;
+    this.wordIndex = this.inputSplitted.length - 1;
+    this.focus();
+  }
+
+  public wordIndex = 0;
+  public selectedIndex = 0;
+  public searchMatch: string[] = [];
+  public clickedChooseItem = false;
+
+  get listToSearch() {
+    const standardItems = this.applications;
+    return standardItems;
+  }
+
+  get currentWord() {
+    return this.plantuml.replace(/(\r\n|\n|\r)/gm, ' ').split(' ')[this.wordIndex];
+  }
+
+  get inputSplitted() {
+    return this.plantuml.replace(/(\r\n|\n|\r)/gm, ' ').split(' ');
+  }
+
+  highlightWord(word) {
+    const regex = new RegExp('(' + this.currentWord + ')', 'g');
+    return word.replace(regex, '<mark>$1</mark>');
+  }
+  setWord(word) {
+    let currentWords = this.plantuml.replace(/(\r\n|\n|\r)/gm, '__br__ ').split(' ');
+    currentWords[this.wordIndex] = currentWords[this.wordIndex].replace(this.currentWord, '"' + word + '" ');
+    this.wordIndex += 1;
+    this.plantuml = currentWords.join(' ').replace(/__br__\s/g, '\n');
+  }
+  moveDown() {
+    if (this.selectedIndex < this.searchMatch.length - 1) {
+      this.selectedIndex++;
+    }
+  }
+  moveUp() {
+    if (this.selectedIndex !== -1) {
+      this.selectedIndex--;
+    }
+  }
+  selectItem(index) {
+    this.selectedIndex = index;
+    this.chooseItem();
+  }
+  chooseItem(e) {
+    this.clickedChooseItem = true;
+
+    if (this.selectedIndex !== -1 && this.searchMatch.length > 0) {
+      if (e) {
+        e.preventDefault();
+      }
+      this.setWord(this.searchMatch[this.selectedIndex]);
+      this.selectedIndex = -1;
+    }
+  }
+  focusout(e) {
+    setTimeout(() => {
+      if (!this.clickedChooseItem) {
+        this.searchMatch = [];
+        this.selectedIndex = -1;
+      }
+      this.clickedChooseItem = false;
+    }, 100);
+  }
+  focus() {
+    this.searchMatch = [];
+    if (this.lastLine.includes(':')) {
+      this.searchMatch = [];
+    } else if (!this.currentWord || this.currentWord === '') {
+      console.log(this.currentWord);
+      this.searchMatch = [];
+    } else if (this.currentWord.length > 2) {
+      console.log(this.currentWord);
+      this.searchMatch = this.listToSearch.filter(el => el.toLowerCase().indexOf(this.currentWord.toLowerCase()) >= 0);
+    } else if (this.searchMatch.length === 1 && this.currentWord === this.searchMatch[0]) {
+      this.searchMatch = [];
+    }
   }
 }
