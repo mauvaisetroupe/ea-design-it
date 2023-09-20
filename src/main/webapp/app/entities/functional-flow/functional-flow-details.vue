@@ -84,7 +84,7 @@
           v-slot="{ navigate }"
         >
           <button @click="navigate" class="btn btn-primary" v-if="accountService().writeAuthorities">
-            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit Information</span>
+            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit </span>
           </button>
         </router-link>
       </div>
@@ -96,9 +96,6 @@
       <div>
         <div v-html="plantUMLImage"></div>
         <div class="col-12">
-          <!-- <button class="btn btn-success float-right" v-on:click="exportDiagram()" style="font-size: 0.7em; padding: 3px; margin: 3px">
-            <font-awesome-icon icon="sync"></font-awesome-icon> <span>Export</span>
-          </button>         -->
           <button
             class="btn btn-warning"
             v-on:click="exportPlantUML()"
@@ -206,29 +203,11 @@
               <td class="text-right">
                 <div class="btn-group">
                   <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: inter.id } }" custom v-slot="{ navigate }">
-                    <button
-                      @click="navigate"
-                      class="btn btn-info btn-sm details"
-                      data-cy="entityDetailsButton"
-                      v-if="!accountService().writeAuthorities"
-                    >
+                    <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
                       <font-awesome-icon icon="eye"></font-awesome-icon>
-                      <span class="d-none d-md-inline">View</span>
-                    </button>
-                    <button
-                      @click="navigate"
-                      class="btn btn-primary btn-sm edit"
-                      data-cy="entityEditButton"
-                      v-if="accountService().writeAuthorities"
-                    >
-                      <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                      <span class="d-none d-md-inline">Edit</span>
+                      <span class="d-none d-md-inline">View Interface</span>
                     </button>
                   </router-link>
-                  <b-button v-if="accountService().writeAuthorities" v-on:click="prepareToDetach(i)" variant="warning" class="btn btn-sm">
-                    <font-awesome-icon icon="times"></font-awesome-icon>
-                    <span class="d-none d-md-inline">Detach</span>
-                  </b-button>
                 </div>
               </td>
             </tr>
@@ -237,71 +216,16 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-          <button
-            @click="startReorder()"
-            id="jh-create-entity"
-            data-cy="entityCreateButton"
-            class="btn btn-success jh-create-entity create-functional-flow"
-            title="Edit Flow Alias in order to move interfaces from on flow to another"
-            v-if="accountService().writeAuthorities && !reorderAlias"
-          >
-            <font-awesome-icon icon="pencil-alt"> </font-awesome-icon>
-            <span> Organize Flows</span>
-          </button>
           <router-link
-            v-if="functionalFlow.id && !reorderAlias"
-            :to="{ name: 'SequenceDiagramImport', query: { functionalFlowId: functionalFlow.id, l: la } }"
+            v-if="functionalFlow.id"
+            :to="{ name: 'FunctionalFlowEdit', params: { functionalFlowId: functionalFlow.id } }"
             custom
             v-slot="{ navigate }"
           >
             <button @click="navigate" class="btn btn-primary" v-if="accountService().writeAuthorities">
-              <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit in plantML editor</span>
+              <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit </span>
             </button>
           </router-link>
-          <button
-            @click="saveReorder()"
-            id="jh-create-entity"
-            data-cy="entityCreateButton"
-            class="btn btn-success jh-create-entity create-functional-flow"
-            title="Edit Flow Alias in order to move interfaces from on flow to another"
-            v-if="reorderAlias && (reorderAliasflowToSave.length > 0 || reorderStepToSave.length > 0)"
-          >
-            <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span>Save</span>
-          </button>
-
-          <button
-            @click="cancelReorder()"
-            id="jh-create-entity"
-            data-cy="entityCreateButton"
-            class="btn btn-success jh-create-entity create-functional-flow"
-            title="Edit Flow Alias in order to move interfaces from on flow to another"
-            v-if="reorderAlias"
-          >
-            <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span>Cancel</span>
-          </button>
-        </div>
-
-        <div class="d-flex justify-content-end col-md-6">
-          <span>
-            <button
-              class="btn btn-primary jh-create-entity create-functional-flow"
-              v-if="accountService().writeAuthorities"
-              @click="prepareSearchInterfaces()"
-            >
-              <font-awesome-icon icon="plus"></font-awesome-icon>
-              <span>Add Interface</span>
-            </button>
-            <button
-              class="btn btn-primary jh-create-entity create-functional-flow"
-              v-if="accountService().writeAuthorities && toBeSaved"
-              @click="saveFunctionalFlow()"
-            >
-              <font-awesome-icon icon="plus"></font-awesome-icon>
-              <span>Save</span>
-            </button>
-          </span>
         </div>
       </div>
 
@@ -335,131 +259,6 @@
         </table>
       </div>
     </div>
-    <b-modal ref="searchEntity" id="searchEntity" class="mymodalclass">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.flowInterface.delete.question" data-cy="flowInterfaceDeleteDialogHeading"
-          >Find or create Interface</span
-        ></span
-      >
-      <div class="modal-body">
-        <datalist id="applications">
-          <option v-for="applcation in applications" :key="applcation.id">{{ applcation.name }}</option>
-        </datalist>
-        <datalist id="protocols">
-          <option v-for="protocol in protocols" :key="protocol.id">{{ protocol.name }}</option>
-        </datalist>
-        <span>
-          Source : <input list="applications" v-model="searchSourceName" /> Target :
-          <input list="applications" v-model="searchTargetName" /> Protocol : <input list="protocols" v-model="searchProtocolName" />
-          <button type="button" class="btn btn-primary" v-on:click="searchInterfaces()">Search Interface</button>
-        </span>
-        <div class="table-responsive" v-if="interfaces && interfaces.length > 0">
-          <table class="table">
-            <thead>
-              <tr>
-                <th></th>
-                <th scope="row"><span>Alias</span></th>
-                <th scope="row"><span>Source</span></th>
-                <th scope="row"><span>Target</span></th>
-                <th scope="row"><span>Protocol</span></th>
-                <th scope="row"><span>DataFlows</span></th>
-                <th scope="row"><span>Functional Flows (used by)</span></th>
-              </tr>
-            </thead>
-            <tr v-for="inter in interfaces" :key="inter.id">
-              <td>
-                <input type="checkbox" :id="inter.id" :value="inter" v-model="checkedInterface" />
-              </td>
-              <td>{{ inter.alias }}</td>
-              <td>{{ inter.source.name }}</td>
-              <td>{{ inter.target.name }}</td>
-              <td>
-                <span v-if="inter.protocol">{{ inter.protocol.name }}</span>
-              </td>
-              <td>
-                <span
-                  v-for="dataflow in inter.dataFlows"
-                  :key="dataflow.id"
-                  :title="'frequency : [' + dataflow.frequency + ']' + (dataflow.format ? ', format : [' + dataflow.format.name + ']' : '')"
-                >
-                  {{ dataflow.resourceName }}
-                </span>
-              </td>
-              <td>
-                <span v-for="flow in inter.functionalFlows" :key="flow.id" :title="flow.description">
-                  {{ flow.alias }}
-                </span>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div v-if="searchDone && (!checkedInterface || checkedInterface.length === 0)">
-          <p />
-          <p>Nothing found. Do you want to create new Interface?</p>
-        </div>
-      </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeSearchDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="mergeflowInterfaceButtonID"
-          ref="mergeflowInterfaceButtonRef"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="addOrCreateInterface()"
-          v-if="checkedInterface && checkedInterface.length > 0"
-        >
-          Add
-        </button>
-        <router-link
-          :to="{
-            name: 'FlowInterfaceCreate',
-            query: {
-              functionalFlowId: functionalFlow.id,
-              sourceId: searchSourceId,
-              targetId: searchTargetId,
-              protocolId: searchProtocolId,
-            },
-          }"
-          custom
-          v-slot="{ navigate }"
-          v-if="accountService().writeAuthorities"
-        >
-          <button
-            @click="navigate"
-            id="jh-create-entity"
-            data-cy="entityCreateButton"
-            class="btn btn-primary jh-create-entity create-flow-interface"
-            v-if="searchDone && (!checkedInterface || checkedInterface.length === 0)"
-          >
-            <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Create a new Flow Interface </span>
-          </button>
-        </router-link>
-      </div>
-    </b-modal>
-    <b-modal ref="detachInterfaceEntity" id="detachInterfaceEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.landscapeView.delete.question" data-cy="landscapeViewDeleteDialogHeading"
-          >Confirm delete operation</span
-        ></span
-      >
-      <div class="modal-body">
-        <p id="jhi-delete-landscapeView-heading">Are you sure you want to detach this Interface?</p>
-      </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDetachDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-landscapeView"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="detachInterface()"
-        >
-          Detach
-        </button>
-      </div>
-    </b-modal>
   </div>
 </template>
 
