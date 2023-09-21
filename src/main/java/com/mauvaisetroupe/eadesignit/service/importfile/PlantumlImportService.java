@@ -272,7 +272,7 @@ public class PlantumlImportService {
         int order = 1;
         for (FlowImportLine flowImportLine : flowImport.getFlowImportLines()) {
             FlowInterface interface1;
-            if (flowImportLine.getSelectedInterface() != null) {
+            if (flowImportLine.getSelectedInterface() != null && StringUtils.hasText(flowImportLine.getSelectedInterface().getAlias())) {
                 interface1 = interfaceRepository.getById(flowImportLine.getSelectedInterface().getId());
             } else {
                 interface1 = new FlowInterface();

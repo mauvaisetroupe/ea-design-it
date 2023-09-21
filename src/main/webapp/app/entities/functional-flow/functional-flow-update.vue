@@ -252,7 +252,8 @@
                   <th scope="row"><span>Source</span></th>
                   <th scope="row"><span>Target</span></th>
                   <th scope="row"><span>Protocol</span></th>
-                  <th scope="row"><span>Interface</span></th>
+                  <th scope="row"><span>Potential Interfaces</span></th>
+                  <th scope="row"><span>Interface Name</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -279,21 +280,16 @@
                     </span>
                     <span v-else class="alert alert-warning">Not imported</span>
                   </td>
-                  <!-- <td>
-                    <datalist :id="'datalist'+i">
-                      <option v-for="inter in step.potentialInterfaces" :key="inter.id" :value="inter">
-                        {{ inter.alias }} ({{ inter.protocol.name }})
-                      </option>
-                    </datalist>
-                    <input :list="'datalist'+i" v-model="searchProtocolName" />
-                  </td> -->
                   <td>
-                    <select v-if="step.potentialInterfaces" v-model="step.selectedInterface" @change="changeInterface(step)">
-                      <option value=""></option>
+                    <select v-model="step.selectedInterface" @change="changeInterface(step)">
+                      <option :value="{}">Create new Interface</option>
                       <option v-for="inter in step.potentialInterfaces" :key="inter.id" :value="inter">
                         {{ inter.alias }} <span v-if="inter.protocol">({{ inter.protocol.name }})</span>
                       </option>
                     </select>
+                  </td>
+                  <td>
+                    <input type="text" v-model="step.interfaceAlias" :disabled="step.selectedInterface && step.selectedInterface.alias" />
                   </td>
                 </tr>
               </tbody>
@@ -321,7 +317,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.functionalFlow.$invalid || isSaving || plantumlModified"
+            :disabled="$v.functionalFlow.$invalid || isSaving || plantumlModified || !aliasesValid"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

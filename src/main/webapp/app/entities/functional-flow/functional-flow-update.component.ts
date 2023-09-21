@@ -172,6 +172,11 @@ export default class FunctionalFlowUpdate extends Vue {
       .then(
         res => {
           this.functionalFlowImport = res.data;
+          this.functionalFlowImport.flowImportLines.forEach(step => {
+            if (step.selectedInterface) {
+              step.interfaceAlias = step.selectedInterface.alias;
+            }
+          });
           this.isFetching = false;
           this.previewError = '';
         },
@@ -185,8 +190,8 @@ export default class FunctionalFlowUpdate extends Vue {
   }
 
   public changeInterface(flowimportLine) {
-    if (flowimportLine.selectedInterface && flowimportLine.selectedInterface.protocol) {
-      flowimportLine.protocol = flowimportLine.selectedInterface.protocol;
+    if (flowimportLine) {
+      flowimportLine.interfaceAlias = flowimportLine.selectedInterface.alias;
     }
   }
 
@@ -196,6 +201,10 @@ export default class FunctionalFlowUpdate extends Vue {
 
   public get creation() {
     return !this.functionalFlow.id;
+  }
+
+  public get aliasesValid() {
+    return !this.functionalFlowImport.flowImportLines.some(step => !step.interfaceAlias || step.interfaceAlias === '');
   }
 
   public save(): void {
