@@ -218,27 +218,22 @@
                       custom
                       v-slot="{ navigate }"
                     >
-                      <button
-                        @click="navigate"
-                        class="btn btn-primary btn-sm edit"
-                        data-cy="entityEditButton"
-                        v-if="accountService().writeAuthorities"
-                      >
-                        <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                        <span class="d-none d-md-inline">Edit</span>
-                      </button>
-
-                      <button
-                        @click="navigate"
-                        class="btn btn-info btn-sm details"
-                        data-cy="entityDetailsButton"
-                        v-if="!accountService().writeAuthorities"
-                      >
+                      <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
                         <font-awesome-icon icon="eye"></font-awesome-icon>
                         <span class="d-none d-md-inline">View</span>
                       </button>
                     </router-link>
-
+                    <router-link
+                      v-if="accountService().writeAuthorities"
+                      :to="{ name: 'FunctionalFlowEdit', params: { functionalFlowId: functionalFlow.id } }"
+                      custom
+                      v-slot="{ navigate }"
+                    >
+                      <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
+                        <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+                        <span class="d-none d-md-inline">Edit</span>
+                      </button>
+                    </router-link>
                     <b-button v-if="accountService().writeAuthorities" variant="warning" class="btn btn-sm" @click="prepareToDetach(i)">
                       <font-awesome-icon icon="times"></font-awesome-icon>
                       <span class="d-none d-md-inline">Detach</span>

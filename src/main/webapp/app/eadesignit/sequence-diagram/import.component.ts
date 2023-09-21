@@ -5,6 +5,7 @@ import { ILandscapeView, LandscapeView } from '@/shared/model/landscape-view.mod
 import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
 import AlertService from '@/shared/alert/alert.service';
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
+import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 @Component
 export default class SequenceDiagram extends Vue {
@@ -16,12 +17,27 @@ export default class SequenceDiagram extends Vue {
   public plantuml = '';
   public plantUMLImage = '';
   public isFetching = false;
-  public functionalFlow = null;
+  public functionalFlow: IFunctionalFlow = null;
+  public functionalFlowImport = null;
   public importError = '';
   public previewError = '';
 
   public existingLandscapes: ILandscapeView[] = null;
   public selectedLandscape = '';
+  public currentLanguage = '';
+  public isSaving = false;
+
+  created(): void {
+    this.currentLanguage = this.$store.getters.currentLanguage;
+    this.$store.watch(
+      () => this.$store.getters.currentLanguage,
+      () => {
+        this.currentLanguage = this.$store.getters.currentLanguage;
+      }
+    );
+  }
+
+  public previousState() {}
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -114,13 +130,13 @@ export default class SequenceDiagram extends Vue {
       .importPlantuml(this.plantuml)
       .then(
         res => {
-          this.functionalFlow = res.data;
+          this.functionalFlowImport = res.data;
           this.isFetching = false;
           this.importError = '';
         },
         err => {
           this.plantUMLImage = '';
-          this.functionalFlow = '';
+          this.functionalFlowImport = {};
           this.importError = err;
         }
       );

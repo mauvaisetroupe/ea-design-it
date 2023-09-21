@@ -22,7 +22,6 @@ export default class SequenceDiagramService {
   public importPlantuml(source: string) {
     return new Promise<any>((resolve, reject) => {
       console.log('importPlantuml source ');
-      console.log(source);
       axios
         .post(`${importApiUrl}/pre-import`, source.replace(/[\n\r]/g, '###CR##'))
         .then(res => {

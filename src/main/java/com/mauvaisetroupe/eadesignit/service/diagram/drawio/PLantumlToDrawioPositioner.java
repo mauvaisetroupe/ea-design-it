@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.service.diagram.drawio;
 
+import com.mauvaisetroupe.eadesignit.config.AsyncConfiguration;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.PositionAndSize;
@@ -19,6 +20,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,6 +39,8 @@ public class PLantumlToDrawioPositioner {
     private Map<Long, List<Long>> topConnected = new HashMap<>();
     // Ancestors below application(ID), from left to right
     private Map<Long, List<Long>> bottomConnected = new HashMap<>();
+
+    private final Logger log = LoggerFactory.getLogger(AsyncConfiguration.class);
 
     public Map<String, PositionAndSize> getMapApplicationPosition() {
         return mapApplicationPosition;
@@ -82,6 +87,8 @@ public class PLantumlToDrawioPositioner {
         for (int i = 0; i < nodeList.getLength(); i++) {
             Element mxcellElement = ((Element) nodeList.item(i));
             String applicationName = mxcellElement.getAttribute("value");
+            // Do not clean the application, map key is the name of application found in svg XML
+            // applicationName = cleanApplicationName(applicationName);
             PositionAndSize position = this.mapApplicationPosition.get(applicationName);
 
             NodeList textNodeList = mxcellElement.getElementsByTagName("mxGeometry");
@@ -142,8 +149,14 @@ public class PLantumlToDrawioPositioner {
 
             // sorted list of applications connected to topApplication and lower than it
             List<Long> bottomAppliList = bottomConnected.get(topApplicationId);
+            if (bottomAppliList == null) {
+                bottomAppliList = new ArrayList<>();
+            }
             // sorted list of applications connected to bottomApplication and higherr than it
             List<Long> topAppliList = topConnected.get(bottomApplicationId);
+            if (topAppliList == null) {
+                topAppliList = new ArrayList<>();
+            }
 
             // Define Horiontal (X) connection points
             int indexTop = bottomAppliList.indexOf(bottomApplicationId);
@@ -221,11 +234,7 @@ public class PLantumlToDrawioPositioner {
             Element textElement = (Element) textNodes.item(i);
             String applicationName = textElement.getTextContent();
 
-            if (applicationName != null) {
-                applicationName = applicationName.replaceAll("[\n|\r]", " ").replaceAll(" +", " ").replaceAll("-", "–");
-            }
-
-            if (appliNames.contains(applicationName)) {
+            if (appliNamesContain(appliNames, applicationName)) {
                 String _x = textElement.getAttribute("x");
                 Double x = Double.parseDouble(_x);
                 String _y = textElement.getAttribute("y");
@@ -235,7 +244,7 @@ public class PLantumlToDrawioPositioner {
 
                 textPostion.put(applicationName, new PositionAndSize(x + textLength / 2, y, null, null));
             } else {
-                System.out.println("Pb with : " + applicationName);
+                log.error("Pb with : " + applicationName);
             }
         }
 
@@ -266,6 +275,19 @@ public class PLantumlToDrawioPositioner {
         }
     }
 
+    private boolean appliNamesContain(Set<String> appliNames, String applicationName) {
+        for (String appliname : appliNames) {
+            if (cleanApplicationName(applicationName).equals(cleanApplicationName(appliname))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String cleanApplicationName(String applicationName) {
+        return (applicationName != null) ? applicationName.replaceAll("[\n|\r]", " ").replaceAll(" +", " ").replaceAll("-", "–") : null;
+    }
+
     private static Element extractFirstChild(NodeList nodeList) {
         if (nodeList != null && nodeList.getLength() > 0) {
             Element element = (Element) nodeList.item(0);
@@ -278,38 +300,42 @@ public class PLantumlToDrawioPositioner {
         for (Application application : applications) {
             PositionAndSize applicationPosition = mapApplicationPosition.get(application.getName());
 
-            List<Application> connectedApplication = edges
-                .stream()
-                .filter(e -> e.getSourceId().equals(application.getId()) || e.getTargetId().equals(application.getId())) // edges connected to appli
-                .map(e -> e.getSourceId().equals(application.getId()) ? e.getTargetId() : e.getSourceId()) // keep source or target if not appli
-                .map(id -> mapApplicationNames.get(id)) // get position
-                .collect(Collectors.toList());
+            if (applicationPosition == null) {
+                log.error("applicationPosition is null for : " + application);
+            } else {
+                List<Application> connectedApplication = edges
+                    .stream()
+                    .filter(e -> e.getSourceId().equals(application.getId()) || e.getTargetId().equals(application.getId())) // edges connected to appli
+                    .map(e -> e.getSourceId().equals(application.getId()) ? e.getTargetId() : e.getSourceId()) // keep source or target if not appli
+                    .map(id -> mapApplicationNames.get(id)) // get position
+                    .collect(Collectors.toList());
 
-            List<Application> upAppli = connectedApplication
-                .stream()
-                .filter(a -> mapApplicationPosition.get(a.getName()) != null)
-                .filter(a -> mapApplicationPosition.get(a.getName()).getY() < applicationPosition.getY())
-                .collect(Collectors.toList());
+                List<Application> upAppli = connectedApplication
+                    .stream()
+                    .filter(a -> mapApplicationPosition.get(a.getName()) != null)
+                    .filter(a -> mapApplicationPosition.get(a.getName()).getY() < applicationPosition.getY())
+                    .collect(Collectors.toList());
 
-            upAppli.sort((appli1, appli2) ->
-                mapApplicationPosition.get(appli1.getName()).getX().compareTo(mapApplicationPosition.get(appli2.getName()).getX())
-            );
+                upAppli.sort((appli1, appli2) ->
+                    mapApplicationPosition.get(appli1.getName()).getX().compareTo(mapApplicationPosition.get(appli2.getName()).getX())
+                );
 
-            if (upAppli != null) {
-                this.topConnected.put(application.getId(), upAppli.stream().map(a -> a.getId()).collect(Collectors.toList()));
+                if (upAppli != null) {
+                    this.topConnected.put(application.getId(), upAppli.stream().map(a -> a.getId()).collect(Collectors.toList()));
+                }
+
+                List<Application> downAppli = connectedApplication
+                    .stream()
+                    .filter(a -> mapApplicationPosition.get(a.getName()) != null)
+                    .filter(a -> mapApplicationPosition.get(a.getName()).getY() >= applicationPosition.getY())
+                    .collect(Collectors.toList());
+
+                downAppli.sort((appli1, appli2) ->
+                    mapApplicationPosition.get(appli1.getName()).getX().compareTo(mapApplicationPosition.get(appli2.getName()).getX())
+                );
+
+                this.bottomConnected.put(application.getId(), downAppli.stream().map(a -> a.getId()).collect(Collectors.toList()));
             }
-
-            List<Application> downAppli = connectedApplication
-                .stream()
-                .filter(a -> mapApplicationPosition.get(a.getName()) != null)
-                .filter(a -> mapApplicationPosition.get(a.getName()).getY() >= applicationPosition.getY())
-                .collect(Collectors.toList());
-
-            downAppli.sort((appli1, appli2) ->
-                mapApplicationPosition.get(appli1.getName()).getX().compareTo(mapApplicationPosition.get(appli2.getName()).getX())
-            );
-
-            this.bottomConnected.put(application.getId(), downAppli.stream().map(a -> a.getId()).collect(Collectors.toList()));
         }
     }
 }
