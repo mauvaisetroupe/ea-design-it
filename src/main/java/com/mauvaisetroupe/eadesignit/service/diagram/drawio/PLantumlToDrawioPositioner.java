@@ -40,7 +40,7 @@ public class PLantumlToDrawioPositioner {
     // Ancestors below application(ID), from left to right
     private Map<Long, List<Long>> bottomConnected = new HashMap<>();
 
-    private final Logger log = LoggerFactory.getLogger(AsyncConfiguration.class);
+    private final Logger log = LoggerFactory.getLogger(PLantumlToDrawioPositioner.class);
 
     public Map<String, PositionAndSize> getMapApplicationPosition() {
         return mapApplicationPosition;
