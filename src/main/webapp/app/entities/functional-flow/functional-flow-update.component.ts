@@ -13,13 +13,9 @@ import { IOwner } from '@/shared/model/owner.model';
 import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
 import { ILandscapeView } from '@/shared/model/landscape-view.model';
 
-import DataFlowService from '@/entities/data-flow/data-flow.service';
-import { IDataFlow } from '@/shared/model/data-flow.model';
-
 import { IFunctionalFlow, FunctionalFlow } from '@/shared/model/functional-flow.model';
 import FunctionalFlowService from './functional-flow.service';
 
-import SequenceDiagramService from '@/eadesignit/sequence-diagram/import.service';
 import ApplicationService from '../application/application.service';
 import { IApplication } from '@/shared/model/application.model';
 
@@ -57,26 +53,18 @@ export default class FunctionalFlowUpdate extends Vue {
 
   public functionalFlow: IFunctionalFlow = new FunctionalFlow();
 
-  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
-
-  public functionalFlowSteps: IFunctionalFlowStep[] = [];
-
   @Inject('ownerService') private ownerService: () => OwnerService;
 
   public owners: IOwner[] = [];
 
   @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
 
-  public landscapeViews: ILandscapeView[] = [];
-
-  @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
-
-  @Inject('sequenceDiagramService') private sequenceDiagramService: () => SequenceDiagramService;
+  public allLandscapes: ILandscapeView[] = [];
+  public selectedLandscape: ILandscapeView = {};
 
   @Inject('applicationService') private applicationService: () => ApplicationService;
   public applications: string[] = [];
 
-  public dataFlows: IDataFlow[] = [];
   public isSaving = false;
   public currentLanguage = '';
   public plantuml = '';
@@ -111,6 +99,15 @@ export default class FunctionalFlowUpdate extends Vue {
       .then(res => {
         this.applications = res.data.map(appli => appli.name);
       });
+    if (this.$route.query.landscapeViewId) {
+      this.allLandscapes.forEach(landscape => {
+        console.log(landscape.id + ' ...[' + this.$route.query.landscapeViewId + ']...');
+        console.log('----[' + parseInt(this.$route.query.landscapeViewId as string) + ']---');
+        if (landscape.id === parseInt(this.$route.query.landscapeViewId as string)) {
+          this.selectedLandscape = landscape;
+        }
+      });
+    }
   }
 
   ////////////////////////////////////////////////
@@ -152,7 +149,7 @@ export default class FunctionalFlowUpdate extends Vue {
 
   // STEP 3 : Retrieve plantuml Image from plantuml source
   public getPlantUMLImageFromString() {
-    this.sequenceDiagramService()
+    this.functionalFlowService()
       .getPlantUMLFromString(this.plantuml)
       .then(
         res => {
@@ -170,7 +167,7 @@ export default class FunctionalFlowUpdate extends Vue {
 
   // STEP 3 : Retrieve interface list from plantuml Source
   public importPlantuml() {
-    this.sequenceDiagramService()
+    this.functionalFlowService()
       .importPlantuml(this.plantuml)
       .then(
         res => {
@@ -187,22 +184,6 @@ export default class FunctionalFlowUpdate extends Vue {
       );
   }
 
-  public saveImport() {
-    // this.getPlantUML();
-    // this.sequenceDiagramService()
-    //   .saveImport(this.functionalFlow, this.selectedLandscape)
-    //   .then(
-    //     res => {
-    //       this.$router.push({ name: 'FunctionalFlowView', params: { functionalFlowId: res.data.id } });
-    //     },
-    //     err => {
-    //       this.plantUMLImage = '';
-    //       this.functionalFlow = '';
-    //       this.importError = err;
-    //     }
-    //   );
-  }
-
   public changeInterface(flowimportLine) {
     if (flowimportLine.selectedInterface && flowimportLine.selectedInterface.protocol) {
       flowimportLine.protocol = flowimportLine.selectedInterface.protocol;
@@ -213,86 +194,44 @@ export default class FunctionalFlowUpdate extends Vue {
   // SAVE
   //////////////////////////////////////////////////
 
-  public assignLandscape(): ILandscapeView {
-    // is landcaspe ID pass as param
-    let landscapeToSave: ILandscapeView;
-    if (this.$route.query.landscapeViewId) {
-      this.landscapeViews.forEach(landscape => {
-        console.log(landscape.id + ' ...[' + this.$route.query.landscapeViewId + ']...');
-        console.log('----[' + parseInt(this.$route.query.landscapeViewId as string) + ']---');
-        if (landscape.id === parseInt(this.$route.query.landscapeViewId as string)) {
-          landscapeToSave = landscape;
-        }
-      });
-    }
-    return landscapeToSave;
+  public get creation() {
+    return !this.functionalFlow.id;
   }
 
   public save(): void {
     this.isSaving = true;
-    if (this.functionalFlow.id) {
-      this.functionalFlowService()
-        .update(this.functionalFlow)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A FunctionalFlow is updated with identifier ' + param.id;
-          return this.$root.$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
+    this.functionalFlowImport.id = this.functionalFlow.id;
+    this.functionalFlowImport.alias = this.functionalFlow.alias;
+    this.functionalFlowImport.description = this.functionalFlow.description;
+    this.functionalFlowImport.comment = this.functionalFlow.comment;
+    this.functionalFlowImport.status = this.functionalFlow.status;
+    this.functionalFlowImport.documentationURL = this.functionalFlow.documentationURL;
+    this.functionalFlowImport.documentationURL2 = this.functionalFlow.documentationURL;
+    this.functionalFlowImport.startDate = this.functionalFlow.startDate;
+    this.functionalFlowImport.endDate = this.functionalFlow.endDate;
+    this.functionalFlowImport.owner = this.functionalFlow.owner;
+
+    this.functionalFlowService()
+      .saveImport(this.functionalFlowImport, this.selectedLandscape.id)
+      .then(param => {
+        this.isSaving = false;
+        this.$router.go(-1);
+        let message = 'A FunctionalFlow is created with identifier ' + param.id;
+        if (this.functionalFlow.id) {
+          message = 'A FunctionalFlow is updated with identifier ' + param.id;
+        }
+        return this.$root.$bvToast.toast(message.toString(), {
+          toaster: 'b-toaster-top-center',
+          title: 'Info',
+          variant: 'info',
+          solid: true,
+          autoHideDelay: 5000,
         });
-    } else {
-      this.functionalFlowService()
-        .create(this.functionalFlow)
-        .then(param => {
-          const createdFunctionalFlow: IFunctionalFlow = param;
-          // add to landscape if exist then save landscape
-          const landscapeToSave = this.assignLandscape();
-          console.log(landscapeToSave);
-          if (landscapeToSave != null) {
-            landscapeToSave.flows.push(createdFunctionalFlow);
-            console.log('About to save landcsape : ');
-            console.log(landscapeToSave);
-            this.landscapeViewService()
-              .update(landscapeToSave)
-              .then(param2 => {
-                this.isSaving = false;
-                this.$router.go(-1);
-                const message = 'A FunctionalFlow is created with identifier ' + param.id + ' for landscape ' + param2.id;
-                this.$root.$bvToast.toast(message.toString(), {
-                  toaster: 'b-toaster-top-center',
-                  title: 'Success',
-                  variant: 'success',
-                  solid: true,
-                  autoHideDelay: 5000,
-                });
-              });
-          } else {
-            this.isSaving = false;
-            this.$router.go(-1);
-            const message = 'A FunctionalFlow is created with identifier ' + param.id;
-            this.$root.$bvToast.toast(message.toString(), {
-              toaster: 'b-toaster-top-center',
-              title: 'Success',
-              variant: 'success',
-              solid: true,
-              autoHideDelay: 5000,
-            });
-          }
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    }
+      })
+      .catch(error => {
+        this.isSaving = false;
+        this.alertService().showHttpError(this, error.response);
+      });
   }
 
   public previousState(): void {
@@ -300,11 +239,6 @@ export default class FunctionalFlowUpdate extends Vue {
   }
 
   public initRelationships(): void {
-    this.functionalFlowStepService()
-      .retrieve()
-      .then(res => {
-        this.functionalFlowSteps = res.data;
-      });
     this.ownerService()
       .retrieve()
       .then(res => {
@@ -313,12 +247,7 @@ export default class FunctionalFlowUpdate extends Vue {
     this.landscapeViewService()
       .retrieve()
       .then(res => {
-        this.landscapeViews = res.data;
-      });
-    this.dataFlowService()
-      .retrieve()
-      .then(res => {
-        this.dataFlows = res.data;
+        this.allLandscapes = res.data;
       });
   }
 

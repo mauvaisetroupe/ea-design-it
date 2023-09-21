@@ -1,12 +1,9 @@
 package com.mauvaisetroupe.eadesignit.service.dto;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
-import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class FlowImportLine {
 
@@ -17,8 +14,15 @@ public class FlowImportLine {
     private List<FlowInterface> potentialInterfaces;
     private FlowInterface selectedInterface;
     private Protocol protocol;
-    private List<DataFlow> potentialDataFlows;
-    private DataFlow selectedDataFlow;
+    private String interfaceAlias;
+
+    public String getInterfaceAlias() {
+        return interfaceAlias;
+    }
+
+    public void setInterfaceAlias(String alias) {
+        this.interfaceAlias = alias;
+    }
 
     public String getDescription() {
         return description;
@@ -30,32 +34,6 @@ public class FlowImportLine {
 
     public void setSelectedInterface(FlowInterface selectedInterface) {
         this.selectedInterface = selectedInterface;
-    }
-
-    public DataFlow getSelectedDataFlow() {
-        return selectedDataFlow;
-    }
-
-    public void setSelectedDataFlow(DataFlow selectedDataFlow) {
-        this.selectedDataFlow = selectedDataFlow;
-    }
-
-    public List<DataFlow> getPotentialDataFlows() {
-        return potentialDataFlows;
-    }
-
-    public void setPotentialDataFlows(List<DataFlow> potentialDataFlows) {
-        this.potentialDataFlows = potentialDataFlows;
-    }
-
-    public void addPotentialDataFlow(DataFlow potentialDataFlow) {
-        if (this.potentialDataFlows == null) this.potentialDataFlows = new ArrayList<>();
-        this.potentialDataFlows.add(potentialDataFlow);
-    }
-
-    public void addPotentialDataFlow(Set<DataFlow> dataFlows) {
-        if (this.potentialDataFlows == null) this.potentialDataFlows = new ArrayList<>();
-        this.potentialDataFlows.addAll(dataFlows);
     }
 
     public int getOrder() {

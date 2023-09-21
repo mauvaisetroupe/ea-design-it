@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.service.importfile;
 
+import com.mauvaisetroupe.eadesignit.config.DatabaseConfiguration;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
@@ -19,8 +20,11 @@ import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.La
 import com.mauvaisetroupe.eadesignit.service.dto.FlowImport;
 import com.mauvaisetroupe.eadesignit.service.dto.FlowImportLine;
 import com.mauvaisetroupe.eadesignit.service.identitier.IdentifierGenerator;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import net.sourceforge.plantuml.BlockUml;
@@ -32,6 +36,8 @@ import net.sourceforge.plantuml.sequencediagram.Message;
 import net.sourceforge.plantuml.sequencediagram.Note;
 import net.sourceforge.plantuml.sequencediagram.Participant;
 import net.sourceforge.plantuml.sequencediagram.SequenceDiagram;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -67,6 +73,7 @@ public class PlantumlImportService {
     private static final String START_UML = "@startuml\n";
     public static final String END_UML = "@enduml";
     private static final String EQUAL_CHARACTER = "=";
+    private final Logger log = LoggerFactory.getLogger(PlantumlImportService.class);
 
     public String getPlantUMLSourceForEdition(String plantuml, boolean removeHeaderAndFooter, boolean protocolAsComment) {
         if (removeHeaderAndFooter) {
@@ -154,14 +161,6 @@ public class PlantumlImportService {
                                 if (CollectionUtils.isEmpty(potentialDataFlows)) {
                                     potentialDataFlows = dataFlowRepository.findByDocumentationURLIgnoreCase(url);
                                 }
-                                flowImportLine.setPotentialDataFlows(new ArrayList<>(potentialDataFlows));
-                                if (CollectionUtils.isEmpty(flowImportLine.getPotentialDataFlows())) {
-                                    DataFlow dataFlow = new DataFlow();
-                                    dataFlow.setContractURL(url);
-                                    dataFlow.setId(-1L);
-                                    flowImportLine.addPotentialDataFlow(dataFlow);
-                                    flowImportLine.setSelectedDataFlow(dataFlow);
-                                }
                             }
                         } else {
                             throw new RuntimeException("Not implemented");
@@ -180,14 +179,8 @@ public class PlantumlImportService {
                         if (potentialInterfaces.size() == 1) {
                             FlowInterface selectedInterface = potentialInterfaces.get(0);
                             flowImportLine.setSelectedInterface(selectedInterface);
-                            flowImportLine.addPotentialDataFlow(selectedInterface.getDataFlows());
                             flowImportLine.setProtocol(selectedInterface.getProtocol());
                         }
-                    }
-                }
-                if (!CollectionUtils.isEmpty(flowImportLine.getPotentialDataFlows())) {
-                    if (flowImportLine.getPotentialDataFlows().size() == 1) {
-                        flowImportLine.setSelectedDataFlow(flowImportLine.getPotentialDataFlows().get(0));
                     }
                 }
                 flowImportLine.setDescription(displayToString(message.getLabel()));
@@ -236,16 +229,46 @@ public class PlantumlImportService {
     }
 
     public FunctionalFlow saveImport(FlowImport flowImport, Long landscapeId) {
-        FunctionalFlow functionalFlow = new FunctionalFlow();
+        FunctionalFlow functionalFlow = null;
+        if (flowImport.getId() != null) {
+            Optional<FunctionalFlow> optional = functionalFlowRepository.findById(flowImport.getId());
+            if (optional.isPresent()) {
+                functionalFlow = optional.get();
+            } else {
+                log.error("Could not find functionalFlow with ID = " + flowImport.getId());
+            }
+        }
+        if (functionalFlow == null) {
+            functionalFlow = new FunctionalFlow();
+            functionalFlowRepository.save(functionalFlow);
+        }
 
-        List<String> interfacesAliases = interfaceRepository.findAlias();
-        IdentifierGenerator interfaceIdgenerator = new IdentifierGenerator(interfacesAliases);
-
-        List<String> flowAliases = functionalFlowRepository.findAlias();
-        IdentifierGenerator flowIdGenerator = new IdentifierGenerator(flowAliases);
-
+        functionalFlow = copyFlowImportToFunctionalFlow(flowImport, functionalFlow);
         functionalFlowRepository.save(functionalFlow);
+        return functionalFlow;
+    }
+
+    private FunctionalFlow copyFlowImportToFunctionalFlow(FlowImport flowImport, FunctionalFlow functionalFlow) {
+        functionalFlow.setId(flowImport.getId());
+        functionalFlow.setAlias(flowImport.getAlias());
         functionalFlow.setDescription(flowImport.getDescription());
+        functionalFlow.setComment(flowImport.getComment());
+        functionalFlow.setStatus(flowImport.getStatus());
+        functionalFlow.setDocumentationURL(flowImport.getDocumentationURL());
+        functionalFlow.setDocumentationURL2(flowImport.getDocumentationURL2());
+        functionalFlow.setStartDate(flowImport.getStartDate());
+        functionalFlow.setEndDate(flowImport.getEndDate());
+        functionalFlow.setDescription(flowImport.getDescription());
+
+        for (FunctionalFlowStep step : new HashSet<>(functionalFlow.getSteps())) {
+            FlowInterface inter = step.getFlowInterface();
+            inter.removeSteps(step);
+            functionalFlow.removeSteps(step);
+            interfaceRepository.save(inter);
+            functionalFlowRepository.save(functionalFlow);
+            flowStepRepository.delete(step);
+        }
+
         int order = 1;
         for (FlowImportLine flowImportLine : flowImport.getFlowImportLines()) {
             FlowInterface interface1;
@@ -255,22 +278,10 @@ public class PlantumlImportService {
                 interface1 = new FlowInterface();
                 interface1.setSource(applicationRepository.getById(flowImportLine.getSource().getId()));
                 interface1.setTarget(applicationRepository.getById(flowImportLine.getTarget().getId()));
-                interface1.setAlias(interfaceIdgenerator.getNext("GEN-"));
+                interface1.setAlias(flowImportLine.getInterfaceAlias());
                 interfaceRepository.save(interface1);
                 if (flowImportLine.getProtocol() != null) {
                     interface1.setProtocol(protocolRepository.getById(flowImportLine.getProtocol().getId()));
-                }
-                if (flowImportLine.getSelectedDataFlow() != null) {
-                    DataFlow dataFlow = dataFlowRepository.getById(flowImportLine.getSelectedDataFlow().getId());
-                    if (dataFlow == null) {
-                        dataFlow = new DataFlow();
-                        dataFlowRepository.save(dataFlow);
-                        dataFlow.setFrequency(flowImportLine.getSelectedDataFlow().getFrequency());
-                        dataFlow.setFormat(flowImportLine.getSelectedDataFlow().getFormat());
-                        dataFlow.setContractURL(flowImportLine.getSelectedDataFlow().getContractURL());
-                        dataFlow.setDocumentationURL(flowImportLine.getSelectedDataFlow().getDocumentationURL());
-                    }
-                    interface1.addDataFlows(dataFlow);
                 }
             }
             FunctionalFlowStep step = new FunctionalFlowStep();
@@ -280,19 +291,6 @@ public class PlantumlImportService {
             interface1.addSteps(step);
             flowStepRepository.save(step);
         }
-        functionalFlow.setAlias(flowIdGenerator.getNext("GEN."));
-        TreeSet<String> aliases = new TreeSet<>();
-        for (FunctionalFlowStep step : functionalFlow.getSteps()) {
-            aliases.add(step.getFlowInterface().getAlias());
-        }
-
-        if (landscapeId != null) {
-            LandscapeView landscapeView = landscapeViewRepository.getById(landscapeId);
-            if (landscapeView != null) {
-                landscapeView.addFlows(functionalFlow);
-            }
-        }
-
         return functionalFlow;
     }
 }

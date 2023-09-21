@@ -291,13 +291,21 @@
                     <select v-if="step.potentialInterfaces" v-model="step.selectedInterface" @change="changeInterface(step)">
                       <option value=""></option>
                       <option v-for="inter in step.potentialInterfaces" :key="inter.id" :value="inter">
-                        {{ inter.alias }} ({{ inter.protocol.name }})
+                        {{ inter.alias }} <span v-if="inter.protocol">({{ inter.protocol.name }})</span>
                       </option>
                     </select>
                   </td>
                 </tr>
               </tbody>
             </table>
+            <div v-if="creation">
+              <label for="landscape">Choose corresponding landscape to attache flow</label>
+              <select v-model="selectedLandscape">
+                <option v-for="landscape in allLandscapes" :value="landscape.id" :key="landscape.id">
+                  {{ landscape.diagramName }}
+                </option>
+              </select>
+            </div>
           </div>
         </b-tab>
       </b-tabs>
@@ -313,7 +321,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.functionalFlow.$invalid || isSaving"
+            :disabled="$v.functionalFlow.$invalid || isSaving || plantumlModified"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>
