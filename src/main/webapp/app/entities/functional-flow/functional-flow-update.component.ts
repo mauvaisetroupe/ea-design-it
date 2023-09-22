@@ -204,6 +204,7 @@ export default class FunctionalFlowUpdate extends Vue {
   }
 
   public get aliasesValid() {
+    if (!this.functionalFlowImport) return true;
     return !this.functionalFlowImport.flowImportLines.some(step => !step.interfaceAlias || step.interfaceAlias === '');
   }
 
@@ -329,7 +330,8 @@ export default class FunctionalFlowUpdate extends Vue {
     this.selectedIndex = index;
     this.chooseItem();
   }
-  chooseItem(e) {
+  chooseItem(e = null) {
+    console.log(e);
     this.clickedChooseItem = true;
 
     if (this.selectedIndex !== -1 && this.searchMatch.length > 0) {

@@ -217,7 +217,7 @@
                   :key="'li' + index"
                   :class="{ active: selectedIndex === index }"
                   v-for="(result, index) in searchMatch"
-                  @click="selectItem(index), chooseItem()"
+                  @click="selectItem(index), chooseItem($event)"
                   v-html="highlightWord(result)"
                 ></li>
               </ul>
@@ -244,7 +244,7 @@
             class="table-responsive"
             v-if="functionalFlowImport && functionalFlowImport.flowImportLines && functionalFlowImport.flowImportLines.length > 0"
           >
-            <table class="table table-striped">
+            <table class="table table-striped" v-if="functionalFlowImport && functionalFlowImport.flowImportLines">
               <thead>
                 <tr>
                   <th scope="row"><span>#</span></th>
@@ -257,7 +257,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(step, i) in functionalFlowImport.flowImportLines" v-bind:key="step.id">
+                <tr v-for="step in functionalFlowImport.flowImportLines" v-bind:key="step.id">
                   <td>{{ step.order }}</td>
                   <td>
                     <span>{{ step.description }}</span>
