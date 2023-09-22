@@ -97,7 +97,9 @@ export default class FunctionalFlowUpdate extends Vue {
     this.applicationService()
       .retrieve()
       .then(res => {
-        this.applications = res.data.map(appli => appli.name);
+        if (res.data) {
+          this.applications = res.data.map(appli => appli.name);
+        }
       });
     if (this.$route.query.landscapeViewId) {
       this.allLandscapes.forEach(landscape => {
@@ -172,11 +174,13 @@ export default class FunctionalFlowUpdate extends Vue {
       .then(
         res => {
           this.functionalFlowImport = res.data;
-          this.functionalFlowImport.flowImportLines.forEach(step => {
-            if (step.selectedInterface) {
-              step.interfaceAlias = step.selectedInterface.alias;
-            }
-          });
+          if (this.functionalFlowImport) {
+            this.functionalFlowImport.flowImportLines.forEach(step => {
+              if (step.selectedInterface) {
+                step.interfaceAlias = step.selectedInterface.alias;
+              }
+            });
+          }
           this.isFetching = false;
           this.previewError = '';
         },
