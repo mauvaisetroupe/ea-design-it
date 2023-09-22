@@ -311,7 +311,7 @@ export default class FunctionalFlowUpdate extends Vue {
     return word.replace(regex, '<mark>$1</mark>');
   }
   setWord(word) {
-    let currentWords = this.plantuml.replace(/(\r\n|\n|\r)/gm, '__br__ ').split(' ');
+    const currentWords = this.plantuml.replace(/(\r\n|\n|\r)/gm, '__br__ ').split(' ');
     currentWords[this.wordIndex] = currentWords[this.wordIndex].replace(this.currentWord, '"' + word + '" ');
     this.wordIndex += 1;
     this.plantuml = currentWords.join(' ').replace(/__br__\s/g, '\n');
