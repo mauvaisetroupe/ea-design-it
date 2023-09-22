@@ -18,6 +18,7 @@ import FunctionalFlowService from './functional-flow.service';
 
 import ApplicationService from '../application/application.service';
 import { IApplication } from '@/shared/model/application.model';
+import { IPlantumlFlowImport } from '@/shared/model/plantuml-flow-import.model';
 
 const validations: any = {
   functionalFlow: {
@@ -72,7 +73,7 @@ export default class FunctionalFlowUpdate extends Vue {
   public isFetching = false;
   public importError = '';
   public previewError = '';
-  public functionalFlowImport = null;
+  public functionalFlowImport: IPlantumlFlowImport = {};
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -174,7 +175,7 @@ export default class FunctionalFlowUpdate extends Vue {
       .then(
         res => {
           this.functionalFlowImport = res.data;
-          if (this.functionalFlowImport) {
+          if (this.functionalFlowImport && this.functionalFlowImport.flowImportLines) {
             this.functionalFlowImport.flowImportLines.forEach(step => {
               if (step.selectedInterface) {
                 step.interfaceAlias = step.selectedInterface.alias;
@@ -186,7 +187,7 @@ export default class FunctionalFlowUpdate extends Vue {
         },
         err => {
           this.plantUMLImage = '';
-          this.functionalFlowImport = {};
+          this.functionalFlowImport = { flowImportLines: [] };
           this.previewError = err;
           this.plantumlModified = false;
         }
@@ -208,7 +209,7 @@ export default class FunctionalFlowUpdate extends Vue {
   }
 
   public get aliasesValid() {
-    if (!this.functionalFlowImport) return true;
+    if (!this.functionalFlowImport || !this.functionalFlowImport.flowImportLines) return true;
     return !this.functionalFlowImport.flowImportLines.some(step => !step.interfaceAlias || step.interfaceAlias === '');
   }
 
