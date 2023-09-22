@@ -249,7 +249,6 @@ public class PlantumlImportService {
     }
 
     private FunctionalFlow copyFlowImportToFunctionalFlow(FlowImport flowImport, FunctionalFlow functionalFlow) {
-        functionalFlow.setId(flowImport.getId());
         functionalFlow.setAlias(flowImport.getAlias());
         functionalFlow.setDescription(flowImport.getDescription());
         functionalFlow.setComment(flowImport.getComment());
