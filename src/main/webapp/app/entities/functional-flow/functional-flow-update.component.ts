@@ -102,15 +102,6 @@ export default class FunctionalFlowUpdate extends Vue {
           this.applications = res.data.map(appli => appli.name);
         }
       });
-    if (this.$route.query.landscapeViewId) {
-      this.allLandscapes.forEach(landscape => {
-        console.log(landscape.id + ' ...[' + this.$route.query.landscapeViewId + ']...');
-        console.log('----[' + parseInt(this.$route.query.landscapeViewId as string) + ']---');
-        if (landscape.id === parseInt(this.$route.query.landscapeViewId as string)) {
-          this.selectedLandscape = landscape;
-        }
-      });
-    }
   }
 
   ////////////////////////////////////////////////
@@ -263,6 +254,13 @@ export default class FunctionalFlowUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.allLandscapes = res.data;
+        if (this.$route.query.landscapeViewId) {
+          this.allLandscapes.forEach(landscape => {
+            if (landscape.id === parseInt(this.$route.query.landscapeViewId as string)) {
+              this.selectedLandscape = landscape;
+            }
+          });
+        }
       });
   }
 

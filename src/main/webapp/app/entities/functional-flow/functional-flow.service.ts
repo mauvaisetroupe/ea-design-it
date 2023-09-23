@@ -146,7 +146,7 @@ export default class FunctionalFlowService {
     const params = { landscapeId: landscapeId };
     return new Promise<any>((resolve, reject) => {
       axios
-        .post(`${sequenceDiagramApiUrl}/save`, flowImport, { params })
+        .post(`${sequenceDiagramApiUrl}/save`, flowImport, { params: params })
         .then(res => {
           resolve(res);
         })

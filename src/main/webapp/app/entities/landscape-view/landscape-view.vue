@@ -57,7 +57,11 @@
                   custom
                   v-slot="{ navigate }"
                 >
-                  <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
+                  <button
+                    @click="navigate"
+                    class="btn btn-info btn-sm details"
+                    :data-cy="'entityDetailsButton-' + landscapeView.diagramName"
+                  >
                     <font-awesome-icon icon="eye"></font-awesome-icon>
                     <span class="d-none d-md-inline">View</span>
                   </button>
