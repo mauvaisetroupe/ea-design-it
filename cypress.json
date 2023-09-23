@@ -10,7 +10,7 @@
   "chromeWebSecurity": true,
   "viewportWidth": 1200,
   "viewportHeight": 720,
-  "retries": 2,
+  "retries": 0,
   "env": {
     "authenticationUrl": "/api/authenticate",
     "jwtStorageName": "jhi-authenticationToken"
