@@ -33,7 +33,7 @@ describe('Application Import and Flows e2e test', () => {
     cy.intercept('POST', '/api/import/flow/upload-multi-file').as('landscapeImportRequest');
     cy.intercept('POST', '/api/import/summary').as('excelSummaryRequest');
     cy.intercept('POST', '/api/import/application/upload-file').as('applicationsImportRequest');
-    cy.intercept('POST', '/api/functional-flows').as('flowPostEntityRequest');
+    cy.intercept('POST', '/api/import/flow/sequence-diagram/save').as('flowPostEntityRequest');
     cy.intercept('DELETE', '/api/functional-flows/*').as('flowDeleteEntityRequest');
     cy.intercept('GET', '/api/functional-flows+(?*|)').as('flowEntitiesRequest');
   });
@@ -144,7 +144,7 @@ describe('Application Import and Flows e2e test', () => {
     cy.get(entityCreateSaveButtonSelector).click();
 
     cy.wait('@flowPostEntityRequest').then(({ response }) => {
-      expect(response!.statusCode).to.equal(201);
+      expect(response!.statusCode).to.equal(200);
     });
   });
 

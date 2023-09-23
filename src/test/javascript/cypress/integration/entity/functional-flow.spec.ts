@@ -25,7 +25,7 @@ describe('FunctionalFlow e2e test', () => {
 
   beforeEach(() => {
     cy.intercept('GET', '/api/functional-flows+(?*|)').as('entitiesRequest');
-    cy.intercept('POST', '/api/functional-flows').as('postEntityRequest');
+    cy.intercept('POST', '/api/import/flow/sequence-diagram/save').as('postEntityRequest');
     cy.intercept('DELETE', '/api/functional-flows/*').as('deleteEntityRequest');
   });
 
@@ -171,7 +171,7 @@ describe('FunctionalFlow e2e test', () => {
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response!.statusCode).to.equal(201);
+        expect(response!.statusCode).to.equal(200);
         functionalFlow = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
