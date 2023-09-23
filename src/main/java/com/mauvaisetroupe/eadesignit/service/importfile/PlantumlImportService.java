@@ -109,7 +109,7 @@ public class PlantumlImportService {
         }
         // transform // API in note
         plantUMLSource = plantUMLSource.replaceAll(" // (.*)\n", "\nnote right\n$1\nend note\n");
-        System.out.println(plantUMLSource);
+        //System.out.println(plantUMLSource);
         return plantUMLSource;
     }
 
@@ -245,6 +245,16 @@ public class PlantumlImportService {
 
         functionalFlow = copyFlowImportToFunctionalFlow(flowImport, functionalFlow);
         functionalFlowRepository.save(functionalFlow);
+
+        if (landscapeId != null) {
+            LandscapeView landscape = landscapeViewRepository.getById(landscapeId);
+            if (landscape != null) {
+                landscape.addFlows(functionalFlow);
+                functionalFlow.addLandscape(landscape);
+                landscapeViewRepository.save(landscape);
+                functionalFlowRepository.save(functionalFlow);
+            }
+        }
         return functionalFlow;
     }
 

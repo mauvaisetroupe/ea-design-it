@@ -207,7 +207,7 @@ public class MXFileSerializer {
             diagram.appendChild(newNode);
         }
         String newXML = getStringFromDocument(doc);
-        System.out.println(newXML);
+        //System.out.println(newXML);
         return doc;
     }
 
