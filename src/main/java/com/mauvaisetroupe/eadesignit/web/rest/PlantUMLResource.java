@@ -10,6 +10,7 @@ import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
+import com.mauvaisetroupe.eadesignit.repository.view.FunctionalFlowLight;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.Layout;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService.DiagramType;
@@ -151,13 +152,16 @@ public class PlantUMLResource {
         Optional<Application> optional = applicationRepository.findById(id);
 
         if (optional.isPresent()) {
+            Application appli = optional.get();
             SortedSet<FlowInterfaceLight> interfaces = flowInterfaceRepository.findBySource_NameOrTarget_Name(
-                optional.get().getName(),
-                optional.get().getName()
+                appli.getName(),
+                appli.getName()
             );
+            SortedSet<FunctionalFlow> flows = functionalFlowRepository.findFunctionalFlowsForInterfacesIn(appli);
             return new PlantumlDTO(
                 this.plantUMLSerializer.getInterfacesCollectionDiagramSVG(interfaces, layout, groupComponents),
-                interfaces
+                interfaces,
+                flows
             );
         } else {
             throw new BadRequestException("Cannot find landscape View");

@@ -7,6 +7,7 @@ import AlertService from '@/shared/alert/alert.service';
 import { IFlowInterface } from '@/shared/model/flow-interface.model';
 import { ICapability } from '@/shared/model/capability.model';
 import CapabilityComponent from '@/entities/capability/component/capability.vue';
+import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 @Component({
   components: {
@@ -21,6 +22,7 @@ export default class ApplicationDetails extends Vue {
   public plantUMLImage = '';
   public capabilitiesPlantUMLImage = '';
   public interfaces: IFlowInterface[] = [];
+  public flows: IFunctionalFlow[] = [];
   public consolidatedCapabilities: ICapability[] = [];
 
   public layout = 'smetana';
@@ -63,6 +65,7 @@ export default class ApplicationDetails extends Vue {
         res => {
           this.plantUMLImage = res.data.svg;
           this.interfaces = res.data.interfaces;
+          this.flows = res.data.flows;
           this.refreshingPlantuml = false;
         },
         err => {

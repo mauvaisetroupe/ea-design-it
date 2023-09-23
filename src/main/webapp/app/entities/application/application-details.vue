@@ -166,47 +166,83 @@
         </button>
         <br /><br />
       </div>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="row"><span>Interface</span></th>
-            <th scope="row"><span>Source</span></th>
-            <th scope="row"><span>Target</span></th>
-            <th scope="row"><span>Protocol</span></th>
-            <th scope="row"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="caption in interfaces" v-bind:key="caption.id">
-            <td>
-              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: caption.id } }">{{ caption.alias }}</router-link>
-            </td>
-            <td>
-              <a v-on:click="retrieveApplication(caption.source.id)">{{ caption.source.name }}</a>
-              <span v-if="caption.id && caption.sourceComponent">
-                /
-                <router-link :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: caption.sourceComponent.id } }">{{
-                  caption.sourceComponent.name
+      <div>
+        <h2>Interfaces for {{ application.name }}</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="row"><span>Interface</span></th>
+              <th scope="row"><span>Source</span></th>
+              <th scope="row"><span>Target</span></th>
+              <th scope="row"><span>Protocol</span></th>
+              <th scope="row"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="caption in interfaces" v-bind:key="caption.id">
+              <td>
+                <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: caption.id } }">{{ caption.alias }}</router-link>
+              </td>
+              <td>
+                <a v-on:click="retrieveApplication(caption.source.id)">{{ caption.source.name }}</a>
+                <span v-if="caption.id && caption.sourceComponent">
+                  /
+                  <router-link :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: caption.sourceComponent.id } }">{{
+                    caption.sourceComponent.name
+                  }}</router-link>
+                </span>
+              </td>
+              <td>
+                <a v-on:click="retrieveApplication(caption.target.id)">{{ caption.target.name }}</a>
+                <span v-if="caption.id && caption.targetComponent">
+                  /
+                  <router-link :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: caption.targetComponent.id } }">{{
+                    caption.targetComponent.name
+                  }}</router-link>
+                </span>
+              </td>
+              <td>
+                <router-link v-if="caption.protocol" :to="{ name: 'ProtocolView', params: { protocolId: caption.protocol.id } }">
+                  {{ caption.protocol.name }}
+                </router-link>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h2>Functional Flows for {{ application.name }}</h2>
+        <table class="table table-striped" aria-describedby="functionalFlows">
+          <thead>
+            <tr>
+              <th scope="row"><span>Functional Flow ID</span></th>
+              <th scope="row"><span>Alias</span></th>
+              <th scope="row"><span>Description</span></th>
+              <th scope="row"><span>Landscape(s)</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="functionalFlow in flows" :key="functionalFlow.id">
+              <td>
+                <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }">{{
+                  functionalFlow.id
                 }}</router-link>
-              </span>
-            </td>
-            <td>
-              <a v-on:click="retrieveApplication(caption.target.id)">{{ caption.target.name }}</a>
-              <span v-if="caption.id && caption.targetComponent">
-                /
-                <router-link :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: caption.targetComponent.id } }">{{
-                  caption.targetComponent.name
-                }}</router-link>
-              </span>
-            </td>
-            <td>
-              <router-link v-if="caption.protocol" :to="{ name: 'ProtocolView', params: { protocolId: caption.protocol.id } }">
-                {{ caption.protocol.name }}
-              </router-link>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </td>
+              <td>{{ functionalFlow.alias }}</td>
+              <td>{{ functionalFlow.description }}</td>
+              <td>
+                <span v-for="(landscape, i) in functionalFlow.landscapes" :key="landscape.id">
+                  {{ i > 0 ? ', ' : '' }}
+                  <router-link :to="{ name: 'LandscapeViewView', params: { landscapeViewId: landscape.id } }">{{
+                    landscape.diagramName
+                  }}</router-link>
+                </span>
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="col-12" v-if="consolidatedCapabilities.length > 0">
       <h2>Capabilities for {{ application.name }}</h2>

@@ -240,7 +240,7 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th scope="row"><span>Id</span></th>
+              <th scope="row"><span>Landscape Id</span></th>
               <th scope="row"><span>Diagram Name</span></th>
             </tr>
           </thead>

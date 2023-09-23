@@ -236,10 +236,10 @@
           <table class="table table-striped" aria-describedby="functionalFlows">
             <thead>
               <tr>
-                <th scope="row"><span>ID</span></th>
+                <th scope="row"><span>Functional Flow ID</span></th>
                 <th scope="row"><span>Alias</span></th>
                 <th scope="row"><span>Description</span></th>
-                <th scope="row"><span>Landscape</span></th>
+                <th scope="row"><span>Landscape(s)</span></th>
               </tr>
             </thead>
             <tbody>
