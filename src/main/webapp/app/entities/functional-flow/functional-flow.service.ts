@@ -5,7 +5,7 @@ import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
 const functionalFlowBaseApiUrl = 'api/functional-flows';
 const functionalFlowPlantUMLApiUrl = 'api/plantuml/functional-flow';
 const sequenceDiagramApiUrl = 'api/import/flow/sequence-diagram';
-const baseApiUrl = 'api/plantuml/sequence-diagram/';
+const baseApiUrl = 'api/plantuml/sequence-diagram';
 
 export default class FunctionalFlowService {
   public find(id: number): Promise<IFunctionalFlow> {
