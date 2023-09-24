@@ -4,6 +4,7 @@ import com.mauvaisetroupe.eadesignit.domain.Owner;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class FlowImport {
 
@@ -114,5 +115,15 @@ public class FlowImport {
 
     public void setOwner(Owner owner) {
         this.owner = owner;
+    }
+
+    private Set<String> potentialIdentifier;
+
+    public Set<String> getPotentialIdentifier() {
+        return potentialIdentifier;
+    }
+
+    public void setPotentialIdentifier(Set<String> potentialIdentifier) {
+        this.potentialIdentifier = potentialIdentifier;
     }
 }

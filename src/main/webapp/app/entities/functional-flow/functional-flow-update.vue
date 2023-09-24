@@ -282,14 +282,24 @@
                   </td>
                   <td>
                     <select v-model="step.selectedInterface" @change="changeInterface(step)">
-                      <option :value="{}">Create new Interface</option>
+                      <option>Create new Interface</option>
                       <option v-for="inter in step.potentialInterfaces" :key="inter.id" :value="inter">
                         {{ inter.alias }} <span v-if="inter.protocol">({{ inter.protocol.name }})</span>
                       </option>
                     </select>
                   </td>
                   <td>
-                    <input type="text" v-model="step.interfaceAlias" :disabled="step.selectedInterface && step.selectedInterface.alias" />
+                    <datalist id="potential-identifier">
+                      <option v-for="identifier in functionalFlowImport.potentialIdentifier" :key="identifier">
+                        {{ identifier }}
+                      </option>
+                    </datalist>
+                    <input
+                      list="potential-identifier"
+                      type="text"
+                      v-model="step.interfaceAlias"
+                      :disabled="step.selectedInterface && step.selectedInterface.alias"
+                    />
                   </td>
                 </tr>
               </tbody>

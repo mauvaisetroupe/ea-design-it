@@ -188,6 +188,11 @@ public class PlantumlImportService {
                 flowImport.addLine(flowImportLine);
             }
         }
+
+        List<String> interfacesAliases = interfaceRepository.findAlias();
+        IdentifierGenerator interfaceIdgenerator = new IdentifierGenerator(interfacesAliases);
+        flowImport.setPotentialIdentifier(interfaceIdgenerator.getPotentialIdentifiers());
+
         return flowImport;
     }
 

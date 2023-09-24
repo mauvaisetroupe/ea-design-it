@@ -16,4 +16,5 @@ export interface IPlantumlFlowImport {
   flowImportLines?: FlowImportLines[] | null;
   owner?: IOwner | null;
   onError?: boolean | null;
+  potentialIdentifier?: string[] | null;
 }
