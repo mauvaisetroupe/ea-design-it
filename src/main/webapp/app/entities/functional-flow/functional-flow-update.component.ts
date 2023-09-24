@@ -186,9 +186,15 @@ export default class FunctionalFlowUpdate extends Vue {
   }
 
   public changeInterface(flowimportLine) {
-    if (flowimportLine && flowimportLine.selectedInterface && flowimportLine.selectedInterface.alias) {
+    if (!flowimportLine.selectedIndex) {
+      flowimportLine.interfaceAlias = '';
+    } else {
       flowimportLine.interfaceAlias = flowimportLine.selectedInterface.alias;
     }
+  }
+
+  public tabChanged() {
+    if (this.plantumlModified) this.getPlantUMLImageFromString();
   }
 
   //////////////////////////////////////////////////

@@ -1,8 +1,8 @@
 package com.mauvaisetroupe.eadesignit.service.importfile;
 
-import com.mauvaisetroupe.eadesignit.config.DatabaseConfiguration;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
+import com.mauvaisetroupe.eadesignit.domain.FlowGroup;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
@@ -10,23 +10,27 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
+import com.mauvaisetroupe.eadesignit.repository.FlowGroupRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowStepRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
+import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.Layout;
 import com.mauvaisetroupe.eadesignit.service.dto.FlowImport;
 import com.mauvaisetroupe.eadesignit.service.dto.FlowImportLine;
 import com.mauvaisetroupe.eadesignit.service.identitier.IdentifierGenerator;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.stream.Collectors;
 import net.sourceforge.plantuml.BlockUml;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.core.Diagram;
@@ -40,6 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -70,6 +75,9 @@ public class PlantumlImportService {
     @Autowired
     private PlantUMLBuilder plantUMLBuilder;
 
+    @Autowired
+    private FlowGroupRepository flowGroupRepository;
+
     private static final String START_UML = "@startuml\n";
     public static final String END_UML = "@enduml";
     private static final String EQUAL_CHARACTER = "=";
@@ -90,6 +98,10 @@ public class PlantumlImportService {
             //remove note
             plantuml = plantuml.replaceAll("\nnote right\n(.*)\nend note", " // $1");
         }
+        // [["/functional-flow/1751/view" Scan document and archive]] group
+        // Ophan group ID=3351
+        plantuml = plantuml.replaceAll("\ngroup \\[\\[\".*?\"\\s*(.*?) ##.*?\\]\\] group\n", "\ngroup $1\n");
+
         return plantuml;
     }
 
@@ -115,6 +127,40 @@ public class PlantumlImportService {
 
     public FlowImport importPlantuml(String plantUMLSource) {
         FlowImport flowImport = new FlowImport();
+
+        // Find group, o idea how to find from plantuml sequenceDiagram
+        if (plantUMLSource.endsWith(EQUAL_CHARACTER)) {
+            plantUMLSource = plantUMLSource.substring(0, plantUMLSource.length() - 1);
+        }
+        String[] lines = plantUMLSource.split("\n");
+        List<String> linesss = new ArrayList<>(Arrays.asList(lines))
+            .stream()
+            .filter(line -> !line.trim().isEmpty())
+            .collect(Collectors.toList());
+        Queue<Grouping> groupings = new LinkedList<>();
+        int interfaceIndex = 0;
+        int groupIndex = 0;
+        int index = 0;
+        Grouping grouping = new Grouping();
+        boolean inGroup = false;
+
+        while (index < linesss.size()) {
+            String line = linesss.get(index);
+            if (line.startsWith("group")) {
+                inGroup = true;
+                grouping.start = interfaceIndex;
+                grouping.flowAlias = line.replaceAll("group\\s*(.*)\\s*", "$1");
+            } else if (line.trim().equals("end")) {
+                Assert.isTrue(inGroup, "should not find end without 'group' first");
+                grouping.end = interfaceIndex - 1;
+                groupings.add(grouping);
+                grouping = new Grouping();
+                inGroup = false;
+            } else {
+                interfaceIndex++;
+            }
+            index++;
+        }
         plantUMLSource = preparePlantUMLSource(plantUMLSource);
         SourceStringReader reader = new SourceStringReader(plantUMLSource);
         BlockUml blockUml = reader.getBlocks().get(0);
@@ -127,6 +173,9 @@ public class PlantumlImportService {
 
         List<Event> events = sequenceDiagram.events();
         int stepOrder = 0;
+
+        Grouping currentGrouping = groupings.poll();
+
         for (Event event : events) {
             if (event instanceof Message) {
                 Message message = (Message) event;
@@ -184,6 +233,15 @@ public class PlantumlImportService {
                     }
                 }
                 flowImportLine.setDescription(displayToString(message.getLabel()));
+                if (currentGrouping != null) {
+                    if (stepOrder >= currentGrouping.start && stepOrder <= currentGrouping.end) {
+                        flowImportLine.setGroupOrder(stepOrder - currentGrouping.start + 1);
+                        flowImportLine.setGroupFlowAlias(currentGrouping.flowAlias);
+                    } else if (stepOrder > currentGrouping.end) {
+                        currentGrouping = groupings.poll();
+                    }
+                }
+
                 flowImportLine.setOrder(stepOrder++);
                 flowImport.addLine(flowImportLine);
             }
@@ -274,16 +332,25 @@ public class PlantumlImportService {
         functionalFlow.setEndDate(flowImport.getEndDate());
         functionalFlow.setDescription(flowImport.getDescription());
 
+        Set<FlowGroup> groupsToDelete = new HashSet<>();
         for (FunctionalFlowStep step : new HashSet<>(functionalFlow.getSteps())) {
             FlowInterface inter = step.getFlowInterface();
             inter.removeSteps(step);
             functionalFlow.removeSteps(step);
             interfaceRepository.save(inter);
             functionalFlowRepository.save(functionalFlow);
+            if (step.getGroup() != null) {
+                groupsToDelete.add(step.getGroup());
+                step.getGroup().removeSteps(step);
+            }
             flowStepRepository.delete(step);
+        }
+        for (FlowGroup flowGroup : new HashSet<>(groupsToDelete)) {
+            flowGroupRepository.delete(flowGroup);
         }
 
         int order = 1;
+        FlowGroup flowGroup = null;
         for (FlowImportLine flowImportLine : flowImport.getFlowImportLines()) {
             FlowInterface interface1;
             if (flowImportLine.getSelectedInterface() != null && StringUtils.hasText(flowImportLine.getSelectedInterface().getAlias())) {
@@ -304,7 +371,40 @@ public class PlantumlImportService {
             functionalFlow.addSteps(step);
             interface1.addSteps(step);
             flowStepRepository.save(step);
+
+            if (flowImportLine.getGroupOrder() == 1) {
+                //start the group
+                flowGroup = new FlowGroup();
+            }
+            if (flowGroup != null) {
+                if (flowImportLine.getGroupOrder() == 0) {
+                    // close de group
+                    flowGroup = null;
+                } else {
+                    flowGroup.addSteps(step);
+                    flowStepRepository.save(step);
+                    flowGroupRepository.save(flowGroup);
+
+                    if (flowImportLine.getGroupFlowAlias() != null) {
+                        Optional<FunctionalFlow> option = functionalFlowRepository.findByAlias(flowImportLine.getGroupFlowAlias());
+                        if (option.isPresent()) {
+                            flowGroup.setFlow(option.get());
+                            flowStepRepository.save(step);
+                            flowGroupRepository.save(flowGroup);
+                        } else {
+                            flowGroup.setDescription(LandscapeViewService.SHOULD_BE_LINKED_TO + flowImportLine.getGroupFlowAlias());
+                        }
+                    }
+                }
+            }
         }
         return functionalFlow;
+    }
+
+    private class Grouping {
+
+        int start;
+        int end;
+        String flowAlias;
     }
 }

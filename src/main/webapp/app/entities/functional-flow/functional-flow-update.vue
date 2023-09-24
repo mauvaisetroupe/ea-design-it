@@ -14,7 +14,7 @@
       </h2>
     </div>
     <div class="col-12">
-      <b-tabs content-class="mt-3" card pills>
+      <b-tabs content-class="mt-3" card pills @input="tabChanged">
         <b-tab title="1. Edit information" active>
           <div>
             <div class="form-group row" v-if="functionalFlow.id">
@@ -254,6 +254,8 @@
                   <th scope="row"><span>Protocol</span></th>
                   <th scope="row"><span>Potential Interfaces</span></th>
                   <th scope="row"><span>Interface Name</span></th>
+                  <th scope="row"><span>Group order</span></th>
+                  <th scope="row"><span>Group Flow</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -266,25 +268,36 @@
                     <span v-if="step.source">
                       {{ step.source.name }}
                     </span>
-                    <span v-else class="alert alert-danger">Not imported</span>
+                    <span v-else class="alert alert-danger" title="Correct application name in plantuml">Not imported</span>
                   </td>
                   <td>
                     <span v-if="step.target">
                       {{ step.target.name }}
                     </span>
-                    <span v-else class="alert alert-danger">Not imported</span>
+                    <span v-else class="alert alert-danger" title="Correct application name in plantuml">Not imported</span>
                   </td>
                   <td>
                     <span v-if="step.protocol">
                       {{ step.protocol.name }}
                     </span>
-                    <span v-else class="alert alert-warning">Not imported</span>
+                    <span
+                      v-else
+                      class="alert alert-warning"
+                      title="Add Protocol in plantuml adding // API or // Event at the end of concerned line"
+                      >Not imported</span
+                    >
                   </td>
                   <td>
-                    <select v-model="step.selectedInterface" @change="changeInterface(step)">
-                      <option>Create new Interface</option>
+                    <select
+                      style="width: 100%"
+                      v-model="step.selectedInterface"
+                      @change="changeInterface(step)"
+                      title="Choose compatible existing interface or leave blank and type new interface alias name in next field"
+                      :disabled="!step.potentialInterfaces || step.potentialInterfaces.length == 0"
+                    >
+                      <option value="{}"></option>
                       <option v-for="inter in step.potentialInterfaces" :key="inter.id" :value="inter">
-                        {{ inter.alias }} <span v-if="inter.protocol">({{ inter.protocol.name }})</span>
+                        {{ inter.alias }}
                       </option>
                     </select>
                   </td>
@@ -299,7 +312,18 @@
                       type="text"
                       v-model="step.interfaceAlias"
                       :disabled="step.selectedInterface && step.selectedInterface.alias"
+                      :title="
+                        step.interfaceAlias === ''
+                          ? 'Start typing to have proposed identifiers ok key down'
+                          : 'Deselect proposed interface if you want to type new identifier'
+                      "
                     />
+                  </td>
+                  <td>
+                    <span v-if="step.groupOrder > 0">{{ step.groupOrder }}</span>
+                  </td>
+                  <td>
+                    {{ step.groupFlowAlias }}
                   </td>
                 </tr>
               </tbody>

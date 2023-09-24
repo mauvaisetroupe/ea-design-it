@@ -14,4 +14,6 @@ export interface FlowImportLines {
   interfaceAlias?: string | null;
   potentialInterfaces: IFlowInterface[];
   protocol: IProtocol;
+  groupOrder?: number | null;
+  groupFlowAlias?: string;
 }

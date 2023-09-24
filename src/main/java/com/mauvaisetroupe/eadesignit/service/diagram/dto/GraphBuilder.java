@@ -109,7 +109,7 @@ public class GraphBuilder {
         String title = step.getGroup().getTitle();
         if (step.getGroup().getFlow() != null) {
             groupUrl = "/functional-flow/" + step.getGroup().getFlow().getId() + "/view";
-            title = step.getGroup().getFlow().getDescription();
+            title = "" + step.getGroup().getFlow().getAlias() + " ## " + step.getGroup().getFlow().getDescription();
         } else if (title == null) {
             title = "Ophan group ID=" + step.getGroup().getId();
         }

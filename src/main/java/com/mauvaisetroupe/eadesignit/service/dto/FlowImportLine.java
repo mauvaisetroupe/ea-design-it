@@ -15,6 +15,24 @@ public class FlowImportLine {
     private FlowInterface selectedInterface;
     private Protocol protocol;
     private String interfaceAlias;
+    private int groupOrder;
+    private String groupFlowAlias;
+
+    public int getGroupOrder() {
+        return groupOrder;
+    }
+
+    public void setGroupOrder(int groupOrder) {
+        this.groupOrder = groupOrder;
+    }
+
+    public String getGroupFlowAlias() {
+        return groupFlowAlias;
+    }
+
+    public void setGroupFlowAlias(String groupFlowAlias) {
+        this.groupFlowAlias = groupFlowAlias;
+    }
 
     public String getInterfaceAlias() {
         return interfaceAlias;
