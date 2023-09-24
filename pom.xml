@@ -4,7 +4,7 @@
 
     <groupId>com.mauvaisetroupe.eadesignit</groupId>
     <artifactId>ea-design-it</artifactId>
-    <version>0.9.0</version>
+    <version>0.9.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>EA Design It</name>
     <description>Description for EADesignIt</description>
@@ -13,7 +13,7 @@
         <url>https://github.com/mauvaisetroupe/EADesignIt/</url>
         <connection>scm:git:ssh://git@github.com/mauvaisetroupe/EADesignIt.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/mauvaisetroupe/EADesignIt.git</developerConnection>
-      <tag>v0.9.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <repositories>
