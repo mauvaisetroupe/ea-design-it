@@ -118,7 +118,11 @@ export default class FunctionalFlowService {
   public getPlantUMLFromString(source: string) {
     return new Promise<any>((resolve, reject) => {
       axios
-        .post(`${baseApiUrl}/get-svg`, source.replace(/[\n\r]/g, '###CR##'))
+        .post(`${baseApiUrl}/get-svg`, source, {
+          headers: {
+            'Content-Type': 'text/plain', // Specify content type as plain text
+          },
+        })
         .then(res => {
           resolve(res);
         })
@@ -132,7 +136,11 @@ export default class FunctionalFlowService {
     return new Promise<any>((resolve, reject) => {
       console.log('importPlantuml source ');
       axios
-        .post(`${sequenceDiagramApiUrl}/pre-import`, source.replace(/[\n\r]/g, '###CR##'))
+        .post(`${sequenceDiagramApiUrl}/pre-import`, source, {
+          headers: {
+            'Content-Type': 'text/plain', // Specify content type as plain text
+          },
+        })
         .then(res => {
           resolve(res);
         })

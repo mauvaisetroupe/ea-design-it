@@ -208,8 +208,6 @@ public class PlantUMLResource {
 
     @PostMapping(value = "plantuml/sequence-diagram/get-svg")
     public @ResponseBody String getSequenceDiagramSVG(@RequestBody String plantumlSource) throws IOException {
-        plantumlSource = URLDecoder.decode(plantumlSource, StandardCharsets.UTF_8);
-        plantumlSource = plantumlSource.replace("###CR##", "\n");
         plantumlSource = plantumlImportService.preparePlantUMLSource(plantumlSource);
         return this.plantUMLSerializer.getSVGFromSource(plantumlSource);
     }

@@ -208,6 +208,7 @@ public class PlantUMLBuilder {
                 Diagram diagram = blockUml.getDiagram();
                 String errorOrWarning = diagram.getWarningOrError();
                 if (errorOrWarning != null) {
+                    log.error(plantUMLSource);
                     throw new RuntimeException("Error during plantuml redering");
                 }
             }
