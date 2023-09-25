@@ -153,6 +153,8 @@ public class ApplicationMapperUtil {
 
         Set<ExternalReference> references = getExternalReferencesFromImport(applicationImport);
         application.setExternalIDS(references);
+
+        application.setDisplayInLandscape(applicationImport.getDisplayInLandscape());
     }
 
     private SoftwareType getSoftwareType(ApplicationImport applicationImport) {

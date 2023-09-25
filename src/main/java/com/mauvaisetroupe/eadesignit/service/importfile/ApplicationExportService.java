@@ -168,6 +168,9 @@ public class ApplicationExportService {
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_DOCUMENTATION);
 
         Map<String, Integer> externalOrder = writeExternalSystemHeader(column, headerRow);
+        column = column + externalOrder.entrySet().size();
+
+        headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.COMPONENT_DISPLAY_IN_LANDSCAPE);
 
         for (ApplicationComponent application : applications) {
             column = 0;
@@ -200,6 +203,12 @@ public class ApplicationExportService {
 
             writeExternalSytemRow(column, externalOrder, application.getExternalIDS(), row);
             column = column + externalOrder.entrySet().size();
+
+            String displayComponentInLandscape = "";
+            if (application.getDisplayInLandscape() != null && application.getDisplayInLandscape()) {
+                displayComponentInLandscape = "yes";
+            }
+            row.createCell(column++).setCellValue(displayComponentInLandscape);
         }
     }
 
