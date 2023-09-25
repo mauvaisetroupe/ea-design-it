@@ -50,7 +50,7 @@ public class MXFileSerializer {
 
     public String createMXFileXML(String svgXML) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graphDTO = graphBuilder.createGraph(landscapeView);
+        GraphDTO graphDTO = graphBuilder.createGraph(landscapeView, true);
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -103,7 +103,7 @@ public class MXFileSerializer {
         Document doc = getDecodedExistingXML();
 
         GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graphFromLandscape = graphBuilder.createGraph(landscapeView);
+        GraphDTO graphFromLandscape = graphBuilder.createGraph(landscapeView, true);
         GraphDTO graphFromMXFile = graphBuilder.createGraph(doc);
 
         XPathFactory xpathfactory = XPathFactory.newInstance();

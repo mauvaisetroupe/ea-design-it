@@ -25,7 +25,7 @@ public class GraphBuilder {
 
     public static final String KEY_PROTOCOL = "protocol";
 
-    public GraphDTO createGraph(LandscapeView landscape) {
+    public GraphDTO createGraph(LandscapeView landscape, boolean showLabels) {
         GraphDTO graph = new GraphDTO();
         for (FunctionalFlow flow : landscape.getFlows()) {
             for (FunctionalFlowStep step : flow.getSteps()) {
@@ -44,7 +44,8 @@ public class GraphBuilder {
                 graph.addApplication(target);
                 String id = flow.getId() + "-" + step.getStepOrder();
                 String url = "/functional-flow/" + flow.getId() + "/view";
-                Edge edge = new Edge(id, source.getId(), target.getId(), new Label(flow.getAlias(), url), false);
+                Label label = showLabels ? new Label(flow.getAlias(), url) : null;
+                Edge edge = new Edge(id, source.getId(), target.getId(), label, false);
                 graph.addEdge(edge);
                 addInApplicationsGroup(
                     graph,

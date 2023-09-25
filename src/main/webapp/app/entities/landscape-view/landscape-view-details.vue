@@ -95,6 +95,16 @@
             <font-awesome-icon icon="sync" :spin="refreshingPlantuml"></font-awesome-icon>
             <span>{{ groupComponents ? 'Ungroup Components' : 'Group components' }} </span>
           </button>
+          <button
+            class="btn btn-secondary"
+            v-on:click="doShowLabels()"
+            style="font-size: 0.7em; padding: 3px; margin: 3px"
+            v-if="plantUMLImage"
+            :disabled="refreshingPlantuml"
+          >
+            <font-awesome-icon icon="sync" :spin="refreshingPlantuml"></font-awesome-icon>
+            <span>{{ showLabels ? 'Hide Labels' : 'Show Labels' }} </span>
+          </button>
           <br /><br />
         </div>
       </div>

@@ -47,6 +47,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public layout = 'elk';
   public refreshingPlantuml = false;
   public groupComponents = true;
+  public showLabels = false;
 
   //for description update
   public reorderAliasflowToSave: IFunctionalFlow[] = [];
@@ -94,7 +95,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public getPlantUML(landscapeViewId) {
     this.refreshingPlantuml = true;
     this.landscapeViewService()
-      .getPlantUML(landscapeViewId, this.layout, this.groupComponents)
+      .getPlantUML(landscapeViewId, this.layout, this.groupComponents, this.showLabels)
       .then(
         res => {
           this.plantUMLImage = res.data;
@@ -316,6 +317,12 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public doGroupComponents() {
     this.refreshingPlantuml = true;
     this.groupComponents = !this.groupComponents;
+    this.getPlantUML(this.landscapeView.id);
+  }
+
+  public doShowLabels() {
+    this.refreshingPlantuml = true;
+    this.showLabels = !this.showLabels;
     this.getPlantUML(this.landscapeView.id);
   }
 }

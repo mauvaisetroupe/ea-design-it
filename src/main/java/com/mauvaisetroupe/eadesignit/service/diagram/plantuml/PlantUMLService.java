@@ -109,17 +109,22 @@ public class PlantUMLService {
         return " ".repeat(Math.max(0, factor * nbConnection - name.length()));
     }
 
-    public String getLandscapeDiagramSVG(LandscapeView landscapeView, Layout layout, boolean groupComponents, boolean adaptWidth)
-        throws IOException {
+    public String getLandscapeDiagramSVG(
+        LandscapeView landscapeView,
+        Layout layout,
+        boolean groupComponents,
+        boolean adaptWidth,
+        boolean showLabels
+    ) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graph = graphBuilder.createGraph(landscapeView);
+        GraphDTO graph = graphBuilder.createGraph(landscapeView, showLabels);
         String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, true, layout, groupComponents, adaptWidth);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
-    public String getLandscapeDiagramSource(LandscapeView landscapeView, Layout layout) throws IOException {
+    public String getLandscapeDiagramSource(LandscapeView landscapeView, Layout layout, boolean showLabels) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graph = graphBuilder.createGraph(landscapeView);
+        GraphDTO graph = graphBuilder.createGraph(landscapeView, showLabels);
         return createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, false, Layout.none, false, false);
     }
 

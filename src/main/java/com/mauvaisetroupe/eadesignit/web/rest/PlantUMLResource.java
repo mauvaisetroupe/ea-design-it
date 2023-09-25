@@ -79,22 +79,24 @@ public class PlantUMLResource {
     @GetMapping(value = "plantuml/landscape-view/get-svg/{id}")
     public @ResponseBody String getLandscapeSVG(
         @PathVariable Long id,
-        @RequestParam(required = false, defaultValue = "smetana") Layout layout,
-        @RequestParam(required = false, defaultValue = "true") boolean groupComponents
+        @RequestParam(defaultValue = "smetana") Layout layout,
+        @RequestParam(defaultValue = "true") boolean groupComponents,
+        @RequestParam(defaultValue = "true") boolean showLabels
     ) throws IOException, BadRequestException {
         Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
         if (landscapeViewOptional.isPresent()) {
-            return this.plantUMLSerializer.getLandscapeDiagramSVG(landscapeViewOptional.get(), layout, groupComponents, true);
+            return this.plantUMLSerializer.getLandscapeDiagramSVG(landscapeViewOptional.get(), layout, groupComponents, true, showLabels);
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }
     }
 
     @GetMapping(value = "plantuml/landscape-view/get-source/{id}")
-    public ResponseEntity<Resource> getLandscapeSource(@PathVariable Long id) throws IOException, BadRequestException {
+    public ResponseEntity<Resource> getLandscapeSource(@PathVariable Long id, @RequestParam(defaultValue = "true") boolean showLabels)
+        throws IOException, BadRequestException {
         Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
         if (landscapeViewOptional.isPresent()) {
-            String source = this.plantUMLSerializer.getLandscapeDiagramSource(landscapeViewOptional.get(), Layout.elk);
+            String source = this.plantUMLSerializer.getLandscapeDiagramSource(landscapeViewOptional.get(), Layout.elk, showLabels);
             InputStreamResource inputStreamResource = new InputStreamResource(new ByteArrayInputStream(source.getBytes()));
             return ResponseEntity
                 .ok()

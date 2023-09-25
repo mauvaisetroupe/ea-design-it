@@ -26,7 +26,7 @@ public class Edge {
         this.setId(id);
         this.sourceId = sourceId;
         this.targetId = targetId;
-        this.labels = new TreeSet<>(labels);
+        if (labels != null) this.labels = new TreeSet<>(labels);
         this.bidirectional = bidirectional;
     }
 
@@ -34,7 +34,7 @@ public class Edge {
         this.setId(id);
         this.sourceId = sourceId;
         this.targetId = targetId;
-        this.labels.add(labels);
+        if (labels != null) this.labels.add(labels);
         this.bidirectional = bidirectional;
     }
 
