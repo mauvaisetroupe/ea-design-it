@@ -73,7 +73,7 @@ public class PlantumlImportService {
     private LandscapeViewRepository landscapeViewRepository;
 
     @Autowired
-    private PlantUMLBuilder plantUMLBuilder;
+    protected PlantUMLBuilder plantUMLBuilder;
 
     @Autowired
     private FlowGroupRepository flowGroupRepository;
@@ -83,7 +83,12 @@ public class PlantumlImportService {
     private static final String EQUAL_CHARACTER = "=";
     private final Logger log = LoggerFactory.getLogger(PlantumlImportService.class);
 
-    public String getPlantUMLSourceForEdition(String plantuml, boolean removeHeaderAndFooter, boolean protocolAsComment) {
+    public String getPlantUMLSourceForEdition(
+        String plantuml,
+        boolean removeHeaderAndFooter,
+        boolean protocolAsComment,
+        Queue<String> interfaces
+    ) {
         if (removeHeaderAndFooter) {
             // remove header... everithing end of hedaer
             plantuml =
@@ -101,6 +106,52 @@ public class PlantumlImportService {
         // [["/functional-flow/1751/view" Scan document and archive]] group
         // Ophan group ID=3351
         plantuml = plantuml.replaceAll("\ngroup \\[\\[\".*?\"\\s*(.*?) ##.*?\\]\\] group\n", "\ngroup $1\n");
+
+        StringBuilder builder = new StringBuilder();
+        String[] lines = plantuml.split("\n");
+        List<String> linesss = new ArrayList<>(Arrays.asList(lines))
+            .stream()
+            .filter(line -> !line.trim().isEmpty())
+            .collect(Collectors.toList());
+        int interfaceIndex = 0;
+        int index = 0;
+        boolean inGroup = false;
+        boolean inNote = false;
+
+        if (interfaces != null) {
+            //clone to avoid side effects
+            interfaces = new LinkedList<>(interfaces);
+
+            int interfacesSize = interfaces.size();
+            while (index < linesss.size()) {
+                String line = linesss.get(index);
+                if (line.startsWith("group")) {
+                    inGroup = true;
+                    builder.append(line + "\n");
+                } else if (line.trim().equals("end")) {
+                    Assert.isTrue(inGroup, "should not find end without 'group' first");
+                    inGroup = false;
+                    builder.append(line + "\n");
+                } else if (line.startsWith("note")) {
+                    inNote = true;
+                    builder.append(line + "\n");
+                } else if (inNote && line.startsWith("end note")) {
+                    inNote = false;
+                    builder.append(line + "\n");
+                } else if (inNote) {
+                    builder.append(line + "\n");
+                } else if (!inNote) {
+                    interfaceIndex++;
+                    builder.append(line + " ##" + interfaces.poll() + "\n");
+                }
+                index++;
+            }
+            Assert.isTrue(
+                interfaceIndex == interfacesSize,
+                "We should haveas many interfaces (" + interfacesSize + ") as number of lines (" + interfaceIndex + ") in plantuml"
+            );
+            plantuml = builder.toString();
+        }
 
         return plantuml;
     }
@@ -121,6 +172,8 @@ public class PlantumlImportService {
         }
         // transform // API in note
         plantUMLSource = plantUMLSource.replaceAll(" // (.*)\n", "\nnote right\n$1\nend note\n");
+        // remove in liline alias name ##interfaceAlias
+        plantUMLSource = plantUMLSource.replaceAll(" ##([^#]*?)\\s*\n", "\n");
         //System.out.println(plantUMLSource);
         return plantUMLSource;
     }
@@ -139,7 +192,6 @@ public class PlantumlImportService {
             .collect(Collectors.toList());
         Queue<Grouping> groupings = new LinkedList<>();
         int interfaceIndex = 0;
-        int groupIndex = 0;
         int index = 0;
         Grouping grouping = new Grouping();
         boolean inGroup = false;

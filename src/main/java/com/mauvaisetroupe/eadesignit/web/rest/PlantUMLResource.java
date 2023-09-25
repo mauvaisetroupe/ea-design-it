@@ -10,7 +10,6 @@ import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
-import com.mauvaisetroupe.eadesignit.repository.view.FunctionalFlowLight;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.Layout;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService.DiagramType;
@@ -22,8 +21,10 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.SortedSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,7 +131,9 @@ public class PlantUMLResource {
         if (functionalFlowOptional.isPresent()) {
             String source = this.plantUMLSerializer.getFunctionalFlowDiagramSource(functionalFlowOptional.get(), diagramType);
             if (preparedForEdition) {
-                source = plantumlImportService.getPlantUMLSourceForEdition(source, true, true);
+                Queue<String> interfaces = new LinkedList<>();
+                functionalFlowOptional.get().getSteps().forEach(step -> interfaces.add(step.getFlowInterface().getAlias()));
+                source = plantumlImportService.getPlantUMLSourceForEdition(source, true, true, interfaces);
             }
             InputStreamResource inputStreamResource = new InputStreamResource(new ByteArrayInputStream(source.getBytes()));
             return ResponseEntity
