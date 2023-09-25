@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import net.sourceforge.plantuml.BlockUml;
 import net.sourceforge.plantuml.SourceStringReader;
@@ -195,6 +197,9 @@ public class PlantumlImportService {
         int index = 0;
         Grouping grouping = new Grouping();
         boolean inGroup = false;
+        Queue<String> interfaces = new LinkedList<>();
+        String regex = "##([^#\\s]+)";
+        Pattern pattern = Pattern.compile(regex);
 
         while (index < linesss.size()) {
             String line = linesss.get(index);
@@ -210,6 +215,12 @@ public class PlantumlImportService {
                 inGroup = false;
             } else {
                 interfaceIndex++;
+                String _interface = null;
+                Matcher matcher = pattern.matcher(line);
+                if (matcher.find()) {
+                    _interface = matcher.group(1);
+                }
+                interfaces.add(_interface);
             }
             index++;
         }
@@ -292,6 +303,13 @@ public class PlantumlImportService {
                     } else if (stepOrder > currentGrouping.end) {
                         currentGrouping = groupings.poll();
                     }
+                }
+                String interfaceAlias = interfaces.poll();
+                Optional<FlowInterface> optional = interfaceRepository.findByAlias(interfaceAlias);
+                if (optional.isPresent()) {
+                    flowImportLine.setSelectedInterface(optional.get());
+                } else {
+                    flowImportLine.setInterfaceAlias(interfaceAlias);
                 }
 
                 flowImportLine.setOrder(stepOrder++);

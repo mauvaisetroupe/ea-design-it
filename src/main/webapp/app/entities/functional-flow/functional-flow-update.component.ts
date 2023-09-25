@@ -186,7 +186,7 @@ export default class FunctionalFlowUpdate extends Vue {
   }
 
   public changeInterface(flowimportLine) {
-    if (!flowimportLine.selectedIndex) {
+    if (!flowimportLine.selectedInterface) {
       flowimportLine.interfaceAlias = '';
     } else {
       flowimportLine.interfaceAlias = flowimportLine.selectedInterface.alias;
