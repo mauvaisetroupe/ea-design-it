@@ -1,4 +1,4 @@
-import { Component, Inject } from 'vue-property-decorator';
+import { Component, Inject, Watch } from 'vue-property-decorator';
 
 import { mixins } from 'vue-class-component';
 import JhiDataUtils from '@/shared/data/data-utils.service';
@@ -18,6 +18,7 @@ import FunctionalFlowStepService from '@/entities/functional-flow-step/functiona
 import FlowImportService from '@/entities/flow-import/flow-import.service';
 import { ICapability } from '@/shared/model/capability.model';
 import CapabilityComponent from '@/entities/capability/component/capability.vue';
+import { IApplication } from '@/shared/model/application.model';
 
 @Component({
   components: {
@@ -48,6 +49,10 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public refreshingPlantuml = false;
   public groupComponents = true;
   public showLabels = false;
+  public tabIndex = 1;
+  public sessionKey = 'landscape.detail.tab';
+  public landscapeViewId = -1;
+  public filter = '';
 
   //for description update
   public reorderAliasflowToSave: IFunctionalFlow[] = [];
@@ -58,10 +63,42 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     return this.landscapeView.flows.map(f => f.alias);
   }
 
+  @Watch('tabIndex')
+  public onTabChange(newtab) {
+    this.tabIndex = newtab;
+    if (this.landscapeView && this.landscapeView.id) {
+      sessionStorage.setItem(this.sessionKey, this.landscapeView.id + '#' + this.tabIndex);
+    }
+  }
+
+  public created() {
+    // https://github.com/bootstrap-vue/bootstrap-vue/issues/2803
+    this.$nextTick(() => {
+      this.loadTab(this.landscapeViewId);
+    });
+  }
+
+  public loadTab(_landscapeID) {
+    if (sessionStorage.getItem(this.sessionKey)) {
+      const parts = sessionStorage.getItem(this.sessionKey).split('#');
+      const landId = parseInt(parts[0]);
+      const tabIndex = parseInt(parts[1]);
+      const landscapeID = parseInt(_landscapeID);
+      if (landscapeID === landId) {
+        this.tabIndex = tabIndex;
+      } else {
+        sessionStorage.removeItem(this.sessionKey);
+      }
+    } else {
+      this.tabIndex = 1;
+    }
+  }
+
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (to.params.landscapeViewId) {
         vm.retrieveLandscapeView(to.params.landscapeViewId);
+        vm.landscapeViewId = parseInt(to.params.landscapeViewId);
       }
     });
   }
@@ -75,8 +112,21 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     this.landscapeViewService()
       .find(landscapeViewId)
       .then(res => {
-        console.log(res);
         this.landscapeView = res.landscape;
+        this.landscapeView.flows.forEach(flow => {
+          const distinctApplications: Record<string, IApplication> = {};
+          flow.steps
+            .map(step => step.flowInterface)
+            .forEach(inter => {
+              if (inter.source) {
+                distinctApplications[inter.source.alias] = inter.source;
+              }
+              if (inter.target) {
+                distinctApplications[inter.target.alias] = inter.target;
+              }
+            });
+          flow.allApplications = Object.values(distinctApplications);
+        });
         this.consolidatedCapability = res.consolidatedCapability;
         if (this.landscapeView.compressedDrawSVG) {
           this.drawIoSVG = decodeURIComponent(escape(window.atob(this.landscapeView.compressedDrawSVG)));
@@ -271,23 +321,6 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
       });
   }
 
-  public exportExcel() {
-    this.flowImportService()
-      .downloadFile(this.landscapeView.id)
-      .then(response => {
-        const url = URL.createObjectURL(
-          new Blob([response.data], {
-            type: 'application/vnd.ms-excel',
-          })
-        );
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', this.landscapeView.diagramName + '.xlsx');
-        document.body.appendChild(link);
-        link.click();
-      });
-  }
-
   public exportPlantUML() {
     this.landscapeViewService()
       .getPlantUMLSource(this.landscapeView.id)
@@ -324,5 +357,24 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     this.refreshingPlantuml = true;
     this.showLabels = !this.showLabels;
     this.getPlantUML(this.landscapeView.id);
+  }
+
+  get filteredRows() {
+    return this.functionalFlows.filter(row => {
+      const alias = row.alias ? row.alias.toString().toLowerCase() : '';
+      const id = row.id.toString().toLowerCase();
+      const description = row.description ? row.description.toString().toLowerCase() : '';
+      const inFFF = row.steps
+        ? row.steps
+            .map(i => i.flowInterface)
+            .map(i => i.alias)
+            .join(' ')
+            .toString()
+            .toLowerCase()
+        : '';
+      const searchTerm = this.filter.toLowerCase();
+
+      return alias.includes(searchTerm) || id.includes(searchTerm) || inFFF.includes(searchTerm) || description.includes(searchTerm);
+    });
   }
 }
