@@ -202,7 +202,7 @@
 
               <textarea
                 style="width: 100%; min-width: 600px"
-                rows="10"
+                :rows="textareaNbLine"
                 v-model="plantuml"
                 @focusout="focusout"
                 @focus="focus"

@@ -19,6 +19,7 @@ import FunctionalFlowService from './functional-flow.service';
 import ApplicationService from '../application/application.service';
 import { IApplication } from '@/shared/model/application.model';
 import { IPlantumlFlowImport } from '@/shared/model/plantuml-flow-import.model';
+import FlowGroup from '../flow-group/flow-group.component';
 
 const validations: any = {
   functionalFlow: {
@@ -102,6 +103,23 @@ export default class FunctionalFlowUpdate extends Vue {
           this.applications = res.data.map(appli => appli.name);
         }
       });
+  }
+
+  get textareaNbLine() {
+    if (this.functionalFlow.steps) {
+      let nb = this.functionalFlow.steps.length;
+      const distinvtID: Set<number> = new Set(
+        this.functionalFlow.steps
+          .map(step => step.group)
+          .filter(group => group) // to filter null values
+          .map(group => group.id)
+      );
+      const nbGroups = distinvtID.size;
+      nb = nb + 2 * nbGroups;
+      const margin = 2;
+      return nb + margin;
+    }
+    return 10;
   }
 
   ////////////////////////////////////////////////
