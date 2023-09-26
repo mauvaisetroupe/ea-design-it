@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="row">
-      <div v-if="functionalFlow" class="col-10">
+      <div class="col-12">
         <h2 class="jh-entity-heading" data-cy="functionalFlowDetailsHeading">
           <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon>
-          <span>Functional Flow</span> - {{ functionalFlow.alias }} - {{ functionalFlow.description }}
+          <span class="text-primary font-weight-bold">FUNCTIONAL FLOW</span> - {{ functionalFlow.alias }} - {{ functionalFlow.description }}
         </h2>
       </div>
     </div>
@@ -83,7 +83,7 @@
           </div>
         </b-tab>
         <b-tab title="Schema" active>
-          <div class="row my-5">
+          <div class="table-responsive my-5">
             <div v-html="plantUMLImage"></div>
             <div class="col-12">
               <button

@@ -1,17 +1,21 @@
 <template>
   <div>
     <div class="row">
-      <h2 id="eaDesignItApp.functionalFlow.home.createOrEditLabel" data-cy="FunctionalFlowCreateUpdateHeading">
-        <span v-if="functionalFlow">
-          <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon>
-          <span>Functional Flow</span> - {{ functionalFlow.alias }} - {{ functionalFlow.description }}
-          <span v-if="this.$route.query.landscapeViewId"> for landscape {{ this.$route.query.landscapeViewId }}</span>
-        </span>
-        <span v-else>
-          <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Create a FunctionalFlow
-          <span v-if="this.$route.query.landscapeViewId"> for landscape {{ this.$route.query.landscapeViewId }}</span>
-        </span>
-      </h2>
+      <div class="col-12">
+        <h2 id="eaDesignItApp.functionalFlow.home.createOrEditLabel" data-cy="FunctionalFlowCreateUpdateHeading">
+          <span v-if="functionalFlow && functionalFlow">
+            <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon>
+            <span class="text-primary font-weight-bold">FUNCTIONAL FLOW</span> - {{ functionalFlow.alias }} -
+            {{ functionalFlow.description }}
+            <span v-if="this.$route.query.landscapeViewId"> for landscape {{ this.$route.query.landscapeViewId }}</span>
+          </span>
+          <span v-else>
+            <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Create a
+            <span class="text-primary font-weight-bold">FUNCTIONAL FLOW</span>
+            <span v-if="this.$route.query.landscapeViewId"> for landscape {{ this.$route.query.landscapeViewId }}</span>
+          </span>
+        </h2>
+      </div>
     </div>
     <div class="col-12">
       <b-tabs content-class="mt-3" card pills @input="tabChanged">
