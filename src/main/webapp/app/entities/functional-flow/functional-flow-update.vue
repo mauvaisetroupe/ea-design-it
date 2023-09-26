@@ -3,8 +3,8 @@
     <div class="row">
       <h2 id="eaDesignItApp.functionalFlow.home.createOrEditLabel" data-cy="FunctionalFlowCreateUpdateHeading">
         <span v-if="functionalFlow">
-          <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Edit FunctionalFlow -
-          {{ functionalFlow.description }}
+          <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon>
+          <span>Functional Flow</span> - {{ functionalFlow.alias }} - {{ functionalFlow.description }}
           <span v-if="this.$route.query.landscapeViewId"> for landscape {{ this.$route.query.landscapeViewId }}</span>
         </span>
         <span v-else>
@@ -15,7 +15,7 @@
     </div>
     <div class="col-12">
       <b-tabs content-class="mt-3" card pills @input="tabChanged">
-        <b-tab title="1. Edit information" active>
+        <b-tab title="Information">
           <div>
             <div class="form-group row" v-if="functionalFlow.id">
               <label for="id" class="col-sm-2 col-form-label">ID</label>
@@ -185,7 +185,7 @@
             </div>
           </div>
         </b-tab>
-        <b-tab title="2. Modify plantuml">
+        <b-tab title="Schema" active>
           <div class="row">
             <div class="col-10 autocomplete">
               <!-- <b-navbar toggleable="lg" type="dark" variant="info" class="col-10">
@@ -236,10 +236,10 @@
               </div>
             </div>
           </div>
-          <div v-html="plantUMLImage" class="table-responsive"></div>
+          <div v-html="plantUMLImage" class="table-responsive my-5"></div>
           <div v-if="previewError" class="alert alert-danger">Error during import</div>
         </b-tab>
-        <b-tab title="3. Choose interfaces">
+        <b-tab title="Interfaces">
           <div
             class="table-responsive"
             v-if="functionalFlowImport && functionalFlowImport.flowImportLines && functionalFlowImport.flowImportLines.length > 0"
@@ -260,7 +260,7 @@
               </thead>
               <tbody>
                 <tr v-for="step in functionalFlowImport.flowImportLines" v-bind:key="step.id">
-                  <td>{{ step.order }}</td>
+                  <td>{{ step.order + 1 }}</td>
                   <td>
                     <span>{{ step.description }}</span>
                   </td>
@@ -338,6 +338,7 @@
             </div>
           </div>
         </b-tab>
+        <b-tab title="References" disabled></b-tab>
       </b-tabs>
     </div>
 
