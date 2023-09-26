@@ -151,8 +151,9 @@ public class PlantUMLResource {
     @GetMapping(value = "plantuml/application/get-svg/{id}")
     public @ResponseBody PlantumlDTO getApplicationSVG(
         @PathVariable Long id,
-        @RequestParam(required = false, defaultValue = "smetana") Layout layout,
-        @RequestParam(required = false, defaultValue = "true") boolean groupComponents
+        @RequestParam(defaultValue = "elk") Layout layout,
+        @RequestParam(defaultValue = "true") boolean groupComponents,
+        @RequestParam(defaultValue = "false") boolean showLabels
     ) throws IOException, BadRequestException {
         Optional<Application> optional = applicationRepository.findById(id);
 
@@ -164,7 +165,7 @@ public class PlantUMLResource {
             );
             SortedSet<FunctionalFlow> flows = functionalFlowRepository.findFunctionalFlowsForInterfacesIn(appli);
             return new PlantumlDTO(
-                this.plantUMLSerializer.getInterfacesCollectionDiagramSVG(interfaces, layout, groupComponents),
+                this.plantUMLSerializer.getInterfacesCollectionDiagramSVG(interfaces, layout, groupComponents, showLabels),
                 interfaces,
                 flows
             );
@@ -184,9 +185,12 @@ public class PlantUMLResource {
     }
 
     @GetMapping(value = "plantuml/applications/get-svg")
-    public @ResponseBody String getApplicationsSVG(@RequestParam(value = "ids[]") Long[] ids) throws IOException, BadRequestException {
+    public @ResponseBody String getApplicationsSVG(
+        @RequestParam(value = "ids[]") Long[] ids,
+        @RequestParam(defaultValue = "false") boolean showLabels
+    ) throws IOException, BadRequestException {
         SortedSet<FlowInterfaceLight> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
-        return this.plantUMLSerializer.getInterfacesCollectionDiagramSVG(interfaces, Layout.smetana, false);
+        return this.plantUMLSerializer.getInterfacesCollectionDiagramSVG(interfaces, Layout.smetana, false, showLabels);
     }
 
     @GetMapping(value = "plantuml/applications/get-source")

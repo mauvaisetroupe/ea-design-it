@@ -25,11 +25,12 @@ export default class ApplicationDetails extends Vue {
   public flows: IFunctionalFlow[] = [];
   public consolidatedCapabilities: ICapability[] = [];
 
-  public layout = 'smetana';
+  public layout = 'elk';
   public refreshingPlantuml = false;
   public groupComponents = true;
 
   public lco: ICapability = {};
+  public showLabels = false;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -60,7 +61,7 @@ export default class ApplicationDetails extends Vue {
 
   public getPlantUML(applicationId) {
     this.applicationService()
-      .getPlantUML(applicationId, this.layout, this.groupComponents)
+      .getPlantUML(applicationId, this.layout, this.groupComponents, this.showLabels)
       .then(
         res => {
           this.plantUMLImage = res.data.svg;
@@ -117,6 +118,12 @@ export default class ApplicationDetails extends Vue {
   public doGroupComponents() {
     this.refreshingPlantuml = true;
     this.groupComponents = !this.groupComponents;
+    this.getPlantUML(this.application.id);
+  }
+
+  public doShowLabels() {
+    this.refreshingPlantuml = true;
+    this.showLabels = !this.showLabels;
     this.getPlantUML(this.application.id);
   }
 }

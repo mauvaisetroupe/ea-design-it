@@ -141,17 +141,21 @@ public class PlantUMLService {
         return createPlantUMLSource(graph, diagramType, false, false, Layout.smetana, false, false);
     }
 
-    public String getInterfacesCollectionDiagramSVG(SortedSet<FlowInterfaceLight> interfaces, Layout layout, boolean groupComponents)
-        throws IOException {
+    public String getInterfacesCollectionDiagramSVG(
+        SortedSet<FlowInterfaceLight> interfaces,
+        Layout layout,
+        boolean groupComponents,
+        boolean showLabels
+    ) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graph = graphBuilder.createGraph(interfaces);
+        GraphDTO graph = graphBuilder.createGraph(interfaces, showLabels);
         String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, true, layout, groupComponents, true);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getInterfacesCollectionDiagramSource(SortedSet<FlowInterfaceLight> interfaces) {
         GraphBuilder graphBuilder = new GraphBuilder();
-        GraphDTO graph = graphBuilder.createGraph(interfaces);
+        GraphDTO graph = graphBuilder.createGraph(interfaces, true);
         String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, false, Layout.none, false, false);
         return plantUMLSource.toString();
     }

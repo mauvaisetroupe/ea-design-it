@@ -117,7 +117,7 @@ public class GraphBuilder {
         graph.addEdgeIngroup(step.getGroup(), title, groupUrl);
     }
 
-    public GraphDTO createGraph(SortedSet<FlowInterfaceLight> interfaces) {
+    public GraphDTO createGraph(SortedSet<FlowInterfaceLight> interfaces, boolean showLabels) {
         GraphDTO graph = new GraphDTO();
         for (FlowInterfaceLight interface1 : interfaces) {
             Application source = getApplication(interface1.getSource(), interface1.getSourceComponent(), null);
@@ -127,7 +127,8 @@ public class GraphBuilder {
             Long id = interface1.getId();
             String label = interface1.getAlias();
             String url = "/flow-interface/" + interface1.getId() + "/view";
-            Edge edge = new Edge("" + id, source.getId(), target.getId(), new Label(label, url), false);
+            Label mylabel = showLabels ? new Label(label, url) : null;
+            Edge edge = new Edge("" + id, source.getId(), target.getId(), mylabel, false);
             graph.addEdge(edge);
             addInApplicationsGroup(
                 graph,

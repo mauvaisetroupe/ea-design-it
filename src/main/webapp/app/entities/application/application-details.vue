@@ -142,7 +142,7 @@
       </div>
       <br />
       <h2>Interfaces for {{ application.name }}</h2>
-      <div v-html="plantUMLImage" class="table-responsive"></div>
+      <div v-html="plantUMLImage" class="table-responsive my-5"></div>
       <div class="col-12">
         <button
           class="btn btn-secondary"
@@ -163,6 +163,16 @@
         >
           <font-awesome-icon icon="sync" :spin="refreshingPlantuml"></font-awesome-icon>
           <span>{{ groupComponents ? 'Ungroup Components' : 'Group components' }} </span>
+        </button>
+        <button
+          class="btn btn-secondary"
+          v-on:click="doShowLabels()"
+          style="font-size: 0.7em; padding: 3px; margin: 3px"
+          v-if="plantUMLImage"
+          :disabled="refreshingPlantuml"
+        >
+          <font-awesome-icon icon="sync" :spin="refreshingPlantuml"></font-awesome-icon>
+          <span>{{ showLabels ? 'Hide Labels' : 'Show Labels' }} </span>
         </button>
         <br /><br />
       </div>
