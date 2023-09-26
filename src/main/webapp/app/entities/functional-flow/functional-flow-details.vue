@@ -257,7 +257,7 @@
         </b-tab>
       </b-tabs>
     </div>
-    <div class="md-12">
+    <div class="col-12">
       <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
         <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
       </button>

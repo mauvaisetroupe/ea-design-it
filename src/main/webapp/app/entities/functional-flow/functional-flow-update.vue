@@ -341,7 +341,6 @@
         <b-tab title="References" disabled></b-tab>
       </b-tabs>
     </div>
-
     <div class="col-12">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
         <div>
