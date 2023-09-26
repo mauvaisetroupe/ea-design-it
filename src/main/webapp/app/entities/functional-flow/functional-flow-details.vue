@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="col-12">
-      <b-tabs content-class="mt-3" active-nav-item-class="bg-info" card pills>
+      <b-tabs content-class="mt-3" active-nav-item-class="bg-info" card pills v-model="tabIndex">
         <b-tab title="Information" active>
           <div class="row">
             <dl class="row jh-entity-details">
@@ -263,11 +263,11 @@
       </button>
       <router-link
         v-if="functionalFlow.id"
-        :to="{ name: 'FunctionalFlowEdit', params: { functionalFlowId: functionalFlow.id } }"
+        :to="{ name: 'FunctionalFlowEdit', params: { functionalFlowId: functionalFlow.id, tabIndex: tabIndex } }"
         custom
         v-slot="{ navigate }"
       >
-        <button @click="navigate" class="btn btn-primary" v-if="accountService().writeAuthorities">
+        <button @click="navigate" class="btn btn-primary" v-if="accountService().writeAuthorities" :disabled="tabIndex === 3">
           <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit </span>
         </button>
       </router-link>

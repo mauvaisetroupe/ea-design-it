@@ -75,14 +75,27 @@ export default class FunctionalFlowUpdate extends Vue {
   public importError = '';
   public previewError = '';
   public functionalFlowImport: IPlantumlFlowImport = {};
+  public tabIndex = 1;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (to.params.functionalFlowId) {
         vm.retrieveFunctionalFlow(to.params.functionalFlowId);
       }
+      if (typeof to.params.tabIndex !== 'undefined') {
+        vm.chooseTab(parseInt(to.params.tabIndex));
+      }
       vm.initRelationships();
     });
+  }
+
+  public chooseTab(_tabIndex) {
+    if (_tabIndex === 0) {
+      // https://github.com/bootstrap-vue/bootstrap-vue/issues/2803
+      this.$nextTick(() => {
+        this.tabIndex = _tabIndex;
+      });
+    }
   }
 
   created(): void {

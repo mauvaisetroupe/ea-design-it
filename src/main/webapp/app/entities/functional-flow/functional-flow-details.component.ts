@@ -1,4 +1,4 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { Component, Vue, Inject, Watch } from 'vue-property-decorator';
 
 import { FunctionalFlow, IFunctionalFlow } from '@/shared/model/functional-flow.model';
 import FunctionalFlowService from './functional-flow.service';
@@ -51,6 +51,45 @@ export default class FunctionalFlowDetails extends Vue {
 
   public applicationIds = [];
 
+  //////////////////////////////
+  // Store current tab in sessionStorage
+  //////////////////////////////
+
+  public tabIndex = 0;
+  public flowId = -1;
+  public sessionKey = 'flow.detail.tab';
+
+  @Watch('tabIndex')
+  public onTabChange(newtab) {
+    if (this.functionalFlow && this.functionalFlow.id) {
+      this.tabIndex = newtab;
+      sessionStorage.setItem(this.sessionKey, this.functionalFlow.id + '#' + this.tabIndex);
+    }
+  }
+
+  public created() {
+    // https://github.com/bootstrap-vue/bootstrap-vue/issues/2803
+    this.$nextTick(() => {
+      this.loadTab(this.flowId);
+    });
+  }
+
+  public loadTab(_landscapeID) {
+    if (sessionStorage.getItem(this.sessionKey)) {
+      const parts = sessionStorage.getItem(this.sessionKey).split('#');
+      const landId = parseInt(parts[0]);
+      const tabIndex = parseInt(parts[1]);
+      const landscapeID = parseInt(_landscapeID);
+      if (landscapeID === landId) {
+        this.tabIndex = tabIndex;
+      } else {
+        sessionStorage.removeItem(this.sessionKey);
+      }
+    } else {
+      this.tabIndex = 1;
+    }
+  }
+
   //for description update
   public reorderAliasflowToSave: IFunctionalFlow[] = [];
   //for reordering update
@@ -60,6 +99,7 @@ export default class FunctionalFlowDetails extends Vue {
     next(vm => {
       if (to.params.functionalFlowId) {
         vm.retrieveFunctionalFlow(to.params.functionalFlowId);
+        vm.flowId = parseInt(to.params.functionalFlowId);
       }
     });
   }

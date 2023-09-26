@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="col-12">
-      <b-tabs content-class="mt-3" card pills @input="tabChanged">
+      <b-tabs content-class="mt-3" card pills @input="tabChanged" v-model="tabIndex">
         <b-tab title="Information">
           <div>
             <div class="form-group row" v-if="functionalFlow.id">
