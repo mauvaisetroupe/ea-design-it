@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -11,14 +12,21 @@ import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link FlowInterfaceResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser(username = "admin", authorities = { "ROLE_USER", "ROLE_WRITE" })
 class FlowInterfaceResourceIT {
@@ -61,6 +70,9 @@ class FlowInterfaceResourceIT {
 
     @Autowired
     private FlowInterfaceRepository flowInterfaceRepository;
+
+    @Mock
+    private FlowInterfaceRepository flowInterfaceRepositoryMock;
 
     @Autowired
     private EntityManager em;
@@ -243,7 +255,7 @@ class FlowInterfaceResourceIT {
 
     @Test
     @Transactional
-    void putNewFlowInterface() throws Exception {
+    void putExistingFlowInterface() throws Exception {
         // Initialize the database
         flowInterfaceRepository.saveAndFlush(flowInterface);
 

@@ -1,18 +1,12 @@
----
-title: "JHipster"
-layout: page
-permalink: /jhipster/
-nav_order: 6
----
-# EADesignIt & JHipster
+# EADesignIt
 
-This application was generated using JHipster 7.6.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.6.0](https://www.jhipster.tech/documentation-archive/v7.6.0).
+This application was generated using JHipster 7.9.4, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.9.4](https://www.jhipster.tech/documentation-archive/v7.9.4).
 
 ## Project Structure
 
 Node is required for generation and recommended for development. `package.json` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
 
-In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husk, and others that are well known and you can find references in the web.
+In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
 
 `/src/*` structure follows default Java structure.
 
@@ -186,30 +180,29 @@ For more information, refer to the [Code quality page][].
 
 You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
 
-For example, to start a oracle database in a docker container, run:
+For example, to start a postgresql database in a docker container, run:
 
 ```
-docker-compose -f src/main/docker/oracle.yml up -d
+docker-compose -f src/main/docker/postgresql.yml up -d
 ```
 
 To stop it and remove the container, run:
 
 ```
-docker-compose -f src/main/docker/oracle.yml down
+docker-compose -f src/main/docker/postgresql.yml down
 ```
-
-```
-docker run -d -p 1521:1521 -e ORACLE_PASSWORD=EADesignIt -e APP_USER=EADesignIt -e APP_USER_PASSWORD=EADesignIt -v /media/data/ubuntu/docker-data/docker-data/lco-data/oracle:/opt/oracle/oradata gvenzl/oracle-xe:18
-```
-
-Use if write access eror : chown -R 54321:54321 /oradata/path/on/host
-
 
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a docker image of your app by running:
 
 ```
-./mvnw -Pprod verify jib:dockerBuild
+npm run java:docker
+```
+
+Or build a arm64 docker image when using an arm64 processor os like MacOS with M1 processor family running:
+
+```
+npm run java:docker:arm64
 ```
 
 Then run:
@@ -218,6 +211,8 @@ Then run:
 docker-compose -f src/main/docker/app.yml up -d
 ```
 
+When running Docker Desktop on MacOS Big Sur or later, consider enabling experimental `Use the new Virtualization framework` for better processing performance ([disk access performance is worse](https://github.com/docker/roadmap/issues/7)).
+
 For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
 
 ## Continuous Integration (optional)
@@ -225,13 +220,13 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
 [jhipster homepage and latest documentation]: https://www.jhipster.tech
-[jhipster 7.6.0 archive]: https://www.jhipster.tech/documentation-archive/v7.6.0
-[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v7.6.0/development/
-[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v7.6.0/docker-compose
-[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v7.6.0/production/
-[running tests page]: https://www.jhipster.tech/documentation-archive/v7.6.0/running-tests/
-[code quality page]: https://www.jhipster.tech/documentation-archive/v7.6.0/code-quality/
-[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v7.6.0/setting-up-ci/
+[jhipster 7.9.4 archive]: https://www.jhipster.tech/documentation-archive/v7.9.4
+[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v7.9.4/development/
+[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v7.9.4/docker-compose
+[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v7.9.4/production/
+[running tests page]: https://www.jhipster.tech/documentation-archive/v7.9.4/running-tests/
+[code quality page]: https://www.jhipster.tech/documentation-archive/v7.9.4/code-quality/
+[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v7.9.4/setting-up-ci/
 [node.js]: https://nodejs.org/
 [npm]: https://www.npmjs.com/
 [webpack]: https://webpack.github.io/

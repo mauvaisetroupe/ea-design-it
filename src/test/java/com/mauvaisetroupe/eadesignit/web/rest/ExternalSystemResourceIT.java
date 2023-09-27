@@ -153,7 +153,7 @@ class ExternalSystemResourceIT {
 
     @Test
     @Transactional
-    void putNewExternalSystem() throws Exception {
+    void putExistingExternalSystem() throws Exception {
         // Initialize the database
         externalSystemRepository.saveAndFlush(externalSystem);
 

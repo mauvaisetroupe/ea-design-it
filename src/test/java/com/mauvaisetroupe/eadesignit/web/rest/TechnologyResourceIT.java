@@ -178,7 +178,7 @@ class TechnologyResourceIT {
 
     @Test
     @Transactional
-    void putNewTechnology() throws Exception {
+    void putExistingTechnology() throws Exception {
         // Initialize the database
         technologyRepository.saveAndFlush(technology);
 

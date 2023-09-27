@@ -182,7 +182,7 @@ class CapabilityApplicationMappingResourceIT {
 
     @Test
     @Transactional
-    void putNewCapabilityApplicationMapping() throws Exception {
+    void putExistingCapabilityApplicationMapping() throws Exception {
         // Initialize the database
         capabilityApplicationMappingRepository.saveAndFlush(capabilityApplicationMapping);
 

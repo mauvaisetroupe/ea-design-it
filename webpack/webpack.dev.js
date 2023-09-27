@@ -12,6 +12,10 @@ module.exports = (env, options) => {
     },
     // cheap-module-eval-source-map is faster for development
     devtool: config.dev.devtool,
+    output: {
+      filename: 'app/[name].[contenthash].bundle.js',
+      chunkFilename: 'app/[id].[chunkhash].chunk.js',
+    },
     optimization: {
       moduleIds: 'named',
     },

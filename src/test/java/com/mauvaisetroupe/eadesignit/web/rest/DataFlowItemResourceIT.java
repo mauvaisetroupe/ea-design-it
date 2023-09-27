@@ -218,7 +218,7 @@ class DataFlowItemResourceIT {
 
     @Test
     @Transactional
-    void putNewDataFlowItem() throws Exception {
+    void putExistingDataFlowItem() throws Exception {
         // Initialize the database
         dataFlowItemRepository.saveAndFlush(dataFlowItem);
 

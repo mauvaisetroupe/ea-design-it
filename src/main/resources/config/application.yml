@@ -60,6 +60,8 @@ management:
   info:
     git:
       mode: full
+    env:
+      enabled: true
   health:
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
@@ -132,7 +134,6 @@ spring:
     basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
-    allow-circular-references: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

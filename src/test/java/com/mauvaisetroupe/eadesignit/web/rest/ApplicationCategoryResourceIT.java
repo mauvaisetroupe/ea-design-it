@@ -190,7 +190,7 @@ class ApplicationCategoryResourceIT {
 
     @Test
     @Transactional
-    void putNewApplicationCategory() throws Exception {
+    void putExistingApplicationCategory() throws Exception {
         // Initialize the database
         applicationCategoryRepository.saveAndFlush(applicationCategory);
 
