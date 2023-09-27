@@ -62,7 +62,7 @@ describe('/admin', () => {
             .then(() => {
               // Wait iframe to load
               cy.wait(500); // eslint-disable-line cypress/no-unnecessary-waiting
-              cy.get(swaggerFrameSelector).its('0.contentDocument.body').find(swaggerPageSelector).should('be.visible');
+              cy.get(swaggerFrameSelector).its('0.contentDocument.body').find(swaggerPageSelector, { timeout: 15000 }).should('be.visible');
             });
         }
       });

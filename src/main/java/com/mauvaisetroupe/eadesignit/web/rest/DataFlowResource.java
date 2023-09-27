@@ -169,7 +169,11 @@ public class DataFlowResource {
     @GetMapping("/data-flows")
     public List<DataFlow> getAllDataFlows(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all DataFlows");
-        return dataFlowRepository.findAllWithEagerRelationships();
+        if (eagerload) {
+            return dataFlowRepository.findAllWithEagerRelationships();
+        } else {
+            return dataFlowRepository.findAll();
+        }
     }
 
     /**

@@ -10,23 +10,23 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
- * Spring Data SQL repository for the CapabilityApplicationMapping entity.
+ * Spring Data JPA repository for the CapabilityApplicationMapping entity.
+ *
+ * When extending this class, extend CapabilityApplicationMappingRepositoryWithBagRelationships too.
+ * For more information refer to https://github.com/jhipster/generator-jhipster/issues/17990.
  */
 @Repository
-public interface CapabilityApplicationMappingRepository extends JpaRepository<CapabilityApplicationMapping, Long> {
-    @Query(
-        value = "select distinct capabilityApplicationMapping from CapabilityApplicationMapping capabilityApplicationMapping left join fetch capabilityApplicationMapping.landscapes",
-        countQuery = "select count(distinct capabilityApplicationMapping) from CapabilityApplicationMapping capabilityApplicationMapping"
-    )
-    Page<CapabilityApplicationMapping> findAllWithEagerRelationships(Pageable pageable);
+public interface CapabilityApplicationMappingRepository
+    extends CapabilityApplicationMappingRepositoryWithBagRelationships, JpaRepository<CapabilityApplicationMapping, Long> {
+    default Optional<CapabilityApplicationMapping> findOneWithEagerRelationships(Long id) {
+        return this.fetchBagRelationships(this.findById(id));
+    }
 
-    @Query(
-        "select distinct capabilityApplicationMapping from CapabilityApplicationMapping capabilityApplicationMapping left join fetch capabilityApplicationMapping.landscapes"
-    )
-    List<CapabilityApplicationMapping> findAllWithEagerRelationships();
+    default List<CapabilityApplicationMapping> findAllWithEagerRelationships() {
+        return this.fetchBagRelationships(this.findAll());
+    }
 
-    @Query(
-        "select capabilityApplicationMapping from CapabilityApplicationMapping capabilityApplicationMapping left join fetch capabilityApplicationMapping.landscapes where capabilityApplicationMapping.id =:id"
-    )
-    Optional<CapabilityApplicationMapping> findOneWithEagerRelationships(@Param("id") Long id);
+    default Page<CapabilityApplicationMapping> findAllWithEagerRelationships(Pageable pageable) {
+        return this.fetchBagRelationships(this.findAll(pageable));
+    }
 }

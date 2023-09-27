@@ -202,7 +202,7 @@ class ProtocolResourceIT {
 
     @Test
     @Transactional
-    void putNewProtocol() throws Exception {
+    void putExistingProtocol() throws Exception {
         // Initialize the database
         protocolRepository.saveAndFlush(protocol);
 

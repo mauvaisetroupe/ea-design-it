@@ -3,7 +3,7 @@
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <!--
@@ -26,7 +26,7 @@
 
     <changeSet id="20230614182406-1-relations" author="jhipster">
 
-        <createTable tableName="rel_capability_ap__landscap_b2">
+        <createTable tableName="rel_capability_application_mapping__landscape">
             <column name="landscape_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -35,7 +35,7 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="capability_application_mapping_id, landscape_id" tableName="rel_capability_ap__landscap_b2"/>
+        <addPrimaryKey columnNames="capability_application_mapping_id, landscape_id" tableName="rel_capability_application_mapping__landscape"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

@@ -17,7 +17,7 @@ export default class JhiNavbar extends Vue {
   public version = 'v' + VERSION;
   private currentLanguage = this.$store.getters.currentLanguage;
   private languages: any = this.$store.getters.languages;
-  private hasAnyAuthorityValue = false;
+  private hasAnyAuthorityValues = {};
 
   created() {}
 
@@ -50,9 +50,11 @@ export default class JhiNavbar extends Vue {
     this.accountService()
       .hasAnyAuthorityAndCheckAuth(authorities)
       .then(value => {
-        this.hasAnyAuthorityValue = value;
+        if (this.hasAnyAuthorityValues[authorities] !== value) {
+          this.hasAnyAuthorityValues = { ...this.hasAnyAuthorityValues, [authorities]: value };
+        }
       });
-    return this.hasAnyAuthorityValue;
+    return this.hasAnyAuthorityValues[authorities] ?? false;
   }
 
   public get openAPIEnabled(): boolean {

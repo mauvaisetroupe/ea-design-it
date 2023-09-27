@@ -148,7 +148,11 @@ public class CapabilityApplicationMappingResource {
         @RequestParam(required = false, defaultValue = "false") boolean eagerload
     ) {
         log.debug("REST request to get all CapabilityApplicationMappings");
-        return capabilityApplicationMappingRepository.findAllWithEagerRelationships();
+        if (eagerload) {
+            return capabilityApplicationMappingRepository.findAllWithEagerRelationships();
+        } else {
+            return capabilityApplicationMappingRepository.findAll();
+        }
     }
 
     /**

@@ -148,12 +148,17 @@ public class FlowGroupResource {
     /**
      * {@code GET  /flow-groups} : get all the flowGroups.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of flowGroups in body.
      */
     @GetMapping("/flow-groups")
-    public List<FlowGroup> getAllFlowGroups() {
+    public List<FlowGroup> getAllFlowGroups(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all FlowGroups");
-        return flowGroupRepository.findAll();
+        if (eagerload) {
+            return flowGroupRepository.findAllWithEagerRelationships();
+        } else {
+            return flowGroupRepository.findAll();
+        }
     }
 
     /**
@@ -165,7 +170,7 @@ public class FlowGroupResource {
     @GetMapping("/flow-groups/{id}")
     public ResponseEntity<FlowGroup> getFlowGroup(@PathVariable Long id) {
         log.debug("REST request to get FlowGroup : {}", id);
-        Optional<FlowGroup> flowGroup = flowGroupRepository.findById(id);
+        Optional<FlowGroup> flowGroup = flowGroupRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(flowGroup);
     }
 

@@ -1,12 +1,12 @@
 # EADesignIt
 
-This application was generated using JHipster 7.6.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.6.0](https://www.jhipster.tech/documentation-archive/v7.6.0).
+This application was generated using JHipster 7.9.4, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.9.4](https://www.jhipster.tech/documentation-archive/v7.9.4).
 
 ## Project Structure
 
 Node is required for generation and recommended for development. `package.json` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
 
-In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husk, and others that are well known and you can find references in the web.
+In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
 
 `/src/*` structure follows default Java structure.
 
@@ -15,6 +15,7 @@ In the project root, JHipster generates configuration files for tools like git, 
 - `.yo-resolve` (optional) - Yeoman conflict resolver
   Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line should match `[pattern] [action]` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch) pattern and action been one of skip (default if ommited) or force. Lines starting with `#` are considered comments and are ignored.
 - `.jhipster/*.json` - JHipster entity configuration files
+
 - `npmw` - wrapper to use locally installed npm.
   JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed locally and uses it avoiding some differences different versions can cause. By using `./npmw` instead of the traditional `npm` you can configure a Node-less environment to develop or test your application.
 - `/src/main/docker` - Docker configurations for the application and services that the application depends on
@@ -196,7 +197,13 @@ You can also fully dockerize your application and all the services that it depen
 To achieve this, first build a docker image of your app by running:
 
 ```
-./mvnw -Pprod verify jib:dockerBuild
+npm run java:docker
+```
+
+Or build a arm64 docker image when using an arm64 processor os like MacOS with M1 processor family running:
+
+```
+npm run java:docker:arm64
 ```
 
 Then run:
@@ -205,6 +212,8 @@ Then run:
 docker-compose -f src/main/docker/app.yml up -d
 ```
 
+When running Docker Desktop on MacOS Big Sur or later, consider enabling experimental `Use the new Virtualization framework` for better processing performance ([disk access performance is worse](https://github.com/docker/roadmap/issues/7)).
+
 For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
 
 ## Continuous Integration (optional)
@@ -212,13 +221,13 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
 [jhipster homepage and latest documentation]: https://www.jhipster.tech
-[jhipster 7.6.0 archive]: https://www.jhipster.tech/documentation-archive/v7.6.0
-[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v7.6.0/development/
-[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v7.6.0/docker-compose
-[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v7.6.0/production/
-[running tests page]: https://www.jhipster.tech/documentation-archive/v7.6.0/running-tests/
-[code quality page]: https://www.jhipster.tech/documentation-archive/v7.6.0/code-quality/
-[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v7.6.0/setting-up-ci/
+[jhipster 7.9.4 archive]: https://www.jhipster.tech/documentation-archive/v7.9.4
+[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v7.9.4/development/
+[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v7.9.4/docker-compose
+[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v7.9.4/production/
+[running tests page]: https://www.jhipster.tech/documentation-archive/v7.9.4/running-tests/
+[code quality page]: https://www.jhipster.tech/documentation-archive/v7.9.4/code-quality/
+[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v7.9.4/setting-up-ci/
 [node.js]: https://nodejs.org/
 [npm]: https://www.npmjs.com/
 [webpack]: https://webpack.github.io/

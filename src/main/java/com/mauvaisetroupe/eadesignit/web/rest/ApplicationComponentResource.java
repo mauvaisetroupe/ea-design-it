@@ -178,7 +178,11 @@ public class ApplicationComponentResource {
         @RequestParam(required = false, defaultValue = "false") boolean eagerload
     ) {
         log.debug("REST request to get all ApplicationComponents");
-        return applicationComponentRepository.findAllWithEagerRelationships();
+        if (eagerload) {
+            return applicationComponentRepository.findAllWithEagerRelationships();
+        } else {
+            return applicationComponentRepository.findAll();
+        }
     }
 
     /**

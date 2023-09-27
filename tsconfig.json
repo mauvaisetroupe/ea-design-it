@@ -11,7 +11,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": ["es7", "dom"],
-    "typeRoots": ["node_modules/@types"],
     "paths": {
       "@/*": ["*"]
     },
@@ -20,5 +19,5 @@
     "allowJs": true
   },
   "include": ["src/main/webapp/app"],
-  "exclude": ["node_modules", "src/test/javascript/cypress"]
+  "exclude": ["node_modules"]
 }

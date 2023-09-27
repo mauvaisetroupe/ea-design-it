@@ -16,6 +16,7 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table(name = "landscape_view")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class LandscapeView implements Serializable {
 
     private static final long serialVersionUID = 1L;

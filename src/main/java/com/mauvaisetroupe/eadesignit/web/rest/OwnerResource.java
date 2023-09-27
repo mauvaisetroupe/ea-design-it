@@ -155,7 +155,11 @@ public class OwnerResource {
     @GetMapping("/owners")
     public List<Owner> getAllOwners(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Owners");
-        return ownerRepository.findAllWithEagerRelationships();
+        if (eagerload) {
+            return ownerRepository.findAllWithEagerRelationships();
+        } else {
+            return ownerRepository.findAll();
+        }
     }
 
     /**

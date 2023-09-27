@@ -160,12 +160,17 @@ public class FlowInterfaceResource {
     /**
      * {@code GET  /flow-interfaces} : get all the flowInterfaces.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of flowInterfaces in body.
      */
     @GetMapping("/flow-interfaces")
-    public List<FlowInterface> getAllFlowInterfaces() {
+    public List<FlowInterface> getAllFlowInterfaces(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all FlowInterfaces");
-        return flowInterfaceRepository.findAll();
+        if (eagerload) {
+            return flowInterfaceRepository.findAllWithEagerRelationships();
+        } else {
+            return flowInterfaceRepository.findAll();
+        }
     }
 
     /**
@@ -177,7 +182,7 @@ public class FlowInterfaceResource {
     @GetMapping("/flow-interfaces/{id}")
     public ResponseEntity<FlowInterface> getFlowInterface(@PathVariable Long id) {
         log.debug("REST request to get FlowInterface : {}", id);
-        Optional<FlowInterface> flowInterface = flowInterfaceRepository.findById(id);
+        Optional<FlowInterface> flowInterface = flowInterfaceRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(flowInterface);
     }
 

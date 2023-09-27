@@ -32,7 +32,7 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:h2:file:./target/h2db/db/eadesignit;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:file:./target/h2db/db/eadesignit;DB_CLOSE_DELAY=-1;MODE=LEGACY
     username: EADesignIt
     password:
     hikari:
@@ -43,7 +43,6 @@ spring:
       # disable spring boot built-in h2-console since we start it manually with correct configuration
       enabled: false
   jpa:
-    database-platform: tech.jhipster.domain.util.FixedH2Dialect
   liquibase:
     contexts: dev
   mail:
@@ -55,15 +54,6 @@ spring:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
     cache: false
-  sleuth:
-    sampler:
-      probability: 1 # report 100% of traces
-  zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
-    base-url: http://localhost:9411
-    enabled: false
-    locator:
-      discovery:
-        enabled: true
 
 server:
   port: 8080
@@ -83,6 +73,8 @@ jhipster:
   cors:
     # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
     allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,http://localhost:9060,https://localhost:9060'
+    # Enable CORS when running in GitHub Codespaces
+    allowed-origin-patterns: 'https://*.githubpreview.dev'
     allowed-methods: '*'
     allowed-headers: '*'
     exposed-headers: 'Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params'

@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -154,9 +155,8 @@ class CapabilityApplicationMappingResourceIT {
     void getAllCapabilityApplicationMappingsWithEagerRelationshipsIsNotEnabled() throws Exception {
         when(capabilityApplicationMappingRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
 
-        restCapabilityApplicationMappingMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
-
-        verify(capabilityApplicationMappingRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+        restCapabilityApplicationMappingMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
+        verify(capabilityApplicationMappingRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
 
     @Test
@@ -182,7 +182,7 @@ class CapabilityApplicationMappingResourceIT {
 
     @Test
     @Transactional
-    void putNewCapabilityApplicationMapping() throws Exception {
+    void putExistingCapabilityApplicationMapping() throws Exception {
         // Initialize the database
         capabilityApplicationMappingRepository.saveAndFlush(capabilityApplicationMapping);
 

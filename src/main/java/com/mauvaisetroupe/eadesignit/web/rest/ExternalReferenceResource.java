@@ -141,12 +141,17 @@ public class ExternalReferenceResource {
     /**
      * {@code GET  /external-references} : get all the externalReferences.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of externalReferences in body.
      */
     @GetMapping("/external-references")
-    public List<ExternalReference> getAllExternalReferences() {
+    public List<ExternalReference> getAllExternalReferences(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all ExternalReferences");
-        return externalReferenceRepository.findAll();
+        if (eagerload) {
+            return externalReferenceRepository.findAllWithEagerRelationships();
+        } else {
+            return externalReferenceRepository.findAll();
+        }
     }
 
     /**
@@ -158,7 +163,7 @@ public class ExternalReferenceResource {
     @GetMapping("/external-references/{id}")
     public ResponseEntity<ExternalReference> getExternalReference(@PathVariable Long id) {
         log.debug("REST request to get ExternalReference : {}", id);
-        Optional<ExternalReference> externalReference = externalReferenceRepository.findById(id);
+        Optional<ExternalReference> externalReference = externalReferenceRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(externalReference);
     }
 

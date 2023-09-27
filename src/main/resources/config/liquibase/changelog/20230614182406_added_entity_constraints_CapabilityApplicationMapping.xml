@@ -2,7 +2,7 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <!--
         Added the constraints for entity CapabilityApplicationMapping.
     -->
@@ -21,14 +21,14 @@
                                  referencedTableName="application"/>
 
         <addForeignKeyConstraint baseColumnNames="capability_application_mapping_id"
-                                 baseTableName="rel_capability_ap__landscap_b2"
-                                 constraintName="fk_rel_capability_ap__landscap_b2__capability_application_mapping_id"
+                                 baseTableName="rel_capability_application_mapping__landscape"
+                                 constraintName="fk_rel_capability_application_mapping__landscape__capability_application_mapping_id"
                                  referencedColumnNames="id"
                                  referencedTableName="capability_application_mapping"/>
 
         <addForeignKeyConstraint baseColumnNames="landscape_id"
-                                 baseTableName="rel_capability_ap__landscap_b2"
-                                 constraintName="fk_rel_capability_ap__landscap_b2__landscape_id"
+                                 baseTableName="rel_capability_application_mapping__landscape"
+                                 constraintName="fk_rel_capability_application_mapping__landscape__landscape_id"
                                  referencedColumnNames="id"
                                  referencedTableName="landscape_view"/>
     </changeSet>

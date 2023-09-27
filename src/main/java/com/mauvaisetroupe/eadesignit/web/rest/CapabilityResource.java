@@ -151,12 +151,17 @@ public class CapabilityResource {
     /**
      * {@code GET  /capabilities} : get all the capabilities.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of capabilities in body.
      */
     @GetMapping("/capabilities")
-    public List<Capability> getAllCapabilities() {
+    public List<Capability> getAllCapabilities(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Capabilities");
-        return capabilityRepository.findAll();
+        if (eagerload) {
+            return capabilityRepository.findAllWithEagerRelationships();
+        } else {
+            return capabilityRepository.findAll();
+        }
     }
 
     /**
@@ -168,7 +173,7 @@ public class CapabilityResource {
     @GetMapping("/capabilities/{id}")
     public ResponseEntity<Capability> getCapability(@PathVariable Long id) {
         log.debug("REST request to get Capability : {}", id);
-        Optional<Capability> capability = capabilityRepository.findById(id);
+        Optional<Capability> capability = capabilityRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(capability);
     }
 

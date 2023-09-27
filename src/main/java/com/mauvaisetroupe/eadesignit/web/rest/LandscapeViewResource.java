@@ -155,7 +155,11 @@ public class LandscapeViewResource {
     @GetMapping("/landscape-views")
     public List<LandscapeView> getAllLandscapeViews(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all LandscapeViews");
-        return landscapeViewRepository.findAllWithEagerRelationships();
+        if (eagerload) {
+            return landscapeViewRepository.findAllWithEagerRelationships();
+        } else {
+            return landscapeViewRepository.findAll();
+        }
     }
 
     /**

@@ -166,7 +166,7 @@ class DataFormatResourceIT {
 
     @Test
     @Transactional
-    void putNewDataFormat() throws Exception {
+    void putExistingDataFormat() throws Exception {
         // Initialize the database
         dataFormatRepository.saveAndFlush(dataFormat);
 

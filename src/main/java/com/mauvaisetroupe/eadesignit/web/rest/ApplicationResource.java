@@ -175,7 +175,11 @@ public class ApplicationResource {
     @GetMapping("/applications")
     public List<Application> getAllApplications(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Applications");
-        return applicationRepository.findAllWithEagerRelationships();
+        if (eagerload) {
+            return applicationRepository.findAllWithEagerRelationships();
+        } else {
+            return applicationRepository.findAll();
+        }
     }
 
     /**

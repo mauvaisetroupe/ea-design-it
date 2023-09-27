@@ -10,23 +10,39 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
- * Spring Data SQL repository for the ApplicationComponent entity.
+ * Spring Data JPA repository for the ApplicationComponent entity.
+ *
+ * When extending this class, extend ApplicationComponentRepositoryWithBagRelationships too.
+ * For more information refer to https://github.com/jhipster/generator-jhipster/issues/17990.
  */
 @Repository
-public interface ApplicationComponentRepository extends JpaRepository<ApplicationComponent, Long> {
+public interface ApplicationComponentRepository
+    extends ApplicationComponentRepositoryWithBagRelationships, JpaRepository<ApplicationComponent, Long> {
+    default Optional<ApplicationComponent> findOneWithEagerRelationships(Long id) {
+        return this.fetchBagRelationships(this.findOneWithToOneRelationships(id));
+    }
+
+    default List<ApplicationComponent> findAllWithEagerRelationships() {
+        return this.fetchBagRelationships(this.findAllWithToOneRelationships());
+    }
+
+    default Page<ApplicationComponent> findAllWithEagerRelationships(Pageable pageable) {
+        return this.fetchBagRelationships(this.findAllWithToOneRelationships(pageable));
+    }
+
     @Query(
-        value = "select distinct applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.categories left join fetch applicationComponent.technologies left join fetch applicationComponent.externalIDS",
+        value = "select distinct applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.application",
         countQuery = "select count(distinct applicationComponent) from ApplicationComponent applicationComponent"
     )
-    Page<ApplicationComponent> findAllWithEagerRelationships(Pageable pageable);
+    Page<ApplicationComponent> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select distinct applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.categories left join fetch applicationComponent.technologies left join fetch applicationComponent.externalIDS"
+        "select distinct applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.application"
     )
-    List<ApplicationComponent> findAllWithEagerRelationships();
+    List<ApplicationComponent> findAllWithToOneRelationships();
 
     @Query(
-        "select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.categories left join fetch applicationComponent.technologies left join fetch applicationComponent.externalIDS where applicationComponent.id =:id"
+        "select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.application where applicationComponent.id =:id"
     )
-    Optional<ApplicationComponent> findOneWithEagerRelationships(@Param("id") Long id);
+    Optional<ApplicationComponent> findOneWithToOneRelationships(@Param("id") Long id);
 }

@@ -10,19 +10,22 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
- * Spring Data SQL repository for the Owner entity.
+ * Spring Data JPA repository for the Owner entity.
+ *
+ * When extending this class, extend OwnerRepositoryWithBagRelationships too.
+ * For more information refer to https://github.com/jhipster/generator-jhipster/issues/17990.
  */
 @Repository
-public interface OwnerRepository extends JpaRepository<Owner, Long> {
-    @Query(
-        value = "select distinct owner from Owner owner left join fetch owner.users",
-        countQuery = "select count(distinct owner) from Owner owner"
-    )
-    Page<Owner> findAllWithEagerRelationships(Pageable pageable);
+public interface OwnerRepository extends OwnerRepositoryWithBagRelationships, JpaRepository<Owner, Long> {
+    default Optional<Owner> findOneWithEagerRelationships(Long id) {
+        return this.fetchBagRelationships(this.findById(id));
+    }
 
-    @Query("select distinct owner from Owner owner left join fetch owner.users")
-    List<Owner> findAllWithEagerRelationships();
+    default List<Owner> findAllWithEagerRelationships() {
+        return this.fetchBagRelationships(this.findAll());
+    }
 
-    @Query("select owner from Owner owner left join fetch owner.users where owner.id =:id")
-    Optional<Owner> findOneWithEagerRelationships(@Param("id") Long id);
+    default Page<Owner> findAllWithEagerRelationships(Pageable pageable) {
+        return this.fetchBagRelationships(this.findAll(pageable));
+    }
 }
