@@ -263,7 +263,7 @@ export default class FunctionalFlowUpdate extends Vue {
         if (this.functionalFlow.id) {
           message = 'A FunctionalFlow is updated with identifier ' + param.id;
         }
-        return this.$root.$bvToast.toast(message.toString(), {
+        return (this.$root as any).$bvToast.toast(message.toString(), {
           toaster: 'b-toaster-top-center',
           title: 'Info',
           variant: 'info',
