@@ -63,7 +63,7 @@ describe('Component Tests', () => {
       it('Should call load all on init', async () => {
         // GIVEN
         const lanscapeDTO: ILandscapeDTO = {
-          landscape: { id: 123 },
+          landscape: { id: 123, flows: [] },
           consolidatedCapability: [],
         };
         landscapeViewServiceStub.find.resolves(lanscapeDTO);
@@ -72,6 +72,9 @@ describe('Component Tests', () => {
         // WHEN
         comp.retrieveLandscapeView(123);
         await comp.$nextTick();
+
+        // const args = alertServiceStub.showHttpError.getCall(0).args;
+        // console.log('XXXXXXXXXXXXXXXXXXXXXXXXX Arguments passed to showHttpError:', args);
 
         // THEN
         expect(alertServiceStub.showError.callCount).toBe(0);
@@ -84,7 +87,7 @@ describe('Component Tests', () => {
       it('Should retrieve data', async () => {
         // GIVEN
         const lanscapeDTO: ILandscapeDTO = {
-          landscape: { id: 123 },
+          landscape: { id: 123, flows: [] },
           consolidatedCapability: [],
         };
 
