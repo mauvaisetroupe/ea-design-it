@@ -70,7 +70,7 @@ export default class CapabilityUpdate extends Vue {
           this.isSaving = false;
           this.$router.go(-1);
           const message = 'A Capability is updated with identifier ' + param.id;
-          return this.$root.$bvToast.toast(message.toString(), {
+          return (this.$root as any).$bvToast.toast(message.toString(), {
             toaster: 'b-toaster-top-center',
             title: 'Info',
             variant: 'info',
@@ -89,7 +89,7 @@ export default class CapabilityUpdate extends Vue {
           this.isSaving = false;
           this.$router.go(-1);
           const message = 'A Capability is created with identifier ' + param.id;
-          this.$root.$bvToast.toast(message.toString(), {
+          (this.$root as any).$bvToast.toast(message.toString(), {
             toaster: 'b-toaster-top-center',
             title: 'Success',
             variant: 'success',

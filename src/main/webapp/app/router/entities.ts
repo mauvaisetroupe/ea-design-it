@@ -63,28 +63,23 @@ const FunctionalFlowStepDetails = () => import('@/entities/functional-flow-step/
 
 // prettier-ignore
 const FlowGroup = () => import('@/entities/flow-group/flow-group.vue');
-// prettier-ignore
 const FlowGroupUpdate = () => import('@/entities/flow-group/flow-group-update.vue');
-// prettier-ignore
 const FlowGroupDetails = () => import('@/entities/flow-group/flow-group-details.vue');
-// prettier-ignore
+
 const ExternalReference = () => import('@/entities/external-reference/external-reference.vue');
-// prettier-ignore
 const ExternalReferenceUpdate = () => import('@/entities/external-reference/external-reference-update.vue');
-// prettier-ignore
 const ExternalReferenceDetails = () => import('@/entities/external-reference/external-reference-details.vue');
-// prettier-ignore
+
 const ExternalSystem = () => import('@/entities/external-system/external-system.vue');
-// prettier-ignore
 const ExternalSystemUpdate = () => import('@/entities/external-system/external-system-update.vue');
-// prettier-ignore
 const ExternalSystemDetails = () => import('@/entities/external-system/external-system-details.vue');
-// prettier-ignore
+
 const CapabilityApplicationMapping = () => import('@/entities/capability-application-mapping/capability-application-mapping.vue');
-// prettier-ignore
-const CapabilityApplicationMappingUpdate = () => import('@/entities/capability-application-mapping/capability-application-mapping-update.vue');
-// prettier-ignore
-const CapabilityApplicationMappingDetails = () => import('@/entities/capability-application-mapping/capability-application-mapping-details.vue');
+const CapabilityApplicationMappingUpdate = () =>
+  import('@/entities/capability-application-mapping/capability-application-mapping-update.vue');
+const CapabilityApplicationMappingDetails = () =>
+  import('@/entities/capability-application-mapping/capability-application-mapping-details.vue');
+
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default {

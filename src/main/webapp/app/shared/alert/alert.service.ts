@@ -6,7 +6,7 @@ export default class AlertService {
     if (message) {
       alertMessage = message;
     }
-    instance.$root.$bvToast.toast(alertMessage, {
+    (instance.$root as any).$bvToast.toast(alertMessage, {
       toaster: 'b-toaster-top-center',
       title: 'Error',
       variant: 'danger',
