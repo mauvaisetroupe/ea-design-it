@@ -45,8 +45,6 @@ export default class FunctionalFlowDetails extends Vue {
 
   public indexStepToDetach: number;
 
-  public reorderAlias = false;
-
   public isFetching = false;
 
   public applicationIds = [];

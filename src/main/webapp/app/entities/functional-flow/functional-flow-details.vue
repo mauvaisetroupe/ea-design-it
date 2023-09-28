@@ -115,8 +115,6 @@
                   <tr>
                     <th scope="row"><span>#</span></th>
                     <th scope="row"><span>Step</span></th>
-                    <th scope="row" v-if="reorderAlias"></th>
-                    <th scope="row" v-if="reorderAlias"></th>
                     <th scope="row"><span>Interface</span></th>
                     <th scope="row"><span>Source</span></th>
                     <th scope="row"><span>Target</span></th>
@@ -126,40 +124,21 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(step, i) in functionalFlow.steps" v-bind:key="step.id" :set="(inter = step.flowInterface)">
+                  <tr v-for="step in functionalFlow.steps" v-bind:key="step.id">
                     <td>
                       {{ step.stepOrder }}
                     </td>
                     <td>
-                      <span v-if="!reorderAlias">{{ step.description }}</span>
-                      <span v-else>
-                        <textarea
-                          style="width: 100%; min-width: 600px"
-                          rows="1"
-                          v-model="step.description"
-                          @change="changeStepDescription(functionalFlow, step)"
-                        ></textarea>
-                      </span>
-                    </td>
-                    <td v-if="reorderAlias">
-                      <font-awesome-icon icon="chevron-up" class="btn-success" v-if="i != 0" @click="swap(i, i - 1)"></font-awesome-icon>
-                    </td>
-                    <td v-if="reorderAlias">
-                      <font-awesome-icon
-                        icon="chevron-down"
-                        class="btn-success"
-                        v-if="i != functionalFlow.steps.length - 1"
-                        @click="swap(i, i + 1)"
-                      ></font-awesome-icon>
+                      <span>{{ step.description }}</span>
                     </td>
                     <td>
-                      <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: inter.id } }">{{
-                        inter.alias
+                      <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: step.flowInterface.id } }">{{
+                        step.flowInterface.alias
                       }}</router-link>
                     </td>
                     <td>
-                      <router-link :to="{ name: 'ApplicationView', params: { applicationId: inter.source.id } }">
-                        {{ inter.source.name }}
+                      <router-link :to="{ name: 'ApplicationView', params: { applicationId: step.flowInterface.source.id } }">
+                        {{ step.flowInterface.source.name }}
                       </router-link>
                       <span v-if="step.flowInterface.id && step.flowInterface.sourceComponent">
                         /
@@ -173,8 +152,8 @@
                       </span>
                     </td>
                     <td>
-                      <router-link :to="{ name: 'ApplicationView', params: { applicationId: inter.target.id } }">
-                        {{ inter.target.name }}
+                      <router-link :to="{ name: 'ApplicationView', params: { applicationId: step.flowInterface.target.id } }">
+                        {{ step.flowInterface.target.name }}
                       </router-link>
                       <span v-if="step.flowInterface.id && step.flowInterface.targetComponent">
                         /
@@ -188,12 +167,15 @@
                       </span>
                     </td>
                     <td>
-                      <router-link v-if="inter.protocol" :to="{ name: 'ProtocolView', params: { protocolId: inter.protocol.id } }">
-                        {{ inter.protocol.name }}
+                      <router-link
+                        v-if="step.flowInterface.protocol"
+                        :to="{ name: 'ProtocolView', params: { protocolId: step.flowInterface.protocol.id } }"
+                      >
+                        {{ step.flowInterface.protocol.name }}
                       </router-link>
                     </td>
                     <td>
-                      <span v-for="dataflow in inter.dataFlows" :key="dataflow.id">
+                      <span v-for="dataflow in step.flowInterface.dataFlows" :key="dataflow.id">
                         <router-link
                           :to="{ name: 'DataFlowView', params: { dataFlowId: dataflow.id } }"
                           :title="
@@ -206,7 +188,7 @@
                     <td class="text-right">
                       <div class="btn-group">
                         <router-link
-                          :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: inter.id } }"
+                          :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: step.flowInterface.id } }"
                           custom
                           v-slot="{ navigate }"
                         >
