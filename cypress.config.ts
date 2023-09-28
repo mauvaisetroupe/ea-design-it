@@ -24,7 +24,9 @@ export const defaultConfig = {
     specPattern: 'src/test/javascript/cypress/integration/**/*.spec.ts',
     supportFile: 'src/test/javascript/cypress/support/index.ts',
     experimentalSessionAndOrigin: true,
+    experimentalStudio: true,
   },
+  projectId: 'urjhz2', // <- add this line
 };
 
 export default defineConfig(defaultConfig);

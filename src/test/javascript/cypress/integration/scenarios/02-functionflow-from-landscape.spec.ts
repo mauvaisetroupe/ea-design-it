@@ -48,6 +48,9 @@ describe('Create a new Landscape, a new Functional flow from landscape with 2 sp
   it('Create new function flow from landscape page', function () {
     cy.visit('/landscape-view');
     cy.get('[data-cy="entityDetailsButton-' + landscapeAlias + '"]').click();
+
+    cy.get('#tab-flows___BV_tab_button__').click();
+
     cy.get('[data-cy="entityCreateButton"] > span').click();
     cy.get('[data-cy="alias"]').clear();
     cy.get('[data-cy="alias"]').type(functionalFlowAlias);
@@ -85,6 +88,10 @@ describe('Create a new Landscape, a new Functional flow from landscape with 2 sp
     cy.wait('@getLandscape').then(({ response }) => {
       expect(response!.statusCode).to.equal(200);
     });
+
+    cy.get('#tab-flows___BV_tab_button__').click();
+    cy.get('[data-cy="entityDetailsButton"] > .svg-inline--fa').eq(0).click();
+    cy.get('#tab-steps___BV_tab_button__').click();
 
     cy.contains('step1');
     cy.contains('step2');

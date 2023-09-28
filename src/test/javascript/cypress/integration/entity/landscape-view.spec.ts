@@ -103,7 +103,7 @@ describe('LandscapeView e2e test', () => {
       });
 
       it('detail button click should load details LandscapeView page', () => {
-        cy.get(entityDetailsButtonSelector).first().click();
+        cy.get('[data-cy2="entityDetailsButton"]').first().click();
         cy.getEntityDetailsHeading('landscapeView');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {

@@ -92,7 +92,11 @@ describe('Application Import and Flows e2e test', () => {
       expect(response!.statusCode).to.equal(200);
     });
 
-    cy.get('.table').find('tbody').find('tr').should('have.length', 4);
+    cy.get('#tab-flows___BV_tab_button__').click();
+    cy.get('[data-cy="entityDetailsButton"] > .svg-inline--fa').click();
+    cy.get('#tab-steps___BV_tab_button__').click();
+
+    cy.get('[data-cy="functional-flow-step"]').should('have.length', 4);
   });
 
   it('Import Flows second time - should be idempotent', () => {
@@ -130,7 +134,11 @@ describe('Application Import and Flows e2e test', () => {
       expect(response!.statusCode).to.equal(200);
     });
 
-    cy.get('.table').find('tbody').find('tr').should('have.length', 4);
+    cy.get('#tab-flows___BV_tab_button__').click();
+    cy.get('[data-cy="entityDetailsButton"] > .svg-inline--fa').click();
+    cy.get('#tab-steps___BV_tab_button__').click();
+
+    cy.get('[data-cy="functional-flow-step"]').should('have.length', 4);
   });
 
   // CREATE EXTERNAL FUNCTIONALFLOW MAUALLY
@@ -184,7 +192,14 @@ describe('Application Import and Flows e2e test', () => {
       expect(response!.statusCode).to.equal(200);
     });
 
-    cy.get('.table').find('tbody').find('tr').should('have.length', 5);
+    // 2 functional flows
+    cy.get('[data-cy="landscape-functional-flows"]').should('have.length', 2);
+
+    // 4 steps in 1st functional flow
+    cy.get('#tab-flows___BV_tab_button__').click();
+    cy.get('[data-cy="entityDetailsButton"] > .svg-inline--fa').eq(0).click();
+    cy.get('#tab-steps___BV_tab_button__').click();
+    cy.get('[data-cy="functional-flow-step"]').should('have.length', 4);
   });
 
   it('delete created Landscape', () => {
