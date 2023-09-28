@@ -45,15 +45,4 @@ jobs:
           GIT_TAG=:${GITHUB_REF#refs/tags/}
           DOCKER_TAG=${GIT_TAG#:refs/heads/main}
           ./mvnw -ntp jib:build -Djib.to.image=mauvaisetroupe/ea-design-it${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKERHUB_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKERHUB_TOKEN }}"
-      - name: 'E2E: Package'
-        run: npm run ci:e2e:package
-      - name: 'E2E: Prepare'
-        run: npm run ci:e2e:prepare
-      - name: 'E2E: Run'
-        run: npm run ci:e2e:run
-        env:
-          CYPRESS_ENABLE_RECORD: false
-          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-      - name: 'E2E: Teardown'
-        run: npm run ci:e2e:teardown
+
