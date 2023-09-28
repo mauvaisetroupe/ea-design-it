@@ -8,6 +8,7 @@ import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.domain.Owner;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
@@ -19,6 +20,7 @@ import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowStepRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
 import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
 import com.mauvaisetroupe.eadesignit.service.FunctionalflowService;
 import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
@@ -103,6 +105,9 @@ public class FlowImportService {
     @Autowired
     private FlowGroupRepository flowGroupRepository;
 
+    @Autowired
+    private OwnerRepository ownerRepository;
+
     public FlowImportService() {
         this.columnsArray.add(FLOW_ID_FLOW);
         this.columnsArray.add(FLOW_ALIAS_FLOW);
@@ -130,14 +135,24 @@ public class FlowImportService {
         // Find diagramname in Summary sheet
         List<Map<String, Object>> summaryDF = excelReader.getSheet(ExportFullDataService.SUMMARY_SHEET);
         String diagramName = findLandscape(summaryDF, sheetname);
+        String owner = findOwner(summaryDF, sheetname);
 
-        return _importExcel(flowsDF, diagramName, sheetname);
+        return _importExcel(flowsDF, diagramName, sheetname, owner);
     }
 
     private String findLandscape(List<Map<String, Object>> summaryDF, String sheetname) {
         for (Map<String, Object> row : summaryDF) {
             if (sheetname.equals(row.get("sheet hyperlink"))) {
-                return (String) row.get("landscape.name");
+                return (String) row.get("owner");
+            }
+        }
+        throw new IllegalStateException("Error with sheet name " + sheetname);
+    }
+
+    private String findOwner(List<Map<String, Object>> summaryDF, String sheetname) {
+        for (Map<String, Object> row : summaryDF) {
+            if (sheetname.equals(row.get("sheet hyperlink"))) {
+                return (String) row.get("owner");
             }
         }
         throw new IllegalStateException("Error with sheet name " + sheetname);
@@ -160,10 +175,10 @@ public class FlowImportService {
         ExcelReader excelReader = new ExcelReader(file);
         List<Map<String, Object>> flowsDF = excelReader.getSheet(sheetname);
 
-        return _importExcel(flowsDF, diagramName, sheetname);
+        return _importExcel(flowsDF, diagramName, sheetname, null);
     }
 
-    private List<FlowImport> _importExcel(List<Map<String, Object>> flowsDF, String diagramName, String sheetname)
+    private List<FlowImport> _importExcel(List<Map<String, Object>> flowsDF, String diagramName, String sheetname, String owner)
         throws EncryptedDocumentException, IOException {
         List<FlowImport> result = new ArrayList<FlowImport>();
 
@@ -294,6 +309,13 @@ public class FlowImportService {
                                     flowGroup.setDescription(LandscapeViewService.SHOULD_BE_LINKED_TO + flowImport.getGroupFlowAlias());
                                 }
                             }
+                        }
+                    }
+
+                    if (owner != null) {
+                        Owner landscapeOwner = ownerRepository.findByNameIgnoreCase(owner);
+                        if (landscapeOwner != null) {
+                            landscapeView.setOwner(landscapeOwner);
                         }
                     }
 

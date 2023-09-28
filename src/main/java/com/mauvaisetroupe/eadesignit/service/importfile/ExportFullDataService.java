@@ -47,6 +47,7 @@ public class ExportFullDataService {
     private static String ENTITY_TYPE = "entity.type";
     private static String SHEET_LINK = "sheet hyperlink";
     private static String LANDSCAPE_NAME = "landscape.name";
+    private static String OWNER = "owner";
 
     public ByteArrayOutputStream getallData(
         boolean exportApplications,
@@ -72,6 +73,7 @@ public class ExportFullDataService {
         headerRow.createCell(nbcolumn++).setCellValue(ENTITY_TYPE);
         headerRow.createCell(nbcolumn++).setCellValue(SHEET_LINK);
         headerRow.createCell(nbcolumn++).setCellValue(LANDSCAPE_NAME);
+        headerRow.createCell(nbcolumn++).setCellValue(OWNER);
 
         // External Systems
         if (exportExternalSystem) {
@@ -195,6 +197,11 @@ public class ExportFullDataService {
 
         // Landscape Name
         row.createCell(columnNb++).setCellValue(landscape.getDiagramName());
+
+        // Landscape Owner
+        if (landscape.getOwner() != null) {
+            row.createCell(columnNb++).setCellValue(landscape.getOwner().getName());
+        }
     }
 
     private void addCapabilitiesSummary(Workbook workbook, Sheet summarySheet, String capabilitySheetName, int lineNb) {
