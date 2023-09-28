@@ -143,7 +143,7 @@ public class FlowImportService {
     private String findLandscape(List<Map<String, Object>> summaryDF, String sheetname) {
         for (Map<String, Object> row : summaryDF) {
             if (sheetname.equals(row.get("sheet hyperlink"))) {
-                return (String) row.get("owner");
+                return (String) row.get("landscape.name");
             }
         }
         throw new IllegalStateException("Error with sheet name " + sheetname);
