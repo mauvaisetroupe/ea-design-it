@@ -1,4 +1,4 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { Component, Vue, Inject, Watch } from 'vue-property-decorator';
 
 import { IApplication } from '@/shared/model/application.model';
 import ApplicationService from './application.service';
@@ -31,11 +31,53 @@ export default class ApplicationDetails extends Vue {
 
   public lco: ICapability = {};
   public showLabels = false;
+  public interfaceCurrentPage = 1;
+  public interfaceFilter = '';
+  public interfacePerPage = 10;
+  public flowCurrentPage = 1;
+  public flowFilter = '';
+  public flowPerPage = 10;
+
+  public tabIndex = 0;
+  public applicationId = -1;
+  public sessionKey = 'application.detail.tab';
+
+  @Watch('tabIndex')
+  public onTabChange(newtab) {
+    if (this.application && this.application.id) {
+      this.tabIndex = newtab;
+      sessionStorage.setItem(this.sessionKey, this.application.id + '#' + this.tabIndex);
+    }
+  }
+
+  public created() {
+    // https://github.com/bootstrap-vue/bootstrap-vue/issues/2803
+    this.$nextTick(() => {
+      this.loadTab(this.applicationId);
+    });
+  }
+
+  public loadTab(_applicationID) {
+    if (sessionStorage.getItem(this.sessionKey)) {
+      const parts = sessionStorage.getItem(this.sessionKey).split('#');
+      const appliId = parseInt(parts[0]);
+      const tabIndex = parseInt(parts[1]);
+      const applicationID = parseInt(_applicationID);
+      if (applicationID === appliId) {
+        this.tabIndex = tabIndex;
+      } else {
+        sessionStorage.removeItem(this.sessionKey);
+      }
+    } else {
+      this.tabIndex = 1;
+    }
+  }
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (to.params.applicationId) {
         vm.retrieveApplication(to.params.applicationId);
+        vm.applicationId = parseInt(to.params.applicationId);
       }
     });
   }
