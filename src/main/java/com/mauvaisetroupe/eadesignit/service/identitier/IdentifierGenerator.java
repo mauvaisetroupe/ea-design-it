@@ -16,7 +16,7 @@ public class IdentifierGenerator {
         return potentialIdentifiers;
     }
 
-    private Map<String, Integer> numberMap = new HashMap<>();
+    private Map<String, Long> numberMap = new HashMap<>();
     private Map<String, String> numberAsStringMap = new HashMap<>();
     private Collection<String> exisitingIdentifiers;
 
@@ -31,25 +31,27 @@ public class IdentifierGenerator {
                 Pattern p = Pattern.compile("(.*?)(\\d+)");
                 Matcher m = p.matcher(identifier);
                 boolean b = m.matches();
-                if (b) {
-                    String prefix = m.group(1);
-                    String numberAsString = m.group(2);
-                    int number = Integer.parseInt(numberAsString);
-                    if (numberMap.get(prefix) == null) {
-                        numberMap.put(prefix, number);
-                        numberAsStringMap.put(prefix, numberAsString);
-                    } else {
-                        if (number > numberMap.get(prefix)) {
+                try {
+                    if (b) {
+                        String prefix = m.group(1);
+                        String numberAsString = m.group(2);
+                        long number = Long.parseLong(numberAsString);
+                        if (numberMap.get(prefix) == null) {
                             numberMap.put(prefix, number);
                             numberAsStringMap.put(prefix, numberAsString);
+                        } else {
+                            if (number > numberMap.get(prefix)) {
+                                numberMap.put(prefix, number);
+                                numberAsStringMap.put(prefix, numberAsString);
+                            }
                         }
                     }
-                }
+                } catch (NumberFormatException e) {}
             }
         }
         potentialIdentifiers = new HashSet<>();
         numberMap.forEach((k, v) -> {
-            int newNumber = v + 1;
+            long newNumber = v + 1;
             String formatted = String.format("%0" + numberAsStringMap.get(k).length() + "d", newNumber);
             potentialIdentifiers.add("" + k + formatted);
         });
