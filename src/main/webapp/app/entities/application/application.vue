@@ -110,6 +110,7 @@
     <br />
 
     <b-table
+      striped
       v-if="applications && applications.length > 0"
       :items="filteredApplications"
       :fields="fields"
