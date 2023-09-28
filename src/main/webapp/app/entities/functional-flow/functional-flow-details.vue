@@ -107,7 +107,7 @@
             </div>
           </div>
         </b-tab>
-        <b-tab title="Steps">
+        <b-tab title="Steps" id="tab-steps">
           <div class="row">
             <div class="table-responsive" v-if="functionalFlow.steps && functionalFlow.steps.length > 0">
               <table class="table table-striped">
@@ -124,7 +124,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="step in functionalFlow.steps" v-bind:key="step.id">
+                  <tr v-for="step in functionalFlow.steps" v-bind:key="step.id" data-cy="functional-flow-step">
                     <td>
                       {{ step.stepOrder }}
                     </td>

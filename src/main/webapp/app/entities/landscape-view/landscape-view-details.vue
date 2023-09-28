@@ -86,7 +86,7 @@
             </div>
           </div>
         </b-tab>
-        <b-tab title="Functional Flows">
+        <b-tab title="Functional Flows" id="tab-flows">
           <div class="row">
             <table class="table table-striped">
               <thead>
@@ -98,7 +98,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="functionalFlow in landscapeView.flows" :key="functionalFlow.id">
+                <tr v-for="functionalFlow in landscapeView.flows" :key="functionalFlow.id" data-cy="landscape-functional-flows">
                   <td>
                     <div>
                       <router-link

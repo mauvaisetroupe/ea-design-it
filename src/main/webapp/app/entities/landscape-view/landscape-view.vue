@@ -61,6 +61,7 @@
                     @click="navigate"
                     class="btn btn-info btn-sm details"
                     :data-cy="'entityDetailsButton-' + landscapeView.diagramName"
+                    data-cy2="entityDetailsButton"
                   >
                     <font-awesome-icon icon="eye"></font-awesome-icon>
                     <span class="d-none d-md-inline">View</span>
