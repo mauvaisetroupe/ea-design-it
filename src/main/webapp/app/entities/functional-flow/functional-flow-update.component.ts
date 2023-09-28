@@ -81,6 +81,9 @@ export default class FunctionalFlowUpdate extends Vue {
     next(vm => {
       if (to.params.functionalFlowId) {
         vm.retrieveFunctionalFlow(to.params.functionalFlowId);
+      } else {
+        // for creation, go on first tab
+        vm.chooseTab(0);
       }
       if (typeof to.params.tabIndex !== 'undefined') {
         vm.chooseTab(parseInt(to.params.tabIndex));
