@@ -205,13 +205,9 @@
             </div>
           </div>
         </b-tab>
-        <b-tab title="References" title-link-class="text-secondary">
+        <b-tab title="Landscapes">
           <div class="row">
             <div class="table-responsive" v-if="functionalFlow.landscapes && functionalFlow.landscapes.length > 0">
-              <h3>
-                <font-awesome-icon icon="map" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Landscapes using Functional Flow
-                {{ functionalFlow.alias }}
-              </h3>
               <table class="table table-striped">
                 <thead>
                   <tr>

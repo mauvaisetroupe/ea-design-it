@@ -342,7 +342,7 @@
             </div>
           </div>
         </b-tab>
-        <b-tab title="References" disabled></b-tab>
+        <b-tab title="Landscapes" disabled></b-tab>
       </b-tabs>
     </div>
     <div class="col-12">
