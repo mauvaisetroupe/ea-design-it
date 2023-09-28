@@ -19,9 +19,9 @@ export default class FlowInterface extends Vue {
   @Inject('accountService') public accountService: () => AccountService;
   @Inject('reportingService') private reportingService: () => ReportingService;
 
-  private interfaceToKeep: IFlowInterface = null;
-  private interfacesToMerge: IFlowInterface[] = null;
-  private checkToMerge = [];
+  public interfaceToKeep: IFlowInterface = null;
+  public interfacesToMerge: IFlowInterface[] = null;
+  public checkToMerge = [];
 
   public flowInterfaces: IFlowInterface[] = [];
 
