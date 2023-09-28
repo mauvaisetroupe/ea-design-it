@@ -107,7 +107,7 @@
             </div>
           </div>
         </b-tab>
-        <b-tab title="Interfaces">
+        <b-tab title="Steps">
           <div class="row">
             <div class="table-responsive" v-if="functionalFlow.steps && functionalFlow.steps.length > 0">
               <table class="table table-striped">
@@ -223,7 +223,7 @@
             </div>
           </div>
         </b-tab>
-        <b-tab title="References">
+        <b-tab title="References" title-link-class="text-secondary">
           <div class="row">
             <div class="table-responsive" v-if="functionalFlow.landscapes && functionalFlow.landscapes.length > 0">
               <h3>

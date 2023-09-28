@@ -243,7 +243,7 @@
           <div v-html="plantUMLImage" class="table-responsive my-5"></div>
           <div v-if="previewError" class="alert alert-danger">Error during import</div>
         </b-tab>
-        <b-tab title="Interfaces">
+        <b-tab title="Steps">
           <div
             class="table-responsive"
             v-if="functionalFlowImport && functionalFlowImport.flowImportLines && functionalFlowImport.flowImportLines.length > 0"
