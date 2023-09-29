@@ -92,8 +92,7 @@
           </li>
           <li>
             Import
-            <router-link to="/sequence-diagram/import" data-cy="import-sequence-diagram-mapping">Sequence diagram</router-link> Plantuml
-            file
+            <router-link to="/functional-flow/new" data-cy="import-sequence-diagram-mapping">Sequence diagram</router-link> Plantuml file
           </li>
         </ol>
 

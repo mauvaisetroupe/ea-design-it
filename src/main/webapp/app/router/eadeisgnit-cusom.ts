@@ -20,8 +20,6 @@ const FlowReporting = () => import('@/entities/flow-interface/reporting-flow-int
 // prettier-ignore
 const OrphanFlowGroupReporting = () => import('@/entities/flow-group/reporting-orphan-flow-group.vue');
 // prettier-ignore
-const SequenceDiagramImport = () => import('@/eadesignit/sequence-diagram/import.vue');
-// prettier-ignore
 const ApplicationsDiagram = () => import('@/eadesignit/applications-diagram/applications-diagram.vue');
 // prettier-ignore
 const ExternalSystemUploadFile = () => import('@/entities/external-system/external-system-upload-file.vue');
@@ -81,12 +79,6 @@ export default [
     path: '/reporting/orphan-flow-group',
     name: 'OrphanFlowGroupReporting',
     component: OrphanFlowGroupReporting,
-    meta: { authorities: [Authority.WRITE] },
-  },
-  {
-    path: '/sequence-diagram/import',
-    name: 'SequenceDiagramImport',
-    component: SequenceDiagramImport,
     meta: { authorities: [Authority.WRITE] },
   },
   {
