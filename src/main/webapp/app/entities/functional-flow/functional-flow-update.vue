@@ -327,7 +327,10 @@
                     <span v-if="step.groupOrder > 0">{{ step.groupOrder }}</span>
                   </td>
                   <td>
-                    {{ step.groupFlowAlias }}
+                    <div v-if="step.groupOrder > 0">
+                      <span v-if="step.groupFlowAlias">{{ step.groupFlowAlias }}</span>
+                      <span v-else class="alert alert-danger" title="Correct application name in plantuml">Not imported</span>
+                    </div>
                   </td>
                 </tr>
               </tbody>

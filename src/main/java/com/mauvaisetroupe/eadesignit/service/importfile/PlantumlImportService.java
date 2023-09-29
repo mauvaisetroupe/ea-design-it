@@ -299,7 +299,10 @@ public class PlantumlImportService {
                 if (currentGrouping != null) {
                     if (stepOrder >= currentGrouping.start && stepOrder <= currentGrouping.end) {
                         flowImportLine.setGroupOrder(stepOrder - currentGrouping.start + 1);
-                        flowImportLine.setGroupFlowAlias(currentGrouping.flowAlias);
+                        Optional<FunctionalFlow> optionalReferencedFlow = functionalFlowRepository.findByAlias(currentGrouping.flowAlias);
+                        if (optionalReferencedFlow.isPresent()) {
+                            flowImportLine.setGroupFlowAlias(currentGrouping.flowAlias);
+                        }
                     } else if (stepOrder > currentGrouping.end) {
                         currentGrouping = groupings.poll();
                     }
