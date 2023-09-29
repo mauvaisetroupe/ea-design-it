@@ -57,7 +57,8 @@ public class ExportFullDataService {
         boolean exportCapabilities,
         List<Long> landscapesToExport,
         List<Long> capabilitiesMappingToExport,
-        boolean exportCapabilitiesWithNoLandscape
+        boolean exportCapabilitiesWithNoLandscape,
+        boolean functionalFlowsWhithNoLandscape
     ) throws IOException {
         Workbook workbook = new XSSFWorkbook();
         Sheet summarySheet = workbook.createSheet(SUMMARY_SHEET);
@@ -124,6 +125,16 @@ public class ExportFullDataService {
                 ExcelUtils.addHeaderColorAndFilte(workbook, flowSheet);
                 ExcelUtils.alternateColors(workbook, flowSheet, 1);
             }
+        }
+
+        // Orphan flows
+        if (functionalFlowsWhithNoLandscape) {
+            Sheet flowSheet = workbook.createSheet("FLW.ORPH");
+            landscapeExportService.writeOrphanFlows(flowSheet);
+            addSummryFlow(workbook, summarySheet, null, "FLW.ORPH", lineNb++);
+            ExcelUtils.autoSizeAllColumns(flowSheet);
+            ExcelUtils.addHeaderColorAndFilte(workbook, flowSheet);
+            ExcelUtils.alternateColors(workbook, flowSheet, 1);
         }
 
         // Capabilities
@@ -196,11 +207,15 @@ public class ExportFullDataService {
         createHyperlink(workbook, flowSheetName, cell);
 
         // Landscape Name
-        row.createCell(columnNb++).setCellValue(landscape.getDiagramName());
-
-        // Landscape Owner
-        if (landscape.getOwner() != null) {
-            row.createCell(columnNb++).setCellValue(landscape.getOwner().getName());
+        if (landscape != null) { // for orphan flows
+            row.createCell(columnNb++).setCellValue(landscape.getDiagramName());
+            // Landscape Owner
+            if (landscape.getOwner() != null) {
+                row.createCell(columnNb++).setCellValue(landscape.getOwner().getName());
+            }
+        } else {
+            columnNb++;
+            columnNb++;
         }
     }
 

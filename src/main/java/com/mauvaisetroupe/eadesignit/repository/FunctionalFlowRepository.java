@@ -37,4 +37,6 @@ public interface FunctionalFlowRepository extends JpaRepository<FunctionalFlow, 
         "where s=:appli or t=:appli "
     )
     SortedSet<FunctionalFlow> findFunctionalFlowsForInterfacesIn(@Param("appli") Application application);
+
+    SortedSet<FunctionalFlow> findByLandscapesIsEmpty();
 }

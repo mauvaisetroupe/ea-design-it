@@ -258,7 +258,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
     pom.click();
   }
 
-  public prepareRemove(instance: ILandscapeView): void {
+  public prepareRemove(): void {
     if (<any>this.$refs.removeDiagramEntity) {
       (<any>this.$refs.removeDiagramEntity).show();
     }

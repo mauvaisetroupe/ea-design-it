@@ -10,11 +10,14 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationComponentRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ExcelUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Comment;
@@ -44,6 +47,9 @@ public class LandscapeExportService {
     @Autowired
     LandscapeViewRepository landscapeViewRepository;
 
+    @Autowired
+    FunctionalFlowRepository flowRepository;
+
     public ByteArrayOutputStream getLandscapeExcel(Long landscapeId) throws IOException {
         Workbook workbook = new XSSFWorkbook();
         Sheet appliSheet = workbook.createSheet(ApplicationImportService.APPLICATION_SHEET_NAME);
@@ -69,6 +75,15 @@ public class LandscapeExportService {
 
     protected void writeFlows(Sheet sheet, Long landscapeId) {
         LandscapeView landscapeView = landscapeViewRepository.getById(landscapeId);
+        writeFlows(sheet, landscapeView.getFlows());
+    }
+
+    protected void writeOrphanFlows(Sheet sheet) {
+        Set<FunctionalFlow> flows = flowRepository.findByLandscapesIsEmpty();
+        writeFlows(sheet, flows);
+    }
+
+    private void writeFlows(Sheet sheet, Collection<FunctionalFlow> flows) {
         int column = 0;
         int rownb = 0;
         Row headerRow = sheet.createRow(rownb++);
@@ -90,7 +105,7 @@ public class LandscapeExportService {
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_BLUEPRINT_TARGET);
         headerRow.createCell(column++).setCellValue(FlowImportService.FLOW_COMMENT);
 
-        for (FunctionalFlow flow : landscapeView.getFlows()) {
+        for (FunctionalFlow flow : flows) {
             int currentGroupOrder = 1;
             for (FunctionalFlowStep step : flow.getSteps()) {
                 FlowInterface interface1 = step.getFlowInterface();

@@ -13,7 +13,8 @@ export default class FullExportService {
     capabilities: boolean,
     landscapes: number[],
     capabilitiesMapping: number[],
-    capabilitiesMappingWithNoLandscape: boolean
+    capabilitiesMappingWithNoLandscape: boolean,
+    functionalFlowsWhithNoLandscape: boolean
   ): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios
@@ -28,6 +29,7 @@ export default class FullExportService {
             landscapes: landscapes,
             capabilitiesMapping: capabilitiesMapping,
             capabilitiesMappingWithNoLandscape: capabilitiesMappingWithNoLandscape,
+            functionalFlowsWhithNoLandscape: functionalFlowsWhithNoLandscape,
           },
         })
         .then(res => {

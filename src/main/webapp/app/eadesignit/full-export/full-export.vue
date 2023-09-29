@@ -30,6 +30,12 @@
         <label>{{ landscape.diagramName.substring(0, 40) }}</label>
       </div>
     </div>
+    <div class="row m-3">
+      <div class="col-12">
+        <input type="checkbox" v-model="functionalFlowsWhithNoLandscape" />
+        <label>Functional Flows with no landscape association</label>
+      </div>
+    </div>
     <h3>Capabilities</h3>
     <div class="row m-3">
       <div class="col-4">

@@ -28,6 +28,7 @@ export default class FullExport extends Vue {
   public capabilitiesMapping: ILandscapeView[] = [];
   public checkedCapabilitiesMapping: ILandscapeView[] = [];
   public capabilitiesMappingWithNoLandscape = true;
+  public functionalFlowsWhithNoLandscape = true;
 
   public submited = false;
 
@@ -95,7 +96,8 @@ export default class FullExport extends Vue {
         this.capabilities,
         this.checkedLandscapes.map(l => l.id),
         this.checkedCapabilitiesMapping.map(l => l.id),
-        this.capabilitiesMappingWithNoLandscape
+        this.capabilitiesMappingWithNoLandscape,
+        this.functionalFlowsWhithNoLandscape
       )
       .then(
         response => {
