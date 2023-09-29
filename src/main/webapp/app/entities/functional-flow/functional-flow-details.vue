@@ -10,7 +10,7 @@
     </div>
     <div class="col-12">
       <b-tabs content-class="mt-3" active-nav-item-class="bg-info" card pills v-model="tabIndex">
-        <b-tab title="Information" active>
+        <b-tab title="Information" id="tab-info">
           <div class="row">
             <dl class="row jh-entity-details">
               <dt>
@@ -82,7 +82,7 @@
             </dl>
           </div>
         </b-tab>
-        <b-tab title="Schema" active>
+        <b-tab title="Schema" id="tab-schenma">
           <div class="table-responsive my-5">
             <div v-html="plantUMLImage"></div>
             <div class="col-12">
@@ -205,7 +205,7 @@
             </div>
           </div>
         </b-tab>
-        <b-tab title="Landscapes">
+        <b-tab title="Landscapes" id="tab-landscape">
           <div class="row">
             <div class="table-responsive" v-if="functionalFlow.landscapes && functionalFlow.landscapes.length > 0">
               <table class="table table-striped">

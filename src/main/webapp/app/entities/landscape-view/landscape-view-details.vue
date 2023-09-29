@@ -10,7 +10,7 @@
     </div>
     <div class="col-12">
       <b-tabs content-class="mt-3" active-nav-item-class="bg-info" card pills v-model="tabIndex">
-        <b-tab title="Information">
+        <b-tab title="Information" id="tab-info">
           <div class="row">
             <dl class="row jh-entity-details">
               <dt>
@@ -38,7 +38,7 @@
             </dl>
           </div>
         </b-tab>
-        <b-tab title="Schema">
+        <b-tab title="Schema" id="tab-schema">
           <div class="row">
             <div class="table-responsive my-5">
               <div v-html="plantUMLImage" class="table-responsive"></div>
@@ -98,7 +98,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="functionalFlow in landscapeView.flows" :key="functionalFlow.id" data-cy="landscape-functional-flows">
+                <tr v-for="(functionalFlow, index) in landscapeView.flows" :key="functionalFlow.id" data-cy="landscape-functional-flows">
                   <td>
                     <div>
                       <router-link
@@ -143,7 +143,12 @@
                           <span class="d-none d-md-inline">Edit</span>
                         </button>
                       </router-link>
-                      <b-button v-if="accountService().writeAuthorities" variant="warning" class="btn btn-sm" @click="prepareToDetach(i)">
+                      <b-button
+                        v-if="accountService().writeAuthorities"
+                        variant="warning"
+                        class="btn btn-sm"
+                        @click="prepareToDetach(index)"
+                      >
                         <font-awesome-icon icon="times"></font-awesome-icon>
                         <span class="d-none d-md-inline">Detach</span>
                       </b-button>
@@ -185,7 +190,7 @@
             </div>
           </div>
         </b-tab>
-        <b-tab title="Capabilities">
+        <b-tab title="Capabilities" id="tab-capa">
           <div class="col-12" v-if="consolidatedCapability && consolidatedCapability.length > 0">
             <h2>Capabilities for {{ landscapeView.diagramName }}</h2>
             <CapabilityComponent
@@ -198,7 +203,7 @@
             ></CapabilityComponent>
           </div>
         </b-tab>
-        <b-tab title="DrawIO">
+        <b-tab title="DrawIO" id="tab-drawio">
           <div class="row">
             <div v-if="!drawIoSVG">
               <button @click="editDiagram()" class="btn btn-warning" v-if="accountService().writeAuthorities">
@@ -348,15 +353,7 @@
       </div>
       <div slot="modal-footer">
         <button type="button" class="btn btn-secondary" v-on:click="closeSearchFlow()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-landscapeView"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="addNew()"
-        >
-          Add
-        </button>
+        <button type="button" class="btn btn-primary" id="jhi-confirm-delete-landscapeView" data-cy="entityConfirmDeleteButton">Add</button>
       </div>
     </b-modal>
   </div>
