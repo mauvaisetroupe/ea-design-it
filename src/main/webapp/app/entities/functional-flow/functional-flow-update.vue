@@ -7,12 +7,10 @@
             <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon>
             <span class="text-primary font-weight-bold">FUNCTIONAL FLOW</span> - {{ functionalFlow.alias }} -
             {{ functionalFlow.description }}
-            <span v-if="this.$route.query.landscapeViewId"> for landscape {{ this.$route.query.landscapeViewId }}</span>
           </span>
           <span v-else>
             <font-awesome-icon icon="project-diagram" style="color: Tomato; font-size: 0.7em"></font-awesome-icon> Create a
             <span class="text-primary font-weight-bold">FUNCTIONAL FLOW</span>
-            <span v-if="this.$route.query.landscapeViewId"> for landscape {{ this.$route.query.landscapeViewId }}</span>
           </span>
         </h2>
       </div>
@@ -335,14 +333,14 @@
                 </tr>
               </tbody>
             </table>
-            <div v-if="creation">
-              <label for="landscape">Choose corresponding landscape to attache flow</label>
-              <select v-model="selectedLandscape">
-                <option v-for="landscape in allLandscapes" :value="landscape.id" :key="landscape.id">
-                  {{ landscape.diagramName }}
-                </option>
-              </select>
-            </div>
+          </div>
+          <div v-if="creation">
+            <label for="landscape">Choose corresponding landscape to attache flow</label>
+            <select v-model="selectedLandscape" :disabled="landscapeGivenInParameter">
+              <option v-for="landscape in allLandscapes" :key="landscape.id" :value="landscape">
+                {{ landscape.diagramName }}
+              </option>
+            </select>
           </div>
         </b-tab>
         <b-tab title="Landscapes" disabled></b-tab>

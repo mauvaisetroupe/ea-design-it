@@ -76,6 +76,7 @@ export default class FunctionalFlowUpdate extends Vue {
   public previewError = '';
   public functionalFlowImport: IPlantumlFlowImport = {};
   public tabIndex = 1;
+  public landscapeGivenInParameter = false;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -295,9 +296,14 @@ export default class FunctionalFlowUpdate extends Vue {
       .then(res => {
         this.allLandscapes = res.data;
         if (this.$route.query.landscapeViewId) {
+          this.landscapeGivenInParameter = true;
           this.allLandscapes.forEach(landscape => {
+            console.log(landscape.id);
+            console.log(parseInt(this.$route.query.landscapeViewId as string));
             if (landscape.id === parseInt(this.$route.query.landscapeViewId as string)) {
+              console.log('popopo');
               this.selectedLandscape = landscape;
+              console.log(this.selectedLandscape);
             }
           });
         }
