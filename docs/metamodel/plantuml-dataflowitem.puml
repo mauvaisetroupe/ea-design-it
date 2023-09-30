@@ -1,8 +1,0 @@
-@startuml
-rectangle FrontEnd
-rectangle MicroService
-rectangle BackEnd
-FrontEnd -right-> MicroService : API
-MicroService -right-> BackEnd : Event\nDataFlow : EVT/TOPIC/CUSTOMER\nDataFlowItem : CUST_CORE_EVENT\n CUST_ADDRESS_EVENT 
-@enduml
-

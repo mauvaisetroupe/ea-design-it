@@ -1,7 +1,0 @@
-@startuml
-rectangle FrontEnd
-rectangle MicroService
-rectangle BackEnd
-FrontEnd -right-> MicroService : API / REST
-MicroService -right-> BackEnd : File / SFTP
-@enduml
