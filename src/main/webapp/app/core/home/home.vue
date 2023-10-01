@@ -102,7 +102,7 @@
             <router-link to="/full-export" data-cy="full-export">Full Export</router-link>
           </li>
         </ul>
-        <p>Please, refer to <a href="https://mauvaisetroupe.github.io/ea-design-it/import/">documentation</a> for more explanation</p>
+        <p>Please, refer to <a href="https://architech.lu/ea-design-it/">documentation</a> for more explanation</p>
       </div>
     </div>
   </div>
