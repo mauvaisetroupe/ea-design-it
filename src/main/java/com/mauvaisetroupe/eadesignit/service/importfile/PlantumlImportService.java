@@ -167,7 +167,7 @@ public class PlantumlImportService {
 
         if (!plantUMLSource.startsWith(START_UML)) {
             StringBuilder builder = new StringBuilder();
-            plantUMLBuilder.getPlantumlHeader(builder, Layout.smetana);
+            plantUMLBuilder.getPlantumlHeader(builder, Layout.smetana, false);
             builder.append(plantUMLSource);
             plantUMLBuilder.getPlantumlFooter(builder);
             plantUMLSource = builder.toString();

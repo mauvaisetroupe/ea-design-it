@@ -234,6 +234,16 @@
             </button>
           </div>
         </b-tab>
+        <b-tab title="Components">
+          <div v-html="applicationStructurePlantUMLImage" class="table-responsive my-5"></div>
+          <b-table :items="application.applicationsLists" :fields="['alias', 'name']">
+            <template #cell(alias)="data">
+              <router-link :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: data.item.id } }">{{
+                data.item.alias
+              }}</router-link>
+            </template>
+          </b-table>
+        </b-tab>
         <b-tab title="Functional Flows">
           <div class="row">
             <div class="row m-2">

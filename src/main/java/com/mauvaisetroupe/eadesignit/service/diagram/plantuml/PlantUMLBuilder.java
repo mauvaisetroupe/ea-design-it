@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.service.diagram.plantuml;
 
+import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.EdgeGroup;
@@ -41,19 +42,23 @@ public class PlantUMLBuilder {
     }
 
     public void getPlantumlHeader(StringBuilder plantUMLSource) {
-        getPlantumlHeader(plantUMLSource, Layout.smetana);
+        getPlantumlHeader(plantUMLSource, Layout.smetana, false);
     }
 
-    public void getPlantumlHeader(StringBuilder plantUMLSource, Layout layout) {
+    public void getPlantumlHeader(StringBuilder plantUMLSource, Layout layout, boolean componentStyle) {
         plantUMLSource.append("@startuml\n");
         if (layout != Layout.none) {
             plantUMLSource.append("!pragma layout " + layout.toString() + "\n");
         }
-        plantUMLSource.append("skinparam componentStyle rectangle\n");
+        if (!componentStyle) {
+            plantUMLSource.append("skinparam componentStyle rectangle\n");
+        }
         plantUMLSource.append("skinparam hyperlinkColor #000000\n");
         plantUMLSource.append("skinparam hyperlinkUnderline false\n");
         plantUMLSource.append("skinparam monochrome true\n");
-        plantUMLSource.append("skinparam shadowing false\n");
+        if (!componentStyle) {
+            plantUMLSource.append("skinparam shadowing false\n");
+        }
         plantUMLSource.append("skinparam padding 5\n");
         plantUMLSource.append("skinparam rectangle {\n");
         plantUMLSource.append("  backgroundColor #A9DCDF\n");
@@ -298,5 +303,18 @@ public class PlantUMLBuilder {
             }
         }
         plantUMLSource.append("}\n");
+    }
+
+    public void getApplicationStructure(StringBuilder plantUMLSource, com.mauvaisetroupe.eadesignit.domain.Application application) {
+        String QUOTE = "\"";
+        String NL = "\n";
+
+        if (application != null) {
+            plantUMLSource.append("component " + QUOTE + application.getName() + QUOTE + " {" + NL);
+            for (ApplicationComponent component : application.getApplicationsLists()) {
+                plantUMLSource.append("  component " + QUOTE + component.getName() + QUOTE + NL);
+            }
+            plantUMLSource.append("}" + NL);
+        }
     }
 }

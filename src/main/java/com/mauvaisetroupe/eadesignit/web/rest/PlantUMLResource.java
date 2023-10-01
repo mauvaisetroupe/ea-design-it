@@ -18,8 +18,6 @@ import com.mauvaisetroupe.eadesignit.service.importfile.PlantumlImportService;
 import io.undertow.util.BadRequestException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -179,6 +177,16 @@ public class PlantUMLResource {
         Optional<Application> optional = applicationRepository.findById(id);
         if (optional.isPresent()) {
             return this.plantUMLSerializer.getCapabilitiesFromLeavesSVG(optional.get().getCapabilities());
+        } else {
+            throw new BadRequestException("Cannot find application");
+        }
+    }
+
+    @GetMapping(value = "plantuml/application/structure/get-svg/{id}")
+    public @ResponseBody String getApplicationStructureSVG(@PathVariable Long id) throws IOException, BadRequestException {
+        Optional<Application> optional = applicationRepository.findOneWithEagerRelationships(id);
+        if (optional.isPresent()) {
+            return this.plantUMLSerializer.getApplicationStructureSVG(optional.get());
         } else {
             throw new BadRequestException("Cannot find application");
         }

@@ -53,7 +53,8 @@ public class PlantUMLService {
         boolean addURL,
         Layout layout,
         boolean groupComponents,
-        boolean adaptWidth
+        boolean adaptWidth,
+        boolean componentStyle
     ) {
         if (adaptWidth) {
             for (Application application : groupComponents ? graph.getApplicationsWithoutGroups() : graph.getApplications()) {
@@ -63,7 +64,7 @@ public class PlantUMLService {
         }
 
         StringBuilder plantUMLSource = new StringBuilder();
-        plantUMLBuilder.getPlantumlHeader(plantUMLSource, layout);
+        plantUMLBuilder.getPlantumlHeader(plantUMLSource, layout, componentStyle);
         boolean useID = false;
         if (addURL) {
             // Declare application without the ones included in packages
@@ -118,27 +119,36 @@ public class PlantUMLService {
     ) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(landscapeView, showLabels);
-        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, true, layout, groupComponents, adaptWidth);
+        String plantUMLSource = createPlantUMLSource(
+            graph,
+            DiagramType.COMPONENT_DIAGRAM,
+            true,
+            true,
+            layout,
+            groupComponents,
+            adaptWidth,
+            false
+        );
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getLandscapeDiagramSource(LandscapeView landscapeView, Layout layout, boolean showLabels) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(landscapeView, showLabels);
-        return createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, false, Layout.none, false, false);
+        return createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, false, Layout.none, false, false, false);
     }
 
     public String getFunctionalFlowDiagramSVG(FunctionalFlow functionalFlow, DiagramType diagramType) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(functionalFlow, true);
-        String plantUMLSource = createPlantUMLSource(graph, diagramType, false, true, Layout.smetana, false, true);
+        String plantUMLSource = createPlantUMLSource(graph, diagramType, false, true, Layout.smetana, false, true, false);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getFunctionalFlowDiagramSource(FunctionalFlow functionalFlow, DiagramType diagramType) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(functionalFlow, false);
-        return createPlantUMLSource(graph, diagramType, false, false, Layout.smetana, false, false);
+        return createPlantUMLSource(graph, diagramType, false, false, Layout.smetana, false, false, false);
     }
 
     public String getInterfacesCollectionDiagramSVG(
@@ -149,14 +159,23 @@ public class PlantUMLService {
     ) throws IOException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(interfaces, showLabels);
-        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, true, layout, groupComponents, true);
+        String plantUMLSource = createPlantUMLSource(
+            graph,
+            DiagramType.COMPONENT_DIAGRAM,
+            true,
+            true,
+            layout,
+            groupComponents,
+            true,
+            false
+        );
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getInterfacesCollectionDiagramSource(SortedSet<FlowInterfaceLight> interfaces) {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(interfaces, true);
-        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, false, Layout.none, false, false);
+        String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, false, Layout.none, false, false, false);
         return plantUMLSource.toString();
     }
 
@@ -181,5 +200,13 @@ public class PlantUMLService {
 
     public String getSVGFromSource(String plantUMLSource) throws IOException {
         return plantUMLBuilder.getSVGFromSource(plantUMLSource);
+    }
+
+    public String getApplicationStructureSVG(com.mauvaisetroupe.eadesignit.domain.Application application) throws IOException {
+        StringBuilder plantUMLSource = new StringBuilder();
+        plantUMLBuilder.getPlantumlHeader(plantUMLSource, Layout.smetana, true);
+        plantUMLBuilder.getApplicationStructure(plantUMLSource, application);
+        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 }

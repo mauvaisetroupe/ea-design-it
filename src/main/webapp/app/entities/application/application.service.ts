@@ -6,6 +6,7 @@ import { ICapability } from '@/shared/model/capability.model';
 const baseApiUrl = 'api/applications';
 const basePlantUMLApiUrl = 'api/plantuml/application/get-svg';
 const baseCapabilitiesPlantUMLApiUrl = 'api/plantuml/application/capability/get-svg';
+const applicationStructurePlantUMLApiUrl = 'api/plantuml/application/structure/get-svg';
 
 export default class ApplicationService {
   public find(id: number): Promise<IApplication> {
@@ -122,6 +123,19 @@ export default class ApplicationService {
     return new Promise<any>((resolve, reject) => {
       axios
         .get(`${baseCapabilitiesPlantUMLApiUrl}/${id}`)
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public getApplicationStructurePlantUML(id: number) {
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .get(`${applicationStructurePlantUMLApiUrl}/${id}`)
         .then(res => {
           resolve(res);
         })

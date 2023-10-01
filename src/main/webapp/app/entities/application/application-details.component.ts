@@ -20,6 +20,7 @@ export default class ApplicationDetails extends Vue {
   @Inject('accountService') public accountService: () => AccountService;
   public application: IApplication = {};
   public plantUMLImage = '';
+  public applicationStructurePlantUMLImage = '';
   public capabilitiesPlantUMLImage = '';
   public interfaces: IFlowInterface[] = [];
   public flows: IFunctionalFlow[] = [];
@@ -90,6 +91,7 @@ export default class ApplicationDetails extends Vue {
       .then(res => {
         this.application = res;
         this.getPlantUML(applicationId);
+        this.getStructurePlantUML(applicationId);
         this.retrieveCapabilities(applicationId);
       })
       .catch(error => {
@@ -110,6 +112,19 @@ export default class ApplicationDetails extends Vue {
           this.interfaces = res.data.interfaces;
           this.flows = res.data.flows;
           this.refreshingPlantuml = false;
+        },
+        err => {
+          console.log(err);
+        }
+      );
+  }
+
+  public getStructurePlantUML(applicationId) {
+    this.applicationService()
+      .getApplicationStructurePlantUML(applicationId)
+      .then(
+        res => {
+          this.applicationStructurePlantUMLImage = res.data;
         },
         err => {
           console.log(err);
