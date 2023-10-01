@@ -26,14 +26,6 @@ public class FlowImport implements Serializable {
 
     private String integrationPattern;
 
-    private String sourceURLDocumentation;
-
-    private String targetURLDocumentation;
-
-    private String sourceDocumentationStatus;
-
-    private String targetDocumentationStatus;
-
     private String flowStatus;
 
     private String comment;
@@ -170,58 +162,6 @@ public class FlowImport implements Serializable {
 
     public void setIntegrationPattern(String integrationPattern) {
         this.integrationPattern = integrationPattern;
-    }
-
-    public String getSourceURLDocumentation() {
-        return this.sourceURLDocumentation;
-    }
-
-    public FlowImport sourceURLDocumentation(String sourceURLDocumentation) {
-        this.setSourceURLDocumentation(sourceURLDocumentation);
-        return this;
-    }
-
-    public void setSourceURLDocumentation(String sourceURLDocumentation) {
-        this.sourceURLDocumentation = sourceURLDocumentation;
-    }
-
-    public String getTargetURLDocumentation() {
-        return this.targetURLDocumentation;
-    }
-
-    public FlowImport targetURLDocumentation(String targetURLDocumentation) {
-        this.setTargetURLDocumentation(targetURLDocumentation);
-        return this;
-    }
-
-    public void setTargetURLDocumentation(String targetURLDocumentation) {
-        this.targetURLDocumentation = targetURLDocumentation;
-    }
-
-    public String getSourceDocumentationStatus() {
-        return this.sourceDocumentationStatus;
-    }
-
-    public FlowImport sourceDocumentationStatus(String sourceDocumentationStatus) {
-        this.setSourceDocumentationStatus(sourceDocumentationStatus);
-        return this;
-    }
-
-    public void setSourceDocumentationStatus(String sourceDocumentationStatus) {
-        this.sourceDocumentationStatus = sourceDocumentationStatus;
-    }
-
-    public String getTargetDocumentationStatus() {
-        return this.targetDocumentationStatus;
-    }
-
-    public FlowImport targetDocumentationStatus(String targetDocumentationStatus) {
-        this.setTargetDocumentationStatus(targetDocumentationStatus);
-        return this;
-    }
-
-    public void setTargetDocumentationStatus(String targetDocumentationStatus) {
-        this.targetDocumentationStatus = targetDocumentationStatus;
     }
 
     public String getFlowStatus() {

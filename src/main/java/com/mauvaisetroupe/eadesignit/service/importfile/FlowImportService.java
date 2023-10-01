@@ -382,7 +382,6 @@ public class FlowImportService {
                 flowImport.setImportFunctionalFlowStatus(ImportStatus.NEW);
                 functionalFlow = mapToFunctionalFlow(flowImport);
             }
-            setDocumentation(flowImport, functionalFlow);
             validateBean(functionalFlow);
         } catch (Exception e) {
             log.error("Error with row " + flowImport + " " + e.getMessage(), e);
@@ -391,19 +390,6 @@ public class FlowImportService {
             functionalFlow = null;
         }
         return functionalFlow;
-    }
-
-    private void setDocumentation(FlowImport flowImport, FunctionalFlow functionalFlow) {
-        if (StringUtils.hasText(flowImport.getSourceURLDocumentation())) {
-            functionalFlow.setDocumentationURL(flowImport.getSourceURLDocumentation());
-            if (StringUtils.hasText(flowImport.getTargetURLDocumentation())) {
-                functionalFlow.setDocumentationURL2(flowImport.getSourceURLDocumentation());
-            }
-        } else {
-            if (StringUtils.hasText(flowImport.getTargetURLDocumentation())) {
-                functionalFlow.setDocumentationURL(flowImport.getSourceURLDocumentation());
-            }
-        }
     }
 
     private FlowInterface findOrCreateInterface(FlowImport flowImport) {
@@ -501,10 +487,6 @@ public class FlowImportService {
         flowImport.setTargetElement((String) map.get(FLOW_TARGET_ELEMENT));
         flowImport.setDescription((String) map.get(FLOW_DESCRIPTION));
         flowImport.setIntegrationPattern((String) map.get(FLOW_INTEGRATION_PATTERN));
-        flowImport.setSourceURLDocumentation((String) map.get(FLOW_BLUEPRINT_SOURCE));
-        flowImport.setTargetURLDocumentation((String) map.get(FLOW_BLUEPRINT_TARGET));
-        flowImport.setSourceDocumentationStatus((String) map.get(FLOW_BLUEPRINT_SOURCE_STATUS));
-        flowImport.setTargetDocumentationStatus((String) map.get(FLOW_BLUEPRINT_TARGET_STATUS));
         flowImport.setFlowStatus((String) map.get(FLOW_STATUS_FLOW));
         flowImport.setComment((String) map.get(FLOW_COMMENT));
         flowImport.setDocumentName((String) map.get(FLOW_ADD_CORRESPONDENT_ID));
