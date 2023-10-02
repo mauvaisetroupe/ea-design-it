@@ -5,6 +5,7 @@ import Vue2Filters from 'vue2-filters';
 import CapabilityImportService from './capability-import.service';
 import AlertService from '@/shared/alert/alert.service';
 import { IApplicationCapabilityImport, IApplicationCapabilityImportItem } from '@/shared/model/application-capability-import.model';
+import { ISummary } from '@/shared/model/summary-sheet.model';
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -21,9 +22,8 @@ export default class CapabilityImport extends Vue {
   public fileSubmited = false;
   public rowsLoaded = false;
 
-  public sheetnames: string[] = [];
   public checkedNames: string[] = [];
-  public landscapeMap = {};
+  public summary: ISummary[] = [];
 
   // STEP 1 - Upload file and retreive all sheet with name starting with FLW
 
@@ -40,16 +40,8 @@ export default class CapabilityImport extends Vue {
       .then(
         res => {
           this.isFetching = false;
-          const summary = res.data;
-          summary.forEach(row => {
-            if (row['entity.type'] === 'Capability Mapping') {
-              const sheetname: string = row['sheet hyperlink'];
-              const landscape: string = row['landscape.name'];
-              this.checkedNames.push(sheetname);
-              this.sheetnames.push(sheetname);
-              this.landscapeMap[sheetname] = landscape;
-            }
-          });
+          this.summary = res.data.filter(sum => sum).filter(sum => sum.entityType === 'Capability Mapping');
+          this.checkedNames = this.summary.map(sum => sum.sheetName);
         },
         err => {
           this.isFetching = false;
@@ -61,7 +53,7 @@ export default class CapabilityImport extends Vue {
   public selectAll() {
     if (!this.fileSubmited) {
       this.checkedNames = [];
-      this.checkedNames.push(...this.sheetnames);
+      this.checkedNames.push(...this.summary.map(sum => sum.sheetName));
     }
   }
 
