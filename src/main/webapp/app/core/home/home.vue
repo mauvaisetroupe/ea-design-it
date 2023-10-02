@@ -46,7 +46,7 @@
             <router-link to="capability/navigate">Capability Map</router-link>
           </li>
         </ul>
-        <p>Please, refer to <a href="https://mauvaisetroupe.github.io/ea-design-it/">documentation</a> for more explanation</p>
+        <p>Please, refer to <a href="https://architech.lu/ea-design-it/">documentation</a> for more explanation</p>
       </div>
 
       <div class="alert alert-success" v-if="authenticated">
