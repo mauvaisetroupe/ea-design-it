@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.service.importfile.util.SummaryImporterService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -34,22 +35,22 @@ public class FlowImportNewFormat extends ImportFlowTest {
         /////////////////////
         file = this.getClass().getResourceAsStream(filename); // inputstream consumed
         ExcelReader excelReader = new ExcelReader(file);
-        List<Map<String, Object>> summaryDF = excelReader.getSheet(ExportFullDataService.SUMMARY_SHEET);
+        List<Map<String, Object>> summaryDF = excelReader.getSheet(SummaryImporterService.SUMMARY_SHEET);
         boolean flowFLW01found = false;
         boolean flowFLW02found = false;
         for (Map<String, Object> map : summaryDF) {
             System.out.println(map);
             if (
-                map.containsKey(ExportFullDataService.SHEET_LINK) &&
-                map.get(ExportFullDataService.SHEET_LINK).equals("FLW.01") &&
-                map.containsKey(ExportFullDataService.ENTITY_TYPE) &&
-                map.get(ExportFullDataService.ENTITY_TYPE).equals("Landscape")
+                map.containsKey(SummaryImporterService.SHEET_LINK) &&
+                map.get(SummaryImporterService.SHEET_LINK).equals("FLW.01") &&
+                map.containsKey(SummaryImporterService.ENTITY_TYPE) &&
+                map.get(SummaryImporterService.ENTITY_TYPE).equals("Landscape")
             ) flowFLW01found = true;
             if (
-                map.containsKey(ExportFullDataService.SHEET_LINK) &&
-                map.get(ExportFullDataService.SHEET_LINK).equals("FLW.02") &&
-                map.containsKey(ExportFullDataService.ENTITY_TYPE) &&
-                map.get(ExportFullDataService.ENTITY_TYPE).equals("Landscape")
+                map.containsKey(SummaryImporterService.SHEET_LINK) &&
+                map.get(SummaryImporterService.SHEET_LINK).equals("FLW.02") &&
+                map.containsKey(SummaryImporterService.ENTITY_TYPE) &&
+                map.get(SummaryImporterService.ENTITY_TYPE).equals("Landscape")
             ) flowFLW02found = true;
         }
         assertTrue("flow FLW01 not found", flowFLW01found);
@@ -97,22 +98,22 @@ public class FlowImportNewFormat extends ImportFlowTest {
         /////////////////////
         file = this.getClass().getResourceAsStream(filename); // inputstream consumed
         ExcelReader excelReader = new ExcelReader(file);
-        List<Map<String, Object>> summaryDF = excelReader.getSheet(ExportFullDataService.SUMMARY_SHEET);
+        List<Map<String, Object>> summaryDF = excelReader.getSheet(SummaryImporterService.SUMMARY_SHEET);
         boolean flowFLW01found = false;
         boolean flowFLW02found = false;
         for (Map<String, Object> map : summaryDF) {
             System.out.println(map);
             if (
-                map.containsKey(ExportFullDataService.SHEET_LINK) &&
-                map.get(ExportFullDataService.SHEET_LINK).equals("FLW.01") &&
-                map.containsKey(ExportFullDataService.ENTITY_TYPE) &&
-                map.get(ExportFullDataService.ENTITY_TYPE).equals("Landscape")
+                map.containsKey(SummaryImporterService.SHEET_LINK) &&
+                map.get(SummaryImporterService.SHEET_LINK).equals("FLW.01") &&
+                map.containsKey(SummaryImporterService.ENTITY_TYPE) &&
+                map.get(SummaryImporterService.ENTITY_TYPE).equals("Landscape")
             ) flowFLW01found = true;
             if (
-                map.containsKey(ExportFullDataService.SHEET_LINK) &&
-                map.get(ExportFullDataService.SHEET_LINK).equals("FLW.02") &&
-                map.containsKey(ExportFullDataService.ENTITY_TYPE) &&
-                map.get(ExportFullDataService.ENTITY_TYPE).equals("Landscape")
+                map.containsKey(SummaryImporterService.SHEET_LINK) &&
+                map.get(SummaryImporterService.SHEET_LINK).equals("FLW.02") &&
+                map.containsKey(SummaryImporterService.ENTITY_TYPE) &&
+                map.get(SummaryImporterService.ENTITY_TYPE).equals("Landscape")
             ) flowFLW02found = true;
         }
         assertTrue("flow FLW01 not found", flowFLW01found);

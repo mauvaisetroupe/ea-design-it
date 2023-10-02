@@ -17,25 +17,36 @@
         </div>
       </div>
 
-      <div class="form-group" v-if="excelFile && sheetnames.length == 0">
+      <div class="form-group" v-if="excelFile && summary.length == 0">
         <button type="submit" class="btn btn-primary mb-2" v-on:click="getSheetnames()">Submit File</button>
       </div>
 
-      <div v-if="sheetnames.length > 0" class="col-md-12">
+      <div v-if="summary.length > 0" class="col-md-12">
         <div>
           <span class="h3">Choose sheets to import</span>
           [<a @click="selectAll">Select All</a>] [<a @click="selectNone">Select None</a>]
         </div>
 
         <div class="row m-3">
-          <template v-for="(sheet, i) in sheetnames">
+          <template v-for="(row, i) in summary">
             <div class="col-1" :key="'0-' + i">
-              <input type="checkbox" v-model="checkedNames" :value="sheet" :id="'CHK-' + sheet" :disabled="fileSubmited" checked="false" />
-              <label :for="'CHK-' + sheet" class="">{{ sheet }} </label>
+              <input
+                type="checkbox"
+                v-model="checkedNames"
+                :value="row.sheetName"
+                :id="'CHK-' + row.sheetName"
+                :disabled="fileSubmited"
+                checked="false"
+              />
+              <label :for="'CHK-' + row.sheetName" class="">{{ row.sheetName }} </label>
             </div>
             <div class="col-3" :key="'1-' + i">
-              <label :for="'CHK-' + sheet" class="" v-if="landscapeMap[sheet]"> {{ landscapeMap[sheet] }}</label>
-              <label :for="'CHK-' + sheet" class="" v-else><span class="bg-danger text-white">No Existing Landscape</span></label>
+              <label :for="'CHK-' + row.sheetName" class="" v-if="row.landscapeName">
+                {{ row.landscapeName }}
+                <span v-if="row.landscapeExists" class="text-success">(existing)</span>
+                <span v-else class="text-danger">(new)</span>
+              </label>
+              <label :for="'CHK-' + row.sheetName" class="" v-else><span class="bg-danger text-white">No Landscape</span></label>
             </div>
             <div class="col-2" :key="'2-' + i"></div>
           </template>

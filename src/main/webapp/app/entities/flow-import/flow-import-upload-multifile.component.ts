@@ -6,6 +6,7 @@ import { IFlowImport } from '@/shared/model/flow-import.model';
 
 import FlowImportService from './flow-import.service';
 import AlertService from '@/shared/alert/alert.service';
+import { ISummary } from '@/shared/model/summary-sheet.model';
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -21,10 +22,8 @@ export default class FlowImportUploadMultiFile extends Vue {
   public rowsLoaded = false;
   public excelFileName = 'Browse File';
 
-  public sheetnames: string[] = [];
   public checkedNames: string[] = [];
-  public landscapeMap = {};
-
+  public summary: ISummary[] = [];
   public dtos = [];
   public notFilteredDtos = [];
 
@@ -42,16 +41,8 @@ export default class FlowImportUploadMultiFile extends Vue {
       .then(
         res => {
           this.isFetching = false;
-          const summary = res.data;
-          summary.forEach(row => {
-            if (row['entity.type'] === 'Landscape') {
-              const sheetname: string = row['sheet hyperlink'];
-              const landscape: string = row['landscape.name'];
-              this.checkedNames.push(sheetname);
-              this.sheetnames.push(sheetname);
-              this.landscapeMap[sheetname] = landscape;
-            }
-          });
+          this.summary = res.data.filter(sum => sum).filter(row => row.entityType === 'Landscape');
+          this.checkedNames = this.summary.map(row => row.sheetName);
         },
         err => {
           this.isFetching = false;
@@ -63,7 +54,7 @@ export default class FlowImportUploadMultiFile extends Vue {
   public selectAll() {
     if (!this.fileSubmited) {
       this.checkedNames = [];
-      this.checkedNames.push(...this.sheetnames);
+      this.checkedNames.push(...this.summary.map(sum => sum.sheetName));
     }
   }
 
