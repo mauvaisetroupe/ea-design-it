@@ -105,8 +105,19 @@ export default class ApplicationService {
     });
   }
 
-  public getPlantUML(id: number, layout: string, groupComponents: boolean, showLabels: boolean) {
-    const params = { layout: layout, groupComponents: groupComponents, showLabels: showLabels };
+  public getPlantUML(
+    id: number,
+    layout: string,
+    groupComponents: boolean,
+    showLabels: boolean,
+    showLabelIfNumberapplicationsLessThan: number
+  ) {
+    const params = {
+      layout: layout,
+      groupComponents: groupComponents,
+      showLabels: showLabels,
+      showLabelIfNumberapplicationsLessThan: showLabelIfNumberapplicationsLessThan,
+    };
     return new Promise<any>((resolve, reject) => {
       axios
         .get(`${basePlantUMLApiUrl}/${id}`, { params })

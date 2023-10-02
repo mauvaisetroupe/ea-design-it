@@ -38,6 +38,7 @@ export default class ApplicationDetails extends Vue {
   public flowCurrentPage = 1;
   public flowFilter = '';
   public flowPerPage = 10;
+  public showLabelIfNumberapplicationsLessThan = 20;
 
   public tabIndex = 0;
   public applicationId = -1;
@@ -105,13 +106,14 @@ export default class ApplicationDetails extends Vue {
 
   public getPlantUML(applicationId) {
     this.applicationService()
-      .getPlantUML(applicationId, this.layout, this.groupComponents, this.showLabels)
+      .getPlantUML(applicationId, this.layout, this.groupComponents, this.showLabels, this.showLabelIfNumberapplicationsLessThan)
       .then(
         res => {
           this.plantUMLImage = res.data.svg;
           this.interfaces = res.data.interfaces;
           this.flows = res.data.flows;
           this.refreshingPlantuml = false;
+          this.showLabels = res.data.labelsShown;
         },
         err => {
           console.log(err);
@@ -180,6 +182,7 @@ export default class ApplicationDetails extends Vue {
 
   public doShowLabels() {
     this.refreshingPlantuml = true;
+    this.showLabelIfNumberapplicationsLessThan = -1; // if left to 15, hide wont work
     this.showLabels = !this.showLabels;
     this.getPlantUML(this.application.id);
   }

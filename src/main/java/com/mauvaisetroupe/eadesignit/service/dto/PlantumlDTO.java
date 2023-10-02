@@ -9,11 +9,13 @@ public class PlantumlDTO {
     private String svg;
     private Set<FlowInterfaceLight> interfaces;
     private Set<FunctionalFlow> flows;
+    private boolean labelsShown;
 
-    public PlantumlDTO(String svg, Set<FlowInterfaceLight> interfaces, Set<FunctionalFlow> flows) {
+    public PlantumlDTO(String svg, Set<FlowInterfaceLight> interfaces, Set<FunctionalFlow> flows, boolean labelsShown) {
         this.svg = svg;
         this.interfaces = interfaces;
         this.flows = flows;
+        this.labelsShown = labelsShown;
     }
 
     public String getSvg() {
@@ -38,5 +40,9 @@ public class PlantumlDTO {
 
     public void setFlows(Set<FunctionalFlow> flows) {
         this.flows = flows;
+    }
+
+    public boolean getLabelsShown() {
+        return labelsShown;
     }
 }

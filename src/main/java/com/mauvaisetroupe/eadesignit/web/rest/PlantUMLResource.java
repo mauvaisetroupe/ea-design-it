@@ -19,10 +19,12 @@ import io.undertow.util.BadRequestException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.Set;
 import java.util.SortedSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,7 +153,8 @@ public class PlantUMLResource {
         @PathVariable Long id,
         @RequestParam(defaultValue = "elk") Layout layout,
         @RequestParam(defaultValue = "true") boolean groupComponents,
-        @RequestParam(defaultValue = "false") boolean showLabels
+        @RequestParam(defaultValue = "false") boolean showLabels,
+        @RequestParam(defaultValue = "-1") int showLabelIfNumberapplicationsLessThan
     ) throws IOException, BadRequestException {
         Optional<Application> optional = applicationRepository.findById(id);
 
@@ -161,15 +164,33 @@ public class PlantUMLResource {
                 appli.getName(),
                 appli.getName()
             );
+            if (!showLabels && showLabelIfNumberapplicationsLessThan > -1) {
+                int nbApplicationsInInterfaces = getApplicationsCount(interfaces);
+                if (nbApplicationsInInterfaces <= showLabelIfNumberapplicationsLessThan) {
+                    showLabels = true;
+                }
+            }
             SortedSet<FunctionalFlow> flows = functionalFlowRepository.findFunctionalFlowsForInterfacesIn(appli);
             return new PlantumlDTO(
                 this.plantUMLSerializer.getInterfacesCollectionDiagramSVG(interfaces, layout, groupComponents, showLabels),
                 interfaces,
-                flows
+                flows,
+                showLabels
             );
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }
+    }
+
+    private int getApplicationsCount(Set<FlowInterfaceLight> interfaces) {
+        Set<Application> result = new HashSet<Application>();
+        if (interfaces != null) {
+            interfaces.forEach(i -> {
+                result.add(i.getSource());
+                result.add(i.getTarget());
+            });
+        }
+        return result.size();
     }
 
     @GetMapping(value = "plantuml/application/capability/get-svg/{id}")
