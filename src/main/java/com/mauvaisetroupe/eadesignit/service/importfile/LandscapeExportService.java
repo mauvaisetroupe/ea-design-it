@@ -78,8 +78,7 @@ public class LandscapeExportService {
         writeFlows(sheet, landscapeView.getFlows());
     }
 
-    protected void writeOrphanFlows(Sheet sheet) {
-        Set<FunctionalFlow> flows = flowRepository.findByLandscapesIsEmpty();
+    protected void writeOrphanFlows(Sheet sheet, Set<FunctionalFlow> flows) {
         writeFlows(sheet, flows);
     }
 

@@ -1,12 +1,15 @@
 package com.mauvaisetroupe.eadesignit.service.importfile;
 
+import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityMappingDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ExcelUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -43,6 +46,9 @@ public class ExportFullDataService {
 
     @Autowired
     ApplicationCapabilityExportService capabilityMappingExportService;
+
+    @Autowired
+    FunctionalFlowRepository flowRepository;
 
     protected static String ENTITY_TYPE = "entity.type";
     protected static String SHEET_LINK = "sheet hyperlink";
@@ -129,12 +135,15 @@ public class ExportFullDataService {
 
         // Orphan flows
         if (functionalFlowsWhithNoLandscape) {
-            Sheet flowSheet = workbook.createSheet("FLW.ORPH");
-            landscapeExportService.writeOrphanFlows(flowSheet);
-            addSummryFlow(workbook, summarySheet, null, "FLW.ORPH", lineNb++);
-            ExcelUtils.autoSizeAllColumns(flowSheet);
-            ExcelUtils.addHeaderColorAndFilte(workbook, flowSheet);
-            ExcelUtils.alternateColors(workbook, flowSheet, 1);
+            Set<FunctionalFlow> flows = flowRepository.findByLandscapesIsEmpty();
+            if (flows != null && !flows.isEmpty()) {
+                Sheet flowSheet = workbook.createSheet("FLW.ORPH");
+                landscapeExportService.writeOrphanFlows(flowSheet, flows);
+                addSummryFlow(workbook, summarySheet, null, "FLW.ORPH", lineNb++);
+                ExcelUtils.autoSizeAllColumns(flowSheet);
+                ExcelUtils.addHeaderColorAndFilte(workbook, flowSheet);
+                ExcelUtils.alternateColors(workbook, flowSheet, 1);
+            }
         }
 
         // Capabilities
