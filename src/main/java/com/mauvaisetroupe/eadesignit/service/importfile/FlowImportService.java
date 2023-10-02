@@ -24,6 +24,7 @@ import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
 import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
 import com.mauvaisetroupe.eadesignit.service.FunctionalflowService;
 import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
+import com.mauvaisetroupe.eadesignit.service.importfile.util.SummaryImporterService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -108,6 +109,9 @@ public class FlowImportService {
     @Autowired
     private OwnerRepository ownerRepository;
 
+    @Autowired
+    private SummaryImporterService summaryImporterService;
+
     public FlowImportService() {
         this.columnsArray.add(FLOW_ID_FLOW);
         this.columnsArray.add(FLOW_ALIAS_FLOW);
@@ -133,29 +137,10 @@ public class FlowImportService {
         List<Map<String, Object>> flowsDF = excelReader.getSheet(sheetname);
 
         // Find diagramname in Summary sheet
-        List<Map<String, Object>> summaryDF = excelReader.getSheet(ExportFullDataService.SUMMARY_SHEET);
-        String diagramName = findLandscape(summaryDF, sheetname);
-        String owner = findOwner(summaryDF, sheetname);
+        String diagramName = summaryImporterService.findLandscape(excelReader, sheetname);
+        String owner = summaryImporterService.findOwner(excelReader, sheetname);
 
         return _importExcel(flowsDF, diagramName, sheetname, owner);
-    }
-
-    private String findLandscape(List<Map<String, Object>> summaryDF, String sheetname) {
-        for (Map<String, Object> row : summaryDF) {
-            if (sheetname.equals(row.get("sheet hyperlink"))) {
-                return (String) row.get("landscape.name");
-            }
-        }
-        throw new IllegalStateException("Error with sheet name " + sheetname);
-    }
-
-    private String findOwner(List<Map<String, Object>> summaryDF, String sheetname) {
-        for (Map<String, Object> row : summaryDF) {
-            if (sheetname.equals(row.get("sheet hyperlink"))) {
-                return (String) row.get("owner");
-            }
-        }
-        throw new IllegalStateException("Error with sheet name " + sheetname);
     }
 
     /**

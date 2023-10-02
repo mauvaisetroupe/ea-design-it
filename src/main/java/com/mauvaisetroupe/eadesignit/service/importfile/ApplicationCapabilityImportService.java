@@ -10,9 +10,9 @@ import com.mauvaisetroupe.eadesignit.repository.CapabilityApplicationMappingRepo
 import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
-import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityItemDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.util.SummaryImporterService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -42,6 +42,9 @@ public class ApplicationCapabilityImportService {
     @Autowired
     private LandscapeViewRepository landscapeViewRepository;
 
+    @Autowired
+    private SummaryImporterService summaryImporterService;
+
     public static final String APP_NAME_1 = "application.name.1";
     public static final String APP_NAME_2 = "application.name.2";
     public static final String APP_NAME_3 = "application.name.3";
@@ -59,10 +62,7 @@ public class ApplicationCapabilityImportService {
         ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
         List<ApplicationCapabilityItemDTO> result = new ArrayList<ApplicationCapabilityItemDTO>();
 
-        // Find diagramname in Summary sheet
-        List<Map<String, Object>> summaryDF = capabilityFlowExcelReader.getSheet(ExportFullDataService.SUMMARY_SHEET);
-        String diagramName = findLandscape(summaryDF, sheetname);
-
+        String diagramName = summaryImporterService.findLandscape(capabilityFlowExcelReader, sheetname);
         LandscapeView landscape = landscapeViewRepository.findByDiagramNameIgnoreCase(diagramName);
 
         List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(sheetname);
@@ -122,15 +122,6 @@ public class ApplicationCapabilityImportService {
             result.add(itemDTO);
         }
         return result;
-    }
-
-    private String findLandscape(List<Map<String, Object>> summaryDF, String sheetname) {
-        for (Map<String, Object> row : summaryDF) {
-            if (sheetname.equals(row.get("sheet hyperlink"))) {
-                return (String) row.get("landscape.name");
-            }
-        }
-        throw new IllegalStateException("Error with sheet name " + sheetname);
     }
 
     private List<Application> findApplication(Map<String, Object> map, ApplicationCapabilityItemDTO applicationCapabilityDTO) {

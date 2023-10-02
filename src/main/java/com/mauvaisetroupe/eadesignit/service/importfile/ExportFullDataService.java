@@ -6,6 +6,7 @@ import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityMappingDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ExcelUtils;
+import com.mauvaisetroupe.eadesignit.service.importfile.util.SummaryImporterService;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -26,8 +27,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ExportFullDataService {
-
-    public static final String SUMMARY_SHEET = "Summary";
 
     @Autowired
     private ApplicationExportService applicationExportService;
@@ -50,11 +49,6 @@ public class ExportFullDataService {
     @Autowired
     FunctionalFlowRepository flowRepository;
 
-    protected static String ENTITY_TYPE = "entity.type";
-    protected static String SHEET_LINK = "sheet hyperlink";
-    protected static String LANDSCAPE_NAME = "landscape.name";
-    protected static String OWNER = "owner";
-
     public ByteArrayOutputStream getallData(
         boolean exportApplications,
         boolean exportComponents,
@@ -67,7 +61,7 @@ public class ExportFullDataService {
         boolean functionalFlowsWhithNoLandscape
     ) throws IOException {
         Workbook workbook = new XSSFWorkbook();
-        Sheet summarySheet = workbook.createSheet(SUMMARY_SHEET);
+        Sheet summarySheet = workbook.createSheet(SummaryImporterService.SUMMARY_SHEET);
         Sheet appliSheet = workbook.createSheet(ApplicationImportService.APPLICATION_SHEET_NAME);
         Sheet componentSheet = workbook.createSheet(ComponentImportService.COMPONENT_SHEET_NAME);
         Sheet ownerSheet = workbook.createSheet(ApplicationImportService.OWNER_SHEET_NAME);
@@ -77,10 +71,10 @@ public class ExportFullDataService {
         int lineNb = 0;
         int nbcolumn = 0;
         Row headerRow = summarySheet.createRow(lineNb++);
-        headerRow.createCell(nbcolumn++).setCellValue(ENTITY_TYPE);
-        headerRow.createCell(nbcolumn++).setCellValue(SHEET_LINK);
-        headerRow.createCell(nbcolumn++).setCellValue(LANDSCAPE_NAME);
-        headerRow.createCell(nbcolumn++).setCellValue(OWNER);
+        headerRow.createCell(nbcolumn++).setCellValue(SummaryImporterService.ENTITY_TYPE);
+        headerRow.createCell(nbcolumn++).setCellValue(SummaryImporterService.SHEET_LINK);
+        headerRow.createCell(nbcolumn++).setCellValue(SummaryImporterService.LANDSCAPE_NAME);
+        headerRow.createCell(nbcolumn++).setCellValue(SummaryImporterService.OWNER);
 
         // External Systems
         if (exportExternalSystem) {

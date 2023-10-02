@@ -23,16 +23,15 @@ import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilit
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityItemDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.FlowImportDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.SummarySheetDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.util.SummaryImporterService;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.ApplicationImportException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -95,6 +94,9 @@ public class ImportResource {
     @Autowired
     private ExternalSystemImportService externalSystemImportService;
 
+    @Autowired
+    private SummaryImporterService summaryImporterService;
+
     @PostMapping("/import/sheetnames")
     public List<String> getSheetNames(@RequestPart MultipartFile file) throws Exception {
         ExcelReader excelReader = new ExcelReader(file.getInputStream());
@@ -102,9 +104,8 @@ public class ImportResource {
     }
 
     @PostMapping("/import/summary")
-    public List<Map<String, Object>> getSummary(@RequestPart MultipartFile file) throws Exception {
-        ExcelReader excelReader = new ExcelReader(file.getInputStream());
-        return excelReader.getSheet(ExportFullDataService.SUMMARY_SHEET);
+    public List<SummarySheetDTO> getSummary(@RequestPart MultipartFile file) throws Exception {
+        return summaryImporterService.getSummary(file);
     }
 
     @PostMapping("/import/application/upload-file")
