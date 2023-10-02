@@ -4,9 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
+import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import java.util.List;
@@ -36,6 +38,9 @@ public class ImportFlowTest {
     ApplicationRepository applicationRepository;
 
     @Autowired
+    FlowInterfaceRepository flowInterfaceRepository;
+
+    @Autowired
     JdbcTemplate jdbcTemplate;
 
     protected List<LandscapeView> checkNbLandscapes(int nbLandscape) {
@@ -54,11 +59,26 @@ public class ImportFlowTest {
         assertEquals(nbFlows, flows.size());
     }
 
-    protected void checkNbsteps(String flowAlias, int nbSteps) {
+    protected FunctionalFlow checkNbsteps(String flowAlias, int nbSteps) {
         Optional<FunctionalFlow> optional = functionalFlowRepository.findByAlias(flowAlias);
         assertTrue(optional.isPresent(), "Could not find alias " + flowAlias);
         FunctionalFlow flow = optional.get();
         assertEquals(nbSteps, flow.getSteps().size());
+        return flow;
+    }
+
+    protected List<FlowInterface> checkNbInterfaces(int nbInterfaces) {
+        List<FlowInterface> interfaces = flowInterfaceRepository.findAll();
+        assertEquals(nbInterfaces, interfaces.size());
+        return interfaces;
+    }
+
+    protected void checkInterfaceExists(String alias, List<FlowInterface> interfaces) {
+        boolean found = false;
+        for (FlowInterface inter : interfaces) {
+            if (alias.equals(inter.getAlias())) return;
+        }
+        assertTrue(found, "Interface not found : " + alias);
     }
 
     @AfterEach

@@ -44,10 +44,10 @@ public class ExportFullDataService {
     @Autowired
     ApplicationCapabilityExportService capabilityMappingExportService;
 
-    private static String ENTITY_TYPE = "entity.type";
-    private static String SHEET_LINK = "sheet hyperlink";
-    private static String LANDSCAPE_NAME = "landscape.name";
-    private static String OWNER = "owner";
+    protected static String ENTITY_TYPE = "entity.type";
+    protected static String SHEET_LINK = "sheet hyperlink";
+    protected static String LANDSCAPE_NAME = "landscape.name";
+    protected static String OWNER = "owner";
 
     public ByteArrayOutputStream getallData(
         boolean exportApplications,

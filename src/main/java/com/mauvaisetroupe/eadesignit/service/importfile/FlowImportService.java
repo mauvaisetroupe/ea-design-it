@@ -199,19 +199,20 @@ public class FlowImportService {
         }
         // Complete by all Flows from Landscape
         LandscapeView landscapeView = findOrCreateLandscape(diagramName);
-        for (FunctionalFlow flow : landscapeView.getFlows()) {
-            allFlows.add(flow);
-        }
-
-        // Detach all Flows from landscape
-        // And delete if anonymous
-        for (FunctionalFlow functionalFlow : allFlows) {
-            landscapeView.removeFlows(functionalFlow);
-            flowRepository.save(functionalFlow);
-            landscapeViewRepository.save(landscapeView);
-            if (functionalFlow.getAlias() == null) {
-                // anonymous, so not used in another landscape
-                functionalflowService.delete(functionalFlow.getId(), true, true);
+        if (landscapeView != null) {
+            for (FunctionalFlow flow : landscapeView.getFlows()) {
+                allFlows.add(flow);
+            }
+            // Detach all Flows from landscape
+            // And delete if anonymous
+            for (FunctionalFlow functionalFlow : allFlows) {
+                landscapeView.removeFlows(functionalFlow);
+                flowRepository.save(functionalFlow);
+                landscapeViewRepository.save(landscapeView);
+                if (functionalFlow.getAlias() == null) {
+                    // anonymous, so not used in another landscape
+                    functionalflowService.delete(functionalFlow.getId(), true, true);
+                }
             }
         }
 
@@ -271,9 +272,7 @@ public class FlowImportService {
                 FlowInterface flowInterface = findOrCreateInterface(flowImport);
                 Protocol protocol = findOrCreateProtocol(flowImport);
 
-                if (landscapeView != null && functionalFlow != null && flowInterface != null) {
-                    // Set<>, so could add even if already associated
-                    functionalFlow.addLandscape(landscapeView);
+                if (functionalFlow != null && flowInterface != null) {
                     // For first persistence
                     interfaceRepository.save(flowInterface);
                     flowRepository.save(functionalFlow);
@@ -312,20 +311,25 @@ public class FlowImportService {
                         }
                     }
 
-                    if (owner != null) {
-                        Owner landscapeOwner = ownerRepository.findByNameIgnoreCase(owner);
-                        if (landscapeOwner != null) {
-                            landscapeView.setOwner(landscapeOwner);
-                        }
-                    }
-
-                    landscapeViewRepository.save(landscapeView);
                     if (protocol != null) {
                         flowInterface.setProtocol(protocol);
                         // validate here beacause relationship should not be null
                         validateBean(protocol);
                         protocolRepository.save(protocol);
                         interfaceRepository.save(flowInterface);
+                    }
+
+                    if (landscapeView != null) {
+                        // Set<>, so could add even if already associated
+                        functionalFlow.addLandscape(landscapeView);
+
+                        if (owner != null) {
+                            Owner landscapeOwner = ownerRepository.findByNameIgnoreCase(owner);
+                            if (landscapeOwner != null) {
+                                landscapeView.setOwner(landscapeOwner);
+                            }
+                        }
+                        landscapeViewRepository.save(landscapeView);
                     }
                 } else {
                     flowInterface = null;
@@ -354,6 +358,9 @@ public class FlowImportService {
     }
 
     private LandscapeView findOrCreateLandscape(String diagramName) {
+        if (diagramName == null) {
+            return null;
+        }
         LandscapeView landscapeView = landscapeViewRepository.findByDiagramNameIgnoreCase(diagramName);
         if (landscapeView == null) {
             landscapeView = mapToLandscapeView(diagramName);

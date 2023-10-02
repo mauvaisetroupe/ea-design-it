@@ -29,9 +29,13 @@
 
         <div class="row m-3">
           <template v-for="(sheet, i) in sheetnames">
+            <div class="col-1" :key="'0-' + i">
+              <input type="checkbox" v-model="checkedNames" :value="sheet" :id="'CHK-' + sheet" :disabled="fileSubmited" checked="false" />
+              <label :for="'CHK-' + sheet" class="">{{ sheet }} </label>
+            </div>
             <div class="col-3" :key="'1-' + i">
-              <input type="checkbox" v-model="checkedNames" :value="sheet" :id="'CHK-' + sheet" :disabled="fileSubmited" />
-              <label :for="'CHK-' + sheet" class="">{{ sheet }} {{ landscapeMap[sheet] }}</label>
+              <label :for="'CHK-' + sheet" class="" v-if="landscapeMap[sheet]"> {{ landscapeMap[sheet] }}</label>
+              <label :for="'CHK-' + sheet" class="" v-else><span class="bg-danger text-white">No Existing Landscape</span></label>
             </div>
             <div class="col-2" :key="'2-' + i"></div>
           </template>
