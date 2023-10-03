@@ -1,6 +1,5 @@
 package com.mauvaisetroupe.eadesignit.service.diagram.drawio;
 
-import com.mauvaisetroupe.eadesignit.config.AsyncConfiguration;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.PositionAndSize;
@@ -209,6 +208,10 @@ public class PLantumlToDrawioPositioner {
             PositionAndSize topPos = mapApplicationPosition.get(topApplication.getName());
             PositionAndSize bottomPos = mapApplicationPosition.get(bottomApplication.getName());
 
+            double verticalStep = 10;
+            double additionVerticalStep = 10;
+            double nbEdge = bottomAppliList.size();
+
             Element geometry = (Element) elem.getFirstChild();
 
             Element array = (Element) geometry.appendChild(doc.createElement("Array"));
@@ -217,7 +220,20 @@ public class PLantumlToDrawioPositioner {
             double deltaX = Math.abs((topPos.getX() + topPos.getWidth() / 2) - (bottomPos.getX() + bottomPos.getWidth() / 2));
             Element mxPoint3 = (Element) array.appendChild(doc.createElement("mxPoint"));
             mxPoint3.setAttribute("x", "" + (Math.min(topPos.getX(), bottomPos.getX()) + deltaX / 2));
-            mxPoint3.setAttribute("y", "" + (topPos.getY() + topPos.getHeight() + (indexTop + 1) * 10));
+
+            if ((topPos.getX() + topPos.getWidth() / 2) < (bottomPos.getX() + bottomPos.getWidth() / 2)) {
+                // when N bottom application are connected to the same bottom application, all the edge have the same vertical alignement
+                // We need to align a additional vertical step depending of the n-th connection on the bottom aplication (top of the bottom app)
+                // That's because in the algorithm we process edge from top to bottom, not from bottom to top
+                double deltaFor1ToMany = (topAppliList.size() - indexBottom) * additionVerticalStep;
+                mxPoint3.setAttribute(
+                    "y",
+                    "" + ((topPos.getY() + topPos.getHeight() + (nbEdge - indexTop) * verticalStep) + deltaFor1ToMany)
+                );
+            } else {
+                double deltaFor1ToMany = indexBottom * additionVerticalStep;
+                mxPoint3.setAttribute("y", "" + ((topPos.getY() + topPos.getHeight() + (indexTop + 1) * verticalStep) + deltaFor1ToMany));
+            }
         }
         return doc;
     }
