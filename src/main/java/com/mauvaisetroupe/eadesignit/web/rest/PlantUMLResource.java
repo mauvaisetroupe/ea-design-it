@@ -79,7 +79,7 @@ public class PlantUMLResource {
     }
 
     @GetMapping(value = "plantuml/landscape-view/get-svg/{id}")
-    public @ResponseBody String getLandscapeSVG(
+    public @ResponseBody PlantumlDTO getLandscapeSVG(
         @PathVariable Long id,
         @RequestParam(defaultValue = "smetana") Layout layout,
         @RequestParam(defaultValue = "true") boolean groupComponents,
@@ -94,7 +94,12 @@ public class PlantUMLResource {
                     showLabels = true;
                 }
             }
-            return this.plantUMLSerializer.getLandscapeDiagramSVG(landscapeViewOptional.get(), layout, groupComponents, true, showLabels);
+            return new PlantumlDTO(
+                this.plantUMLSerializer.getLandscapeDiagramSVG(landscapeViewOptional.get(), layout, groupComponents, true, showLabels),
+                null,
+                null,
+                showLabels
+            );
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }

@@ -149,7 +149,8 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
       .getPlantUML(landscapeViewId, this.layout, this.groupComponents, this.showLabels, this.showLabelIfNumberapplicationsLessThan)
       .then(
         res => {
-          this.plantUMLImage = res.data;
+          this.plantUMLImage = res.data.svg;
+          this.showLabels = res.data.labelsShown;
           this.refreshingPlantuml = false;
         },
         err => {
@@ -357,6 +358,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public doShowLabels() {
     this.refreshingPlantuml = true;
     this.showLabels = !this.showLabels;
+    this.showLabelIfNumberapplicationsLessThan = -1; // if left to 15, hide wont work
     this.getPlantUML(this.landscapeView.id);
   }
 
