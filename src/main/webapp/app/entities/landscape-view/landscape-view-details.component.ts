@@ -53,6 +53,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public sessionKey = 'landscape.detail.tab';
   public landscapeViewId = -1;
   public filter = '';
+  public showLabelIfNumberapplicationsLessThan = 20;
 
   //for description update
   public reorderAliasflowToSave: IFunctionalFlow[] = [];
@@ -145,7 +146,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public getPlantUML(landscapeViewId) {
     this.refreshingPlantuml = true;
     this.landscapeViewService()
-      .getPlantUML(landscapeViewId, this.layout, this.groupComponents, this.showLabels)
+      .getPlantUML(landscapeViewId, this.layout, this.groupComponents, this.showLabels, this.showLabelIfNumberapplicationsLessThan)
       .then(
         res => {
           this.plantUMLImage = res.data;

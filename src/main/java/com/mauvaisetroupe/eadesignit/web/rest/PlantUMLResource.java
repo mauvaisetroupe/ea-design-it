@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
+import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
@@ -26,6 +27,7 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
@@ -81,14 +83,38 @@ public class PlantUMLResource {
         @PathVariable Long id,
         @RequestParam(defaultValue = "smetana") Layout layout,
         @RequestParam(defaultValue = "true") boolean groupComponents,
-        @RequestParam(defaultValue = "true") boolean showLabels
+        @RequestParam(defaultValue = "true") boolean showLabels,
+        @RequestParam(defaultValue = "-1") int showLabelIfNumberapplicationsLessThan
     ) throws IOException, BadRequestException {
         Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
         if (landscapeViewOptional.isPresent()) {
+            if (!showLabels && showLabelIfNumberapplicationsLessThan > -1) {
+                int nbApplicationsInInterfaces = getApplicationsCount(landscapeViewOptional.get());
+                if (nbApplicationsInInterfaces <= showLabelIfNumberapplicationsLessThan) {
+                    showLabels = true;
+                }
+            }
             return this.plantUMLSerializer.getLandscapeDiagramSVG(landscapeViewOptional.get(), layout, groupComponents, true, showLabels);
         } else {
             throw new BadRequestException("Cannot find landscape View");
         }
+    }
+
+    private int getApplicationsCount(LandscapeView landscape) {
+        Set<Application> result = new HashSet<Application>();
+        if (landscape != null && landscape.getFlows() != null) {
+            landscape
+                .getFlows()
+                .forEach(flow -> {
+                    flow
+                        .getInterfaces()
+                        .forEach(i -> {
+                            result.add(i.getSource());
+                            result.add(i.getTarget());
+                        });
+                });
+        }
+        return result.size();
     }
 
     @GetMapping(value = "plantuml/landscape-view/get-source/{id}")
