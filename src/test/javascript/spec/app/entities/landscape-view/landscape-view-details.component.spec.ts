@@ -62,12 +62,17 @@ describe('Component Tests', () => {
     describe('OnInit', () => {
       it('Should call load all on init', async () => {
         // GIVEN
+        landscapeViewServiceStub.getPlantUML.resolves({
+          data: {
+            svg: '@startuml\nAlice -> Bob: Authentication Request\n@enduml',
+            labelsShown: false,
+          },
+        });
         const lanscapeDTO: ILandscapeDTO = {
           landscape: { id: 123, flows: [] },
           consolidatedCapability: [],
         };
         landscapeViewServiceStub.find.resolves(lanscapeDTO);
-        landscapeViewServiceStub.getPlantUML.resolves('@startuml\nAlice -> Bob: Authentication Request\n@enduml');
 
         // WHEN
         comp.retrieveLandscapeView(123);
@@ -86,13 +91,18 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
+        landscapeViewServiceStub.getPlantUML.resolves({
+          data: {
+            svg: '@startuml\nAlice -> Bob: Authentication Request\n@enduml',
+            labelsShown: false,
+          },
+        });
         const lanscapeDTO: ILandscapeDTO = {
           landscape: { id: 123, flows: [] },
           consolidatedCapability: [],
         };
 
         landscapeViewServiceStub.find.resolves(lanscapeDTO);
-        landscapeViewServiceStub.getPlantUML.resolves('@startuml\nAlice -> Bob: Authentication Request\n@enduml');
 
         // WHEN
         comp.beforeRouteEnter({ params: { landscapeViewId: 123 } }, null, cb => cb(comp));
