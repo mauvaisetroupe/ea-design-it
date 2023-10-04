@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,8 +54,23 @@ public class PLantumlToDrawioPositioner {
         NodeList textNodes = docSvgXML.getElementsByTagName("text");
         NodeList rectNodes = docSvgXML.getElementsByTagName("rect");
         populateMaps(textNodes, rectNodes, applications);
+        addVerticalOrderInPosition();
         if (edges != null) {
             populateUpAndDownAncestors(applications, edges);
+        }
+    }
+
+    private void addVerticalOrderInPosition(){
+        List<PositionAndSize> orderedList  = new ArrayList<>(this.mapApplicationPosition.values());
+        orderedList.sort(Comparator.comparing(pos -> pos.getY()));
+        int i = 0;
+        double currentY = -1;
+        for (PositionAndSize pos : orderedList) {   
+            if (pos.getY() > currentY) {
+                currentY = pos.getY();
+                i++;
+            }         
+            pos.setVerticalOrder(i);
         }
     }
 

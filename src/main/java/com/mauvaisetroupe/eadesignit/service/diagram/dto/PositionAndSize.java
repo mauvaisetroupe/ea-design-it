@@ -8,6 +8,15 @@ public class PositionAndSize {
     private Double y;
     private Double width;
     private Double height;
+    private int verticalOrder;
+
+    public int getVerticalOrder() {
+        return verticalOrder;
+    }
+
+    public void setVerticalOrder(int verticalOrder) {
+        this.verticalOrder = verticalOrder;
+    }
 
     public Double getWidth() {
         return width;
