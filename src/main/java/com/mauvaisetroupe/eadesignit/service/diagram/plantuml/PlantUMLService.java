@@ -61,6 +61,12 @@ public class PlantUMLService {
                 String space = getSpaces(application.getName(), graph.getNbConnection(application), layout);
                 application.setName(space + application.getName() + space);
             }
+            for (List<Application> groupedAplications : graph.getApplicationGroups().values()) {
+                for (Application application : groupedAplications) {
+                    String space = getSpaces(application.getName(), graph.getNbConnection(application), layout);
+                    application.setName(space + application.getName() + space)                    ;
+                }
+            }            
         }
 
         StringBuilder plantUMLSource = new StringBuilder();
