@@ -224,17 +224,27 @@ public class PLantumlToDrawioPositioner {
             Element mxPoint3 = (Element) array.appendChild(doc.createElement("mxPoint"));
             mxPoint3.setAttribute("x", "" + (Math.min(topPos.getX(), bottomPos.getX()) + deltaX / 2));
 
-            if ((topPos.getX() + topPos.getWidth() / 2) < (bottomPos.getX() + bottomPos.getWidth() / 2)) {
+            boolean connectionFromLeftToright = (topPos.getX() + topPos.getWidth() / 2) < (bottomPos.getX() + bottomPos.getWidth() / 2);
+            if (connectionFromLeftToright) {
                 // when N bottom application are connected to the same bottom application, all the edge have the same vertical alignement
                 // We need to align a additional vertical step depending of the n-th connection on the bottom aplication (top of the bottom app)
                 // That's because in the algorithm we process edge from top to bottom, not from bottom to top
-                double deltaFor1ToMany = (topAppliList.size() - indexBottom) * additionVerticalStep;
+
+                double deltaFor1ToMany = 0;
+                if (bottomAppliList.size() < topAppliList.size()) {
+                    // delta cause disgracious schema when top application has many connection
+                    deltaFor1ToMany = (topAppliList.size() - indexBottom) * additionVerticalStep;
+                }
                 mxPoint3.setAttribute(
                     "y",
                     "" + ((topPos.getY() + topPos.getHeight() + (nbEdge - indexTop) * verticalStep) + deltaFor1ToMany)
                 );
             } else {
-                double deltaFor1ToMany = indexBottom * additionVerticalStep;
+                double deltaFor1ToMany = 0;
+                if (bottomAppliList.size() < topAppliList.size()) {
+                    deltaFor1ToMany = indexBottom * additionVerticalStep;
+                }
+
                 mxPoint3.setAttribute("y", "" + ((topPos.getY() + topPos.getHeight() + (indexTop + 1) * verticalStep) + deltaFor1ToMany));
             }
         }
