@@ -128,6 +128,9 @@ public class PLantumlToDrawioPositioner {
         //   </mxGraphModel>
 
         for (Edge edge : edges) {
+            if (edge.getSourceId().equals(edge.getTargetId())) {
+                continue;
+            }
             boolean fromTopToBottom = (bottomConnected.get(edge.getSourceId()).indexOf(edge.getTargetId()) > -1);
 
             // identify which of the source or target ones is the top application and the bottom application
