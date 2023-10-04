@@ -3,7 +3,6 @@ package com.mauvaisetroupe.eadesignit.service.diagram.drawio;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.PositionAndSize;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,12 +26,12 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 public class PLantumlToDrawioPositioner {
 
     // appliName -> PositionAndSize
     private Map<String, PositionAndSize> mapApplicationPosition = new HashMap<>();
+    private Map<Long, String> mapApplicationsById = new HashMap<>();
     // applicationId -> Application
     private Map<Long, Application> mapApplicationNames = new HashMap<>();
     // Ancestors above application(ID), from left to right
@@ -40,41 +39,51 @@ public class PLantumlToDrawioPositioner {
     // Ancestors below application(ID), from left to right
     private Map<Long, List<Long>> bottomConnected = new HashMap<>();
 
+    private boolean initialized = false;
+
     private final Logger log = LoggerFactory.getLogger(PLantumlToDrawioPositioner.class);
 
     public Map<String, PositionAndSize> getMapApplicationPosition() {
         return mapApplicationPosition;
     }
 
-    public PLantumlToDrawioPositioner(String svgXML, Collection<Application> applications, Collection<Edge> edges)
-        throws SAXException, IOException, ParserConfigurationException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document docSvgXML = db.parse(new InputSource(new StringReader(svgXML)));
-        NodeList textNodes = docSvgXML.getElementsByTagName("text");
-        NodeList rectNodes = docSvgXML.getElementsByTagName("rect");
-        populateMaps(textNodes, rectNodes, applications);
-        addVerticalOrderInPosition();
-        if (edges != null) {
-            populateUpAndDownAncestors(applications, edges);
+    public PLantumlToDrawioPositioner(String svgXML, Collection<Application> applications, Collection<Edge> edges) {
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document docSvgXML = db.parse(new InputSource(new StringReader(svgXML)));
+            NodeList textNodes = docSvgXML.getElementsByTagName("text");
+            NodeList rectNodes = docSvgXML.getElementsByTagName("rect");
+            this.mapApplicationsById = applications.stream().collect(Collectors.toMap(Application::getId, Application::getName));
+            populateMaps(textNodes, rectNodes, applications);
+            addVerticalOrderInPosition();
+            if (edges != null) {
+                populateUpAndDownAncestors(applications, edges);
+            }
+            this.initialized = true;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private void addVerticalOrderInPosition(){
-        List<PositionAndSize> orderedList  = new ArrayList<>(this.mapApplicationPosition.values());
+    private void addVerticalOrderInPosition() {
+        List<PositionAndSize> orderedList = new ArrayList<>(this.mapApplicationPosition.values());
         orderedList.sort(Comparator.comparing(pos -> pos.getY()));
         int i = 0;
         double currentY = -1;
-        for (PositionAndSize pos : orderedList) {   
+        for (PositionAndSize pos : orderedList) {
             if (pos.getY() > currentY) {
                 currentY = pos.getY();
                 i++;
-            }         
+            }
             pos.setVerticalOrder(i);
         }
     }
 
     public Document addPositions(Document drawDocument) {
+        if (!initialized) {
+            return drawDocument;
+        }
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         Document copiedDocument;
         try {
@@ -118,6 +127,9 @@ public class PLantumlToDrawioPositioner {
     }
 
     public Document addConnectionPoints(Document doc, Collection<Edge> edges) throws XPathExpressionException {
+        if (!initialized) {
+            return doc;
+        }
         //     WEBBANKING (EXIT)
         //       |
         //       |
@@ -382,5 +394,11 @@ public class PLantumlToDrawioPositioner {
                 this.bottomConnected.put(application.getId(), downAppli.stream().map(a -> a.getId()).collect(Collectors.toList()));
             }
         }
+    }
+
+    public int getDistance(Edge edge) {
+        PositionAndSize source = this.mapApplicationPosition.get(this.mapApplicationsById.get(edge.getSourceId()));
+        PositionAndSize target = this.mapApplicationPosition.get(this.mapApplicationsById.get(edge.getTargetId()));
+        return Math.abs(source.getVerticalOrder() - target.getVerticalOrder());
     }
 }

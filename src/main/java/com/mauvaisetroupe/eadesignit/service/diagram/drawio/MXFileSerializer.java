@@ -11,7 +11,8 @@ import java.io.StringWriter;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Random;
+import java.util.HashSet;
+import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -43,14 +44,34 @@ public class MXFileSerializer {
     private static final String CELL_DEFAULT_HEIGHT = "50";
 
     private LandscapeView landscapeView;
+    private static final int MAX_DISTANCE = 4;
+    private String svgXML;
 
     public MXFileSerializer(LandscapeView landscapeView) throws ParserConfigurationException {
-        this.landscapeView = landscapeView;
+        this(landscapeView, null);
     }
 
-    public String createMXFileXML(String svgXML) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    public MXFileSerializer(LandscapeView landscapeView, String svgXML) throws ParserConfigurationException {
+        this.landscapeView = landscapeView;
+        this.svgXML = svgXML;
+    }
+
+    public String createMXFileXML() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graphDTO = graphBuilder.createGraph(landscapeView, true);
+
+        PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner(
+            svgXML,
+            graphDTO.getApplications(),
+            graphDTO.getBidirectionalConsolidatedEdges()
+        );
+
+        Set<Edge> edgeToProcess = new HashSet<>();
+        for (Edge edge : graphDTO.getBidirectionalConsolidatedEdges()) {
+            if (drawioPositioner.getDistance(edge) < MAX_DISTANCE) {
+                edgeToProcess.add(edge);
+            }
+        }
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -66,7 +87,7 @@ public class MXFileSerializer {
         cell1.setAttribute("id", "1");
         cell1.setAttribute("parent", "0");
 
-        for (Edge edge : graphDTO.getBidirectionalConsolidatedEdges()) {
+        for (Edge edge : edgeToProcess) {
             createEdge(doc, root, edge);
         }
 
@@ -74,19 +95,8 @@ public class MXFileSerializer {
             createRectangle(doc, root, application.getId().toString(), application.getName());
         }
 
-        try {
-            if (svgXML != null) {
-                PLantumlToDrawioPositioner drawioPositioner = new PLantumlToDrawioPositioner(
-                    svgXML,
-                    graphDTO.getApplications(),
-                    graphDTO.getBidirectionalConsolidatedEdges()
-                );
-                doc = drawioPositioner.addPositions(doc);
-                doc = drawioPositioner.addConnectionPoints(doc, graphDTO.getBidirectionalConsolidatedEdges());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        doc = drawioPositioner.addPositions(doc);
+        doc = drawioPositioner.addConnectionPoints(doc, edgeToProcess);
         return getStringFromDocument(doc);
     }
 
