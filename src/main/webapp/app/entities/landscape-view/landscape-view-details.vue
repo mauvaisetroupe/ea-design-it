@@ -40,7 +40,7 @@
         </b-tab>
         <b-tab title="Schema" id="tab-schema">
           <div class="row">
-            <div class="table-responsive my-5">
+            <div class="table-responsive my-5" v-if="plantUMLImage">
               <div v-html="plantUMLImage" class="table-responsive"></div>
               <div class="col-12">
                 <button
@@ -83,6 +83,9 @@
                 </button>
                 <br /><br />
               </div>
+            </div>
+            <div v-else class="container d-flex justify-content-center align-items-center" style="height: 50vh">
+              <font-awesome-icon icon="sync" spin="true" size="6x" style="color: #cccccc"></font-awesome-icon>
             </div>
           </div>
         </b-tab>

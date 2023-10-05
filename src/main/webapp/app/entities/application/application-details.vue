@@ -200,7 +200,10 @@
           </div>
         </b-tab>
         <b-tab title="Schema (interfaces)">
-          <div v-html="plantUMLImage" class="table-responsive my-5"></div>
+          <div v-html="plantUMLImage" class="table-responsive my-5" v-if="plantUMLImage"></div>
+          <div v-else class="container d-flex justify-content-center align-items-center" style="height: 50vh">
+            <font-awesome-icon icon="sync" spin="true" size="6x" style="color: #cccccc"></font-awesome-icon>
+          </div>
           <div class="col-12">
             <button
               class="btn btn-secondary"
