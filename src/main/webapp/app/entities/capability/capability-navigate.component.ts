@@ -17,7 +17,17 @@ export default class CapabilityDetails extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
 
   public capability: ICapability = {};
-  public capabilitiesPlantUMLImage = '';
+  public flattenCapabilities: string[] = [];
+  public filter = '';
+  public isFetching = true;
+
+  get filteredCapabilities() {
+    if (this.filter) {
+      return this.flattenCapabilities.filter(s => s.toLowerCase().includes(this.filter.toLowerCase()));
+    } else {
+      return this.flattenCapabilities;
+    }
+  }
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -27,6 +37,7 @@ export default class CapabilityDetails extends Vue {
 
   public retrieveCapability(capabilityId) {
     console.log('Finding capabilty : ' + capabilityId);
+    this.isFetching = true;
     if (!capabilityId) {
       this.capabilityService()
         .findRoot()
@@ -50,11 +61,38 @@ export default class CapabilityDetails extends Vue {
     }
   }
 
+  public computeflattenCapabilities(capability: ICapability, fullPathCapabilities: string[], parentPath: string) {
+    let fullPath = '';
+    if (capability.name !== 'ROOT') {
+      let sep = '';
+      if (parentPath) {
+        sep = ' > ';
+      }
+      fullPath = parentPath + sep + capability.name;
+      fullPathCapabilities.push(fullPath);
+    }
+    if (capability.subCapabilities) {
+      capability.subCapabilities.forEach(cap => this.computeflattenCapabilities(cap, fullPathCapabilities, fullPath));
+    }
+  }
+
   public previousState() {
     this.$router.go(-1);
   }
 
   private init(res: ICapability) {
     this.capability = res;
+    this.initFlatten().then(flat => {
+      this.flattenCapabilities = flat;
+    });
+    this.isFetching = false;
+  }
+
+  private initFlatten(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const flatten = [];
+      this.computeflattenCapabilities(this.capability, flatten, '');
+      resolve(flatten);
+    });
   }
 }
