@@ -38,8 +38,7 @@ public class FlowInterfaceDAOImpl implements FlowInterfaceDAO {
             " left join APPLICATION t on i1.TARGET_ID = t.ID  " +
             " left join COMPONENT sc on i1.SOURCE_COMPONENT_ID = sc.ID  " +
             " left join COMPONENT tc on i1.TARGET_COMPONENT_ID = tc.ID  " +
-            " left join PROTOCOL p on i1.PROTOCOL_ID = p.ID  " +
-            " left join Owner o on i1.owner_ID = o.ID  ";
+            " left join PROTOCOL p on i1.PROTOCOL_ID = p.ID  ";
 
         List<FlowInterfaceLight> list = jdbcTemplate.query(
             select,
@@ -89,18 +88,11 @@ public class FlowInterfaceDAOImpl implements FlowInterfaceDAO {
                     FlowInterfaceLight flowInterface = new FlowInterfaceLight(
                         rs.getLong("id"),
                         rs.getString("alias"),
-                        rs.getString("status"),
-                        rs.getString("documentation_url"),
-                        rs.getString("documentation_url_2"),
-                        rs.getString("description"),
-                        rs.getDate("start_date") != null ? rs.getDate("start_date").toLocalDate() : null,
-                        rs.getDate("end_date") != null ? rs.getDate("end_date").toLocalDate() : null,
                         source,
                         target,
                         sourceComponent,
                         targetComponent,
-                        protocol,
-                        null
+                        protocol
                     );
                     return flowInterface;
                 }
