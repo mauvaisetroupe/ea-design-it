@@ -36,18 +36,11 @@
           <tr>
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Alias</span></th>
-            <th scope="row"><span>Status</span></th>
-            <th scope="row"><span>Documentation URL</span></th>
-            <th scope="row"><span>Documentation URL 2</span></th>
-            <th scope="row"><span>Description</span></th>
-            <th scope="row"><span>Start Date</span></th>
-            <th scope="row"><span>End Date</span></th>
             <th scope="row"><span>Source</span></th>
             <th scope="row"><span>Target</span></th>
             <th scope="row"><span>Source Component</span></th>
             <th scope="row"><span>Target Component</span></th>
             <th scope="row"><span>Protocol</span></th>
-            <th scope="row"><span>Owner</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -59,16 +52,6 @@
               }}</router-link>
             </td>
             <td>{{ flowInterface.alias }}</td>
-            <td>{{ flowInterface.status }}</td>
-            <td>
-              <a v-bind:href="flowInterface.documentationURL">{{ flowInterface.documentationURL }}</a>
-            </td>
-            <td>
-              <a v-bind:href="flowInterface.documentationURL2">{{ flowInterface.documentationURL2 }}</a>
-            </td>
-            <td>{{ flowInterface.description }}</td>
-            <td>{{ flowInterface.startDate }}</td>
-            <td>{{ flowInterface.endDate }}</td>
             <td>
               <div v-if="flowInterface.source">
                 <router-link :to="{ name: 'ApplicationView', params: { applicationId: flowInterface.source.id } }">{{
@@ -103,13 +86,6 @@
               <div v-if="flowInterface.protocol">
                 <router-link :to="{ name: 'ProtocolView', params: { protocolId: flowInterface.protocol.id } }">{{
                   flowInterface.protocol.name
-                }}</router-link>
-              </div>
-            </td>
-            <td>
-              <div v-if="flowInterface.owner">
-                <router-link :to="{ name: 'OwnerView', params: { ownerId: flowInterface.owner.id } }">{{
-                  flowInterface.owner.name
                 }}</router-link>
               </div>
             </td>
