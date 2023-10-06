@@ -91,13 +91,13 @@ export default class ApplicationDetails extends Vue {
       .find(applicationId)
       .then(res => {
         this.application = res;
-        this.getPlantUML(applicationId);
-        this.getStructurePlantUML(applicationId);
-        this.retrieveCapabilities(applicationId);
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
       });
+    this.getPlantUML(applicationId);
+    this.getStructurePlantUML(applicationId);
+    this.retrieveCapabilities(applicationId);
   }
 
   public previousState() {
