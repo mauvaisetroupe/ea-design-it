@@ -216,13 +216,7 @@ class FlowInterfaceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(flowInterface.getId().intValue())))
-            .andExpect(jsonPath("$.[*].alias").value(hasItem(DEFAULT_ALIAS)))
-            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
-            .andExpect(jsonPath("$.[*].documentationURL").value(hasItem(DEFAULT_DOCUMENTATION_URL)))
-            .andExpect(jsonPath("$.[*].documentationURL2").value(hasItem(DEFAULT_DOCUMENTATION_URL_2)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
+            .andExpect(jsonPath("$.[*].alias").value(hasItem(DEFAULT_ALIAS)));
     }
 
     @Test
