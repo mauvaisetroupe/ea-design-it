@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { IApplication } from '@/shared/model/application.model';
 import { ICapability } from '@/shared/model/capability.model';
+import { PlantumlDTO } from '@/shared/model/plantuml-dto';
 
 const baseApiUrl = 'api/applications';
 const basePlantUMLApiUrl = 'api/plantuml/application/get-svg';
@@ -118,11 +119,11 @@ export default class ApplicationService {
       showLabels: showLabels,
       showLabelIfNumberapplicationsLessThan: showLabelIfNumberapplicationsLessThan,
     };
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<PlantumlDTO>((resolve, reject) => {
       axios
         .get(`${basePlantUMLApiUrl}/${id}`, { params })
         .then(res => {
-          resolve(res);
+          resolve(res.data);
         })
         .catch(err => {
           reject(err);

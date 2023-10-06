@@ -149,8 +149,8 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
       .getPlantUML(landscapeViewId, this.layout, this.groupComponents, this.showLabels, this.showLabelIfNumberapplicationsLessThan)
       .then(
         res => {
-          this.plantUMLImage = res.data.svg;
-          this.showLabels = res.data.labelsShown;
+          this.plantUMLImage = res.svg;
+          this.showLabels = res.labelsShown;
           this.refreshingPlantuml = false;
         },
         err => {

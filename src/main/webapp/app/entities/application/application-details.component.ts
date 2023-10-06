@@ -8,6 +8,7 @@ import { IFlowInterface } from '@/shared/model/flow-interface.model';
 import { ICapability } from '@/shared/model/capability.model';
 import CapabilityComponent from '@/entities/capability/component/capability.vue';
 import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { IFLowInterfaceLight } from '@/shared/model/plantuml-dto';
 
 @Component({
   components: {
@@ -22,7 +23,7 @@ export default class ApplicationDetails extends Vue {
   public plantUMLImage = '';
   public applicationStructurePlantUMLImage = '';
   public capabilitiesPlantUMLImage = '';
-  public interfaces: IFlowInterface[] = [];
+  public interfaces: IFLowInterfaceLight[] = [];
   public flows: IFunctionalFlow[] = [];
   public consolidatedCapabilities: ICapability[] = [];
 
@@ -109,11 +110,11 @@ export default class ApplicationDetails extends Vue {
       .getPlantUML(applicationId, this.layout, this.groupComponents, this.showLabels, this.showLabelIfNumberapplicationsLessThan)
       .then(
         res => {
-          this.plantUMLImage = res.data.svg;
-          this.interfaces = res.data.interfaces;
-          this.flows = res.data.flows;
+          this.plantUMLImage = res.svg;
+          this.interfaces = res.interfaces;
+          this.flows = res.flows;
           this.refreshingPlantuml = false;
-          this.showLabels = res.data.labelsShown;
+          this.showLabels = res.labelsShown;
         },
         err => {
           console.log(err);
