@@ -85,7 +85,7 @@
               </div>
             </div>
             <div v-else class="container d-flex justify-content-center align-items-center" style="height: 50vh">
-              <font-awesome-icon icon="sync" spin="true" size="6x" style="color: #cccccc"></font-awesome-icon>
+              <font-awesome-icon icon="sync" :spin="true" size="6x" style="color: #cccccc"></font-awesome-icon>
             </div>
           </div>
         </b-tab>
