@@ -63,10 +63,10 @@ describe('Component Tests', () => {
       it('Should call load all on init', async () => {
         // GIVEN
         landscapeViewServiceStub.getPlantUML.resolves({
-          data: {
-            svg: '@startuml\nAlice -> Bob: Authentication Request\n@enduml',
-            labelsShown: false,
-          },
+          svg: '@startuml\nAlice -> Bob: Authentication Request\n@enduml',
+          labelsShown: false,
+          flows: [],
+          interfaces: [],
         });
         const lanscapeDTO: ILandscapeDTO = {
           landscape: { id: 123, flows: [] },
@@ -92,10 +92,10 @@ describe('Component Tests', () => {
       it('Should retrieve data', async () => {
         // GIVEN
         landscapeViewServiceStub.getPlantUML.resolves({
-          data: {
-            svg: '@startuml\nAlice -> Bob: Authentication Request\n@enduml',
-            labelsShown: false,
-          },
+          svg: '@startuml\nAlice -> Bob: Authentication Request\n@enduml',
+          labelsShown: false,
+          flows: [],
+          interfaces: [],
         });
         const lanscapeDTO: ILandscapeDTO = {
           landscape: { id: 123, flows: [] },

@@ -9,6 +9,8 @@ import ApplicationClass from '@/entities/application/application-details.compone
 import ApplicationService from '@/entities/application/application.service';
 import router from '@/router';
 import AlertService from '@/shared/alert/alert.service';
+import { PlantumlDTO } from '@/shared/model/plantuml-dto';
+import { ICapability } from '@/shared/model/capability.model';
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
@@ -49,6 +51,16 @@ describe('Component Tests', () => {
         // GIVEN
         const foundApplication = { id: 123 };
         applicationServiceStub.find.resolves(foundApplication);
+        const plantumldto: PlantumlDTO = {
+          svg: 'string',
+          interfaces: [],
+          flows: [],
+          labelsShown: false,
+        };
+        applicationServiceStub.getPlantUML.resolves(plantumldto);
+        applicationServiceStub.getApplicationStructurePlantUML.resolves('<svg></svg>');
+        const capabilities: ICapability[] = [{}];
+        applicationServiceStub.getCapabilities.resolves(capabilities);
 
         // WHEN
         comp.retrieveApplication(123);
@@ -64,6 +76,16 @@ describe('Component Tests', () => {
         // GIVEN
         const foundApplication = { id: 123 };
         applicationServiceStub.find.resolves(foundApplication);
+        const plantumldto: PlantumlDTO = {
+          svg: 'string',
+          interfaces: [],
+          flows: [],
+          labelsShown: false,
+        };
+        applicationServiceStub.getPlantUML.resolves(plantumldto);
+        applicationServiceStub.getApplicationStructurePlantUML.resolves('<svg></svg>');
+        const capabilities: ICapability[] = [{}];
+        applicationServiceStub.getCapabilities.resolves(capabilities);
 
         // WHEN
         comp.beforeRouteEnter({ params: { applicationId: 123 } }, null, cb => cb(comp));
