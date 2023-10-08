@@ -139,7 +139,7 @@
             </dl>
           </div>
         </b-tab>
-        <b-tab title="Interfaces" :disabled="!interfaces || !interfaces.length">
+        <b-tab title="Interfaces">
           <div class="row">
             <div class="col-12">
               <div class="row m-2">
@@ -199,10 +199,10 @@
             </div>
           </div>
         </b-tab>
-        <b-tab title="Schema (interfaces)" :disabled="!interfaces || !interfaces.length">
+        <b-tab title="Schema (interfaces)">
           <div v-html="plantUMLImage" class="table-responsive my-5" v-if="plantUMLImage"></div>
           <div v-else class="container d-flex justify-content-center align-items-center" style="height: 50vh">
-            <font-awesome-icon icon="sync" spin="true" size="6x" style="color: #cccccc"></font-awesome-icon>
+            <font-awesome-icon icon="sync" :spin="true" size="6x" style="color: #cccccc"></font-awesome-icon>
           </div>
           <div class="col-12">
             <button
@@ -220,7 +220,6 @@
               v-on:click="doGroupComponents()"
               style="font-size: 0.7em; padding: 3px; margin: 3px"
               v-if="plantUMLImage"
-              :disabled="refreshingPlantuml"
             >
               <font-awesome-icon icon="sync" :spin="refreshingPlantuml"></font-awesome-icon>
               <span>{{ groupComponents ? 'Ungroup Components' : 'Group components' }} </span>
@@ -230,14 +229,13 @@
               v-on:click="doShowLabels()"
               style="font-size: 0.7em; padding: 3px; margin: 3px"
               v-if="plantUMLImage"
-              :disabled="refreshingPlantuml"
             >
               <font-awesome-icon icon="sync" :spin="refreshingPlantuml"></font-awesome-icon>
               <span>{{ showLabels ? 'Hide Labels' : 'Show Labels' }} </span>
             </button>
           </div>
         </b-tab>
-        <b-tab title="Components" :disabled="!application.applicationsLists || !application.applicationsLists.length">
+        <b-tab title="Components">
           <div v-html="applicationStructurePlantUMLImage" class="table-responsive my-5"></div>
           <b-table :items="application.applicationsLists" :fields="['alias', 'name']">
             <template #cell(alias)="data">
@@ -247,7 +245,7 @@
             </template>
           </b-table>
         </b-tab>
-        <b-tab title="Functional Flows" :disabled="!flows || !flows.length">
+        <b-tab title="Functional Flows">
           <div class="row">
             <div class="row m-2">
               <b-pagination
@@ -288,7 +286,7 @@
             </div>
           </div>
         </b-tab>
-        <b-tab title="Capabilities" :disabled="!lco">
+        <b-tab title="Capabilities">
           <div class="row">
             <div class="col-12" v-if="consolidatedCapabilities.length > 0">
               <h2>Capabilities for {{ application.name }}</h2>
