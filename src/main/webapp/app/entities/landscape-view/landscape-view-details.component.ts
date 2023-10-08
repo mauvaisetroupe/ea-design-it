@@ -89,6 +89,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
         this.tabIndex = tabIndex;
       } else {
         sessionStorage.removeItem(this.sessionKey);
+        this.tabIndex = 1;
       }
     } else {
       this.tabIndex = 1;
