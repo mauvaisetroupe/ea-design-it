@@ -70,10 +70,10 @@ export default class ApplicationDetails extends Vue {
         this.tabIndex = tabIndex;
       } else {
         sessionStorage.removeItem(this.sessionKey);
-        this.tabIndex = 1;
+        this.tabIndex = 0;
       }
     } else {
-      this.tabIndex = 1;
+      this.tabIndex = 0;
     }
   }
 
