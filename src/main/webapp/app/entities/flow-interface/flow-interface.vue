@@ -26,92 +26,89 @@
       <span>No flowInterfaces found</span>
     </div>
 
-    <div>
-      <input type="text" placeholder="Filter by text" v-model="filter" />
-    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="row m-2">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="filteredRows.length"
+            :per-page="perPage"
+            aria-controls="my-table"
+            class="m-0"
+          ></b-pagination>
+        </div>
+        <div class="col-12">
+          <b-table
+            striped
+            :items="filteredRows"
+            :fields="['alias', 'source', 'target', 'protocol', 'actions']"
+            :perPage="perPage"
+            :current-page="currentPage"
+            :filter-included-fields="['alias', 'source', 'target', 'protocol']"
+            class="col-12"
+          >
+            <template #thead-top="data">
+              <b-tr>
+                <b-th><input type="text" v-model="filterAlias" placeholder="Text filter" /></b-th>
+                <b-th><input type="text" v-model="filterSource" placeholder="Text filter" /></b-th>
+                <b-th><input type="text" v-model="filterTarget" placeholder="Text filter" /></b-th>
+                <b-th><input type="text" v-model="filterProtocol" placeholder="Text filter" /></b-th>
+              </b-tr>
+            </template>
 
-    <div class="table-responsive" v-if="flowInterfaces && flowInterfaces.length > 0">
-      <table class="table table-striped" aria-describedby="flowInterfaces">
-        <thead>
-          <tr>
-            <th scope="row"><span>ID</span></th>
-            <th scope="row"><span>Alias</span></th>
-            <th scope="row"><span>Source</span></th>
-            <th scope="row"><span>Target</span></th>
-            <th scope="row"><span>Source Component</span></th>
-            <th scope="row"><span>Target Component</span></th>
-            <th scope="row"><span>Protocol</span></th>
-            <th scope="row"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="flowInterface in filteredRows" :key="flowInterface.id" data-cy="entityTable">
-            <td>
-              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: flowInterface.id } }">{{
-                flowInterface.id
+            <template #cell(alias)="data">
+              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: data.item.id } }">{{
+                data.item.alias
               }}</router-link>
-            </td>
-            <td>{{ flowInterface.alias }}</td>
-            <td>
-              <div v-if="flowInterface.source">
-                <router-link :to="{ name: 'ApplicationView', params: { applicationId: flowInterface.source.id } }">{{
-                  flowInterface.source.name
-                }}</router-link>
-              </div>
-            </td>
-            <td>
-              <div v-if="flowInterface.target">
-                <router-link :to="{ name: 'ApplicationView', params: { applicationId: flowInterface.target.id } }">{{
-                  flowInterface.target.name
-                }}</router-link>
-              </div>
-            </td>
-            <td>
-              <div v-if="flowInterface.sourceComponent">
-                <router-link
-                  :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: flowInterface.sourceComponent.id } }"
-                  >{{ flowInterface.sourceComponent.name }}</router-link
-                >
-              </div>
-            </td>
-            <td>
-              <div v-if="flowInterface.targetComponent">
-                <router-link
-                  :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: flowInterface.targetComponent.id } }"
-                  >{{ flowInterface.targetComponent.name }}</router-link
-                >
-              </div>
-            </td>
-            <td>
-              <div v-if="flowInterface.protocol">
-                <router-link :to="{ name: 'ProtocolView', params: { protocolId: flowInterface.protocol.id } }">{{
-                  flowInterface.protocol.name
-                }}</router-link>
-              </div>
-            </td>
-            <td class="text-right">
+            </template>
+
+            <template #cell(source)="data">
+              <router-link :to="{ name: 'ApplicationView', params: { applicationId: data.item.source.id } }"
+                >{{ data.item.source.name }}
+              </router-link>
+
+              <span v-if="data.item.id && data.item.sourceComponent">
+                /
+                <router-link :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: data.item.sourceComponent.id } }"
+                  >{{ data.item.sourceComponent.name }}
+                </router-link>
+              </span>
+            </template>
+
+            <template #cell(target)="data">
+              <router-link :to="{ name: 'ApplicationView', params: { applicationId: data.item.target.id } }"
+                >{{ data.item.target.name }}
+              </router-link>
+
+              <span v-if="data.item.id && data.item.targetComponent">
+                /
+                <router-link :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: data.item.targetComponent.id } }"
+                  >{{ data.item.targetComponent.name }}
+                </router-link>
+              </span>
+            </template>
+
+            <template #cell(protocol)="data">
+              <router-link :to="{ name: 'ProtocolView', params: { protocolId: data.item.protocol?.id } }">{{
+                data.item.protocol?.name
+              }}</router-link>
+            </template>
+
+            <template #cell(actions)="data">
               <div class="btn-group">
-                <router-link
-                  :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: flowInterface.id } }"
-                  custom
-                  v-slot="{ navigate }"
-                >
+                <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: data.item.id } }" custom v-slot="{ navigate }">
                   <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
                     <font-awesome-icon icon="eye"></font-awesome-icon>
                     <span class="d-none d-md-inline">View</span>
                   </button>
                 </router-link>
-                <router-link
-                  :to="{ name: 'FlowInterfaceEdit', params: { flowInterfaceId: flowInterface.id } }"
-                  custom
-                  v-slot="{ navigate }"
-                >
+                <router-link :to="{ name: 'FlowInterfaceEdit', params: { flowInterfaceId: data.item.id } }" custom v-slot="{ navigate }">
                   <button
                     @click="navigate"
                     class="btn btn-primary btn-sm edit"
                     data-cy="entityEditButton"
                     v-if="accountService().writeOrContributor"
-                    :disabled="!isOwner(flowInterface)"
+                    :disabled="!isOwner(data.item)"
                   >
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                     <span class="d-none d-md-inline">Edit</span>
@@ -119,14 +116,14 @@
                 </router-link>
                 <b-button
                   v-if="accountService().deleteAuthorities"
-                  v-on:click="prepareRemove(flowInterface)"
+                  v-on:click="prepareRemove(data.item)"
                   variant="danger"
                   class="btn btn-sm"
                   data-cy="entityDeleteButton"
                   v-b-modal.removeEntity
-                  :disabled="flowInterface.steps && flowInterface.steps.length > 0"
+                  :disabled="data.item.steps && data.item.steps.length > 0"
                   :title="
-                    !flowInterface.steps || flowInterface.steps.length == 0
+                    !data.item.steps || data.item.steps.length == 0
                       ? ''
                       : 'Cannot be deleted, please detache from all functional flows first'
                   "
@@ -135,10 +132,10 @@
                   <span class="d-none d-md-inline">Delete</span>
                 </b-button>
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </template>
+          </b-table>
+        </div>
+      </div>
     </div>
     <b-modal ref="removeEntity" id="removeEntity">
       <span slot="modal-title"

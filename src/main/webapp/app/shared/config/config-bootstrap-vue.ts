@@ -29,6 +29,8 @@ import {
   BBreadcrumbItem,
   BTab,
   BTabs,
+  BTr,
+  BTh,
 } from 'bootstrap-vue';
 
 export function initBootstrapVue(vue) {
@@ -59,6 +61,8 @@ export function initBootstrapVue(vue) {
   vue.component('b-input-group', BInputGroup);
   vue.component('b-input-group-prepend', BInputGroupPrepend);
   vue.component('b-table', BTable);
+  vue.component('b-th', BTh);
+  vue.component('b-tr', BTr);
   vue.component('b-breadcrumb', BBreadcrumb);
   vue.component('b-breadcrumb-item', BBreadcrumbItem);
   vue.component('b-tab', BTab);

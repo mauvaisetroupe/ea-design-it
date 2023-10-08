@@ -47,6 +47,8 @@ public class FlowInterfaceService {
             // delete Interface
             log.debug("about to delete interface " + interface1);
             flowInterfaceRepository.delete(interface1);
+        } else {
+            throw new IllegalStateException("Cannot delete Interface used by Functional Flow");
         }
 
         // delete DataFlow not linked to

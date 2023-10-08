@@ -241,7 +241,11 @@ public class FlowInterfaceResource {
     @DeleteMapping("/flow-interfaces/{id}")
     public ResponseEntity<Void> deleteFlowInterface(@PathVariable Long id) {
         log.debug("REST request to delete FlowInterface : {}", id);
-        flowInterfaceService.delete(id);
+        try {
+            flowInterfaceService.delete(id);
+        } catch (Exception e) {
+            throw new BadRequestAlertException(e.getMessage(), applicationName, "cannotDelete");
+        }
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

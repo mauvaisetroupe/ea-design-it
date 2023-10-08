@@ -14,27 +14,19 @@ export default class FlowInterface extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('accountService') public accountService: () => AccountService;
 
+  public perPage = 20;
+  public currentPage = 1;
+
   get filteredRows() {
     return this.flowInterfaces.filter(row => {
-      const searchTerm = this.filter.toLowerCase();
-      const id = row.id.toString().toLowerCase();
-      const description = row.description ? row.description.toString().toLowerCase() : '';
-      const alias = row.alias ? row.alias.toString().toLowerCase() : '';
-      const source = row.source ? row.source.name.toString().toLowerCase() : '';
-      const target = row.source ? row.target.name.toString().toLowerCase() : '';
-      const proto = row.protocol ? row.protocol.name.toString().toLowerCase() : '';
-      if (searchTerm == 'protocol::empty') {
-        return proto === '';
-      } else {
-        return (
-          id.includes(searchTerm) ||
-          description.includes(searchTerm) ||
-          alias.includes(searchTerm) ||
-          source.includes(searchTerm) ||
-          target.includes(searchTerm) ||
-          proto.includes(searchTerm)
-        );
-      }
+      return (
+        (!this.filterAlias || row.alias?.toLowerCase().includes(this.filterAlias?.toLowerCase())) &&
+        (!this.filterSource ||
+          (row.source?.name?.toLowerCase() + row.sourceComponent?.name?.toLowerCase()).includes(this.filterSource?.toLowerCase())) &&
+        (!this.filterTarget ||
+          (row.target?.name?.toLowerCase() + row.targetComponent?.name?.toLowerCase()).includes(this.filterTarget?.toLowerCase())) &&
+        (!this.filterProtocol || row.protocol?.name?.toLowerCase().includes(this.filterProtocol?.toLowerCase()))
+      );
     });
   }
 
@@ -44,12 +36,15 @@ export default class FlowInterface extends Vue {
 
   public isFetching = false;
 
-  public filter = '';
+  public filterAlias = '';
+  public filterSource = '';
+  public filterTarget = '';
+  public filterProtocol = '';
 
   public mounted(): void {
     this.retrieveAllFlowInterfaces();
     if (this.$route && this.$route.query && this.$route.query.searchTerm) {
-      this.filter = this.$route.query.searchTerm as string;
+      this.filterProtocol = this.$route.query.searchTerm as string;
     }
   }
 
