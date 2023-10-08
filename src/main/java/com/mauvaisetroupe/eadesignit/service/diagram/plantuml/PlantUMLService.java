@@ -3,7 +3,7 @@ package com.mauvaisetroupe.eadesignit.service.diagram.plantuml;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
-import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
+import com.mauvaisetroupe.eadesignit.repository.view.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.EdgeGroup;
@@ -64,9 +64,9 @@ public class PlantUMLService {
             for (List<Application> groupedAplications : graph.getApplicationGroups().values()) {
                 for (Application application : groupedAplications) {
                     String space = getSpaces(application.getName(), graph.getNbConnection(application), layout);
-                    application.setName(space + application.getName() + space)                    ;
+                    application.setName(space + application.getName() + space);
                 }
-            }            
+            }
         }
 
         StringBuilder plantUMLSource = new StringBuilder();
@@ -158,7 +158,7 @@ public class PlantUMLService {
     }
 
     public String getInterfacesCollectionDiagramSVG(
-        SortedSet<FlowInterfaceLight> interfaces,
+        SortedSet<IFlowInterface> interfaces,
         Layout layout,
         boolean groupComponents,
         boolean showLabels
@@ -178,7 +178,7 @@ public class PlantUMLService {
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
-    public String getInterfacesCollectionDiagramSource(SortedSet<FlowInterfaceLight> interfaces) {
+    public String getInterfacesCollectionDiagramSource(SortedSet<IFlowInterface> interfaces) {
         GraphBuilder graphBuilder = new GraphBuilder();
         GraphDTO graph = graphBuilder.createGraph(interfaces, true);
         String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, false, Layout.none, false, false, false);

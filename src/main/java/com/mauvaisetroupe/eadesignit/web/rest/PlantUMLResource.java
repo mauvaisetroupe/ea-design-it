@@ -2,7 +2,6 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
-import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
@@ -10,7 +9,7 @@ import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
-import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
+import com.mauvaisetroupe.eadesignit.repository.view.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.Layout;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService.DiagramType;
@@ -191,10 +190,7 @@ public class PlantUMLResource {
 
         if (optional.isPresent()) {
             Application appli = optional.get();
-            SortedSet<FlowInterfaceLight> interfaces = flowInterfaceRepository.findBySource_NameOrTarget_Name(
-                appli.getName(),
-                appli.getName()
-            );
+            SortedSet<IFlowInterface> interfaces = flowInterfaceRepository.findBySource_NameOrTarget_Name(appli.getName(), appli.getName());
             if (!showLabels && showLabelIfNumberapplicationsLessThan > -1) {
                 int nbApplicationsInInterfaces = getApplicationsCount(interfaces);
                 if (nbApplicationsInInterfaces <= showLabelIfNumberapplicationsLessThan) {
@@ -213,7 +209,7 @@ public class PlantUMLResource {
         }
     }
 
-    private int getApplicationsCount(Set<FlowInterfaceLight> interfaces) {
+    private int getApplicationsCount(Set<IFlowInterface> interfaces) {
         Set<Application> result = new HashSet<Application>();
         if (interfaces != null) {
             interfaces.forEach(i -> {
@@ -249,13 +245,13 @@ public class PlantUMLResource {
         @RequestParam(value = "ids[]") Long[] ids,
         @RequestParam(defaultValue = "false") boolean showLabels
     ) throws IOException, BadRequestException {
-        SortedSet<FlowInterfaceLight> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
+        SortedSet<IFlowInterface> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
         return this.plantUMLSerializer.getInterfacesCollectionDiagramSVG(interfaces, Layout.smetana, false, showLabels);
     }
 
     @GetMapping(value = "plantuml/applications/get-source")
     public @ResponseBody String getApplicationsSource(@RequestParam(value = "ids[]") Long[] ids) throws IOException, BadRequestException {
-        SortedSet<FlowInterfaceLight> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
+        SortedSet<IFlowInterface> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
         return this.plantUMLSerializer.getInterfacesCollectionDiagramSource(interfaces);
     }
 

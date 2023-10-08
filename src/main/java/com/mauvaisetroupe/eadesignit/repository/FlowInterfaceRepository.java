@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
+import com.mauvaisetroupe.eadesignit.repository.view.IFlowInterface;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -14,6 +15,7 @@ import org.apache.xmlbeans.impl.xb.xmlconfig.Extensionconfig.Interface;
 import org.hibernate.query.NativeQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -48,6 +50,19 @@ public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Lo
     @Query(value = "select distinct(i.alias) from FlowInterface i")
     public List<String> findAlias();
 
-    SortedSet<FlowInterfaceLight> findBySource_NameOrTarget_Name(String sourceName, String targetName);
-    SortedSet<FlowInterfaceLight> findBySourceIdInAndTargetIdIn(Long[] sourceIds, Long[] targetIds);
+    @Query(
+        value = "select fi from FlowInterface fi " +
+        " left join fetch fi.protocol p " +
+        " left join fetch fi.source so " +
+        " left join fetch fi.sourceComponent sc " +
+        " left join fetch fi.target ta " +
+        " left join fetch fi.targetComponent tc " +
+        " where so.name = :sourceName or ta.name = :targetName "
+    )
+    SortedSet<IFlowInterface> findBySource_NameOrTarget_Name(
+        @Param("sourceName") String sourceName,
+        @Param("targetName") String targetName
+    );
+
+    SortedSet<IFlowInterface> findBySourceIdInAndTargetIdIn(Long[] sourceIds, Long[] targetIds);
 }

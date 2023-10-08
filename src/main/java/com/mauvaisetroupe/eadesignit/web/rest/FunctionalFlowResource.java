@@ -3,8 +3,8 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
-import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
 import com.mauvaisetroupe.eadesignit.repository.view.FunctionalFlowLight;
+import com.mauvaisetroupe.eadesignit.repository.view.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.service.FunctionalflowService;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -216,11 +216,11 @@ public class FunctionalFlowResource {
     }
 
     @GetMapping("/functional-flows/new/applications")
-    public Set<FlowInterfaceLight> getFunctionalNonPersistedFlowFromApplications(@RequestParam(value = "ids[]") Long[] ids) {
+    public Set<IFlowInterface> getFunctionalNonPersistedFlowFromApplications(@RequestParam(value = "ids[]") Long[] ids) {
         log.debug("REST request to build non persisted FunctionalFlow with applications ids: {}", Arrays.toString(ids));
         FunctionalFlow functionalFlow = new FunctionalFlow();
         functionalFlow.setAlias("not persisted");
-        Set<FlowInterfaceLight> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
+        Set<IFlowInterface> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
         return interfaces;
     }
 }

@@ -31,7 +31,9 @@ public interface FunctionalFlowRepository extends JpaRepository<FunctionalFlow, 
     @Query(
         value = "select f from FunctionalFlow f " +
         "left join fetch f.steps s " +
+        "left join fetch f.landscapes l " +
         "left join fetch s.flowInterface i " +
+        "left join fetch s.group g " +
         "left join fetch i.source s " +
         "left join fetch i.target t " +
         "where s=:appli or t=:appli "

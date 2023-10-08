@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.util.Ownershipable;
+import com.mauvaisetroupe.eadesignit.repository.view.IFlowInterface;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -19,7 +20,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "interface")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class FlowInterface implements Serializable, Comparable<FlowInterface>, Ownershipable {
+public class FlowInterface implements Serializable, Comparable<FlowInterface>, Ownershipable, IFlowInterface {
 
     private static final long serialVersionUID = 1L;
 

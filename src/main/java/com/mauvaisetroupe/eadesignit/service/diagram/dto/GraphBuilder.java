@@ -5,7 +5,7 @@ import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
-import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
+import com.mauvaisetroupe.eadesignit.repository.view.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.service.diagram.drawio.MXFileSerializer;
 import java.util.HashMap;
 import java.util.Map;
@@ -117,9 +117,9 @@ public class GraphBuilder {
         graph.addEdgeIngroup(step.getGroup(), title, groupUrl);
     }
 
-    public GraphDTO createGraph(SortedSet<FlowInterfaceLight> interfaces, boolean showLabels) {
+    public GraphDTO createGraph(SortedSet<IFlowInterface> interfaces, boolean showLabels) {
         GraphDTO graph = new GraphDTO();
-        for (FlowInterfaceLight interface1 : interfaces) {
+        for (IFlowInterface interface1 : interfaces) {
             Application source = getApplication(interface1.getSource(), interface1.getSourceComponent(), null);
             graph.addApplication(source);
             Application target = getApplication(interface1.getTarget(), interface1.getTargetComponent(), null);

@@ -6,7 +6,7 @@ import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
 import org.apache.commons.lang3.ObjectUtils;
 
-public class FlowInterfaceLight implements Comparable<FlowInterfaceLight> {
+public class FlowInterfaceLight implements Comparable<FlowInterfaceLight>, IFlowInterface {
 
     private Long id;
     private String alias;
@@ -34,6 +34,7 @@ public class FlowInterfaceLight implements Comparable<FlowInterfaceLight> {
         this.protocol = protocol;
     }
 
+    @Override
     public Long getId() {
         return this.id;
     }
@@ -42,6 +43,7 @@ public class FlowInterfaceLight implements Comparable<FlowInterfaceLight> {
         this.id = id;
     }
 
+    @Override
     public String getAlias() {
         return this.alias;
     }
@@ -50,6 +52,7 @@ public class FlowInterfaceLight implements Comparable<FlowInterfaceLight> {
         this.alias = alias;
     }
 
+    @Override
     @JsonIgnoreProperties(
         value = {
             "description",
@@ -78,6 +81,7 @@ public class FlowInterfaceLight implements Comparable<FlowInterfaceLight> {
         this.source = application;
     }
 
+    @Override
     @JsonIgnoreProperties(
         value = {
             "description",
@@ -106,6 +110,7 @@ public class FlowInterfaceLight implements Comparable<FlowInterfaceLight> {
         this.target = application;
     }
 
+    @Override
     public ApplicationComponent getSourceComponent() {
         return this.sourceComponent;
     }
@@ -114,6 +119,7 @@ public class FlowInterfaceLight implements Comparable<FlowInterfaceLight> {
         this.sourceComponent = applicationComponent;
     }
 
+    @Override
     public ApplicationComponent getTargetComponent() {
         return this.targetComponent;
     }
@@ -122,6 +128,7 @@ public class FlowInterfaceLight implements Comparable<FlowInterfaceLight> {
         this.targetComponent = applicationComponent;
     }
 
+    @Override
     @JsonIgnoreProperties(value = { "type", "description", "scope" })
     public Protocol getProtocol() {
         return this.protocol;
