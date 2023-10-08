@@ -54,7 +54,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "flowInterface", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "flowInterface")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "functionalFlows", "flowInterface" }, allowSetters = true)
     private Set<DataFlow> dataFlows = new HashSet<>();
@@ -93,7 +93,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
     @ManyToOne
     private Owner owner;
 
-    @OneToMany(mappedBy = "flowInterface", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "flowInterface")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "flowInterface", "group" }, allowSetters = true)
     private Set<FunctionalFlowStep> steps = new HashSet<>();
