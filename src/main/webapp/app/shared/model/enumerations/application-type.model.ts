@@ -8,4 +8,6 @@ export enum ApplicationType {
   PARTNER = 'PARTNER',
 
   OTHER = 'OTHER',
+
+  ACTOR = 'ACTOR',
 }

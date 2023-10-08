@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 id="page-heading" data-cy="ApplicationHeading">
-      <span id="application-heading">Applications</span>
+      <span id="application-heading">Applications and Actors</span>
       <div class="d-flex justify-content-end">
         <router-link :to="{ name: 'ApplicationsDiagram', query: { id: selectedApplicationIds } }" v-if="selectedApplicationIds.length >= 2">
           <button class="btn btn-warning mr-2" title="Select applications to generate diagram">

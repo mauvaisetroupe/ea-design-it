@@ -8,5 +8,6 @@ public enum ApplicationType {
     MIDDLEWARE,
     HARDWARE,
     PARTNER,
+    ACTOR,
     OTHER,
 }

@@ -176,12 +176,14 @@ public class PlantUMLBuilder {
         boolean addCapabilities
     ) {
         if (diagramType == DiagramType.SEQUENCE_DIAGRAM) {
-            plantUMLSource.append("participant \"" + application.getName() + "\" as C" + application.getId() + "\n");
+            String type = application.isActor() ? "actor" : "participant";
+            plantUMLSource.append(type + " \"" + application.getName() + "\" as C" + application.getId() + "\n");
         } else {
+            String type = application.isActor() ? "actor" : "component";
             if (!addCapabilities || application.getCapabilities() == null || application.getCapabilities().size() == 0) {
-                plantUMLSource.append("component \"" + application.getName() + "\" as C" + application.getId() + "\n");
+                plantUMLSource.append(type + " \"" + application.getName() + "\" as C" + application.getId() + "\n");
             } else {
-                plantUMLSource.append("component \"" + application.getName() + "\" as C" + application.getId() + "{\n");
+                plantUMLSource.append(type + " \"" + application.getName() + "\" as C" + application.getId() + "{\n");
                 application
                     .getCapabilities()
                     .forEach(c -> {
@@ -191,6 +193,12 @@ public class PlantUMLBuilder {
             }
         }
         plantUMLSource.append("url of C" + application.getId() + " is [[" + application.getUrl() + "]]\n");
+    }
+
+    public void createActor(StringBuilder plantUMLSource, Application application, DiagramType diagramType, boolean addCapabilities) {
+        if (application.isActor()) {
+            plantUMLSource.append("actor \"" + application.getName() + "\"\n");
+        }
     }
 
     public void getPlantumlFooter(StringBuilder plantUMLSource) {

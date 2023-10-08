@@ -8,6 +8,7 @@ public class Application {
     private String name;
     private String url;
     private Set<String> capabilities;
+    private boolean actor;
 
     public Set<String> getCapabilities() {
         return capabilities;
@@ -17,11 +18,12 @@ public class Application {
         this.capabilities = capabilities;
     }
 
-    public Application(Long id, String name, String url, Set<String> capabilities) {
+    public Application(Long id, String name, String url, Set<String> capabilities, boolean actor) {
         this.id = id;
         this.name = name;
         this.url = url;
         this.capabilities = capabilities;
+        this.actor = actor;
     }
 
     // Getter and setters
@@ -48,6 +50,14 @@ public class Application {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public boolean isActor() {
+        return actor;
+    }
+
+    public void setActor(boolean actor) {
+        this.actor = actor;
     }
 
     @Override

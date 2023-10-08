@@ -6,6 +6,7 @@ import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.service.diagram.drawio.MXFileSerializer;
 import java.util.HashMap;
 import java.util.Map;
@@ -161,7 +162,8 @@ public class GraphBuilder {
                 component.getId(),
                 application.getName() + " / " + component.getName(),
                 "/application-component/" + component.getId() + "/view",
-                capabilities
+                capabilities,
+                application.getApplicationType() == ApplicationType.ACTOR
             );
         } else {
             return getApplication(application, capabilities);
@@ -169,7 +171,13 @@ public class GraphBuilder {
     }
 
     private Application getApplication(com.mauvaisetroupe.eadesignit.domain.Application application, Set<String> capabilities) {
-        return new Application(application.getId(), application.getName(), "/application/" + application.getId() + "/view", capabilities);
+        return new Application(
+            application.getId(),
+            application.getName(),
+            "/application/" + application.getId() + "/view",
+            capabilities,
+            application.getApplicationType() == ApplicationType.ACTOR
+        );
     }
 
     private void addInApplicationsGroup(
@@ -206,7 +214,7 @@ public class GraphBuilder {
             String elementIdValue = ((Element) nodeList.item(i)).getAttribute("elementId");
             Long id = Long.parseLong(elementIdValue.replace(MXFileSerializer.APP_ID_PREFIX, ""));
             String applicationName = ((Element) nodeList.item(i)).getAttribute("value");
-            Application application = new Application(id, applicationName, null, null);
+            Application application = new Application(id, applicationName, null, null, false);
             graph.addApplication(application);
             aMap.put(application.getId(), application);
         }

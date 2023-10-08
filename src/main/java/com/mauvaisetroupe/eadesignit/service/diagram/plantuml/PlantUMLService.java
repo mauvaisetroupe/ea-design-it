@@ -82,7 +82,13 @@ public class PlantUMLService {
                 plantUMLBuilder.createComponentWithId(plantUMLSource, application, diagramType, false);
                 useID = true;
             }
+        } else {
+            // declare actor
+            for (Application application : groupComponents ? graph.getApplicationsWithoutGroups() : graph.getApplications()) {
+                plantUMLBuilder.createActor(plantUMLSource, application, diagramType, false);
+            }
         }
+
         if (groupComponents) {
             // crerate groups (packages)
             for (Entry<String, List<Application>> groupEntry : graph.getApplicationGroups().entrySet()) {
