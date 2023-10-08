@@ -1,8 +1,8 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
+import com.mauvaisetroupe.eadesignit.domain.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
-import com.mauvaisetroupe.eadesignit.repository.view.IFlowInterface;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

@@ -2,8 +2,8 @@ package com.mauvaisetroupe.eadesignit.service.diagram.plantuml;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
+import com.mauvaisetroupe.eadesignit.domain.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
-import com.mauvaisetroupe.eadesignit.repository.view.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Edge;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.EdgeGroup;

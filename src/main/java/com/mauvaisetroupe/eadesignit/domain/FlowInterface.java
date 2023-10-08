@@ -2,7 +2,6 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.util.Ownershipable;
-import com.mauvaisetroupe.eadesignit.repository.view.IFlowInterface;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;

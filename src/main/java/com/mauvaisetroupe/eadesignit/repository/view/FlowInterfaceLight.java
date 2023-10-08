@@ -3,6 +3,7 @@ package com.mauvaisetroupe.eadesignit.repository.view;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
+import com.mauvaisetroupe.eadesignit.domain.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
 import org.apache.commons.lang3.ObjectUtils;
 

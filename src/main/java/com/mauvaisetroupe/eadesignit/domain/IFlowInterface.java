@@ -1,9 +1,6 @@
-package com.mauvaisetroupe.eadesignit.repository.view;
+package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mauvaisetroupe.eadesignit.domain.Application;
-import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
-import com.mauvaisetroupe.eadesignit.domain.Protocol;
 
 public interface IFlowInterface {
     Long getId();

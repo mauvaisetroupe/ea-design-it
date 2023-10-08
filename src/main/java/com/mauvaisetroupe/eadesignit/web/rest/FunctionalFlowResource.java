@@ -1,10 +1,10 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
+import com.mauvaisetroupe.eadesignit.domain.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.view.FunctionalFlowLight;
-import com.mauvaisetroupe.eadesignit.repository.view.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.service.FunctionalflowService;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;

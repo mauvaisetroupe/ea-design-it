@@ -2,7 +2,7 @@ package com.mauvaisetroupe.eadesignit.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
-import com.mauvaisetroupe.eadesignit.repository.view.IFlowInterface;
+import com.mauvaisetroupe.eadesignit.domain.IFlowInterface;
 import java.util.Set;
 
 public class PlantumlDTO {
