@@ -86,7 +86,7 @@ public class PlantUMLResource {
         @RequestParam(defaultValue = "true") boolean showLabels,
         @RequestParam(defaultValue = "-1") int showLabelIfNumberapplicationsLessThan
     ) throws IOException, BadRequestException {
-        Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
+        Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findOneWithEagerRelationships(id);
         if (landscapeViewOptional.isPresent()) {
             if (!showLabels && showLabelIfNumberapplicationsLessThan > -1) {
                 int nbApplicationsInInterfaces = getApplicationsCount(landscapeViewOptional.get());
