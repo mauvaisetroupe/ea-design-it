@@ -19,6 +19,22 @@ export default class ApplicationComponent extends Vue {
 
   public isFetching = false;
 
+  public fields = [
+    // { key: 'id', sortable: false },
+    { key: 'alias', sortable: true },
+    { key: 'name', sortable: true },
+    { key: 'application', sortable: false },
+    { key: 'description', sortable: false, formatter: 'formatLongText' },
+    { key: 'applicationType', sortable: false },
+    { key: 'softwareType', sortable: false },
+    { key: 'categories', sortable: false },
+    { key: 'technologies', sortable: false },
+  ];
+
+  public currentPage = 1;
+  public perPage = 10;
+  public filter = '';
+
   public mounted(): void {
     this.retrieveAllApplicationComponents();
   }

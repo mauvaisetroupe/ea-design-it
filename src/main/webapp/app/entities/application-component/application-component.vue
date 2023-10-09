@@ -23,126 +23,118 @@
     <div class="alert alert-warning" v-if="!isFetching && applicationComponents && applicationComponents.length === 0">
       <span>No applicationComponents found</span>
     </div>
-    <div class="table-responsive" v-if="applicationComponents && applicationComponents.length > 0">
-      <table class="table table-striped" aria-describedby="applicationComponents">
-        <thead>
-          <tr>
-            <th scope="row"><span>ID</span></th>
-            <th scope="row"><span>Alias</span></th>
-            <th scope="row"><span>Name</span></th>
-            <th scope="row"><span>Description</span></th>
-            <th scope="row"><span>Comment</span></th>
-            <th scope="row"><span>Documentation URL</span></th>
-            <th scope="row"><span>Start Date</span></th>
-            <th scope="row"><span>End Date</span></th>
-            <th scope="row"><span>Application Type</span></th>
-            <th scope="row"><span>Software Type</span></th>
-            <th scope="row"><span>Display In Landscape</span></th>
-            <th scope="row"><span>Application</span></th>
-            <th scope="row"><span>Categories</span></th>
-            <th scope="row"><span>Technologies</span></th>
-            <th scope="row"><span>External IDS</span></th>
-            <th scope="row"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="applicationComponent in applicationComponents" :key="applicationComponent.id" data-cy="entityTable">
-            <td>
-              <router-link :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: applicationComponent.id } }">{{
-                applicationComponent.id
-              }}</router-link>
-            </td>
-            <td>{{ applicationComponent.alias }}</td>
-            <td>{{ applicationComponent.name }}</td>
-            <td>{{ applicationComponent.description }}</td>
-            <td>{{ applicationComponent.comment }}</td>
-            <td>
-              <a v-bind:href="applicationComponent.documentationURL">{{ applicationComponent.documentationURL }}</a>
-            </td>
-            <td>{{ applicationComponent.startDate }}</td>
-            <td>{{ applicationComponent.endDate }}</td>
-            <td>{{ applicationComponent.applicationType }}</td>
-            <td>{{ applicationComponent.softwareType }}</td>
-            <td>{{ applicationComponent.displayInLandscape }}</td>
-            <td>
-              <div v-if="applicationComponent.application">
-                <router-link :to="{ name: 'ApplicationView', params: { applicationId: applicationComponent.application.id } }">{{
-                  applicationComponent.application.name
-                }}</router-link>
-              </div>
-            </td>
-            <td>
-              <span v-for="(categories, i) in applicationComponent.categories" :key="categories.id"
-                >{{ i > 0 ? ', ' : '' }}
-                <router-link
-                  class="form-control-static"
-                  :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: categories.id } }"
-                  >{{ categories.name }}</router-link
-                >
-              </span>
-            </td>
-            <td>
-              <span v-for="(technologies, i) in applicationComponent.technologies" :key="technologies.id"
-                >{{ i > 0 ? ', ' : '' }}
-                <router-link class="form-control-static" :to="{ name: 'TechnologyView', params: { technologyId: technologies.id } }">{{
-                  technologies.name
-                }}</router-link>
-              </span>
-            </td>
-            <td>
-              <span v-for="(externalIDS, i) in applicationComponent.externalIDS" :key="externalIDS.id"
-                >{{ i > 0 ? ', ' : '' }}
-                <router-link
-                  class="form-control-static"
-                  :to="{ name: 'ExternalReferenceView', params: { externalReferenceId: externalIDS.id } }"
-                  >{{ externalIDS.externalID }}</router-link
-                >
-              </span>
-            </td>
-            <td class="text-right">
-              <div class="btn-group">
-                <router-link
-                  :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: applicationComponent.id } }"
-                  custom
-                  v-slot="{ navigate }"
-                >
-                  <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
-                    <font-awesome-icon icon="eye"></font-awesome-icon>
-                    <span class="d-none d-md-inline">View</span>
-                  </button>
-                </router-link>
-                <router-link
-                  :to="{ name: 'ApplicationComponentEdit', params: { applicationComponentId: applicationComponent.id } }"
-                  custom
-                  v-slot="{ navigate }"
-                >
-                  <button
-                    @click="navigate"
-                    class="btn btn-primary btn-sm edit"
-                    data-cy="entityEditButton"
-                    v-if="accountService().writeAuthorities"
-                  >
-                    <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                    <span class="d-none d-md-inline">Edit</span>
-                  </button>
-                </router-link>
-                <b-button
-                  v-if="accountService().deleteAuthorities"
-                  v-on:click="prepareRemove(applicationComponent)"
-                  variant="danger"
-                  class="btn btn-sm"
-                  data-cy="entityDeleteButton"
-                  v-b-modal.removeEntity
-                >
-                  <font-awesome-icon icon="times"></font-awesome-icon>
-                  <span class="d-none d-md-inline">Delete</span>
-                </b-button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+
+    <b-table
+      striped
+      borderless
+      v-if="applicationComponents"
+      :items="applicationComponents"
+      :fields="fields"
+      sort-icon-left
+      responsive
+      data-cy="entityTable"
+      :perPage="perPage"
+      :current-page="currentPage"
+      :filter="filter"
+      :filter-included-fields="['alias', 'name', 'description', 'application']"
+    >
+      <template #thead-top="data">
+        <b-tr>
+          <b-th colspan="2">
+            <input type="text" placeholder="Filter text" v-model="filter" style="width: 100%" class="m-0" />
+          </b-th>
+          <b-th :colspan="data.columns - 3"></b-th>
+          <b-th class="float-right">
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="applicationComponents.length"
+              :per-page="perPage"
+              aria-controls="my-table"
+              class="m-0"
+            ></b-pagination>
+          </b-th>
+        </b-tr>
+      </template>
+
+      <template #cell(id)="PP">
+        <router-link :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: PP.item.id } }">{{
+          PP.item.id
+        }}</router-link>
+      </template>
+
+      <template #cell(alias)="PP">
+        <router-link :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: PP.item.id } }">{{
+          PP.item.alias
+        }}</router-link>
+      </template>
+
+      <template #cell(application)="PP">
+        <router-link :to="{ name: 'ApplicationView', params: { applicationId: PP.item.application.id } }">{{
+          PP.item.application.name
+        }}</router-link>
+      </template>
+
+      <template #cell(technologies)="PP">
+        <span v-for="(technologies, i) in PP.item.technologies" :key="technologies.id"
+          >{{ i > 0 ? ', ' : '' }}
+          <router-link class="form-control-static" :to="{ name: 'TechnologyView', params: { technologyId: technologies.id } }">{{
+            technologies.name
+          }}</router-link>
+        </span>
+      </template>
+
+      <template #cell(categories)="PP">
+        <span v-for="(categories, i) in PP.item.categories" :key="categories.id"
+          >{{ i > 0 ? ', ' : '' }}
+          <router-link
+            class="form-control-static"
+            :to="{ name: 'ApplicationCategoryView', params: { applicationCategoryId: categories.id } }"
+            >{{ categories.name }}</router-link
+          >
+        </span>
+      </template>
+
+      <template #cell(actions)="data">
+        <div class="btn-group">
+          <router-link
+            :to="{ name: 'ApplicationComponentView', params: { applicationComponentId: data.item.id } }"
+            custom
+            v-slot="{ navigate }"
+          >
+            <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
+              <font-awesome-icon icon="eye"></font-awesome-icon>
+              <span class="d-none d-md-inline">View</span>
+            </button>
+          </router-link>
+          <router-link
+            :to="{ name: 'ApplicationComponentEdit', params: { applicationComponentId: data.item.id } }"
+            custom
+            v-slot="{ navigate }"
+          >
+            <button
+              @click="navigate"
+              class="btn btn-primary btn-sm edit"
+              data-cy="entityEditButton"
+              v-if="accountService().writeAuthorities"
+            >
+              <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+              <span class="d-none d-md-inline">Edit</span>
+            </button>
+          </router-link>
+          <b-button
+            v-if="accountService().deleteAuthorities"
+            v-on:click="prepareRemove(data.item)"
+            variant="danger"
+            class="btn btn-sm"
+            data-cy="entityDeleteButton"
+            v-b-modal.removeEntity
+          >
+            <font-awesome-icon icon="times"></font-awesome-icon>
+            <span class="d-none d-md-inline">Delete</span>
+          </b-button>
+        </div>
+      </template>
+    </b-table>
     <b-modal ref="removeEntity" id="removeEntity">
       <span slot="modal-title"
         ><span id="eaDesignItApp.applicationComponent.delete.question" data-cy="applicationComponentDeleteDialogHeading"
