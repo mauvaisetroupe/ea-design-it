@@ -26,6 +26,13 @@ export default class LandscapeView extends mixins(JhiDataUtils) {
 
   public isFetching = false;
 
+  public perPage = 10;
+  public currentPage = 1;
+
+  get filteredRows() {
+    return this.landscapeViews.filter(row => row);
+  }
+
   public deleteCoherence() {
     if (!this.deleteFunctionalFlows) {
       this.deleteInterfaces = false;
