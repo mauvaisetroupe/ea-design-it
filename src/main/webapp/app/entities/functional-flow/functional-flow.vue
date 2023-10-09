@@ -27,22 +27,13 @@
     </div>
 
     <div v-if="functionalFlows && functionalFlows.length > 0">
-      <div class="row m-2">
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="filteredRows.length"
-          :per-page="perPage"
-          aria-controls="my-table"
-          class="m-0"
-        ></b-pagination>
-        <input type="text" placeholder="Filter by text" v-model="filter" class="ml-5" />
-      </div>
-
       <div>
         <b-table
           striped
+          borderless
           :items="filteredRows"
           :fields="[
+            'id',
             'alias',
             'description',
             'comment',
@@ -51,12 +42,38 @@
             'documentationURL2',
             'startDate',
             'endDate',
-            'actions',
+            { key: 'actions', label: '', tdClass: 'text-right' },
           ]"
           :perPage="perPage"
           :current-page="currentPage"
           class="col-12"
         >
+          <template #thead-top="data">
+            <b-tr>
+              <b-th></b-th>
+              <b-th>
+                <input type="text" placeholder="Filter Alias" v-model="filterAlias" style="width: 100%" class="m-0" />
+              </b-th>
+              <b-th>
+                <input type="text" placeholder="Filter Description" v-model="filterDescription" style="width: 100%" class="m-0" />
+              </b-th>
+              <b-th :colspan="data.columns - 4"></b-th>
+              <b-th class="float-right">
+                <b-pagination
+                  v-model="currentPage"
+                  :total-rows="filteredRows.length"
+                  :per-page="perPage"
+                  aria-controls="my-table"
+                  class="m-0"
+                ></b-pagination>
+              </b-th>
+            </b-tr>
+          </template>
+
+          <template #cell(id)="data">
+            <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: data.item.id } }">{{ data.item.id }}</router-link>
+          </template>
+
           <template #cell(alias)="data">
             <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: data.item.id } }">{{
               data.item.alias

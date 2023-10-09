@@ -18,17 +18,7 @@ export default class FunctionalFlow extends Vue {
     return this.functionalFlows.filter(row => {
       const alias = row.alias ? row.alias.toString().toLowerCase() : '';
       const description = row.description ? row.description.toString().toLowerCase() : '';
-      const inFFF = row.steps
-        ? row.steps
-            .map(i => i.flowInterface)
-            .map(i => i.alias)
-            .join(' ')
-            .toString()
-            .toLowerCase()
-        : '';
-      const searchTerm = this.filter.toLowerCase();
-
-      return alias.includes(searchTerm) || inFFF.includes(searchTerm) || description.includes(searchTerm);
+      return alias.includes(this.filterAlias?.toLocaleLowerCase()) && description.includes(this.filterDescription?.toLocaleLowerCase());
     });
   }
 
@@ -38,12 +28,13 @@ export default class FunctionalFlow extends Vue {
 
   public isFetching = false;
 
-  public filter = '';
+  public filterAlias = '';
+  public filterDescription = '';
 
   public deleteInterfaces = true;
   public deleteDatas = true;
 
-  public perPage = 20;
+  public perPage = 10;
   public currentPage = 1;
 
   public deleteCoherence() {
