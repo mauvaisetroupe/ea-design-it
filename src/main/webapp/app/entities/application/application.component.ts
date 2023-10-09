@@ -32,6 +32,13 @@ export default class Application extends Vue {
     });
   }
 
+  public totalRows = 0;
+  public onFiltered(filteredItems) {
+    // Trigger pagination to update the number of buttons/pages due to filtering
+    this.totalRows = filteredItems.length;
+    this.currentPage = 1;
+  }
+
   private removeId: number = null;
 
   public applications: IApplication[] = [];
@@ -68,7 +75,7 @@ export default class Application extends Vue {
   ];
   public sortBy = 'name';
   public sortDesc = false;
-  public filterOn = ['alias', 'name', 'description'];
+  public filterOn = ['alias', 'name'];
   public formatLongText(value, key, item) {
     const max = 600;
     if (value && value.length > max) {
@@ -77,6 +84,12 @@ export default class Application extends Vue {
       return value;
     }
   }
+
+  public get perPage() {
+    return this.filter ? 100 : 7;
+  }
+  public currentPage = 1;
+
   public applicationTypeValues: string[] = Object.keys(ApplicationType);
   public softwareTypeValues: string[] = Object.keys(SoftwareType);
 
@@ -100,6 +113,7 @@ export default class Application extends Vue {
         res => {
           this.applications = res.data;
           this.isFetching = false;
+          this.totalRows = this.applications.length;
         },
         err => {
           this.isFetching = false;

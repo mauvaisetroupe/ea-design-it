@@ -36,9 +36,21 @@
     </div>
 
     <div class="border p-2 m-1" v-if="applications && applications.length > 0">
-      <input type="text" placeholder="Filter by text" v-model="filter" />
-      <br />
-      <a @click="showAdvanced = !showAdvanced" href="javascript:" class="text-decoration-none"
+      <div class="row m-1">
+        <div class="col-2">
+          <input type="text" placeholder="Filter by text" v-model="filter" />
+        </div>
+        <div class="col-10">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            aria-controls="my-table"
+            class="m-0 float-right"
+          ></b-pagination>
+        </div>
+      </div>
+      <a @click="showAdvanced = !showAdvanced" href="javascript:" class="text-decoration-none m-1"
         ><span class="small">Advance Filters <font-awesome-icon icon="angle-down"></font-awesome-icon></span
       ></a>
       <div v-show="showAdvanced" class="p-2 m-1">
@@ -111,6 +123,7 @@
 
     <b-table
       striped
+      borderless
       v-if="applications && applications.length > 0"
       :items="filteredApplications"
       :fields="fields"
@@ -121,40 +134,33 @@
       :filter="filter"
       :filter-included-fields="filterOn"
       data-cy="entityTable"
+      :perPage="perPage"
+      :current-page="currentPage"
+      @filtered="onFiltered"
     >
       <!-- <template #thead-top="data">
-        <TR>
-          <td colspan="5">
-            <div>
-              <input type="text" placeholder="Filter by text" v-model="filter" />
-              <input type="checkbox" id="alias" value="alias" v-model="filterOn">
-              <label for="alias">alias</label>
-              <input type="checkbox" id="name" value="name" v-model="filterOn">
-              <label for="name">name</label>
-              <input type="checkbox" id="description" value="description" v-model="filterOn">
-              <label for="description">description</label>
-            </div>
-          </td>
-          <td>
+        <b-tr>
+          <b-th></b-th>
+          <b-th><input type="text" v-model="filterAlias" :placeholder="'Text filter ' + data.fields[1].label" /></b-th>
+          <b-th><input type="text" v-model="filterName" :placeholder="'Text filter ' + data.fields[2].label" /></b-th>
+          <b-th><input type="text" v-model="filterDescription" :placeholder="'Text filter ' + data.fields[3].label" style="width: 100%"/></b-th>
+          <b-th>
             <select class="form-control form-control-sm" v-model="applicationTypeSelected" >
               <option :value="undefined">--</option>
               <option :value="option" v-for="option in applicationTypeValues" :key="option">{{ option }}</option> 
             </select>
-          </td>
-          <td>
+          </b-th>
+          <b-th>
             <select class="form-control form-control-sm" v-model="softwareTypeSelected" >
               <option :value="undefined">--</option>
               <option :value="option" v-for="option in softwareTypeValues" :key="option">{{ option }}</option> 
             </select>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </TR>
+          </b-th>
+          <b-th><input type="text" v-model="filterNickname" :placeholder="data.fields[6].label" style="width: 100%"/></b-th>
+          <b-th colspan="3"><input type="text" v-model="filterNickname" :placeholder="'Text filter ' + data.fields[7].label" style="width: 100%"/></b-th>
+          <b-th><input type="text" v-model="filterDescription" :placeholder="data.fields[10].label" style="width: 100%"/></b-th>
+          <b-th><input type="text" v-model="filterDescription" :placeholder="data.fields[11].label" style="width: 100%"/></b-th>
+        </b-tr>
       </template> -->
 
       <template #cell(CHECKBOX)="row">
