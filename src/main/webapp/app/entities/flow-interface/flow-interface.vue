@@ -28,20 +28,12 @@
 
     <div class="row">
       <div class="col-12">
-        <div class="row m-2">
-          <b-pagination
-            v-model="currentPage"
-            :total-rows="filteredRows.length"
-            :per-page="perPage"
-            aria-controls="my-table"
-            class="m-0"
-          ></b-pagination>
-        </div>
         <div class="col-12">
           <b-table
             striped
+            borderless
             :items="filteredRows"
-            :fields="['alias', 'source', 'target', 'protocol', 'actions']"
+            :fields="['id', 'alias', 'source', 'target', 'protocol', { key: 'actions', label: '', tdClass: 'text-right' }]"
             :perPage="perPage"
             :current-page="currentPage"
             :filter-included-fields="['alias', 'source', 'target', 'protocol']"
@@ -49,11 +41,25 @@
           >
             <template #thead-top="data">
               <b-tr>
+                <b-th></b-th>
                 <b-th><input type="text" v-model="filterAlias" :placeholder="'Text filter ' + data.fields[0].label" /></b-th>
                 <b-th><input type="text" v-model="filterSource" :placeholder="'Text filter ' + data.fields[1].label" /></b-th>
                 <b-th><input type="text" v-model="filterTarget" :placeholder="'Text filter ' + data.fields[2].label" /></b-th>
                 <b-th><input type="text" v-model="filterProtocol" :placeholder="'Text filter ' + data.fields[3].label" /></b-th>
+                <b-th class="float-right">
+                  <b-pagination
+                    v-model="currentPage"
+                    :total-rows="filteredRows.length"
+                    :per-page="perPage"
+                    aria-controls="my-table"
+                    class="m-0"
+                  ></b-pagination>
+                </b-th>
               </b-tr>
+            </template>
+
+            <template #cell(id)="data">
+              <router-link :to="{ name: 'FlowInterfaceView', params: { flowInterfaceId: data.item.id } }">{{ data.item.id }}</router-link>
             </template>
 
             <template #cell(alias)="data">

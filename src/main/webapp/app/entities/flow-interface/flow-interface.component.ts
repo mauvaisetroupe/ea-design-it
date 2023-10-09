@@ -14,7 +14,7 @@ export default class FlowInterface extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('accountService') public accountService: () => AccountService;
 
-  public perPage = 20;
+  public perPage = 10;
   public currentPage = 1;
 
   get filteredRows() {
