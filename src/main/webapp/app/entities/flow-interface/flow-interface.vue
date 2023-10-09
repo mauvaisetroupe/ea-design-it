@@ -49,10 +49,10 @@
           >
             <template #thead-top="data">
               <b-tr>
-                <b-th><input type="text" v-model="filterAlias" placeholder="Text filter" /></b-th>
-                <b-th><input type="text" v-model="filterSource" placeholder="Text filter" /></b-th>
-                <b-th><input type="text" v-model="filterTarget" placeholder="Text filter" /></b-th>
-                <b-th><input type="text" v-model="filterProtocol" placeholder="Text filter" /></b-th>
+                <b-th><input type="text" v-model="filterAlias" :placeholder="'Text filter ' + data.fields[0].label" /></b-th>
+                <b-th><input type="text" v-model="filterSource" :placeholder="'Text filter ' + data.fields[1].label" /></b-th>
+                <b-th><input type="text" v-model="filterTarget" :placeholder="'Text filter ' + data.fields[2].label" /></b-th>
+                <b-th><input type="text" v-model="filterProtocol" :placeholder="'Text filter ' + data.fields[3].label" /></b-th>
               </b-tr>
             </template>
 
@@ -89,8 +89,8 @@
             </template>
 
             <template #cell(protocol)="data">
-              <router-link :to="{ name: 'ProtocolView', params: { protocolId: data.item.protocol?.id } }">{{
-                data.item.protocol?.name
+              <router-link :to="{ name: 'ProtocolView', params: { protocolId: data.item.protocol.id } }" v-if="data.item.protocol">{{
+                data.item.protocol.name
               }}</router-link>
             </template>
 
