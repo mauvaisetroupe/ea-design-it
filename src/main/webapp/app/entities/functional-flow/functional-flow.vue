@@ -26,102 +26,91 @@
       <span>No functionalFlows found</span>
     </div>
 
-    <div>
-      <input type="text" placeholder="Filter by text" v-model="filter" />
-    </div>
+    <div v-if="functionalFlows && functionalFlows.length > 0">
+      <div class="row m-2">
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="filteredRows.length"
+          :per-page="perPage"
+          aria-controls="my-table"
+          class="m-0"
+        ></b-pagination>
+        <input type="text" placeholder="Filter by text" v-model="filter" class="ml-5" />
+      </div>
 
-    <div class="table-responsive" v-if="functionalFlows && functionalFlows.length > 0">
-      <table class="table table-striped" aria-describedby="functionalFlows">
-        <thead>
-          <tr>
-            <th scope="row"><span>ID</span></th>
-            <th scope="row"><span>Alias</span></th>
-            <th scope="row"><span>Description</span></th>
-            <th scope="row"><span>Comment</span></th>
-            <th scope="row"><span>Status</span></th>
-            <th scope="row"><span>Documentation URL</span></th>
-            <th scope="row"><span>Documentation URL 2</span></th>
-            <th scope="row"><span>Start Date</span></th>
-            <th scope="row"><span>End Date</span></th>
-            <th scope="row"><span>Owner</span></th>
-            <th scope="row"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="functionalFlow in filteredRows" :key="functionalFlow.id" data-cy="entityTable">
-            <td>
-              <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }">{{
-                functionalFlow.id
-              }}</router-link>
-            </td>
-            <td>{{ functionalFlow.alias }}</td>
-            <td>{{ functionalFlow.description }}</td>
-            <td>{{ functionalFlow.comment ? functionalFlow.comment.substring(0, 30) : '' }}</td>
-            <td>{{ functionalFlow.status }}</td>
-            <td>
-              <a :href="functionalFlow.documentationURL">{{
-                functionalFlow.documentationURL ? functionalFlow.documentationURL.substring(0, 20) : ''
-              }}</a>
-            </td>
-            <td>
-              <a :href="functionalFlow.documentationURL2">{{
-                functionalFlow.documentationURL2 ? functionalFlow.documentationURL2.substring(0, 20) : ''
-              }}</a>
-            </td>
-            <td>{{ functionalFlow.startDate }}</td>
-            <td>{{ functionalFlow.endDate }}</td>
-            <td>
-              <div v-if="functionalFlow.owner">
-                <router-link :to="{ name: 'OwnerView', params: { ownerId: functionalFlow.owner.id } }">{{
-                  functionalFlow.owner.name
-                }}</router-link>
-              </div>
-            </td>
-            <td class="text-right">
-              <div class="btn-group">
-                <router-link
-                  :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: functionalFlow.id } }"
-                  custom
-                  v-slot="{ navigate }"
-                >
-                  <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
-                    <font-awesome-icon icon="eye"></font-awesome-icon>
-                    <span class="d-none d-md-inline">View</span>
-                  </button>
-                </router-link>
-                <router-link
-                  v-if="accountService().writeAuthorities"
-                  :to="{ name: 'FunctionalFlowEdit', params: { functionalFlowId: functionalFlow.id } }"
-                  custom
-                  v-slot="{ navigate }"
-                >
-                  <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
-                    <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                    <span class="d-none d-md-inline">Edit</span>
-                  </button>
-                </router-link>
-                <b-button
-                  v-if="accountService().deleteAuthorities"
-                  v-on:click="prepareRemove(functionalFlow)"
-                  variant="danger"
-                  class="btn btn-sm"
-                  data-cy="entityDeleteButton"
-                  v-b-modal.removeEntity
-                  :disabled="functionalFlow.landscapes && functionalFlow.landscapes.length > 0"
-                  :title="
-                    !functionalFlow.landscapes || functionalFlow.landscapes.length == 0
-                      ? ''
-                      : 'Cannot be deleted, please detache from all landscapes first'
-                  "
-                >
-                  <font-awesome-icon icon="times"></font-awesome-icon>
-                  <span class="d-none d-md-inline">Delete</span>
-                </b-button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div>
+        <b-table
+          striped
+          :items="filteredRows"
+          :fields="[
+            'alias',
+            'description',
+            'comment',
+            'status',
+            'documentationURL',
+            'documentationURL2',
+            'startDate',
+            'endDate',
+            'actions',
+          ]"
+          :perPage="perPage"
+          :current-page="currentPage"
+          class="col-12"
+        >
+          <template #cell(alias)="data">
+            <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: data.item.id } }">{{
+              data.item.alias
+            }}</router-link>
+          </template>
+
+          <template #cell(documentationURL)="data">
+            <a :href="data.item.documentationURL">{{ data.item.documentationURL ? data.item.documentationURL.substring(0, 20) : '' }}</a>
+          </template>
+
+          <template #cell(documentationURL2)="data">
+            <a :href="data.item.documentationURL2">{{ data.item.documentationURL2 ? data.item.documentationURL2.substring(0, 20) : '' }}</a>
+          </template>
+
+          <template #cell(actions)="data">
+            <div class="btn-group">
+              <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: data.item.id } }" custom v-slot="{ navigate }">
+                <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
+                  <font-awesome-icon icon="eye"></font-awesome-icon>
+                  <span class="d-none d-md-inline">View</span>
+                </button>
+              </router-link>
+              <router-link
+                v-if="accountService().writeAuthorities"
+                :to="{ name: 'FunctionalFlowEdit', params: { functionalFlowId: data.item.id } }"
+                custom
+                v-slot="{ navigate }"
+              >
+                <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
+                  <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+                  <span class="d-none d-md-inline">Edit</span>
+                </button>
+              </router-link>
+              <b-button
+                v-if="accountService().deleteAuthorities"
+                v-on:click="prepareRemove(data.item)"
+                variant="danger"
+                class="btn btn-sm"
+                data-cy="entityDeleteButton"
+                v-b-modal.removeEntity
+                :disabled="data.item.landscapes && data.item.landscapes.length > 0"
+                :title="
+                  !data.item.landscapes || data.item.landscapes.length == 0
+                    ? ''
+                    : 'Cannot be deleted, please detache from all landscapes first'
+                "
+              >
+                <font-awesome-icon icon="times"></font-awesome-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </b-button>
+            </div>
+          </template>
+        </b-table>
+      </div>
     </div>
     <b-modal ref="removeEntity" id="removeEntity">
       <span slot="modal-title"

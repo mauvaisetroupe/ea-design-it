@@ -17,7 +17,6 @@ export default class FunctionalFlow extends Vue {
   get filteredRows() {
     return this.functionalFlows.filter(row => {
       const alias = row.alias ? row.alias.toString().toLowerCase() : '';
-      const id = row.id.toString().toLowerCase();
       const description = row.description ? row.description.toString().toLowerCase() : '';
       const inFFF = row.steps
         ? row.steps
@@ -29,7 +28,7 @@ export default class FunctionalFlow extends Vue {
         : '';
       const searchTerm = this.filter.toLowerCase();
 
-      return alias.includes(searchTerm) || id.includes(searchTerm) || inFFF.includes(searchTerm) || description.includes(searchTerm);
+      return alias.includes(searchTerm) || inFFF.includes(searchTerm) || description.includes(searchTerm);
     });
   }
 
@@ -43,6 +42,9 @@ export default class FunctionalFlow extends Vue {
 
   public deleteInterfaces = true;
   public deleteDatas = true;
+
+  public perPage = 20;
+  public currentPage = 1;
 
   public deleteCoherence() {
     if (!this.deleteInterfaces) {
