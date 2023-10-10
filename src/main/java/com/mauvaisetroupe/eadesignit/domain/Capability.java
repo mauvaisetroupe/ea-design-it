@@ -54,7 +54,10 @@ public class Capability implements Serializable, Comparable<Capability> {
     private SortedSet<Capability> subCapabilities = new TreeSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "subCapabilities", "applications", "landscapes" }, allowSetters = true)
+    @JsonIgnoreProperties(
+        value = { "subCapabilities", "applications", "landscapes", "capabilityApplicationMappings", "comment", "description" },
+        allowSetters = true
+    )
     private Capability parent;
 
     @OneToMany(mappedBy = "capability", fetch = FetchType.LAZY)

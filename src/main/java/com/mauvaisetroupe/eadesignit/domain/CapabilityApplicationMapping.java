@@ -25,7 +25,7 @@ public class CapabilityApplicationMapping implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "subCapabilities", "parent", "capabilityApplicationMappings" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "subCapabilities", "capabilityApplicationMappings" }, allowSetters = true)
     private Capability capability;
 
     @ManyToOne

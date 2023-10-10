@@ -17,9 +17,9 @@ logging:
   level:
     ROOT: WARN
     tech.jhipster: WARN
-    org.hibernate.SQL: WARN
+    org.hibernate.SQL: DEBUG
     com.mauvaisetroupe.eadesignit: WARN
-    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
 
 spring:
   devtools:

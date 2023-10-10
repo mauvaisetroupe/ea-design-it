@@ -23,7 +23,15 @@ public interface CapabilityApplicationMappingRepository extends JpaRepository<Ca
     Page<CapabilityApplicationMapping> findAllWithEagerRelationships(Pageable pageable);
 
     @Query(
-        "select distinct capabilityApplicationMapping from CapabilityApplicationMapping capabilityApplicationMapping left join fetch capabilityApplicationMapping.landscapes"
+        "select distinct cm from CapabilityApplicationMapping cm " +
+        " left join fetch cm.landscapes l " +
+        " left join fetch cm.capability c3 " +
+        " left join fetch c3.parent c2 " +
+        " left join fetch c2.parent c1 " +
+        " left join fetch c1.parent c0 " +
+        " left join fetch c0.parent c_1 " +
+        " left join fetch c_1.parent c_2 " +
+        " left join fetch cm.application a "
     )
     List<CapabilityApplicationMapping> findAllWithEagerRelationships();
 
