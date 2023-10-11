@@ -16,9 +16,11 @@ import com.mauvaisetroupe.eadesignit.service.importfile.util.SummaryImporterServ
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +66,20 @@ public class ApplicationCapabilityImportService {
 
         String diagramName = summaryImporterService.findLandscape(capabilityFlowExcelReader, sheetname);
         LandscapeView landscape = landscapeViewRepository.findByDiagramNameIgnoreCase(diagramName);
+
+        // remove mapping from landscape and delete  CapabilityMapping if not refernced by another landscape
+        Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>(landscape.getCapabilityApplicationMappings());
+        for (CapabilityApplicationMapping cm : capabilityApplicationMappings) {            
+            
+            // remove capabilityMapping from landscape
+            landscape.removeCapabilityApplicationMapping(cm);
+
+            // if capabiltyMapping have no other landscape, delete it
+            if (cm.getLandscapes() == null || cm.getLandscapes().isEmpty()) {
+                capabilityApplicationMappingRepository.delete(cm);
+            }
+
+        }
 
         List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(sheetname);
         for (Map<String, Object> map : capabilitiesDF) {

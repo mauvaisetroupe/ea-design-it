@@ -217,8 +217,28 @@ public class LandscapeView implements Serializable {
     }
 
     public LandscapeView removeCapabilityApplicationMapping(CapabilityApplicationMapping capabilityApplicationMapping) {
-        this.capabilityApplicationMappings.remove(capabilityApplicationMapping);
-        capabilityApplicationMapping.getLandscapes().remove(this);
+        if (this.capabilityApplicationMappings.contains(capabilityApplicationMapping)) {
+            this.capabilityApplicationMappings.remove(capabilityApplicationMapping);
+        } else {
+            // hibernate bug due to hashcode ?
+            for (Iterator<CapabilityApplicationMapping> iterator = this.capabilityApplicationMappings.iterator(); iterator.hasNext();) {
+                CapabilityApplicationMapping cm = iterator.next();
+                if (cm.getId() != null && cm.getId().equals(capabilityApplicationMapping.getId())) {
+                    iterator.remove();
+                }
+            }
+        }
+        if (capabilityApplicationMapping.getLandscapes().contains(this)) {
+            capabilityApplicationMapping.getLandscapes().remove(this);
+        } else {
+            // hibernate bug due to hashcode ?
+            for (Iterator<LandscapeView> iterator = capabilityApplicationMapping.getLandscapes().iterator(); iterator.hasNext();) {
+                LandscapeView landscapeView = iterator.next();
+                if (landscapeView.getId() != null && landscapeView.getId().equals(this.getId())) {
+                    iterator.remove();
+                }
+            }
+        }
         return this;
     }
 
