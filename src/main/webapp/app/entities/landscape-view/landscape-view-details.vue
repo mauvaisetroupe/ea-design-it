@@ -256,6 +256,60 @@
             </div>
           </div>
         </b-tab>
+        <b-tab title="Report" id="tab-report">
+          <div>
+            <div v-if="applicationsOnlyInCapabilities.length">
+              <h4>[Capability Mapping] Applications with no Functional Flow 
+                ({{ onlyCapabilitiesPercent }} %)
+              </h4>
+              <b-table
+                :items="applicationsOnlyInCapabilities"
+                :fields="['id','alias','name', 'flows', 'capabilities']"
+                striped
+                fixed
+                class="mx-5"
+              >
+                <template #cell(flows)="data">
+                  <span v-for="(f, i) in flowsByApplicationID[data.item.id]" :key="f.id">
+                    {{ i == 0 ? '' : ', ' }} <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: f.id } }">{{ f.alias }}</router-link>
+                  </span>
+                </template>  
+
+                <template #cell(capabilities)="data">
+                  <span v-for="(c, i) in capabilitiesByApplicationID[data.item.id]" :key="c.id">
+                    {{ i == 0 ? '' : ', ' }} <router-link :to="{ name: 'CapabilityView', params: { capabilityId: c.id } }">L{{ c.level }} - {{ c.name }}</router-link>
+                  </span>
+                </template>
+
+              </b-table>
+            </div>  
+            <div v-if="applicationsOnlyInFlows">
+              <h4>[Capability Mapping] Applications with no Capability 
+                ({{ onlyFlowsPercent }} %)
+              </h4>
+              <b-table
+                :items="applicationsOnlyInFlows"
+                :fields="['id','alias','name', 'flows', 'capabilities']"
+                striped
+                fixed
+                class="ml-5"
+              >
+                <template #cell(flows)="data">
+                  <span v-for="(f, i) in flowsByApplicationID[data.item.id]" :key="f.id">
+                    {{ i == 0 ? '' : ', ' }}<router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: f.id } }">{{ f.alias }}</router-link>
+                  </span>
+                </template>              
+
+                <template #cell(capabilities)="data">
+                  <span v-for="(c, i) in capabilitiesByApplicationID[data.item.id]" :key="c.id">
+                    {{ i == 0 ? '' : ', ' }} <router-link :to="{ name: 'CapabilityView', params: { capabilityId: c.id } }">L{{ c.level }} - {{ c.name }}</router-link>
+                  </span>
+                </template>
+                
+              </b-table>
+            </div>
+          </div>        
+        </b-tab>
       </b-tabs>
     </div>
     <div class="col-12">

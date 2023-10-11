@@ -54,6 +54,13 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public landscapeViewId = -1;
   public filter = '';
   public showLabelIfNumberapplicationsLessThan = 20;
+  public applicationsOnlyInCapabilities: IApplication[] = [];
+  public applicationsOnlyInFlows: IApplication[] = [];
+  public get reportToDisplay() {
+    return (this.applicationsOnlyInCapabilities.length > 0 || this.applicationsOnlyInFlows.length > 0);
+  }
+  public capabilitiesByApplicationID = new Object();
+  public flowsByApplicationID = new Object();
 
   //for description update
   public reorderAliasflowToSave: IFunctionalFlow[] = [];
@@ -63,6 +70,23 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   public get allAlias() {
     return this.landscapeView.flows.map(f => f.alias);
   }
+
+  public get allApplications() {
+    if (!this.landscapeView || !this.landscapeView.flows) return [];
+    return this.landscapeView.flows.flatMap(f => f.allApplications).filter((value, index, self) =>
+    index === self.findIndex((a) => (
+      a.id === value.id
+    )))
+  }
+
+  public get onlyCapabilitiesPercent() {
+    return (100 * this.applicationsOnlyInCapabilities.length / this.allApplications.length).toFixed(0)
+  }
+
+  public get onlyFlowsPercent() {
+    return (100 * this.applicationsOnlyInFlows.length / this.allApplications.length).toFixed(0)
+  }
+
 
   @Watch('tabIndex')
   public onTabChange(newtab) {
@@ -129,7 +153,29 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
             });
           flow.allApplications = Object.values(distinctApplications);
         });
+        if (this.landscapeView && this.landscapeView.flows) {
+          // flowsByApplicationID
+          this.landscapeView.flows.forEach(f => {
+            f.steps.map(s => s.flowInterface).forEach(i => {
+              if (!this.flowsByApplicationID[i.source.id]) this.flowsByApplicationID[i.source.id] = [];
+              this.flowsByApplicationID[i.source.id] = [f];
+              if (!this.flowsByApplicationID[i.target.id]) this.flowsByApplicationID[i.target.id] = [];
+              this.flowsByApplicationID[i.target.id] = [f];
+            })
+          });
+        }
         this.consolidatedCapability = res.consolidatedCapability;
+
+        if (this.landscapeView && this.landscapeView.capabilityApplicationMappings) {
+          // capabilitiesByApplicationID
+          this.landscapeView.capabilityApplicationMappings.forEach(cm => {
+            if (!this.capabilitiesByApplicationID[cm.application.id]) this.capabilitiesByApplicationID[cm.application.id] = [];
+            this.capabilitiesByApplicationID[cm.application.id].push(cm.capability);
+          })
+        }
+
+        this.applicationsOnlyInCapabilities = res.applicationsOnlyInCapabilities;
+        this.applicationsOnlyInFlows = res.applicationsOnlyInFlows
         if (this.landscapeView.compressedDrawSVG) {
           this.drawIoSVG = decodeURIComponent(escape(window.atob(this.landscapeView.compressedDrawSVG)));
         }

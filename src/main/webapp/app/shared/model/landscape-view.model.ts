@@ -4,6 +4,7 @@ import { ICapabilityApplicationMapping } from '@/shared/model/capability-applica
 
 import { ViewPoint } from '@/shared/model/enumerations/view-point.model';
 import { ICapability } from './capability.model';
+import { IApplication } from './application.model';
 export interface ILandscapeView {
   id?: number;
   viewpoint?: ViewPoint | null;
@@ -18,6 +19,8 @@ export interface ILandscapeView {
 export interface ILandscapeDTO {
   landscape: ILandscapeView;
   consolidatedCapability: ICapability[];
+  applicationsOnlyInCapabilities: IApplication[];
+  applicationsOnlyInFlows: IApplication[];
 }
 
 export class LandscapeView implements ILandscapeView {

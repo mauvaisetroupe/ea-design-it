@@ -18,7 +18,7 @@ export interface IFunctionalFlow {
   owner?: IOwner | null;
   landscapes?: ILandscapeView[] | null;
   dataFlows?: IDataFlow[] | null;
-  allApplications?: IApplication[];
+  allApplications?: IApplication[]; // not given by backend, computed in typescript
 }
 
 export class FunctionalFlow implements IFunctionalFlow {

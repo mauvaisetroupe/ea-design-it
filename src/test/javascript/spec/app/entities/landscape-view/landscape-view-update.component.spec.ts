@@ -105,6 +105,8 @@ describe('Component Tests', () => {
         const lanscapeDTO: ILandscapeDTO = {
           landscape: { id: 123 },
           consolidatedCapability: [],
+          applicationsOnlyInCapabilities: [],
+          applicationsOnlyInFlows: [],
         };
         landscapeViewServiceStub.find.resolves(lanscapeDTO);
         landscapeViewServiceStub.retrieve.resolves([lanscapeDTO]);

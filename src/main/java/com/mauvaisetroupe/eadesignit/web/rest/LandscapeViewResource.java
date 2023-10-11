@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
+import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.view.LandscapeLight;
@@ -13,9 +14,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -189,9 +192,31 @@ public class LandscapeViewResource {
         CapabilityUtil capabilityUtil = new CapabilityUtil();
 
         if (landscapeView.isPresent()) {
-            Collection<CapabilityDTO> result = capabilityUtil.getRoot(
+            
+            // Capabilities 
+
+            Collection<CapabilityDTO> capabilitiesRoots = capabilityUtil.getRoot(
                 landscapeView.get().getCapabilityApplicationMappings().stream().map(cp -> cp.getCapability()).collect(Collectors.toList())
             );
+
+            // All applications from capabilities
+        
+            Set<Application> applicationsFromCapabilities =  landscapeView.get().getCapabilityApplicationMappings().stream().map(cm -> cm.getApplication()).collect(Collectors.toSet());
+
+            // All applications from flows
+                
+            Set<Application> applicationsFromFlows = new HashSet<>();
+            landscapeView.get().getFlows().stream().flatMap(f -> f.getInterfaces().stream()).forEach( i -> {
+                applicationsFromFlows.add(i.getSource());
+                applicationsFromFlows.add(i.getTarget());
+            });
+
+            // Find difference between applications in flows and in capabilities
+            Set<Application> applicationOnlyInCapabilities = applicationsFromCapabilities.stream().filter(a -> !applicationsFromFlows.contains(a)).collect(Collectors.toSet());
+            Set<Application> applicationOnlyInFlows = applicationsFromFlows.stream().filter(a -> !applicationsFromCapabilities.contains(a)).collect(Collectors.toSet());
+
+
+            // DrawIO
 
             try {
                 MXFileSerializer fileSerializer = new MXFileSerializer(landscapeView.get());
@@ -208,7 +233,9 @@ public class LandscapeViewResource {
                 e.printStackTrace();
             }
             landscapeDTO.setLandscape(landscapeView.get());
-            landscapeDTO.setConsolidatedCapability(result);
+            landscapeDTO.setConsolidatedCapability(capabilitiesRoots);
+            landscapeDTO.setApplicationsOnlyInCapabilities(applicationOnlyInCapabilities);
+            landscapeDTO.setApplicationsOnlyInFlows(applicationOnlyInFlows);
         }
         Optional<LandscapeDTO> landscapeDtoOptional;
         if (landscapeView.isPresent()) {
