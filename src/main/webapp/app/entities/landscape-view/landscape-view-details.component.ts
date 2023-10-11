@@ -157,10 +157,8 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
           // flowsByApplicationID
           this.landscapeView.flows.forEach(f => {
             f.steps.map(s => s.flowInterface).forEach(i => {
-              if (!this.flowsByApplicationID[i.source.id]) this.flowsByApplicationID[i.source.id] = [];
-              this.flowsByApplicationID[i.source.id] = [f];
-              if (!this.flowsByApplicationID[i.target.id]) this.flowsByApplicationID[i.target.id] = [];
-              this.flowsByApplicationID[i.target.id] = [f];
+              this.add(i.source, f);
+              this.add(i.target, f);
             })
           });
         }
@@ -184,6 +182,14 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
         this.alertService().showHttpError(this, error.response);
       });
     this.getPlantUML(landscapeViewId);
+  }
+
+  private add(a: IApplication, f: IFunctionalFlow) {
+    if (!this.flowsByApplicationID[a.id]) this.flowsByApplicationID[a.id] = [];
+    const index = this.flowsByApplicationID[a.id].findIndex(myf => myf.id === f.id)
+    if (index === -1) {
+      this.flowsByApplicationID[a.id].push(f);
+    }
   }
 
   public previousState() {
