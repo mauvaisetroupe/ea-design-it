@@ -1,12 +1,10 @@
 import axios from 'axios';
 
 import { IApplication } from '@/shared/model/application.model';
-import { ICapability } from '@/shared/model/capability.model';
 import { PlantumlDTO } from '@/shared/model/plantuml-dto';
 
 const baseApiUrl = 'api/applications';
 const basePlantUMLApiUrl = 'api/plantuml/application/get-svg';
-const baseCapabilitiesPlantUMLApiUrl = 'api/plantuml/application/capability/get-svg';
 const applicationStructurePlantUMLApiUrl = 'api/plantuml/application/structure/get-svg';
 
 export default class ApplicationService {
@@ -124,19 +122,6 @@ export default class ApplicationService {
         .get(`${basePlantUMLApiUrl}/${id}`, { params })
         .then(res => {
           resolve(res.data);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  }
-
-  public getCapabilitiesPlantUML(id: number) {
-    return new Promise<any>((resolve, reject) => {
-      axios
-        .get(`${baseCapabilitiesPlantUMLApiUrl}/${id}`)
-        .then(res => {
-          resolve(res);
         })
         .catch(err => {
           reject(err);

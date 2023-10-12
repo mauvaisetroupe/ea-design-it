@@ -1,17 +1,14 @@
 package com.mauvaisetroupe.eadesignit.service.diagram.plantuml;
 
 import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
-import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Application;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.EdgeGroup;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphBuilder;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.Label;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService.DiagramType;
-import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedSet;
@@ -20,7 +17,6 @@ import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.core.Diagram;
-import net.sourceforge.plantuml.core.DiagramDescription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
@@ -212,7 +208,7 @@ public class PlantUMLBuilder {
     public String getSVGFromSource(String plantUMLSource) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         SourceStringReader reader = new SourceStringReader(plantUMLSource);
-        DiagramDescription diagramDescription = reader.outputImage(byteArrayOutputStream, new FileFormatOption(FileFormat.SVG));
+        reader.outputImage(byteArrayOutputStream, new FileFormatOption(FileFormat.SVG));
 
         List<BlockUml> blocks = reader.getBlocks();
         if (blocks != null && !blocks.isEmpty()) {
@@ -229,52 +225,6 @@ public class PlantUMLBuilder {
 
         byteArrayOutputStream.close();
         return new String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8"));
-    }
-
-    public void getPlantumlCapabilities(StringBuilder plantUMLSource, Collection<Capability> capabilities) {
-        for (Capability capability : capabilities) {
-            getRectangle1(capability, plantUMLSource, "");
-        }
-    }
-
-    public void getPlantumlCapabilitiesDTO(StringBuilder plantUMLSource, Collection<CapabilityDTO> capabilities) {
-        for (CapabilityDTO capability : capabilities) {
-            getRectangle2(capability, plantUMLSource, "");
-        }
-    }
-
-    private void getRectangle1(Capability root, StringBuilder result, String tab) {
-        result.append(
-            tab +
-            "rectangle \"" +
-            root.getName().replaceAll("[\n\r]", " ") +
-            "\" as C" +
-            root.getId() +
-            (root.getSubCapabilities().size() != 0 ? " {" : "") +
-            " \n"
-        );
-        for (Capability dto : root.getSubCapabilities()) {
-            getRectangle1(dto, result, tab + "   ");
-        }
-        if (root.getSubCapabilities().size() != 0) result.append(tab + "}\n");
-        result.append(tab + "url of C" + root.getId() + " is [[/capability/" + root.getId() + "/view]]\n");
-    }
-
-    private void getRectangle2(CapabilityDTO root, StringBuilder result, String tab) {
-        result.append(
-            tab +
-            "rectangle \"" +
-            root.getName().replaceAll("[\n\r]", " ") +
-            "\" as C" +
-            root.getId() +
-            (root.getSubCapabilities().size() != 0 ? " {" : "") +
-            " \n"
-        );
-        for (CapabilityDTO dto : root.getSubCapabilities()) {
-            getRectangle2(dto, result, tab + "   ");
-        }
-        if (root.getSubCapabilities().size() != 0) result.append(tab + "}\n");
-        result.append(tab + "url of C" + root.getId() + " is [[/capability/" + root.getId() + "/view]]\n");
     }
 
     public void getLegend(StringBuilder plantUMLSource, List<String[]> legend) {
