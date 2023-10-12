@@ -54,12 +54,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="dto in filteredCapabilitiesImports" :key="dto">
+          <tr v-for="(dto, i) in filteredCapabilitiesImports" :key="i">
             <td>
               <span v-bind:class="[dto.status === 'ERROR' ? 'rederror' : '']">{{ dto.status }} </span>
             </td>
             <td>{{ dto.error }}</td>
-            <td>{{ dto.domain }}</td>
+            <td>
+              <span v-if="dto.domain">{{ dto.domain.name }}</span>
+            </td>
             <td>
               <span v-if="dto.l0">{{ dto.l0.level }}</span>
             </td>

@@ -7,7 +7,7 @@ export interface ICapabilityImport {
   l1: ICapability;
   l2: ICapability;
   l3: ICapability;
-  domain: string;
+  domain: ICapability;
   status?: string;
   error?: string;
 }
