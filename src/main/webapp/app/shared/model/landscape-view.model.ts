@@ -18,7 +18,7 @@ export interface ILandscapeView {
 
 export interface ILandscapeDTO {
   landscape: ILandscapeView;
-  consolidatedCapability: ICapability[];
+  consolidatedCapability: ICapability;
   applicationsOnlyInCapabilities: IApplication[];
   applicationsOnlyInFlows: IApplication[];
 }

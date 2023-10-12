@@ -104,7 +104,7 @@ describe('Component Tests', () => {
         const foundLandscapeView = { id: 123 };
         const lanscapeDTO: ILandscapeDTO = {
           landscape: { id: 123 },
-          consolidatedCapability: [],
+          consolidatedCapability: {},
           applicationsOnlyInCapabilities: [],
           applicationsOnlyInFlows: [],
         };

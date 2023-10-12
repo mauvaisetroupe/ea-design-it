@@ -194,10 +194,10 @@
           </div>
         </b-tab>
         <b-tab title="Capabilities" id="tab-capa">
-          <div class="col-12" v-if="consolidatedCapability && consolidatedCapability.length > 0">
+          <div class="col-12" v-if="consolidatedCapability">
             <h2>Capabilities for {{ landscapeView.diagramName }}</h2>
             <CapabilityComponent
-              :capability="consolidatedCapability[0]"
+              :capability="consolidatedCapability"
               :showSliders="true"
               :showPath="false"
               :nbLevel="4"

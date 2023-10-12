@@ -70,7 +70,7 @@ describe('Component Tests', () => {
         });
         const lanscapeDTO: ILandscapeDTO = {
           landscape: { id: 123, flows: [] },
-          consolidatedCapability: [],
+          consolidatedCapability: {},
           applicationsOnlyInCapabilities: [],
           applicationsOnlyInFlows: [],
         };
@@ -101,7 +101,7 @@ describe('Component Tests', () => {
         });
         const lanscapeDTO: ILandscapeDTO = {
           landscape: { id: 123, flows: [] },
-          consolidatedCapability: [],
+          consolidatedCapability: {},
           applicationsOnlyInCapabilities: [],
           applicationsOnlyInFlows: [],
         };

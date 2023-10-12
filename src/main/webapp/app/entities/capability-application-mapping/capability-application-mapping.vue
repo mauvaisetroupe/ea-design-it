@@ -52,14 +52,14 @@
             <td>
               <div v-if="capabilityApplicationMapping.capability">
                 <router-link :to="{ name: 'CapabilityView', params: { capabilityId: capabilityApplicationMapping.capability.id } }">{{
-                  capabilityApplicationMapping.capability.id
+                  capabilityApplicationMapping.capability.name
                 }}</router-link>
               </div>
             </td>
             <td>
               <div v-if="capabilityApplicationMapping.application">
                 <router-link :to="{ name: 'ApplicationView', params: { applicationId: capabilityApplicationMapping.application.id } }">{{
-                  capabilityApplicationMapping.application.id
+                  capabilityApplicationMapping.application.name
                 }}</router-link>
               </div>
             </td>

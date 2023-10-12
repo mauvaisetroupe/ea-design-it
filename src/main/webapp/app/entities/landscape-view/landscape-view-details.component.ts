@@ -34,7 +34,7 @@ export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
   @Inject('flowImportService') private flowImportService: () => FlowImportService;
 
   public landscapeView: ILandscapeView = {};
-  public consolidatedCapability: ICapability[] = [];
+  public consolidatedCapability: ICapability = {};
   public plantUMLImage = '';
 
   public drawIoSVG = '';
