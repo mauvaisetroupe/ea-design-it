@@ -67,6 +67,20 @@ public class Capability implements Serializable, Comparable<Capability> {
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
+    public Capability(String name, Integer level) {
+        this(name,level,null);
+    }
+
+    public Capability(String name, Integer level, String description) {
+        this.name = name;
+        this.level = level;
+        this.description = description;
+    }
+
+    public Capability() {
+
+    }
+
     public Long getId() {
         return this.id;
     }

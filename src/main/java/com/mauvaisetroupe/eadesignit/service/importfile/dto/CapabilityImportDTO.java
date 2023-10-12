@@ -1,54 +1,55 @@
 package com.mauvaisetroupe.eadesignit.service.importfile.dto;
 
+import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
-import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
 
 public class CapabilityImportDTO {
 
-    private CapabilityDTO L0;
-    private CapabilityDTO L1;
-    private CapabilityDTO L2;
-    private CapabilityDTO L3;
-    private String domain;
+    private Capability domain;
+    private Capability L0;
+    private Capability L1;
+    private Capability L2;
+    private Capability L3;
     private ImportStatus status;
     private String error;
 
-    public CapabilityImportDTO(CapabilityDTO l0, CapabilityDTO l1, CapabilityDTO l2, CapabilityDTO l3) {
-        L0 = l0;
-        L1 = l1;
-        L2 = l2;
-        L3 = l3;
+    public CapabilityImportDTO(Capability domain, Capability l0, Capability l1, Capability l2, Capability l3) {
+        this.L0 = l0;
+        this.L1 = l1;
+        this.L2 = l2;
+        this.L3 = l3;
+        this.domain = domain;
     }
 
-    public CapabilityDTO getL0() {
+    public Capability getL0() {
         return L0;
     }
 
-    public void setL0(CapabilityDTO l0) {
+    public void setL0(Capability l0) {
         L0 = l0;
     }
 
-    public CapabilityDTO getL1() {
+    public Capability getL1() {
         return L1;
     }
 
-    public void setL1(CapabilityDTO l1) {
+    public void setL1(Capability l1) {
         L1 = l1;
     }
 
-    public CapabilityDTO getL2() {
+    public Capability getL2() {
         return L2;
     }
 
-    public void setL2(CapabilityDTO l2) {
+    public void setL2(Capability l2) {
         L2 = l2;
     }
 
-    public CapabilityDTO getL3() {
+    public Capability getL3() {
         return L3;
     }
 
-    public void setL3(CapabilityDTO l3) {
+    public void setL3(Capability l3) {
         L3 = l3;
     }
 
@@ -60,11 +61,11 @@ public class CapabilityImportDTO {
         this.status = status;
     }
 
-    public String getDomain() {
+    public Capability getDomain() {
         return domain;
     }
 
-    public void setDomain(String domain) {
+    public void setDomain(Capability domain) {
         this.domain = domain;
     }
 
@@ -78,6 +79,6 @@ public class CapabilityImportDTO {
 
     @Override
     public String toString() {
-        return "CapabilityImportDTO [L0=" + L0 + ", L1=" + L1 + ", L2=" + L2 + ", L3=" + L3 + "]";
+        return "CapabilityImportDTO [Sur-Domain=" + domain + ", L0=" + L0 + ", L1=" + L1 + ", L2=" + L2 + ", L3=" + L3 + "]";
     }
 }

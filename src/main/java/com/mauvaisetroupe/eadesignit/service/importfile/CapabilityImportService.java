@@ -3,7 +3,6 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
-import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,6 +35,7 @@ public class CapabilityImportService {
     public static final String L3_NAME = "Capability L3";
     public static final String L3_DESCRIPTION = "L3 - Description";
     public static final String SUR_DOMAIN = "Sur-domaine";
+    public static final String SUR_DOMAIN_DESCRIPTION = "Sur-domaine Description";    
     public static final String FULL_PATH = "full.path";
 
     public List<CapabilityImportDTO> importExcel(InputStream excel, String originalFilename)
@@ -47,19 +47,19 @@ public class CapabilityImportService {
         List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(CAPABILITY_SHEET_NAME);
 
         List<CapabilityImportDTO> result = new ArrayList<CapabilityImportDTO>();
-        CapabilityDTO rootCapabilityDTO = new CapabilityDTO("ROOT", -2);
-        Capability rootCapability = findOrCreateCapability(rootCapabilityDTO, null);
+        Capability rootCapability = new Capability("ROOT", -2);
+        rootCapability = findOrCreateCapability(rootCapability, null);
         capabilityRepository.save(rootCapability);
 
         for (Map<String, Object> map : capabilitiesDF) {
             // new capability created from excel, without parent assigned
-            CapabilityDTO l0Import = null, l1Import = null, l2Import = null, l3Import = null;
-            if (map.get(L0_NAME) != null) l0Import = new CapabilityDTO((String) map.get(L0_NAME), 0, (String) map.get(L0_DESCRIPTION));
-            if (map.get(L1_NAME) != null) l1Import = new CapabilityDTO((String) map.get(L1_NAME), 1, (String) map.get(L1_DESCRIPTION));
-            if (map.get(L2_NAME) != null) l2Import = new CapabilityDTO((String) map.get(L2_NAME), 2, (String) map.get(L2_DESCRIPTION));
-            if (map.get(L3_NAME) != null) l3Import = new CapabilityDTO((String) map.get(L3_NAME), 3, (String) map.get(L3_DESCRIPTION));
-            CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO(l0Import, l1Import, l2Import, l3Import);
-            capabilityImportDTO.setDomain((String) map.get(SUR_DOMAIN));
+            Capability domainImport = null, l0Import = null, l1Import = null, l2Import = null, l3Import = null;
+            if (map.get(SUR_DOMAIN) != null) domainImport = new Capability((String) map.get(SUR_DOMAIN), -1, (String) map.get(SUR_DOMAIN_DESCRIPTION));            
+            if (map.get(L0_NAME) != null) l0Import = new Capability((String) map.get(L0_NAME), 0, (String) map.get(L0_DESCRIPTION));
+            if (map.get(L1_NAME) != null) l1Import = new Capability((String) map.get(L1_NAME), 1, (String) map.get(L1_DESCRIPTION));
+            if (map.get(L2_NAME) != null) l2Import = new Capability((String) map.get(L2_NAME), 2, (String) map.get(L2_DESCRIPTION));
+            if (map.get(L3_NAME) != null) l3Import = new Capability((String) map.get(L3_NAME), 3, (String) map.get(L3_DESCRIPTION));
+            CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO(domainImport,l0Import, l1Import, l2Import, l3Import);
 
             boolean lineIsValid = checkLineIsValid(capabilityImportDTO);
 
@@ -68,11 +68,7 @@ public class CapabilityImportService {
                     // Find L0 without parent (sur-domaine) to find goo L0 even if Sur-domaine not completed correctly
                     // Assumption : one L0 has a unique name
                     Capability l0 = findOrCreateCapability(l0Import, null);
-                    CapabilityDTO surdomainDTO = new CapabilityDTO(
-                        capabilityImportDTO.getDomain() != null ? capabilityImportDTO.getDomain() : "UNKNOWN",
-                        -1
-                    );
-                    Capability surDomainCapability = findOrCreateCapability(surdomainDTO, rootCapabilityDTO);
+                    Capability surDomainCapability = findOrCreateCapability(capabilityImportDTO.getDomain(), rootCapability);
                     if (surDomainCapability.getParent() == null) {
                         rootCapability.addSubCapabilities(surDomainCapability);
                     }
@@ -86,8 +82,8 @@ public class CapabilityImportService {
 
                     // at least one capability not null
                     Capability parent = l0;
-                    CapabilityDTO parentDTO = l0Import;
-                    for (CapabilityDTO capabilityDTO : Arrays.asList(new CapabilityDTO[] { l1Import, l2Import, l3Import })) {
+                    Capability parentDTO = l0Import;
+                    for (Capability capabilityDTO : Arrays.asList(new Capability[] { l1Import, l2Import, l3Import })) {
                         if (capabilityDTO != null) {
                             capabilityRepository.save(parent);
                             Capability capability = findOrCreateCapability(capabilityDTO, parentDTO);
@@ -132,7 +128,7 @@ public class CapabilityImportService {
         return true;
     }
 
-    private Capability findOrCreateCapability(CapabilityDTO capabilityImport, CapabilityDTO parentImport) {
+    private Capability findOrCreateCapability(Capability capabilityImport, Capability parentImport) {
         if (capabilityImport == null || capabilityImport.getName() == null) return null;
         List<Capability> potentials = new ArrayList<>();
         if (parentImport == null) {
@@ -155,7 +151,7 @@ public class CapabilityImportService {
         throw new IllegalStateException("Could not find a unique Capability");
     }
 
-    private Capability createCapability(CapabilityDTO capabilityDTO) {
+    private Capability createCapability(Capability capabilityDTO) {
         Capability capability = new Capability();
         capability.setName(capabilityDTO.getName());
         capability.setDescription(capabilityDTO.getDescription());

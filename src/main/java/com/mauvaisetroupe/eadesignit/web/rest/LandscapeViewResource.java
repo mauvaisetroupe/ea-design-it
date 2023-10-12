@@ -1,12 +1,12 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
+import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.repository.view.LandscapeLight;
 import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
 import com.mauvaisetroupe.eadesignit.service.diagram.drawio.MXFileSerializer;
-import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.dto.util.CapabilityUtil;
 import com.mauvaisetroupe.eadesignit.web.rest.dto.LandscapeDTO;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
@@ -193,9 +193,9 @@ public class LandscapeViewResource {
 
         if (landscapeView.isPresent()) {
             
-            // Capabilities 
+            // Capabilities, we get root with a subset of tree
 
-            Collection<CapabilityDTO> capabilitiesRoots = capabilityUtil.getRoot(
+            Capability rootCapability = capabilityUtil.buildCapabilityTree(
                 landscapeView.get().getCapabilityApplicationMappings().stream().map(cp -> cp.getCapability()).collect(Collectors.toList())
             );
 
@@ -233,7 +233,7 @@ public class LandscapeViewResource {
                 e.printStackTrace();
             }
             landscapeDTO.setLandscape(landscapeView.get());
-            landscapeDTO.setConsolidatedCapability(capabilitiesRoots);
+            landscapeDTO.setConsolidatedCapability(rootCapability);
             landscapeDTO.setApplicationsOnlyInCapabilities(applicationOnlyInCapabilities);
             landscapeDTO.setApplicationsOnlyInFlows(applicationOnlyInFlows);
         }

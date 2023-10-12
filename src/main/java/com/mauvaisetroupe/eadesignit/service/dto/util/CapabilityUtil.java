@@ -1,39 +1,42 @@
 package com.mauvaisetroupe.eadesignit.service.dto.util;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
-import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.dto.mapper.CapabilityMapper;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.util.Assert;
+
 public class CapabilityUtil {
 
-    public Set<CapabilityDTO> getRoot(Collection<Capability> inputs) {
+    public Capability buildCapabilityTree(Collection<Capability> inputs) {
         // Merge all capabilities finding common parents
         // Return merged capabilities by root (and not by leaf), inverse manyToOne relationship
 
-        Set<CapabilityDTO> listOfRoots = new HashSet<>();
+        if (inputs == null || inputs.isEmpty()) return null;
+        
+        Set<Capability> listOfRoots = new HashSet<>();
         CapabilityMapper mapper = new CapabilityMapper();
-        Map<Long, CapabilityDTO> capabilityById = new HashMap<>();
+        Map<Long, Capability> capabilityById = new HashMap<>();
 
-        for (Capability applicationCapability : inputs) {
-            applicationCapability.getApplications();
+        for (Capability capability : inputs) {
+            capability.getApplications();
             boolean found = false;
-            Capability tmpCapability = applicationCapability;
-            CapabilityDTO childDTO = null;
-            CapabilityDTO dto = null;
+            Capability tmpCapability = capability;
+            Capability childDTO = null;
+            Capability dto = null;
             while (tmpCapability != null && !found) {
                 if (capabilityById.containsKey(tmpCapability.getId())) {
                     found = true;
                     dto = capabilityById.get(tmpCapability.getId());
-                    dto.setCapabilityApplicationMappings(tmpCapability.getCapabilityApplicationMappings());
                 } else {
+                    // Clone capability, mapping and application to avoid hibernate side effects
                     dto = mapper.clone(tmpCapability);
                     capabilityById.put(dto.getId(), dto);
-                    dto.setCapabilityApplicationMappings(tmpCapability.getCapabilityApplicationMappings());
                 }
                 if (childDTO != null) {
                     dto.addSubCapabilities(childDTO);
@@ -45,6 +48,7 @@ public class CapabilityUtil {
                 listOfRoots.add(dto);
             }
         }
-        return listOfRoots;
+        Assert.isTrue(listOfRoots.size() == 1, "We should have a unique ROOT element");
+        return listOfRoots.iterator().next();
     }
 }
