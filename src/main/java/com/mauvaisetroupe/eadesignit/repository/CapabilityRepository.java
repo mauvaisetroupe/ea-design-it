@@ -3,6 +3,7 @@ package com.mauvaisetroupe.eadesignit.repository;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -13,8 +14,6 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface CapabilityRepository extends JpaRepository<Capability, Long> {
-    List<Capability> findByNameIgnoreCaseAndLevel(String name, Integer level);
-    List<Capability> findByNameIgnoreCaseAndParentNameIgnoreCaseAndLevel(String name, String parent, Integer level);
     void deleteByCapabilityApplicationMappingsIsEmpty();
     List<Capability> findByLevel(int i);
 
@@ -48,4 +47,11 @@ public interface CapabilityRepository extends JpaRepository<Capability, Long> {
     // s3 l = 1
     // s4 l = 2
     Optional<Capability> findById(@Param("id") Long id);
+
+    @Query(
+        value = "select c from Capability c" +
+        " left join fetch c.subCapabilities s1 " +
+        " left join fetch s1.subCapabilities s2 "
+    )    
+    Set<Capability> findAllWithSubCapabilities();
 }

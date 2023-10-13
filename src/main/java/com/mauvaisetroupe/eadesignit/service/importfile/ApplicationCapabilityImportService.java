@@ -7,10 +7,10 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityApplicationMappingRepository;
-import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityItemDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityHelper;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.SummaryImporterService;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
@@ -32,9 +31,6 @@ public class ApplicationCapabilityImportService {
     private final Logger log = LoggerFactory.getLogger(ApplicationCapabilityImportService.class);
 
     @Autowired
-    private CapabilityRepository capabilityRepository;
-
-    @Autowired
     private ApplicationRepository applicationRepository;
 
     @Autowired
@@ -46,16 +42,14 @@ public class ApplicationCapabilityImportService {
     @Autowired
     private SummaryImporterService summaryImporterService;
 
+    @Autowired
+    private CapabilityHelper capabilityHelper;
+
     public static final String APP_NAME_1 = "application.name.1";
     public static final String APP_NAME_2 = "application.name.2";
     public static final String APP_NAME_3 = "application.name.3";
     public static final String APP_NAME_4 = "application.name.4";
     public static final String APP_NAME_5 = "application.name.5";
-
-    public static final String L0_NAME = "capability.L0";
-    public static final String L1_NAME = "capability.L1";
-    public static final String L2_NAME = "capability.L2";
-    public static final String L3_NAME = "capability.L3";
     public static final String FULL_PATH = "full.path";
 
     public List<ApplicationCapabilityItemDTO> importExcel(InputStream excel, String sheetname)
@@ -80,41 +74,29 @@ public class ApplicationCapabilityImportService {
 
         }
 
+        Map<String,Capability> capabilitiesByFullPath  = capabilityHelper.initCapabilitiesByNameFromDB();
+
         List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(sheetname);
         for (Map<String, Object> map : capabilitiesDF) {
             ApplicationCapabilityItemDTO itemDTO = new ApplicationCapabilityItemDTO();
 
-            Capability l0Import = null, l1Import = null, l2Import = null, l3Import = null;
-            String domain = null;
-            if (map.containsKey(FULL_PATH)) {
-                String fullPath = (String) map.get(FULL_PATH);
-                String[] capabilitiesName = fullPath.split(" > ");
-                if (capabilitiesName.length > 0) domain = capabilitiesName[0];
-                if (capabilitiesName.length > 1) l0Import = new Capability(capabilitiesName[1], 0);
-                if (capabilitiesName.length > 2) l1Import = new Capability(capabilitiesName[2], 1);
-                if (capabilitiesName.length > 3) l2Import = new Capability(capabilitiesName[3], 2);
-                if (capabilitiesName.length > 4) l3Import = new Capability(capabilitiesName[4], 3);
-            } else {
-                if (map.get(L0_NAME) != null) l0Import = new Capability((String) map.get(L0_NAME), 0);
-                if (map.get(L1_NAME) != null) l1Import = new Capability((String) map.get(L1_NAME), 1);
-                if (map.get(L2_NAME) != null) l2Import = new Capability((String) map.get(L2_NAME), 2);
-                if (map.get(L3_NAME) != null) l3Import = new Capability((String) map.get(L3_NAME), 3);
-            }
-            CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO(null, l0Import, l1Import, l2Import, l3Import);
+            String fullPath = (String) map.get(FULL_PATH);
+            CapabilityImportDTO capabilityImportDTO = capabilityHelper.getCapabilityImportDTO(fullPath);
             itemDTO.setCapabilityImportDTO(capabilityImportDTO);
             itemDTO.setApplicationNames(mapArrayToString(map));
 
-            Optional<Capability> capabilityOptional = findCapability(l0Import, l1Import, l2Import, l3Import, itemDTO);
+            Capability capability = capabilitiesByFullPath.get(fullPath);
             List<Application> applications = findApplication(map, itemDTO);
 
             if (applications.isEmpty()) {
                 String error = "No application found : " + map;
+                itemDTO.setErrorMessage(error);
                 log.error(error);
-            } else if (capabilityOptional.isEmpty()) {
-                String error = "No Capaility found : " + map;
+            } else if (capability == null) {
+                String error = "No Capability found : " + map + " - " + fullPath;
+                itemDTO.setErrorMessage(error);
                 log.error(error);
             } else {
-                Capability capability = capabilityOptional.get();
                 for (Application application : applications) {
                     CapabilityApplicationMapping capabilityApplicationMapping = capabilityApplicationMappingRepository.findByApplicationAndCapability(
                         application,
@@ -171,45 +153,6 @@ public class ApplicationCapabilityImportService {
             return obj.toString().trim();
         }
         return null;
-    }
-
-    private Optional<Capability> findCapability(
-        Capability l0Import,
-        Capability l1Import,
-        Capability l2Import,
-        Capability l3Import,
-        ApplicationCapabilityItemDTO applicationCapability
-    ) {
-        List<Capability> potentials = null;
-        Capability capability = null;
-        if (l3Import != null && l2Import != null) {
-            potentials =
-                capabilityRepository.findByNameIgnoreCaseAndParentNameIgnoreCaseAndLevel(l3Import.getName(), l2Import.getName(), 3);
-        } else if (l2Import != null && l1Import != null) {
-            potentials =
-                capabilityRepository.findByNameIgnoreCaseAndParentNameIgnoreCaseAndLevel(l2Import.getName(), l1Import.getName(), 2);
-        } else if (l1Import != null && l0Import != null) {
-            potentials =
-                capabilityRepository.findByNameIgnoreCaseAndParentNameIgnoreCaseAndLevel(l1Import.getName(), l0Import.getName(), 1);
-        } else if (l0Import != null) {
-            potentials = capabilityRepository.findByNameIgnoreCaseAndParentNameIgnoreCaseAndLevel(l0Import.getName(), null, 0);
-        } else {
-            processError(
-                applicationCapability,
-                "At least one capability should not be null : " + capa(l0Import, l1Import, l2Import, l3Import)
-            );
-        }
-        if (potentials == null || potentials.size() != 1) {
-            processError(applicationCapability, "Capability could not be found : " + capa(l0Import, l1Import, l2Import, l3Import));
-        } else {
-            capability = potentials.get(0);
-        }
-        return Optional.ofNullable(capability);
-    }
-
-    private String capa(Capability l0Import, Capability l1Import, Capability l2Import, Capability l3Import) {
-        String sep = " > ";
-        return l0Import + sep + l1Import + sep + l2Import + ((l3Import == null) ? "" : sep + l3Import);
     }
 
     private void processError(ApplicationCapabilityItemDTO applicationCapability, String error) {
