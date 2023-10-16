@@ -8,9 +8,9 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityApplicationMappingRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.dto.util.CapabilityUtil;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityItemDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
-import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityHelper;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.SummaryImporterService;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,7 +43,7 @@ public class ApplicationCapabilityImportService {
     private SummaryImporterService summaryImporterService;
 
     @Autowired
-    private CapabilityHelper capabilityHelper;
+    private CapabilityUtil capabilityUtil;
 
     public static final String APP_NAME_1 = "application.name.1";
     public static final String APP_NAME_2 = "application.name.2";
@@ -74,14 +74,14 @@ public class ApplicationCapabilityImportService {
 
         }
 
-        Map<String,Capability> capabilitiesByFullPath  = capabilityHelper.initCapabilitiesByNameFromDB();
+        Map<String,Capability> capabilitiesByFullPath  = capabilityUtil.initCapabilitiesByNameFromDB();
 
         List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(sheetname);
         for (Map<String, Object> map : capabilitiesDF) {
             ApplicationCapabilityItemDTO itemDTO = new ApplicationCapabilityItemDTO();
 
             String fullPath = (String) map.get(FULL_PATH);
-            CapabilityImportDTO capabilityImportDTO = capabilityHelper.getCapabilityImportDTO(fullPath);
+            CapabilityImportDTO capabilityImportDTO = capabilityUtil.getCapabilityImportDTO(fullPath);
             itemDTO.setCapabilityImportDTO(capabilityImportDTO);
             itemDTO.setApplicationNames(mapArrayToString(map));
 

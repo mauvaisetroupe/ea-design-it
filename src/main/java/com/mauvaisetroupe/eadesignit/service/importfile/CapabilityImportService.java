@@ -3,15 +3,13 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
+import com.mauvaisetroupe.eadesignit.service.dto.util.CapabilityUtil;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +26,9 @@ public class CapabilityImportService {
     @Autowired
     private CapabilityRepository capabilityRepository;
 
+    @Autowired
+    private CapabilityUtil capabilityUtil;
+
     public static final String L0_NAME = "Capability L0";
     public static final String L0_DESCRIPTION = "L0 - Description";
     public static final String L1_NAME = "Capability L1";
@@ -43,7 +44,7 @@ public class CapabilityImportService {
     public List<CapabilityImportDTO> importExcel(InputStream excel, String originalFilename) throws EncryptedDocumentException, IOException {
         // this line generates error beacause a deleted capability could be a parent of a one non deleted
         // capabilityRepository.deleteByCapabilityApplicationMappingsIsEmpty();
-        Map<String,Capability> capabilitiesByFullPath  = initCapabilitiesByName();
+        Map<String,Capability> capabilitiesByFullPath  = capabilityUtil.initCapabilitiesByNameFromDB();
         ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
         List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(CAPABILITY_SHEET_NAME);
         Capability rootImport = new Capability("ROOT", -2);
@@ -61,11 +62,11 @@ public class CapabilityImportService {
                             if (parent!=null) {
                                 parent.addSubCapabilities(capabilityImport);
                             }                            
-                            Capability capability = capabilitiesByFullPath.get(getFullPath(capabilityImport));
+                            Capability capability = capabilitiesByFullPath.get(capabilityUtil.getCapabilityFullPath(capabilityImport));
                             if (capability == null) {
                                 capability = capabilityImport;
                                 capabilityRepository.save(capability);
-                                capabilitiesByFullPath.put(getFullPath(capability), capability);
+                                capabilitiesByFullPath.put(capabilityUtil.getCapabilityFullPath(capability), capability);
                                 somethingNew = true;                            
                             }
                             parent = capability;     
@@ -111,28 +112,5 @@ public class CapabilityImportService {
         }
         return true;
     }
-    
-    // fullpath helpers
-    
-    private Map<String,Capability>  initCapabilitiesByName() {
-        Map<String,Capability> capabilitiesByFllPath = new HashMap<>();
-        Set<Capability> allCapabilities = capabilityRepository.findAllWithSubCapabilities();
-        for (Capability capability : allCapabilities) {
-            capabilitiesByFllPath.put(getFullPath(capability), capability);
-        }  
-        return capabilitiesByFllPath;      
-    }
 
-    private String getFullPath(Capability capability) {
-        String separator = "";
-        StringBuilder builder = new StringBuilder();
-        while (capability != null) {
-            builder.insert(0,separator);
-            builder.insert(0,capability.getName());
-            separator = " > ";
-            capability = capability.getParent();
-            
-        }
-        return builder.toString().toLowerCase();
-    }
 }

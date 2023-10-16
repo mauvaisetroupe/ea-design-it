@@ -55,6 +55,9 @@ public class LandscapeViewResource {
     @Autowired
     private LandscapeViewService landscapeViewService;
 
+    @Autowired
+    private CapabilityUtil capabilityUtil;
+
     /**
      * {@code POST  /landscape-views} : Create a new landscapeView.
      *
@@ -188,8 +191,6 @@ public class LandscapeViewResource {
         LandscapeDTO landscapeDTO = new LandscapeDTO();
 
         Optional<LandscapeView> landscapeView = landscapeViewRepository.findOneWithEagerRelationships(id);
-
-        CapabilityUtil capabilityUtil = new CapabilityUtil();
 
         if (landscapeView.isPresent()) {
             
