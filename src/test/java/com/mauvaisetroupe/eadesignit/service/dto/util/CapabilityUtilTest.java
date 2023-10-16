@@ -5,10 +5,11 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.Collection;
 import org.junit.Assert;
-import org.junit.Test;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 
@@ -17,22 +18,11 @@ public class CapabilityUtilTest {
     Map<String,Capability> capabilitiesMap = new HashMap<>();
     long index = 0;
 
-    @Test
-    public void testBuildCapabilityTree() {
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    public void testBuildCapabilityTree(boolean createIDs) {
 
-        Capability root = createChild(null, "ROOT", -2);
-        Capability domain = createChild(root, "DOMAIN", -1);   
-        
-
-        for (int i = 0; i <= 3; i++) {
-            Capability l0 = createChild(domain, "L0." + i , 0);
-            for (int j = 0; j <= 3; j++) {       
-                Capability l1 = createChild(l0, "L1." + i + "." + j , 1);    
-                for (int k = 0; k <= 3; k++) {       
-                    Capability l2 = createChild(l1, "L2." + i + "." + j + "." + k , 2);    
-                }
-            }
-        }
+        createCapabilities(createIDs);
 
         CapabilityUtil capabilityUtil = new CapabilityUtil();
         
@@ -63,6 +53,63 @@ public class CapabilityUtilTest {
         Assert.assertEquals(0, sub.getSubCapabilities().size());
     }
 
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    public void checkWithoutRoot(boolean createIDs) {
+
+        createCapabilities(createIDs);
+        CapabilityUtil capabilityUtil = new CapabilityUtil();    
+        
+        Set<Capability> testSet1 = capabilityUtil.buildCapabilityTreeWithoutRoot(Arrays.asList(capabilitiesMap.get("L2.1.1.1")));
+        Assert.assertEquals(1,testSet1.size());
+        Capability test1 = testSet1.iterator().next();
+        Assert.assertEquals("L2.1.1.1",test1.getName());
+        checkSize(test1,new int[] {0}); 
+        checkRootIsReferenced(test1);
+
+        // 2 capabilities in 2 differents lines
+        Set<Capability> testSet2 = capabilityUtil.buildCapabilityTreeWithoutRoot(Arrays.asList(capabilitiesMap.get("L2.1.1.1"), capabilitiesMap.get("L2.1.1.2")));
+        Assert.assertEquals(2,testSet2.size());
+        Capability sub = getCapaByMName(testSet2,"L2.1.1.1");
+        Assert.assertNotNull(sub);
+        checkRootIsReferenced(sub);
+      
+        sub = getCapaByMName(testSet2,"L2.1.1.2");
+        Assert.assertNotNull(sub);
+        checkRootIsReferenced(sub);
+
+        // 2 capabilities in same line
+        Set<Capability> testSet3 = capabilityUtil.buildCapabilityTreeWithoutRoot(Arrays.asList(capabilitiesMap.get("L2.1.1.1"), capabilitiesMap.get("L1.1.1")));
+        Assert.assertEquals(1,testSet3.size());
+        sub = getCapaByMName(testSet3,"L1.1.1");
+        Assert.assertNotNull(sub);
+        checkRootIsReferenced(sub);
+
+
+    }
+
+    private void checkRootIsReferenced(Capability capability) {
+        Capability tmCapability = capability;
+        while(tmCapability.getParent() != null) {
+            tmCapability = tmCapability.getParent();
+        }
+        Assert.assertEquals("ROOT", tmCapability.getName());
+    }
+
+    private void createCapabilities(boolean createIDs) {
+        Capability root = createChild(null, "ROOT", -2, createIDs);
+        Capability domain = createChild(root, "DOMAIN", -1, createIDs);   
+        for (int i = 0; i <= 3; i++) {
+            Capability l0 = createChild(domain, "L0." + i , 0, createIDs);
+            for (int j = 0; j <= 3; j++) {       
+                Capability l1 = createChild(l0, "L1." + i + "." + j , 1, createIDs);    
+                for (int k = 0; k <= 3; k++) {       
+                    Capability l2 = createChild(l1, "L2." + i + "." + j + "." + k , 2, createIDs);    
+                }
+            }
+        }
+    }
+
     private void checkSize(Capability test1, int[] sizes) {
         for (int i = 0; i < sizes.length; i++) {
             System.out.println(sizes[i] + " : " + test1.getName() + " " + test1.getSubCapabilities());
@@ -76,9 +123,11 @@ public class CapabilityUtilTest {
         }
     }
 
-    private Capability createChild(Capability parent, String name, int level) {
+    private Capability createChild(Capability parent, String name, int level, boolean createIDs) {
         Capability capability = new Capability(name,level,null);
-        capability.setId(index++);
+        if (createIDs) {
+            capability.setId(index++);
+        }
         if (parent!=null) {
             parent.addSubCapabilities(capability);
         }

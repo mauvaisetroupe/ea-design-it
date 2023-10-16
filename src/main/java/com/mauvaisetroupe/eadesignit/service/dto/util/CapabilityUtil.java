@@ -8,6 +8,7 @@ import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,6 +23,17 @@ public class CapabilityUtil {
     CapabilityRepository capabilityRepository;
 
     public Capability buildCapabilityTree(Collection<Capability> inputs) {
+        Set<Capability> listOfRoots = buildCapabilityTree(inputs, true);
+        Assert.isTrue(listOfRoots.size() == 1, "We should have a unique ROOT element " + listOfRoots);
+        return listOfRoots.iterator().next();
+    }
+
+    public Set<Capability> buildCapabilityTreeWithoutRoot(Collection<Capability> inputs) {
+        Set<Capability> listOfRoots = buildCapabilityTree(inputs, false);
+        return listOfRoots;
+    }    
+
+    private Set<Capability> buildCapabilityTree(Collection<Capability> inputs, boolean includeRoots) {
         // Merge all capabilities finding common parents
         // Return merged capabilities by root (and not by leaf), inverse manyToOne relationship
 
@@ -29,7 +41,9 @@ public class CapabilityUtil {
         
         Set<Capability> listOfRoots = new HashSet<>();
         CapabilityMapper mapper = new CapabilityMapper();
-        Map<Long, Capability> capabilityById = new HashMap<>();
+        // We use as key "Level-Name" instead of "ID" because new capability does not have an ID
+        // Fullpath is not a solution for key, 
+        Map<String, Capability> capabilityById = new HashMap<>();
 
         for (Capability capability : inputs) {
             capability.getApplications();
@@ -37,27 +51,69 @@ public class CapabilityUtil {
             Capability tmpCapability = capability;
             Capability childDTO = null;
             Capability dto = null;
+            Capability root = null;
             while (tmpCapability != null && !found) {
-                if (capabilityById.containsKey(tmpCapability.getId())) {
+                if (capabilityById.containsKey(getKey(tmpCapability))) {
                     found = true;
-                    dto = capabilityById.get(tmpCapability.getId());
+                    dto = capabilityById.get(getKey(tmpCapability));
                 } else {
                     // Clone capability, mapping and application to avoid hibernate side effects
                     dto = mapper.clone(tmpCapability);
-                    capabilityById.put(dto.getId(), dto);
+                    capabilityById.put(getKey(dto), dto);
                 }
                 if (childDTO != null) {
                     dto.addSubCapabilities(childDTO);
                 }
                 childDTO = dto;
+                if (includeRoots || contains(inputs, tmpCapability)) {
+                    root = dto;
+                }
                 tmpCapability = tmpCapability.getParent();
             }
-            if (dto != null && dto.getParent() == null) {
-                listOfRoots.add(dto);
+            addToRootList(listOfRoots, root);
+        }
+        return listOfRoots;
+    }
+
+    private void addToRootList(Set<Capability> listOfRoots, Capability dto) {
+        // COMMENT SAVOIR SI CEST UN ROOT LOCAL ?
+        if (dto != null) {
+            if (listOfRoots.isEmpty()) {
+                listOfRoots.add(dto);                
+            }
+            else {
+                Iterator<Capability> i = listOfRoots.iterator();
+                boolean stopProcessing = false;
+                while (i.hasNext() && !stopProcessing) {     
+                    Capability rootCapability = i.next(); 
+                    if (getCapabilityFullPath(rootCapability).contains(getCapabilityFullPath(dto))) {
+                        // root is a child, replace root by DTO
+                        i.remove();
+                        listOfRoots.add(dto);  
+                        stopProcessing = true;
+                    } else if (getCapabilityFullPath(dto).contains(getCapabilityFullPath(rootCapability))) {
+                        // dto is a child, we keep root and ignore dto
+                        stopProcessing = true;             
+                    }
+                }
+                if (!stopProcessing) {
+                    listOfRoots.add(dto);
+                }
             }
         }
-        Assert.isTrue(listOfRoots.size() == 1, "We should have a unique ROOT element");
-        return listOfRoots.iterator().next();
+    }
+        
+    private boolean contains(Collection<Capability> inputs, Capability tmpCapability) {
+        if (tmpCapability == null) return false;
+        for (Capability capability : inputs) {
+            if (capability.getLevel().equals(tmpCapability.getLevel()) && capability.getName().equals(tmpCapability.getName())) return true;
+        }
+        return false;
+    }
+
+    private String getKey(Capability dto) {
+        Assert.isTrue(dto.getLevel()!=null && dto.getName()!=null, "Level and name should not be null");
+        return dto.getLevel() + "---" + dto.getName();
     }
 
     public String getCapabilityFullPath(Capability capability) {
