@@ -5,12 +5,12 @@ import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.service.dto.mapper.CapabilityMapper;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,23 +23,24 @@ public class CapabilityUtil {
     CapabilityRepository capabilityRepository;
 
     public Capability buildCapabilityTree(Collection<Capability> inputs) {
-        Set<Capability> listOfRoots = buildCapabilityTree(inputs, true);
+        if (inputs == null || inputs.isEmpty()) return null;
+        List<Capability> listOfRoots = buildCapabilityTree(inputs, true);
         Assert.isTrue(listOfRoots.size() == 1, "We should have a unique ROOT element " + listOfRoots);
         return listOfRoots.iterator().next();
     }
 
-    public Set<Capability> buildCapabilityTreeWithoutRoot(Collection<Capability> inputs) {
-        Set<Capability> listOfRoots = buildCapabilityTree(inputs, false);
+    public List<Capability> buildCapabilityTreeWithoutRoot(Collection<Capability> inputs) {
+        List<Capability> listOfRoots = buildCapabilityTree(inputs, false);
         return listOfRoots;
     }    
 
-    private Set<Capability> buildCapabilityTree(Collection<Capability> inputs, boolean includeRoots) {
+    private List<Capability> buildCapabilityTree(Collection<Capability> inputs, boolean includeRoots) {
         // Merge all capabilities finding common parents
         // Return merged capabilities by root (and not by leaf), inverse manyToOne relationship
 
         if (inputs == null || inputs.isEmpty()) return null;
         
-        Set<Capability> listOfRoots = new HashSet<>();
+        List<Capability> listOfRoots = new ArrayList<>();
         CapabilityMapper mapper = new CapabilityMapper();
         // We use as key "Level-Name" instead of "ID" because new capability does not have an ID
         // Fullpath is not a solution for key, 
@@ -75,7 +76,7 @@ public class CapabilityUtil {
         return listOfRoots;
     }
 
-    private void addToRootList(Set<Capability> listOfRoots, Capability dto) {
+    private void addToRootList(List<Capability> listOfRoots, Capability dto) {
         // COMMENT SAVOIR SI CEST UN ROOT LOCAL ?
         if (dto != null) {
             if (listOfRoots.isEmpty()) {
@@ -130,9 +131,19 @@ public class CapabilityUtil {
         return buffer.toString();
     }        
 
+    public String getCapabilityFullPath(CapabilityImportDTO importDTO) {
+        StringBuilder buffer = new StringBuilder();
+        String sep = "";
+        for (Capability capability : importDTO.getCapabilityList()) {
+            buffer.append(sep).append(capability != null ? capability.getName() : " --- ");
+            sep = " > ";            
+        }
+        return buffer.toString();
+    } 
+
     public Map<String,Capability>  initCapabilitiesByNameFromDB() {
         Map<String,Capability> capabilitiesByFllPath = new HashMap<>();
-        Set<Capability> allCapabilities = capabilityRepository.findAllWithSubCapabilities();
+        List<Capability> allCapabilities = capabilityRepository.findAllWithSubCapabilities();
         for (Capability capability : allCapabilities) {
             capabilitiesByFllPath.put(getCapabilityFullPath(capability), capability);
         }  

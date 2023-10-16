@@ -4,12 +4,19 @@ import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.service.dto.util.CapabilityUtil;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityAction;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportAnalysisDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityAction.Action;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +47,109 @@ public class CapabilityImportService {
     public static final String SUR_DOMAIN = "Sur-domaine";
     public static final String SUR_DOMAIN_DESCRIPTION = "Sur-domaine Description";    
     public static final String FULL_PATH = "full.path";
+
+    public CapabilityImportAnalysisDTO  analyzeExcel(InputStream excel, String originalFilename) throws EncryptedDocumentException, IOException {
+
+        CapabilityImportAnalysisDTO analysisDTO = new CapabilityImportAnalysisDTO();
+        ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
+        List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(CAPABILITY_SHEET_NAME);
+
+
+        // Capabilities from DB
+        Map<String,Capability> capabilitiesFromDBByFullPath  = capabilityUtil.initCapabilitiesByNameFromDB();
+        
+        // Capabilities fromExcel
+        Map<String,Capability> capabilitiesFromExcelByFullPath  = initCapabilitiesByNameFromExcel(capabilitiesDF);
+
+        // Errors from Excel 
+        analysisDTO.setErrorLines(getErrorLines(capabilitiesDF));
+
+        List<String> onlyInExcel = new ArrayList<>(capabilitiesFromExcelByFullPath.keySet());
+        onlyInExcel.removeAll(capabilitiesFromDBByFullPath.keySet());
+
+        List<String> onlyInDatabase = new ArrayList<>(capabilitiesFromDBByFullPath.keySet());
+        onlyInDatabase.removeAll(capabilitiesFromExcelByFullPath.keySet());    
+        
+        List<String> inBothExcelAndDatabase = new ArrayList<>(capabilitiesFromDBByFullPath.keySet());
+        inBothExcelAndDatabase.removeAll(onlyInDatabase);
+        inBothExcelAndDatabase.removeAll(onlyInExcel);
+        
+        analysisDTO.setCapabilitiesToAdd(
+            capabilityUtil.buildCapabilityTreeWithoutRoot(
+                onlyInExcel.stream()
+                .map(fullpath -> capabilitiesFromExcelByFullPath.get(fullpath))
+                .collect(Collectors.toList()))
+            .stream()
+            .map(c -> new CapabilityAction(c, Action.ADD))
+            .collect(Collectors.toList())
+        );
+        
+        analysisDTO.setCapabilitiesToDelete(
+            capabilityUtil.buildCapabilityTreeWithoutRoot(
+                onlyInDatabase.stream()
+                .filter(fullpath -> capabilitiesFromDBByFullPath.get(fullpath).getCapabilityApplicationMappings() == null || capabilitiesFromDBByFullPath.get(fullpath).getCapabilityApplicationMappings().isEmpty())
+                .map(fullpath -> capabilitiesFromDBByFullPath.get(fullpath))
+                .collect(Collectors.toList()))
+            .stream()
+            .map(c -> new CapabilityAction(c, Action.DELETE))
+            .collect(Collectors.toList())            
+        );
+
+
+        analysisDTO.setCapabilitiesToDeleteWithMappings(
+            onlyInDatabase.stream()
+            .filter(fullpath -> capabilitiesFromDBByFullPath.get(fullpath).getCapabilityApplicationMappings() != null && !capabilitiesFromDBByFullPath.get(fullpath).getCapabilityApplicationMappings().isEmpty())
+            .map(fullpath -> capabilitiesFromDBByFullPath.get(fullpath))
+            .map(c -> new CapabilityAction(c, Action.FORCE_DELETE))
+            .collect(Collectors.toList())              
+        );
+        // do not group in order to move separately 
+        //analysisDTO.setCapabilitiesToDeleteWithMappings(capabilityUtil.buildCapabilityTreeWithoutRoot(analysisDTO.getCapabilitiesToDeleteWithMappings()));
+        
+        return analysisDTO;
+
+    }    
+
+    private List<String> getErrorLines(List<Map<String, Object>> capabilitiesDF) {
+        
+        List<String> errors = new ArrayList<>();
+
+        Capability rootImport = new Capability("ROOT", -2);        
+
+        for (Map<String, Object> map : capabilitiesDF) {
+            CapabilityImportDTO capabilityImportDTO = getDTOFromExcel(rootImport, map);
+            if (!checkLineIsValid(capabilityImportDTO)) {
+                errors.add(capabilityUtil.getCapabilityFullPath(capabilityImportDTO));
+            }
+        }
+
+        return errors;
+    }
+
+    private Map<String, Capability> initCapabilitiesByNameFromExcel(List<Map<String, Object>> capabilitiesDF) throws EncryptedDocumentException, IOException {
+        
+        Map<String,Capability> capabilitiesByFullPath = new HashMap<>(); 
+        
+        Capability rootImport = new Capability("ROOT", -2);        
+        for (Map<String, Object> map : capabilitiesDF) {
+            CapabilityImportDTO capabilityImportDTO = getDTOFromExcel(rootImport, map);
+            if (checkLineIsValid(capabilityImportDTO)) {
+                List<Capability> capabilities = capabilityImportDTO.getCapabilityList();
+                Capability parent = null;
+                for (Capability capability : capabilities) {
+                    if (capability != null) {
+                        if (parent!=null) {
+                            parent.addSubCapabilities(capability);
+                        }
+                        parent = capability;
+                        capabilitiesByFullPath.put(capabilityUtil.getCapabilityFullPath(capability),capability);
+                    }
+                }
+            }
+        }
+
+        return capabilitiesByFullPath;
+    }    
 
     public List<CapabilityImportDTO> importExcel(InputStream excel, String originalFilename) throws EncryptedDocumentException, IOException {
         // this line generates error beacause a deleted capability could be a parent of a one non deleted

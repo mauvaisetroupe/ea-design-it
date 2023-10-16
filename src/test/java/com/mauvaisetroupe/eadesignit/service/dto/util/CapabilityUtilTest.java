@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.List;
 import java.util.Collection;
 import org.junit.Assert;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -60,28 +60,28 @@ public class CapabilityUtilTest {
         createCapabilities(createIDs);
         CapabilityUtil capabilityUtil = new CapabilityUtil();    
         
-        Set<Capability> testSet1 = capabilityUtil.buildCapabilityTreeWithoutRoot(Arrays.asList(capabilitiesMap.get("L2.1.1.1")));
-        Assert.assertEquals(1,testSet1.size());
-        Capability test1 = testSet1.iterator().next();
+        List<Capability> testList1 = capabilityUtil.buildCapabilityTreeWithoutRoot(Arrays.asList(capabilitiesMap.get("L2.1.1.1")));
+        Assert.assertEquals(1,testList1.size());
+        Capability test1 = testList1.iterator().next();
         Assert.assertEquals("L2.1.1.1",test1.getName());
         checkSize(test1,new int[] {0}); 
         checkRootIsReferenced(test1);
 
         // 2 capabilities in 2 differents lines
-        Set<Capability> testSet2 = capabilityUtil.buildCapabilityTreeWithoutRoot(Arrays.asList(capabilitiesMap.get("L2.1.1.1"), capabilitiesMap.get("L2.1.1.2")));
-        Assert.assertEquals(2,testSet2.size());
-        Capability sub = getCapaByMName(testSet2,"L2.1.1.1");
+        List<Capability> testList2 = capabilityUtil.buildCapabilityTreeWithoutRoot(Arrays.asList(capabilitiesMap.get("L2.1.1.1"), capabilitiesMap.get("L2.1.1.2")));
+        Assert.assertEquals(2,testList2.size());
+        Capability sub = getCapaByMName(testList2,"L2.1.1.1");
         Assert.assertNotNull(sub);
         checkRootIsReferenced(sub);
       
-        sub = getCapaByMName(testSet2,"L2.1.1.2");
+        sub = getCapaByMName(testList2,"L2.1.1.2");
         Assert.assertNotNull(sub);
         checkRootIsReferenced(sub);
 
         // 2 capabilities in same line
-        Set<Capability> testSet3 = capabilityUtil.buildCapabilityTreeWithoutRoot(Arrays.asList(capabilitiesMap.get("L2.1.1.1"), capabilitiesMap.get("L1.1.1")));
-        Assert.assertEquals(1,testSet3.size());
-        sub = getCapaByMName(testSet3,"L1.1.1");
+        List<Capability> testList3 = capabilityUtil.buildCapabilityTreeWithoutRoot(Arrays.asList(capabilitiesMap.get("L2.1.1.1"), capabilitiesMap.get("L1.1.1")));
+        Assert.assertEquals(1,testList3.size());
+        sub = getCapaByMName(testList3,"L1.1.1");
         Assert.assertNotNull(sub);
         checkRootIsReferenced(sub);
 

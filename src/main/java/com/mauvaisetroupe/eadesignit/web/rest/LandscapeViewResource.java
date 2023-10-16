@@ -193,30 +193,39 @@ public class LandscapeViewResource {
         Optional<LandscapeView> landscapeView = landscapeViewRepository.findOneWithEagerRelationships(id);
 
         if (landscapeView.isPresent()) {
-            
-            // Capabilities, we get root with a subset of tree
 
-            Capability rootCapability = capabilityUtil.buildCapabilityTree(
-                landscapeView.get().getCapabilityApplicationMappings().stream().map(cp -> cp.getCapability()).collect(Collectors.toList())
-            );
+            LandscapeView landscape = landscapeView.get();
 
-            // All applications from capabilities
-        
-            Set<Application> applicationsFromCapabilities =  landscapeView.get().getCapabilityApplicationMappings().stream().map(cm -> cm.getApplication()).collect(Collectors.toSet());
-
-            // All applications from flows
+            if (landscape.getCapabilityApplicationMappings()!=null) {
                 
-            Set<Application> applicationsFromFlows = new HashSet<>();
-            landscapeView.get().getFlows().stream().flatMap(f -> f.getInterfaces().stream()).forEach( i -> {
-                applicationsFromFlows.add(i.getSource());
-                applicationsFromFlows.add(i.getTarget());
-            });
+                // Capabilities, we get root with a subset of tree
 
-            // Find difference between applications in flows and in capabilities
-            Set<Application> applicationOnlyInCapabilities = applicationsFromCapabilities.stream().filter(a -> !applicationsFromFlows.contains(a)).collect(Collectors.toSet());
-            Set<Application> applicationOnlyInFlows = applicationsFromFlows.stream().filter(a -> !applicationsFromCapabilities.contains(a)).collect(Collectors.toSet());
+                Capability rootCapability = capabilityUtil.buildCapabilityTree(
+                    landscapeView.get().getCapabilityApplicationMappings().stream().map(cp -> cp.getCapability()).collect(Collectors.toList())
+                );
 
+                // All applications from capabilities
+            
+                Set<Application> applicationsFromCapabilities =  landscapeView.get().getCapabilityApplicationMappings().stream().map(cm -> cm.getApplication()).collect(Collectors.toSet());
 
+                // All applications from flows
+                    
+                Set<Application> applicationsFromFlows = new HashSet<>();
+                landscapeView.get().getFlows().stream().flatMap(f -> f.getInterfaces().stream()).forEach( i -> {
+                    applicationsFromFlows.add(i.getSource());
+                    applicationsFromFlows.add(i.getTarget());
+                });
+    
+                // Find difference between applications in flows and in capabilities
+                Set<Application> applicationOnlyInCapabilities = applicationsFromCapabilities.stream().filter(a -> !applicationsFromFlows.contains(a)).collect(Collectors.toSet());
+                Set<Application> applicationOnlyInFlows = applicationsFromFlows.stream().filter(a -> !applicationsFromCapabilities.contains(a)).collect(Collectors.toSet());
+
+                landscapeDTO.setConsolidatedCapability(rootCapability);
+                landscapeDTO.setApplicationsOnlyInCapabilities(applicationOnlyInCapabilities);
+                landscapeDTO.setApplicationsOnlyInFlows(applicationOnlyInFlows);
+
+            }
+            
             // DrawIO
 
             try {
@@ -234,9 +243,6 @@ public class LandscapeViewResource {
                 e.printStackTrace();
             }
             landscapeDTO.setLandscape(landscapeView.get());
-            landscapeDTO.setConsolidatedCapability(rootCapability);
-            landscapeDTO.setApplicationsOnlyInCapabilities(applicationOnlyInCapabilities);
-            landscapeDTO.setApplicationsOnlyInFlows(applicationOnlyInFlows);
         }
         Optional<LandscapeDTO> landscapeDtoOptional;
         if (landscapeView.isPresent()) {

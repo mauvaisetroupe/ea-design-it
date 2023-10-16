@@ -19,6 +19,8 @@ import { faList } from '@fortawesome/free-solid-svg-icons/faList';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons/faPencilAlt';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faMinusCircle } from '@fortawesome/free-solid-svg-icons/faMinusCircle';
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle';
 import { faRoad } from '@fortawesome/free-solid-svg-icons/faRoad';
 import { faSave } from '@fortawesome/free-solid-svg-icons/faSave';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
@@ -116,7 +118,9 @@ export function initFortAwesome(vue) {
     faChevronUp,
     faChevronDown,
     faFileExcel,
-    faAngleDown
+    faAngleDown, 
+    faMinusCircle,
+    faPlusCircle,
   );
 }
 

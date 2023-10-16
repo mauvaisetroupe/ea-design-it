@@ -53,5 +53,5 @@ public interface CapabilityRepository extends JpaRepository<Capability, Long> {
         " left join fetch c.subCapabilities s1 " +
         " left join fetch s1.subCapabilities s2 "
     )    
-    Set<Capability> findAllWithSubCapabilities();
+    List<Capability> findAllWithSubCapabilities();
 }
