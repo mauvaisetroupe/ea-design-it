@@ -9,7 +9,7 @@ export default class CapabilityImportService {
     formData.append('file', file);
     return new Promise<any>((resolve, reject) => {
       axios
-        .post(`${apiForImportUrl}/capability/upload-file/analyze`, formData)
+        .post(`${apiForImportUrl}/capability/upload-file`, formData)
         .then(res => {
           console.log(res.data);
           resolve(res.data);
@@ -21,12 +21,10 @@ export default class CapabilityImportService {
     });
   }
 
-  public uploadFile(file: File): Promise<any> {
-    const formData: FormData = new FormData();
-    formData.append('file', file);
+  public confirmUploadedFile(dto: ICapabilityImportAnalysisDTO): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios
-        .post(`${apiForImportUrl}/capability/upload-file`, formData)
+        .post(`${apiForImportUrl}/capability/confirm-uploaded-file`, dto)
         .then(res => {
           console.log(res);
           resolve(res);

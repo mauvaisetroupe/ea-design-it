@@ -169,13 +169,13 @@ public class ImportResource {
     }
 
     @PostMapping("/import/capability/upload-file")
-    public List<CapabilityImportDTO> uploadCapabilityFile(@RequestPart MultipartFile file) throws Exception {
-        return capabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+    public CapabilityImportAnalysisDTO  uploadCapabilityFile(@RequestPart MultipartFile file) throws Exception {
+        return capabilityImportService.analyzeExcel(file.getInputStream(), file.getOriginalFilename());
     }
 
-    @PostMapping("/import/capability/upload-file/analyze")
-    public CapabilityImportAnalysisDTO analyzeCapabilityFile(@RequestPart MultipartFile file) throws Exception {
-        return capabilityImportService.analyzeExcel(file.getInputStream(), file.getOriginalFilename());
+    @PostMapping("/import/capability/confirm-uploaded-file")
+    public List<CapabilityImportDTO> analyzeCapabilityFile(@RequestBody CapabilityImportAnalysisDTO analysisDTO) throws Exception {
+        return capabilityImportService.confirmImport(analysisDTO);
     }
 
     @PostMapping("/import/application/capability/upload-file")

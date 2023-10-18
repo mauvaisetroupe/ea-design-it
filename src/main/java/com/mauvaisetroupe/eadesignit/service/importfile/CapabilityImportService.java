@@ -151,6 +151,103 @@ public class CapabilityImportService {
         return capabilitiesByFullPath;
     }    
 
+
+    public List<CapabilityImportDTO>  confirmImport(CapabilityImportAnalysisDTO analysisDTO) {
+        List<CapabilityImportDTO> capabilityImportDTOs = new ArrayList<>();
+        
+        // UPDATE existing
+
+        // Add new capabilities        
+        for (CapabilityAction capabilityAction : analysisDTO.getCapabilitiesToAdd()) {
+            if (capabilityAction.getAction() == Action.ADD) {                
+                // Find a persisted parent
+                capabilityAction.getCapability().setParent(findPersistedParent(capabilityAction.getCapability()));
+                persistCapabilityTree(capabilityAction.getCapability());
+                capabilityImportDTOs.add(capabilityUtil.buildImportDTO(capabilityAction.getCapability(), "ADDED", ImportStatus.NEW));
+            }
+            else if (capabilityAction.getAction() == Action.IGNORE){
+                capabilityImportDTOs.add(capabilityUtil.buildImportDTO(capabilityAction.getCapability(), "Ignored", ImportStatus.ERROR));
+            }
+        }
+
+
+        // Delete capabilities        
+        for (CapabilityAction capabilityAction : analysisDTO.getCapabilitiesToDelete()) {
+            if (capabilityAction.getAction() == Action.DELETE) {                
+                // Find a persisted parent
+                capabilityAction.getCapability().setParent(findPersistedParent(capabilityAction.getCapability()));
+                deleteCapabilityTree(capabilityAction.getCapability());
+                capabilityImportDTOs.add(capabilityUtil.buildImportDTO(capabilityAction.getCapability(), "DELETED", ImportStatus.UPDATED));
+            }
+            else if (capabilityAction.getAction() == Action.IGNORE){
+                capabilityImportDTOs.add(capabilityUtil.buildImportDTO(capabilityAction.getCapability(), "Ignored", ImportStatus.ERROR));
+            }
+        }
+
+        return capabilityImportDTOs;
+    }
+
+    private void deleteCapabilityTree(Capability capability) {
+
+        List<Capability> children = new ArrayList<>(capability.getSubCapabilities());
+        
+        if (capability.getParent()!=null) {
+            System.out.println("XXX - PARENT " + capability.getParent().getId() + " " + capability.getParent().getName());
+            System.out.println("XXX - CAPA   " + capability.getId() + " " + capability.getName());
+            Capability parent = capability.getParent();
+            parent.removeSubCapabilities(capability);
+            capabilityRepository.save(parent);
+            capabilityRepository.save(capability);
+        }
+
+        for (Capability child : children) {
+            System.out.println("XXX - CAPA   " + capability.getId() + " " + capability.getName());
+            System.out.println("XXX - CHILD  " + child.getId() + " " + child.getName());
+            capability.removeSubCapabilities(child);
+            capabilityRepository.save(child);
+            capabilityRepository.save(capability);
+        }
+
+        System.out.println("[Delete] Capability :" + capabilityUtil.getCapabilityFullPath(capability));
+        capabilityRepository.delete(capability); 
+       
+        for (Capability child : children) {
+            deleteCapabilityTree(child);                
+        }
+
+    }
+
+    private void persistCapabilityTree(Capability capability) {
+        capabilityRepository.save(capability);
+        if (capability!=null && capability.getSubCapabilities()!=null) {
+            for (Capability child : capability.getSubCapabilities()) {
+                persistCapabilityTree(child);                
+            }
+        }
+    }
+
+    private Capability findPersistedParent(Capability capability) {
+        if (capability.getParent()!=null) {
+            List<Capability> potemtials = capabilityRepository.findByNameIgnoreCaseAndLevel(
+                    capability.getParent().getName(), 
+                    capability.getParent().getLevel()
+            );
+            if (potemtials.size() == 1) {
+                return potemtials.get(0);
+            }
+            else if (potemtials.size() > 1) {
+                for (Capability potential : potemtials) {
+                  if (potential.getParent().getName().equals(capability.getParent().getParent().getName())) {
+                    return potential;
+                  }
+                }
+                throw new IllegalStateException("Multiple potential parents");
+            }
+        }     
+        return null;
+    }
+
+
     public List<CapabilityImportDTO> importExcel(InputStream excel, String originalFilename) throws EncryptedDocumentException, IOException {
         // this line generates error beacause a deleted capability could be a parent of a one non deleted
         // capabilityRepository.deleteByCapabilityApplicationMappingsIsEmpty();

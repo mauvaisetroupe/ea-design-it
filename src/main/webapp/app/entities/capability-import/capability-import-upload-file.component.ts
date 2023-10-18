@@ -31,6 +31,7 @@ export default class CapabilityImport extends Vue {
   public toAddOption = [{text: 'Import', value: Action.ADD}, {text: 'Ignore', value: Action.IGNORE}];
   public toDeleteOption = [{text: 'Delete', value: Action.DELETE}, {text: 'Ignore', value: Action.IGNORE}];
   public toDeleteWithMappingOption = [{text: 'Force Delete', value: Action.FORCE_DELETE}, {text: 'Ignore', value: Action.IGNORE}];
+  public analysisDone = false;
 
   public capabilitiesImportAnalysis: ICapabilityImportAnalysisDTO = {};
 
@@ -50,7 +51,7 @@ export default class CapabilityImport extends Vue {
         res => {
           this.capabilitiesImportAnalysis = res;
           this.isFetching = false;
-
+          this.analysisDone = true;
         },
         err => {
           this.isFetching = false;
@@ -59,28 +60,16 @@ export default class CapabilityImport extends Vue {
       );
   }
 
-  public fullPath(capability: ICapability) {
-    let tmpCapability = capability;
-    let fullpath = '';
-    let sep = '';
-    while (tmpCapability) {
-      console.log(tmpCapability.name)
-      fullpath = tmpCapability.name  + sep  + fullpath;
-      sep = ' > ';
-      tmpCapability = tmpCapability.parent;
-    }
-    return fullpath;
-  }
-
-  public submitFile(): void {
+  public confirmUploadedFile(): void {
     this.isFetching = true;
     this.fileSubmited = true;
     this.capabilitiesImports = [];
     this.filteredCapabilitiesImports = [];
     this.capabilityImportService()
-      .uploadFile(this.excelFile)
+      .confirmUploadedFile(this.capabilitiesImportAnalysis)
       .then(
         res => {
+          this.analysisDone = false;
           this.capabilitiesImports = res.data;
           this.filteredCapabilitiesImports = res.data;
           this.isFetching = false;
@@ -97,5 +86,12 @@ export default class CapabilityImport extends Vue {
 
   public filterErrors() {
     this.filteredCapabilitiesImports = this.filteredCapabilitiesImports.filter(c => c.status === 'ERROR');
+  }
+
+
+  public ignoreAllDelete() {
+    this.capabilitiesImportAnalysis.capabilitiesToDelete.forEach(capaAction => {
+        capaAction.action=Action.IGNORE;
+    });
   }
 }

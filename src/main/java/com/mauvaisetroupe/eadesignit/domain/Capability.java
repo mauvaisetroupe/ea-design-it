@@ -181,6 +181,9 @@ public class Capability implements Serializable, Comparable<Capability> {
                 if (capa.getId() != null && capa.getId().equals(capability.getId())) {
                     iterator.remove();
                 }
+                else if (capa.getName() != null) {
+                    iterator.remove();
+                }
             }
         }
         capability.setParent(null);

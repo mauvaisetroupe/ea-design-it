@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 public interface CapabilityRepository extends JpaRepository<Capability, Long> {
     void deleteByCapabilityApplicationMappingsIsEmpty();
     List<Capability> findByLevel(int i);
+    List<Capability> findByNameIgnoreCaseAndLevel(String name, Integer level);
 
     @Query(
         value = "select c from Capability c" +

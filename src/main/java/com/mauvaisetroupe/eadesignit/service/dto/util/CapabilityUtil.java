@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.service.dto.util;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.service.dto.mapper.CapabilityMapper;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
@@ -38,9 +39,10 @@ public class CapabilityUtil {
         // Merge all capabilities finding common parents
         // Return merged capabilities by root (and not by leaf), inverse manyToOne relationship
 
-        if (inputs == null || inputs.isEmpty()) return null;
-        
         List<Capability> listOfRoots = new ArrayList<>();
+
+        if (inputs == null || inputs.isEmpty()) return listOfRoots;
+        
         CapabilityMapper mapper = new CapabilityMapper();
         // We use as key "Level-Name" instead of "ID" because new capability does not have an ID
         // Fullpath is not a solution for key, 
@@ -120,12 +122,13 @@ public class CapabilityUtil {
     public String getCapabilityFullPath(Capability capability) {
         StringBuilder buffer = new StringBuilder();
         String sep = "";
-        while (capability.getParent() != null) {
-            if (capability == capability.getParent()) {
+        Capability tmCapability = capability;
+        while (tmCapability != null) {
+            if (tmCapability == tmCapability.getParent()) {
                 throw new IllegalStateException("Capability hah itself for parent");
             }
-            buffer.insert(0, sep).insert(0, capability.getName());
-            capability = capability.getParent();
+            buffer.insert(0, sep).insert(0, tmCapability.getName());
+            tmCapability = tmCapability.getParent();
             sep = " > ";
         }
         return buffer.toString();
@@ -160,6 +163,23 @@ public class CapabilityUtil {
         if (capabilitiesName.length > 3) l2Import = new Capability(capabilitiesName[3], 2);
         if (capabilitiesName.length > 4) l3Import = new Capability(capabilitiesName[4], 3);
         CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO(root, domain, l0Import, l1Import, l2Import, l3Import);
+        return capabilityImportDTO;
+    }
+
+    public CapabilityImportDTO buildImportDTO(Capability capability, String error, ImportStatus status) {
+        Capability[] capabilities = {null, null, null, null, null, null};
+        capabilities[0] = new Capability("ROOT",-2);
+        Capability tmp = capability;
+        for (int level = capability.getLevel(); level >= 0 ; level--) {
+            capabilities[level+2] = tmp;
+            tmp = capability.getParent();            
+        }        
+
+        CapabilityImportDTO capabilityImportDTO = new CapabilityImportDTO(
+            capabilities[0], capabilities[1], capabilities[2], capabilities[3], capabilities[4], capabilities[5]
+        );
+        capabilityImportDTO.setError(error);
+        capabilityImportDTO.setStatus(status);
         return capabilityImportDTO;
     }  
         

@@ -3,7 +3,7 @@ package com.mauvaisetroupe.eadesignit.service.importfile.dto;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 
 public class CapabilityAction {
-    public enum Action {ADD, DELETE, FORCE_DELETE, MOVE}
+    public enum Action {ADD, DELETE, FORCE_DELETE, MOVE, IGNORE}
 
     private Capability capability;
     private Action action;
@@ -15,6 +15,9 @@ public class CapabilityAction {
 
     public CapabilityAction(Capability capability) {
         this.capability = capability;
+    }
+
+    public CapabilityAction() {
     }
 
     public Capability getCapability() {

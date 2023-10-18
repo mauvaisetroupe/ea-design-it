@@ -2,15 +2,9 @@
   <div>
     <h2 id="page-heading" data-cy="capabilityImportHeading">
       <span id="capability-import-heading">Capabilities Imports</span>
-      <div class="d-flex justify-content-end" v-if="rowsLoaded || isFetching ">
-        <button class="btn btn-info mr-2" v-on:click="filterErrors" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Filter Errors</span>
-        </button>
-      </div>
     </h2>
 
-                   
-
+    UPDATED
     <div v-if="!rowsLoaded">
       <div class="form-group">
         <div class="custom-file">
@@ -18,17 +12,19 @@
           <label class="custom-file-label" for="customFile">{{ excelFileName }}</label>
         </div>
       </div>
-      <div class="form-group" v-if="excelFile && !fileSubmited">
-        <button type="submit" class="btn btn-primary mb-2" v-on:click="submitFileForAnalysis()" :disabled="fileSubmited">Submit File</button>
+      <div class="form-group" v-if="excelFile && !analysisDone">
+        <button type="submit" class="btn btn-primary mb-2" v-on:click="submitFileForAnalysis()" :disabled="isFetching">
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon>  Submit File
+        </button>
       </div>
-      <div class="form-group" v-if="fileSubmited">
-        <button type="submit" class="btn btn-primary mb-2" v-on:click="submitFileForAnalysis()" :disabled="!fileSubmited">Import</button>
+      <div class="form-group" v-if="analysisDone">
+        <button type="submit" class="btn btn-primary mb-2" v-on:click="confirmUploadedFile()">Confirm Import</button>
       </div>
     </div>
 
-    <div v-if="capabilitiesImportAnalysis"> 
+    <div v-if="analysisDone"> 
 
-      <div v-if="capabilitiesImportAnalysis.capabilitiesToAdd">
+      <div v-if="capabilitiesImportAnalysis.capabilitiesToAdd && capabilitiesImportAnalysis.capabilitiesToAdd.length">
         <h3>Capabilities To Add</h3>
         <div>
           <table class="table table-striped">
@@ -61,11 +57,23 @@
         </div>
       </div>
   
-      <div v-if="capabilitiesImportAnalysis.capabilitiesToDelete">
+      <div v-if="capabilitiesImportAnalysis.capabilitiesToDelete && capabilitiesImportAnalysis.capabilitiesToDelete.length">
         <h3>Capabilities To Delete (without associated mapping)</h3>
         <div>
           <table class="table table-striped">
             <tbody>
+              <tr>
+
+                <td colspan="2">
+
+                  <div class="d-flex justify-content-end">
+      <b-form-group v-slot="{ ariaDescribedby }">
+        <button class="btn btn-danger m-0 p-1">Delete</button><button class="btn btn-danger m-0 p-1" @click="ignoreAllDelete()">Ignore All</button>
+      </b-form-group> 
+    </div>    
+
+                </td>
+              </tr>
               <tr v-for="capabilityAction in capabilitiesImportAnalysis.capabilitiesToDelete" :key="capabilityAction.capability.id">
                 <td>
                   <CapabilityTreeComponent :capability="capabilityAction.capability"/>
@@ -94,7 +102,7 @@
       </div>
 
 
-      <div v-if="capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings">
+      <div v-if="capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings && capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings.length">
         <h3>Capabilities To Delete (with associated mapping)</h3>
         <div>
           <table class="table table-striped">
@@ -126,7 +134,7 @@
         </div>
       </div>
 
-      <div v-if="capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings">
+      <div v-if="capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings && capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings.length">
         <h3>Error lines</h3>
         <div>
           <table class="table table-striped">
