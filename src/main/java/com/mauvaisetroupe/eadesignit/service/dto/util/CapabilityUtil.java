@@ -44,9 +44,8 @@ public class CapabilityUtil {
         if (inputs == null || inputs.isEmpty()) return listOfRoots;
         
         CapabilityMapper mapper = new CapabilityMapper();
-        // We use as key "Level-Name" instead of "ID" because new capability does not have an ID
         // Fullpath is not a solution for key, 
-        Map<String, Capability> capabilityById = new HashMap<>();
+        Map<String, Capability> capabilityByFullpath = new HashMap<>();
 
         for (Capability capability : inputs) {
             capability.getApplications();
@@ -56,13 +55,13 @@ public class CapabilityUtil {
             Capability dto = null;
             Capability root = null;
             while (tmpCapability != null && !found) {
-                if (capabilityById.containsKey(getKey(tmpCapability))) {
+                if (capabilityByFullpath.containsKey(getCapabilityFullPath(tmpCapability))) {
                     found = true;
-                    dto = capabilityById.get(getKey(tmpCapability));
+                    dto = capabilityByFullpath.get(getCapabilityFullPath(tmpCapability));
                 } else {
                     // Clone capability, mapping and application to avoid hibernate side effects
                     dto = mapper.clone(tmpCapability);
-                    capabilityById.put(getKey(dto), dto);
+                    capabilityByFullpath.put(getCapabilityFullPath(tmpCapability), dto);
                 }
                 if (childDTO != null) {
                     dto.addSubCapabilities(childDTO);
@@ -114,11 +113,6 @@ public class CapabilityUtil {
         return false;
     }
 
-    private String getKey(Capability dto) {
-        Assert.isTrue(dto.getLevel()!=null && dto.getName()!=null, "Level and name should not be null");
-        return dto.getLevel() + "---" + dto.getName();
-    }
-
     public String getCapabilityFullPath(Capability capability) {
         StringBuilder buffer = new StringBuilder();
         String sep = "";
@@ -128,6 +122,9 @@ public class CapabilityUtil {
                 throw new IllegalStateException("Capability hah itself for parent");
             }
             buffer.insert(0, sep).insert(0, tmCapability.getName());
+            if (tmCapability.getParent() == null) {
+                Assert.isTrue(tmCapability.getName().equals("ROOT"), "Cannot compute full path if parents are not pessent until ROOT");
+            }
             tmCapability = tmCapability.getParent();
             sep = " > ";
         }
@@ -182,5 +179,5 @@ public class CapabilityUtil {
         capabilityImportDTO.setStatus(status);
         return capabilityImportDTO;
     }  
-        
+
 }
