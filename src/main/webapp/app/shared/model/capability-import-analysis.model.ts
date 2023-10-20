@@ -4,6 +4,7 @@ export interface ICapabilityImportAnalysisDTO {
   capabilitiesToAdd?: ICapabilityActionDTO[];
   capabilitiesToDelete?: ICapabilityActionDTO[];
   capabilitiesToDeleteWithMappings?: ICapabilityActionDTO[];
+  ancestorsOfCapabilitiesWithMappings?: ICapabilityActionDTO[];
   errorLines?: string[];
 }
 

@@ -85,7 +85,8 @@ public class ApplicationCapabilityImportService {
             itemDTO.setCapabilityImportDTO(capabilityImportDTO);
             itemDTO.setApplicationNames(mapArrayToString(map));
 
-            Capability capability = capabilitiesByFullPath.get(fullPath);
+            // fullpath from ecel does not inclute ROOT >
+            Capability capability = capabilitiesByFullPath.get(capabilityUtil.getCapabilityFullPath(capabilityImportDTO));
             List<Application> applications = findApplication(map, itemDTO);
 
             if (applications.isEmpty()) {

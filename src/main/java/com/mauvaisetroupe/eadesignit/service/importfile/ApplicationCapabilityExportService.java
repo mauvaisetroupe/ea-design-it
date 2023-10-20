@@ -124,7 +124,7 @@ public class ApplicationCapabilityExportService {
         for (CapabilityApplicationMapping applicationMapping : set) {
             Row row = sheet.createRow(rownb++);
             row.createCell(0).setCellValue(applicationMapping.getApplication().getName());
-            row.createCell(1).setCellValue(capabilityUtil.getCapabilityFullPath(applicationMapping.getCapability()));
+            row.createCell(1).setCellValue(capabilityUtil.getCapabilityFullPath(applicationMapping.getCapability()).replace("ROOT > ", ""));
         }
     }
 

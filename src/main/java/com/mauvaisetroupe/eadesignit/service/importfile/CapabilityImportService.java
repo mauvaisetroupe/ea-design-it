@@ -1,7 +1,9 @@
 package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.Capability;
+import com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
+import com.mauvaisetroupe.eadesignit.repository.CapabilityApplicationMappingRepository;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.service.dto.util.CapabilityUtil;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityAction;
@@ -12,16 +14,21 @@ import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityAction.Act
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 public class CapabilityImportService {
@@ -32,6 +39,10 @@ public class CapabilityImportService {
 
     @Autowired
     private CapabilityRepository capabilityRepository;
+
+
+    @Autowired
+    private CapabilityApplicationMappingRepository applicationMappingRepository;
 
     @Autowired
     private CapabilityUtil capabilityUtil;
@@ -68,48 +79,114 @@ public class CapabilityImportService {
         onlyInExcel.removeAll(capabilitiesFromDBByFullPath.keySet());
 
         List<String> onlyInDatabase = new ArrayList<>(capabilitiesFromDBByFullPath.keySet());
-        onlyInDatabase.removeAll(capabilitiesFromExcelByFullPath.keySet());    
+        onlyInDatabase.removeAll(capabilitiesFromExcelByFullPath.keySet());
         
         List<String> inBothExcelAndDatabase = new ArrayList<>(capabilitiesFromDBByFullPath.keySet());
         inBothExcelAndDatabase.removeAll(onlyInDatabase);
         inBothExcelAndDatabase.removeAll(onlyInExcel);
-        
+
+        Assert.isTrue(capabilitiesFromDBByFullPath.size() == inBothExcelAndDatabase.size() + onlyInDatabase.size(), "Should have same size");
+        Assert.isTrue(capabilitiesFromExcelByFullPath.size() == inBothExcelAndDatabase.size() + onlyInExcel.size() , "Should have same size");
+
+        /////////////// UPDATE DSECRIPTION
+        for (String fullpath : inBothExcelAndDatabase) {
+            Capability capaFromExcel = capabilitiesFromExcelByFullPath.get(fullpath);
+            Capability capaFromDB = capabilitiesFromDBByFullPath.get(fullpath);
+            if (StringUtils.equals(capaFromDB.getDescription(), capaFromExcel.getDescription())) {
+                capaFromDB.setDescription(capaFromExcel.getDescription());
+                capabilityRepository.save(capaFromDB);
+            }
+        }
+
+        /////////////// CAPABILITIES TO ADD
+
         analysisDTO.setCapabilitiesToAdd(
             capabilityUtil.buildCapabilityTreeWithoutRoot(
                 onlyInExcel.stream()
                 .map(fullpath -> capabilitiesFromExcelByFullPath.get(fullpath))
                 .collect(Collectors.toList()))
             .stream()
+            .sorted(Comparator.comparing(c -> capabilityUtil.getCapabilityFullPath(c)))
             .map(c -> new CapabilityAction(c, Action.ADD))
             .collect(Collectors.toList())
         );
         
+        // Prepare Capabilities to delete
+
+        List<Capability> capabilitiesToDeleteWithMapping = 
+            onlyInDatabase.stream()
+            .map(fullpath -> capabilitiesFromDBByFullPath.get(fullpath))
+            .filter(capability -> hasMapping(capability))
+            .collect(Collectors.toList());
+
+        List<Capability> capabilitiesToDeleteWithChildWithMapping =
+            onlyInDatabase.stream()
+            .map(fullpath -> capabilitiesFromDBByFullPath.get(fullpath))
+            .filter(capability -> hasChildToDeleteWithMapping(capability, capabilitiesToDeleteWithMapping))
+            .collect(Collectors.toList());
+
+
+        List<Capability> capabilitiesToDelete = onlyInDatabase.stream()
+            .map(fullpath -> capabilitiesFromDBByFullPath.get(fullpath))
+            .filter(capability -> !hasMapping(capability))
+            .filter(capability -> !hasChildToDeleteWithMapping(capability, capabilitiesToDeleteWithMapping))
+            .collect(Collectors.toList());
+
+        //////////////// CAPABILITIES TO DELETE
+
         analysisDTO.setCapabilitiesToDelete(
-            capabilityUtil.buildCapabilityTreeWithoutRoot(
-                onlyInDatabase.stream()
-                .filter(fullpath -> capabilitiesFromDBByFullPath.get(fullpath).getCapabilityApplicationMappings() == null || capabilitiesFromDBByFullPath.get(fullpath).getCapabilityApplicationMappings().isEmpty())
-                .map(fullpath -> capabilitiesFromDBByFullPath.get(fullpath))
-                .collect(Collectors.toList()))
+            capabilityUtil.buildCapabilityTreeWithoutRoot(capabilitiesToDelete)
             .stream()
+            .sorted(Comparator.comparing(c -> capabilityUtil.getCapabilityFullPath(c)))
             .map(c -> new CapabilityAction(c, Action.DELETE))
             .collect(Collectors.toList())            
         );
 
+        //////////////// CAPABILITIES TO DELETE WITH MAPPING
 
         analysisDTO.setCapabilitiesToDeleteWithMappings(
-            onlyInDatabase.stream()
-            .filter(fullpath -> capabilitiesFromDBByFullPath.get(fullpath).getCapabilityApplicationMappings() != null && !capabilitiesFromDBByFullPath.get(fullpath).getCapabilityApplicationMappings().isEmpty())
-            .map(fullpath -> capabilitiesFromDBByFullPath.get(fullpath))
+            capabilitiesToDeleteWithMapping
+            .stream()
+            .sorted(Comparator.comparing(c -> capabilityUtil.getCapabilityFullPath(c)))
             .map(c -> new CapabilityAction(c, Action.FORCE_DELETE))
             .collect(Collectors.toList())              
-        );
-        // do not group in order to move separately 
-        //analysisDTO.setCapabilitiesToDeleteWithMappings(capabilityUtil.buildCapabilityTreeWithoutRoot(analysisDTO.getCapabilitiesToDeleteWithMappings()));
+            );
+            // do not group in order to move separately 
+
+        ////////////////// ANCESTORS OF CAPABILITIES WITH MAPPPINGS
         
+        analysisDTO.setAncestorsOfCapabilitiesWithMappings(
+            capabilityUtil.buildCapabilityTreeWithoutRoot(capabilitiesToDeleteWithChildWithMapping)
+            .stream()
+            .sorted(Comparator.comparing(c -> capabilityUtil.getCapabilityFullPath(c)))
+            .map(c -> new CapabilityAction(c, Action.IGNORE))
+            .collect(Collectors.toList())              
+        );
         return analysisDTO;
+    }
+    
+    private boolean hasChildToDeleteWithMapping(Capability capability,  List<Capability> capabilitiesToDeleteWithMapping) {
+        return hasChildToDeleteWithMapping(capability, capabilitiesToDeleteWithMapping, true);
+    }
 
-    }    
+    private boolean hasChildToDeleteWithMapping(Capability capability,  List<Capability> capabilitiesToDeleteWithMapping, boolean isFirstCapability) {
+        if (!isFirstCapability && capabilityUtil.contains(capabilitiesToDeleteWithMapping, capability)) {
+            return true;
+        }
+        if (capability.getSubCapabilities() != null && !capability.getSubCapabilities().isEmpty()) {
+            for (Capability child : capability.getSubCapabilities()) { 
+                if (hasChildToDeleteWithMapping(child, capabilitiesToDeleteWithMapping, false)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
+    private boolean hasMapping(Capability capability) {
+        return capability.getCapabilityApplicationMappings() != null && !capability.getCapabilityApplicationMappings().isEmpty();
+    }
+    
     private List<String> getErrorLines(List<Map<String, Object>> capabilitiesDF) {
         
         List<String> errors = new ArrayList<>();
@@ -147,7 +224,6 @@ public class CapabilityImportService {
                 }
             }
         }
-
         return capabilitiesByFullPath;
     }    
 
@@ -170,51 +246,79 @@ public class CapabilityImportService {
             }
         }
 
-
         // Delete capabilities        
+        List<Capability> doDelete = new ArrayList<>();
         for (CapabilityAction capabilityAction : analysisDTO.getCapabilitiesToDelete()) {
             if (capabilityAction.getAction() == Action.DELETE) {                
                 // Find a persisted parent
                 capabilityAction.getCapability().setParent(findPersistedParent(capabilityAction.getCapability()));
-                deleteCapabilityTree(capabilityAction.getCapability());
                 capabilityImportDTOs.add(capabilityUtil.buildImportDTO(capabilityAction.getCapability(), "DELETED", ImportStatus.UPDATED));
+                doDelete.add(capabilityAction.getCapability());
             }
             else if (capabilityAction.getAction() == Action.IGNORE){
                 capabilityImportDTOs.add(capabilityUtil.buildImportDTO(capabilityAction.getCapability(), "Ignored", ImportStatus.ERROR));
             }
         }
+        deleteCapabilityTrees(doDelete, false);
+
+        // Delete capabilities with mappings 
+        // doDelete = new ArrayList<>();
+        for (CapabilityAction capabilityAction : analysisDTO.getCapabilitiesToDeleteWithMappings()) {
+            if (capabilityAction.getAction() == Action.FORCE_DELETE) {                
+                // Find a persisted parent
+                capabilityAction.getCapability().setParent(findPersistedParent(capabilityAction.getCapability()));
+                capabilityImportDTOs.add(capabilityUtil.buildImportDTO(capabilityAction.getCapability(), "DELETED", ImportStatus.UPDATED));
+                doDelete.add(capabilityAction.getCapability());
+            }
+            else if (capabilityAction.getAction() == Action.IGNORE){
+                capabilityImportDTOs.add(capabilityUtil.buildImportDTO(capabilityAction.getCapability(), "Ignored", ImportStatus.ERROR));
+            }
+        }
+        deleteCapabilityTrees(doDelete, true);
 
         return capabilityImportDTOs;
     }
 
-    private void deleteCapabilityTree(Capability capability) {
+    private void deleteCapabilityTrees(List<Capability> doDelete, boolean deleteMappings) {
+        for (Capability capability : doDelete) {
+            deleteCapabilityTrees(capability, deleteMappings);
+        }
+    }
 
+    private void deleteCapabilityTrees(Capability capability,  boolean deleteMappings) {
+
+        //Delete children recursively
         List<Capability> children = new ArrayList<>(capability.getSubCapabilities());
+        if (children!=null) {
+            for (Capability child : children) {
+                deleteCapabilityTrees(child, deleteMappings);
+            }
+        }
         
-        if (capability.getParent()!=null) {
-            System.out.println("XXX - PARENT " + capability.getParent().getId() + " " + capability.getParent().getName());
-            System.out.println("XXX - CAPA   " + capability.getId() + " " + capability.getName());
-            Capability parent = capability.getParent();
+        // Detach parent 
+        Capability parent = capability.getParent();
+        if (parent!=null)  {
             parent.removeSubCapabilities(capability);
             capabilityRepository.save(parent);
             capabilityRepository.save(capability);
         }
 
-        for (Capability child : children) {
-            System.out.println("XXX - CAPA   " + capability.getId() + " " + capability.getName());
-            System.out.println("XXX - CHILD  " + child.getId() + " " + child.getName());
-            capability.removeSubCapabilities(child);
-            capabilityRepository.save(child);
-            capabilityRepository.save(capability);
+        // Remove mappings if needed
+        if (deleteMappings) {
+            Set<CapabilityApplicationMapping> mappings = new HashSet<>(capability.getCapabilityApplicationMappings());
+            for (CapabilityApplicationMapping mapping : mappings) {
+                capability.removeCapabilityApplicationMapping(mapping);
+                capabilityRepository.save(capability);
+                applicationMappingRepository.save(mapping);
+                // if capabiltyMapping have no other landscape, delete it
+                if (mapping.getLandscapes() == null || mapping.getLandscapes().isEmpty()) {
+                    applicationMappingRepository.delete(mapping);
+                }
+            }
         }
-
-        System.out.println("[Delete] Capability :" + capabilityUtil.getCapabilityFullPath(capability));
-        capabilityRepository.delete(capability); 
-       
-        for (Capability child : children) {
-            deleteCapabilityTree(child);                
-        }
-
+    
+        // Delete capability
+        capabilityRepository.delete(capability);
     }
 
     private void persistCapabilityTree(Capability capability) {
@@ -247,57 +351,6 @@ public class CapabilityImportService {
         return null;
     }
 
-
-    public List<CapabilityImportDTO> importExcel(InputStream excel, String originalFilename) throws EncryptedDocumentException, IOException {
-        // this line generates error beacause a deleted capability could be a parent of a one non deleted
-        // capabilityRepository.deleteByCapabilityApplicationMappingsIsEmpty();
-        Map<String,Capability> capabilitiesByFullPath  = capabilityUtil.initCapabilitiesByNameFromDB();
-        ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
-        List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(CAPABILITY_SHEET_NAME);
-        Capability rootImport = new Capability("ROOT", -2);
-        
-        List<CapabilityImportDTO> result = new ArrayList<CapabilityImportDTO>();
-        for (Map<String, Object> map : capabilitiesDF) {
-            CapabilityImportDTO capabilityImportDTO = getDTOFromExcel(rootImport, map);
-            if (checkLineIsValid(capabilityImportDTO)) {
-                try {
-                    List<Capability> capabilitiesImports = capabilityImportDTO.getCapabilityList();
-                    boolean somethingNew = false;
-                    Capability parent = null;
-                    for (Capability capabilityImport : capabilitiesImports) {
-                        if (capabilityImport != null) {
-                            if (parent!=null) {
-                                parent.addSubCapabilities(capabilityImport);
-                            }                            
-                            Capability capability = capabilitiesByFullPath.get(capabilityUtil.getCapabilityFullPath(capabilityImport));
-                            if (capability == null) {
-                                capability = capabilityImport;
-                                capabilityRepository.save(capability);
-                                capabilitiesByFullPath.put(capabilityUtil.getCapabilityFullPath(capability), capability);
-                                somethingNew = true;                            
-                            }
-                            parent = capability;     
-                        }
-                    }
-                    capabilityImportDTO.setStatus(somethingNew ? ImportStatus.NEW : ImportStatus.EXISTING);
-                } catch (Exception e) {
-                    capabilityImportDTO.setStatus(ImportStatus.ERROR);
-                    capabilityImportDTO.setError(e.toString());
-                    e.printStackTrace();
-                }
-            } else {
-                capabilityImportDTO.setStatus(ImportStatus.ERROR);
-                capabilityImportDTO.setError("Line is not vallid");
-            }
-            //Transforming JSON based on modified DTO, with ROOT, parent and subcapabilities create a nver-ending process
-            //So create a neww one withous any relationships
-            CapabilityImportDTO capabilityImportDTO2 = getDTOFromExcel(null, map);
-            capabilityImportDTO2.setError(capabilityImportDTO.getError());
-            capabilityImportDTO2.setStatus(capabilityImportDTO.getStatus()); 
-            result.add(capabilityImportDTO2);
-        }
-        return result;
-    }
 
     private CapabilityImportDTO getDTOFromExcel(Capability rootImport, Map<String, Object> map) {
         // new capability created from excel, without parent assigned

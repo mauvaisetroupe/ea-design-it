@@ -38,6 +38,8 @@ public class CapabilityUtil {
     private List<Capability> buildCapabilityTree(Collection<Capability> inputs, boolean includeRoots) {
         // Merge all capabilities finding common parents
         // Return merged capabilities by root (and not by leaf), inverse manyToOne relationship
+        // clone all capabilities in order to have only concerned capapbilities without all subCapabilities
+        // when includeRoots = false, we do not include parents not in inputs, but parents must be referenced in capability.parent until ROOT elemenent
 
         List<Capability> listOfRoots = new ArrayList<>();
 
@@ -46,6 +48,7 @@ public class CapabilityUtil {
         CapabilityMapper mapper = new CapabilityMapper();
         // Fullpath is not a solution for key, 
         Map<String, Capability> capabilityByFullpath = new HashMap<>();
+        Map<String, Capability> capabilityByFullpathAddedInTree = new HashMap<>();
 
         for (Capability capability : inputs) {
             capability.getApplications();
@@ -69,11 +72,15 @@ public class CapabilityUtil {
                 childDTO = dto;
                 if (includeRoots || contains(inputs, tmpCapability)) {
                     root = dto;
+                    capabilityByFullpathAddedInTree.put(getCapabilityFullPath(tmpCapability), dto);
                 }
                 tmpCapability = tmpCapability.getParent();
             }
             addToRootList(listOfRoots, root);
         }
+        if (!includeRoots) {
+            Assert.isTrue(capabilityByFullpathAddedInTree.size() == inputs.size(), "should have the same size");
+        }         
         return listOfRoots;
     }
 
@@ -88,12 +95,15 @@ public class CapabilityUtil {
                 boolean stopProcessing = false;
                 while (i.hasNext() && !stopProcessing) {     
                     Capability rootCapability = i.next(); 
-                    if (getCapabilityFullPath(rootCapability).contains(getCapabilityFullPath(dto))) {
+                    if (getCapabilityFullPath(rootCapability).equals(getCapabilityFullPath(dto))) {
+                        stopProcessing = true; 
+                    }
+                    else if (getCapabilityFullPath(rootCapability).contains(getCapabilityFullPath(dto) + " > ")) {
                         // root is a child, replace root by DTO
                         i.remove();
                         listOfRoots.add(dto);  
                         stopProcessing = true;
-                    } else if (getCapabilityFullPath(dto).contains(getCapabilityFullPath(rootCapability))) {
+                    } else if (getCapabilityFullPath(dto).contains(getCapabilityFullPath(rootCapability)  + " > " )) {
                         // dto is a child, we keep root and ignore dto
                         stopProcessing = true;             
                     }
@@ -104,11 +114,11 @@ public class CapabilityUtil {
             }
         }
     }
-        
-    private boolean contains(Collection<Capability> inputs, Capability tmpCapability) {
+  
+    public boolean contains(Collection<Capability> inputs, Capability tmpCapability) {
         if (tmpCapability == null) return false;
         for (Capability capability : inputs) {
-            if (capability.getLevel().equals(tmpCapability.getLevel()) && capability.getName().equals(tmpCapability.getName())) return true;
+            if (getCapabilityFullPath(capability).equals(getCapabilityFullPath(tmpCapability))) return true;
         }
         return false;
     }
@@ -121,10 +131,10 @@ public class CapabilityUtil {
             if (tmCapability == tmCapability.getParent()) {
                 throw new IllegalStateException("Capability hah itself for parent");
             }
-            buffer.insert(0, sep).insert(0, tmCapability.getName());
             if (tmCapability.getParent() == null) {
-                Assert.isTrue(tmCapability.getName().equals("ROOT"), "Cannot compute full path if parents are not pessent until ROOT");
+                Assert.isTrue(tmCapability.getName().equals("ROOT"), "Cannot compute full path if parents are not pessent until ROOT " + capability);
             }
+            buffer.insert(0, sep).insert(0, tmCapability.getName());
             tmCapability = tmCapability.getParent();
             sep = " > ";
         }
@@ -179,5 +189,5 @@ public class CapabilityUtil {
         capabilityImportDTO.setStatus(status);
         return capabilityImportDTO;
     }  
-
+        
 }

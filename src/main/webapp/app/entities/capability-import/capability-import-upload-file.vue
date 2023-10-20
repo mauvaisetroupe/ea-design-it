@@ -17,12 +17,16 @@
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon>  Submit File
         </button>
       </div>
-      <div class="form-group" v-if="analysisDone">
+      <div class="form-group" v-if="analysisDone && somethingToImport">
         <button type="submit" class="btn btn-primary mb-2" v-on:click="confirmUploadedFile()">Confirm Import</button>
       </div>
     </div>
 
     <div v-if="analysisDone"> 
+
+      <div v-if="!somethingToImport" class="alert alert-warning">
+          <span>Nothing to import</span>
+     </div>
 
       <div v-if="capabilitiesImportAnalysis.capabilitiesToAdd && capabilitiesImportAnalysis.capabilitiesToAdd.length">
         <h3>Capabilities To Add</h3>
@@ -58,20 +62,17 @@
       </div>
   
       <div v-if="capabilitiesImportAnalysis.capabilitiesToDelete && capabilitiesImportAnalysis.capabilitiesToDelete.length">
-        <h3>Capabilities To Delete (without associated mapping)</h3>
+        <h3>Capabilities To Delete</h3>
         <div>
           <table class="table table-striped">
             <tbody>
               <tr>
-
                 <td colspan="2">
-
                   <div class="d-flex justify-content-end">
-      <b-form-group v-slot="{ ariaDescribedby }">
-        <button class="btn btn-danger m-0 p-1">Delete</button><button class="btn btn-danger m-0 p-1" @click="ignoreAllDelete()">Ignore All</button>
-      </b-form-group> 
-    </div>    
-
+                    <b-form-group v-slot="{ ariaDescribedby }">
+                      <button class="btn btn-danger m-0 p-1">Delete</button><button class="btn btn-danger m-0 p-1" @click="ignoreAllDelete()">Ignore All</button>
+                    </b-form-group> 
+                  </div>    
                 </td>
               </tr>
               <tr v-for="capabilityAction in capabilitiesImportAnalysis.capabilitiesToDelete" :key="capabilityAction.capability.id">
@@ -133,6 +134,38 @@
           </table>
         </div>
       </div>
+
+      <div v-if="capabilitiesImportAnalysis.ancestorsOfCapabilitiesWithMappings && capabilitiesImportAnalysis.ancestorsOfCapabilitiesWithMappings.length">
+        <h3>Capabilities To Delete (with child with Mappimg)</h3>
+        <div>
+          <table class="table table-striped">
+            <tbody>
+              <tr v-for="capabilityAction in capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings" :key="capabilityAction.capability.id">
+                <td>
+                  <CapabilityTreeComponent :capability="capabilityAction.capability"/>
+                </td>  
+                <td>
+                  <div class="d-flex justify-content-end">
+                    <b-form-group
+                      v-slot="{ ariaDescribedby }"
+                    >
+                      <b-form-radio-group
+                        id="btn-radios-3"
+                        :options="toDeleteWithChildMappingOption"
+                        :aria-describedby="ariaDescribedby"
+                        size="sm"
+                        button-variant="outline-danger"
+                        buttons
+                        v-model="capabilityAction.action"
+                      ></b-form-radio-group>
+                    </b-form-group> 
+                  </div> 
+                </td>
+              </tr>
+            </tbody>  
+          </table>
+        </div>
+      </div>      
 
       <div v-if="capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings && capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings.length">
         <h3>Error lines</h3>

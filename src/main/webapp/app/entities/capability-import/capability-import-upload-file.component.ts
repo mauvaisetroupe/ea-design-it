@@ -31,9 +31,19 @@ export default class CapabilityImport extends Vue {
   public toAddOption = [{text: 'Import', value: Action.ADD}, {text: 'Ignore', value: Action.IGNORE}];
   public toDeleteOption = [{text: 'Delete', value: Action.DELETE}, {text: 'Ignore', value: Action.IGNORE}];
   public toDeleteWithMappingOption = [{text: 'Force Delete', value: Action.FORCE_DELETE}, {text: 'Ignore', value: Action.IGNORE}];
+  public toDeleteWithChildMappingOption = [{text: 'Ignore', value: Action.IGNORE}];
   public analysisDone = false;
 
   public capabilitiesImportAnalysis: ICapabilityImportAnalysisDTO = {};
+
+  public get somethingToImport() {
+    return this.analysisDone && (
+        this.capabilitiesImportAnalysis?.capabilitiesToAdd?.length >0 ||
+        this.capabilitiesImportAnalysis?.capabilitiesToDelete?.length >0 ||
+        this.capabilitiesImportAnalysis?.capabilitiesToDeleteWithMappings?.length >0 ||
+        this.capabilitiesImportAnalysis?.ancestorsOfCapabilitiesWithMappings?.length >0
+    );
+  }
 
   public handleFileUpload(event): void {
     this.excelFile = event.target.files[0];

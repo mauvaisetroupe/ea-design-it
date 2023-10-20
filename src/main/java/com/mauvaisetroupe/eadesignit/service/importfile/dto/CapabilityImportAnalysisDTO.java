@@ -7,7 +7,9 @@ public class CapabilityImportAnalysisDTO {
     private List<CapabilityAction> capabilitiesToAdd;
     private List<CapabilityAction> capabilitiesToDelete;
     private List<CapabilityAction> capabilitiesToDeleteWithMappings;
-    private List<String> errorLines;           
+    private List<CapabilityAction> ancestorsOfCapabilitiesWithMappings;          
+
+    private List<String> errorLines; 
 
     public List<CapabilityAction> getCapabilitiesToAdd() {
         return capabilitiesToAdd;
@@ -32,5 +34,11 @@ public class CapabilityImportAnalysisDTO {
     }
     public void setErrorLines(List<String> errorLines) {
         this.errorLines = errorLines;
+    }    
+    public List<CapabilityAction> getAncestorsOfCapabilitiesWithMappings() {
+        return ancestorsOfCapabilitiesWithMappings;
+    }
+    public void setAncestorsOfCapabilitiesWithMappings(List<CapabilityAction> ancestorsOfCapabilitiesWithMappings) {
+        this.ancestorsOfCapabilitiesWithMappings = ancestorsOfCapabilitiesWithMappings;
     }    
 }
