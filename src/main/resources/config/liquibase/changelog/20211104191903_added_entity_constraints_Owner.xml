@@ -12,12 +12,14 @@
                                  baseTableName="rel_owner__users"
                                  constraintName="fk_rel_owner__users__owner_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="owner"/>
+                                 referencedTableName="owner"
+                                 />
 
         <addForeignKeyConstraint baseColumnNames="users_id"
                                  baseTableName="rel_owner__users"
                                  constraintName="fk_rel_owner__users__users_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/>
+                                 referencedTableName="jhi_user"
+                                 />
     </changeSet>
 </databaseChangeLog>

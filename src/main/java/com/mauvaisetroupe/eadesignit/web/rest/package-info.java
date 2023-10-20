@@ -1,4 +1,4 @@
 /**
- * Spring MVC REST controllers.
+ * Rest layer.
  */
 package com.mauvaisetroupe.eadesignit.web.rest;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
+import { type ILandscapeView } from '@/shared/model/landscape-view.model';
 
 const baseApiUrl = 'api/landscape-views';
 

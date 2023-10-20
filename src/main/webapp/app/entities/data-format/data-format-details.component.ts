@@ -1,36 +1,41 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { IDataFormat } from '@/shared/model/data-format.model';
 import DataFormatService from './data-format.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IDataFormat } from '@/shared/model/data-format.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class DataFormatDetails extends Vue {
-  @Inject('dataFormatService') private dataFormatService: () => DataFormatService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'DataFormatDetails',
+  setup() {
+    const dataFormatService = inject('dataFormatService', () => new DataFormatService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public dataFormat: IDataFormat = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.dataFormatId) {
-        vm.retrieveDataFormat(to.params.dataFormatId);
+    const previousState = () => router.go(-1);
+    const dataFormat: Ref<IDataFormat> = ref({});
+
+    const retrieveDataFormat = async dataFormatId => {
+      try {
+        const res = await dataFormatService().find(dataFormatId);
+        dataFormat.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveDataFormat(dataFormatId) {
-    this.dataFormatService()
-      .find(dataFormatId)
-      .then(res => {
-        this.dataFormat = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.dataFormatId) {
+      retrieveDataFormat(route.params.dataFormatId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      dataFormat,
+
+      previousState,
+    };
+  },
+});

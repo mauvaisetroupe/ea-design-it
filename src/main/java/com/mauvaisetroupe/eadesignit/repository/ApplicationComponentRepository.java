@@ -31,14 +31,12 @@ public interface ApplicationComponentRepository
     }
 
     @Query(
-        value = "select distinct applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.application",
-        countQuery = "select count(distinct applicationComponent) from ApplicationComponent applicationComponent"
+        value = "select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.application",
+        countQuery = "select count(applicationComponent) from ApplicationComponent applicationComponent"
     )
     Page<ApplicationComponent> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query(
-        "select distinct applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.application"
-    )
+    @Query("select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.application")
     List<ApplicationComponent> findAllWithToOneRelationships();
 
     @Query(

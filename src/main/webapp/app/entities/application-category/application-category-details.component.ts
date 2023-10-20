@@ -1,36 +1,41 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { IApplicationCategory } from '@/shared/model/application-category.model';
 import ApplicationCategoryService from './application-category.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IApplicationCategory } from '@/shared/model/application-category.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class ApplicationCategoryDetails extends Vue {
-  @Inject('applicationCategoryService') private applicationCategoryService: () => ApplicationCategoryService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ApplicationCategoryDetails',
+  setup() {
+    const applicationCategoryService = inject('applicationCategoryService', () => new ApplicationCategoryService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public applicationCategory: IApplicationCategory = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.applicationCategoryId) {
-        vm.retrieveApplicationCategory(to.params.applicationCategoryId);
+    const previousState = () => router.go(-1);
+    const applicationCategory: Ref<IApplicationCategory> = ref({});
+
+    const retrieveApplicationCategory = async applicationCategoryId => {
+      try {
+        const res = await applicationCategoryService().find(applicationCategoryId);
+        applicationCategory.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveApplicationCategory(applicationCategoryId) {
-    this.applicationCategoryService()
-      .find(applicationCategoryId)
-      .then(res => {
-        this.applicationCategory = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.applicationCategoryId) {
+      retrieveApplicationCategory(route.params.applicationCategoryId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      applicationCategory,
+
+      previousState,
+    };
+  },
+});

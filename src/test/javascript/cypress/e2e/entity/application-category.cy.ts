@@ -15,7 +15,7 @@ describe('ApplicationCategory e2e test', () => {
   const applicationCategoryPageUrlPattern = new RegExp('/application-category(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const applicationCategorySample = { name: 'Metal SSL Liaison' };
+  const applicationCategorySample = { name: 'unlike' };
 
   let applicationCategory;
 
@@ -92,7 +92,7 @@ describe('ApplicationCategory e2e test', () => {
             {
               statusCode: 200,
               body: [applicationCategory],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -157,11 +157,14 @@ describe('ApplicationCategory e2e test', () => {
     });
 
     it('should create an instance of ApplicationCategory', () => {
-      cy.get(`[data-cy="name"]`).type('Account Cheese deposit').should('have.value', 'Account Cheese deposit');
+      cy.get(`[data-cy="name"]`).type('sign meanwhile ick');
+      cy.get(`[data-cy="name"]`).should('have.value', 'sign meanwhile ick');
 
-      cy.get(`[data-cy="type"]`).type('Islands').should('have.value', 'Islands');
+      cy.get(`[data-cy="type"]`).type('entry');
+      cy.get(`[data-cy="type"]`).should('have.value', 'entry');
 
-      cy.get(`[data-cy="description"]`).type('SAS function').should('have.value', 'SAS function');
+      cy.get(`[data-cy="description"]`).type('annihilate under anxiously');
+      cy.get(`[data-cy="description"]`).should('have.value', 'annihilate under anxiously');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

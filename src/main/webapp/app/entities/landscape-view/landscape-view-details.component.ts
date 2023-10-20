@@ -1,39 +1,46 @@
-import { Component, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { mixins } from 'vue-class-component';
-import JhiDataUtils from '@/shared/data/data-utils.service';
-
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
 import LandscapeViewService from './landscape-view.service';
-import AlertService from '@/shared/alert/alert.service';
+import useDataUtils from '@/shared/data/data-utils.service';
+import { type ILandscapeView } from '@/shared/model/landscape-view.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class LandscapeViewDetails extends mixins(JhiDataUtils) {
-  @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'LandscapeViewDetails',
+  setup() {
+    const landscapeViewService = inject('landscapeViewService', () => new LandscapeViewService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public landscapeView: ILandscapeView = {};
+    const dataUtils = useDataUtils();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.landscapeViewId) {
-        vm.retrieveLandscapeView(to.params.landscapeViewId);
+    const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1);
+    const landscapeView: Ref<ILandscapeView> = ref({});
+
+    const retrieveLandscapeView = async landscapeViewId => {
+      try {
+        const res = await landscapeViewService().find(landscapeViewId);
+        landscapeView.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveLandscapeView(landscapeViewId) {
-    this.landscapeViewService()
-      .find(landscapeViewId)
-      .then(res => {
-        this.landscapeView = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.landscapeViewId) {
+      retrieveLandscapeView(route.params.landscapeViewId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      landscapeView,
+
+      ...dataUtils,
+
+      previousState,
+    };
+  },
+});

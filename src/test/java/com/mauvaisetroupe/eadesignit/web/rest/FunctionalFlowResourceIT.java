@@ -9,13 +9,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +24,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -249,7 +248,7 @@ class FunctionalFlowResourceIT {
         int databaseSizeBeforeUpdate = functionalFlowRepository.findAll().size();
 
         // Update the functionalFlow
-        FunctionalFlow updatedFunctionalFlow = functionalFlowRepository.findById(functionalFlow.getId()).get();
+        FunctionalFlow updatedFunctionalFlow = functionalFlowRepository.findById(functionalFlow.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedFunctionalFlow are not directly saved in db
         em.detach(updatedFunctionalFlow);
         updatedFunctionalFlow
@@ -352,12 +351,7 @@ class FunctionalFlowResourceIT {
         FunctionalFlow partialUpdatedFunctionalFlow = new FunctionalFlow();
         partialUpdatedFunctionalFlow.setId(functionalFlow.getId());
 
-        partialUpdatedFunctionalFlow
-            .alias(UPDATED_ALIAS)
-            .documentationURL(UPDATED_DOCUMENTATION_URL)
-            .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
-            .startDate(UPDATED_START_DATE)
-            .endDate(UPDATED_END_DATE);
+        partialUpdatedFunctionalFlow.description(UPDATED_DESCRIPTION).comment(UPDATED_COMMENT).documentationURL(UPDATED_DOCUMENTATION_URL);
 
         restFunctionalFlowMockMvc
             .perform(
@@ -371,14 +365,14 @@ class FunctionalFlowResourceIT {
         List<FunctionalFlow> functionalFlowList = functionalFlowRepository.findAll();
         assertThat(functionalFlowList).hasSize(databaseSizeBeforeUpdate);
         FunctionalFlow testFunctionalFlow = functionalFlowList.get(functionalFlowList.size() - 1);
-        assertThat(testFunctionalFlow.getAlias()).isEqualTo(UPDATED_ALIAS);
-        assertThat(testFunctionalFlow.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testFunctionalFlow.getComment()).isEqualTo(DEFAULT_COMMENT);
+        assertThat(testFunctionalFlow.getAlias()).isEqualTo(DEFAULT_ALIAS);
+        assertThat(testFunctionalFlow.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testFunctionalFlow.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testFunctionalFlow.getStatus()).isEqualTo(DEFAULT_STATUS);
         assertThat(testFunctionalFlow.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
-        assertThat(testFunctionalFlow.getDocumentationURL2()).isEqualTo(UPDATED_DOCUMENTATION_URL_2);
-        assertThat(testFunctionalFlow.getStartDate()).isEqualTo(UPDATED_START_DATE);
-        assertThat(testFunctionalFlow.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testFunctionalFlow.getDocumentationURL2()).isEqualTo(DEFAULT_DOCUMENTATION_URL_2);
+        assertThat(testFunctionalFlow.getStartDate()).isEqualTo(DEFAULT_START_DATE);
+        assertThat(testFunctionalFlow.getEndDate()).isEqualTo(DEFAULT_END_DATE);
     }
 
     @Test

@@ -92,7 +92,7 @@ describe('LandscapeView e2e test', () => {
             {
               statusCode: 200,
               body: [landscapeView],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -159,17 +159,14 @@ describe('LandscapeView e2e test', () => {
     it('should create an instance of LandscapeView', () => {
       cy.get(`[data-cy="viewpoint"]`).select('APPLICATION_LANDSCAPE');
 
-      cy.get(`[data-cy="diagramName"]`).type('benchmark').should('have.value', 'benchmark');
+      cy.get(`[data-cy="diagramName"]`).type('penalize');
+      cy.get(`[data-cy="diagramName"]`).should('have.value', 'penalize');
 
-      cy.get(`[data-cy="compressedDrawXML"]`)
-        .type('../fake-data/blob/hipster.txt')
-        .invoke('val')
-        .should('match', new RegExp('../fake-data/blob/hipster.txt'));
+      cy.get(`[data-cy="compressedDrawXML"]`).type('../fake-data/blob/hipster.txt');
+      cy.get(`[data-cy="compressedDrawXML"]`).invoke('val').should('match', new RegExp('../fake-data/blob/hipster.txt'));
 
-      cy.get(`[data-cy="compressedDrawSVG"]`)
-        .type('../fake-data/blob/hipster.txt')
-        .invoke('val')
-        .should('match', new RegExp('../fake-data/blob/hipster.txt'));
+      cy.get(`[data-cy="compressedDrawSVG"]`).type('../fake-data/blob/hipster.txt');
+      cy.get(`[data-cy="compressedDrawSVG"]`).invoke('val').should('match', new RegExp('../fake-data/blob/hipster.txt'));
 
       cy.get(entityCreateSaveButtonSelector).click();
 

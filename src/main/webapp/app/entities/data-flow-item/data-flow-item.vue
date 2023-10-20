@@ -4,7 +4,7 @@
       <span id="data-flow-item-heading">Data Flow Items</span>
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh list</span>
         </button>
         <router-link :to="{ name: 'DataFlowItemCreate' }" custom v-slot="{ navigate }">
           <button
@@ -14,14 +14,14 @@
             class="btn btn-primary jh-create-entity create-data-flow-item"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Create a new Data Flow Item </span>
+            <span>Create a new Data Flow Item</span>
           </button>
         </router-link>
       </div>
     </h2>
     <br />
     <div class="alert alert-warning" v-if="!isFetching && dataFlowItems && dataFlowItems.length === 0">
-      <span>No dataFlowItems found</span>
+      <span>No Data Flow Items found</span>
     </div>
     <div class="table-responsive" v-if="dataFlowItems && dataFlowItems.length > 0">
       <table class="table table-striped" aria-describedby="dataFlowItems">
@@ -91,26 +91,26 @@
       </table>
     </div>
     <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.dataFlowItem.delete.question" data-cy="dataFlowItemDeleteDialogHeading"
-          >Confirm delete operation</span
-        ></span
-      >
+      <template #modal-title>
+        <span id="eaDesignItApp.dataFlowItem.delete.question" data-cy="dataFlowItemDeleteDialogHeading">Confirm delete operation</span>
+      </template>
       <div class="modal-body">
-        <p id="jhi-delete-dataFlowItem-heading">Are you sure you want to delete this Data Flow Item?</p>
+        <p id="jhi-delete-dataFlowItem-heading">Are you sure you want to delete Data Flow Item {{ removeId }}?</p>
       </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-dataFlowItem"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeDataFlowItem()"
-        >
-          Delete
-        </button>
-      </div>
+      <template #modal-footer>
+        <div>
+          <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="jhi-confirm-delete-dataFlowItem"
+            data-cy="entityConfirmDeleteButton"
+            v-on:click="removeDataFlowItem()"
+          >
+            Delete
+          </button>
+        </div>
+      </template>
     </b-modal>
   </div>
 </template>

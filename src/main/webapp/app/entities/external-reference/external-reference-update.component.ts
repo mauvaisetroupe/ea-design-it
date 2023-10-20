@@ -1,140 +1,108 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import AlertService from '@/shared/alert/alert.service';
+import ExternalReferenceService from './external-reference.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import ExternalSystemService from '@/entities/external-system/external-system.service';
-import { IExternalSystem } from '@/shared/model/external-system.model';
+import { type IExternalSystem } from '@/shared/model/external-system.model';
+import { type IExternalReference, ExternalReference } from '@/shared/model/external-reference.model';
 
-import ApplicationService from '@/entities/application/application.service';
-import { IApplication } from '@/shared/model/application.model';
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ExternalReferenceUpdate',
+  setup() {
+    const externalReferenceService = inject('externalReferenceService', () => new ExternalReferenceService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-import ApplicationComponentService from '@/entities/application-component/application-component.service';
-import { IApplicationComponent } from '@/shared/model/application-component.model';
+    const externalReference: Ref<IExternalReference> = ref(new ExternalReference());
 
-import { IExternalReference, ExternalReference } from '@/shared/model/external-reference.model';
-import ExternalReferenceService from './external-reference.service';
+    const externalSystemService = inject('externalSystemService', () => new ExternalSystemService());
 
-const validations: any = {
-  externalReference: {
-    externalID: {},
-  },
-};
+    const externalSystems: Ref<IExternalSystem[]> = ref([]);
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
-@Component({
-  validations,
-})
-export default class ExternalReferenceUpdate extends Vue {
-  @Inject('externalReferenceService') private externalReferenceService: () => ExternalReferenceService;
-  @Inject('alertService') private alertService: () => AlertService;
+    const route = useRoute();
+    const router = useRouter();
 
-  public externalReference: IExternalReference = new ExternalReference();
+    const previousState = () => router.go(-1);
 
-  @Inject('externalSystemService') private externalSystemService: () => ExternalSystemService;
-
-  public externalSystems: IExternalSystem[] = [];
-
-  @Inject('applicationService') private applicationService: () => ApplicationService;
-
-  public applications: IApplication[] = [];
-
-  @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
-
-  public applicationComponents: IApplicationComponent[] = [];
-  public isSaving = false;
-  public currentLanguage = '';
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.externalReferenceId) {
-        vm.retrieveExternalReference(to.params.externalReferenceId);
+    const retrieveExternalReference = async externalReferenceId => {
+      try {
+        const res = await externalReferenceService().find(externalReferenceId);
+        externalReference.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-      vm.initRelationships();
-    });
-  }
+    };
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.externalReference.id) {
-      this.externalReferenceService()
-        .update(this.externalReference)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A ExternalReference is updated with identifier ' + param.id;
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.externalReferenceService()
-        .create(this.externalReference)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A ExternalReference is created with identifier ' + param.id;
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
+    if (route.params?.externalReferenceId) {
+      retrieveExternalReference(route.params.externalReferenceId);
     }
-  }
 
-  public retrieveExternalReference(externalReferenceId): void {
-    this.externalReferenceService()
-      .find(externalReferenceId)
-      .then(res => {
-        this.externalReference = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    const initRelationships = () => {
+      externalSystemService()
+        .retrieve()
+        .then(res => {
+          externalSystems.value = res.data;
+        });
+    };
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
+    initRelationships();
 
-  public initRelationships(): void {
-    this.externalSystemService()
-      .retrieve()
-      .then(res => {
-        this.externalSystems = res.data;
-      });
-    this.applicationService()
-      .retrieve()
-      .then(res => {
-        this.applications = res.data;
-      });
-    this.applicationComponentService()
-      .retrieve()
-      .then(res => {
-        this.applicationComponents = res.data;
-      });
-  }
-}
+    const validations = useValidation();
+    const validationRules = {
+      externalID: {},
+      externalSystem: {},
+      applications: {},
+      components: {},
+    };
+    const v$ = useVuelidate(validationRules, externalReference as any);
+    v$.value.$validate();
+
+    return {
+      externalReferenceService,
+      alertService,
+      externalReference,
+      previousState,
+      isSaving,
+      currentLanguage,
+      externalSystems,
+      v$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.externalReference.id) {
+        this.externalReferenceService()
+          .update(this.externalReference)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo('A ExternalReference is updated with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.externalReferenceService()
+          .create(this.externalReference)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess('A ExternalReference is created with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
+    },
+  },
+});

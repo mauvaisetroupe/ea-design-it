@@ -1,21 +1,18 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A FunctionalFlow.
  */
 @Entity
 @Table(name = "flow")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class FunctionalFlow implements Serializable {
 
@@ -55,22 +52,19 @@ public class FunctionalFlow implements Serializable {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "flow")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "flow")
     @JsonIgnoreProperties(value = { "flowInterface", "group", "flow" }, allowSetters = true)
     private Set<FunctionalFlowStep> steps = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner owner;
 
-    @ManyToMany(mappedBy = "flows")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "flows")
     @JsonIgnoreProperties(value = { "owner", "flows", "capabilityApplicationMappings" }, allowSetters = true)
     private Set<LandscapeView> landscapes = new HashSet<>();
 
-    @ManyToMany(mappedBy = "functionalFlows")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "functionalFlows")
     @JsonIgnoreProperties(value = { "items", "format", "functionalFlows", "flowInterface" }, allowSetters = true)
     private Set<DataFlow> dataFlows = new HashSet<>();
 
@@ -309,7 +303,7 @@ public class FunctionalFlow implements Serializable {
         if (!(o instanceof FunctionalFlow)) {
             return false;
         }
-        return id != null && id.equals(((FunctionalFlow) o).id);
+        return getId() != null && getId().equals(((FunctionalFlow) o).getId());
     }
 
     @Override

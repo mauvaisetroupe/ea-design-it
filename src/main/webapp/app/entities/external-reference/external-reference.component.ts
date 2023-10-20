@@ -1,80 +1,75 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { IExternalReference } from '@/shared/model/external-reference.model';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import ExternalReferenceService from './external-reference.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IExternalReference } from '@/shared/model/external-reference.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class ExternalReference extends Vue {
-  @Inject('externalReferenceService') private externalReferenceService: () => ExternalReferenceService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ExternalReference',
+  setup() {
+    const externalReferenceService = inject('externalReferenceService', () => new ExternalReferenceService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const externalReferences: Ref<IExternalReference[]> = ref([]);
 
-  public externalReferences: IExternalReference[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllExternalReferences();
-  }
+    const retrieveExternalReferences = async () => {
+      isFetching.value = true;
+      try {
+        const res = await externalReferenceService().retrieve();
+        externalReferences.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllExternalReferences();
-  }
+    const handleSyncList = () => {
+      retrieveExternalReferences();
+    };
 
-  public retrieveAllExternalReferences(): void {
-    this.isFetching = true;
-    this.externalReferenceService()
-      .retrieve()
-      .then(
-        res => {
-          this.externalReferences = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveExternalReferences();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: IExternalReference) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeExternalReference = async () => {
+      try {
+        await externalReferenceService().delete(removeId.value);
+        const message = 'A ExternalReference is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveExternalReferences();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public prepareRemove(instance: IExternalReference): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeExternalReference(): void {
-    this.externalReferenceService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A ExternalReference is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllExternalReferences();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      externalReferences,
+      handleSyncList,
+      isFetching,
+      retrieveExternalReferences,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeExternalReference,
+    };
+  },
+});

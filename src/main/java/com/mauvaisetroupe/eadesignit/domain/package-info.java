@@ -1,4 +1,4 @@
 /**
- * JPA domain objects.
+ * Domain objects.
  */
 package com.mauvaisetroupe.eadesignit.domain;

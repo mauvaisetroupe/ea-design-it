@@ -92,7 +92,7 @@ describe('ExternalReference e2e test', () => {
             {
               statusCode: 200,
               body: [externalReference],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -157,7 +157,8 @@ describe('ExternalReference e2e test', () => {
     });
 
     it('should create an instance of ExternalReference', () => {
-      cy.get(`[data-cy="externalID"]`).type('Gloves').should('have.value', 'Gloves');
+      cy.get(`[data-cy="externalID"]`).type('maintainer furthermore');
+      cy.get(`[data-cy="externalID"]`).should('have.value', 'maintainer furthermore');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

@@ -30,12 +30,12 @@ public interface LandscapeViewRepository extends LandscapeViewRepositoryWithBagR
     }
 
     @Query(
-        value = "select distinct landscapeView from LandscapeView landscapeView left join fetch landscapeView.owner",
-        countQuery = "select count(distinct landscapeView) from LandscapeView landscapeView"
+        value = "select landscapeView from LandscapeView landscapeView left join fetch landscapeView.owner",
+        countQuery = "select count(landscapeView) from LandscapeView landscapeView"
     )
     Page<LandscapeView> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select distinct landscapeView from LandscapeView landscapeView left join fetch landscapeView.owner")
+    @Query("select landscapeView from LandscapeView landscapeView left join fetch landscapeView.owner")
     List<LandscapeView> findAllWithToOneRelationships();
 
     @Query("select landscapeView from LandscapeView landscapeView left join fetch landscapeView.owner where landscapeView.id =:id")

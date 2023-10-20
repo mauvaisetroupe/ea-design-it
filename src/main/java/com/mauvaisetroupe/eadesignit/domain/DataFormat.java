@@ -1,17 +1,14 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A DataFormat.
  */
 @Entity
 @Table(name = "data_format")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class DataFormat implements Serializable {
 
@@ -65,7 +62,7 @@ public class DataFormat implements Serializable {
         if (!(o instanceof DataFormat)) {
             return false;
         }
-        return id != null && id.equals(((DataFormat) o).id);
+        return getId() != null && getId().equals(((DataFormat) o).getId());
     }
 
     @Override

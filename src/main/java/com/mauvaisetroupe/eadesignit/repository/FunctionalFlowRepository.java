@@ -27,12 +27,12 @@ public interface FunctionalFlowRepository extends JpaRepository<FunctionalFlow, 
     }
 
     @Query(
-        value = "select distinct functionalFlow from FunctionalFlow functionalFlow left join fetch functionalFlow.owner",
-        countQuery = "select count(distinct functionalFlow) from FunctionalFlow functionalFlow"
+        value = "select functionalFlow from FunctionalFlow functionalFlow left join fetch functionalFlow.owner",
+        countQuery = "select count(functionalFlow) from FunctionalFlow functionalFlow"
     )
     Page<FunctionalFlow> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select distinct functionalFlow from FunctionalFlow functionalFlow left join fetch functionalFlow.owner")
+    @Query("select functionalFlow from FunctionalFlow functionalFlow left join fetch functionalFlow.owner")
     List<FunctionalFlow> findAllWithToOneRelationships();
 
     @Query("select functionalFlow from FunctionalFlow functionalFlow left join fetch functionalFlow.owner where functionalFlow.id =:id")

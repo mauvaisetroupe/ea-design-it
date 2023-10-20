@@ -3,10 +3,8 @@ package com.mauvaisetroupe.eadesignit.config;
 import java.time.Duration;
 import org.ehcache.config.builders.*;
 import org.ehcache.jsr107.Eh107Configuration;
-import org.hibernate.cache.jcache.ConfigSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.info.GitProperties;
 import org.springframework.cache.annotation.EnableCaching;
@@ -36,18 +34,10 @@ public class CacheConfiguration {
     }
 
     @Bean
-    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cacheManager) {
-        return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cacheManager);
-    }
-
-    @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
             createCache(cm, com.mauvaisetroupe.eadesignit.repository.UserRepository.USERS_BY_LOGIN_CACHE);
             createCache(cm, com.mauvaisetroupe.eadesignit.repository.UserRepository.USERS_BY_EMAIL_CACHE);
-            createCache(cm, com.mauvaisetroupe.eadesignit.domain.User.class.getName());
-            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Authority.class.getName());
-            createCache(cm, com.mauvaisetroupe.eadesignit.domain.User.class.getName() + ".authorities");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.LandscapeView.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.LandscapeView.class.getName() + ".flows");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.LandscapeView.class.getName() + ".capabilityApplicationMappings");

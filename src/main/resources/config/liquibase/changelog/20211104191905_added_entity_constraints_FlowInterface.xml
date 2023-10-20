@@ -12,36 +12,42 @@
                                  baseTableName="interface"
                                  constraintName="fk_interface__source_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="application"/>
+                                 referencedTableName="application"
+                                 />
 
         <addForeignKeyConstraint baseColumnNames="target_id"
                                  baseTableName="interface"
                                  constraintName="fk_interface__target_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="application"/>
+                                 referencedTableName="application"
+                                 />
 
         <addForeignKeyConstraint baseColumnNames="source_component_id"
                                  baseTableName="interface"
                                  constraintName="fk_interface__source_component_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="component"/>
+                                 referencedTableName="component"
+                                 />
 
         <addForeignKeyConstraint baseColumnNames="target_component_id"
                                  baseTableName="interface"
                                  constraintName="fk_interface__target_component_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="component"/>
+                                 referencedTableName="component"
+                                 />
 
         <addForeignKeyConstraint baseColumnNames="protocol_id"
                                  baseTableName="interface"
                                  constraintName="fk_interface__protocol_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="protocol"/>
+                                 referencedTableName="protocol"
+                                 />
 
         <addForeignKeyConstraint baseColumnNames="owner_id"
                                  baseTableName="interface"
                                  constraintName="fk_interface__owner_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="owner"/>
+                                 referencedTableName="owner"
+                                 />
     </changeSet>
 </databaseChangeLog>

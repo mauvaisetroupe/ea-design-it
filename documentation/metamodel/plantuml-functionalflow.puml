@@ -1,7 +1,0 @@
-@startuml
-rectangle FrontEnd
-rectangle MicroService
-rectangle BackEnd
-FrontEnd -right-> MicroService : Create Customer
-MicroService -right-> BackEnd : Create Customer
-@enduml

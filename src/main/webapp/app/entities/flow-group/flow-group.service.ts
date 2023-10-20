@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IFlowGroup } from '@/shared/model/flow-group.model';
+import { type IFlowGroup } from '@/shared/model/flow-group.model';
 
 const baseApiUrl = 'api/flow-groups';
 

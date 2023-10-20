@@ -3,21 +3,18 @@ package com.mauvaisetroupe.eadesignit.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Application.
  */
 @Entity
 @Table(name = "application")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Application implements Serializable {
 
@@ -65,55 +62,50 @@ public class Application implements Serializable {
     @Column(name = "nickname")
     private String nickname;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner owner;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner itOwner;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner businessOwner;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_application__categories",
         joinColumns = @JoinColumn(name = "application_id"),
         inverseJoinColumns = @JoinColumn(name = "categories_id")
     )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "applications", "components" }, allowSetters = true)
     private Set<ApplicationCategory> categories = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_application__technologies",
         joinColumns = @JoinColumn(name = "application_id"),
         inverseJoinColumns = @JoinColumn(name = "technologies_id")
     )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "applications", "components" }, allowSetters = true)
     private Set<Technology> technologies = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_application__externalids",
         joinColumns = @JoinColumn(name = "application_id"),
         inverseJoinColumns = @JoinColumn(name = "externalids_id")
     )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "externalSystem", "applications", "components" }, allowSetters = true)
     private Set<ExternalReference> externalIDS = new HashSet<>();
 
-    @OneToMany(mappedBy = "application")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "application")
     @JsonIgnoreProperties(value = { "application", "categories", "technologies", "externalIDS" }, allowSetters = true)
     private Set<ApplicationComponent> applicationsLists = new HashSet<>();
 
-    @OneToMany(mappedBy = "application")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "application")
     @JsonIgnoreProperties(value = { "capability", "application", "landscapes" }, allowSetters = true)
     private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
 
@@ -448,7 +440,7 @@ public class Application implements Serializable {
         if (!(o instanceof Application)) {
             return false;
         }
-        return id != null && id.equals(((Application) o).id);
+        return getId() != null && getId().equals(((Application) o).getId());
     }
 
     @Override

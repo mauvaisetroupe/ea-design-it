@@ -1,8 +1,0 @@
-@startuml
-rectangle FrontEnd
-rectangle MicroService
-rectangle BackEnd
-FrontEnd -right-> MicroService : POST /user\nPOST /Address
-MicroService -right-> BackEnd : customer-core.css\naddress.csv
-@enduml
-

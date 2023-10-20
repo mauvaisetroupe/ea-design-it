@@ -12,6 +12,7 @@
                                  baseTableName="flow"
                                  constraintName="fk_flow__owner_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="owner"/>
+                                 referencedTableName="owner"
+                                 />
     </changeSet>
 </databaseChangeLog>

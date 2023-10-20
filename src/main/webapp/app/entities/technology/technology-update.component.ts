@@ -1,136 +1,100 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import { required, maxLength } from 'vuelidate/lib/validators';
-
-import AlertService from '@/shared/alert/alert.service';
-
-import ApplicationService from '@/entities/application/application.service';
-import { IApplication } from '@/shared/model/application.model';
-
-import ApplicationComponentService from '@/entities/application-component/application-component.service';
-import { IApplicationComponent } from '@/shared/model/application-component.model';
-
-import { ITechnology, Technology } from '@/shared/model/technology.model';
 import TechnologyService from './technology.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-const validations: any = {
-  technology: {
-    name: {
-      required,
-    },
-    type: {},
-    description: {
-      maxLength: maxLength(250),
+import { type ITechnology, Technology } from '@/shared/model/technology.model';
+
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'TechnologyUpdate',
+  setup() {
+    const technologyService = inject('technologyService', () => new TechnologyService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+
+    const technology: Ref<ITechnology> = ref(new Technology());
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
+
+    const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1);
+
+    const retrieveTechnology = async technologyId => {
+      try {
+        const res = await technologyService().find(technologyId);
+        technology.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
+
+    if (route.params?.technologyId) {
+      retrieveTechnology(route.params.technologyId);
+    }
+
+    const initRelationships = () => {};
+
+    initRelationships();
+
+    const validations = useValidation();
+    const validationRules = {
+      name: {
+        required: validations.required('This field is required.'),
+      },
+      type: {},
+      description: {
+        maxLength: validations.maxLength('This field cannot be longer than 250 characters.', 250),
+      },
+      applications: {},
+      components: {},
+    };
+    const v$ = useVuelidate(validationRules, technology as any);
+    v$.value.$validate();
+
+    return {
+      technologyService,
+      alertService,
+      technology,
+      previousState,
+      isSaving,
+      currentLanguage,
+      v$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.technology.id) {
+        this.technologyService()
+          .update(this.technology)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo('A Technology is updated with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.technologyService()
+          .create(this.technology)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess('A Technology is created with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
     },
   },
-};
-
-@Component({
-  validations,
-})
-export default class TechnologyUpdate extends Vue {
-  @Inject('technologyService') private technologyService: () => TechnologyService;
-  @Inject('alertService') private alertService: () => AlertService;
-
-  public technology: ITechnology = new Technology();
-
-  @Inject('applicationService') private applicationService: () => ApplicationService;
-
-  public applications: IApplication[] = [];
-
-  @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
-
-  public applicationComponents: IApplicationComponent[] = [];
-  public isSaving = false;
-  public currentLanguage = '';
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.technologyId) {
-        vm.retrieveTechnology(to.params.technologyId);
-      }
-      vm.initRelationships();
-    });
-  }
-
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.technology.id) {
-      this.technologyService()
-        .update(this.technology)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A Technology is updated with identifier ' + param.id;
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.technologyService()
-        .create(this.technology)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A Technology is created with identifier ' + param.id;
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    }
-  }
-
-  public retrieveTechnology(technologyId): void {
-    this.technologyService()
-      .find(technologyId)
-      .then(res => {
-        this.technology = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {
-    this.applicationService()
-      .retrieve()
-      .then(res => {
-        this.applications = res.data;
-      });
-    this.applicationComponentService()
-      .retrieve()
-      .then(res => {
-        this.applicationComponents = res.data;
-      });
-  }
-}
+});

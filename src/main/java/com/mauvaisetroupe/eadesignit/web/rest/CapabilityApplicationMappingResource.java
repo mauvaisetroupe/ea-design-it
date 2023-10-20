@@ -126,9 +126,6 @@ public class CapabilityApplicationMappingResource {
 
         Optional<CapabilityApplicationMapping> result = capabilityApplicationMappingRepository
             .findById(capabilityApplicationMapping.getId())
-            .map(existingCapabilityApplicationMapping -> {
-                return existingCapabilityApplicationMapping;
-            })
             .map(capabilityApplicationMappingRepository::save);
 
         return ResponseUtil.wrapOrNotFound(
@@ -164,9 +161,8 @@ public class CapabilityApplicationMappingResource {
     @GetMapping("/capability-application-mappings/{id}")
     public ResponseEntity<CapabilityApplicationMapping> getCapabilityApplicationMapping(@PathVariable Long id) {
         log.debug("REST request to get CapabilityApplicationMapping : {}", id);
-        Optional<CapabilityApplicationMapping> capabilityApplicationMapping = capabilityApplicationMappingRepository.findOneWithEagerRelationships(
-            id
-        );
+        Optional<CapabilityApplicationMapping> capabilityApplicationMapping =
+            capabilityApplicationMappingRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(capabilityApplicationMapping);
     }
 

@@ -12,18 +12,21 @@
                                  baseTableName="flowstep"
                                  constraintName="fk_flowstep__flow_interface_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="interface"/>
+                                 referencedTableName="interface"
+                                 />
 
         <addForeignKeyConstraint baseColumnNames="group_id"
                                  baseTableName="flowstep"
                                  constraintName="fk_flowstep__group_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="flow_group"/>
+                                 referencedTableName="flow_group"
+                                 />
 
         <addForeignKeyConstraint baseColumnNames="flow_id"
                                  baseTableName="flowstep"
                                  constraintName="fk_flowstep__flow_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="flow"/>
+                                 referencedTableName="flow"
+                                 />
     </changeSet>
 </databaseChangeLog>

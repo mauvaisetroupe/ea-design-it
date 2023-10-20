@@ -3,7 +3,7 @@
     <div class="col-8">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
         <h2 id="eaDesignItApp.landscapeView.home.createOrEditLabel" data-cy="LandscapeViewCreateUpdateHeading">
-          Create or edit a LandscapeView
+          Create or edit a Landscape View
         </h2>
         <div>
           <div class="form-group" v-if="landscapeView.id">
@@ -15,8 +15,8 @@
             <select
               class="form-control"
               name="viewpoint"
-              :class="{ valid: !$v.landscapeView.viewpoint.$invalid, invalid: $v.landscapeView.viewpoint.$invalid }"
-              v-model="$v.landscapeView.viewpoint.$model"
+              :class="{ valid: !v$.viewpoint.$invalid, invalid: v$.viewpoint.$invalid }"
+              v-model="v$.viewpoint.$model"
               id="landscape-view-viewpoint"
               data-cy="viewpoint"
             >
@@ -31,8 +31,8 @@
               name="diagramName"
               id="landscape-view-diagramName"
               data-cy="diagramName"
-              :class="{ valid: !$v.landscapeView.diagramName.$invalid, invalid: $v.landscapeView.diagramName.$invalid }"
-              v-model="$v.landscapeView.diagramName.$model"
+              :class="{ valid: !v$.diagramName.$invalid, invalid: v$.diagramName.$invalid }"
+              v-model="v$.diagramName.$model"
             />
           </div>
           <div class="form-group">
@@ -42,8 +42,8 @@
               name="compressedDrawXML"
               id="landscape-view-compressedDrawXML"
               data-cy="compressedDrawXML"
-              :class="{ valid: !$v.landscapeView.compressedDrawXML.$invalid, invalid: $v.landscapeView.compressedDrawXML.$invalid }"
-              v-model="$v.landscapeView.compressedDrawXML.$model"
+              :class="{ valid: !v$.compressedDrawXML.$invalid, invalid: v$.compressedDrawXML.$invalid }"
+              v-model="v$.compressedDrawXML.$model"
             ></textarea>
           </div>
           <div class="form-group">
@@ -53,8 +53,8 @@
               name="compressedDrawSVG"
               id="landscape-view-compressedDrawSVG"
               data-cy="compressedDrawSVG"
-              :class="{ valid: !$v.landscapeView.compressedDrawSVG.$invalid, invalid: $v.landscapeView.compressedDrawSVG.$invalid }"
-              v-model="$v.landscapeView.compressedDrawSVG.$model"
+              :class="{ valid: !v$.compressedDrawSVG.$invalid, invalid: v$.compressedDrawSVG.$invalid }"
+              v-model="v$.compressedDrawSVG.$model"
             ></textarea>
           </div>
           <div class="form-group">
@@ -99,7 +99,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.landscapeView.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

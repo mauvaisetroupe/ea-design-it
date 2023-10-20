@@ -1,169 +1,124 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import { maxLength } from 'vuelidate/lib/validators';
-
-import AlertService from '@/shared/alert/alert.service';
-
-import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
-import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+import FunctionalFlowService from './functional-flow.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import OwnerService from '@/entities/owner/owner.service';
-import { IOwner } from '@/shared/model/owner.model';
+import { type IOwner } from '@/shared/model/owner.model';
+import { type IFunctionalFlow, FunctionalFlow } from '@/shared/model/functional-flow.model';
 
-import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FunctionalFlowUpdate',
+  setup() {
+    const functionalFlowService = inject('functionalFlowService', () => new FunctionalFlowService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-import DataFlowService from '@/entities/data-flow/data-flow.service';
-import { IDataFlow } from '@/shared/model/data-flow.model';
+    const functionalFlow: Ref<IFunctionalFlow> = ref(new FunctionalFlow());
 
-import { IFunctionalFlow, FunctionalFlow } from '@/shared/model/functional-flow.model';
-import FunctionalFlowService from './functional-flow.service';
+    const ownerService = inject('ownerService', () => new OwnerService());
 
-const validations: any = {
-  functionalFlow: {
-    alias: {},
-    description: {
-      maxLength: maxLength(1500),
-    },
-    comment: {
-      maxLength: maxLength(1000),
-    },
-    status: {},
-    documentationURL: {
-      maxLength: maxLength(500),
-    },
-    documentationURL2: {
-      maxLength: maxLength(500),
-    },
-    startDate: {},
-    endDate: {},
-  },
-};
+    const owners: Ref<IOwner[]> = ref([]);
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
-@Component({
-  validations,
-})
-export default class FunctionalFlowUpdate extends Vue {
-  @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
-  @Inject('alertService') private alertService: () => AlertService;
+    const route = useRoute();
+    const router = useRouter();
 
-  public functionalFlow: IFunctionalFlow = new FunctionalFlow();
+    const previousState = () => router.go(-1);
 
-  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
-
-  public functionalFlowSteps: IFunctionalFlowStep[] = [];
-
-  @Inject('ownerService') private ownerService: () => OwnerService;
-
-  public owners: IOwner[] = [];
-
-  @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
-
-  public landscapeViews: ILandscapeView[] = [];
-
-  @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
-
-  public dataFlows: IDataFlow[] = [];
-  public isSaving = false;
-  public currentLanguage = '';
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.functionalFlowId) {
-        vm.retrieveFunctionalFlow(to.params.functionalFlowId);
+    const retrieveFunctionalFlow = async functionalFlowId => {
+      try {
+        const res = await functionalFlowService().find(functionalFlowId);
+        functionalFlow.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-      vm.initRelationships();
-    });
-  }
+    };
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.functionalFlow.id) {
-      this.functionalFlowService()
-        .update(this.functionalFlow)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A FunctionalFlow is updated with identifier ' + param.id;
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.functionalFlowService()
-        .create(this.functionalFlow)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A FunctionalFlow is created with identifier ' + param.id;
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
+    if (route.params?.functionalFlowId) {
+      retrieveFunctionalFlow(route.params.functionalFlowId);
     }
-  }
 
-  public retrieveFunctionalFlow(functionalFlowId): void {
-    this.functionalFlowService()
-      .find(functionalFlowId)
-      .then(res => {
-        this.functionalFlow = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    const initRelationships = () => {
+      ownerService()
+        .retrieve()
+        .then(res => {
+          owners.value = res.data;
+        });
+    };
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
+    initRelationships();
 
-  public initRelationships(): void {
-    this.functionalFlowStepService()
-      .retrieve()
-      .then(res => {
-        this.functionalFlowSteps = res.data;
-      });
-    this.ownerService()
-      .retrieve()
-      .then(res => {
-        this.owners = res.data;
-      });
-    this.landscapeViewService()
-      .retrieve()
-      .then(res => {
-        this.landscapeViews = res.data;
-      });
-    this.dataFlowService()
-      .retrieve()
-      .then(res => {
-        this.dataFlows = res.data;
-      });
-  }
-}
+    const validations = useValidation();
+    const validationRules = {
+      alias: {},
+      description: {
+        maxLength: validations.maxLength('This field cannot be longer than 1500 characters.', 1500),
+      },
+      comment: {
+        maxLength: validations.maxLength('This field cannot be longer than 1000 characters.', 1000),
+      },
+      status: {},
+      documentationURL: {
+        maxLength: validations.maxLength('This field cannot be longer than 500 characters.', 500),
+      },
+      documentationURL2: {
+        maxLength: validations.maxLength('This field cannot be longer than 500 characters.', 500),
+      },
+      startDate: {},
+      endDate: {},
+      steps: {},
+      owner: {},
+      landscapes: {},
+      dataFlows: {},
+    };
+    const v$ = useVuelidate(validationRules, functionalFlow as any);
+    v$.value.$validate();
+
+    return {
+      functionalFlowService,
+      alertService,
+      functionalFlow,
+      previousState,
+      isSaving,
+      currentLanguage,
+      owners,
+      v$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.functionalFlow.id) {
+        this.functionalFlowService()
+          .update(this.functionalFlow)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo('A FunctionalFlow is updated with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.functionalFlowService()
+          .create(this.functionalFlow)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess('A FunctionalFlow is created with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
+    },
+  },
+});

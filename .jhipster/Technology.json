@@ -33,6 +33,7 @@
       "otherEntityRelationshipName": "technologies",
       "ownerSide": false,
       "relationshipName": "applications",
+      "relationshipSide": "right",
       "relationshipType": "many-to-many"
     },
     {
@@ -41,8 +42,10 @@
       "otherEntityRelationshipName": "technologies",
       "ownerSide": false,
       "relationshipName": "components",
+      "relationshipSide": "right",
       "relationshipType": "many-to-many"
     }
   ],
+  "searchEngine": "no",
   "service": "no"
 }

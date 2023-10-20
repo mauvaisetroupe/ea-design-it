@@ -1,6 +1,6 @@
 # EADesignIt
 
-This application was generated using JHipster 7.9.4, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.9.4](https://www.jhipster.tech/documentation-archive/v7.9.4).
+This application was generated using JHipster 8.0.0-rc.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.0.0-rc.1](https://www.jhipster.tech/documentation-archive/v8.0.0-rc.1).
 
 ## Project Structure
 
@@ -87,14 +87,6 @@ Note: There are still a few other things remaining to do for Leaflet that we won
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
 
-### JHipster Control Center
-
-JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
-
-```
-docker-compose -f src/main/docker/jhipster-control-center.yml up
-```
-
 ## Building for production
 
 ### Packaging as jar
@@ -124,7 +116,17 @@ To package your application as a war in order to deploy it to an application ser
 ./mvnw -Pprod,war clean verify
 ```
 
+### JHipster Control Center
+
+JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
+
+```
+docker compose -f src/main/docker/jhipster-control-center.yml up
+```
+
 ## Testing
+
+### Spring Boot tests
 
 To launch your application's tests, run:
 
@@ -149,48 +151,55 @@ You can execute automated [lighthouse audits][https://developers.google.com/web/
 You should only run the audits when your application is packaged with the production profile.
 The lighthouse report is created in `target/cypress/lhreport.html`
 
-For more information, refer to the [Running tests page][].
+## Others
 
-### Code quality
+### Code quality using Sonar
 
 Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
 
 ```
-docker-compose -f src/main/docker/sonar.yml up -d
+docker compose -f src/main/docker/sonar.yml up -d
 ```
 
-Note: we have turned off authentication in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
+Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
 
 You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the maven plugin.
 
 Then, run a Sonar analysis:
 
 ```
-./mvnw -Pprod clean verify sonar:sonar
+./mvnw -Pprod clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
 ```
 
 If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
 
 ```
-./mvnw initialize sonar:sonar
+./mvnw initialize sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
+```
+
+Additionally, Instead of passing `sonar.password` and `sonar.login` as CLI arguments, these parameters can be configured from [sonar-project.properties](sonar-project.properties) as shown below:
+
+```
+sonar.login=admin
+sonar.password=admin
 ```
 
 For more information, refer to the [Code quality page][].
 
-## Using Docker to simplify development (optional)
+### Using Docker to simplify development (optional)
 
 You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
 
 For example, to start a postgresql database in a docker container, run:
 
 ```
-docker-compose -f src/main/docker/postgresql.yml up -d
+docker compose -f src/main/docker/postgresql.yml up -d
 ```
 
 To stop it and remove the container, run:
 
 ```
-docker-compose -f src/main/docker/postgresql.yml down
+docker compose -f src/main/docker/postgresql.yml down
 ```
 
 You can also fully dockerize your application and all the services that it depends on.
@@ -209,7 +218,7 @@ npm run java:docker:arm64
 Then run:
 
 ```
-docker-compose -f src/main/docker/app.yml up -d
+docker compose -f src/main/docker/app.yml up -d
 ```
 
 When running Docker Desktop on MacOS Big Sur or later, consider enabling experimental `Use the new Virtualization framework` for better processing performance ([disk access performance is worse](https://github.com/docker/roadmap/issues/7)).
@@ -220,19 +229,19 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
-[jhipster homepage and latest documentation]: https://www.jhipster.tech
-[jhipster 7.9.4 archive]: https://www.jhipster.tech/documentation-archive/v7.9.4
-[using jhipster in development]: https://www.jhipster.tech/documentation-archive/v7.9.4/development/
-[using docker and docker-compose]: https://www.jhipster.tech/documentation-archive/v7.9.4/docker-compose
-[using jhipster in production]: https://www.jhipster.tech/documentation-archive/v7.9.4/production/
-[running tests page]: https://www.jhipster.tech/documentation-archive/v7.9.4/running-tests/
-[code quality page]: https://www.jhipster.tech/documentation-archive/v7.9.4/code-quality/
-[setting up continuous integration]: https://www.jhipster.tech/documentation-archive/v7.9.4/setting-up-ci/
-[node.js]: https://nodejs.org/
-[npm]: https://www.npmjs.com/
-[webpack]: https://webpack.github.io/
-[browsersync]: https://www.browsersync.io/
-[jest]: https://facebook.github.io/jest/
-[cypress]: https://www.cypress.io/
-[leaflet]: https://leafletjs.com/
-[definitelytyped]: https://definitelytyped.org/
+[JHipster Homepage and latest documentation]: https://www.jhipster.tech
+[JHipster 8.0.0-rc.1 archive]: https://www.jhipster.tech/documentation-archive/v8.0.0-rc.1
+[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v8.0.0-rc.1/development/
+[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v8.0.0-rc.1/docker-compose
+[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v8.0.0-rc.1/production/
+[Running tests page]: https://www.jhipster.tech/documentation-archive/v8.0.0-rc.1/running-tests/
+[Code quality page]: https://www.jhipster.tech/documentation-archive/v8.0.0-rc.1/code-quality/
+[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v8.0.0-rc.1/setting-up-ci/
+[Node.js]: https://nodejs.org/
+[NPM]: https://www.npmjs.com/
+[Webpack]: https://webpack.github.io/
+[BrowserSync]: https://www.browsersync.io/
+[Jest]: https://facebook.github.io/jest/
+[Cypress]: https://www.cypress.io/
+[Leaflet]: https://leafletjs.com/
+[DefinitelyTyped]: https://definitelytyped.org/

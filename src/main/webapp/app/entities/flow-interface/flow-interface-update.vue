@@ -3,7 +3,7 @@
     <div class="col-8">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
         <h2 id="eaDesignItApp.flowInterface.home.createOrEditLabel" data-cy="FlowInterfaceCreateUpdateHeading">
-          Create or edit a FlowInterface
+          Create or edit a Flow Interface
         </h2>
         <div>
           <div class="form-group" v-if="flowInterface.id">
@@ -18,12 +18,12 @@
               name="alias"
               id="flow-interface-alias"
               data-cy="alias"
-              :class="{ valid: !$v.flowInterface.alias.$invalid, invalid: $v.flowInterface.alias.$invalid }"
-              v-model="$v.flowInterface.alias.$model"
+              :class="{ valid: !v$.alias.$invalid, invalid: v$.alias.$invalid }"
+              v-model="v$.alias.$model"
               required
             />
-            <div v-if="$v.flowInterface.alias.$anyDirty && $v.flowInterface.alias.$invalid">
-              <small class="form-text text-danger" v-if="!$v.flowInterface.alias.required"> This field is required. </small>
+            <div v-if="v$.alias.$anyDirty && v$.alias.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.alias.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -34,8 +34,8 @@
               name="status"
               id="flow-interface-status"
               data-cy="status"
-              :class="{ valid: !$v.flowInterface.status.$invalid, invalid: $v.flowInterface.status.$invalid }"
-              v-model="$v.flowInterface.status.$model"
+              :class="{ valid: !v$.status.$invalid, invalid: v$.status.$invalid }"
+              v-model="v$.status.$model"
             />
           </div>
           <div class="form-group">
@@ -46,13 +46,13 @@
               name="documentationURL"
               id="flow-interface-documentationURL"
               data-cy="documentationURL"
-              :class="{ valid: !$v.flowInterface.documentationURL.$invalid, invalid: $v.flowInterface.documentationURL.$invalid }"
-              v-model="$v.flowInterface.documentationURL.$model"
+              :class="{ valid: !v$.documentationURL.$invalid, invalid: v$.documentationURL.$invalid }"
+              v-model="v$.documentationURL.$model"
             />
-            <div v-if="$v.flowInterface.documentationURL.$anyDirty && $v.flowInterface.documentationURL.$invalid">
-              <small class="form-text text-danger" v-if="!$v.flowInterface.documentationURL.maxLength">
-                This field cannot be longer than 500 characters.
-              </small>
+            <div v-if="v$.documentationURL.$anyDirty && v$.documentationURL.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.documentationURL.$errors" :key="error.$uid">{{
+                error.$message
+              }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -63,13 +63,13 @@
               name="documentationURL2"
               id="flow-interface-documentationURL2"
               data-cy="documentationURL2"
-              :class="{ valid: !$v.flowInterface.documentationURL2.$invalid, invalid: $v.flowInterface.documentationURL2.$invalid }"
-              v-model="$v.flowInterface.documentationURL2.$model"
+              :class="{ valid: !v$.documentationURL2.$invalid, invalid: v$.documentationURL2.$invalid }"
+              v-model="v$.documentationURL2.$model"
             />
-            <div v-if="$v.flowInterface.documentationURL2.$anyDirty && $v.flowInterface.documentationURL2.$invalid">
-              <small class="form-text text-danger" v-if="!$v.flowInterface.documentationURL2.maxLength">
-                This field cannot be longer than 500 characters.
-              </small>
+            <div v-if="v$.documentationURL2.$anyDirty && v$.documentationURL2.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.documentationURL2.$errors" :key="error.$uid">{{
+                error.$message
+              }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -80,13 +80,11 @@
               name="description"
               id="flow-interface-description"
               data-cy="description"
-              :class="{ valid: !$v.flowInterface.description.$invalid, invalid: $v.flowInterface.description.$invalid }"
-              v-model="$v.flowInterface.description.$model"
+              :class="{ valid: !v$.description.$invalid, invalid: v$.description.$invalid }"
+              v-model="v$.description.$model"
             />
-            <div v-if="$v.flowInterface.description.$anyDirty && $v.flowInterface.description.$invalid">
-              <small class="form-text text-danger" v-if="!$v.flowInterface.description.maxLength">
-                This field cannot be longer than 1500 characters.
-              </small>
+            <div v-if="v$.description.$anyDirty && v$.description.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.description.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -95,7 +93,7 @@
               <b-input-group-prepend>
                 <b-form-datepicker
                   aria-controls="flow-interface-startDate"
-                  v-model="$v.flowInterface.startDate.$model"
+                  v-model="v$.startDate.$model"
                   name="startDate"
                   class="form-control"
                   :locale="currentLanguage"
@@ -112,8 +110,8 @@
                 type="text"
                 class="form-control"
                 name="startDate"
-                :class="{ valid: !$v.flowInterface.startDate.$invalid, invalid: $v.flowInterface.startDate.$invalid }"
-                v-model="$v.flowInterface.startDate.$model"
+                :class="{ valid: !v$.startDate.$invalid, invalid: v$.startDate.$invalid }"
+                v-model="v$.startDate.$model"
               />
             </b-input-group>
           </div>
@@ -123,7 +121,7 @@
               <b-input-group-prepend>
                 <b-form-datepicker
                   aria-controls="flow-interface-endDate"
-                  v-model="$v.flowInterface.endDate.$model"
+                  v-model="v$.endDate.$model"
                   name="endDate"
                   class="form-control"
                   :locale="currentLanguage"
@@ -140,8 +138,8 @@
                 type="text"
                 class="form-control"
                 name="endDate"
-                :class="{ valid: !$v.flowInterface.endDate.$invalid, invalid: $v.flowInterface.endDate.$invalid }"
-                v-model="$v.flowInterface.endDate.$model"
+                :class="{ valid: !v$.endDate.$invalid, invalid: v$.endDate.$invalid }"
+                v-model="v$.endDate.$model"
               />
             </b-input-group>
           </div>
@@ -160,8 +158,8 @@
               </option>
             </select>
           </div>
-          <div v-if="$v.flowInterface.source.$anyDirty && $v.flowInterface.source.$invalid">
-            <small class="form-text text-danger" v-if="!$v.flowInterface.source.required"> This field is required. </small>
+          <div v-if="v$.source.$anyDirty && v$.source.$invalid">
+            <small class="form-text text-danger" v-for="error of v$.source.$errors" :key="error.$uid">{{ error.$message }}</small>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="flow-interface-target">Target</label>
@@ -178,8 +176,8 @@
               </option>
             </select>
           </div>
-          <div v-if="$v.flowInterface.target.$anyDirty && $v.flowInterface.target.$invalid">
-            <small class="form-text text-danger" v-if="!$v.flowInterface.target.required"> This field is required. </small>
+          <div v-if="v$.target.$anyDirty && v$.target.$invalid">
+            <small class="form-text text-danger" v-for="error of v$.target.$errors" :key="error.$uid">{{ error.$message }}</small>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="flow-interface-sourceComponent">Source Component</label>
@@ -264,7 +262,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.flowInterface.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

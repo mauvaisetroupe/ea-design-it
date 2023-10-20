@@ -3,7 +3,7 @@
     <div class="col-8">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
         <h2 id="eaDesignItApp.functionalFlowStep.home.createOrEditLabel" data-cy="FunctionalFlowStepCreateUpdateHeading">
-          Create or edit a FunctionalFlowStep
+          Create or edit a Functional Flow Step
         </h2>
         <div>
           <div class="form-group" v-if="functionalFlowStep.id">
@@ -18,13 +18,11 @@
               name="description"
               id="functional-flow-step-description"
               data-cy="description"
-              :class="{ valid: !$v.functionalFlowStep.description.$invalid, invalid: $v.functionalFlowStep.description.$invalid }"
-              v-model="$v.functionalFlowStep.description.$model"
+              :class="{ valid: !v$.description.$invalid, invalid: v$.description.$invalid }"
+              v-model="v$.description.$model"
             />
-            <div v-if="$v.functionalFlowStep.description.$anyDirty && $v.functionalFlowStep.description.$invalid">
-              <small class="form-text text-danger" v-if="!$v.functionalFlowStep.description.maxLength">
-                This field cannot be longer than 500 characters.
-              </small>
+            <div v-if="v$.description.$anyDirty && v$.description.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.description.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -35,8 +33,8 @@
               name="stepOrder"
               id="functional-flow-step-stepOrder"
               data-cy="stepOrder"
-              :class="{ valid: !$v.functionalFlowStep.stepOrder.$invalid, invalid: $v.functionalFlowStep.stepOrder.$invalid }"
-              v-model.number="$v.functionalFlowStep.stepOrder.$model"
+              :class="{ valid: !v$.stepOrder.$invalid, invalid: v$.stepOrder.$invalid }"
+              v-model.number="v$.stepOrder.$model"
             />
           </div>
           <div class="form-group">
@@ -63,8 +61,8 @@
               </option>
             </select>
           </div>
-          <div v-if="$v.functionalFlowStep.flowInterface.$anyDirty && $v.functionalFlowStep.flowInterface.$invalid">
-            <small class="form-text text-danger" v-if="!$v.functionalFlowStep.flowInterface.required"> This field is required. </small>
+          <div v-if="v$.flowInterface.$anyDirty && v$.flowInterface.$invalid">
+            <small class="form-text text-danger" v-for="error of v$.flowInterface.$errors" :key="error.$uid">{{ error.$message }}</small>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="functional-flow-step-group">Group</label>
@@ -107,8 +105,8 @@
               </option>
             </select>
           </div>
-          <div v-if="$v.functionalFlowStep.flow.$anyDirty && $v.functionalFlowStep.flow.$invalid">
-            <small class="form-text text-danger" v-if="!$v.functionalFlowStep.flow.required"> This field is required. </small>
+          <div v-if="v$.flow.$anyDirty && v$.flow.$invalid">
+            <small class="form-text text-danger" v-for="error of v$.flow.$errors" :key="error.$uid">{{ error.$message }}</small>
           </div>
         </div>
         <div>
@@ -119,7 +117,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.functionalFlowStep.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

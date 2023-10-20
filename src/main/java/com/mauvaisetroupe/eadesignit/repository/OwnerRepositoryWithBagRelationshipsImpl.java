@@ -1,14 +1,13 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.Owner;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.hibernate.annotations.QueryHints;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -37,9 +36,8 @@ public class OwnerRepositoryWithBagRelationshipsImpl implements OwnerRepositoryW
 
     Owner fetchUsers(Owner result) {
         return entityManager
-            .createQuery("select owner from Owner owner left join fetch owner.users where owner is :owner", Owner.class)
-            .setParameter("owner", result)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
+            .createQuery("select owner from Owner owner left join fetch owner.users where owner.id = :id", Owner.class)
+            .setParameter("id", result.getId())
             .getSingleResult();
     }
 
@@ -47,9 +45,8 @@ public class OwnerRepositoryWithBagRelationshipsImpl implements OwnerRepositoryW
         HashMap<Object, Integer> order = new HashMap<>();
         IntStream.range(0, owners.size()).forEach(index -> order.put(owners.get(index).getId(), index));
         List<Owner> result = entityManager
-            .createQuery("select distinct owner from Owner owner left join fetch owner.users where owner in :owners", Owner.class)
+            .createQuery("select owner from Owner owner left join fetch owner.users where owner in :owners", Owner.class)
             .setParameter("owners", owners)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
             .getResultList();
         Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.getId()), order.get(o2.getId())));
         return result;

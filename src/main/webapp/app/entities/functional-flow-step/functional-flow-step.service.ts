@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+import { type IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
 
 const baseApiUrl = 'api/functional-flow-steps';
 

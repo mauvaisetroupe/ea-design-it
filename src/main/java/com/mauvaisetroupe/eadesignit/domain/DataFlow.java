@@ -3,24 +3,26 @@ package com.mauvaisetroupe.eadesignit.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * DataFlow represents\n- A file when Protocol=FILE\n- A topic when Protocol=Event\n- A Swagger when Protocol=API\n- A WSDL when Protocol=SOAP\n- An XSD when Protocol=ESB, MESSAGING
+ * DataFlow represents
+ * - A file when Protocol=FILE
+ * - A topic when Protocol=Event
+ * - A Swagger when Protocol=API
+ * - A WSDL when Protocol=SOAP
+ * - An XSD when Protocol=ESB, MESSAGING
  */
 @Schema(
     description = "DataFlow represents\n- A file when Protocol=FILE\n- A topic when Protocol=Event\n- A Swagger when Protocol=API\n- A WSDL when Protocol=SOAP\n- An XSD when Protocol=ESB, MESSAGING"
 )
 @Entity
 @Table(name = "dataflow")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class DataFlow implements Serializable {
 
@@ -32,10 +34,6 @@ public class DataFlow implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    /**
-     * TOPIC name for event, FileName for Files
-     */
-    @Schema(description = "TOPIC name for event, FileName for Files", required = true)
     @NotNull
     @Column(name = "resource_name", nullable = false)
     private String resourceName;
@@ -51,10 +49,6 @@ public class DataFlow implements Serializable {
     @Column(name = "frequency")
     private Frequency frequency;
 
-    /**
-     * Swagger or XSD URL
-     */
-    @Schema(description = "Swagger or XSD URL")
     @Size(max = 500)
     @Column(name = "contract_url", length = 500)
     private String contractURL;
@@ -69,25 +63,23 @@ public class DataFlow implements Serializable {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "dataFlow")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "dataFlow")
     @JsonIgnoreProperties(value = { "dataFlow" }, allowSetters = true)
     private Set<DataFlowItem> items = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private DataFormat format;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_dataflow__functional_flows",
         joinColumns = @JoinColumn(name = "dataflow_id"),
         inverseJoinColumns = @JoinColumn(name = "functional_flows_id")
     )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "steps", "owner", "landscapes", "dataFlows" }, allowSetters = true)
     private Set<FunctionalFlow> functionalFlows = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
         value = { "dataFlows", "source", "target", "sourceComponent", "targetComponent", "protocol", "owner", "steps" },
         allowSetters = true
@@ -305,7 +297,7 @@ public class DataFlow implements Serializable {
         if (!(o instanceof DataFlow)) {
             return false;
         }
-        return id != null && id.equals(((DataFlow) o).id);
+        return getId() != null && getId().equals(((DataFlow) o).getId());
     }
 
     @Override

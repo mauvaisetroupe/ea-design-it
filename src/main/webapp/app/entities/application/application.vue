@@ -4,7 +4,7 @@
       <span id="application-heading">Applications</span>
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh list</span>
         </button>
         <router-link :to="{ name: 'ApplicationCreate' }" custom v-slot="{ navigate }">
           <button
@@ -14,14 +14,14 @@
             class="btn btn-primary jh-create-entity create-application"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Create a new Application </span>
+            <span>Create a new Application</span>
           </button>
         </router-link>
       </div>
     </h2>
     <br />
     <div class="alert alert-warning" v-if="!isFetching && applications && applications.length === 0">
-      <span>No applications found</span>
+      <span>No Applications found</span>
     </div>
     <div class="table-responsive" v-if="applications && applications.length > 0">
       <table class="table table-striped" aria-describedby="applications">
@@ -142,24 +142,26 @@
       </table>
     </div>
     <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.application.delete.question" data-cy="applicationDeleteDialogHeading">Confirm delete operation</span></span
-      >
+      <template #modal-title>
+        <span id="eaDesignItApp.application.delete.question" data-cy="applicationDeleteDialogHeading">Confirm delete operation</span>
+      </template>
       <div class="modal-body">
-        <p id="jhi-delete-application-heading">Are you sure you want to delete this Application?</p>
+        <p id="jhi-delete-application-heading">Are you sure you want to delete Application {{ removeId }}?</p>
       </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-application"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeApplication()"
-        >
-          Delete
-        </button>
-      </div>
+      <template #modal-footer>
+        <div>
+          <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="jhi-confirm-delete-application"
+            data-cy="entityConfirmDeleteButton"
+            v-on:click="removeApplication()"
+          >
+            Delete
+          </button>
+        </div>
+      </template>
     </b-modal>
   </div>
 </template>

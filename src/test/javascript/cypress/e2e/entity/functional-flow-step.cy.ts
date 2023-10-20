@@ -31,7 +31,7 @@ describe('FunctionalFlowStep e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/flow-interfaces',
-      body: {"alias":"Rupiah Fantastic calculate","status":"Future","documentationURL":"XSS","documentationURL2":"Representative","description":"Central up Baht","startDate":"2021-11-04","endDate":"2021-11-04"},
+      body: {"alias":"acidly but","status":"rudely nor even","documentationURL":"now whimsical wetly","documentationURL2":"earnings","description":"seminar near","startDate":"2021-11-04","endDate":"2021-11-04"},
     }).then(({ body }) => {
       flowInterface = body;
     });
@@ -39,7 +39,7 @@ describe('FunctionalFlowStep e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/functional-flows',
-      body: {"alias":"niches deposit program","description":"schemas matrix","comment":"Business-focused","status":"Kansas Operations Practical","documentationURL":"Granite enterprise","documentationURL2":"Pound Grove","startDate":"2021-11-04","endDate":"2021-11-03"},
+      body: {"alias":"concern bath","description":"ample genie since","comment":"diploma slurp mmm","status":"sorghum limply","documentationURL":"impanel forgo as","documentationURL2":"denigrate pitcher","startDate":"2021-11-04","endDate":"2021-11-04"},
     }).then(({ body }) => {
       functionalFlow = body;
     });
@@ -238,9 +238,11 @@ describe('FunctionalFlowStep e2e test', () => {
     });
 
     it.skip('should create an instance of FunctionalFlowStep', () => {
-      cy.get(`[data-cy="description"]`).type('interface').should('have.value', 'interface');
+      cy.get(`[data-cy="description"]`).type('painfully minus');
+      cy.get(`[data-cy="description"]`).should('have.value', 'painfully minus');
 
-      cy.get(`[data-cy="stepOrder"]`).type('45575').should('have.value', '45575');
+      cy.get(`[data-cy="stepOrder"]`).type('6596');
+      cy.get(`[data-cy="stepOrder"]`).should('have.value', '6596');
 
       cy.get(`[data-cy="flowInterface"]`).select(1);
       cy.get(`[data-cy="flow"]`).select(1);

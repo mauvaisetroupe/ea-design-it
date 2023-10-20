@@ -1,80 +1,75 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import FunctionalFlowService from './functional-flow.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class FunctionalFlow extends Vue {
-  @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FunctionalFlow',
+  setup() {
+    const functionalFlowService = inject('functionalFlowService', () => new FunctionalFlowService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const functionalFlows: Ref<IFunctionalFlow[]> = ref([]);
 
-  public functionalFlows: IFunctionalFlow[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllFunctionalFlows();
-  }
+    const retrieveFunctionalFlows = async () => {
+      isFetching.value = true;
+      try {
+        const res = await functionalFlowService().retrieve();
+        functionalFlows.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllFunctionalFlows();
-  }
+    const handleSyncList = () => {
+      retrieveFunctionalFlows();
+    };
 
-  public retrieveAllFunctionalFlows(): void {
-    this.isFetching = true;
-    this.functionalFlowService()
-      .retrieve()
-      .then(
-        res => {
-          this.functionalFlows = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveFunctionalFlows();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: IFunctionalFlow) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeFunctionalFlow = async () => {
+      try {
+        await functionalFlowService().delete(removeId.value);
+        const message = 'A FunctionalFlow is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveFunctionalFlows();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public prepareRemove(instance: IFunctionalFlow): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeFunctionalFlow(): void {
-    this.functionalFlowService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A FunctionalFlow is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllFunctionalFlows();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      functionalFlows,
+      handleSyncList,
+      isFetching,
+      retrieveFunctionalFlows,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeFunctionalFlow,
+    };
+  },
+});

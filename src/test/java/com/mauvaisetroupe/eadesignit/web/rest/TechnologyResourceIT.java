@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.Technology;
 import com.mauvaisetroupe.eadesignit.repository.TechnologyRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,7 +185,7 @@ class TechnologyResourceIT {
         int databaseSizeBeforeUpdate = technologyRepository.findAll().size();
 
         // Update the technology
-        Technology updatedTechnology = technologyRepository.findById(technology.getId()).get();
+        Technology updatedTechnology = technologyRepository.findById(technology.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedTechnology are not directly saved in db
         em.detach(updatedTechnology);
         updatedTechnology.name(UPDATED_NAME).type(UPDATED_TYPE).description(UPDATED_DESCRIPTION);
@@ -275,8 +275,6 @@ class TechnologyResourceIT {
         Technology partialUpdatedTechnology = new Technology();
         partialUpdatedTechnology.setId(technology.getId());
 
-        partialUpdatedTechnology.description(UPDATED_DESCRIPTION);
-
         restTechnologyMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedTechnology.getId())
@@ -291,7 +289,7 @@ class TechnologyResourceIT {
         Technology testTechnology = technologyList.get(technologyList.size() - 1);
         assertThat(testTechnology.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testTechnology.getType()).isEqualTo(DEFAULT_TYPE);
-        assertThat(testTechnology.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testTechnology.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
 
     @Test

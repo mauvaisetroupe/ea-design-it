@@ -12,24 +12,28 @@
                                  baseTableName="dataflow"
                                  constraintName="fk_dataflow__format_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="data_format"/>
+                                 referencedTableName="data_format"
+                                 />
 
         <addForeignKeyConstraint baseColumnNames="dataflow_id"
                                  baseTableName="rel_dataflow__functional_flows"
                                  constraintName="fk_rel_dataflow__functional_flows__dataflow_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="dataflow"/>
+                                 referencedTableName="dataflow"
+                                 />
 
         <addForeignKeyConstraint baseColumnNames="functional_flows_id"
                                  baseTableName="rel_dataflow__functional_flows"
                                  constraintName="fk_rel_dataflow__functional_flows__functional_flows_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="flow"/>
+                                 referencedTableName="flow"
+                                 />
 
         <addForeignKeyConstraint baseColumnNames="flow_interface_id"
                                  baseTableName="dataflow"
                                  constraintName="fk_dataflow__flow_interface_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="interface"/>
+                                 referencedTableName="interface"
+                                 />
     </changeSet>
 </databaseChangeLog>

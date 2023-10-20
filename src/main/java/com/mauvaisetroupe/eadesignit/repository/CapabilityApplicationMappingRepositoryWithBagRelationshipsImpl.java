@@ -1,14 +1,13 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.hibernate.annotations.QueryHints;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -45,11 +44,10 @@ public class CapabilityApplicationMappingRepositoryWithBagRelationshipsImpl
     CapabilityApplicationMapping fetchLandscapes(CapabilityApplicationMapping result) {
         return entityManager
             .createQuery(
-                "select capabilityApplicationMapping from CapabilityApplicationMapping capabilityApplicationMapping left join fetch capabilityApplicationMapping.landscapes where capabilityApplicationMapping is :capabilityApplicationMapping",
+                "select capabilityApplicationMapping from CapabilityApplicationMapping capabilityApplicationMapping left join fetch capabilityApplicationMapping.landscapes where capabilityApplicationMapping.id = :id",
                 CapabilityApplicationMapping.class
             )
-            .setParameter("capabilityApplicationMapping", result)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
+            .setParameter("id", result.getId())
             .getSingleResult();
     }
 
@@ -60,11 +58,10 @@ public class CapabilityApplicationMappingRepositoryWithBagRelationshipsImpl
             .forEach(index -> order.put(capabilityApplicationMappings.get(index).getId(), index));
         List<CapabilityApplicationMapping> result = entityManager
             .createQuery(
-                "select distinct capabilityApplicationMapping from CapabilityApplicationMapping capabilityApplicationMapping left join fetch capabilityApplicationMapping.landscapes where capabilityApplicationMapping in :capabilityApplicationMappings",
+                "select capabilityApplicationMapping from CapabilityApplicationMapping capabilityApplicationMapping left join fetch capabilityApplicationMapping.landscapes where capabilityApplicationMapping in :capabilityApplicationMappings",
                 CapabilityApplicationMapping.class
             )
             .setParameter("capabilityApplicationMappings", capabilityApplicationMappings)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
             .getResultList();
         Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.getId()), order.get(o2.getId())));
         return result;

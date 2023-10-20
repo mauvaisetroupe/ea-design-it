@@ -30,7 +30,7 @@ describe('FlowGroup e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/functional-flow-steps',
-      body: {"description":"Intranet","stepOrder":18920},
+      body: {"description":"peak","stepOrder":19159},
     }).then(({ body }) => {
       functionalFlowStep = body;
     });
@@ -215,11 +215,14 @@ describe('FlowGroup e2e test', () => {
     });
 
     it.skip('should create an instance of FlowGroup', () => {
-      cy.get(`[data-cy="title"]`).type('portal rich innovative').should('have.value', 'portal rich innovative');
+      cy.get(`[data-cy="title"]`).type('bashfully deposit pace');
+      cy.get(`[data-cy="title"]`).should('have.value', 'bashfully deposit pace');
 
-      cy.get(`[data-cy="url"]`).type('https://alexandro.biz').should('have.value', 'https://alexandro.biz');
+      cy.get(`[data-cy="url"]`).type('https://same-indigence.net/');
+      cy.get(`[data-cy="url"]`).should('have.value', 'https://same-indigence.net/');
 
-      cy.get(`[data-cy="description"]`).type('Streamlined parsing Exclusive').should('have.value', 'Streamlined parsing Exclusive');
+      cy.get(`[data-cy="description"]`).type('incidentally permeate');
+      cy.get(`[data-cy="description"]`).should('have.value', 'incidentally permeate');
 
       cy.get(`[data-cy="steps"]`).select([0]);
 

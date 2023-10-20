@@ -4,7 +4,7 @@
       <span id="capability-application-mapping-heading">Capability Application Mappings</span>
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh list</span>
         </button>
         <router-link :to="{ name: 'CapabilityApplicationMappingCreate' }" custom v-slot="{ navigate }">
           <button
@@ -14,14 +14,14 @@
             class="btn btn-primary jh-create-entity create-capability-application-mapping"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Create a new Capability Application Mapping </span>
+            <span>Create a new Capability Application Mapping</span>
           </button>
         </router-link>
       </div>
     </h2>
     <br />
     <div class="alert alert-warning" v-if="!isFetching && capabilityApplicationMappings && capabilityApplicationMappings.length === 0">
-      <span>No capabilityApplicationMappings found</span>
+      <span>No Capability Application Mappings found</span>
     </div>
     <div class="table-responsive" v-if="capabilityApplicationMappings && capabilityApplicationMappings.length > 0">
       <table class="table table-striped" aria-describedby="capabilityApplicationMappings">
@@ -116,26 +116,30 @@
       </table>
     </div>
     <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.capabilityApplicationMapping.delete.question" data-cy="capabilityApplicationMappingDeleteDialogHeading"
+      <template #modal-title>
+        <span id="eaDesignItApp.capabilityApplicationMapping.delete.question" data-cy="capabilityApplicationMappingDeleteDialogHeading"
           >Confirm delete operation</span
-        ></span
-      >
-      <div class="modal-body">
-        <p id="jhi-delete-capabilityApplicationMapping-heading">Are you sure you want to delete this Capability Application Mapping?</p>
-      </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-capabilityApplicationMapping"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeCapabilityApplicationMapping()"
         >
-          Delete
-        </button>
+      </template>
+      <div class="modal-body">
+        <p id="jhi-delete-capabilityApplicationMapping-heading">
+          Are you sure you want to delete Capability Application Mapping {{ removeId }}?
+        </p>
       </div>
+      <template #modal-footer>
+        <div>
+          <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="jhi-confirm-delete-capabilityApplicationMapping"
+            data-cy="entityConfirmDeleteButton"
+            v-on:click="removeCapabilityApplicationMapping()"
+          >
+            Delete
+          </button>
+        </div>
+      </template>
     </b-modal>
   </div>
 </template>

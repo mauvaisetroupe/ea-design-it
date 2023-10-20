@@ -15,7 +15,7 @@ describe('ApplicationComponent e2e test', () => {
   const applicationComponentPageUrlPattern = new RegExp('/application-component(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const applicationComponentSample = { name: 'withdrawal Savings' };
+  const applicationComponentSample = { name: 'meaningfully' };
 
   let applicationComponent;
   let application;
@@ -30,16 +30,16 @@ describe('ApplicationComponent e2e test', () => {
       method: 'POST',
       url: '/api/applications',
       body: {
-        alias: 'stable',
-        name: 'Configuration Industrial navigate',
-        description: 'upward-trending open-source standardization',
-        comment: 'enable Kansas analyzing',
-        documentationURL: 'Mexico TCP open-source',
+        alias: 'accredit',
+        name: 'bruised idolized',
+        description: 'down',
+        comment: 'an bah',
+        documentationURL: 'ideal punctually admirable',
         startDate: '2021-11-04',
         endDate: '2021-11-04',
-        applicationType: 'OTHER',
-        softwareType: 'ON_PREMISE_CUSTOM',
-        nickname: 'parallelism driver',
+        applicationType: 'SOFTWARE',
+        softwareType: 'CLOUD_SAAS',
+        nickname: 'delectable sweat that',
       },
     }).then(({ body }) => {
       application = body;
@@ -152,7 +152,7 @@ describe('ApplicationComponent e2e test', () => {
             {
               statusCode: 200,
               body: [applicationComponent],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -217,26 +217,36 @@ describe('ApplicationComponent e2e test', () => {
     });
 
     it('should create an instance of ApplicationComponent', () => {
-      cy.get(`[data-cy="alias"]`).type('Licensed Bedfordshire').should('have.value', 'Licensed Bedfordshire');
+      cy.get(`[data-cy="alias"]`).type('clasp ha');
+      cy.get(`[data-cy="alias"]`).should('have.value', 'clasp ha');
 
-      cy.get(`[data-cy="name"]`).type('hacking Fort homogeneous').should('have.value', 'hacking Fort homogeneous');
+      cy.get(`[data-cy="name"]`).type('adulterate athwart');
+      cy.get(`[data-cy="name"]`).should('have.value', 'adulterate athwart');
 
-      cy.get(`[data-cy="description"]`).type('SMS optical').should('have.value', 'SMS optical');
+      cy.get(`[data-cy="description"]`).type('that nervous');
+      cy.get(`[data-cy="description"]`).should('have.value', 'that nervous');
 
-      cy.get(`[data-cy="comment"]`).type('Liaison').should('have.value', 'Liaison');
+      cy.get(`[data-cy="comment"]`).type('hilarious');
+      cy.get(`[data-cy="comment"]`).should('have.value', 'hilarious');
 
-      cy.get(`[data-cy="documentationURL"]`).type('1080p Chief').should('have.value', '1080p Chief');
+      cy.get(`[data-cy="documentationURL"]`).type('drat');
+      cy.get(`[data-cy="documentationURL"]`).should('have.value', 'drat');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-04').blur().should('have.value', '2021-11-04');
+      cy.get(`[data-cy="startDate"]`).type('2021-11-03');
+      cy.get(`[data-cy="startDate"]`).blur();
+      cy.get(`[data-cy="startDate"]`).should('have.value', '2021-11-03');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-04').blur().should('have.value', '2021-11-04');
+      cy.get(`[data-cy="endDate"]`).type('2021-11-04');
+      cy.get(`[data-cy="endDate"]`).blur();
+      cy.get(`[data-cy="endDate"]`).should('have.value', '2021-11-04');
 
-      cy.get(`[data-cy="applicationType"]`).select('HARDWARE');
+      cy.get(`[data-cy="applicationType"]`).select('SOFTWARE');
 
-      cy.get(`[data-cy="softwareType"]`).select('CLOUD_SAAS');
+      cy.get(`[data-cy="softwareType"]`).select('CLOUD_THIRD_PARTY');
 
       cy.get(`[data-cy="displayInLandscape"]`).should('not.be.checked');
-      cy.get(`[data-cy="displayInLandscape"]`).click().should('be.checked');
+      cy.get(`[data-cy="displayInLandscape"]`).click();
+      cy.get(`[data-cy="displayInLandscape"]`).should('be.checked');
 
       cy.get(`[data-cy="application"]`).select(1);
 

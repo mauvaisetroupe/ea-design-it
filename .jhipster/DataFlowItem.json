@@ -1,6 +1,7 @@
 {
   "applications": "*",
   "changelogDate": "20211120191107",
+  "documentation": "DataFlow represents\\n- A Event when DataFlow.Protocol=Event",
   "dto": "no",
   "embedded": false,
   "entityTableName": "data_flow_item",
@@ -52,8 +53,10 @@
       "otherEntityName": "dataFlow",
       "otherEntityRelationshipName": "items",
       "relationshipName": "dataFlow",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     }
   ],
+  "searchEngine": "no",
   "service": "no"
 }

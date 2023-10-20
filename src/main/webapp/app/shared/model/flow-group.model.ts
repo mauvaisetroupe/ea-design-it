@@ -1,5 +1,5 @@
-import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
-import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+import { type IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { type IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
 
 export interface IFlowGroup {
   id?: number;
@@ -17,6 +17,6 @@ export class FlowGroup implements IFlowGroup {
     public url?: string | null,
     public description?: string | null,
     public flow?: IFunctionalFlow | null,
-    public steps?: IFunctionalFlowStep[]
+    public steps?: IFunctionalFlowStep[],
   ) {}
 }

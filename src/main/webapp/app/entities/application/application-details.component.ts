@@ -1,36 +1,41 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { IApplication } from '@/shared/model/application.model';
 import ApplicationService from './application.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IApplication } from '@/shared/model/application.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class ApplicationDetails extends Vue {
-  @Inject('applicationService') private applicationService: () => ApplicationService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ApplicationDetails',
+  setup() {
+    const applicationService = inject('applicationService', () => new ApplicationService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public application: IApplication = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.applicationId) {
-        vm.retrieveApplication(to.params.applicationId);
+    const previousState = () => router.go(-1);
+    const application: Ref<IApplication> = ref({});
+
+    const retrieveApplication = async applicationId => {
+      try {
+        const res = await applicationService().find(applicationId);
+        application.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveApplication(applicationId) {
-    this.applicationService()
-      .find(applicationId)
-      .then(res => {
-        this.application = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.applicationId) {
+      retrieveApplication(route.params.applicationId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      application,
+
+      previousState,
+    };
+  },
+});

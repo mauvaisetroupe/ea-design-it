@@ -15,7 +15,7 @@ describe('DataFlowItem e2e test', () => {
   const dataFlowItemPageUrlPattern = new RegExp('/data-flow-item(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const dataFlowItemSample = { resourceName: 'Practical' };
+  const dataFlowItemSample = { resourceName: 'er' };
 
   let dataFlowItem;
 
@@ -92,7 +92,7 @@ describe('DataFlowItem e2e test', () => {
             {
               statusCode: 200,
               body: [dataFlowItem],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -157,19 +157,28 @@ describe('DataFlowItem e2e test', () => {
     });
 
     it('should create an instance of DataFlowItem', () => {
-      cy.get(`[data-cy="resourceName"]`).type('Customer withdrawal Credit').should('have.value', 'Customer withdrawal Credit');
+      cy.get(`[data-cy="resourceName"]`).type('outline ugh date');
+      cy.get(`[data-cy="resourceName"]`).should('have.value', 'outline ugh date');
 
-      cy.get(`[data-cy="resourceType"]`).type('Rubber').should('have.value', 'Rubber');
+      cy.get(`[data-cy="resourceType"]`).type('aha');
+      cy.get(`[data-cy="resourceType"]`).should('have.value', 'aha');
 
-      cy.get(`[data-cy="description"]`).type('Ball').should('have.value', 'Ball');
+      cy.get(`[data-cy="description"]`).type('after duh');
+      cy.get(`[data-cy="description"]`).should('have.value', 'after duh');
 
-      cy.get(`[data-cy="contractURL"]`).type('blockchains deliver transparent').should('have.value', 'blockchains deliver transparent');
+      cy.get(`[data-cy="contractURL"]`).type('monopolise unlike');
+      cy.get(`[data-cy="contractURL"]`).should('have.value', 'monopolise unlike');
 
-      cy.get(`[data-cy="documentationURL"]`).type('hack Concrete').should('have.value', 'hack Concrete');
+      cy.get(`[data-cy="documentationURL"]`).type('ruminate modulo rightfully');
+      cy.get(`[data-cy="documentationURL"]`).should('have.value', 'ruminate modulo rightfully');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-20').blur().should('have.value', '2021-11-20');
+      cy.get(`[data-cy="startDate"]`).type('2021-11-20');
+      cy.get(`[data-cy="startDate"]`).blur();
+      cy.get(`[data-cy="startDate"]`).should('have.value', '2021-11-20');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-20').blur().should('have.value', '2021-11-20');
+      cy.get(`[data-cy="endDate"]`).type('2021-11-20');
+      cy.get(`[data-cy="endDate"]`).blur();
+      cy.get(`[data-cy="endDate"]`).should('have.value', '2021-11-20');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

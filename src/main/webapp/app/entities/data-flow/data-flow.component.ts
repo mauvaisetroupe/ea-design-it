@@ -1,80 +1,75 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { IDataFlow } from '@/shared/model/data-flow.model';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import DataFlowService from './data-flow.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IDataFlow } from '@/shared/model/data-flow.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class DataFlow extends Vue {
-  @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'DataFlow',
+  setup() {
+    const dataFlowService = inject('dataFlowService', () => new DataFlowService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const dataFlows: Ref<IDataFlow[]> = ref([]);
 
-  public dataFlows: IDataFlow[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllDataFlows();
-  }
+    const retrieveDataFlows = async () => {
+      isFetching.value = true;
+      try {
+        const res = await dataFlowService().retrieve();
+        dataFlows.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllDataFlows();
-  }
+    const handleSyncList = () => {
+      retrieveDataFlows();
+    };
 
-  public retrieveAllDataFlows(): void {
-    this.isFetching = true;
-    this.dataFlowService()
-      .retrieve()
-      .then(
-        res => {
-          this.dataFlows = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveDataFlows();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: IDataFlow) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeDataFlow = async () => {
+      try {
+        await dataFlowService().delete(removeId.value);
+        const message = 'A DataFlow is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveDataFlows();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public prepareRemove(instance: IDataFlow): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeDataFlow(): void {
-    this.dataFlowService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A DataFlow is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllDataFlows();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      dataFlows,
+      handleSyncList,
+      isFetching,
+      retrieveDataFlows,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeDataFlow,
+    };
+  },
+});

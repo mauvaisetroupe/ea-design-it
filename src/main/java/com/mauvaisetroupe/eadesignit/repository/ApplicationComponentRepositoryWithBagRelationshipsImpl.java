@@ -1,14 +1,13 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.hibernate.annotations.QueryHints;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -47,11 +46,10 @@ public class ApplicationComponentRepositoryWithBagRelationshipsImpl implements A
     ApplicationComponent fetchCategories(ApplicationComponent result) {
         return entityManager
             .createQuery(
-                "select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.categories where applicationComponent is :applicationComponent",
+                "select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.categories where applicationComponent.id = :id",
                 ApplicationComponent.class
             )
-            .setParameter("applicationComponent", result)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
+            .setParameter("id", result.getId())
             .getSingleResult();
     }
 
@@ -60,11 +58,10 @@ public class ApplicationComponentRepositoryWithBagRelationshipsImpl implements A
         IntStream.range(0, applicationComponents.size()).forEach(index -> order.put(applicationComponents.get(index).getId(), index));
         List<ApplicationComponent> result = entityManager
             .createQuery(
-                "select distinct applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.categories where applicationComponent in :applicationComponents",
+                "select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.categories where applicationComponent in :applicationComponents",
                 ApplicationComponent.class
             )
             .setParameter("applicationComponents", applicationComponents)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
             .getResultList();
         Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.getId()), order.get(o2.getId())));
         return result;
@@ -73,11 +70,10 @@ public class ApplicationComponentRepositoryWithBagRelationshipsImpl implements A
     ApplicationComponent fetchTechnologies(ApplicationComponent result) {
         return entityManager
             .createQuery(
-                "select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.technologies where applicationComponent is :applicationComponent",
+                "select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.technologies where applicationComponent.id = :id",
                 ApplicationComponent.class
             )
-            .setParameter("applicationComponent", result)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
+            .setParameter("id", result.getId())
             .getSingleResult();
     }
 
@@ -86,11 +82,10 @@ public class ApplicationComponentRepositoryWithBagRelationshipsImpl implements A
         IntStream.range(0, applicationComponents.size()).forEach(index -> order.put(applicationComponents.get(index).getId(), index));
         List<ApplicationComponent> result = entityManager
             .createQuery(
-                "select distinct applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.technologies where applicationComponent in :applicationComponents",
+                "select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.technologies where applicationComponent in :applicationComponents",
                 ApplicationComponent.class
             )
             .setParameter("applicationComponents", applicationComponents)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
             .getResultList();
         Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.getId()), order.get(o2.getId())));
         return result;
@@ -99,11 +94,10 @@ public class ApplicationComponentRepositoryWithBagRelationshipsImpl implements A
     ApplicationComponent fetchExternalIDS(ApplicationComponent result) {
         return entityManager
             .createQuery(
-                "select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.externalIDS where applicationComponent is :applicationComponent",
+                "select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.externalIDS where applicationComponent.id = :id",
                 ApplicationComponent.class
             )
-            .setParameter("applicationComponent", result)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
+            .setParameter("id", result.getId())
             .getSingleResult();
     }
 
@@ -112,11 +106,10 @@ public class ApplicationComponentRepositoryWithBagRelationshipsImpl implements A
         IntStream.range(0, applicationComponents.size()).forEach(index -> order.put(applicationComponents.get(index).getId(), index));
         List<ApplicationComponent> result = entityManager
             .createQuery(
-                "select distinct applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.externalIDS where applicationComponent in :applicationComponents",
+                "select applicationComponent from ApplicationComponent applicationComponent left join fetch applicationComponent.externalIDS where applicationComponent in :applicationComponents",
                 ApplicationComponent.class
             )
             .setParameter("applicationComponents", applicationComponents)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
             .getResultList();
         Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.getId()), order.get(o2.getId())));
         return result;

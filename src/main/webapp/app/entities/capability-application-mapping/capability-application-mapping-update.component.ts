@@ -1,146 +1,143 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import AlertService from '@/shared/alert/alert.service';
+import CapabilityApplicationMappingService from './capability-application-mapping.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import CapabilityService from '@/entities/capability/capability.service';
-import { ICapability } from '@/shared/model/capability.model';
-
+import { type ICapability } from '@/shared/model/capability.model';
 import ApplicationService from '@/entities/application/application.service';
-import { IApplication } from '@/shared/model/application.model';
-
+import { type IApplication } from '@/shared/model/application.model';
 import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
+import { type ILandscapeView } from '@/shared/model/landscape-view.model';
+import { type ICapabilityApplicationMapping, CapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
 
-import { ICapabilityApplicationMapping, CapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
-import CapabilityApplicationMappingService from './capability-application-mapping.service';
-
-const validations: any = {
-  capabilityApplicationMapping: {},
-};
-
-@Component({
-  validations,
-})
-export default class CapabilityApplicationMappingUpdate extends Vue {
-  @Inject('capabilityApplicationMappingService') private capabilityApplicationMappingService: () => CapabilityApplicationMappingService;
-  @Inject('alertService') private alertService: () => AlertService;
-
-  public capabilityApplicationMapping: ICapabilityApplicationMapping = new CapabilityApplicationMapping();
-
-  @Inject('capabilityService') private capabilityService: () => CapabilityService;
-
-  public capabilities: ICapability[] = [];
-
-  @Inject('applicationService') private applicationService: () => ApplicationService;
-
-  public applications: IApplication[] = [];
-
-  @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
-
-  public landscapeViews: ILandscapeView[] = [];
-  public isSaving = false;
-  public currentLanguage = '';
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.capabilityApplicationMappingId) {
-        vm.retrieveCapabilityApplicationMapping(to.params.capabilityApplicationMappingId);
-      }
-      vm.initRelationships();
-    });
-  }
-
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'CapabilityApplicationMappingUpdate',
+  setup() {
+    const capabilityApplicationMappingService = inject(
+      'capabilityApplicationMappingService',
+      () => new CapabilityApplicationMappingService(),
     );
+    const alertService = inject('alertService', () => useAlertService(), true);
+
+    const capabilityApplicationMapping: Ref<ICapabilityApplicationMapping> = ref(new CapabilityApplicationMapping());
+
+    const capabilityService = inject('capabilityService', () => new CapabilityService());
+
+    const capabilities: Ref<ICapability[]> = ref([]);
+
+    const applicationService = inject('applicationService', () => new ApplicationService());
+
+    const applications: Ref<IApplication[]> = ref([]);
+
+    const landscapeViewService = inject('landscapeViewService', () => new LandscapeViewService());
+
+    const landscapeViews: Ref<ILandscapeView[]> = ref([]);
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
+
+    const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1);
+
+    const retrieveCapabilityApplicationMapping = async capabilityApplicationMappingId => {
+      try {
+        const res = await capabilityApplicationMappingService().find(capabilityApplicationMappingId);
+        capabilityApplicationMapping.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
+
+    if (route.params?.capabilityApplicationMappingId) {
+      retrieveCapabilityApplicationMapping(route.params.capabilityApplicationMappingId);
+    }
+
+    const initRelationships = () => {
+      capabilityService()
+        .retrieve()
+        .then(res => {
+          capabilities.value = res.data;
+        });
+      applicationService()
+        .retrieve()
+        .then(res => {
+          applications.value = res.data;
+        });
+      landscapeViewService()
+        .retrieve()
+        .then(res => {
+          landscapeViews.value = res.data;
+        });
+    };
+
+    initRelationships();
+
+    const validations = useValidation();
+    const validationRules = {
+      capability: {},
+      application: {},
+      landscapes: {},
+    };
+    const v$ = useVuelidate(validationRules, capabilityApplicationMapping as any);
+    v$.value.$validate();
+
+    return {
+      capabilityApplicationMappingService,
+      alertService,
+      capabilityApplicationMapping,
+      previousState,
+      isSaving,
+      currentLanguage,
+      capabilities,
+      applications,
+      landscapeViews,
+      v$,
+    };
+  },
+  created(): void {
     this.capabilityApplicationMapping.landscapes = [];
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.capabilityApplicationMapping.id) {
-      this.capabilityApplicationMappingService()
-        .update(this.capabilityApplicationMapping)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A CapabilityApplicationMapping is updated with identifier ' + param.id;
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
+  },
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.capabilityApplicationMapping.id) {
+        this.capabilityApplicationMappingService()
+          .update(this.capabilityApplicationMapping)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo('A CapabilityApplicationMapping is updated with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
           });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.capabilityApplicationMappingService()
-        .create(this.capabilityApplicationMapping)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A CapabilityApplicationMapping is created with identifier ' + param.id;
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
+      } else {
+        this.capabilityApplicationMappingService()
+          .create(this.capabilityApplicationMapping)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess('A CapabilityApplicationMapping is created with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
           });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    }
-  }
+      }
+    },
 
-  public retrieveCapabilityApplicationMapping(capabilityApplicationMappingId): void {
-    this.capabilityApplicationMappingService()
-      .find(capabilityApplicationMappingId)
-      .then(res => {
-        this.capabilityApplicationMapping = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {
-    this.capabilityService()
-      .retrieve()
-      .then(res => {
-        this.capabilities = res.data;
-      });
-    this.applicationService()
-      .retrieve()
-      .then(res => {
-        this.applications = res.data;
-      });
-    this.landscapeViewService()
-      .retrieve()
-      .then(res => {
-        this.landscapeViews = res.data;
-      });
-  }
-
-  public getSelected(selectedVals, option): any {
-    if (selectedVals) {
-      return selectedVals.find(value => option.id === value.id) ?? option;
-    }
-    return option;
-  }
-}
+    getSelected(selectedVals, option): any {
+      if (selectedVals) {
+        return selectedVals.find(value => option.id === value.id) ?? option;
+      }
+      return option;
+    },
+  },
+});

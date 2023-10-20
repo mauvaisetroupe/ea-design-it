@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.DataFormat;
 import com.mauvaisetroupe.eadesignit.repository.DataFormatRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,7 +173,7 @@ class DataFormatResourceIT {
         int databaseSizeBeforeUpdate = dataFormatRepository.findAll().size();
 
         // Update the dataFormat
-        DataFormat updatedDataFormat = dataFormatRepository.findById(dataFormat.getId()).get();
+        DataFormat updatedDataFormat = dataFormatRepository.findById(dataFormat.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedDataFormat are not directly saved in db
         em.detach(updatedDataFormat);
         updatedDataFormat.name(UPDATED_NAME);
@@ -261,8 +261,6 @@ class DataFormatResourceIT {
         DataFormat partialUpdatedDataFormat = new DataFormat();
         partialUpdatedDataFormat.setId(dataFormat.getId());
 
-        partialUpdatedDataFormat.name(UPDATED_NAME);
-
         restDataFormatMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedDataFormat.getId())
@@ -275,7 +273,7 @@ class DataFormatResourceIT {
         List<DataFormat> dataFormatList = dataFormatRepository.findAll();
         assertThat(dataFormatList).hasSize(databaseSizeBeforeUpdate);
         DataFormat testDataFormat = dataFormatList.get(dataFormatList.size() - 1);
-        assertThat(testDataFormat.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testDataFormat.getName()).isEqualTo(DEFAULT_NAME);
     }
 
     @Test

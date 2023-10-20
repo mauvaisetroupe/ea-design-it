@@ -92,7 +92,7 @@ describe('CapabilityApplicationMapping e2e test', () => {
             {
               statusCode: 200,
               body: [capabilityApplicationMapping],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 

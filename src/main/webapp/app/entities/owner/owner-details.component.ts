@@ -1,36 +1,41 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { IOwner } from '@/shared/model/owner.model';
 import OwnerService from './owner.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IOwner } from '@/shared/model/owner.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class OwnerDetails extends Vue {
-  @Inject('ownerService') private ownerService: () => OwnerService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'OwnerDetails',
+  setup() {
+    const ownerService = inject('ownerService', () => new OwnerService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public owner: IOwner = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.ownerId) {
-        vm.retrieveOwner(to.params.ownerId);
+    const previousState = () => router.go(-1);
+    const owner: Ref<IOwner> = ref({});
+
+    const retrieveOwner = async ownerId => {
+      try {
+        const res = await ownerService().find(ownerId);
+        owner.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveOwner(ownerId) {
-    this.ownerService()
-      .find(ownerId)
-      .then(res => {
-        this.owner = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.ownerId) {
+      retrieveOwner(route.params.ownerId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      owner,
+
+      previousState,
+    };
+  },
+});

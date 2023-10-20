@@ -1,4 +1,4 @@
-import Vuex from 'vuex';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
@@ -39,21 +39,9 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
 import { faUsersCog } from '@fortawesome/free-solid-svg-icons/faUsersCog';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 
-import VueCookie from 'vue-cookie';
-import Vuelidate from 'vuelidate';
-import Vue2Filters from 'vue2-filters';
-
-import * as filters from '@/shared/date/filters';
-import { accountStore } from '@/shared/config/store/account-store';
-
-export function initVueApp(vue) {
-  vue.use(VueCookie);
-  vue.use(Vuelidate);
-  vue.use(Vue2Filters);
-  filters.initFilters();
-}
-
 export function initFortAwesome(vue) {
+  vue.component('font-awesome-icon', FontAwesomeIcon);
+
   library.add(
     faArrowLeft,
     faAsterisk,
@@ -91,15 +79,6 @@ export function initFortAwesome(vue) {
     faUserPlus,
     faUsers,
     faUsersCog,
-    faWrench
+    faWrench,
   );
-}
-
-export function initVueXStore(vue) {
-  vue.use(Vuex);
-  return new Vuex.Store({
-    modules: {
-      accountStore,
-    },
-  });
 }

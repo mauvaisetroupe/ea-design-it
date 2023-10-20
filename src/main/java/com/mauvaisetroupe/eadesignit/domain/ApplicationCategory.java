@@ -1,20 +1,17 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A ApplicationCategory.
  */
 @Entity
 @Table(name = "application_category")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class ApplicationCategory implements Serializable {
 
@@ -37,8 +34,7 @@ public class ApplicationCategory implements Serializable {
     @Column(name = "description", length = 250)
     private String description;
 
-    @ManyToMany(mappedBy = "categories")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
     @JsonIgnoreProperties(
         value = {
             "owner",
@@ -54,8 +50,7 @@ public class ApplicationCategory implements Serializable {
     )
     private Set<Application> applications = new HashSet<>();
 
-    @ManyToMany(mappedBy = "categories")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
     @JsonIgnoreProperties(value = { "application", "categories", "technologies", "externalIDS" }, allowSetters = true)
     private Set<ApplicationComponent> components = new HashSet<>();
 
@@ -185,7 +180,7 @@ public class ApplicationCategory implements Serializable {
         if (!(o instanceof ApplicationCategory)) {
             return false;
         }
-        return id != null && id.equals(((ApplicationCategory) o).id);
+        return getId() != null && getId().equals(((ApplicationCategory) o).getId());
     }
 
     @Override

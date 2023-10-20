@@ -1,20 +1,17 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Capability.
  */
 @Entity
 @Table(name = "capability")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Capability implements Serializable {
 
@@ -41,17 +38,15 @@ public class Capability implements Serializable {
     @Column(name = "level")
     private Integer level;
 
-    @OneToMany(mappedBy = "parent")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
     @JsonIgnoreProperties(value = { "subCapabilities", "parent", "capabilityApplicationMappings" }, allowSetters = true)
     private Set<Capability> subCapabilities = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "subCapabilities", "parent", "capabilityApplicationMappings" }, allowSetters = true)
     private Capability parent;
 
-    @OneToMany(mappedBy = "capability")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "capability")
     @JsonIgnoreProperties(value = { "capability", "application", "landscapes" }, allowSetters = true)
     private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
 
@@ -207,7 +202,7 @@ public class Capability implements Serializable {
         if (!(o instanceof Capability)) {
             return false;
         }
-        return id != null && id.equals(((Capability) o).id);
+        return getId() != null && getId().equals(((Capability) o).getId());
     }
 
     @Override

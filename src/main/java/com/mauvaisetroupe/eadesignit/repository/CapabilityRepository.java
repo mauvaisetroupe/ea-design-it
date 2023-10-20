@@ -27,12 +27,12 @@ public interface CapabilityRepository extends JpaRepository<Capability, Long> {
     }
 
     @Query(
-        value = "select distinct capability from Capability capability left join fetch capability.parent",
-        countQuery = "select count(distinct capability) from Capability capability"
+        value = "select capability from Capability capability left join fetch capability.parent",
+        countQuery = "select count(capability) from Capability capability"
     )
     Page<Capability> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select distinct capability from Capability capability left join fetch capability.parent")
+    @Query("select capability from Capability capability left join fetch capability.parent")
     List<Capability> findAllWithToOneRelationships();
 
     @Query("select capability from Capability capability left join fetch capability.parent where capability.id =:id")

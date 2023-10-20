@@ -15,7 +15,7 @@ describe('FlowInterface e2e test', () => {
   const flowInterfacePageUrlPattern = new RegExp('/flow-interface(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const flowInterfaceSample = { alias: 'Bike exploit' };
+  const flowInterfaceSample = { alias: 'beyond turnip' };
 
   let flowInterface;
   let application;
@@ -30,16 +30,16 @@ describe('FlowInterface e2e test', () => {
       method: 'POST',
       url: '/api/applications',
       body: {
-        alias: 'Product Baby',
-        name: 'Cliff',
-        description: 'bluetooth encryption SAS',
-        comment: 'Customer',
-        documentationURL: 'Directives deposit Home',
+        alias: 'gene instrumentation fatal',
+        name: 'dapper creditor outside',
+        description: 'woot delirious yahoo',
+        comment: 'handle over',
+        documentationURL: 'apropos some botch',
         startDate: '2021-11-04',
         endDate: '2021-11-04',
         applicationType: 'MIDDLEWARE',
-        softwareType: 'CLOUD_SAAS',
-        nickname: 'calculating',
+        softwareType: 'ON_PREMISE_EXTERNAL_LIBRARY',
+        nickname: 'sprinkles',
       },
     }).then(({ body }) => {
       application = body;
@@ -163,7 +163,7 @@ describe('FlowInterface e2e test', () => {
             {
               statusCode: 200,
               body: [flowInterface],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -228,19 +228,28 @@ describe('FlowInterface e2e test', () => {
     });
 
     it('should create an instance of FlowInterface', () => {
-      cy.get(`[data-cy="alias"]`).type('programming').should('have.value', 'programming');
+      cy.get(`[data-cy="alias"]`).type('violate');
+      cy.get(`[data-cy="alias"]`).should('have.value', 'violate');
 
-      cy.get(`[data-cy="status"]`).type('Armenian').should('have.value', 'Armenian');
+      cy.get(`[data-cy="status"]`).type('limply whereas');
+      cy.get(`[data-cy="status"]`).should('have.value', 'limply whereas');
 
-      cy.get(`[data-cy="documentationURL"]`).type('fuchsia').should('have.value', 'fuchsia');
+      cy.get(`[data-cy="documentationURL"]`).type('via boo daintily');
+      cy.get(`[data-cy="documentationURL"]`).should('have.value', 'via boo daintily');
 
-      cy.get(`[data-cy="documentationURL2"]`).type('Oklahoma Street Plastic').should('have.value', 'Oklahoma Street Plastic');
+      cy.get(`[data-cy="documentationURL2"]`).type('thin excluding lest');
+      cy.get(`[data-cy="documentationURL2"]`).should('have.value', 'thin excluding lest');
 
-      cy.get(`[data-cy="description"]`).type('aggregate').should('have.value', 'aggregate');
+      cy.get(`[data-cy="description"]`).type('beyond');
+      cy.get(`[data-cy="description"]`).should('have.value', 'beyond');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-04').blur().should('have.value', '2021-11-04');
+      cy.get(`[data-cy="startDate"]`).type('2021-11-03');
+      cy.get(`[data-cy="startDate"]`).blur();
+      cy.get(`[data-cy="startDate"]`).should('have.value', '2021-11-03');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-04').blur().should('have.value', '2021-11-04');
+      cy.get(`[data-cy="endDate"]`).type('2021-11-04');
+      cy.get(`[data-cy="endDate"]`).blur();
+      cy.get(`[data-cy="endDate"]`).should('have.value', '2021-11-04');
 
       cy.get(`[data-cy="source"]`).select(1);
       cy.get(`[data-cy="target"]`).select(1);

@@ -1,19 +1,16 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Owner.
  */
 @Entity
 @Table(name = "owner")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Owner implements Serializable {
 
@@ -39,9 +36,8 @@ public class Owner implements Serializable {
     @Column(name = "email")
     private String email;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "rel_owner__users", joinColumns = @JoinColumn(name = "owner_id"), inverseJoinColumns = @JoinColumn(name = "users_id"))
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<User> users = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -144,7 +140,7 @@ public class Owner implements Serializable {
         if (!(o instanceof Owner)) {
             return false;
         }
-        return id != null && id.equals(((Owner) o).id);
+        return getId() != null && getId().equals(((Owner) o).getId());
     }
 
     @Override

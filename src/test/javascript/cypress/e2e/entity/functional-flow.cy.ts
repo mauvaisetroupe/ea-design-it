@@ -92,7 +92,7 @@ describe('FunctionalFlow e2e test', () => {
             {
               statusCode: 200,
               body: [functionalFlow],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -157,21 +157,31 @@ describe('FunctionalFlow e2e test', () => {
     });
 
     it('should create an instance of FunctionalFlow', () => {
-      cy.get(`[data-cy="alias"]`).type('generate').should('have.value', 'generate');
+      cy.get(`[data-cy="alias"]`).type('mmm searchingly which');
+      cy.get(`[data-cy="alias"]`).should('have.value', 'mmm searchingly which');
 
-      cy.get(`[data-cy="description"]`).type('incremental').should('have.value', 'incremental');
+      cy.get(`[data-cy="description"]`).type('purse or ah');
+      cy.get(`[data-cy="description"]`).should('have.value', 'purse or ah');
 
-      cy.get(`[data-cy="comment"]`).type('content').should('have.value', 'content');
+      cy.get(`[data-cy="comment"]`).type('yuck stump versus');
+      cy.get(`[data-cy="comment"]`).should('have.value', 'yuck stump versus');
 
-      cy.get(`[data-cy="status"]`).type('Account Fish').should('have.value', 'Account Fish');
+      cy.get(`[data-cy="status"]`).type('severe with oof');
+      cy.get(`[data-cy="status"]`).should('have.value', 'severe with oof');
 
-      cy.get(`[data-cy="documentationURL"]`).type('International Barbados').should('have.value', 'International Barbados');
+      cy.get(`[data-cy="documentationURL"]`).type('outside');
+      cy.get(`[data-cy="documentationURL"]`).should('have.value', 'outside');
 
-      cy.get(`[data-cy="documentationURL2"]`).type('sensor Viaduct Mouse').should('have.value', 'sensor Viaduct Mouse');
+      cy.get(`[data-cy="documentationURL2"]`).type('sycamore because');
+      cy.get(`[data-cy="documentationURL2"]`).should('have.value', 'sycamore because');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-04').blur().should('have.value', '2021-11-04');
+      cy.get(`[data-cy="startDate"]`).type('2021-11-04');
+      cy.get(`[data-cy="startDate"]`).blur();
+      cy.get(`[data-cy="startDate"]`).should('have.value', '2021-11-04');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-04').blur().should('have.value', '2021-11-04');
+      cy.get(`[data-cy="endDate"]`).type('2021-11-04');
+      cy.get(`[data-cy="endDate"]`).blur();
+      cy.get(`[data-cy="endDate"]`).should('have.value', '2021-11-04');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

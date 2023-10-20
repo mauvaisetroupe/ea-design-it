@@ -1,19 +1,16 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A CapabilityApplicationMapping.
  */
 @Entity
 @Table(name = "capability_application_mapping")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class CapabilityApplicationMapping implements Serializable {
 
@@ -25,11 +22,11 @@ public class CapabilityApplicationMapping implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "subCapabilities", "parent", "capabilityApplicationMappings" }, allowSetters = true)
     private Capability capability;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
         value = {
             "owner",
@@ -45,13 +42,12 @@ public class CapabilityApplicationMapping implements Serializable {
     )
     private Application application;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_capability_application_mapping__landscape",
         joinColumns = @JoinColumn(name = "capability_application_mapping_id"),
         inverseJoinColumns = @JoinColumn(name = "landscape_id")
     )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "owner", "flows", "capabilityApplicationMappings" }, allowSetters = true)
     private Set<LandscapeView> landscapes = new HashSet<>();
 
@@ -131,7 +127,7 @@ public class CapabilityApplicationMapping implements Serializable {
         if (!(o instanceof CapabilityApplicationMapping)) {
             return false;
         }
-        return id != null && id.equals(((CapabilityApplicationMapping) o).id);
+        return getId() != null && getId().equals(((CapabilityApplicationMapping) o).getId());
     }
 
     @Override

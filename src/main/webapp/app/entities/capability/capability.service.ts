@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { ICapability } from '@/shared/model/capability.model';
+import { type ICapability } from '@/shared/model/capability.model';
 
 const baseApiUrl = 'api/capabilities';
 

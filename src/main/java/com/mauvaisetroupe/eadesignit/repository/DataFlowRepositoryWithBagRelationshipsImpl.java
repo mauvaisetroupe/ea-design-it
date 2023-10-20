@@ -1,14 +1,13 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.hibernate.annotations.QueryHints;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
@@ -38,11 +37,10 @@ public class DataFlowRepositoryWithBagRelationshipsImpl implements DataFlowRepos
     DataFlow fetchFunctionalFlows(DataFlow result) {
         return entityManager
             .createQuery(
-                "select dataFlow from DataFlow dataFlow left join fetch dataFlow.functionalFlows where dataFlow is :dataFlow",
+                "select dataFlow from DataFlow dataFlow left join fetch dataFlow.functionalFlows where dataFlow.id = :id",
                 DataFlow.class
             )
-            .setParameter("dataFlow", result)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
+            .setParameter("id", result.getId())
             .getSingleResult();
     }
 
@@ -51,11 +49,10 @@ public class DataFlowRepositoryWithBagRelationshipsImpl implements DataFlowRepos
         IntStream.range(0, dataFlows.size()).forEach(index -> order.put(dataFlows.get(index).getId(), index));
         List<DataFlow> result = entityManager
             .createQuery(
-                "select distinct dataFlow from DataFlow dataFlow left join fetch dataFlow.functionalFlows where dataFlow in :dataFlows",
+                "select dataFlow from DataFlow dataFlow left join fetch dataFlow.functionalFlows where dataFlow in :dataFlows",
                 DataFlow.class
             )
             .setParameter("dataFlows", dataFlows)
-            .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
             .getResultList();
         Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.getId()), order.get(o2.getId())));
         return result;

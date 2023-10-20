@@ -1,130 +1,117 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import { required } from 'vuelidate/lib/validators';
-
-import AlertService from '@/shared/alert/alert.service';
+import OwnerService from './owner.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import UserService from '@/entities/user/user.service';
+import { type IOwner, Owner } from '@/shared/model/owner.model';
 
-import { IOwner, Owner } from '@/shared/model/owner.model';
-import OwnerService from './owner.service';
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'OwnerUpdate',
+  setup() {
+    const ownerService = inject('ownerService', () => new OwnerService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-const validations: any = {
-  owner: {
-    name: {
-      required,
-    },
-    firstname: {},
-    lastname: {},
-    email: {},
+    const owner: Ref<IOwner> = ref(new Owner());
+    const userService = inject('userService', () => new UserService());
+    const users: Ref<Array<any>> = ref([]);
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
+
+    const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1);
+
+    const retrieveOwner = async ownerId => {
+      try {
+        const res = await ownerService().find(ownerId);
+        owner.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
+
+    if (route.params?.ownerId) {
+      retrieveOwner(route.params.ownerId);
+    }
+
+    const initRelationships = () => {
+      userService()
+        .retrieve()
+        .then(res => {
+          users.value = res.data;
+        });
+    };
+
+    initRelationships();
+
+    const validations = useValidation();
+    const validationRules = {
+      name: {
+        required: validations.required('This field is required.'),
+      },
+      firstname: {},
+      lastname: {},
+      email: {},
+      users: {},
+    };
+    const v$ = useVuelidate(validationRules, owner as any);
+    v$.value.$validate();
+
+    return {
+      ownerService,
+      alertService,
+      owner,
+      previousState,
+      isSaving,
+      currentLanguage,
+      users,
+      v$,
+    };
   },
-};
-
-@Component({
-  validations,
-})
-export default class OwnerUpdate extends Vue {
-  @Inject('ownerService') private ownerService: () => OwnerService;
-  @Inject('alertService') private alertService: () => AlertService;
-
-  public owner: IOwner = new Owner();
-
-  @Inject('userService') private userService: () => UserService;
-
-  public users: Array<any> = [];
-  public isSaving = false;
-  public currentLanguage = '';
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.ownerId) {
-        vm.retrieveOwner(to.params.ownerId);
-      }
-      vm.initRelationships();
-    });
-  }
-
   created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
     this.owner.users = [];
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.owner.id) {
-      this.ownerService()
-        .update(this.owner)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A Owner is updated with identifier ' + param.id;
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
+  },
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.owner.id) {
+        this.ownerService()
+          .update(this.owner)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo('A Owner is updated with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
           });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.ownerService()
-        .create(this.owner)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A Owner is created with identifier ' + param.id;
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
+      } else {
+        this.ownerService()
+          .create(this.owner)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess('A Owner is created with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
           });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    }
-  }
+      }
+    },
 
-  public retrieveOwner(ownerId): void {
-    this.ownerService()
-      .find(ownerId)
-      .then(res => {
-        this.owner = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {
-    this.userService()
-      .retrieve()
-      .then(res => {
-        this.users = res.data;
-      });
-  }
-
-  public getSelected(selectedVals, option): any {
-    if (selectedVals) {
-      return selectedVals.find(value => option.id === value.id) ?? option;
-    }
-    return option;
-  }
-}
+    getSelected(selectedVals, option): any {
+      if (selectedVals) {
+        return selectedVals.find(value => option.id === value.id) ?? option;
+      }
+      return option;
+    },
+  },
+});

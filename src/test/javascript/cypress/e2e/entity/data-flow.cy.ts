@@ -15,7 +15,7 @@ describe('DataFlow e2e test', () => {
   const dataFlowPageUrlPattern = new RegExp('/data-flow(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const dataFlowSample = { resourceName: 'Papua' };
+  const dataFlowSample = { resourceName: 'usually long-term' };
 
   let dataFlow;
 
@@ -92,7 +92,7 @@ describe('DataFlow e2e test', () => {
             {
               statusCode: 200,
               body: [dataFlow],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -157,21 +157,30 @@ describe('DataFlow e2e test', () => {
     });
 
     it('should create an instance of DataFlow', () => {
-      cy.get(`[data-cy="resourceName"]`).type('Administrator global e-services').should('have.value', 'Administrator global e-services');
+      cy.get(`[data-cy="resourceName"]`).type('openly how contrail');
+      cy.get(`[data-cy="resourceName"]`).should('have.value', 'openly how contrail');
 
-      cy.get(`[data-cy="resourceType"]`).type('Internal applications hacking').should('have.value', 'Internal applications hacking');
+      cy.get(`[data-cy="resourceType"]`).type('majestically quizzical');
+      cy.get(`[data-cy="resourceType"]`).should('have.value', 'majestically quizzical');
 
-      cy.get(`[data-cy="description"]`).type('XSS Philippines Pants').should('have.value', 'XSS Philippines Pants');
+      cy.get(`[data-cy="description"]`).type('freeze a jackal');
+      cy.get(`[data-cy="description"]`).should('have.value', 'freeze a jackal');
 
-      cy.get(`[data-cy="frequency"]`).select('INTRADAY');
+      cy.get(`[data-cy="frequency"]`).select('HOURLY');
 
-      cy.get(`[data-cy="contractURL"]`).type('Usability reinvent').should('have.value', 'Usability reinvent');
+      cy.get(`[data-cy="contractURL"]`).type('phooey cure hm');
+      cy.get(`[data-cy="contractURL"]`).should('have.value', 'phooey cure hm');
 
-      cy.get(`[data-cy="documentationURL"]`).type('Managed Chief Shirt').should('have.value', 'Managed Chief Shirt');
+      cy.get(`[data-cy="documentationURL"]`).type('easy visible against');
+      cy.get(`[data-cy="documentationURL"]`).should('have.value', 'easy visible against');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-03').blur().should('have.value', '2021-11-03');
+      cy.get(`[data-cy="startDate"]`).type('2021-11-04');
+      cy.get(`[data-cy="startDate"]`).blur();
+      cy.get(`[data-cy="startDate"]`).should('have.value', '2021-11-04');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-04').blur().should('have.value', '2021-11-04');
+      cy.get(`[data-cy="endDate"]`).type('2021-11-04');
+      cy.get(`[data-cy="endDate"]`).blur();
+      cy.get(`[data-cy="endDate"]`).should('have.value', '2021-11-04');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

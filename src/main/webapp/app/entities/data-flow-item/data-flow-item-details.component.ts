@@ -1,36 +1,41 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { IDataFlowItem } from '@/shared/model/data-flow-item.model';
 import DataFlowItemService from './data-flow-item.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IDataFlowItem } from '@/shared/model/data-flow-item.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class DataFlowItemDetails extends Vue {
-  @Inject('dataFlowItemService') private dataFlowItemService: () => DataFlowItemService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'DataFlowItemDetails',
+  setup() {
+    const dataFlowItemService = inject('dataFlowItemService', () => new DataFlowItemService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public dataFlowItem: IDataFlowItem = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.dataFlowItemId) {
-        vm.retrieveDataFlowItem(to.params.dataFlowItemId);
+    const previousState = () => router.go(-1);
+    const dataFlowItem: Ref<IDataFlowItem> = ref({});
+
+    const retrieveDataFlowItem = async dataFlowItemId => {
+      try {
+        const res = await dataFlowItemService().find(dataFlowItemId);
+        dataFlowItem.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveDataFlowItem(dataFlowItemId) {
-    this.dataFlowItemService()
-      .find(dataFlowItemId)
-      .then(res => {
-        this.dataFlowItem = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.dataFlowItemId) {
+      retrieveDataFlowItem(route.params.dataFlowItemId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      dataFlowItem,
+
+      previousState,
+    };
+  },
+});

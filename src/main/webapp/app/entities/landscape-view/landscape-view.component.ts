@@ -1,83 +1,78 @@
-import { mixins } from 'vue-class-component';
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
-
-import JhiDataUtils from '@/shared/data/data-utils.service';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import LandscapeViewService from './landscape-view.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type ILandscapeView } from '@/shared/model/landscape-view.model';
+import useDataUtils from '@/shared/data/data-utils.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class LandscapeView extends mixins(JhiDataUtils) {
-  @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'LandscapeView',
+  setup() {
+    const dataUtils = useDataUtils();
+    const landscapeViewService = inject('landscapeViewService', () => new LandscapeViewService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const landscapeViews: Ref<ILandscapeView[]> = ref([]);
 
-  public landscapeViews: ILandscapeView[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllLandscapeViews();
-  }
+    const retrieveLandscapeViews = async () => {
+      isFetching.value = true;
+      try {
+        const res = await landscapeViewService().retrieve();
+        landscapeViews.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllLandscapeViews();
-  }
+    const handleSyncList = () => {
+      retrieveLandscapeViews();
+    };
 
-  public retrieveAllLandscapeViews(): void {
-    this.isFetching = true;
-    this.landscapeViewService()
-      .retrieve()
-      .then(
-        res => {
-          this.landscapeViews = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveLandscapeViews();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: ILandscapeView) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeLandscapeView = async () => {
+      try {
+        await landscapeViewService().delete(removeId.value);
+        const message = 'A LandscapeView is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveLandscapeViews();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public prepareRemove(instance: ILandscapeView): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeLandscapeView(): void {
-    this.landscapeViewService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A LandscapeView is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllLandscapeViews();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      landscapeViews,
+      handleSyncList,
+      isFetching,
+      retrieveLandscapeViews,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeLandscapeView,
+      ...dataUtils,
+    };
+  },
+});

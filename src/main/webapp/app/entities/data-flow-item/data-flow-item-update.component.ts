@@ -1,132 +1,120 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import { required, maxLength } from 'vuelidate/lib/validators';
-
-import AlertService from '@/shared/alert/alert.service';
+import DataFlowItemService from './data-flow-item.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import DataFlowService from '@/entities/data-flow/data-flow.service';
-import { IDataFlow } from '@/shared/model/data-flow.model';
+import { type IDataFlow } from '@/shared/model/data-flow.model';
+import { type IDataFlowItem, DataFlowItem } from '@/shared/model/data-flow-item.model';
 
-import { IDataFlowItem, DataFlowItem } from '@/shared/model/data-flow-item.model';
-import DataFlowItemService from './data-flow-item.service';
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'DataFlowItemUpdate',
+  setup() {
+    const dataFlowItemService = inject('dataFlowItemService', () => new DataFlowItemService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-const validations: any = {
-  dataFlowItem: {
-    resourceName: {
-      required,
-    },
-    resourceType: {},
-    description: {
-      maxLength: maxLength(1000),
-    },
-    contractURL: {
-      maxLength: maxLength(500),
-    },
-    documentationURL: {
-      maxLength: maxLength(500),
-    },
-    startDate: {},
-    endDate: {},
-  },
-};
+    const dataFlowItem: Ref<IDataFlowItem> = ref(new DataFlowItem());
 
-@Component({
-  validations,
-})
-export default class DataFlowItemUpdate extends Vue {
-  @Inject('dataFlowItemService') private dataFlowItemService: () => DataFlowItemService;
-  @Inject('alertService') private alertService: () => AlertService;
+    const dataFlowService = inject('dataFlowService', () => new DataFlowService());
 
-  public dataFlowItem: IDataFlowItem = new DataFlowItem();
+    const dataFlows: Ref<IDataFlow[]> = ref([]);
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
-  @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
+    const route = useRoute();
+    const router = useRouter();
 
-  public dataFlows: IDataFlow[] = [];
-  public isSaving = false;
-  public currentLanguage = '';
+    const previousState = () => router.go(-1);
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.dataFlowItemId) {
-        vm.retrieveDataFlowItem(to.params.dataFlowItemId);
+    const retrieveDataFlowItem = async dataFlowItemId => {
+      try {
+        const res = await dataFlowItemService().find(dataFlowItemId);
+        dataFlowItem.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-      vm.initRelationships();
-    });
-  }
+    };
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.dataFlowItem.id) {
-      this.dataFlowItemService()
-        .update(this.dataFlowItem)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A DataFlowItem is updated with identifier ' + param.id;
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.dataFlowItemService()
-        .create(this.dataFlowItem)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A DataFlowItem is created with identifier ' + param.id;
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
+    if (route.params?.dataFlowItemId) {
+      retrieveDataFlowItem(route.params.dataFlowItemId);
     }
-  }
 
-  public retrieveDataFlowItem(dataFlowItemId): void {
-    this.dataFlowItemService()
-      .find(dataFlowItemId)
-      .then(res => {
-        this.dataFlowItem = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    const initRelationships = () => {
+      dataFlowService()
+        .retrieve()
+        .then(res => {
+          dataFlows.value = res.data;
+        });
+    };
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
+    initRelationships();
 
-  public initRelationships(): void {
-    this.dataFlowService()
-      .retrieve()
-      .then(res => {
-        this.dataFlows = res.data;
-      });
-  }
-}
+    const validations = useValidation();
+    const validationRules = {
+      resourceName: {
+        required: validations.required('This field is required.'),
+      },
+      resourceType: {},
+      description: {
+        maxLength: validations.maxLength('This field cannot be longer than 1000 characters.', 1000),
+      },
+      contractURL: {
+        maxLength: validations.maxLength('This field cannot be longer than 500 characters.', 500),
+      },
+      documentationURL: {
+        maxLength: validations.maxLength('This field cannot be longer than 500 characters.', 500),
+      },
+      startDate: {},
+      endDate: {},
+      dataFlow: {},
+    };
+    const v$ = useVuelidate(validationRules, dataFlowItem as any);
+    v$.value.$validate();
+
+    return {
+      dataFlowItemService,
+      alertService,
+      dataFlowItem,
+      previousState,
+      isSaving,
+      currentLanguage,
+      dataFlows,
+      v$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.dataFlowItem.id) {
+        this.dataFlowItemService()
+          .update(this.dataFlowItem)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo('A DataFlowItem is updated with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.dataFlowItemService()
+          .create(this.dataFlowItem)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess('A DataFlowItem is created with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
+    },
+  },
+});

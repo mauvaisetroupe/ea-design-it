@@ -12,6 +12,7 @@
                                  baseTableName="capability"
                                  constraintName="fk_capability__parent_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="capability"/>
+                                 referencedTableName="capability"
+                                 />
     </changeSet>
 </databaseChangeLog>

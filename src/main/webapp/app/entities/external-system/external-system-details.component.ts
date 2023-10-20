@@ -1,36 +1,41 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { IExternalSystem } from '@/shared/model/external-system.model';
 import ExternalSystemService from './external-system.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IExternalSystem } from '@/shared/model/external-system.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class ExternalSystemDetails extends Vue {
-  @Inject('externalSystemService') private externalSystemService: () => ExternalSystemService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ExternalSystemDetails',
+  setup() {
+    const externalSystemService = inject('externalSystemService', () => new ExternalSystemService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public externalSystem: IExternalSystem = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.externalSystemId) {
-        vm.retrieveExternalSystem(to.params.externalSystemId);
+    const previousState = () => router.go(-1);
+    const externalSystem: Ref<IExternalSystem> = ref({});
+
+    const retrieveExternalSystem = async externalSystemId => {
+      try {
+        const res = await externalSystemService().find(externalSystemId);
+        externalSystem.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveExternalSystem(externalSystemId) {
-    this.externalSystemService()
-      .find(externalSystemId)
-      .then(res => {
-        this.externalSystem = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.externalSystemId) {
+      retrieveExternalSystem(route.params.externalSystemId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      externalSystem,
+
+      previousState,
+    };
+  },
+});

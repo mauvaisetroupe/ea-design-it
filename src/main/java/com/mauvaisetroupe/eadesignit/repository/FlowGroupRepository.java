@@ -27,12 +27,12 @@ public interface FlowGroupRepository extends JpaRepository<FlowGroup, Long> {
     }
 
     @Query(
-        value = "select distinct flowGroup from FlowGroup flowGroup left join fetch flowGroup.flow",
-        countQuery = "select count(distinct flowGroup) from FlowGroup flowGroup"
+        value = "select flowGroup from FlowGroup flowGroup left join fetch flowGroup.flow",
+        countQuery = "select count(flowGroup) from FlowGroup flowGroup"
     )
     Page<FlowGroup> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select distinct flowGroup from FlowGroup flowGroup left join fetch flowGroup.flow")
+    @Query("select flowGroup from FlowGroup flowGroup left join fetch flowGroup.flow")
     List<FlowGroup> findAllWithToOneRelationships();
 
     @Query("select flowGroup from FlowGroup flowGroup left join fetch flowGroup.flow where flowGroup.id =:id")

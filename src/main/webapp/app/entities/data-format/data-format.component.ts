@@ -1,80 +1,75 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { IDataFormat } from '@/shared/model/data-format.model';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import DataFormatService from './data-format.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IDataFormat } from '@/shared/model/data-format.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class DataFormat extends Vue {
-  @Inject('dataFormatService') private dataFormatService: () => DataFormatService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'DataFormat',
+  setup() {
+    const dataFormatService = inject('dataFormatService', () => new DataFormatService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const dataFormats: Ref<IDataFormat[]> = ref([]);
 
-  public dataFormats: IDataFormat[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllDataFormats();
-  }
+    const retrieveDataFormats = async () => {
+      isFetching.value = true;
+      try {
+        const res = await dataFormatService().retrieve();
+        dataFormats.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllDataFormats();
-  }
+    const handleSyncList = () => {
+      retrieveDataFormats();
+    };
 
-  public retrieveAllDataFormats(): void {
-    this.isFetching = true;
-    this.dataFormatService()
-      .retrieve()
-      .then(
-        res => {
-          this.dataFormats = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveDataFormats();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: IDataFormat) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeDataFormat = async () => {
+      try {
+        await dataFormatService().delete(removeId.value);
+        const message = 'A DataFormat is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveDataFormats();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public prepareRemove(instance: IDataFormat): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeDataFormat(): void {
-    this.dataFormatService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A DataFormat is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllDataFormats();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      dataFormats,
+      handleSyncList,
+      isFetching,
+      retrieveDataFormats,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeDataFormat,
+    };
+  },
+});

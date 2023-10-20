@@ -3,7 +3,7 @@
     <div class="col-8">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
         <h2 id="eaDesignItApp.externalSystem.home.createOrEditLabel" data-cy="ExternalSystemCreateUpdateHeading">
-          Create or edit a ExternalSystem
+          Create or edit a External System
         </h2>
         <div>
           <div class="form-group" v-if="externalSystem.id">
@@ -18,8 +18,8 @@
               name="externalSystemID"
               id="external-system-externalSystemID"
               data-cy="externalSystemID"
-              :class="{ valid: !$v.externalSystem.externalSystemID.$invalid, invalid: $v.externalSystem.externalSystemID.$invalid }"
-              v-model="$v.externalSystem.externalSystemID.$model"
+              :class="{ valid: !v$.externalSystemID.$invalid, invalid: v$.externalSystemID.$invalid }"
+              v-model="v$.externalSystemID.$model"
             />
           </div>
         </div>
@@ -31,7 +31,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.externalSystem.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

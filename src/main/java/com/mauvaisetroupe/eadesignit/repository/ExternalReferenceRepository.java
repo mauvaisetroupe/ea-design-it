@@ -27,12 +27,12 @@ public interface ExternalReferenceRepository extends JpaRepository<ExternalRefer
     }
 
     @Query(
-        value = "select distinct externalReference from ExternalReference externalReference left join fetch externalReference.externalSystem",
-        countQuery = "select count(distinct externalReference) from ExternalReference externalReference"
+        value = "select externalReference from ExternalReference externalReference left join fetch externalReference.externalSystem",
+        countQuery = "select count(externalReference) from ExternalReference externalReference"
     )
     Page<ExternalReference> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select distinct externalReference from ExternalReference externalReference left join fetch externalReference.externalSystem")
+    @Query("select externalReference from ExternalReference externalReference left join fetch externalReference.externalSystem")
     List<ExternalReference> findAllWithToOneRelationships();
 
     @Query(

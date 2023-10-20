@@ -15,7 +15,7 @@ describe('Capability e2e test', () => {
   const capabilityPageUrlPattern = new RegExp('/capability(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const capabilitySample = { name: 'utilize' };
+  const capabilitySample = { name: 'motorboat' };
 
   let capability;
 
@@ -92,7 +92,7 @@ describe('Capability e2e test', () => {
             {
               statusCode: 200,
               body: [capability],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -157,13 +157,17 @@ describe('Capability e2e test', () => {
     });
 
     it('should create an instance of Capability', () => {
-      cy.get(`[data-cy="name"]`).type('Consultant capability Infrastructure').should('have.value', 'Consultant capability Infrastructure');
+      cy.get(`[data-cy="name"]`).type('hopelessly');
+      cy.get(`[data-cy="name"]`).should('have.value', 'hopelessly');
 
-      cy.get(`[data-cy="description"]`).type('Station microchip').should('have.value', 'Station microchip');
+      cy.get(`[data-cy="description"]`).type('midst modulo');
+      cy.get(`[data-cy="description"]`).should('have.value', 'midst modulo');
 
-      cy.get(`[data-cy="comment"]`).type('B2B bluetooth').should('have.value', 'B2B bluetooth');
+      cy.get(`[data-cy="comment"]`).type('woot');
+      cy.get(`[data-cy="comment"]`).should('have.value', 'woot');
 
-      cy.get(`[data-cy="level"]`).type('76749').should('have.value', '76749');
+      cy.get(`[data-cy="level"]`).type('21870');
+      cy.get(`[data-cy="level"]`).should('have.value', '21870');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

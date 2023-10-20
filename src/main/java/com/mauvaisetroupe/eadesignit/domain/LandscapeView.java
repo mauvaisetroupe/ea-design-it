@@ -2,20 +2,16 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ViewPoint;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Type;
 
 /**
  * A LandscapeView.
  */
 @Entity
 @Table(name = "landscape_view")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class LandscapeView implements Serializable {
 
@@ -35,31 +31,27 @@ public class LandscapeView implements Serializable {
     private String diagramName;
 
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "compressed_draw_xml")
     private String compressedDrawXML;
 
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "compressed_draw_svg")
     private String compressedDrawSVG;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner owner;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_landscape_view__flows",
         joinColumns = @JoinColumn(name = "landscape_view_id"),
         inverseJoinColumns = @JoinColumn(name = "flows_id")
     )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "steps", "owner", "landscapes", "dataFlows" }, allowSetters = true)
     private Set<FunctionalFlow> flows = new HashSet<>();
 
-    @ManyToMany(mappedBy = "landscapes")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "landscapes")
     @JsonIgnoreProperties(value = { "capability", "application", "landscapes" }, allowSetters = true)
     private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
 
@@ -209,7 +201,7 @@ public class LandscapeView implements Serializable {
         if (!(o instanceof LandscapeView)) {
             return false;
         }
-        return id != null && id.equals(((LandscapeView) o).id);
+        return getId() != null && getId().equals(((LandscapeView) o).getId());
     }
 
     @Override

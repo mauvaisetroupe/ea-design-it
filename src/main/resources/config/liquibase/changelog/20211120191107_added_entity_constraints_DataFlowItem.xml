@@ -12,6 +12,7 @@
                                  baseTableName="data_flow_item"
                                  constraintName="fk_data_flow_item__data_flow_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="dataflow"/>
+                                 referencedTableName="dataflow"
+                                 />
     </changeSet>
 </databaseChangeLog>

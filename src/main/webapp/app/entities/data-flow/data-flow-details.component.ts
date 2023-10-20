@@ -1,36 +1,41 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { IDataFlow } from '@/shared/model/data-flow.model';
 import DataFlowService from './data-flow.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IDataFlow } from '@/shared/model/data-flow.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class DataFlowDetails extends Vue {
-  @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'DataFlowDetails',
+  setup() {
+    const dataFlowService = inject('dataFlowService', () => new DataFlowService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public dataFlow: IDataFlow = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.dataFlowId) {
-        vm.retrieveDataFlow(to.params.dataFlowId);
+    const previousState = () => router.go(-1);
+    const dataFlow: Ref<IDataFlow> = ref({});
+
+    const retrieveDataFlow = async dataFlowId => {
+      try {
+        const res = await dataFlowService().find(dataFlowId);
+        dataFlow.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveDataFlow(dataFlowId) {
-    this.dataFlowService()
-      .find(dataFlowId)
-      .then(res => {
-        this.dataFlow = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.dataFlowId) {
+      retrieveDataFlow(route.params.dataFlowId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      dataFlow,
+
+      previousState,
+    };
+  },
+});

@@ -8,12 +8,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.DataFlowItem;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowItemRepository;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -225,7 +225,7 @@ class DataFlowItemResourceIT {
         int databaseSizeBeforeUpdate = dataFlowItemRepository.findAll().size();
 
         // Update the dataFlowItem
-        DataFlowItem updatedDataFlowItem = dataFlowItemRepository.findById(dataFlowItem.getId()).get();
+        DataFlowItem updatedDataFlowItem = dataFlowItemRepository.findById(dataFlowItem.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedDataFlowItem are not directly saved in db
         em.detach(updatedDataFlowItem);
         updatedDataFlowItem
@@ -327,10 +327,10 @@ class DataFlowItemResourceIT {
         partialUpdatedDataFlowItem.setId(dataFlowItem.getId());
 
         partialUpdatedDataFlowItem
-            .resourceName(UPDATED_RESOURCE_NAME)
             .resourceType(UPDATED_RESOURCE_TYPE)
-            .description(UPDATED_DESCRIPTION)
-            .startDate(UPDATED_START_DATE);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
 
         restDataFlowItemMockMvc
             .perform(
@@ -344,13 +344,13 @@ class DataFlowItemResourceIT {
         List<DataFlowItem> dataFlowItemList = dataFlowItemRepository.findAll();
         assertThat(dataFlowItemList).hasSize(databaseSizeBeforeUpdate);
         DataFlowItem testDataFlowItem = dataFlowItemList.get(dataFlowItemList.size() - 1);
-        assertThat(testDataFlowItem.getResourceName()).isEqualTo(UPDATED_RESOURCE_NAME);
+        assertThat(testDataFlowItem.getResourceName()).isEqualTo(DEFAULT_RESOURCE_NAME);
         assertThat(testDataFlowItem.getResourceType()).isEqualTo(UPDATED_RESOURCE_TYPE);
-        assertThat(testDataFlowItem.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testDataFlowItem.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testDataFlowItem.getContractURL()).isEqualTo(DEFAULT_CONTRACT_URL);
-        assertThat(testDataFlowItem.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
+        assertThat(testDataFlowItem.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
         assertThat(testDataFlowItem.getStartDate()).isEqualTo(UPDATED_START_DATE);
-        assertThat(testDataFlowItem.getEndDate()).isEqualTo(DEFAULT_END_DATE);
+        assertThat(testDataFlowItem.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 
     @Test

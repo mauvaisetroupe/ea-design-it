@@ -16,10 +16,12 @@
               name="alias"
               id="application-alias"
               data-cy="alias"
-              :class="{ valid: !$v.application.alias.$invalid, invalid: $v.application.alias.$invalid }"
-              v-model="$v.application.alias.$model"
+              :class="{ valid: !v$.alias.$invalid, invalid: v$.alias.$invalid }"
+              v-model="v$.alias.$model"
             />
-            <div v-if="$v.application.alias.$anyDirty && $v.application.alias.$invalid"></div>
+            <div v-if="v$.alias.$anyDirty && v$.alias.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.alias.$errors" :key="error.$uid">{{ error.$message }}</small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="application-name">Name</label>
@@ -29,12 +31,12 @@
               name="name"
               id="application-name"
               data-cy="name"
-              :class="{ valid: !$v.application.name.$invalid, invalid: $v.application.name.$invalid }"
-              v-model="$v.application.name.$model"
+              :class="{ valid: !v$.name.$invalid, invalid: v$.name.$invalid }"
+              v-model="v$.name.$model"
               required
             />
-            <div v-if="$v.application.name.$anyDirty && $v.application.name.$invalid">
-              <small class="form-text text-danger" v-if="!$v.application.name.required"> This field is required. </small>
+            <div v-if="v$.name.$anyDirty && v$.name.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.name.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -45,13 +47,11 @@
               name="description"
               id="application-description"
               data-cy="description"
-              :class="{ valid: !$v.application.description.$invalid, invalid: $v.application.description.$invalid }"
-              v-model="$v.application.description.$model"
+              :class="{ valid: !v$.description.$invalid, invalid: v$.description.$invalid }"
+              v-model="v$.description.$model"
             />
-            <div v-if="$v.application.description.$anyDirty && $v.application.description.$invalid">
-              <small class="form-text text-danger" v-if="!$v.application.description.maxLength">
-                This field cannot be longer than 1500 characters.
-              </small>
+            <div v-if="v$.description.$anyDirty && v$.description.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.description.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -62,13 +62,11 @@
               name="comment"
               id="application-comment"
               data-cy="comment"
-              :class="{ valid: !$v.application.comment.$invalid, invalid: $v.application.comment.$invalid }"
-              v-model="$v.application.comment.$model"
+              :class="{ valid: !v$.comment.$invalid, invalid: v$.comment.$invalid }"
+              v-model="v$.comment.$model"
             />
-            <div v-if="$v.application.comment.$anyDirty && $v.application.comment.$invalid">
-              <small class="form-text text-danger" v-if="!$v.application.comment.maxLength">
-                This field cannot be longer than 1000 characters.
-              </small>
+            <div v-if="v$.comment.$anyDirty && v$.comment.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.comment.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -79,13 +77,13 @@
               name="documentationURL"
               id="application-documentationURL"
               data-cy="documentationURL"
-              :class="{ valid: !$v.application.documentationURL.$invalid, invalid: $v.application.documentationURL.$invalid }"
-              v-model="$v.application.documentationURL.$model"
+              :class="{ valid: !v$.documentationURL.$invalid, invalid: v$.documentationURL.$invalid }"
+              v-model="v$.documentationURL.$model"
             />
-            <div v-if="$v.application.documentationURL.$anyDirty && $v.application.documentationURL.$invalid">
-              <small class="form-text text-danger" v-if="!$v.application.documentationURL.maxLength">
-                This field cannot be longer than 500 characters.
-              </small>
+            <div v-if="v$.documentationURL.$anyDirty && v$.documentationURL.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.documentationURL.$errors" :key="error.$uid">{{
+                error.$message
+              }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -94,7 +92,7 @@
               <b-input-group-prepend>
                 <b-form-datepicker
                   aria-controls="application-startDate"
-                  v-model="$v.application.startDate.$model"
+                  v-model="v$.startDate.$model"
                   name="startDate"
                   class="form-control"
                   :locale="currentLanguage"
@@ -111,8 +109,8 @@
                 type="text"
                 class="form-control"
                 name="startDate"
-                :class="{ valid: !$v.application.startDate.$invalid, invalid: $v.application.startDate.$invalid }"
-                v-model="$v.application.startDate.$model"
+                :class="{ valid: !v$.startDate.$invalid, invalid: v$.startDate.$invalid }"
+                v-model="v$.startDate.$model"
               />
             </b-input-group>
           </div>
@@ -122,7 +120,7 @@
               <b-input-group-prepend>
                 <b-form-datepicker
                   aria-controls="application-endDate"
-                  v-model="$v.application.endDate.$model"
+                  v-model="v$.endDate.$model"
                   name="endDate"
                   class="form-control"
                   :locale="currentLanguage"
@@ -139,8 +137,8 @@
                 type="text"
                 class="form-control"
                 name="endDate"
-                :class="{ valid: !$v.application.endDate.$invalid, invalid: $v.application.endDate.$invalid }"
-                v-model="$v.application.endDate.$model"
+                :class="{ valid: !v$.endDate.$invalid, invalid: v$.endDate.$invalid }"
+                v-model="v$.endDate.$model"
               />
             </b-input-group>
           </div>
@@ -149,8 +147,8 @@
             <select
               class="form-control"
               name="applicationType"
-              :class="{ valid: !$v.application.applicationType.$invalid, invalid: $v.application.applicationType.$invalid }"
-              v-model="$v.application.applicationType.$model"
+              :class="{ valid: !v$.applicationType.$invalid, invalid: v$.applicationType.$invalid }"
+              v-model="v$.applicationType.$model"
               id="application-applicationType"
               data-cy="applicationType"
             >
@@ -164,8 +162,8 @@
             <select
               class="form-control"
               name="softwareType"
-              :class="{ valid: !$v.application.softwareType.$invalid, invalid: $v.application.softwareType.$invalid }"
-              v-model="$v.application.softwareType.$model"
+              :class="{ valid: !v$.softwareType.$invalid, invalid: v$.softwareType.$invalid }"
+              v-model="v$.softwareType.$model"
               id="application-softwareType"
               data-cy="softwareType"
             >
@@ -180,8 +178,8 @@
               name="nickname"
               id="application-nickname"
               data-cy="nickname"
-              :class="{ valid: !$v.application.nickname.$invalid, invalid: $v.application.nickname.$invalid }"
-              v-model="$v.application.nickname.$model"
+              :class="{ valid: !v$.nickname.$invalid, invalid: v$.nickname.$invalid }"
+              v-model="v$.nickname.$model"
             />
           </div>
           <div class="form-group">
@@ -300,7 +298,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.application.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

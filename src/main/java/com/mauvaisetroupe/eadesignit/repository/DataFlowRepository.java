@@ -30,12 +30,12 @@ public interface DataFlowRepository extends DataFlowRepositoryWithBagRelationshi
     }
 
     @Query(
-        value = "select distinct dataFlow from DataFlow dataFlow left join fetch dataFlow.format left join fetch dataFlow.flowInterface",
-        countQuery = "select count(distinct dataFlow) from DataFlow dataFlow"
+        value = "select dataFlow from DataFlow dataFlow left join fetch dataFlow.format left join fetch dataFlow.flowInterface",
+        countQuery = "select count(dataFlow) from DataFlow dataFlow"
     )
     Page<DataFlow> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select distinct dataFlow from DataFlow dataFlow left join fetch dataFlow.format left join fetch dataFlow.flowInterface")
+    @Query("select dataFlow from DataFlow dataFlow left join fetch dataFlow.format left join fetch dataFlow.flowInterface")
     List<DataFlow> findAllWithToOneRelationships();
 
     @Query(

@@ -1,18 +1,15 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A FunctionalFlowStep.
  */
 @Entity
 @Table(name = "flowstep")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class FunctionalFlowStep implements Serializable {
 
@@ -39,7 +36,7 @@ public class FunctionalFlowStep implements Serializable {
     )
     private FlowInterface flowInterface;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "flow", "steps" }, allowSetters = true)
     private FlowGroup group;
 
@@ -138,7 +135,7 @@ public class FunctionalFlowStep implements Serializable {
         if (!(o instanceof FunctionalFlowStep)) {
             return false;
         }
-        return id != null && id.equals(((FunctionalFlowStep) o).id);
+        return getId() != null && getId().equals(((FunctionalFlowStep) o).getId());
     }
 
     @Override

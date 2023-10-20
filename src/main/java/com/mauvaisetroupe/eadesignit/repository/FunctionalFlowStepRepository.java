@@ -27,13 +27,13 @@ public interface FunctionalFlowStepRepository extends JpaRepository<FunctionalFl
     }
 
     @Query(
-        value = "select distinct functionalFlowStep from FunctionalFlowStep functionalFlowStep left join fetch functionalFlowStep.flowInterface left join fetch functionalFlowStep.group left join fetch functionalFlowStep.flow",
-        countQuery = "select count(distinct functionalFlowStep) from FunctionalFlowStep functionalFlowStep"
+        value = "select functionalFlowStep from FunctionalFlowStep functionalFlowStep left join fetch functionalFlowStep.flowInterface left join fetch functionalFlowStep.group left join fetch functionalFlowStep.flow",
+        countQuery = "select count(functionalFlowStep) from FunctionalFlowStep functionalFlowStep"
     )
     Page<FunctionalFlowStep> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select distinct functionalFlowStep from FunctionalFlowStep functionalFlowStep left join fetch functionalFlowStep.flowInterface left join fetch functionalFlowStep.group left join fetch functionalFlowStep.flow"
+        "select functionalFlowStep from FunctionalFlowStep functionalFlowStep left join fetch functionalFlowStep.flowInterface left join fetch functionalFlowStep.group left join fetch functionalFlowStep.flow"
     )
     List<FunctionalFlowStep> findAllWithToOneRelationships();
 

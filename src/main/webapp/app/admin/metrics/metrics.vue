@@ -37,7 +37,7 @@
           </b-progress-bar>
         </b-progress>
 
-        <span><span>Timed Waiting</span> ({{ threadStats.threadDumpTimedWaiting }})</span>
+        <span><span>Timed waiting</span> ({{ threadStats.threadDumpTimedWaiting }})</span>
         <b-progress variant="success" :max="threadStats.threadDumpAll" striped>
           <b-progress-bar
             :value="threadStats.threadDumpTimedWaiting"
@@ -79,7 +79,7 @@
         </div>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-4">Start time</div>
-          <div class="col-md-8 text-right">{{ metrics.processMetrics['process.start.time'] | formatDate }}</div>
+          <div class="col-md-8 text-right">{{ formatDate(metrics.processMetrics['process.start.time']) }}</div>
         </div>
         <div class="row" v-if="!updatingMetrics">
           <div class="col-md-9">Process CPU usage</div>
@@ -135,7 +135,7 @@
               :value="metrics.garbageCollector['jvm.gc.live.data.size']"
               :label="
                 formatNumber2(
-                  (100 * metrics.garbageCollector['jvm.gc.live.data.size']) / metrics.garbageCollector['jvm.gc.max.data.size']
+                  (100 * metrics.garbageCollector['jvm.gc.live.data.size']) / metrics.garbageCollector['jvm.gc.max.data.size'],
                 ) + '%'
               "
             >
@@ -154,7 +154,7 @@
               :value="metrics.garbageCollector['jvm.gc.memory.promoted']"
               :label="
                 formatNumber2(
-                  (100 * metrics.garbageCollector['jvm.gc.memory.promoted']) / metrics.garbageCollector['jvm.gc.memory.allocated']
+                  (100 * metrics.garbageCollector['jvm.gc.memory.promoted']) / metrics.garbageCollector['jvm.gc.memory.allocated'],
                 ) + '%'
               "
             >
@@ -352,7 +352,9 @@
     </div>
 
     <b-modal ref="metricsModal" size="lg">
-      <h4 slot="modal-title" class="modal-title" id="showMetricsLabel">Threads dump</h4>
+      <template #modal-title>
+        <h4 class="modal-title" id="showMetricsLabel">Threads dump</h4>
+      </template>
       <metrics-modal :thread-dump="threadData"></metrics-modal>
     </b-modal>
   </div>

@@ -1,4 +1,4 @@
-import { IDataFlow } from '@/shared/model/data-flow.model';
+import { type IDataFlow } from '@/shared/model/data-flow.model';
 
 export interface IDataFlowItem {
   id?: number;
@@ -22,6 +22,6 @@ export class DataFlowItem implements IDataFlowItem {
     public documentationURL?: string | null,
     public startDate?: Date | null,
     public endDate?: Date | null,
-    public dataFlow?: IDataFlow | null
+    public dataFlow?: IDataFlow | null,
   ) {}
 }

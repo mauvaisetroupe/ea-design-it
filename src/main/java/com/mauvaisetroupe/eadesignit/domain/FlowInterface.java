@@ -1,21 +1,18 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A FlowInterface.
  */
 @Entity
 @Table(name = "interface")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class FlowInterface implements Serializable {
 
@@ -52,8 +49,7 @@ public class FlowInterface implements Serializable {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @OneToMany(mappedBy = "flowInterface")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "flowInterface")
     @JsonIgnoreProperties(value = { "items", "format", "functionalFlows", "flowInterface" }, allowSetters = true)
     private Set<DataFlow> dataFlows = new HashSet<>();
 
@@ -91,23 +87,22 @@ public class FlowInterface implements Serializable {
     )
     private Application target;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "application", "categories", "technologies", "externalIDS" }, allowSetters = true)
     private ApplicationComponent sourceComponent;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "application", "categories", "technologies", "externalIDS" }, allowSetters = true)
     private ApplicationComponent targetComponent;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Protocol protocol;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner owner;
 
-    @OneToMany(mappedBy = "flowInterface")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "flowInterface")
     @JsonIgnoreProperties(value = { "flowInterface", "group", "flow" }, allowSetters = true)
     private Set<FunctionalFlowStep> steps = new HashSet<>();
 
@@ -367,7 +362,7 @@ public class FlowInterface implements Serializable {
         if (!(o instanceof FlowInterface)) {
             return false;
         }
-        return id != null && id.equals(((FlowInterface) o).id);
+        return getId() != null && getId().equals(((FlowInterface) o).getId());
     }
 
     @Override

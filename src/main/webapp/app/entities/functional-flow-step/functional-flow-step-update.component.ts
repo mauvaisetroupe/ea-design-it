@@ -1,151 +1,139 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import { maxLength, required } from 'vuelidate/lib/validators';
-
-import AlertService from '@/shared/alert/alert.service';
+import FunctionalFlowStepService from './functional-flow-step.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
-import { IFlowInterface } from '@/shared/model/flow-interface.model';
-
+import { type IFlowInterface } from '@/shared/model/flow-interface.model';
 import FlowGroupService from '@/entities/flow-group/flow-group.service';
-import { IFlowGroup } from '@/shared/model/flow-group.model';
-
+import { type IFlowGroup } from '@/shared/model/flow-group.model';
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
-import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { type IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { type IFunctionalFlowStep, FunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
 
-import { IFunctionalFlowStep, FunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
-import FunctionalFlowStepService from './functional-flow-step.service';
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FunctionalFlowStepUpdate',
+  setup() {
+    const functionalFlowStepService = inject('functionalFlowStepService', () => new FunctionalFlowStepService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-const validations: any = {
-  functionalFlowStep: {
-    description: {
-      maxLength: maxLength(500),
-    },
-    stepOrder: {},
-    flowInterface: {
-      required,
-    },
-    flow: {
-      required,
+    const functionalFlowStep: Ref<IFunctionalFlowStep> = ref(new FunctionalFlowStep());
+
+    const flowInterfaceService = inject('flowInterfaceService', () => new FlowInterfaceService());
+
+    const flowInterfaces: Ref<IFlowInterface[]> = ref([]);
+
+    const flowGroupService = inject('flowGroupService', () => new FlowGroupService());
+
+    const flowGroups: Ref<IFlowGroup[]> = ref([]);
+
+    const functionalFlowService = inject('functionalFlowService', () => new FunctionalFlowService());
+
+    const functionalFlows: Ref<IFunctionalFlow[]> = ref([]);
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
+
+    const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1);
+
+    const retrieveFunctionalFlowStep = async functionalFlowStepId => {
+      try {
+        const res = await functionalFlowStepService().find(functionalFlowStepId);
+        functionalFlowStep.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
+
+    if (route.params?.functionalFlowStepId) {
+      retrieveFunctionalFlowStep(route.params.functionalFlowStepId);
+    }
+
+    const initRelationships = () => {
+      flowInterfaceService()
+        .retrieve()
+        .then(res => {
+          flowInterfaces.value = res.data;
+        });
+      flowGroupService()
+        .retrieve()
+        .then(res => {
+          flowGroups.value = res.data;
+        });
+      functionalFlowService()
+        .retrieve()
+        .then(res => {
+          functionalFlows.value = res.data;
+        });
+    };
+
+    initRelationships();
+
+    const validations = useValidation();
+    const validationRules = {
+      description: {
+        maxLength: validations.maxLength('This field cannot be longer than 500 characters.', 500),
+      },
+      stepOrder: {},
+      flowInterface: {
+        required: validations.required('This field is required.'),
+      },
+      group: {},
+      flow: {
+        required: validations.required('This field is required.'),
+      },
+    };
+    const v$ = useVuelidate(validationRules, functionalFlowStep as any);
+    v$.value.$validate();
+
+    return {
+      functionalFlowStepService,
+      alertService,
+      functionalFlowStep,
+      previousState,
+      isSaving,
+      currentLanguage,
+      flowInterfaces,
+      flowGroups,
+      functionalFlows,
+      v$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.functionalFlowStep.id) {
+        this.functionalFlowStepService()
+          .update(this.functionalFlowStep)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo('A FunctionalFlowStep is updated with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.functionalFlowStepService()
+          .create(this.functionalFlowStep)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess('A FunctionalFlowStep is created with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
     },
   },
-};
-
-@Component({
-  validations,
-})
-export default class FunctionalFlowStepUpdate extends Vue {
-  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
-  @Inject('alertService') private alertService: () => AlertService;
-
-  public functionalFlowStep: IFunctionalFlowStep = new FunctionalFlowStep();
-
-  @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
-
-  public flowInterfaces: IFlowInterface[] = [];
-
-  @Inject('flowGroupService') private flowGroupService: () => FlowGroupService;
-
-  public flowGroups: IFlowGroup[] = [];
-
-  @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
-
-  public functionalFlows: IFunctionalFlow[] = [];
-  public isSaving = false;
-  public currentLanguage = '';
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.functionalFlowStepId) {
-        vm.retrieveFunctionalFlowStep(to.params.functionalFlowStepId);
-      }
-      vm.initRelationships();
-    });
-  }
-
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.functionalFlowStep.id) {
-      this.functionalFlowStepService()
-        .update(this.functionalFlowStep)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A FunctionalFlowStep is updated with identifier ' + param.id;
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.functionalFlowStepService()
-        .create(this.functionalFlowStep)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A FunctionalFlowStep is created with identifier ' + param.id;
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    }
-  }
-
-  public retrieveFunctionalFlowStep(functionalFlowStepId): void {
-    this.functionalFlowStepService()
-      .find(functionalFlowStepId)
-      .then(res => {
-        this.functionalFlowStep = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {
-    this.flowInterfaceService()
-      .retrieve()
-      .then(res => {
-        this.flowInterfaces = res.data;
-      });
-    this.flowGroupService()
-      .retrieve()
-      .then(res => {
-        this.flowGroups = res.data;
-      });
-    this.functionalFlowService()
-      .retrieve()
-      .then(res => {
-        this.functionalFlows = res.data;
-      });
-  }
-}
+});

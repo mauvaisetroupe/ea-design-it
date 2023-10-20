@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.ExternalSystem;
 import com.mauvaisetroupe.eadesignit.repository.ExternalSystemRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,7 +160,7 @@ class ExternalSystemResourceIT {
         int databaseSizeBeforeUpdate = externalSystemRepository.findAll().size();
 
         // Update the externalSystem
-        ExternalSystem updatedExternalSystem = externalSystemRepository.findById(externalSystem.getId()).get();
+        ExternalSystem updatedExternalSystem = externalSystemRepository.findById(externalSystem.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedExternalSystem are not directly saved in db
         em.detach(updatedExternalSystem);
         updatedExternalSystem.externalSystemID(UPDATED_EXTERNAL_SYSTEM_ID);

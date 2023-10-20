@@ -15,7 +15,7 @@ describe('Technology e2e test', () => {
   const technologyPageUrlPattern = new RegExp('/technology(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const technologySample = { name: 'parsing' };
+  const technologySample = { name: 'yieldingly more pish' };
 
   let technology;
 
@@ -92,7 +92,7 @@ describe('Technology e2e test', () => {
             {
               statusCode: 200,
               body: [technology],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -157,11 +157,14 @@ describe('Technology e2e test', () => {
     });
 
     it('should create an instance of Technology', () => {
-      cy.get(`[data-cy="name"]`).type('Polarised Buckinghamshire viral').should('have.value', 'Polarised Buckinghamshire viral');
+      cy.get(`[data-cy="name"]`).type('budge onto hike');
+      cy.get(`[data-cy="name"]`).should('have.value', 'budge onto hike');
 
-      cy.get(`[data-cy="type"]`).type('Hat Berkshire').should('have.value', 'Hat Berkshire');
+      cy.get(`[data-cy="type"]`).type('against');
+      cy.get(`[data-cy="type"]`).should('have.value', 'against');
 
-      cy.get(`[data-cy="description"]`).type('drive').should('have.value', 'drive');
+      cy.get(`[data-cy="description"]`).type('before');
+      cy.get(`[data-cy="description"]`).should('have.value', 'before');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

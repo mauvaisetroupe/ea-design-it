@@ -36,6 +36,7 @@
       "otherEntityName": "owner",
       "otherEntityRelationshipName": "landscapeView",
       "relationshipName": "owner",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     },
     {
@@ -44,6 +45,7 @@
       "otherEntityRelationshipName": "landscape",
       "ownerSide": true,
       "relationshipName": "flows",
+      "relationshipSide": "left",
       "relationshipType": "many-to-many"
     },
     {
@@ -51,8 +53,10 @@
       "otherEntityRelationshipName": "landscape",
       "ownerSide": false,
       "relationshipName": "capabilityApplicationMapping",
+      "relationshipSide": "right",
       "relationshipType": "many-to-many"
     }
   ],
+  "searchEngine": "no",
   "service": "no"
 }

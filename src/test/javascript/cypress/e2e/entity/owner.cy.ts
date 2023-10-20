@@ -15,7 +15,7 @@ describe('Owner e2e test', () => {
   const ownerPageUrlPattern = new RegExp('/owner(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const ownerSample = { name: 'Account compressing' };
+  const ownerSample = { name: 'hence' };
 
   let owner;
 
@@ -92,7 +92,7 @@ describe('Owner e2e test', () => {
             {
               statusCode: 200,
               body: [owner],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -157,13 +157,17 @@ describe('Owner e2e test', () => {
     });
 
     it('should create an instance of Owner', () => {
-      cy.get(`[data-cy="name"]`).type('Cambridgeshire explicit').should('have.value', 'Cambridgeshire explicit');
+      cy.get(`[data-cy="name"]`).type('dodge precipitation');
+      cy.get(`[data-cy="name"]`).should('have.value', 'dodge precipitation');
 
-      cy.get(`[data-cy="firstname"]`).type('Intelligent Architect').should('have.value', 'Intelligent Architect');
+      cy.get(`[data-cy="firstname"]`).type('with step-sister but');
+      cy.get(`[data-cy="firstname"]`).should('have.value', 'with step-sister but');
 
-      cy.get(`[data-cy="lastname"]`).type('HDD').should('have.value', 'HDD');
+      cy.get(`[data-cy="lastname"]`).type('oof conspiracy meh');
+      cy.get(`[data-cy="lastname"]`).should('have.value', 'oof conspiracy meh');
 
-      cy.get(`[data-cy="email"]`).type('=-]@p.`Hp').should('have.value', '=-]@p.`Hp');
+      cy.get(`[data-cy="email"]`).type("(z5Z@W'$:s.u*M");
+      cy.get(`[data-cy="email"]`).should('have.value', "(z5Z@W'$:s.u*M");
 
       cy.get(entityCreateSaveButtonSelector).click();
 

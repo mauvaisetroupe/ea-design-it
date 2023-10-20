@@ -15,7 +15,7 @@ describe('DataFormat e2e test', () => {
   const dataFormatPageUrlPattern = new RegExp('/data-format(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const dataFormatSample = { name: 'Keyboard RSS Spain' };
+  const dataFormatSample = { name: 'within' };
 
   let dataFormat;
 
@@ -92,7 +92,7 @@ describe('DataFormat e2e test', () => {
             {
               statusCode: 200,
               body: [dataFormat],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -157,7 +157,8 @@ describe('DataFormat e2e test', () => {
     });
 
     it('should create an instance of DataFormat', () => {
-      cy.get(`[data-cy="name"]`).type('Indiana').should('have.value', 'Indiana');
+      cy.get(`[data-cy="name"]`).type('strictly');
+      cy.get(`[data-cy="name"]`).should('have.value', 'strictly');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

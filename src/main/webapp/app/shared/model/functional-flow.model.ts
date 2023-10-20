@@ -1,7 +1,7 @@
-import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
-import { IOwner } from '@/shared/model/owner.model';
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
-import { IDataFlow } from '@/shared/model/data-flow.model';
+import { type IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+import { type IOwner } from '@/shared/model/owner.model';
+import { type ILandscapeView } from '@/shared/model/landscape-view.model';
+import { type IDataFlow } from '@/shared/model/data-flow.model';
 
 export interface IFunctionalFlow {
   id?: number;
@@ -33,6 +33,6 @@ export class FunctionalFlow implements IFunctionalFlow {
     public steps?: IFunctionalFlowStep[] | null,
     public owner?: IOwner | null,
     public landscapes?: ILandscapeView[] | null,
-    public dataFlows?: IDataFlow[] | null
+    public dataFlows?: IDataFlow[] | null,
   ) {}
 }

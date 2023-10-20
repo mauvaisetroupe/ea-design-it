@@ -27,13 +27,13 @@ public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Lo
     }
 
     @Query(
-        value = "select distinct flowInterface from FlowInterface flowInterface left join fetch flowInterface.source left join fetch flowInterface.target left join fetch flowInterface.sourceComponent left join fetch flowInterface.targetComponent left join fetch flowInterface.protocol left join fetch flowInterface.owner",
-        countQuery = "select count(distinct flowInterface) from FlowInterface flowInterface"
+        value = "select flowInterface from FlowInterface flowInterface left join fetch flowInterface.source left join fetch flowInterface.target left join fetch flowInterface.sourceComponent left join fetch flowInterface.targetComponent left join fetch flowInterface.protocol left join fetch flowInterface.owner",
+        countQuery = "select count(flowInterface) from FlowInterface flowInterface"
     )
     Page<FlowInterface> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select distinct flowInterface from FlowInterface flowInterface left join fetch flowInterface.source left join fetch flowInterface.target left join fetch flowInterface.sourceComponent left join fetch flowInterface.targetComponent left join fetch flowInterface.protocol left join fetch flowInterface.owner"
+        "select flowInterface from FlowInterface flowInterface left join fetch flowInterface.source left join fetch flowInterface.target left join fetch flowInterface.sourceComponent left join fetch flowInterface.targetComponent left join fetch flowInterface.protocol left join fetch flowInterface.owner"
     )
     List<FlowInterface> findAllWithToOneRelationships();
 

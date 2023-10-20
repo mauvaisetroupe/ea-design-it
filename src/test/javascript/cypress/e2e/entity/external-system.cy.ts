@@ -92,7 +92,7 @@ describe('ExternalSystem e2e test', () => {
             {
               statusCode: 200,
               body: [externalSystem],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -157,9 +157,8 @@ describe('ExternalSystem e2e test', () => {
     });
 
     it('should create an instance of ExternalSystem', () => {
-      cy.get(`[data-cy="externalSystemID"]`)
-        .type('Infrastructure architectures killer')
-        .should('have.value', 'Infrastructure architectures killer');
+      cy.get(`[data-cy="externalSystemID"]`).type('nice which boring');
+      cy.get(`[data-cy="externalSystemID"]`).should('have.value', 'nice which boring');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

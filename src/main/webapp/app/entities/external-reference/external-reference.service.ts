@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IExternalReference } from '@/shared/model/external-reference.model';
+import { type IExternalReference } from '@/shared/model/external-reference.model';
 
 const baseApiUrl = 'api/external-references';
 

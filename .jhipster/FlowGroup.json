@@ -33,15 +33,18 @@
       "otherEntityName": "functionalFlow",
       "otherEntityRelationshipName": "flowGroup",
       "relationshipName": "flow",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "functionalFlowStep",
       "otherEntityRelationshipName": "group",
       "relationshipName": "steps",
+      "relationshipSide": "left",
       "relationshipType": "one-to-many",
       "relationshipValidateRules": "required"
     }
   ],
+  "searchEngine": "no",
   "service": "no"
 }

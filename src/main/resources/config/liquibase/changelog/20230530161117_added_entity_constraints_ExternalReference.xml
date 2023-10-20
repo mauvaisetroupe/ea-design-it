@@ -12,6 +12,7 @@
                                  baseTableName="external_reference"
                                  constraintName="fk_external_reference__external_system_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="external_system"/>
+                                 referencedTableName="external_system"
+                                 />
     </changeSet>
 </databaseChangeLog>

@@ -12,6 +12,7 @@
                                  baseTableName="flow_group"
                                  constraintName="fk_flow_group__flow_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="flow"/>
+                                 referencedTableName="flow"
+                                 />
     </changeSet>
 </databaseChangeLog>

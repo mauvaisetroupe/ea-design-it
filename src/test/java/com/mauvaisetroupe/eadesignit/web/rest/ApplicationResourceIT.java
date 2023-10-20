@@ -11,13 +11,13 @@ import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +26,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -280,7 +279,7 @@ class ApplicationResourceIT {
         int databaseSizeBeforeUpdate = applicationRepository.findAll().size();
 
         // Update the application
-        Application updatedApplication = applicationRepository.findById(application.getId()).get();
+        Application updatedApplication = applicationRepository.findById(application.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedApplication are not directly saved in db
         em.detach(updatedApplication);
         updatedApplication
@@ -387,7 +386,11 @@ class ApplicationResourceIT {
         Application partialUpdatedApplication = new Application();
         partialUpdatedApplication.setId(application.getId());
 
-        partialUpdatedApplication.name(UPDATED_NAME).endDate(UPDATED_END_DATE).nickname(UPDATED_NICKNAME);
+        partialUpdatedApplication
+            .description(UPDATED_DESCRIPTION)
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .endDate(UPDATED_END_DATE)
+            .nickname(UPDATED_NICKNAME);
 
         restApplicationMockMvc
             .perform(
@@ -402,10 +405,10 @@ class ApplicationResourceIT {
         assertThat(applicationList).hasSize(databaseSizeBeforeUpdate);
         Application testApplication = applicationList.get(applicationList.size() - 1);
         assertThat(testApplication.getAlias()).isEqualTo(DEFAULT_ALIAS);
-        assertThat(testApplication.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testApplication.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testApplication.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testApplication.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testApplication.getComment()).isEqualTo(DEFAULT_COMMENT);
-        assertThat(testApplication.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
+        assertThat(testApplication.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
         assertThat(testApplication.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testApplication.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testApplication.getApplicationType()).isEqualTo(DEFAULT_APPLICATION_TYPE);

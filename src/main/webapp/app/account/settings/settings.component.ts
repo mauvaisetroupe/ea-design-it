@@ -1,7 +1,9 @@
-import { email, maxLength, minLength, required } from 'vuelidate/lib/validators';
+import { computed, type ComputedRef, defineComponent, inject, ref, type Ref } from 'vue';
+import { useVuelidate } from '@vuelidate/core';
+import { email, maxLength, minLength, required } from '@vuelidate/validators';
 import axios from 'axios';
 import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
-import { Vue, Component } from 'vue-property-decorator';
+import { useStore } from '@/store';
 
 const validations = {
   settingsAccount: {
@@ -24,40 +26,48 @@ const validations = {
   },
 };
 
-@Component({
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'Settings',
   validations,
-})
-export default class Settings extends Vue {
-  public success: string = null;
-  public error: string = null;
-  public errorEmailExists: string = null;
-  public languages: any = this.$store.getters.languages || [];
+  setup() {
+    const store = useStore();
 
-  public save(): void {
-    this.error = null;
-    this.errorEmailExists = null;
-    axios
-      .post('api/account', this.settingsAccount)
-      .then(() => {
-        this.error = null;
-        this.success = 'OK';
-        this.errorEmailExists = null;
-      })
-      .catch(error => {
-        this.success = null;
-        this.error = 'ERROR';
-        if (error.response.status === 400 && error.response.data.type === EMAIL_ALREADY_USED_TYPE) {
-          this.errorEmailExists = 'ERROR';
+    const success: Ref<string> = ref(null);
+    const error: Ref<string> = ref(null);
+    const errorEmailExists: Ref<string> = ref(null);
+
+    const settingsAccount = computed(() => store.account);
+    const username = inject<ComputedRef<string>>('currentUsername', () => computed(() => store.account?.login), true);
+
+    return {
+      success,
+      error,
+      errorEmailExists,
+      settingsAccount,
+      username,
+      v$: useVuelidate(),
+    };
+  },
+  methods: {
+    save() {
+      this.error = null;
+      this.errorEmailExists = null;
+      return axios
+        .post('api/account', this.settingsAccount)
+        .then(() => {
           this.error = null;
-        }
-      });
-  }
-
-  public get settingsAccount(): any {
-    return this.$store.getters.account;
-  }
-
-  public get username(): string {
-    return this.$store.getters.account?.login ?? '';
-  }
-}
+          this.success = 'OK';
+          this.errorEmailExists = null;
+        })
+        .catch(ex => {
+          this.success = null;
+          this.error = 'ERROR';
+          if (ex.response.status === 400 && ex.response.data.type === EMAIL_ALREADY_USED_TYPE) {
+            this.errorEmailExists = 'ERROR';
+            this.error = null;
+          }
+        });
+    },
+  },
+});

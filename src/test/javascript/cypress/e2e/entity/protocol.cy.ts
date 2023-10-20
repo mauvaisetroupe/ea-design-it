@@ -15,7 +15,7 @@ describe('Protocol e2e test', () => {
   const protocolPageUrlPattern = new RegExp('/protocol(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const protocolSample = { name: 'Minor', type: 'FILE' };
+  const protocolSample = { name: 'oh', type: 'ETL' };
 
   let protocol;
 
@@ -92,7 +92,7 @@ describe('Protocol e2e test', () => {
             {
               statusCode: 200,
               body: [protocol],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -157,13 +157,16 @@ describe('Protocol e2e test', () => {
     });
 
     it('should create an instance of Protocol', () => {
-      cy.get(`[data-cy="name"]`).type('Nebraska').should('have.value', 'Nebraska');
+      cy.get(`[data-cy="name"]`).type('sushi round');
+      cy.get(`[data-cy="name"]`).should('have.value', 'sushi round');
 
-      cy.get(`[data-cy="type"]`).select('SOAP');
+      cy.get(`[data-cy="type"]`).select('FRONT');
 
-      cy.get(`[data-cy="description"]`).type('Supervisor').should('have.value', 'Supervisor');
+      cy.get(`[data-cy="description"]`).type('forked');
+      cy.get(`[data-cy="description"]`).should('have.value', 'forked');
 
-      cy.get(`[data-cy="scope"]`).type('flexibility Orchestrator Garden').should('have.value', 'flexibility Orchestrator Garden');
+      cy.get(`[data-cy="scope"]`).type('to acoustics');
+      cy.get(`[data-cy="scope"]`).should('have.value', 'to acoustics');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

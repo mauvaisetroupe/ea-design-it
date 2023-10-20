@@ -1,80 +1,75 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { ITechnology } from '@/shared/model/technology.model';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import TechnologyService from './technology.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type ITechnology } from '@/shared/model/technology.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class Technology extends Vue {
-  @Inject('technologyService') private technologyService: () => TechnologyService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'Technology',
+  setup() {
+    const technologyService = inject('technologyService', () => new TechnologyService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const technologies: Ref<ITechnology[]> = ref([]);
 
-  public technologies: ITechnology[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllTechnologys();
-  }
+    const retrieveTechnologys = async () => {
+      isFetching.value = true;
+      try {
+        const res = await technologyService().retrieve();
+        technologies.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllTechnologys();
-  }
+    const handleSyncList = () => {
+      retrieveTechnologys();
+    };
 
-  public retrieveAllTechnologys(): void {
-    this.isFetching = true;
-    this.technologyService()
-      .retrieve()
-      .then(
-        res => {
-          this.technologies = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveTechnologys();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: ITechnology) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeTechnology = async () => {
+      try {
+        await technologyService().delete(removeId.value);
+        const message = 'A Technology is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveTechnologys();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public prepareRemove(instance: ITechnology): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeTechnology(): void {
-    this.technologyService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A Technology is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllTechnologys();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      technologies,
+      handleSyncList,
+      isFetching,
+      retrieveTechnologys,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeTechnology,
+    };
+  },
+});

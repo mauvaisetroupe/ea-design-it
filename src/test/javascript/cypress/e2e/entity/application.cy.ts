@@ -15,7 +15,7 @@ describe('Application e2e test', () => {
   const applicationPageUrlPattern = new RegExp('/application(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  const applicationSample = { name: 'repurpose group' };
+  const applicationSample = { name: 'publication under reheat' };
 
   let application;
 
@@ -92,7 +92,7 @@ describe('Application e2e test', () => {
             {
               statusCode: 200,
               body: [application],
-            }
+            },
           ).as('entitiesRequestInternal');
         });
 
@@ -157,25 +157,35 @@ describe('Application e2e test', () => {
     });
 
     it('should create an instance of Application', () => {
-      cy.get(`[data-cy="alias"]`).type('generate').should('have.value', 'generate');
+      cy.get(`[data-cy="alias"]`).type('anenst duh');
+      cy.get(`[data-cy="alias"]`).should('have.value', 'anenst duh');
 
-      cy.get(`[data-cy="name"]`).type('Planner Lead').should('have.value', 'Planner Lead');
+      cy.get(`[data-cy="name"]`).type('angrily without');
+      cy.get(`[data-cy="name"]`).should('have.value', 'angrily without');
 
-      cy.get(`[data-cy="description"]`).type('Bedfordshire Vermont').should('have.value', 'Bedfordshire Vermont');
+      cy.get(`[data-cy="description"]`).type('yet pinion');
+      cy.get(`[data-cy="description"]`).should('have.value', 'yet pinion');
 
-      cy.get(`[data-cy="comment"]`).type('(Vatican Generic Rubber').should('have.value', '(Vatican Generic Rubber');
+      cy.get(`[data-cy="comment"]`).type('enter hmph');
+      cy.get(`[data-cy="comment"]`).should('have.value', 'enter hmph');
 
-      cy.get(`[data-cy="documentationURL"]`).type('Specialist Computer').should('have.value', 'Specialist Computer');
+      cy.get(`[data-cy="documentationURL"]`).type('considering root');
+      cy.get(`[data-cy="documentationURL"]`).should('have.value', 'considering root');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-04').blur().should('have.value', '2021-11-04');
+      cy.get(`[data-cy="startDate"]`).type('2021-11-04');
+      cy.get(`[data-cy="startDate"]`).blur();
+      cy.get(`[data-cy="startDate"]`).should('have.value', '2021-11-04');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-03').blur().should('have.value', '2021-11-03');
+      cy.get(`[data-cy="endDate"]`).type('2021-11-04');
+      cy.get(`[data-cy="endDate"]`).blur();
+      cy.get(`[data-cy="endDate"]`).should('have.value', '2021-11-04');
 
-      cy.get(`[data-cy="applicationType"]`).select('SOFTWARE');
+      cy.get(`[data-cy="applicationType"]`).select('PARTNER');
 
-      cy.get(`[data-cy="softwareType"]`).select('CLOUD_CUSTOM');
+      cy.get(`[data-cy="softwareType"]`).select('ON_PREMISE_EXTERNAL_LIBRARY');
 
-      cy.get(`[data-cy="nickname"]`).type('FTP').should('have.value', 'FTP');
+      cy.get(`[data-cy="nickname"]`).type('while');
+      cy.get(`[data-cy="nickname"]`).should('have.value', 'while');
 
       cy.get(entityCreateSaveButtonSelector).click();
 
