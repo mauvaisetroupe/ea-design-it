@@ -31,6 +31,7 @@ import {
   BTabs,
   BTr,
   BTh,
+  BFormRadioGroup,
 } from 'bootstrap-vue';
 
 export function initBootstrapVue(vue) {
@@ -67,4 +68,5 @@ export function initBootstrapVue(vue) {
   vue.component('b-breadcrumb-item', BBreadcrumbItem);
   vue.component('b-tab', BTab);
   vue.component('b-tabs', BTabs);
+  vue.component('b-form-radio-group', BFormRadioGroup)
 }

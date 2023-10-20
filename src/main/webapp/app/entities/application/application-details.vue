@@ -288,7 +288,7 @@
         </b-tab>
         <b-tab title="Capabilities">
           <div class="row">
-            <div class="col-12" v-if="consolidatedCapabilities.length > 0">
+            <div class="col-12" v-if="consolidatedCapabilities">
               <h2>Capabilities for {{ application.name }}</h2>
               <CapabilityComponent
                 :capability="lco"

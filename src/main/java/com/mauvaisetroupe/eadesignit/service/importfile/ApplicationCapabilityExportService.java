@@ -1,9 +1,9 @@
 package com.mauvaisetroupe.eadesignit.service.importfile;
 
-import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityApplicationMappingRepository;
+import com.mauvaisetroupe.eadesignit.service.dto.util.CapabilityUtil;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.CapabilityMappingDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ExcelUtils;
 import java.io.ByteArrayOutputStream;
@@ -33,6 +33,9 @@ public class ApplicationCapabilityExportService {
 
     @Autowired
     private CapabilityApplicationMappingRepository capabilityApplicationMappingRepository;
+
+    @Autowired
+    private CapabilityUtil capabilityUtil;
 
     public ByteArrayOutputStream getApplicationCapabilitiesMapping() throws IOException {
         Workbook workbook = new XSSFWorkbook();
@@ -121,7 +124,7 @@ public class ApplicationCapabilityExportService {
         for (CapabilityApplicationMapping applicationMapping : set) {
             Row row = sheet.createRow(rownb++);
             row.createCell(0).setCellValue(applicationMapping.getApplication().getName());
-            row.createCell(1).setCellValue(getCapabilityFullPath(applicationMapping.getCapability()));
+            row.createCell(1).setCellValue(capabilityUtil.getCapabilityFullPath(applicationMapping.getCapability()).replace("ROOT > ", ""));
         }
     }
 
@@ -136,14 +139,5 @@ public class ApplicationCapabilityExportService {
         mappingByLandscape.put(key, tmpSet);
     }
 
-    private String getCapabilityFullPath(Capability capability) {
-        StringBuilder buffer = new StringBuilder();
-        String sep = "";
-        while (capability.getParent() != null) {
-            buffer.insert(0, sep).insert(0, capability.getName());
-            capability = capability.getParent();
-            sep = " > ";
-        }
-        return buffer.toString();
-    }
+
 }

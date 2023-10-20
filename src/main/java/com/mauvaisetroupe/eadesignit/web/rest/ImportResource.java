@@ -21,6 +21,7 @@ import com.mauvaisetroupe.eadesignit.service.importfile.LandscapeExportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.PlantumlImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityItemDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportAnalysisDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.FlowImportDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.SummarySheetDTO;
@@ -168,8 +169,13 @@ public class ImportResource {
     }
 
     @PostMapping("/import/capability/upload-file")
-    public List<CapabilityImportDTO> uploadCapabilityFile(@RequestPart MultipartFile file) throws Exception {
-        return capabilityImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+    public CapabilityImportAnalysisDTO  uploadCapabilityFile(@RequestPart MultipartFile file) throws Exception {
+        return capabilityImportService.analyzeExcel(file.getInputStream(), file.getOriginalFilename());
+    }
+
+    @PostMapping("/import/capability/confirm-uploaded-file")
+    public List<CapabilityImportDTO> analyzeCapabilityFile(@RequestBody CapabilityImportAnalysisDTO analysisDTO) throws Exception {
+        return capabilityImportService.confirmImport(analysisDTO);
     }
 
     @PostMapping("/import/application/capability/upload-file")

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { ICapability } from '@/shared/model/capability.model';
 
 const baseApiUrl = 'api/capabilities';
-const plantumlBaseApiUrl = 'api/plantuml/capabilities';
 
 export default class CapabilityService {
   public find(id: number): Promise<ICapability> {
@@ -97,16 +96,4 @@ export default class CapabilityService {
     });
   }
 
-  public getCapabilitiesPlantUML(id: number) {
-    return new Promise<any>((resolve, reject) => {
-      axios
-        .get(`${plantumlBaseApiUrl}/get-svg/${id}`)
-        .then(res => {
-          resolve(res);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  }
 }

@@ -25,7 +25,7 @@ export default class ApplicationDetails extends Vue {
   public capabilitiesPlantUMLImage = '';
   public interfaces: IFLowInterfaceLight[] = [];
   public flows: IFunctionalFlow[] = [];
-  public consolidatedCapabilities: ICapability[] = [];
+  public consolidatedCapabilities: ICapability = {};
 
   public layout = 'elk';
   public refreshingPlantuml = false;
@@ -156,7 +156,7 @@ export default class ApplicationDetails extends Vue {
       .getCapabilities(applicationId)
       .then(res => {
         this.consolidatedCapabilities = res;
-        this.lco = this.consolidatedCapabilities[0];
+        this.lco = this.consolidatedCapabilities;
       })
       .catch(error => {
         this.alertService().showHttpError(this, error.response);

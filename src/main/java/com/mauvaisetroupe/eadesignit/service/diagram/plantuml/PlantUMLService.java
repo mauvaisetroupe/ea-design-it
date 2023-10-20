@@ -1,6 +1,5 @@
 package com.mauvaisetroupe.eadesignit.service.diagram.plantuml;
 
-import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
@@ -10,10 +9,7 @@ import com.mauvaisetroupe.eadesignit.service.diagram.dto.EdgeGroup;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphBuilder;
 import com.mauvaisetroupe.eadesignit.service.diagram.dto.GraphDTO;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.Layout;
-import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
-import com.mauvaisetroupe.eadesignit.service.dto.util.CapabilityUtil;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedSet;
@@ -189,25 +185,6 @@ public class PlantUMLService {
         GraphDTO graph = graphBuilder.createGraph(interfaces, true);
         String plantUMLSource = createPlantUMLSource(graph, DiagramType.COMPONENT_DIAGRAM, true, false, Layout.none, false, false, false);
         return plantUMLSource.toString();
-    }
-
-    public String getCapabilitiesFromLeavesSVG(Collection<Capability> capabilities) throws IOException {
-        StringBuilder plantUMLSource = new StringBuilder();
-        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
-
-        CapabilityUtil capabilityUtil = new CapabilityUtil();
-        Collection<CapabilityDTO> rootDTO = capabilityUtil.getRoot(capabilities);
-        plantUMLBuilder.getPlantumlCapabilitiesDTO(plantUMLSource, rootDTO);
-        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
-        return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
-    }
-
-    public String getCapabilitiesFromRootsSVG(Collection<Capability> capabilities) throws IOException {
-        StringBuilder plantUMLSource = new StringBuilder();
-        plantUMLBuilder.getPlantumlHeader(plantUMLSource);
-        plantUMLBuilder.getPlantumlCapabilities(plantUMLSource, capabilities);
-        plantUMLBuilder.getPlantumlFooter(plantUMLSource);
-        return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 
     public String getSVGFromSource(String plantUMLSource) throws IOException {

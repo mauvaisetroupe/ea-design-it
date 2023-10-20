@@ -220,16 +220,6 @@ public class PlantUMLResource {
         return result.size();
     }
 
-    @GetMapping(value = "plantuml/application/capability/get-svg/{id}")
-    public @ResponseBody String getApplicationCapabilitiesSVG(@PathVariable Long id) throws IOException, BadRequestException {
-        Optional<Application> optional = applicationRepository.findById(id);
-        if (optional.isPresent()) {
-            return this.plantUMLSerializer.getCapabilitiesFromLeavesSVG(optional.get().getCapabilities());
-        } else {
-            throw new BadRequestException("Cannot find application");
-        }
-    }
-
     @GetMapping(value = "plantuml/application/structure/get-svg/{id}")
     public @ResponseBody String getApplicationStructureSVG(@PathVariable Long id) throws IOException, BadRequestException {
         Optional<Application> optional = applicationRepository.findOneWithEagerRelationships(id);
@@ -253,19 +243,6 @@ public class PlantUMLResource {
     public @ResponseBody String getApplicationsSource(@RequestParam(value = "ids[]") Long[] ids) throws IOException, BadRequestException {
         SortedSet<IFlowInterface> interfaces = flowInterfaceRepository.findBySourceIdInAndTargetIdIn(ids, ids);
         return this.plantUMLSerializer.getInterfacesCollectionDiagramSource(interfaces);
-    }
-
-    @GetMapping(value = "plantuml/capabilities/get-svg/{id}")
-    public @ResponseBody String getCapabilitiesSVG(@PathVariable Long id) throws IOException, BadRequestException {
-        Optional<Capability> optional = capabilityRepository.findById(id);
-        if (optional.isPresent()) {
-            Capability capability = optional.get();
-            List<Capability> tmp = new ArrayList<>();
-            tmp.add(capability);
-            return this.plantUMLSerializer.getCapabilitiesFromRootsSVG(tmp);
-        } else {
-            throw new BadRequestException("Cannot find application");
-        }
     }
 
     @PostMapping(value = "plantuml/sequence-diagram/get-svg")

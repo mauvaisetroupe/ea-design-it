@@ -1,23 +1,22 @@
 package com.mauvaisetroupe.eadesignit.web.rest.dto;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
+import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
-import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
-import java.util.Collection;
 import java.util.Set;
 
 public class LandscapeDTO {
 
     LandscapeView landscape;
-    Collection<CapabilityDTO> consolidatedCapability;
+    Capability consolidatedCapability;
     Set<Application> applicationsOnlyInCapabilities;
     Set<Application> applicationsOnlyInFlows;
 
-    public Collection<CapabilityDTO> getConsolidatedCapability() {
+    public Capability getConsolidatedCapability() {
         return consolidatedCapability;
     }
 
-    public void setConsolidatedCapability(Collection<CapabilityDTO> consolidatedCapability) {
+    public void setConsolidatedCapability(Capability consolidatedCapability) {
         this.consolidatedCapability = consolidatedCapability;
     }
 

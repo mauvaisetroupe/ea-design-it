@@ -1,13 +1,12 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
+import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
-import com.mauvaisetroupe.eadesignit.service.dto.CapabilityDTO;
 import com.mauvaisetroupe.eadesignit.service.dto.util.CapabilityUtil;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,8 +39,11 @@ public class ApplicationResource {
 
     private final ApplicationRepository applicationRepository;
 
-    public ApplicationResource(ApplicationRepository applicationRepository) {
+    private final CapabilityUtil capabilityUtil;
+
+    public ApplicationResource(ApplicationRepository applicationRepository, CapabilityUtil capabilityUtil) {
         this.applicationRepository = applicationRepository;
+        this.capabilityUtil = capabilityUtil;
     }
 
     /**
@@ -216,11 +218,10 @@ public class ApplicationResource {
     }
 
     @GetMapping("/applications/{id}/capabilities")
-    public Collection<CapabilityDTO> getApplicationCapabilities(@PathVariable Long id) {
+    public Capability getApplicationCapabilities(@PathVariable Long id) {
         log.debug("REST request to get Application : {}", id);
         Optional<Application> application = applicationRepository.findOneWithEagerRelationships(id);
-        CapabilityUtil capabilityUtil = new CapabilityUtil();
-        Collection<CapabilityDTO> result = capabilityUtil.getRoot(application.get().getCapabilities());
-        return result;
+        Capability rootCapability = capabilityUtil.buildCapabilityTree(application.get().getCapabilities());
+        return rootCapability;
     }
 }
