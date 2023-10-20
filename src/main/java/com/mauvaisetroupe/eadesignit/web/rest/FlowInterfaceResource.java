@@ -228,7 +228,7 @@ public class FlowInterfaceResource {
     @GetMapping("/flow-interfaces/{id}")
     public ResponseEntity<FlowInterface> getFlowInterface(@PathVariable Long id) {
         log.debug("REST request to get FlowInterface : {}", id);
-        Optional<FlowInterface> flowInterface = flowInterfaceRepository.findById(id);
+        Optional<FlowInterface> flowInterface = flowInterfaceRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(flowInterface);
     }
 

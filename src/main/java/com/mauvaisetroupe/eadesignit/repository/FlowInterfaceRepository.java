@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
+import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
@@ -65,4 +66,19 @@ public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Lo
     );
 
     SortedSet<IFlowInterface> findBySourceIdInAndTargetIdIn(Long[] sourceIds, Long[] targetIds);
+
+    @Query(
+        value = "select i from FlowInterface i " +
+        " left join fetch i.protocol p " +
+        " left join fetch i.source s " +
+        " left join fetch i.sourceComponent sc " +
+        " left join fetch i.target t " +
+        " left join fetch i.targetComponent tc " +
+        " left join fetch i.steps s " +
+        " left join fetch s.flow f " +
+        " left join fetch f.landscapes l " +
+        " where i.id = :id "
+    )
+    Optional<FlowInterface> findOneWithEagerRelationships(@Param("id") Long id);
+
 }

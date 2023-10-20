@@ -132,6 +132,7 @@
         <br />
         <br />
 
+        <!-- 
         <h3><font-awesome-icon icon="folder" style="color: Tomato; font-size: 0.9em"></font-awesome-icon> Data Flows</h3>
         <div class="table-responsive" v-if="flowInterface.dataFlows && flowInterface.dataFlows.length > 0">
           <br />
@@ -204,28 +205,29 @@
         <div class="d-flex justify-content-end">
           <span>
             <button
-              class="btn btn-primary jh-create-entity create-functional-flow"
-              v-if="accountService().writeAuthorities"
-              @click="addNew()"
+            class="btn btn-primary jh-create-entity create-functional-flow"
+            v-if="accountService().writeAuthorities"
+            @click="addNew()"
             >
               <font-awesome-icon icon="plus"></font-awesome-icon>
               <span>Add exisintg Data Flow</span>
             </button>
             <router-link :to="{ name: 'DataFlowCreate' }" custom v-slot="{ navigate }" v-if="accountService().writeAuthorities">
               <button
-                @click="navigate"
-                id="jh-create-entity"
-                data-cy="entityCreateButton"
-                class="btn btn-primary jh-create-entity create-flow-interface"
-                v-if="accountService().writeAuthorities"
+              @click="navigate"
+              id="jh-create-entity"
+              data-cy="entityCreateButton"
+              class="btn btn-primary jh-create-entity create-flow-interface"
+              v-if="accountService().writeAuthorities"
               >
-                <font-awesome-icon icon="plus"></font-awesome-icon>
-                <span> Create a new Data Flow </span>
-              </button>
-            </router-link>
-          </span>
-        </div>
-
+              <font-awesome-icon icon="plus"></font-awesome-icon>
+              <span> Create a new Data Flow </span>
+            </button>
+          </router-link>
+        </span>
+      </div>
+    -->
+      
         <div class="table-responsive" v-if="flowInterface.steps && flowInterface.steps.length > 0">
           <br />
           <br />
