@@ -5,7 +5,7 @@ import Vue2Filters from 'vue2-filters';
 import CapabilityImportService from './capability-import.service';
 import AlertService from '@/shared/alert/alert.service';
 import { ICapabilityImport } from '@/shared/model/capability-import.model';
-import { Action, ICapabilityImportAnalysisDTO } from '@/shared/model/capability-import-analysis.model';
+import { Action, ICapabilityActionDTO, ICapabilityImportAnalysisDTO } from '@/shared/model/capability-import-analysis.model';
 import { ICapability } from '@/shared/model/capability.model';
 import CapabilityTreeComponent from '@/entities/capability/component/capability-tree.vue';
  
@@ -33,6 +33,10 @@ export default class CapabilityImport extends Vue {
   public toDeleteWithMappingOption = [{text: 'Force Delete', value: Action.FORCE_DELETE}, {text: 'Ignore', value: Action.IGNORE}];
   public toDeleteWithChildMappingOption = [{text: 'Ignore', value: Action.IGNORE}];
   public analysisDone = false;
+  public IGNORE = Action.IGNORE;
+  public DELETE = Action.DELETE;
+  public FORCE_DELETE = Action.FORCE_DELETE;
+  public ADD = Action.ADD;
 
   public capabilitiesImportAnalysis: ICapabilityImportAnalysisDTO = {};
 
@@ -99,9 +103,9 @@ export default class CapabilityImport extends Vue {
   }
 
 
-  public ignoreAllDelete() {
-    this.capabilitiesImportAnalysis.capabilitiesToDelete.forEach(capaAction => {
-        capaAction.action=Action.IGNORE;
+  public toggleAll(capabilityActionss: ICapabilityActionDTO[], action: Action) {
+    capabilityActionss.forEach(capaAction => {
+        capaAction.action=action;
     });
   }
 }

@@ -3,8 +3,6 @@
     <h2 id="page-heading" data-cy="capabilityImportHeading">
       <span id="capability-import-heading">Capabilities Imports</span>
     </h2>
-
-    UPDATED
     <div v-if="!rowsLoaded">
       <div class="form-group">
         <div class="custom-file">
@@ -30,6 +28,12 @@
 
       <div v-if="capabilitiesImportAnalysis.capabilitiesToAdd && capabilitiesImportAnalysis.capabilitiesToAdd.length">
         <h3>Capabilities To Add</h3>
+        <div class="d-flex justify-content-end">
+            <b-form-group>
+              <button class="btn btn-success m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToAdd, ADD)">Import All</button>
+              <button class="btn btn-success m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToAdd, IGNORE )">Ignore All</button>
+            </b-form-group> 
+        </div>    
         <div>
           <table class="table table-striped">
             <tbody>
@@ -39,13 +43,10 @@
                 </td>
                 <td>
                   <div class="d-flex justify-content-end">
-                    <b-form-group
-                      v-slot="{ ariaDescribedby }"
-                    >
+                    <b-form-group>
                       <b-form-radio-group
                         id="btn-radios-1"
                         :options="toAddOption"
-                        :aria-describedby="ariaDescribedby"
                         size="sm"
                         button-variant="outline-success"
                         buttons
@@ -63,31 +64,25 @@
   
       <div v-if="capabilitiesImportAnalysis.capabilitiesToDelete && capabilitiesImportAnalysis.capabilitiesToDelete.length">
         <h3>Capabilities To Delete</h3>
+        <div class="d-flex justify-content-end">
+          <b-form-group>
+            <button class="btn btn-danger m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToDelete, DELETE)">Delete All</button>
+            <button class="btn btn-danger m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToDelete, IGNORE )">Ignore All</button>
+          </b-form-group> 
+        </div>    
         <div>
           <table class="table table-striped">
             <tbody>
-              <tr>
-                <td colspan="2">
-                  <div class="d-flex justify-content-end">
-                    <b-form-group v-slot="{ ariaDescribedby }">
-                      <button class="btn btn-danger m-0 p-1">Delete</button><button class="btn btn-danger m-0 p-1" @click="ignoreAllDelete()">Ignore All</button>
-                    </b-form-group> 
-                  </div>    
-                </td>
-              </tr>
               <tr v-for="capabilityAction in capabilitiesImportAnalysis.capabilitiesToDelete" :key="capabilityAction.capability.id">
                 <td>
                   <CapabilityTreeComponent :capability="capabilityAction.capability"/>
                 </td> 
                 <td>
                   <div class="d-flex justify-content-end">
-                    <b-form-group
-                      v-slot="{ ariaDescribedby }"
-                    >
+                    <b-form-group>
                       <b-form-radio-group
                         id="btn-radios-2"
                         :options="toDeleteOption"
-                        :aria-describedby="ariaDescribedby"
                         size="sm"
                         button-variant="outline-danger"
                         buttons
@@ -105,6 +100,12 @@
 
       <div v-if="capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings && capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings.length">
         <h3>Capabilities To Delete (with associated mapping)</h3>
+        <div class="d-flex justify-content-end">
+          <b-form-group>
+            <button class="btn btn-danger m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings, FORCE_DELETE)">Delete All</button>
+            <button class="btn btn-danger m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings, IGNORE )">Ignore All</button>
+          </b-form-group> 
+        </div>    
         <div>
           <table class="table table-striped">
             <tbody>
@@ -114,13 +115,10 @@
                 </td>  
                 <td>
                   <div class="d-flex justify-content-end">
-                    <b-form-group
-                      v-slot="{ ariaDescribedby }"
-                    >
+                    <b-form-group>
                       <b-form-radio-group
                         id="btn-radios-3"
                         :options="toDeleteWithMappingOption"
-                        :aria-describedby="ariaDescribedby"
                         size="sm"
                         button-variant="outline-danger"
                         buttons
@@ -136,23 +134,20 @@
       </div>
 
       <div v-if="capabilitiesImportAnalysis.ancestorsOfCapabilitiesWithMappings && capabilitiesImportAnalysis.ancestorsOfCapabilitiesWithMappings.length">
-        <h3>Capabilities To Delete (with child with Mappimg)</h3>
+        <h3>Capabilities To Delete (with child with Mapping)</h3>
         <div>
           <table class="table table-striped">
-            <tbody>
-              <tr v-for="capabilityAction in capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings" :key="capabilityAction.capability.id">
+            <tbody>              
+              <tr v-for="capabilityAction in capabilitiesImportAnalysis.ancestorsOfCapabilitiesWithMappings" :key="capabilityAction.capability.id">
                 <td>
                   <CapabilityTreeComponent :capability="capabilityAction.capability"/>
                 </td>  
                 <td>
                   <div class="d-flex justify-content-end">
-                    <b-form-group
-                      v-slot="{ ariaDescribedby }"
-                    >
+                    <b-form-group>
                       <b-form-radio-group
                         id="btn-radios-3"
                         :options="toDeleteWithChildMappingOption"
-                        :aria-describedby="ariaDescribedby"
                         size="sm"
                         button-variant="outline-danger"
                         buttons
@@ -178,13 +173,10 @@
                 </td>  
                 <td>
                   <div class="d-flex justify-content-end">
-                    <b-form-group
-                      v-slot="{ ariaDescribedby }"
-                    >
+                    <b-form-group>
                       <b-form-radio-group
                         id="btn-radios-4"
                         :options="[{ text: 'Ignore', value: 'Ignore'}]"
-                        :aria-describedby="ariaDescribedby"
                         size="sm"
                         button-variant="outline-danger  active"
                         buttons
