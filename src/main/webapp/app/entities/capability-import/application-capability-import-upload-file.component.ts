@@ -105,7 +105,7 @@ export default class CapabilityImport extends Vue {
           newitems.push(item);
         }
       });
-      let newdto: IApplicationCapabilityImport;
+      let newdto: IApplicationCapabilityImport = {}; 
       newdto.dtos = newitems;
       newdto.sheetname = dto.sheetname;
       this.dtos.push(newdto);

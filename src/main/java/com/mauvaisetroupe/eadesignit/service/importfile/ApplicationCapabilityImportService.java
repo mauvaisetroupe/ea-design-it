@@ -92,10 +92,12 @@ public class ApplicationCapabilityImportService {
             if (applications.isEmpty()) {
                 String error = "No application found : " + map;
                 itemDTO.setErrorMessage(error);
+                itemDTO.setImportStatus(ImportStatus.ERROR);
                 log.error(error);
             } else if (capability == null) {
                 String error = "No Capability found : " + map + " - " + fullPath;
                 itemDTO.setErrorMessage(error);
+                itemDTO.setImportStatus(ImportStatus.ERROR);
                 log.error(error);
             } else {
                 for (Application application : applications) {
