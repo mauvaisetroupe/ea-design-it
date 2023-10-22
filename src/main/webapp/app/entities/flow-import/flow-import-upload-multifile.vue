@@ -29,7 +29,7 @@
 
         <div class="row m-3">
           <template v-for="(row, i) in summary">
-            <div class="col-1" :key="'0-' + i">
+            <div class="col-1">
               <input
                 type="checkbox"
                 v-model="checkedNames"
@@ -40,7 +40,7 @@
               />
               <label :for="'CHK-' + row.sheetName" class="">{{ row.sheetName }} </label>
             </div>
-            <div class="col-3" :key="'1-' + i">
+            <div class="col-3">
               <label :for="'CHK-' + row.sheetName" class="" v-if="row.landscapeName">
                 {{ row.landscapeName }}
                 <span v-if="row.landscapeExists" class="text-success">(existing)</span>
@@ -48,7 +48,7 @@
               </label>
               <label :for="'CHK-' + row.sheetName" class="" v-else><span class="bg-danger text-white">No Landscape</span></label>
             </div>
-            <div class="col-2" :key="'2-' + i"></div>
+            <div class="col-2"></div>
           </template>
         </div>
         <div class="form-group col-md-12" v-if="excelFile">

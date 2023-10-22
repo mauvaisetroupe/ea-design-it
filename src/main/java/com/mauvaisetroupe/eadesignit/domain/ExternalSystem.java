@@ -1,16 +1,14 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
-import javax.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A ExternalSystem.
  */
 @Entity
 @Table(name = "external_system")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class ExternalSystem implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -62,7 +60,7 @@ public class ExternalSystem implements Serializable {
         if (!(o instanceof ExternalSystem)) {
             return false;
         }
-        return id != null && id.equals(((ExternalSystem) o).id);
+        return getId() != null && getId().equals(((ExternalSystem) o).getId());
     }
 
     @Override

@@ -1,81 +1,77 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { IApplicationCategory } from '@/shared/model/application-category.model';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import ApplicationCategoryService from './application-category.service';
-import AlertService from '@/shared/alert/alert.service';
-import AccountService from '@/account/account.service';
+import { type IApplicationCategory } from '@/shared/model/application-category.model';
+import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class ApplicationCategory extends Vue {
-  @Inject('applicationCategoryService') private applicationCategoryService: () => ApplicationCategoryService;
-  @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') public accountService: () => AccountService;
-  private removeId: number = null;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ApplicationCategory',
+  setup() {
+    const applicationCategoryService = inject('applicationCategoryService', () => new ApplicationCategoryService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject('accountService', () => new AccountService(), true);
 
-  public applicationCategories: IApplicationCategory[] = [];
+    const applicationCategories: Ref<IApplicationCategory[]> = ref([]);
 
-  public isFetching = false;
+    const isFetching = ref(false);
 
-  public mounted(): void {
-    this.retrieveAllApplicationCategorys();
-  }
+    const clear = () => {};
 
-  public clear(): void {
-    this.retrieveAllApplicationCategorys();
-  }
+    const retrieveApplicationCategorys = async () => {
+      isFetching.value = true;
+      try {
+        const res = await applicationCategoryService().retrieve();
+        applicationCategories.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public retrieveAllApplicationCategorys(): void {
-    this.isFetching = true;
-    this.applicationCategoryService()
-      .retrieve()
-      .then(
-        res => {
-          this.applicationCategories = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    const handleSyncList = () => {
+      retrieveApplicationCategorys();
+    };
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    onMounted(async () => {
+      await retrieveApplicationCategorys();
+    });
 
-  public prepareRemove(instance: IApplicationCategory): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: IApplicationCategory) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeApplicationCategory = async () => {
+      try {
+        await applicationCategoryService().delete(removeId.value);
+        const message = 'A ApplicationCategory is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveApplicationCategorys();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public removeApplicationCategory(): void {
-    this.applicationCategoryService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A ApplicationCategory is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllApplicationCategorys();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      applicationCategories,
+      handleSyncList,
+      isFetching,
+      retrieveApplicationCategorys,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeApplicationCategory,
+    };
+  },
+});

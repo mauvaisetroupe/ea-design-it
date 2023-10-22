@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IOwner } from '@/shared/model/owner.model';
+import { type IOwner } from '@/shared/model/owner.model';
 
 const baseApiUrl = 'api/owners';
 

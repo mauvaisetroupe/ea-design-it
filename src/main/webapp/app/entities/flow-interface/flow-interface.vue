@@ -6,7 +6,7 @@
       >
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh list</span>
         </button>
         <router-link :to="{ name: 'FlowInterfaceCreate' }" custom v-slot="{ navigate }" v-if="accountService().writeAuthorities">
           <button
@@ -16,14 +16,14 @@
             class="btn btn-primary jh-create-entity create-flow-interface"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Create a new Flow Interface </span>
+            <span>Create a new Flow Interface</span>
           </button>
         </router-link>
       </div>
     </h2>
     <br />
     <div class="alert alert-warning" v-if="!isFetching && flowInterfaces && flowInterfaces.length === 0">
-      <span>No flowInterfaces found</span>
+      <span>No Flow Interfaces found</span>
     </div>
 
     <div class="row">
@@ -144,26 +144,26 @@
       </div>
     </div>
     <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.flowInterface.delete.question" data-cy="flowInterfaceDeleteDialogHeading"
-          >Confirm delete operation</span
-        ></span
-      >
+      <template #modal-title>
+        <span id="eaDesignItApp.flowInterface.delete.question" data-cy="flowInterfaceDeleteDialogHeading">Confirm delete operation</span>
+      </template>
       <div class="modal-body">
-        <p id="jhi-delete-flowInterface-heading">Are you sure you want to delete this Flow Interface?</p>
+        <p id="jhi-delete-flowInterface-heading">Are you sure you want to delete Flow Interface {{ removeId }}?</p>
       </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-flowInterface"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeFlowInterface()"
-        >
-          Delete
-        </button>
-      </div>
+      <template #modal-footer>
+        <div>
+          <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="jhi-confirm-delete-flowInterface"
+            data-cy="entityConfirmDeleteButton"
+            v-on:click="removeFlowInterface()"
+          >
+            Delete
+          </button>
+        </div>
+      </template>
     </b-modal>
   </div>
 </template>

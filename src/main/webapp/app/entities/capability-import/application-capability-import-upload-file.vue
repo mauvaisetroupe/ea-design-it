@@ -29,7 +29,7 @@
 
         <div class="row m-3">
           <template v-for="(row, i) in summary">
-            <div class="col-3" :key="'1-' + i">
+            <div class="col-3">
               <input type="checkbox" v-model="checkedNames" :value="row.sheetName" :id="'CHK-' + row.sheetName" :disabled="fileSubmited" />
               <label :for="'CHK-' + row.sheetName" class=""
                 >{{ row.sheetName }} {{ row.landscapeName }}
@@ -37,7 +37,7 @@
                 <span v-else class="text-danger">(DOES NOT EXIST)</span>
               </label>
             </div>
-            <div class="col-2" :key="'2-' + i"></div>
+            <div class="col-2"></div>
           </template>
         </div>
         <div class="form-group col-md-12" v-if="excelFile">

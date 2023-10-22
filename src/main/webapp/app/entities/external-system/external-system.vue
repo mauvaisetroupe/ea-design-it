@@ -4,7 +4,7 @@
       <span id="external-system-heading">External Systems</span>
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh list</span>
         </button>
         <router-link :to="{ name: 'ExternalSystemCreate' }" custom v-slot="{ navigate }">
           <button
@@ -14,14 +14,14 @@
             class="btn btn-primary jh-create-entity create-external-system"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Create a new External System </span>
+            <span>Create a new External System</span>
           </button>
         </router-link>
       </div>
     </h2>
     <br />
     <div class="alert alert-warning" v-if="!isFetching && externalSystems && externalSystems.length === 0">
-      <span>No externalSystems found</span>
+      <span>No External Systems found</span>
     </div>
     <div class="table-responsive" v-if="externalSystems && externalSystems.length > 0">
       <table class="table table-striped" aria-describedby="externalSystems">
@@ -79,26 +79,26 @@
       </table>
     </div>
     <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.externalSystem.delete.question" data-cy="externalSystemDeleteDialogHeading"
-          >Confirm delete operation</span
-        ></span
-      >
+      <template #modal-title>
+        <span id="eaDesignItApp.externalSystem.delete.question" data-cy="externalSystemDeleteDialogHeading">Confirm delete operation</span>
+      </template>
       <div class="modal-body">
-        <p id="jhi-delete-externalSystem-heading">Are you sure you want to delete this External System?</p>
+        <p id="jhi-delete-externalSystem-heading">Are you sure you want to delete External System {{ removeId }}?</p>
       </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-externalSystem"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeExternalSystem()"
-        >
-          Delete
-        </button>
-      </div>
+      <template #modal-footer>
+        <div>
+          <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="jhi-confirm-delete-externalSystem"
+            data-cy="entityConfirmDeleteButton"
+            v-on:click="removeExternalSystem()"
+          >
+            Delete
+          </button>
+        </div>
+      </template>
     </b-modal>
   </div>
 </template>

@@ -3,7 +3,7 @@
     <div class="col-12">
       <div v-if="applicationComponent">
         <h2 class="jh-entity-heading" data-cy="applicationComponentDetailsHeading">
-          <span>ApplicationComponent</span> {{ applicationComponent.id }}
+          <span>Application Component</span> {{ applicationComponent.id }}
         </h2>
         <dl class="row jh-entity-details">
           <dt>
@@ -111,7 +111,7 @@
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
+          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>Back</span>
         </button>
         <router-link
           v-if="applicationComponent.id"

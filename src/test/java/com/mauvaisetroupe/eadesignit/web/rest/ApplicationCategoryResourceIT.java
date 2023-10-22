@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationCategory;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationCategoryRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,7 +197,7 @@ class ApplicationCategoryResourceIT {
         int databaseSizeBeforeUpdate = applicationCategoryRepository.findAll().size();
 
         // Update the applicationCategory
-        ApplicationCategory updatedApplicationCategory = applicationCategoryRepository.findById(applicationCategory.getId()).get();
+        ApplicationCategory updatedApplicationCategory = applicationCategoryRepository.findById(applicationCategory.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedApplicationCategory are not directly saved in db
         em.detach(updatedApplicationCategory);
         updatedApplicationCategory.name(UPDATED_NAME).type(UPDATED_TYPE).description(UPDATED_DESCRIPTION);

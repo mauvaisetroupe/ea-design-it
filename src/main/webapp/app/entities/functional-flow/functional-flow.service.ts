@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { type IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 const functionalFlowBaseApiUrl = 'api/functional-flows';
 const functionalFlowPlantUMLApiUrl = 'api/plantuml/functional-flow';

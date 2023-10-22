@@ -1,8 +1,9 @@
 {
-  "extends": "../../../../tsconfig.json",
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "../../../../target/out-tsc/cypress",
+    "sourceMap": false,
+    "outDir": "../../../../target/cypress/tsc",
     "target": "es2018",
     "types": ["cypress", "node"]
   },

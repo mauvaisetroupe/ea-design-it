@@ -1,134 +1,113 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import { required, maxLength } from 'vuelidate/lib/validators';
-
-import AlertService from '@/shared/alert/alert.service';
-
-import CapabilityApplicationMappingService from '@/entities/capability-application-mapping/capability-application-mapping.service';
-import { ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
-
-import { ICapability, Capability } from '@/shared/model/capability.model';
 import CapabilityService from './capability.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-const validations: any = {
-  capability: {
-    name: {
-      required,
-    },
-    description: {
-      maxLength: maxLength(1500),
-    },
-    comment: {
-      maxLength: maxLength(1500),
-    },
-    level: {},
-  },
-};
+import { type ICapability, Capability } from '@/shared/model/capability.model';
 
-@Component({
-  validations,
-})
-export default class CapabilityUpdate extends Vue {
-  @Inject('capabilityService') private capabilityService: () => CapabilityService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'CapabilityUpdate',
+  setup() {
+    const capabilityService = inject('capabilityService', () => new CapabilityService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public capability: ICapability = new Capability();
+    const capability: Ref<ICapability> = ref(new Capability());
 
-  public capabilities: ICapability[] = [];
+    const capabilities: Ref<ICapability[]> = ref([]);
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
-  @Inject('capabilityApplicationMappingService') private capabilityApplicationMappingService: () => CapabilityApplicationMappingService;
+    const route = useRoute();
+    const router = useRouter();
 
-  public capabilityApplicationMappings: ICapabilityApplicationMapping[] = [];
-  public isSaving = false;
-  public currentLanguage = '';
+    const previousState = () => router.go(-1);
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.capabilityId) {
-        vm.retrieveCapability(to.params.capabilityId);
+    const retrieveCapability = async capabilityId => {
+      try {
+        const res = await capabilityService().find(capabilityId);
+        capability.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-      vm.initRelationships();
-    });
-  }
+    };
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.capability.id) {
-      this.capabilityService()
-        .update(this.capability)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A Capability is updated with identifier ' + param.id;
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.capabilityService()
-        .create(this.capability)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A Capability is created with identifier ' + param.id;
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
+    if (route.params?.capabilityId) {
+      retrieveCapability(route.params.capabilityId);
     }
-  }
 
-  public retrieveCapability(capabilityId): void {
-    this.capabilityService()
-      .find(capabilityId)
-      .then(res => {
-        this.capability = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    const initRelationships = () => {
+      capabilityService()
+        .retrieve()
+        .then(res => {
+          capabilities.value = res.data;
+        });
+    };
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
+    initRelationships();
 
-  public initRelationships(): void {
-    this.capabilityService()
-      .retrieve()
-      .then(res => {
-        this.capabilities = res.data;
-      });
-    this.capabilityApplicationMappingService()
-      .retrieve()
-      .then(res => {
-        this.capabilityApplicationMappings = res.data;
-      });
-  }
-}
+    const validations = useValidation();
+    const validationRules = {
+      name: {
+        required: validations.required('This field is required.'),
+      },
+      description: {
+        maxLength: validations.maxLength('This field cannot be longer than 1500 characters.', 1500),
+      },
+      comment: {
+        maxLength: validations.maxLength('This field cannot be longer than 1500 characters.', 1500),
+      },
+      level: {},
+      subCapabilities: {},
+      parent: {},
+      capabilityApplicationMappings: {},
+    };
+    const v$ = useVuelidate(validationRules, capability as any);
+    v$.value.$validate();
+
+    return {
+      capabilityService,
+      alertService,
+      capability,
+      previousState,
+      isSaving,
+      currentLanguage,
+      capabilities,
+      v$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.capability.id) {
+        this.capabilityService()
+          .update(this.capability)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo('A Capability is updated with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.capabilityService()
+          .create(this.capability)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess('A Capability is created with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
+    },
+  },
+});

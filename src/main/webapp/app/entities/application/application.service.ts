@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import { IApplication } from '@/shared/model/application.model';
-import { PlantumlDTO } from '@/shared/model/plantuml-dto';
+import { type IApplication } from '@/shared/model/application.model';
+import { type PlantumlDTO } from '@/shared/model/plantuml-dto';
 
 const baseApiUrl = 'api/applications';
 const basePlantUMLApiUrl = 'api/plantuml/application/get-svg';
@@ -109,7 +109,7 @@ export default class ApplicationService {
     layout: string,
     groupComponents: boolean,
     showLabels: boolean,
-    showLabelIfNumberapplicationsLessThan: number
+    showLabelIfNumberapplicationsLessThan: number,
   ) {
     const params = {
       layout: layout,

@@ -38,6 +38,7 @@
       "otherEntityName": "capability",
       "otherEntityRelationshipName": "parent",
       "relationshipName": "subCapabilities",
+      "relationshipSide": "left",
       "relationshipType": "one-to-many"
     },
     {
@@ -45,14 +46,17 @@
       "otherEntityName": "capability",
       "otherEntityRelationshipName": "subCapabilities",
       "relationshipName": "parent",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "capabilityApplicationMapping",
       "otherEntityRelationshipName": "capability",
       "relationshipName": "capabilityApplicationMapping",
+      "relationshipSide": "left",
       "relationshipType": "one-to-many"
     }
   ],
+  "searchEngine": "no",
   "service": "no"
 }

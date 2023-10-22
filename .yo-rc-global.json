@@ -1,8 +1,0 @@
-{
-  "generator-jhipster:7.3.1": {
-    "promptValues": {
-      "packageName": "com.mauvaisetroupe.eadesignit",
-      "nativeLanguage": "en"
-    }
-  }
-}

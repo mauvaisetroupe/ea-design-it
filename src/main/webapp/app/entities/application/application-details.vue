@@ -306,7 +306,7 @@
     <div class="col-12">
       <div v-if="application">
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
+          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>Back</span>
         </button>
         <router-link
           v-if="application.id"

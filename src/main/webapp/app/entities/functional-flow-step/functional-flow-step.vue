@@ -4,7 +4,7 @@
       <span id="functional-flow-step-heading">Functional Flow Steps</span>
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh list</span>
         </button>
         <router-link :to="{ name: 'FunctionalFlowStepCreate' }" custom v-slot="{ navigate }">
           <button
@@ -14,14 +14,14 @@
             class="btn btn-primary jh-create-entity create-functional-flow-step"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Create a new Functional Flow Step </span>
+            <span>Create a new Functional Flow Step</span>
           </button>
         </router-link>
       </div>
     </h2>
     <br />
     <div class="alert alert-warning" v-if="!isFetching && functionalFlowSteps && functionalFlowSteps.length === 0">
-      <span>No functionalFlowSteps found</span>
+      <span>No Functional Flow Steps found</span>
     </div>
     <div class="table-responsive" v-if="functionalFlowSteps && functionalFlowSteps.length > 0">
       <table class="table table-striped" aria-describedby="functionalFlowSteps">
@@ -105,26 +105,28 @@
       </table>
     </div>
     <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.functionalFlowStep.delete.question" data-cy="functionalFlowStepDeleteDialogHeading"
+      <template #modal-title>
+        <span id="eaDesignItApp.functionalFlowStep.delete.question" data-cy="functionalFlowStepDeleteDialogHeading"
           >Confirm delete operation</span
-        ></span
-      >
-      <div class="modal-body">
-        <p id="jhi-delete-functionalFlowStep-heading">Are you sure you want to delete this Functional Flow Step?</p>
-      </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-functionalFlowStep"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeFunctionalFlowStep()"
         >
-          Delete
-        </button>
+      </template>
+      <div class="modal-body">
+        <p id="jhi-delete-functionalFlowStep-heading">Are you sure you want to delete Functional Flow Step {{ removeId }}?</p>
       </div>
+      <template #modal-footer>
+        <div>
+          <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="jhi-confirm-delete-functionalFlowStep"
+            data-cy="entityConfirmDeleteButton"
+            v-on:click="removeFunctionalFlowStep()"
+          >
+            Delete
+          </button>
+        </div>
+      </template>
     </b-modal>
   </div>
 </template>

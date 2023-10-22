@@ -21,7 +21,7 @@
             class="btn btn-primary jh-create-entity create-application"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Create a new Application </span>
+            <span>Create a new Application</span>
           </button>
         </router-link>
         &nbsp;
@@ -32,7 +32,7 @@
     </h2>
     <br />
     <div class="alert alert-warning" v-if="!isFetching && applications && applications.length === 0">
-      <span>No applications found</span>
+      <span>No Applications found</span>
     </div>
 
     <div class="border p-2 m-1" v-if="applications && applications.length > 0">

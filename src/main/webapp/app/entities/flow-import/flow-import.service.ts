@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-import { IFlowImport } from '@/shared/model/flow-import.model';
+import { type IFlowImport } from '@/shared/model/flow-import.model';
+import type { ISummary } from 'shared/model/summary-sheet.model';
 
 const baseApiUrl = 'api/flow-imports';
 const apiForImportUrl = 'api/import';
@@ -84,24 +85,6 @@ export default class FlowImportService {
         });
     });
   }
-  public uploadFile(files: File[]): Promise<any> {
-    const formData: FormData = new FormData();
-
-    files.forEach(file => formData.append('files', file));
-    return new Promise<any>((resolve, reject) => {
-      axios
-        .post(`${apiForImportUrl}/flow/upload-files`, formData)
-        .then(res => {
-          console.log(res);
-          resolve(res);
-        })
-        .catch(err => {
-          console.log(err);
-          reject(err);
-        });
-    });
-  }
-
   public uploadMultipleFile(file: File, sheetnames: string[]): Promise<any> {
     const formData: FormData = new FormData();
     formData.append('file', file);
@@ -155,7 +138,7 @@ export default class FlowImportService {
     });
   }
 
-  public getSummary(file: File): Promise<any> {
+  public getSummary(file: File): Promise<ISummary[]> {
     const formData: FormData = new FormData();
     formData.append('file', file);
     return new Promise<any>((resolve, reject) => {

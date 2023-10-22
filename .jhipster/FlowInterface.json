@@ -51,6 +51,7 @@
       "otherEntityName": "dataFlow",
       "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "dataFlows",
+      "relationshipSide": "left",
       "relationshipType": "one-to-many"
     },
     {
@@ -58,6 +59,7 @@
       "otherEntityName": "application",
       "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "source",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": "required"
     },
@@ -66,6 +68,7 @@
       "otherEntityName": "application",
       "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "target",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": "required"
     },
@@ -74,6 +77,7 @@
       "otherEntityName": "applicationComponent",
       "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "sourceComponent",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     },
     {
@@ -81,6 +85,7 @@
       "otherEntityName": "applicationComponent",
       "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "targetComponent",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     },
     {
@@ -88,6 +93,7 @@
       "otherEntityName": "protocol",
       "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "protocol",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     },
     {
@@ -95,14 +101,17 @@
       "otherEntityName": "owner",
       "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "owner",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "functionalFlowStep",
       "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "steps",
+      "relationshipSide": "left",
       "relationshipType": "one-to-many"
     }
   ],
+  "searchEngine": "no",
   "service": "no"
 }

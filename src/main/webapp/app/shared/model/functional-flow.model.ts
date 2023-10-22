@@ -1,8 +1,8 @@
-import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
-import { IOwner } from '@/shared/model/owner.model';
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
-import { IDataFlow } from '@/shared/model/data-flow.model';
-import { IApplication } from './application.model';
+import { type IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+import { type IOwner } from '@/shared/model/owner.model';
+import { type ILandscapeView } from '@/shared/model/landscape-view.model';
+import { type IDataFlow } from '@/shared/model/data-flow.model';
+import { type IApplication } from './application.model';
 
 export interface IFunctionalFlow {
   id?: number;
@@ -18,7 +18,7 @@ export interface IFunctionalFlow {
   owner?: IOwner | null;
   landscapes?: ILandscapeView[] | null;
   dataFlows?: IDataFlow[] | null;
-  allApplications?: IApplication[]; // not given by backend, computed in typescript
+  allApplications?: IApplication[] | null; // not given by backend, computed in typescript
 }
 
 export class FunctionalFlow implements IFunctionalFlow {
@@ -36,6 +36,6 @@ export class FunctionalFlow implements IFunctionalFlow {
     public owner?: IOwner | null,
     public landscapes?: ILandscapeView[] | null,
     public dataFlows?: IDataFlow[] | null,
-    public allApplications?: IApplication[] | null
+    public allApplications?: IApplication[] | null,
   ) {}
 }

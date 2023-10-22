@@ -1,37 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { ITechnology } from '@/shared/model/technology.model';
 import TechnologyService from './technology.service';
-import AlertService from '@/shared/alert/alert.service';
-import AccountService from '@/account/account.service';
+import { type ITechnology } from '@/shared/model/technology.model';
+import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
-@Component
-export default class TechnologyDetails extends Vue {
-  @Inject('technologyService') private technologyService: () => TechnologyService;
-  @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') public accountService: () => AccountService;
-  public technology: ITechnology = {};
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'TechnologyDetails',
+  setup() {
+    const technologyService = inject('technologyService', () => new TechnologyService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject('accountService', () => new AccountService(), true);
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.technologyId) {
-        vm.retrieveTechnology(to.params.technologyId);
+    const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1);
+    const technology: Ref<ITechnology> = ref({});
+
+    const retrieveTechnology = async technologyId => {
+      try {
+        const res = await technologyService().find(technologyId);
+        technology.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveTechnology(technologyId) {
-    this.technologyService()
-      .find(technologyId)
-      .then(res => {
-        this.technology = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.technologyId) {
+      retrieveTechnology(route.params.technologyId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      technology,
+
+      previousState,
+    };
+  },
+});

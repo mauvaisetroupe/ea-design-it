@@ -6,8 +6,6 @@ const ApplicationImportUploadFile = () => import('@/entities/application-import/
 // prettier-ignore
 const ComponentImportUploadFile = () => import('@/entities/component-import/component-import-upload-file.vue');
 // prettier-ignore
-const FlowImportUploadFile = () => import('@/entities/flow-import/flow-import-upload-file.vue');
-// prettier-ignore
 const FlowImportUploadMultiFile = () => import('@/entities/flow-import/flow-import-upload-multifile.vue');
 // prettier-ignore
 const EventImportUploadFile = () => import('@/entities/data-flow-import/data-flow-import-upload-file.vue');
@@ -37,12 +35,6 @@ export default [
     path: '/component-import-upload-file',
     name: 'ComponentImportUploadFile',
     component: ComponentImportUploadFile,
-    meta: { authorities: [Authority.WRITE] },
-  },
-  {
-    path: '/flow-import-upload-file',
-    name: 'FlowImportUploadFile',
-    component: FlowImportUploadFile,
     meta: { authorities: [Authority.WRITE] },
   },
   {

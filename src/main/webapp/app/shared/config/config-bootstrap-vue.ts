@@ -24,6 +24,7 @@ import {
   BFormDatepicker,
   BInputGroup,
   BInputGroupPrepend,
+  ToastPlugin,
   BTable,
   BBreadcrumb,
   BBreadcrumbItem,
@@ -35,12 +36,13 @@ import {
 } from 'bootstrap-vue';
 
 export function initBootstrapVue(vue) {
+  vue.use(ToastPlugin);
+
   vue.component('b-badge', BBadge);
   vue.component('b-dropdown', BDropdown);
   vue.component('b-dropdown-item', BDropdownItem);
   vue.component('b-link', BLink);
   vue.component('b-alert', BAlert);
-  vue.component('b-modal', BModal);
   vue.component('b-button', BButton);
   vue.component('b-navbar', BNavbar);
   vue.component('b-navbar-nav', BNavbarNav);
@@ -68,5 +70,5 @@ export function initBootstrapVue(vue) {
   vue.component('b-breadcrumb-item', BBreadcrumbItem);
   vue.component('b-tab', BTab);
   vue.component('b-tabs', BTabs);
-  vue.component('b-form-radio-group', BFormRadioGroup)
+  vue.component('b-form-radio-group', BFormRadioGroup);
 }

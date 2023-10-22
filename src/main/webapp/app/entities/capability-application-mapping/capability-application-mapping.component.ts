@@ -1,80 +1,78 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import CapabilityApplicationMappingService from './capability-application-mapping.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class CapabilityApplicationMapping extends Vue {
-  @Inject('capabilityApplicationMappingService') private capabilityApplicationMappingService: () => CapabilityApplicationMappingService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'CapabilityApplicationMapping',
+  setup() {
+    const capabilityApplicationMappingService = inject(
+      'capabilityApplicationMappingService',
+      () => new CapabilityApplicationMappingService(),
+    );
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const capabilityApplicationMappings: Ref<ICapabilityApplicationMapping[]> = ref([]);
 
-  public capabilityApplicationMappings: ICapabilityApplicationMapping[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllCapabilityApplicationMappings();
-  }
+    const retrieveCapabilityApplicationMappings = async () => {
+      isFetching.value = true;
+      try {
+        const res = await capabilityApplicationMappingService().retrieve();
+        capabilityApplicationMappings.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllCapabilityApplicationMappings();
-  }
+    const handleSyncList = () => {
+      retrieveCapabilityApplicationMappings();
+    };
 
-  public retrieveAllCapabilityApplicationMappings(): void {
-    this.isFetching = true;
-    this.capabilityApplicationMappingService()
-      .retrieve()
-      .then(
-        res => {
-          this.capabilityApplicationMappings = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveCapabilityApplicationMappings();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: ICapabilityApplicationMapping) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeCapabilityApplicationMapping = async () => {
+      try {
+        await capabilityApplicationMappingService().delete(removeId.value);
+        const message = 'A CapabilityApplicationMapping is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveCapabilityApplicationMappings();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public prepareRemove(instance: ICapabilityApplicationMapping): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeCapabilityApplicationMapping(): void {
-    this.capabilityApplicationMappingService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A CapabilityApplicationMapping is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllCapabilityApplicationMappings();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      capabilityApplicationMappings,
+      handleSyncList,
+      isFetching,
+      retrieveCapabilityApplicationMappings,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeCapabilityApplicationMapping,
+    };
+  },
+});

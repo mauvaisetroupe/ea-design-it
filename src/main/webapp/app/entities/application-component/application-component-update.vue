@@ -3,7 +3,7 @@
     <div class="col-8">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
         <h2 id="eaDesignItApp.applicationComponent.home.createOrEditLabel" data-cy="ApplicationComponentCreateUpdateHeading">
-          Create or edit a ApplicationComponent
+          Create or edit a Application Component
         </h2>
         <div>
           <div class="form-group" v-if="applicationComponent.id">
@@ -18,10 +18,12 @@
               name="alias"
               id="application-component-alias"
               data-cy="alias"
-              :class="{ valid: !$v.applicationComponent.alias.$invalid, invalid: $v.applicationComponent.alias.$invalid }"
-              v-model="$v.applicationComponent.alias.$model"
+              :class="{ valid: !v$.alias.$invalid, invalid: v$.alias.$invalid }"
+              v-model="v$.alias.$model"
             />
-            <div v-if="$v.applicationComponent.alias.$anyDirty && $v.applicationComponent.alias.$invalid"></div>
+            <div v-if="v$.alias.$anyDirty && v$.alias.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.alias.$errors" :key="error.$uid">{{ error.$message }}</small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" for="application-component-name">Name</label>
@@ -31,12 +33,12 @@
               name="name"
               id="application-component-name"
               data-cy="name"
-              :class="{ valid: !$v.applicationComponent.name.$invalid, invalid: $v.applicationComponent.name.$invalid }"
-              v-model="$v.applicationComponent.name.$model"
+              :class="{ valid: !v$.name.$invalid, invalid: v$.name.$invalid }"
+              v-model="v$.name.$model"
               required
             />
-            <div v-if="$v.applicationComponent.name.$anyDirty && $v.applicationComponent.name.$invalid">
-              <small class="form-text text-danger" v-if="!$v.applicationComponent.name.required"> This field is required. </small>
+            <div v-if="v$.name.$anyDirty && v$.name.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.name.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -47,13 +49,11 @@
               name="description"
               id="application-component-description"
               data-cy="description"
-              :class="{ valid: !$v.applicationComponent.description.$invalid, invalid: $v.applicationComponent.description.$invalid }"
-              v-model="$v.applicationComponent.description.$model"
+              :class="{ valid: !v$.description.$invalid, invalid: v$.description.$invalid }"
+              v-model="v$.description.$model"
             />
-            <div v-if="$v.applicationComponent.description.$anyDirty && $v.applicationComponent.description.$invalid">
-              <small class="form-text text-danger" v-if="!$v.applicationComponent.description.maxLength">
-                This field cannot be longer than 1000 characters.
-              </small>
+            <div v-if="v$.description.$anyDirty && v$.description.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.description.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -64,13 +64,11 @@
               name="comment"
               id="application-component-comment"
               data-cy="comment"
-              :class="{ valid: !$v.applicationComponent.comment.$invalid, invalid: $v.applicationComponent.comment.$invalid }"
-              v-model="$v.applicationComponent.comment.$model"
+              :class="{ valid: !v$.comment.$invalid, invalid: v$.comment.$invalid }"
+              v-model="v$.comment.$model"
             />
-            <div v-if="$v.applicationComponent.comment.$anyDirty && $v.applicationComponent.comment.$invalid">
-              <small class="form-text text-danger" v-if="!$v.applicationComponent.comment.maxLength">
-                This field cannot be longer than 500 characters.
-              </small>
+            <div v-if="v$.comment.$anyDirty && v$.comment.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.comment.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -81,16 +79,13 @@
               name="documentationURL"
               id="application-component-documentationURL"
               data-cy="documentationURL"
-              :class="{
-                valid: !$v.applicationComponent.documentationURL.$invalid,
-                invalid: $v.applicationComponent.documentationURL.$invalid,
-              }"
-              v-model="$v.applicationComponent.documentationURL.$model"
+              :class="{ valid: !v$.documentationURL.$invalid, invalid: v$.documentationURL.$invalid }"
+              v-model="v$.documentationURL.$model"
             />
-            <div v-if="$v.applicationComponent.documentationURL.$anyDirty && $v.applicationComponent.documentationURL.$invalid">
-              <small class="form-text text-danger" v-if="!$v.applicationComponent.documentationURL.maxLength">
-                This field cannot be longer than 500 characters.
-              </small>
+            <div v-if="v$.documentationURL.$anyDirty && v$.documentationURL.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.documentationURL.$errors" :key="error.$uid">{{
+                error.$message
+              }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -99,7 +94,7 @@
               <b-input-group-prepend>
                 <b-form-datepicker
                   aria-controls="application-component-startDate"
-                  v-model="$v.applicationComponent.startDate.$model"
+                  v-model="v$.startDate.$model"
                   name="startDate"
                   class="form-control"
                   :locale="currentLanguage"
@@ -116,8 +111,8 @@
                 type="text"
                 class="form-control"
                 name="startDate"
-                :class="{ valid: !$v.applicationComponent.startDate.$invalid, invalid: $v.applicationComponent.startDate.$invalid }"
-                v-model="$v.applicationComponent.startDate.$model"
+                :class="{ valid: !v$.startDate.$invalid, invalid: v$.startDate.$invalid }"
+                v-model="v$.startDate.$model"
               />
             </b-input-group>
           </div>
@@ -127,7 +122,7 @@
               <b-input-group-prepend>
                 <b-form-datepicker
                   aria-controls="application-component-endDate"
-                  v-model="$v.applicationComponent.endDate.$model"
+                  v-model="v$.endDate.$model"
                   name="endDate"
                   class="form-control"
                   :locale="currentLanguage"
@@ -144,8 +139,8 @@
                 type="text"
                 class="form-control"
                 name="endDate"
-                :class="{ valid: !$v.applicationComponent.endDate.$invalid, invalid: $v.applicationComponent.endDate.$invalid }"
-                v-model="$v.applicationComponent.endDate.$model"
+                :class="{ valid: !v$.endDate.$invalid, invalid: v$.endDate.$invalid }"
+                v-model="v$.endDate.$model"
               />
             </b-input-group>
           </div>
@@ -154,11 +149,8 @@
             <select
               class="form-control"
               name="applicationType"
-              :class="{
-                valid: !$v.applicationComponent.applicationType.$invalid,
-                invalid: $v.applicationComponent.applicationType.$invalid,
-              }"
-              v-model="$v.applicationComponent.applicationType.$model"
+              :class="{ valid: !v$.applicationType.$invalid, invalid: v$.applicationType.$invalid }"
+              v-model="v$.applicationType.$model"
               id="application-component-applicationType"
               data-cy="applicationType"
             >
@@ -172,8 +164,8 @@
             <select
               class="form-control"
               name="softwareType"
-              :class="{ valid: !$v.applicationComponent.softwareType.$invalid, invalid: $v.applicationComponent.softwareType.$invalid }"
-              v-model="$v.applicationComponent.softwareType.$model"
+              :class="{ valid: !v$.softwareType.$invalid, invalid: v$.softwareType.$invalid }"
+              v-model="v$.softwareType.$model"
               id="application-component-softwareType"
               data-cy="softwareType"
             >
@@ -188,11 +180,8 @@
               name="displayInLandscape"
               id="application-component-displayInLandscape"
               data-cy="displayInLandscape"
-              :class="{
-                valid: !$v.applicationComponent.displayInLandscape.$invalid,
-                invalid: $v.applicationComponent.displayInLandscape.$invalid,
-              }"
-              v-model="$v.applicationComponent.displayInLandscape.$model"
+              :class="{ valid: !v$.displayInLandscape.$invalid, invalid: v$.displayInLandscape.$invalid }"
+              v-model="v$.displayInLandscape.$model"
             />
           </div>
           <div class="form-group">
@@ -219,8 +208,8 @@
               </option>
             </select>
           </div>
-          <div v-if="$v.applicationComponent.application.$anyDirty && $v.applicationComponent.application.$invalid">
-            <small class="form-text text-danger" v-if="!$v.applicationComponent.application.required"> This field is required. </small>
+          <div v-if="v$.application.$anyDirty && v$.application.$invalid">
+            <small class="form-text text-danger" v-for="error of v$.application.$errors" :key="error.$uid">{{ error.$message }}</small>
           </div>
           <div class="form-group">
             <label for="application-component-categories">Categories</label>
@@ -291,7 +280,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.applicationComponent.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

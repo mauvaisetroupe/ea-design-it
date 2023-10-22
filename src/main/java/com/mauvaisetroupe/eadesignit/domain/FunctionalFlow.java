@@ -2,6 +2,8 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -9,11 +11,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.apache.commons.lang3.ObjectUtils;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.SortNatural;
 
 /**
@@ -21,7 +19,7 @@ import org.hibernate.annotations.SortNatural;
  */
 @Entity
 @Table(name = "flow")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> {
 
     private static final long serialVersionUID = 1L;
@@ -62,21 +60,18 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
 
     @OneToMany(mappedBy = "flow", fetch = FetchType.EAGER)
     @SortNatural
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "flow" }, allowSetters = true)
     private SortedSet<FunctionalFlowStep> steps = new TreeSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner owner;
 
     @ManyToMany(mappedBy = "flows", fetch = FetchType.EAGER)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "owner", "flows", "capabilityApplicationMappings" }, allowSetters = true)
     private Set<LandscapeView> landscapes = new HashSet<>();
 
     @ManyToMany(mappedBy = "functionalFlows")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "events", "functionalFlows", "flowInterface" }, allowSetters = true)
     private Set<DataFlow> dataFlows = new HashSet<>();
 
@@ -347,7 +342,7 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
         if (!(o instanceof FunctionalFlow)) {
             return false;
         }
-        return id != null && id.equals(((FunctionalFlow) o).id);
+        return getId() != null && getId().equals(((FunctionalFlow) o).getId());
     }
 
     @Override

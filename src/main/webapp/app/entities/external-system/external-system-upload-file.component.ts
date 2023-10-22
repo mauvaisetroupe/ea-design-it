@@ -1,42 +1,55 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useAlertService } from '@/shared/alert/alert.service';
+
+import { type IExternalSystem } from '@/shared/model/external-system.model';
 import ExternalSystemService from '@/entities/external-system/external-system.service';
-import AlertService from '@/shared/alert/alert.service';
-import { IExternalSystem } from '@/shared/model/external-system.model';
 
-@Component
-export default class ExternalSystemUploadFile extends Vue {
-  @Inject('alertService') private alertService: () => AlertService;
-  @Inject('externalSystemService') private externalSystemService: () => ExternalSystemService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ExternalSystemUploadFile',
+  setup() {
+    const externalSystemService = inject('externalSystemService', () => new ExternalSystemService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  //public flowImports: IFlowImport[] = [];
-  public excelFile: File = null;
-  public isFetching = false;
-  public fileSubmited = false;
-  public rowsLoaded = false;
-  public excelFileName = 'Browse File';
-  public externalSystems: IExternalSystem[] = [];
+    const route = useRoute();
+    const router = useRouter();
 
-  public handleFileUpload(event): void {
-    console.log(event);
-    this.excelFile = event.target.files[0];
-    this.excelFileName = this.excelFile.name;
-  }
+    const externalSystems: Ref<IExternalSystem[]> = ref([]);
+    const excelFile = ref();
+    const isFetching = ref(false);
+    const fileSubmited = ref(false);
+    const rowsLoaded = ref(false);
+    const excelFileName = ref('Browse File');
 
-  public submitFile(): void {
-    this.isFetching = true;
-    this.fileSubmited = true;
-    this.externalSystemService()
-      .uploadFile(this.excelFile)
-      .then(
-        res => {
-          this.externalSystems = res.data;
-          this.isFetching = false;
-          this.rowsLoaded = true;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
-}
+    function handleFileUpload(): void {
+      //excelFile.value = event.target.files[0];
+      excelFileName.value = excelFile.value.name;
+    }
+
+    async function submitFile() {
+      isFetching.value = true;
+      fileSubmited.value = true;
+      try {
+        const res = await externalSystemService().uploadFile(excelFile.value.files[0]);
+        externalSystems.value = res.data;
+        isFetching.value = false;
+        rowsLoaded.value = true;
+      } catch (error) {
+        alertService().showHttpError(error.response);
+      } finally {
+        isFetching.value = false;
+      }
+    }
+
+    return {
+      excelFile,
+      excelFileName,
+      isFetching,
+      rowsLoaded,
+      externalSystemService,
+      handleFileUpload,
+      submitFile,
+    };
+  },
+});

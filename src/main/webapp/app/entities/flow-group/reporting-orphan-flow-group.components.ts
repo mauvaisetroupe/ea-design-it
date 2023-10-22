@@ -1,50 +1,55 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { IFlowGroup } from '@/shared/model/flow-group.model';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useAlertService } from '@/shared/alert/alert.service';
 
+import { IFlowGroup } from '@/shared/model/flow-group.model';
 import ReportingService from '@/eadesignit/reporting.service';
 import AlertService from '@/shared/alert/alert.service';
 import FlowGroupService from './flow-group.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class FlowGroup extends Vue {
-  @Inject('reportingService') private reportingService: () => ReportingService;
-  @Inject('alertService') private alertService: () => AlertService;
-  @Inject('flowGroupService') private flowGroupService: () => FlowGroupService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FlowGroup',
+  setup() {
+    const reportingService = inject('reportingService', () => new ReportingService());
+    const flowGroupService = inject('flowGroupService', () => new FlowGroupService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const route = useRoute();
+    const router = useRouter();
 
-  public flowGroups: IFlowGroup[] = [];
+    const isFetching = ref(false);
+    const flowGroups: Ref<IFlowGroup[]> = ref([]);
 
-  public isFetching = false;
+    function clear(): void {
+      retrieveAllFlowGroups();
+    }
 
-  public mounted(): void {
-    this.retrieveAllFlowGroups();
-  }
+    onMounted(async () => {
+      await retrieveAllFlowGroups();
+    });
 
-  public clear(): void {
-    this.retrieveAllFlowGroups();
-  }
+    const retrieveAllFlowGroups = async () => {
+      isFetching.value = true;
+      try {
+        const res = await flowGroupService().retrieve();
+        flowGroups.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public retrieveAllFlowGroups(): void {
-    this.isFetching = true;
-    this.reportingService()
-      .retrieveOrphanFlowGroup()
-      .then(
-        res => {
-          this.flowGroups = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    function handleSyncList(): void {
+      clear();
+    }
 
-  public handleSyncList(): void {
-    this.clear();
-  }
-}
+    return {
+      flowGroups,
+      handleSyncList,
+      isFetching,
+      clear,
+    };
+  },
+});

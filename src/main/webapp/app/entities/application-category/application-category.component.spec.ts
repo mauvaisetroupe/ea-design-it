@@ -1,0 +1,100 @@
+/* tslint:disable max-line-length */
+import { vitest } from 'vitest';
+import { shallowMount, type MountingOptions } from '@vue/test-utils';
+import sinon, { type SinonStubbedInstance } from 'sinon';
+
+import ApplicationCategory from './application-category.vue';
+import ApplicationCategoryService from './application-category.service';
+import AlertService from '@/shared/alert/alert.service';
+
+type ApplicationCategoryComponentType = InstanceType<typeof ApplicationCategory>;
+
+const bModalStub = {
+  render: () => {},
+  methods: {
+    hide: () => {},
+    show: () => {},
+  },
+};
+
+describe('Component Tests', () => {
+  let alertService: AlertService;
+
+  describe('ApplicationCategory Management Component', () => {
+    let applicationCategoryServiceStub: SinonStubbedInstance<ApplicationCategoryService>;
+    let mountOptions: MountingOptions<ApplicationCategoryComponentType>['global'];
+
+    beforeEach(() => {
+      applicationCategoryServiceStub = sinon.createStubInstance<ApplicationCategoryService>(ApplicationCategoryService);
+      applicationCategoryServiceStub.retrieve.resolves({ headers: {} });
+
+      alertService = new AlertService({
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
+      });
+
+      mountOptions = {
+        stubs: {
+          bModal: bModalStub as any,
+          'font-awesome-icon': true,
+          'b-badge': true,
+          'b-button': true,
+          'router-link': true,
+        },
+        directives: {
+          'b-modal': {},
+        },
+        provide: {
+          alertService,
+          applicationCategoryService: () => applicationCategoryServiceStub,
+        },
+      };
+    });
+
+    describe('Mount', () => {
+      it('Should call load all on init', async () => {
+        // GIVEN
+        applicationCategoryServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
+
+        // WHEN
+        const wrapper = shallowMount(ApplicationCategory, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
+        // THEN
+        expect(applicationCategoryServiceStub.retrieve.calledOnce).toBeTruthy();
+        expect(comp.applicationCategories[0]).toEqual(expect.objectContaining({ id: 123 }));
+      });
+    });
+    describe('Handles', () => {
+      let comp: ApplicationCategoryComponentType;
+
+      beforeEach(async () => {
+        const wrapper = shallowMount(ApplicationCategory, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+        applicationCategoryServiceStub.retrieve.reset();
+        applicationCategoryServiceStub.retrieve.resolves({ headers: {}, data: [] });
+      });
+
+      it('Should call delete service on confirmDelete', async () => {
+        // GIVEN
+        applicationCategoryServiceStub.delete.resolves({});
+
+        // WHEN
+        comp.prepareRemove({ id: 123 });
+
+        comp.removeApplicationCategory();
+        await comp.$nextTick(); // clear components
+
+        // THEN
+        expect(applicationCategoryServiceStub.delete.called).toBeTruthy();
+
+        // THEN
+        await comp.$nextTick(); // handle component clear watch
+        expect(applicationCategoryServiceStub.retrieve.callCount).toEqual(1);
+      });
+    });
+  });
+});

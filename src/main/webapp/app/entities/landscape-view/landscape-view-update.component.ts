@@ -1,156 +1,134 @@
-import { Component, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import { mixins } from 'vue-class-component';
-import JhiDataUtils from '@/shared/data/data-utils.service';
-
-import AlertService from '@/shared/alert/alert.service';
+import LandscapeViewService from './landscape-view.service';
+import useDataUtils from '@/shared/data/data-utils.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import OwnerService from '@/entities/owner/owner.service';
-import { IOwner } from '@/shared/model/owner.model';
-
+import { type IOwner } from '@/shared/model/owner.model';
 import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
-import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
-
-import CapabilityApplicationMappingService from '@/entities/capability-application-mapping/capability-application-mapping.service';
-import { ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
-
-import { ILandscapeView, LandscapeView } from '@/shared/model/landscape-view.model';
-import LandscapeViewService from './landscape-view.service';
+import { type IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { type ILandscapeView, LandscapeView } from '@/shared/model/landscape-view.model';
 import { ViewPoint } from '@/shared/model/enumerations/view-point.model';
 
-const validations: any = {
-  landscapeView: {
-    viewpoint: {},
-    diagramName: {},
-    compressedDrawXML: {},
-    compressedDrawSVG: {},
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'LandscapeViewUpdate',
+  setup() {
+    const landscapeViewService = inject('landscapeViewService', () => new LandscapeViewService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+
+    const landscapeView: Ref<ILandscapeView> = ref(new LandscapeView());
+
+    const ownerService = inject('ownerService', () => new OwnerService());
+
+    const owners: Ref<IOwner[]> = ref([]);
+
+    const functionalFlowService = inject('functionalFlowService', () => new FunctionalFlowService());
+
+    const functionalFlows: Ref<IFunctionalFlow[]> = ref([]);
+    const viewPointValues: Ref<string[]> = ref(Object.keys(ViewPoint));
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
+
+    const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1);
+
+    const retrieveLandscapeView = async landscapeViewId => {
+      try {
+        const res = await landscapeViewService().find(landscapeViewId);
+        landscapeView.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
+
+    if (route.params?.landscapeViewId) {
+      retrieveLandscapeView(route.params.landscapeViewId);
+    }
+
+    const initRelationships = () => {
+      ownerService()
+        .retrieve()
+        .then(res => {
+          owners.value = res.data;
+        });
+    };
+
+    initRelationships();
+
+    const dataUtils = useDataUtils();
+
+    const validations = useValidation();
+    const validationRules = {
+      viewpoint: {},
+      diagramName: {},
+      compressedDrawXML: {},
+      compressedDrawSVG: {},
+      owner: {},
+      flows: {},
+      capabilityApplicationMappings: {},
+    };
+    const v$ = useVuelidate(validationRules, landscapeView as any);
+    v$.value.$validate();
+
+    return {
+      landscapeViewService,
+      alertService,
+      landscapeView,
+      previousState,
+      viewPointValues,
+      isSaving,
+      currentLanguage,
+      owners,
+      functionalFlows,
+      ...dataUtils,
+      v$,
+    };
   },
-};
-
-@Component({
-  validations,
-})
-export default class LandscapeViewUpdate extends mixins(JhiDataUtils) {
-  @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
-  @Inject('alertService') private alertService: () => AlertService;
-
-  public landscapeView: ILandscapeView = new LandscapeView();
-
-  @Inject('ownerService') private ownerService: () => OwnerService;
-
-  public owners: IOwner[] = [];
-
-  @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
-
-  public functionalFlows: IFunctionalFlow[] = [];
-
-  @Inject('capabilityApplicationMappingService') private capabilityApplicationMappingService: () => CapabilityApplicationMappingService;
-
-  public capabilityApplicationMappings: ICapabilityApplicationMapping[] = [];
-  public viewPointValues: string[] = Object.keys(ViewPoint);
-  public isSaving = false;
-  public currentLanguage = '';
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.landscapeViewId) {
-        vm.retrieveLandscapeView(to.params.landscapeViewId);
-      }
-      vm.initRelationships();
-    });
-  }
-
   created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
     this.landscapeView.flows = [];
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.landscapeView.id) {
-      this.landscapeViewService()
-        .update(this.landscapeView)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A LandscapeView is updated with identifier ' + param.id;
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
+  },
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.landscapeView.id) {
+        this.landscapeViewService()
+          .update(this.landscapeView)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo('A LandscapeView is updated with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
           });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.landscapeViewService()
-        .create(this.landscapeView)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A LandscapeView is created with identifier ' + param.id;
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
+      } else {
+        this.landscapeViewService()
+          .create(this.landscapeView)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess('A LandscapeView is created with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
           });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    }
-  }
+      }
+    },
 
-  public retrieveLandscapeView(landscapeViewId): void {
-    this.landscapeViewService()
-      .find(landscapeViewId)
-      .then(res => {
-        this.landscapeView = res.landscape;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {
-    this.ownerService()
-      .retrieve()
-      .then(res => {
-        this.owners = res.data;
-      });
-    this.functionalFlowService()
-      .retrieve()
-      .then(res => {
-        this.functionalFlows = res.data;
-      });
-    this.capabilityApplicationMappingService()
-      .retrieve()
-      .then(res => {
-        this.capabilityApplicationMappings = res.data;
-      });
-  }
-
-  public getSelected(selectedVals, option): any {
-    if (selectedVals) {
-      return selectedVals.find(value => option.id === value.id) ?? option;
-    }
-    return option;
-  }
-}
+    getSelected(selectedVals, option): any {
+      if (selectedVals) {
+        return selectedVals.find(value => option.id === value.id) ?? option;
+      }
+      return option;
+    },
+  },
+});

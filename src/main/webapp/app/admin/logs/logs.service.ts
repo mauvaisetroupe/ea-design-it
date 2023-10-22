@@ -1,9 +1,6 @@
-import axios, { AxiosPromise } from 'axios';
-import Vue from 'vue';
-import Component from 'vue-class-component';
+import axios, { type AxiosPromise } from 'axios';
 
-@Component
-export default class LogsService extends Vue {
+export default class LogsService {
   public changeLevel(name: string, configuredLevel: string): AxiosPromise<any> {
     return axios.post(`management/loggers/${name}`, { configuredLevel });
   }

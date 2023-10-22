@@ -1,274 +1,167 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import { required, maxLength } from 'vuelidate/lib/validators';
-
-import AlertService from '@/shared/alert/alert.service';
-
-import DataFlowService from '@/entities/data-flow/data-flow.service';
-import { IDataFlow } from '@/shared/model/data-flow.model';
+import FlowInterfaceService from './flow-interface.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import ApplicationService from '@/entities/application/application.service';
-import { IApplication } from '@/shared/model/application.model';
-
+import { type IApplication } from '@/shared/model/application.model';
 import ApplicationComponentService from '@/entities/application-component/application-component.service';
-import { IApplicationComponent } from '@/shared/model/application-component.model';
-
+import { type IApplicationComponent } from '@/shared/model/application-component.model';
 import ProtocolService from '@/entities/protocol/protocol.service';
-import { IProtocol } from '@/shared/model/protocol.model';
-
+import { type IProtocol } from '@/shared/model/protocol.model';
 import OwnerService from '@/entities/owner/owner.service';
-import { IOwner } from '@/shared/model/owner.model';
+import { type IOwner } from '@/shared/model/owner.model';
+import { type IFlowInterface, FlowInterface } from '@/shared/model/flow-interface.model';
 
-import FunctionalFlowService from '@/entities/functional-flow/functional-flow.service';
-import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FlowInterfaceUpdate',
+  setup() {
+    const flowInterfaceService = inject('flowInterfaceService', () => new FlowInterfaceService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
-import { FunctionalFlowStep, IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+    const flowInterface: Ref<IFlowInterface> = ref(new FlowInterface());
 
-import { IFlowInterface, FlowInterface } from '@/shared/model/flow-interface.model';
-import FlowInterfaceService from './flow-interface.service';
-import ApplicationComponent from '../application-component/application-component.component';
+    const applicationService = inject('applicationService', () => new ApplicationService());
 
-const validations: any = {
-  flowInterface: {
-    alias: {
-      required,
-    },
-    status: {},
-    documentationURL: {
-      maxLength: maxLength(500),
-    },
-    documentationURL2: {
-      maxLength: maxLength(500),
-    },
-    description: {
-      maxLength: maxLength(1500),
-    },
-    startDate: {},
-    endDate: {},
-    source: {
-      required,
-    },
-    target: {
-      required,
+    const applications: Ref<IApplication[]> = ref([]);
+
+    const applicationComponentService = inject('applicationComponentService', () => new ApplicationComponentService());
+
+    const applicationComponents: Ref<IApplicationComponent[]> = ref([]);
+
+    const protocolService = inject('protocolService', () => new ProtocolService());
+
+    const protocols: Ref<IProtocol[]> = ref([]);
+
+    const ownerService = inject('ownerService', () => new OwnerService());
+
+    const owners: Ref<IOwner[]> = ref([]);
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
+
+    const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1);
+
+    const retrieveFlowInterface = async flowInterfaceId => {
+      try {
+        const res = await flowInterfaceService().find(flowInterfaceId);
+        flowInterface.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
+
+    if (route.params?.flowInterfaceId) {
+      retrieveFlowInterface(route.params.flowInterfaceId);
+    }
+
+    const initRelationships = () => {
+      applicationService()
+        .retrieve()
+        .then(res => {
+          applications.value = res.data;
+        });
+      applicationComponentService()
+        .retrieve()
+        .then(res => {
+          applicationComponents.value = res.data;
+        });
+      protocolService()
+        .retrieve()
+        .then(res => {
+          protocols.value = res.data;
+        });
+      ownerService()
+        .retrieve()
+        .then(res => {
+          owners.value = res.data;
+        });
+    };
+
+    initRelationships();
+
+    const validations = useValidation();
+    const validationRules = {
+      alias: {
+        required: validations.required('This field is required.'),
+      },
+      status: {},
+      documentationURL: {
+        maxLength: validations.maxLength('This field cannot be longer than 500 characters.', 500),
+      },
+      documentationURL2: {
+        maxLength: validations.maxLength('This field cannot be longer than 500 characters.', 500),
+      },
+      description: {
+        maxLength: validations.maxLength('This field cannot be longer than 1500 characters.', 1500),
+      },
+      startDate: {},
+      endDate: {},
+      dataFlows: {},
+      source: {
+        required: validations.required('This field is required.'),
+      },
+      target: {
+        required: validations.required('This field is required.'),
+      },
+      sourceComponent: {},
+      targetComponent: {},
+      protocol: {},
+      owner: {},
+      steps: {},
+    };
+    const v$ = useVuelidate(validationRules, flowInterface as any);
+    v$.value.$validate();
+
+    return {
+      flowInterfaceService,
+      alertService,
+      flowInterface,
+      previousState,
+      isSaving,
+      currentLanguage,
+      applications,
+      applicationComponents,
+      protocols,
+      owners,
+      v$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.flowInterface.id) {
+        this.flowInterfaceService()
+          .update(this.flowInterface)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo('A FlowInterface is updated with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.flowInterfaceService()
+          .create(this.flowInterface)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess('A FlowInterface is created with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
     },
   },
-};
-
-@Component({
-  validations,
-})
-export default class FlowInterfaceUpdate extends Vue {
-  @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
-  @Inject('alertService') private alertService: () => AlertService;
-
-  public flowInterface: IFlowInterface = new FlowInterface();
-
-  @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
-
-  public dataFlows: IDataFlow[] = [];
-
-  @Inject('applicationService') private applicationService: () => ApplicationService;
-
-  public applications: IApplication[] = [];
-  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
-
-  @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
-
-  public applicationComponents: IApplicationComponent[] = [];
-
-  @Inject('protocolService') private protocolService: () => ProtocolService;
-
-  public protocols: IProtocol[] = [];
-
-  @Inject('ownerService') private ownerService: () => OwnerService;
-
-  public owners: IOwner[] = [];
-
-  @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
-
-  public functionalFlows: IFunctionalFlow[] = [];
-  public isSaving = false;
-  public currentLanguage = '';
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.flowInterfaceId) {
-        vm.retrieveFlowInterface(to.params.flowInterfaceId);
-      }
-      vm.initRelationships();
-    });
-  }
-
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public assignFunctionalFlow(): IFunctionalFlow {
-    // is landcaspe ID pass as param
-    let functionalFlowToSave: IFunctionalFlow;
-    if (this.$route.query.functionalFlowId) {
-      this.functionalFlows.forEach(functionalFlow => {
-        console.log(functionalFlow.id + '---' + this.$route.query.functionalFlowId);
-        if (functionalFlow.id === parseInt(this.$route.query.functionalFlowId as string)) {
-          console.log('FunctionalFlow : ' + functionalFlow.id);
-          functionalFlowToSave = functionalFlow;
-        }
-      });
-    }
-    return functionalFlowToSave;
-  }
-
-  public assignSourceAndTarget() {
-    if (this.$route.query.sourceId || this.$route.query.targetId) {
-      this.applications.forEach(a => {
-        if (this.$route.query.sourceId && a.id === parseInt(this.$route.query.sourceId as string)) {
-          this.flowInterface.source = a;
-        }
-
-        if (this.$route.query.targetId && a.id === parseInt(this.$route.query.targetId as string)) {
-          this.flowInterface.target = a;
-        }
-      });
-    }
-  }
-
-  public assignProtocol() {
-    if (this.$route.query.protocolId) {
-      this.protocols.forEach(p => {
-        if (p.id === parseInt(this.$route.query.protocolId as string)) {
-          this.flowInterface.protocol = p;
-        }
-      });
-    }
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.flowInterface.id) {
-      this.flowInterfaceService()
-        .update(this.flowInterface)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A FlowInterface is updated with identifier ' + param.id;
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.flowInterfaceService()
-        .create(this.flowInterface)
-        .then(param => {
-          const createdInterface: IFunctionalFlow = param;
-          const functionalFlowToSave = this.assignFunctionalFlow();
-          if (functionalFlowToSave != null) {
-            const step: IFunctionalFlowStep = new FunctionalFlowStep();
-            step.flowInterface = createdInterface;
-            step.flow = functionalFlowToSave;
-            this.functionalFlowStepService()
-              .create(step)
-              .then(param2 => {
-                this.isSaving = false;
-                this.$router.go(-1);
-                const message = 'A Interface is created with identifier ' + param.id + ' for FunctionalFlow  ' + functionalFlowToSave.id;
-                (this.$root as any).$bvToast.toast(message.toString(), {
-                  toaster: 'b-toaster-top-center',
-                  title: 'Success',
-                  variant: 'success',
-                  solid: true,
-                  autoHideDelay: 5000,
-                });
-              });
-          } else {
-            this.isSaving = false;
-            this.$router.go(-1);
-            const message = 'A FlowInterface is created with identifier ' + param.id;
-            (this.$root as any).$bvToast.toast(message.toString(), {
-              toaster: 'b-toaster-top-center',
-              title: 'Success',
-              variant: 'success',
-              solid: true,
-              autoHideDelay: 5000,
-            });
-          }
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    }
-  }
-
-  public retrieveFlowInterface(flowInterfaceId): void {
-    this.flowInterfaceService()
-      .find(flowInterfaceId)
-      .then(res => {
-        this.flowInterface = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {
-    this.dataFlowService()
-      .retrieve()
-      .then(res => {
-        this.dataFlows = res.data;
-      });
-    this.applicationService()
-      .retrieve()
-      .then(res => {
-        this.applications = res.data;
-        this.assignSourceAndTarget();
-      });
-    this.applicationComponentService()
-      .retrieve()
-      .then(res => {
-        this.applicationComponents = res.data;
-      });
-    this.protocolService()
-      .retrieve()
-      .then(res => {
-        this.protocols = res.data;
-        this.assignProtocol();
-      });
-    this.ownerService()
-      .retrieve()
-      .then(res => {
-        this.owners = res.data;
-      });
-    this.functionalFlowService()
-      .retrieve()
-      .then(res => {
-        this.functionalFlows = res.data;
-      });
-  }
-
-  changeSource(component: IApplicationComponent) {
-    this.flowInterface.source = component.application;
-  }
-
-  changeTarget(component: IApplicationComponent) {
-    this.flowInterface.target = component.application;
-  }
-}
+});

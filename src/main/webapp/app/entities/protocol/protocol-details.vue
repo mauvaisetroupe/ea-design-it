@@ -30,7 +30,7 @@
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
+          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>Back</span>
         </button>
         <router-link v-if="protocol.id" :to="{ name: 'ProtocolEdit', params: { protocolId: protocol.id } }" custom v-slot="{ navigate }">
           <button @click="navigate" class="btn btn-primary" v-if="accountService().writeAuthorities">

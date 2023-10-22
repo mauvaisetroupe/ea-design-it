@@ -18,13 +18,13 @@
     <div class="mt-2">&nbsp;</div>
     Filter
     <input type="text" v-model="threadDumpFilter" class="form-control" />
-    <div class="pad" v-for="(entry, key) of filterBy(threadDump, threadDumpFilter)" :key="key">
+    <div class="pad" v-for="(entry, key) of filteredThreadDump" :key="key">
       <h6>
         <span class="badge" :class="getBadgeClass(entry.threadState)">{{ entry.threadState }}</span
         >&nbsp;{{ entry.threadName }} (ID {{ entry.threadId }})
         <a v-on:click="entry.show = !entry.show" href="javascript:void(0);">
-          <span :hidden="entry.show">Show StackTrace</span>
-          <span :hidden="!entry.show">Hide StackTrace</span>
+          <span :hidden="entry.show">Show Stacktrace</span>
+          <span :hidden="!entry.show">Hide Stacktrace</span>
         </a>
       </h6>
       <div class="card" :hidden="!entry.show">
@@ -45,7 +45,7 @@
             <th scope="col">Blocked Count</th>
             <th scope="col">Waited Time</th>
             <th scope="col">Waited Count</th>
-            <th scope="col">Lock Name</th>
+            <th scope="col">Lock name</th>
           </tr>
         </thead>
         <tbody>

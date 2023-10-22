@@ -10,13 +10,13 @@ import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +25,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -256,7 +255,7 @@ class FlowInterfaceResourceIT {
         int databaseSizeBeforeUpdate = flowInterfaceRepository.findAll().size();
 
         // Update the flowInterface
-        FlowInterface updatedFlowInterface = flowInterfaceRepository.findById(flowInterface.getId()).get();
+        FlowInterface updatedFlowInterface = flowInterfaceRepository.findById(flowInterface.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedFlowInterface are not directly saved in db
         em.detach(updatedFlowInterface);
         updatedFlowInterface
@@ -360,10 +359,8 @@ class FlowInterfaceResourceIT {
         partialUpdatedFlowInterface
             .alias(UPDATED_ALIAS)
             .status(UPDATED_STATUS)
-            .documentationURL(UPDATED_DOCUMENTATION_URL)
             .documentationURL2(UPDATED_DOCUMENTATION_URL_2)
             .description(UPDATED_DESCRIPTION)
-            .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE);
 
         restFlowInterfaceMockMvc
@@ -380,10 +377,10 @@ class FlowInterfaceResourceIT {
         FlowInterface testFlowInterface = flowInterfaceList.get(flowInterfaceList.size() - 1);
         assertThat(testFlowInterface.getAlias()).isEqualTo(UPDATED_ALIAS);
         assertThat(testFlowInterface.getStatus()).isEqualTo(UPDATED_STATUS);
-        assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
+        assertThat(testFlowInterface.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
         assertThat(testFlowInterface.getDocumentationURL2()).isEqualTo(UPDATED_DOCUMENTATION_URL_2);
         assertThat(testFlowInterface.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testFlowInterface.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testFlowInterface.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testFlowInterface.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 

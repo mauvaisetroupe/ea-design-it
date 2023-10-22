@@ -1,37 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { IProtocol } from '@/shared/model/protocol.model';
 import ProtocolService from './protocol.service';
-import AlertService from '@/shared/alert/alert.service';
-import AccountService from '@/account/account.service';
+import { type IProtocol } from '@/shared/model/protocol.model';
+import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
-@Component
-export default class ProtocolDetails extends Vue {
-  @Inject('protocolService') private protocolService: () => ProtocolService;
-  @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') public accountService: () => AccountService;
-  public protocol: IProtocol = {};
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ProtocolDetails',
+  setup() {
+    const protocolService = inject('protocolService', () => new ProtocolService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject('accountService', () => new AccountService(), true);
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.protocolId) {
-        vm.retrieveProtocol(to.params.protocolId);
+    const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1);
+    const protocol: Ref<IProtocol> = ref({});
+
+    const retrieveProtocol = async protocolId => {
+      try {
+        const res = await protocolService().find(protocolId);
+        protocol.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveProtocol(protocolId) {
-    this.protocolService()
-      .find(protocolId)
-      .then(res => {
-        this.protocol = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.protocolId) {
+      retrieveProtocol(route.params.protocolId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      protocol,
+
+      previousState,
+    };
+  },
+});

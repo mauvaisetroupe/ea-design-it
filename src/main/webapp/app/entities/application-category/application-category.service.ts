@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IApplicationCategory } from '@/shared/model/application-category.model';
+import { type IApplicationCategory } from '@/shared/model/application-category.model';
 
 const baseApiUrl = 'api/application-categories';
 

@@ -13,20 +13,28 @@
             <b-badge variant="success" v-if="user.activated">Activated</b-badge>
             <b-badge variant="danger" v-if="!user.activated">Deactivated</b-badge>
           </dd>
-          <dt><span>First Name</span></dt>
+          <dt><span>First name</span></dt>
           <dd>{{ user.firstName }}</dd>
-          <dt><span>Last Name</span></dt>
+          <dt><span>Last name</span></dt>
           <dd>{{ user.lastName }}</dd>
           <dt><span>Email</span></dt>
           <dd>{{ user.email }}</dd>
-          <dt><span>Created By</span></dt>
+          <dt><span>Created by</span></dt>
           <dd>{{ user.createdBy }}</dd>
-          <dt><span>Created Date</span></dt>
-          <dd>{{ user.createdDate | formatDate }}</dd>
-          <dt><span>Last Modified By</span></dt>
+          <dt><span>Created date</span></dt>
+          <dd>
+            <span v-if="user.createdDate">
+              {{ formatDate(user.createdDate) }}
+            </span>
+          </dd>
+          <dt><span>Modified by</span></dt>
           <dd>{{ user.lastModifiedBy }}</dd>
-          <dt><span>Last Modified Date</span></dt>
-          <dd>{{ user.lastModifiedDate | formatDate }}</dd>
+          <dt><span>Modified date</span></dt>
+          <dd>
+            <span v-if="user.lastModifiedDate">
+              {{ formatDate(user.lastModifiedDate) }}
+            </span>
+          </dd>
           <dt><span>Profiles</span></dt>
           <dd>
             <ul class="list-unstyled">
@@ -38,7 +46,7 @@
         </dl>
         <router-link custom v-slot="{ navigate }" :to="{ name: 'JhiUser' }">
           <button @click="navigate" class="btn btn-info">
-            <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
+            <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>Back</span>
           </button>
         </router-link>
       </div>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IApplicationComponent } from '@/shared/model/application-component.model';
+import { type IApplicationComponent } from '@/shared/model/application-component.model';
 
 const baseApiUrl = 'api/application-components';
 

@@ -67,6 +67,7 @@
       "otherEntityName": "owner",
       "otherEntityRelationshipName": "application",
       "relationshipName": "owner",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     },
     {
@@ -74,6 +75,7 @@
       "otherEntityName": "owner",
       "otherEntityRelationshipName": "application",
       "relationshipName": "itOwner",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     },
     {
@@ -81,6 +83,7 @@
       "otherEntityName": "owner",
       "otherEntityRelationshipName": "application",
       "relationshipName": "businessOwner",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     },
     {
@@ -89,6 +92,7 @@
       "otherEntityRelationshipName": "applications",
       "ownerSide": true,
       "relationshipName": "categories",
+      "relationshipSide": "left",
       "relationshipType": "many-to-many"
     },
     {
@@ -97,6 +101,7 @@
       "otherEntityRelationshipName": "applications",
       "ownerSide": true,
       "relationshipName": "technologies",
+      "relationshipSide": "left",
       "relationshipType": "many-to-many"
     },
     {
@@ -105,6 +110,7 @@
       "otherEntityRelationshipName": "applications",
       "ownerSide": true,
       "relationshipName": "externalIDS",
+      "relationshipSide": "left",
       "relationshipType": "many-to-many"
     },
     {
@@ -112,14 +118,17 @@
       "otherEntityName": "applicationComponent",
       "otherEntityRelationshipName": "application",
       "relationshipName": "applicationsList",
+      "relationshipSide": "left",
       "relationshipType": "one-to-many"
     },
     {
       "otherEntityName": "capabilityApplicationMapping",
       "otherEntityRelationshipName": "application",
       "relationshipName": "capabilityApplicationMapping",
+      "relationshipSide": "left",
       "relationshipType": "one-to-many"
     }
   ],
+  "searchEngine": "no",
   "service": "no"
 }

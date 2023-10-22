@@ -117,7 +117,7 @@
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
+          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>Back</span>
         </button>
         <router-link
           v-if="flowInterface.id"
@@ -227,7 +227,7 @@
         </span>
       </div>
     -->
-      
+
         <div class="table-responsive" v-if="flowInterface.steps && flowInterface.steps.length > 0">
           <br />
           <br />

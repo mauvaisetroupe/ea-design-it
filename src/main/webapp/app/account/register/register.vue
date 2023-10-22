@@ -27,27 +27,26 @@
             <input
               type="text"
               class="form-control"
-              v-model="$v.registerAccount.login.$model"
+              v-model="v$.registerAccount.login.$model"
               id="username"
               name="login"
-              :class="{ valid: !$v.registerAccount.login.$invalid, invalid: $v.registerAccount.login.$invalid }"
+              :class="{ valid: !v$.registerAccount.login.$invalid, invalid: v$.registerAccount.login.$invalid }"
               required
               minlength="1"
               maxlength="50"
               pattern="^[a-zA-Z0-9!#$&'*+=?^_`{|}~.-]+@?[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
+              placeholder="Your username"
               data-cy="username"
             />
-            <div v-if="$v.registerAccount.login.$anyDirty && $v.registerAccount.login.$invalid">
-              <small class="form-text text-danger" v-if="!$v.registerAccount.login.required"> Your username is required. </small>
-              <small class="form-text text-danger" v-if="!$v.registerAccount.login.minLength">
-                Your username is required to be at least 1 character.
-              </small>
-              <small class="form-text text-danger" v-if="!$v.registerAccount.login.maxLength">
-                Your username cannot be longer than 50 characters.
-              </small>
-              <small class="form-text text-danger" v-if="!$v.registerAccount.login.pattern">
-                Your username can only contain letters and digits.
-              </small>
+            <div v-if="v$.registerAccount.login.$anyDirty && v$.registerAccount.login.$invalid">
+              <small class="form-text text-danger" v-if="!v$.registerAccount.login.required">Your username is required.</small>
+              <small class="form-text text-danger" v-if="!v$.registerAccount.login.minLength"
+                >Your username is required to be at least 1 character.</small
+              >
+              <small class="form-text text-danger" v-if="!v$.registerAccount.login.maxLength"
+                >Your username cannot be longer than 50 characters.</small
+              >
+              <small class="form-text text-danger" v-if="!v$.registerAccount.login.pattern">Your username is invalid.</small>
             </div>
           </div>
           <div class="form-group">
@@ -57,23 +56,24 @@
               class="form-control"
               id="email"
               name="email"
-              :class="{ valid: !$v.registerAccount.email.$invalid, invalid: $v.registerAccount.email.$invalid }"
-              v-model="$v.registerAccount.email.$model"
+              :class="{ valid: !v$.registerAccount.email.$invalid, invalid: v$.registerAccount.email.$invalid }"
+              v-model="v$.registerAccount.email.$model"
               minlength="5"
               maxlength="254"
               email
               required
+              placeholder="Your email"
               data-cy="email"
             />
-            <div v-if="$v.registerAccount.email.$anyDirty && $v.registerAccount.email.$invalid">
-              <small class="form-text text-danger" v-if="!$v.registerAccount.email.required"> Your email is required. </small>
-              <small class="form-text text-danger" v-if="!$v.registerAccount.email.email"> Your email is invalid. </small>
-              <small class="form-text text-danger" v-if="!$v.registerAccount.email.minLength">
-                Your email is required to be at least 5 characters.
-              </small>
-              <small class="form-text text-danger" v-if="!$v.registerAccount.email.maxLength">
-                Your email cannot be longer than 100 characters.
-              </small>
+            <div v-if="v$.registerAccount.email.$anyDirty && v$.registerAccount.email.$invalid">
+              <small class="form-text text-danger" v-if="!v$.registerAccount.email.required">Your email is required.</small>
+              <small class="form-text text-danger" v-if="!v$.registerAccount.email.email">Your email is invalid.</small>
+              <small class="form-text text-danger" v-if="!v$.registerAccount.email.minLength"
+                >Your email is required to be at least 5 characters.</small
+              >
+              <small class="form-text text-danger" v-if="!v$.registerAccount.email.maxLength"
+                >Your email cannot be longer than 50 characters.</small
+              >
             </div>
           </div>
           <div class="form-group">
@@ -83,21 +83,22 @@
               class="form-control"
               id="firstPassword"
               name="password"
-              :class="{ valid: !$v.registerAccount.password.$invalid, invalid: $v.registerAccount.password.$invalid }"
-              v-model="$v.registerAccount.password.$model"
+              :class="{ valid: !v$.registerAccount.password.$invalid, invalid: v$.registerAccount.password.$invalid }"
+              v-model="v$.registerAccount.password.$model"
               minlength="4"
               maxlength="50"
               required
+              placeholder="New password"
               data-cy="firstPassword"
             />
-            <div v-if="$v.registerAccount.password.$anyDirty && $v.registerAccount.password.$invalid">
-              <small class="form-text text-danger" v-if="!$v.registerAccount.password.required"> Your password is required. </small>
-              <small class="form-text text-danger" v-if="!$v.registerAccount.password.minLength">
-                Your password is required to be at least 4 characters.
-              </small>
-              <small class="form-text text-danger" v-if="!$v.registerAccount.password.maxLength">
-                Your password cannot be longer than 50 characters.
-              </small>
+            <div v-if="v$.registerAccount.password.$anyDirty && v$.registerAccount.password.$invalid">
+              <small class="form-text text-danger" v-if="!v$.registerAccount.password.required">Your password is required.</small>
+              <small class="form-text text-danger" v-if="!v$.registerAccount.password.minLength"
+                >Your password is required to be at least 4 characters.</small
+              >
+              <small class="form-text text-danger" v-if="!v$.registerAccount.password.maxLength"
+                >Your password cannot be longer than 50 characters.</small
+              >
             </div>
           </div>
           <div class="form-group">
@@ -107,28 +108,29 @@
               class="form-control"
               id="secondPassword"
               name="confirmPasswordInput"
-              :class="{ valid: !$v.confirmPassword.$invalid, invalid: $v.confirmPassword.$invalid }"
-              v-model="$v.confirmPassword.$model"
+              :class="{ valid: !v$.confirmPassword.$invalid, invalid: v$.confirmPassword.$invalid }"
+              v-model="v$.confirmPassword.$model"
               minlength="4"
               maxlength="50"
               required
+              placeholder="Confirm the new password"
               data-cy="secondPassword"
             />
-            <div v-if="$v.confirmPassword.$dirty && $v.confirmPassword.$invalid">
-              <small class="form-text text-danger" v-if="!$v.confirmPassword.required"> Your confirmation password is required. </small>
-              <small class="form-text text-danger" v-if="!$v.confirmPassword.minLength">
-                Your confirmation password is required to be at least 4 characters.
-              </small>
-              <small class="form-text text-danger" v-if="!$v.confirmPassword.maxLength">
-                Your confirmation password cannot be longer than 50 characters.
-              </small>
-              <small class="form-text text-danger" v-if="!$v.confirmPassword.sameAsPassword">
-                The password and its confirmation do not match!
-              </small>
+            <div v-if="v$.confirmPassword.$dirty && v$.confirmPassword.$invalid">
+              <small class="form-text text-danger" v-if="!v$.confirmPassword.required">Your confirmation password is required.</small>
+              <small class="form-text text-danger" v-if="!v$.confirmPassword.minLength"
+                >Your confirmation password is required to be at least 4 characters.</small
+              >
+              <small class="form-text text-danger" v-if="!v$.confirmPassword.maxLength"
+                >Your confirmation password cannot be longer than 50 characters.</small
+              >
+              <small class="form-text text-danger" v-if="!v$.confirmPassword.sameAsPassword"
+                >The password and its confirmation do not match!</small
+              >
             </div>
           </div>
 
-          <button type="submit" :disabled="$v.$invalid" class="btn btn-primary" data-cy="submit">Register</button>
+          <button type="submit" :disabled="v$.$invalid" class="btn btn-primary" data-cy="submit">Register</button>
         </form>
         <p></p>
         <div class="alert alert-warning">

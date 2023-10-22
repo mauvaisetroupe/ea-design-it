@@ -2,23 +2,21 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.util.Ownershipable;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.apache.commons.lang3.ObjectUtils;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A FlowInterface.
  */
 @Entity
 @Table(name = "interface")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class FlowInterface implements Serializable, Comparable<FlowInterface>, Ownershipable, IFlowInterface {
 
     private static final long serialVersionUID = 1L;
@@ -55,7 +53,6 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
     private LocalDate endDate;
 
     @OneToMany(mappedBy = "flowInterface")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "functionalFlows", "flowInterface" }, allowSetters = true)
     private Set<DataFlow> dataFlows = new HashSet<>();
 
@@ -87,14 +84,13 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
     @JsonIgnoreProperties(value = { "application", "externalIDS" }, allowSetters = true)
     private ApplicationComponent targetComponent;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Protocol protocol;
 
     @ManyToOne
     private Owner owner;
 
     @OneToMany(mappedBy = "flowInterface")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "flowInterface", "group" }, allowSetters = true)
     private Set<FunctionalFlowStep> steps = new HashSet<>();
 
@@ -365,7 +361,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
         if (!(o instanceof FlowInterface)) {
             return false;
         }
-        return id != null && id.equals(((FlowInterface) o).id);
+        return getId() != null && getId().equals(((FlowInterface) o).getId());
     }
 
     @Override

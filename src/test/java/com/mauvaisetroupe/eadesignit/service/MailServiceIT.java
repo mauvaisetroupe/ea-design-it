@@ -7,6 +7,11 @@ import static org.mockito.Mockito.*;
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.config.Constants;
 import com.mauvaisetroupe.eadesignit.domain.User;
+import jakarta.mail.Multipart;
+import jakarta.mail.Session;
+import jakarta.mail.internet.MimeBodyPart;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,21 +22,14 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.mail.Multipart;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.MailSendException;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.springframework.mail.javamail.JavaMailSender;
 import tech.jhipster.config.JHipsterProperties;
 
 /**
@@ -49,25 +47,19 @@ class MailServiceIT {
     @Autowired
     private JHipsterProperties jHipsterProperties;
 
-    @Autowired
-    private MessageSource messageSource;
-
-    @Autowired
-    private SpringTemplateEngine templateEngine;
-
-    @Spy
-    private JavaMailSenderImpl javaMailSender;
+    @MockBean
+    private JavaMailSender javaMailSender;
 
     @Captor
     private ArgumentCaptor<MimeMessage> messageCaptor;
 
+    @Autowired
     private MailService mailService;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.openMocks(this);
         doNothing().when(javaMailSender).send(any(MimeMessage.class));
-        mailService = new MailService(jHipsterProperties, javaMailSender, messageSource, templateEngine);
+        when(javaMailSender.createMimeMessage()).thenReturn(new MimeMessage((Session) null));
     }
 
     @Test
@@ -133,9 +125,9 @@ class MailServiceIT {
     @Test
     void testSendEmailFromTemplate() throws Exception {
         User user = new User();
+        user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
-        user.setLangKey("en");
         mailService.sendEmailFromTemplate(user, "mail/testEmail", "email.test.title");
         verify(javaMailSender).send(messageCaptor.capture());
         MimeMessage message = messageCaptor.getValue();
@@ -212,7 +204,7 @@ class MailServiceIT {
             verify(javaMailSender, atLeastOnce()).send(messageCaptor.capture());
             MimeMessage message = messageCaptor.getValue();
 
-            String propertyFilePath = "i18n/messages_" + getJavaLocale(langKey) + ".properties";
+            String propertyFilePath = "i18n/messages_" + getMessageSourceSuffixForLanguage(langKey) + ".properties";
             URL resource = this.getClass().getClassLoader().getResource(propertyFilePath);
             File file = new File(new URI(resource.getFile()).getPath());
             Properties properties = new Properties();
@@ -228,7 +220,7 @@ class MailServiceIT {
     /**
      * Convert a lang key to the Java locale.
      */
-    private String getJavaLocale(String langKey) {
+    private String getMessageSourceSuffixForLanguage(String langKey) {
         String javaLangKey = langKey;
         Matcher matcher2 = PATTERN_LOCALE_2.matcher(langKey);
         if (matcher2.matches()) {

@@ -2,24 +2,21 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ViewPoint;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import javax.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.SortNatural;
-import org.hibernate.annotations.Type;
 
 /**
  * A LandscapeView.
  */
 @Entity
 @Table(name = "landscape_view")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class LandscapeView implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,12 +35,10 @@ public class LandscapeView implements Serializable {
     private String diagramName;
 
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "compressed_draw_xml")
     private String compressedDrawXML;
 
     @Lob
-    @Type(type = "org.hibernate.type.TextType")
     @Column(name = "compressed_draw_svg")
     private String compressedDrawSVG;
 
@@ -57,12 +52,10 @@ public class LandscapeView implements Serializable {
         joinColumns = @JoinColumn(name = "landscape_view_id"),
         inverseJoinColumns = @JoinColumn(name = "flows_id")
     )
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "landscapes", "dataFlows" }, allowSetters = true)
     private SortedSet<FunctionalFlow> flows = new TreeSet<>();
 
     @ManyToMany(mappedBy = "landscapes")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "landscapes" }, allowSetters = true)
     private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
 
@@ -252,7 +245,7 @@ public class LandscapeView implements Serializable {
         if (!(o instanceof LandscapeView)) {
             return false;
         }
-        return id != null && id.equals(((LandscapeView) o).id);
+        return getId() != null && getId().equals(((LandscapeView) o).getId());
     }
 
     @Override

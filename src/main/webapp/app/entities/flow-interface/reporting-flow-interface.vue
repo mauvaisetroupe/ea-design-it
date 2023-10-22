@@ -169,7 +169,7 @@
             </thead>
             <template v-for="(inter, i) in interfacesToMerge">
               <template v-for="(dataFlowToMerge, j) in inter.dataFlows">
-                <tr :key="dataFlowToMerge.id" :class="i % 2 == 0 ? 'mycolor' : ''">
+                <tr :class="i % 2 == 0 ? 'mycolor' : ''">
                   <td><input v-if="j == 0" type="radio" :value="inter" v-model="interfaceToKeep" @change="prepareMerge(inter)" /></td>
                   <td>
                     <input

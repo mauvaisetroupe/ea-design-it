@@ -1,4 +1,9 @@
-import { Component, Vue } from 'vue-property-decorator';
+import { defineComponent } from 'vue';
 
-@Component
-export default class JhiFooter extends Vue {}
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'JhiFooter',
+  setup() {
+    return {};
+  },
+});

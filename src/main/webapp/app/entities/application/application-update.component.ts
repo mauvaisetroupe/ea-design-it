@@ -1,209 +1,183 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import { required, maxLength } from 'vuelidate/lib/validators';
-
-import AlertService from '@/shared/alert/alert.service';
+import ApplicationService from './application.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import OwnerService from '@/entities/owner/owner.service';
-import { IOwner } from '@/shared/model/owner.model';
-
+import { type IOwner } from '@/shared/model/owner.model';
 import ApplicationCategoryService from '@/entities/application-category/application-category.service';
-import { IApplicationCategory } from '@/shared/model/application-category.model';
-
+import { type IApplicationCategory } from '@/shared/model/application-category.model';
 import TechnologyService from '@/entities/technology/technology.service';
-import { ITechnology } from '@/shared/model/technology.model';
-
+import { type ITechnology } from '@/shared/model/technology.model';
 import ExternalReferenceService from '@/entities/external-reference/external-reference.service';
-import { IExternalReference } from '@/shared/model/external-reference.model';
-
-import ApplicationComponentService from '@/entities/application-component/application-component.service';
-import { IApplicationComponent } from '@/shared/model/application-component.model';
-
-import CapabilityApplicationMappingService from '@/entities/capability-application-mapping/capability-application-mapping.service';
-import { ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
-
-import { IApplication, Application } from '@/shared/model/application.model';
-import ApplicationService from './application.service';
+import { type IExternalReference } from '@/shared/model/external-reference.model';
+import { type IApplication, Application } from '@/shared/model/application.model';
 import { ApplicationType } from '@/shared/model/enumerations/application-type.model';
 import { SoftwareType } from '@/shared/model/enumerations/software-type.model';
 
-const validations: any = {
-  application: {
-    alias: {},
-    name: {
-      required,
-    },
-    description: {
-      maxLength: maxLength(1500),
-    },
-    comment: {
-      maxLength: maxLength(1000),
-    },
-    documentationURL: {
-      maxLength: maxLength(500),
-    },
-    startDate: {},
-    endDate: {},
-    applicationType: {},
-    softwareType: {},
-    nickname: {},
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ApplicationUpdate',
+  setup() {
+    const applicationService = inject('applicationService', () => new ApplicationService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+
+    const application: Ref<IApplication> = ref(new Application());
+
+    const ownerService = inject('ownerService', () => new OwnerService());
+
+    const owners: Ref<IOwner[]> = ref([]);
+
+    const applicationCategoryService = inject('applicationCategoryService', () => new ApplicationCategoryService());
+
+    const applicationCategories: Ref<IApplicationCategory[]> = ref([]);
+
+    const technologyService = inject('technologyService', () => new TechnologyService());
+
+    const technologies: Ref<ITechnology[]> = ref([]);
+
+    const externalReferenceService = inject('externalReferenceService', () => new ExternalReferenceService());
+
+    const externalReferences: Ref<IExternalReference[]> = ref([]);
+    const applicationTypeValues: Ref<string[]> = ref(Object.keys(ApplicationType));
+    const softwareTypeValues: Ref<string[]> = ref(Object.keys(SoftwareType));
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
+
+    const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1);
+
+    const retrieveApplication = async applicationId => {
+      try {
+        const res = await applicationService().find(applicationId);
+        application.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
+
+    if (route.params?.applicationId) {
+      retrieveApplication(route.params.applicationId);
+    }
+
+    const initRelationships = () => {
+      ownerService()
+        .retrieve()
+        .then(res => {
+          owners.value = res.data;
+        });
+      applicationCategoryService()
+        .retrieve()
+        .then(res => {
+          applicationCategories.value = res.data;
+        });
+      technologyService()
+        .retrieve()
+        .then(res => {
+          technologies.value = res.data;
+        });
+      externalReferenceService()
+        .retrieve()
+        .then(res => {
+          externalReferences.value = res.data;
+        });
+    };
+
+    initRelationships();
+
+    const validations = useValidation();
+    const validationRules = {
+      alias: {},
+      name: {
+        required: validations.required('This field is required.'),
+      },
+      description: {
+        maxLength: validations.maxLength('This field cannot be longer than 1500 characters.', 1500),
+      },
+      comment: {
+        maxLength: validations.maxLength('This field cannot be longer than 1000 characters.', 1000),
+      },
+      documentationURL: {
+        maxLength: validations.maxLength('This field cannot be longer than 500 characters.', 500),
+      },
+      startDate: {},
+      endDate: {},
+      applicationType: {},
+      softwareType: {},
+      nickname: {},
+      owner: {},
+      itOwner: {},
+      businessOwner: {},
+      categories: {},
+      technologies: {},
+      externalIDS: {},
+      applicationsLists: {},
+      capabilityApplicationMappings: {},
+    };
+    const v$ = useVuelidate(validationRules, application as any);
+    v$.value.$validate();
+
+    return {
+      applicationService,
+      alertService,
+      application,
+      previousState,
+      applicationTypeValues,
+      softwareTypeValues,
+      isSaving,
+      currentLanguage,
+      owners,
+      applicationCategories,
+      technologies,
+      externalReferences,
+      v$,
+    };
   },
-};
-
-@Component({
-  validations,
-})
-export default class ApplicationUpdate extends Vue {
-  @Inject('applicationService') private applicationService: () => ApplicationService;
-  @Inject('alertService') private alertService: () => AlertService;
-
-  public application: IApplication = new Application();
-
-  @Inject('ownerService') private ownerService: () => OwnerService;
-
-  public owners: IOwner[] = [];
-
-  @Inject('applicationCategoryService') private applicationCategoryService: () => ApplicationCategoryService;
-
-  public applicationCategories: IApplicationCategory[] = [];
-
-  @Inject('technologyService') private technologyService: () => TechnologyService;
-
-  public technologies: ITechnology[] = [];
-
-  @Inject('externalReferenceService') private externalReferenceService: () => ExternalReferenceService;
-
-  public externalReferences: IExternalReference[] = [];
-
-  @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
-
-  public applicationComponents: IApplicationComponent[] = [];
-
-  @Inject('capabilityApplicationMappingService') private capabilityApplicationMappingService: () => CapabilityApplicationMappingService;
-
-  public capabilityApplicationMappings: ICapabilityApplicationMapping[] = [];
-  public applicationTypeValues: string[] = Object.keys(ApplicationType);
-  public softwareTypeValues: string[] = Object.keys(SoftwareType);
-  public isSaving = false;
-  public currentLanguage = '';
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.applicationId) {
-        vm.retrieveApplication(to.params.applicationId);
-      }
-      vm.initRelationships();
-    });
-  }
-
   created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
     this.application.categories = [];
     this.application.technologies = [];
     this.application.externalIDS = [];
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.application.id) {
-      this.applicationService()
-        .update(this.application)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A Application is updated with identifier ' + param.id;
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
+  },
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.application.id) {
+        this.applicationService()
+          .update(this.application)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo('A Application is updated with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
           });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.applicationService()
-        .create(this.application)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A Application is created with identifier ' + param.id;
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
+      } else {
+        this.applicationService()
+          .create(this.application)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess('A Application is created with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
           });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    }
-  }
+      }
+    },
 
-  public retrieveApplication(applicationId): void {
-    this.applicationService()
-      .find(applicationId)
-      .then(res => {
-        this.application = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {
-    this.ownerService()
-      .retrieve()
-      .then(res => {
-        this.owners = res.data;
-      });
-    this.applicationCategoryService()
-      .retrieve()
-      .then(res => {
-        this.applicationCategories = res.data;
-      });
-    this.technologyService()
-      .retrieve()
-      .then(res => {
-        this.technologies = res.data;
-      });
-    this.externalReferenceService()
-      .retrieve()
-      .then(res => {
-        this.externalReferences = res.data;
-      });
-    this.applicationComponentService()
-      .retrieve()
-      .then(res => {
-        this.applicationComponents = res.data;
-      });
-    this.capabilityApplicationMappingService()
-      .retrieve()
-      .then(res => {
-        this.capabilityApplicationMappings = res.data;
-      });
-  }
-
-  public getSelected(selectedVals, option): any {
-    if (selectedVals) {
-      return selectedVals.find(value => option.id === value.id) ?? option;
-    }
-    return option;
-  }
-}
+    getSelected(selectedVals, option): any {
+      if (selectedVals) {
+        return selectedVals.find(value => option.id === value.id) ?? option;
+      }
+      return option;
+    },
+  },
+});

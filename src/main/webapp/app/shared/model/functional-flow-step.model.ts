@@ -1,6 +1,6 @@
-import { IFlowInterface } from '@/shared/model/flow-interface.model';
-import { IFlowGroup } from '@/shared/model/flow-group.model';
-import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { type IFlowInterface } from '@/shared/model/flow-interface.model';
+import { type IFlowGroup } from '@/shared/model/flow-group.model';
+import { type IFunctionalFlow } from '@/shared/model/functional-flow.model';
 
 export interface IFunctionalFlowStep {
   id?: number;
@@ -18,6 +18,6 @@ export class FunctionalFlowStep implements IFunctionalFlowStep {
     public stepOrder?: number | null,
     public flowInterface?: IFlowInterface,
     public group?: IFlowGroup | null,
-    public flow?: IFunctionalFlow
+    public flow?: IFunctionalFlow,
   ) {}
 }

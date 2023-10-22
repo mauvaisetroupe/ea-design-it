@@ -1,98 +1,80 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { ICapability } from '@/shared/model/capability.model';
 import CapabilityService from './capability.service';
-import AlertService from '@/shared/alert/alert.service';
-
+import { type ICapability } from '@/shared/model/capability.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 import CapabilityComponent from '@/entities/capability/component/capability.vue';
-import { IApplication } from '@/shared/model/application.model';
 
-@Component({
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'CapabilityDetails',
   components: {
     CapabilityComponent,
   },
-})
-export default class CapabilityDetails extends Vue {
-  @Inject('capabilityService') private capabilityService: () => CapabilityService;
-  @Inject('alertService') private alertService: () => AlertService;
+  setup() {
+    const capabilityService = inject('capabilityService', () => new CapabilityService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public capability: ICapability = {};
-  public flattenCapabilities: string[] = [];
-  public filter = '';
-  public isFetching = true;
+    const route = useRoute();
+    const router = useRouter();
 
-  get filteredCapabilities() {
-    if (this.filter) {
-      return this.flattenCapabilities.filter(s => s.toLowerCase().includes(this.filter.toLowerCase()));
-    } else {
-      return this.flattenCapabilities;
-    }
-  }
+    const previousState = () => router.go(-1);
+    const capability: Ref<ICapability> = ref({});
+    const flattenCapabilities: Ref<string[]> = ref([]);
+    const filter: Ref<string> = ref('');
+    const isFetching: Ref<boolean> = ref(true);
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.retrieveCapability(to.params.capabilityId);
-    });
-  }
-
-  public retrieveCapability(capabilityId) {
-    console.log('Finding capabilty : ' + capabilityId);
-    this.isFetching = true;
-    if (!capabilityId) {
-      this.capabilityService()
-        .findRoot()
-        .then(res => {
-          this.init(res);
-        })
-        .catch(error => {
-          console.log('Something wrong when finding root');
-          console.log(error);
-        });
-    } else {
-      this.capabilityService()
-        .find(capabilityId)
-        .then(res => {
-          this.init(res);
-        })
-        .catch(error => {
-          console.log('Something wrong when capability ' + capabilityId);
-          console.log(error);
-        });
-    }
-  }
-
-  public computeflattenCapabilities(capability: ICapability, fullPathCapabilities: string[], parentPath: string) {
-    let fullPath = '';
-    if (capability.name !== 'ROOT') {
-      let sep = '';
-      if (parentPath) {
-        sep = ' > ';
+    const filteredCapabilities = computed(() => {
+      if (filter.value) {
+        return flattenCapabilities.value.filter(s => s.toLowerCase().includes(filter.value.toLowerCase()));
+      } else {
+        return flattenCapabilities.value;
       }
-      fullPath = parentPath + sep + capability.name;
-      fullPathCapabilities.push(fullPath);
-    }
-    if (capability.subCapabilities) {
-      capability.subCapabilities.forEach(cap => this.computeflattenCapabilities(cap, fullPathCapabilities, fullPath));
-    }
-  }
-
-  public previousState() {
-    this.$router.go(-1);
-  }
-
-  private init(res: ICapability) {
-    this.capability = res;
-    this.initFlatten().then(flat => {
-      this.flattenCapabilities = flat;
     });
-    this.isFetching = false;
-  }
 
-  private initFlatten(): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      const flatten = [];
-      this.computeflattenCapabilities(this.capability, flatten, '');
-      resolve(flatten);
-    });
-  }
-}
+    const retrieveCapability = async capabilityId => {
+      try {
+        if (!capabilityId) {
+          const res = await capabilityService().findRoot();
+          capability.value = res;
+        } else {
+          const res = await capabilityService().find(capabilityId);
+          capability.value = res;
+        }
+        computeflattenCapabilities(capability.value, flattenCapabilities.value, '');
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
+
+    function computeflattenCapabilities(capability: ICapability, fullPathCapabilities: string[], parentPath: string) {
+      let fullPath = '';
+      if (capability.name !== 'ROOT') {
+        let sep = '';
+        if (parentPath) {
+          sep = ' > ';
+        }
+        fullPath = parentPath + sep + capability.name;
+        fullPathCapabilities.push(fullPath);
+      }
+      if (capability.subCapabilities) {
+        capability.subCapabilities.forEach(cap => computeflattenCapabilities(cap, fullPathCapabilities, fullPath));
+      }
+    }
+
+    if (route.params?.capabilityId) {
+      retrieveCapability(route.params.capabilityId);
+    }
+
+    return {
+      isFetching,
+      alertService,
+      capability,
+      filter,
+      filteredCapabilities,
+      previousState,
+      retrieveCapability,
+    };
+  },
+});

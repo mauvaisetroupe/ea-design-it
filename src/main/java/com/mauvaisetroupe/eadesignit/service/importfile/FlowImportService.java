@@ -25,6 +25,14 @@ import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
 import com.mauvaisetroupe.eadesignit.service.FunctionalflowService;
 import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.SummaryImporterService;
+import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import jakarta.validation.constraints.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -35,12 +43,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import javax.transaction.Transactional;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -398,10 +400,8 @@ public class FlowImportService {
                 flowInterface = flowInterfaceOption.get();
                 Assert.isTrue(
                     flowInterface.getSource().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase()) ||
-                    (
-                        flowInterface.getSourceComponent() != null &&
-                        flowInterface.getSourceComponent().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase())
-                    ),
+                    (flowInterface.getSourceComponent() != null &&
+                        flowInterface.getSourceComponent().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase())),
                     "Source of interface doesn't match for interface Id='" +
                     flowInterface.getId() +
                     "', source= [" +
@@ -413,10 +413,8 @@ public class FlowImportService {
 
                 Assert.isTrue(
                     flowInterface.getTarget().getName().toLowerCase().equals(flowImport.getTargetElement().toLowerCase()) ||
-                    (
-                        flowInterface.getTargetComponent() != null &&
-                        flowInterface.getTargetComponent().getName().toLowerCase().equals(flowImport.getTargetElement().toLowerCase())
-                    ),
+                    (flowInterface.getTargetComponent() != null &&
+                        flowInterface.getTargetComponent().getName().toLowerCase().equals(flowImport.getTargetElement().toLowerCase())),
                     "Target of interface doesn't match for interface Id='" +
                     flowInterface.getId() +
                     "', target= [" +

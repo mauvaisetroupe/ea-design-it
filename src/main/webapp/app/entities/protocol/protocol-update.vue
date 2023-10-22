@@ -16,12 +16,12 @@
               name="name"
               id="protocol-name"
               data-cy="name"
-              :class="{ valid: !$v.protocol.name.$invalid, invalid: $v.protocol.name.$invalid }"
-              v-model="$v.protocol.name.$model"
+              :class="{ valid: !v$.name.$invalid, invalid: v$.name.$invalid }"
+              v-model="v$.name.$model"
               required
             />
-            <div v-if="$v.protocol.name.$anyDirty && $v.protocol.name.$invalid">
-              <small class="form-text text-danger" v-if="!$v.protocol.name.required"> This field is required. </small>
+            <div v-if="v$.name.$anyDirty && v$.name.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.name.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -29,16 +29,16 @@
             <select
               class="form-control"
               name="type"
-              :class="{ valid: !$v.protocol.type.$invalid, invalid: $v.protocol.type.$invalid }"
-              v-model="$v.protocol.type.$model"
+              :class="{ valid: !v$.type.$invalid, invalid: v$.type.$invalid }"
+              v-model="v$.type.$model"
               id="protocol-type"
               data-cy="type"
               required
             >
               <option v-for="protocolType in protocolTypeValues" :key="protocolType" v-bind:value="protocolType">{{ protocolType }}</option>
             </select>
-            <div v-if="$v.protocol.type.$anyDirty && $v.protocol.type.$invalid">
-              <small class="form-text text-danger" v-if="!$v.protocol.type.required"> This field is required. </small>
+            <div v-if="v$.type.$anyDirty && v$.type.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.type.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -49,13 +49,11 @@
               name="description"
               id="protocol-description"
               data-cy="description"
-              :class="{ valid: !$v.protocol.description.$invalid, invalid: $v.protocol.description.$invalid }"
-              v-model="$v.protocol.description.$model"
+              :class="{ valid: !v$.description.$invalid, invalid: v$.description.$invalid }"
+              v-model="v$.description.$model"
             />
-            <div v-if="$v.protocol.description.$anyDirty && $v.protocol.description.$invalid">
-              <small class="form-text text-danger" v-if="!$v.protocol.description.maxLength">
-                This field cannot be longer than 1000 characters.
-              </small>
+            <div v-if="v$.description.$anyDirty && v$.description.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.description.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -66,8 +64,8 @@
               name="scope"
               id="protocol-scope"
               data-cy="scope"
-              :class="{ valid: !$v.protocol.scope.$invalid, invalid: $v.protocol.scope.$invalid }"
-              v-model="$v.protocol.scope.$model"
+              :class="{ valid: !v$.scope.$invalid, invalid: v$.scope.$invalid }"
+              v-model="v$.scope.$model"
             />
           </div>
         </div>
@@ -79,7 +77,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.protocol.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

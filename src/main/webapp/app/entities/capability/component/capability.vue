@@ -38,17 +38,16 @@
         :nbLevel="nbLevel"
       >
         <div class="d-flex flex-wrap">
-          <template v-for="child1 in capability.subCapabilities">
+          <template v-for="child1 in capability.subCapabilities" :key="child1.id">
             <CapabilityComponentItem
               :capability="child1"
               childStyle="1"
               @retrieveCapability="retrieveCapability"
               :showApplications="showApplications"
               :nbLevel="nbLevel"
-              :key="child1.id"
             >
               <div class="d-flex flex-wrap">
-                <template v-for="child2 in child1.subCapabilities">
+                <template v-for="child2 in child1.subCapabilities" :key="child2.id">
                   <CapabilityComponentItem
                     :capability="child2"
                     childStyle="2"
@@ -56,10 +55,9 @@
                     :showApplications="showApplications"
                     :nbLevel="nbLevel"
                     :nbNode="mapNbCapabilitiesByLevel.get(child2.level)"
-                    :key="child2.id"
                   >
                     <div class="d-flex flex-wrap">
-                      <template v-for="child3 in child2.subCapabilities">
+                      <template v-for="child3 in child2.subCapabilities" :key="child3.id">
                         <CapabilityComponentItem
                           :capability="child3"
                           childStyle="3"
@@ -67,10 +65,9 @@
                           :showApplications="showApplications"
                           :nbLevel="nbLevel"
                           :showInheritedApplications="true"
-                          :key="child3.id"
                         >
                           <div class="d-flex flex-wrap">
-                            <template v-for="child4 in child3.subCapabilities">
+                            <template v-for="child4 in child3.subCapabilities" :key="child4.id">
                               <CapabilityComponentItem
                                 :capability="child4"
                                 childStyle="4"
@@ -78,10 +75,9 @@
                                 :showApplications="showApplications"
                                 :nbLevel="nbLevel"
                                 :showInheritedApplications="true"
-                                :key="child4.id"
                               >
                                 <div class="d-flex flex-wrap">
-                                  <template v-for="child5 in child4.subCapabilities">
+                                  <template v-for="child5 in child4.subCapabilities" :key="child5.id">
                                     <CapabilityComponentItem
                                       :capability="child5"
                                       childStyle="5"
@@ -89,10 +85,9 @@
                                       :showApplications="showApplications"
                                       :nbLevel="nbLevel"
                                       :showInheritedApplications="true"
-                                      :key="child5.id"
                                     >
                                       <div class="d-flex flex-wrap">
-                                        <template v-for="child6 in child5.subCapabilities">
+                                        <template v-for="child6 in child5.subCapabilities" :key="child6.id">
                                           <CapabilityComponentItem
                                             :capability="child6"
                                             childStyle="6"
@@ -100,7 +95,6 @@
                                             :showApplications="showApplications"
                                             :nbLevel="nbLevel"
                                             :showInheritedApplications="true"
-                                            :key="child6.id"
                                           >
                                           </CapabilityComponentItem>
                                         </template>

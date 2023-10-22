@@ -111,10 +111,12 @@
           class="pointer"
           data-cy="adminMenu"
         >
-          <span slot="button-content" class="navbar-dropdown-menu">
-            <font-awesome-icon icon="users-cog" />
-            <span class="no-bold">Administration</span>
-          </span>
+          <template #button-content>
+            <span class="navbar-dropdown-menu">
+              <font-awesome-icon icon="users-cog" />
+              <span class="no-bold">Administration</span>
+            </span>
+          </template>
           <b-dropdown-item to="/admin/user-management" active-class="active">
             <font-awesome-icon icon="users" />
             <span>User management</span>
@@ -153,15 +155,17 @@
           class="pointer"
           data-cy="accountMenu"
         >
-          <span slot="button-content" class="navbar-dropdown-menu">
-            <font-awesome-icon icon="user" />
-            <span class="no-bold"> Account </span>
-          </span>
-          <b-dropdown-item data-cy="settings" to="/account/settings" tag="b-dropdown-item" v-if="authenticated" active-class="active">
+          <template #button-content>
+            <span class="navbar-dropdown-menu">
+              <font-awesome-icon icon="user" />
+              <span class="no-bold">Account</span>
+            </span>
+          </template>
+          <b-dropdown-item data-cy="settings" to="/account/settings" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="wrench" />
             <span>Settings</span>
           </b-dropdown-item>
-          <b-dropdown-item data-cy="passwordItem" to="/account/password" tag="b-dropdown-item" v-if="authenticated" active-class="active">
+          <b-dropdown-item data-cy="passwordItem" to="/account/password" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="lock" />
             <span>Password</span>
           </b-dropdown-item>
@@ -173,14 +177,7 @@
             <font-awesome-icon icon="sign-in-alt" />
             <span>Sign in</span>
           </b-dropdown-item>
-          <b-dropdown-item
-            data-cy="register"
-            to="/register"
-            tag="b-dropdown-item"
-            id="register"
-            v-if="!authenticated"
-            active-class="active"
-          >
+          <b-dropdown-item data-cy="register" to="/register" id="register" v-if="!authenticated" active-class="active">
             <font-awesome-icon icon="user-plus" />
             <span>Register</span>
           </b-dropdown-item>
@@ -285,5 +282,6 @@
   background-size: contain;
   width: 100%;
   filter: drop-shadow(0 0 0.05rem white);
+  margin: 0 5px;
 }
 </style>

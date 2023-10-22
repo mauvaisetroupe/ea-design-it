@@ -8,14 +8,16 @@
       <table class="table table-striped table-bordered table-responsive d-table" aria-describedby="Configuration">
         <thead>
           <tr>
-            <th class="w-40" v-on:click="changeOrder('prefix')" scope="col"><span>Prefix</span></th>
+            <th class="w-40" v-on:click="changeOrder('prefix')" scope="col">
+              <span>Prefix</span>
+            </th>
             <th class="w-60" v-on:click="changeOrder('properties')" scope="col">
               <span>Properties</span>
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="entry in orderBy(filterBy(configuration, filtered), orderProp, reverse ? 1 : -1)" :key="entry.prefix">
+          <tr v-for="entry in filteredConfiguration" :key="entry.prefix">
             <td>
               <span>{{ entry.prefix }}</span>
             </td>

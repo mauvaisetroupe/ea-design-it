@@ -10,11 +10,11 @@ import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.FlowGroup;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.repository.FlowGroupRepository;
+import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -201,7 +200,7 @@ class FlowGroupResourceIT {
         int databaseSizeBeforeUpdate = flowGroupRepository.findAll().size();
 
         // Update the flowGroup
-        FlowGroup updatedFlowGroup = flowGroupRepository.findById(flowGroup.getId()).get();
+        FlowGroup updatedFlowGroup = flowGroupRepository.findById(flowGroup.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedFlowGroup are not directly saved in db
         em.detach(updatedFlowGroup);
         updatedFlowGroup.title(UPDATED_TITLE).url(UPDATED_URL).description(UPDATED_DESCRIPTION);
@@ -291,7 +290,7 @@ class FlowGroupResourceIT {
         FlowGroup partialUpdatedFlowGroup = new FlowGroup();
         partialUpdatedFlowGroup.setId(flowGroup.getId());
 
-        partialUpdatedFlowGroup.title(UPDATED_TITLE).url(UPDATED_URL).description(UPDATED_DESCRIPTION);
+        partialUpdatedFlowGroup.url(UPDATED_URL);
 
         restFlowGroupMockMvc
             .perform(
@@ -305,9 +304,9 @@ class FlowGroupResourceIT {
         List<FlowGroup> flowGroupList = flowGroupRepository.findAll();
         assertThat(flowGroupList).hasSize(databaseSizeBeforeUpdate);
         FlowGroup testFlowGroup = flowGroupList.get(flowGroupList.size() - 1);
-        assertThat(testFlowGroup.getTitle()).isEqualTo(UPDATED_TITLE);
+        assertThat(testFlowGroup.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testFlowGroup.getUrl()).isEqualTo(UPDATED_URL);
-        assertThat(testFlowGroup.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testFlowGroup.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
 
     @Test

@@ -93,7 +93,7 @@
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
+          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>Back</span>
         </button>
         <router-link v-if="dataFlow.id" :to="{ name: 'DataFlowEdit', params: { dataFlowId: dataFlow.id } }" custom v-slot="{ navigate }">
           <button @click="navigate" class="btn btn-primary" v-if="accountService().writeAuthorities">
