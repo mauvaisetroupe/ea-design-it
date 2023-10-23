@@ -17,7 +17,7 @@ export default defineComponent({
     const loginService = inject<LoginService>('loginService');
     //const accountService = inject<AccountService>('accountService'); proposed by jhipster
     const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
-    const accountService = inject('accountService', () => new AccountService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const router = useRouter();
     const store = useStore();
@@ -69,6 +69,8 @@ export default defineComponent({
       openAPIEnabled,
       inProduction,
       authenticated,
+      adminAuthorities,
+      readAuthorities,
     };
   },
   methods: {

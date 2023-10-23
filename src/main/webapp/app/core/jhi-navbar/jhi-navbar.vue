@@ -32,10 +32,12 @@
           data-cy="eadesign-main"
           v-if="readAuthorities"
         >
-          <span slot="button-content" class="navbar-dropdown-menu">
-            <font-awesome-icon icon="th-list" />
-            <span class="no-bold">EADesignIt</span>
-          </span>
+          <template #button-content>
+            <span class="navbar-dropdown-menu">
+              <font-awesome-icon icon="th-list" />
+              <span class="no-bold">EADesignIt</span>
+            </span>
+          </template>
           <b-dropdown-item to="/landscape-view">
             <font-awesome-icon icon="map" />
             <span>Landscape</span>
@@ -77,10 +79,12 @@
           class="pointer"
           data-cy="eadesign-report"
         >
-          <span slot="button-content" class="navbar-dropdown-menu">
-            <font-awesome-icon icon="th-list" />
-            <span class="no-bold">EADesignit Report</span>
-          </span>
+          <template #button-content>
+            <span class="navbar-dropdown-menu">
+              <font-awesome-icon icon="th-list" />
+              <span class="no-bold">EADesignit Report</span>
+            </span>
+          </template>
           <b-dropdown-item to="/reporting/flow-interface">
             <font-awesome-icon icon="asterisk" />
             <span>Duplicated Interfaces</span>
@@ -95,17 +99,19 @@
           </b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item-dropdown right id="entity-menu" v-if="adminAuthorities" active-class="active" class="pointer" data-cy="entity">
-          <span slot="button-content" class="navbar-dropdown-menu">
-            <font-awesome-icon icon="th-list" />
-            <span class="no-bold">Entities</span>
-          </span>
+          <template #button-content>
+            <span class="navbar-dropdown-menu">
+              <font-awesome-icon icon="th-list" />
+              <span class="no-bold">Entities</span>
+            </span>
+          </template>
           <entities-menu></entities-menu>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </b-nav-item-dropdown>
         <b-nav-item-dropdown
           right
           id="admin-menu"
-          v-if="adminAuthorities"
+          v-if="hasAnyAuthority('ROLE_ADMIN') && authenticated"
           :class="{ 'router-link-active': subIsActive('/admin') }"
           active-class="active"
           class="pointer"
@@ -278,7 +284,7 @@
 
 .logo-img {
   height: 100%;
-  background: url('../../../content/images/logo-EA-small.png') no-repeat center center;
+  background: url('/content/images/logo-jhipster.png') no-repeat center center;
   background-size: contain;
   width: 100%;
   filter: drop-shadow(0 0 0.05rem white);
