@@ -119,7 +119,7 @@
           custom
           v-slot="{ navigate }"
         >
-          <button @click="navigate" class="btn btn-primary" v-if="accountService().writeAuthorities">
+          <button @click="navigate" class="btn btn-primary" v-if="accountService.writeAuthorities">
             <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
           </button>
         </router-link>

@@ -1,4 +1,4 @@
-import { IFlowInterface } from '@/shared/model/flow-interface.model';
+import { type IFlowInterface } from '@/shared/model/flow-interface.model';
 import axios from 'axios';
 
 const baseApiUrl = 'api/reporting';

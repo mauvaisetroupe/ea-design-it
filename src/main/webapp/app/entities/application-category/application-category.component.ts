@@ -11,7 +11,7 @@ export default defineComponent({
   setup() {
     const applicationCategoryService = inject('applicationCategoryService', () => new ApplicationCategoryService());
     const alertService = inject('alertService', () => useAlertService(), true);
-    const accountService = inject('accountService', () => new AccountService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const applicationCategories: Ref<IApplicationCategory[]> = ref([]);
 

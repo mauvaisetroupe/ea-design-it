@@ -136,7 +136,7 @@
                         </button>
                       </router-link>
                       <router-link
-                        v-if="accountService().writeAuthorities"
+                        v-if="accountService.writeAuthorities"
                         :to="{ name: 'FunctionalFlowEdit', params: { functionalFlowId: functionalFlow.id } }"
                         custom
                         v-slot="{ navigate }"
@@ -146,12 +146,7 @@
                           <span class="d-none d-md-inline">Edit</span>
                         </button>
                       </router-link>
-                      <b-button
-                        v-if="accountService().writeAuthorities"
-                        variant="warning"
-                        class="btn btn-sm"
-                        @click="prepareToDetach(index)"
-                      >
+                      <b-button v-if="accountService.writeAuthorities" variant="warning" class="btn btn-sm" @click="prepareToDetach(index)">
                         <font-awesome-icon icon="times"></font-awesome-icon>
                         <span class="d-none d-md-inline">Detach</span>
                       </b-button>
@@ -164,7 +159,7 @@
               <span class="float-right">
                 <button
                   class="btn btn-primary jh-create-entity create-functional-flow"
-                  v-if="accountService().writeAuthorities"
+                  v-if="accountService.writeAuthorities"
                   title="Add existing Functional flow, from other landscape, with same description, same interfaces"
                   @click="openSearchFlow()"
                 >
@@ -176,7 +171,7 @@
                   :to="{ name: 'FunctionalFlowCreate', query: { landscapeViewId: landscapeView.id } }"
                   custom
                   v-slot="{ navigate }"
-                  v-if="accountService().writeAuthorities"
+                  v-if="accountService.writeAuthorities"
                 >
                   <button
                     @click="navigate"
@@ -209,11 +204,11 @@
         <b-tab title="DrawIO" id="tab-drawio">
           <div class="row">
             <div v-if="!drawIoSVG">
-              <button @click="editDiagram()" class="btn btn-warning" v-if="accountService().writeAuthorities">
+              <button @click="editDiagram()" class="btn btn-warning" v-if="accountService.writeAuthorities">
                 <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Generate diagram</span>
               </button>
               <div>No preview available</div>
-              <div v-if="accountService().writeAuthorities">
+              <div v-if="accountService.writeAuthorities">
                 Generate diagram and use Arrange > Layout > Vertical Flow or Arrange > Layout > Organic to distribute the first diagram
                 components
               </div>
@@ -224,20 +219,20 @@
 
             <div class="col-12">
               <span v-if="!isEditing" class="float-right">
-                <button @click="editDiagram()" class="btn btn-warning" v-if="accountService().writeAuthorities && drawIoSVG">
+                <button @click="editDiagram()" class="btn btn-warning" v-if="accountService.writeAuthorities && drawIoSVG">
                   <font-awesome-icon icon="pencil-alt"></font-awesome-icon><span> Edit diagram</span>
                 </button>
                 <button
                   @click="saveDiagram()"
                   class="btn btn-primary"
-                  v-if="accountService().writeAuthorities && drawIoSVG && drawIOToBeSaved"
+                  v-if="accountService.writeAuthorities && drawIoSVG && drawIOToBeSaved"
                 >
                   <font-awesome-icon icon="pencil-alt"></font-awesome-icon><span> Save diagram</span>
                 </button>
                 <button
                   @click="prepareRemove()"
                   class="btn btn-danger"
-                  v-if="accountService().writeAuthorities && drawIoSVG && !drawIOToBeSaved"
+                  v-if="accountService.writeAuthorities && drawIoSVG && !drawIOToBeSaved"
                 >
                   <font-awesome-icon icon="times"></font-awesome-icon><span> Delete Diagram</span>
                 </button>
@@ -259,56 +254,58 @@
         <b-tab title="Report" id="tab-report">
           <div>
             <div v-if="applicationsOnlyInCapabilities.length">
-              <h4>[Capability Mapping] Applications with no Functional Flow 
-                ({{ onlyCapabilitiesPercent }} %)
-              </h4>
+              <h4>[Capability Mapping] Applications with no Functional Flow ({{ onlyCapabilitiesPercent }} %)</h4>
               <b-table
                 :items="applicationsOnlyInCapabilities"
-                :fields="['id','alias','name', 'flows', 'capabilities']"
+                :fields="['id', 'alias', 'name', 'flows', 'capabilities']"
                 striped
                 fixed
                 class="mx-5"
               >
                 <template #cell(flows)="data">
                   <span v-for="(f, i) in flowsByApplicationID[data.item.id]" :key="f.id">
-                    {{ i == 0 ? '' : ', ' }} <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: f.id } }">{{ f.alias }}</router-link>
-                  </span>
-                </template>  
-
-                <template #cell(capabilities)="data">
-                  <span v-for="(c, i) in capabilitiesByApplicationID[data.item.id]" :key="c.id">
-                    {{ i == 0 ? '' : ', ' }} <router-link :to="{ name: 'CapabilityView', params: { capabilityId: c.id } }">L{{ c.level }} - {{ c.name }}</router-link>
+                    {{ i == 0 ? '' : ', ' }}
+                    <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: f.id } }">{{ f.alias }}</router-link>
                   </span>
                 </template>
 
+                <template #cell(capabilities)="data">
+                  <span v-for="(c, i) in capabilitiesByApplicationID[data.item.id]" :key="c.id">
+                    {{ i == 0 ? '' : ', ' }}
+                    <router-link :to="{ name: 'CapabilityView', params: { capabilityId: c.id } }"
+                      >L{{ c.level }} - {{ c.name }}</router-link
+                    >
+                  </span>
+                </template>
               </b-table>
-            </div>  
+            </div>
             <div v-if="applicationsOnlyInFlows">
-              <h4>[Capability Mapping] Applications with no Capability 
-                ({{ onlyFlowsPercent }} %)
-              </h4>
+              <h4>[Capability Mapping] Applications with no Capability ({{ onlyFlowsPercent }} %)</h4>
               <b-table
                 :items="applicationsOnlyInFlows"
-                :fields="['id','alias','name', 'flows', 'capabilities']"
+                :fields="['id', 'alias', 'name', 'flows', 'capabilities']"
                 striped
                 fixed
                 class="ml-5"
               >
                 <template #cell(flows)="data">
                   <span v-for="(f, i) in flowsByApplicationID[data.item.id]" :key="f.id">
-                    {{ i == 0 ? '' : ', ' }}<router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: f.id } }">{{ f.alias }}</router-link>
+                    {{ i == 0 ? '' : ', '
+                    }}<router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: f.id } }">{{ f.alias }}</router-link>
                   </span>
-                </template>              
+                </template>
 
                 <template #cell(capabilities)="data">
                   <span v-for="(c, i) in capabilitiesByApplicationID[data.item.id]" :key="c.id">
-                    {{ i == 0 ? '' : ', ' }} <router-link :to="{ name: 'CapabilityView', params: { capabilityId: c.id } }">L{{ c.level }} - {{ c.name }}</router-link>
+                    {{ i == 0 ? '' : ', ' }}
+                    <router-link :to="{ name: 'CapabilityView', params: { capabilityId: c.id } }"
+                      >L{{ c.level }} - {{ c.name }}</router-link
+                    >
                   </span>
                 </template>
-                
               </b-table>
             </div>
-          </div>        
+          </div>
         </b-tab>
       </b-tabs>
     </div>
@@ -322,7 +319,7 @@
         custom
         v-slot="{ navigate }"
       >
-        <button @click="navigate" class="btn btn-primary" v-if="accountService().writeAuthorities">
+        <button @click="navigate" class="btn btn-primary" v-if="accountService.writeAuthorities">
           <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
         </button>
       </router-link>

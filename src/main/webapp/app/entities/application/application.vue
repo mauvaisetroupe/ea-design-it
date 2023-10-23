@@ -14,7 +14,7 @@
         </button>
         <router-link :to="{ name: 'ApplicationCreate' }" custom v-slot="{ navigate }">
           <button
-            v-if="accountService().writeAuthorities"
+            v-if="accountService.writeAuthorities"
             @click="navigate"
             id="jh-create-entity"
             data-cy="entityCreateButton"

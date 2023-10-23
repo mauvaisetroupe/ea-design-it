@@ -11,7 +11,7 @@ export default defineComponent({
   setup() {
     const ownerService = inject('ownerService', () => new OwnerService());
     const alertService = inject('alertService', () => useAlertService(), true);
-    const accountService = inject('accountService', () => new AccountService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const owners: Ref<IOwner[]> = ref([]);
 

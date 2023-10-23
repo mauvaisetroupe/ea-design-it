@@ -3,6 +3,7 @@ import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 import ApplicationComponentService from './application-component.service';
 import { type IApplicationComponent } from '@/shared/model/application-component.model';
 import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -10,6 +11,7 @@ export default defineComponent({
   setup() {
     const applicationComponentService = inject('applicationComponentService', () => new ApplicationComponentService());
     const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const applicationComponents: Ref<IApplicationComponent[]> = ref([]);
 
@@ -70,6 +72,7 @@ export default defineComponent({
       prepareRemove,
       closeDialog,
       removeApplicationComponent,
+      accountService,
     };
   },
 });

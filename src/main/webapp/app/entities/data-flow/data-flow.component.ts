@@ -3,6 +3,7 @@ import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 import DataFlowService from './data-flow.service';
 import { type IDataFlow } from '@/shared/model/data-flow.model';
 import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -10,6 +11,7 @@ export default defineComponent({
   setup() {
     const dataFlowService = inject('dataFlowService', () => new DataFlowService());
     const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const dataFlows: Ref<IDataFlow[]> = ref([]);
 
@@ -70,6 +72,7 @@ export default defineComponent({
       prepareRemove,
       closeDialog,
       removeDataFlow,
+      accountService,
     };
   },
 });

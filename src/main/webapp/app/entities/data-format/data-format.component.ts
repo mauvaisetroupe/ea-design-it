@@ -11,7 +11,7 @@ export default defineComponent({
   setup() {
     const dataFormatService = inject('dataFormatService', () => new DataFormatService());
     const alertService = inject('alertService', () => useAlertService(), true);
-    const accountService = inject('accountService', () => new AccountService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const dataFormats: Ref<IDataFormat[]> = ref([]);
 

@@ -245,7 +245,7 @@
         custom
         v-slot="{ navigate }"
       >
-        <button @click="navigate" class="btn btn-primary" v-if="accountService().writeAuthorities" :disabled="tabIndex === 3">
+        <button @click="navigate" class="btn btn-primary" v-if="accountService.writeAuthorities" :disabled="tabIndex === 3">
           <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit </span>
         </button>
       </router-link>

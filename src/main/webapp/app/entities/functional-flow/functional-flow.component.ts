@@ -3,6 +3,7 @@ import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 import FunctionalFlowService from './functional-flow.service';
 import { type IFunctionalFlow } from '@/shared/model/functional-flow.model';
 import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -10,6 +11,7 @@ export default defineComponent({
   setup() {
     const functionalFlowService = inject('functionalFlowService', () => new FunctionalFlowService());
     const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const functionalFlows: Ref<IFunctionalFlow[]> = ref([]);
 
@@ -70,6 +72,7 @@ export default defineComponent({
       prepareRemove,
       closeDialog,
       removeFunctionalFlow,
+      accountService,
     };
   },
 });

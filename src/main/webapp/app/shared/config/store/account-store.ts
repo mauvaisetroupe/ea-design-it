@@ -22,9 +22,9 @@ export const useAccountStore = defineStore('main', {
   state: (): AccountStateStorable => ({ ...defaultAccountState }),
   getters: {
     account: state => state.userIdentity,
-    authenticated: state => state.authenticated,
-    activeProfiles: state => state.activeProfiles,
-    ribbonOnProfiles: state => state.ribbonOnProfiles,
+    //authenticated: state => state.authenticated,
+    // activeProfiles: state => state.activeProfiles,
+    // ribbonOnProfiles: state => state.ribbonOnProfiles,
     writeAuthority: state => hasAuthority(state, 'ROLE_WRITE'),
     userAuthority: state => hasAuthority(state, 'ROLE_USER'),
     deleteAuthority: state => hasAuthority(state, 'ROLE_HARD_DELETE'),

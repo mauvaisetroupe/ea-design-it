@@ -3,6 +3,7 @@ import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 import FlowInterfaceService from './flow-interface.service';
 import { type IFlowInterface } from '@/shared/model/flow-interface.model';
 import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -10,6 +11,7 @@ export default defineComponent({
   setup() {
     const flowInterfaceService = inject('flowInterfaceService', () => new FlowInterfaceService());
     const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const flowInterfaces: Ref<IFlowInterface[]> = ref([]);
 
@@ -70,6 +72,7 @@ export default defineComponent({
       prepareRemove,
       closeDialog,
       removeFlowInterface,
+      accountService,
     };
   },
 });

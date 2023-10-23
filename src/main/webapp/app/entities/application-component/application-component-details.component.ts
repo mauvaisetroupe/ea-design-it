@@ -12,7 +12,7 @@ export default defineComponent({
   setup() {
     const applicationComponentService = inject('applicationComponentService', () => new ApplicationComponentService());
     const alertService = inject('alertService', () => useAlertService(), true);
-    const accountService = inject('accountService', () => new AccountService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const route = useRoute();
     const router = useRouter();

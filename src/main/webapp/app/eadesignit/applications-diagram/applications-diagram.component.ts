@@ -1,7 +1,7 @@
 import { defineComponent, inject, ref, type Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import ApplicationsDiagramService from './applications-diagram.service';
-import { IFlowInterface } from '@/shared/model/flow-interface.model';
+import { type IFlowInterface } from '@/shared/model/flow-interface.model';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },

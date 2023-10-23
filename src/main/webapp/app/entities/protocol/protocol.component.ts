@@ -11,7 +11,7 @@ export default defineComponent({
   setup() {
     const protocolService = inject('protocolService', () => new ProtocolService());
     const alertService = inject('alertService', () => useAlertService(), true);
-    const accountService = inject('accountService', () => new AccountService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const protocols: Ref<IProtocol[]> = ref([]);
 
@@ -72,6 +72,7 @@ export default defineComponent({
       prepareRemove,
       closeDialog,
       removeProtocol,
+      accountService,
     };
   },
 });

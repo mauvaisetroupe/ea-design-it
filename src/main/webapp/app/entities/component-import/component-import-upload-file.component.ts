@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 import ComponentImportService from './component-import.service';
-import { IApplicationImport } from '@/shared/model/application-import.model';
+import { type IApplicationImport } from '@/shared/model/application-import.model';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -36,7 +36,7 @@ export default defineComponent({
         isFetching.value = false;
         rowsLoaded.value = true;
       } catch (error) {
-        alertService().showHttpError(error.response);
+        alertService.showHttpError(error.response);
       } finally {
         isFetching.value = false;
       }

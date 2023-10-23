@@ -17,7 +17,7 @@ export default defineComponent({
   setup() {
     const flowGroupService = inject('flowGroupService', () => new FlowGroupService());
     const alertService = inject('alertService', () => useAlertService(), true);
-    const accountService = inject('accountService', () => new AccountService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const flowGroup: Ref<IFlowGroup> = ref(new FlowGroup());
 

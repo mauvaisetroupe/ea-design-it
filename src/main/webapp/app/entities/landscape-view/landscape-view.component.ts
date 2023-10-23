@@ -4,6 +4,7 @@ import LandscapeViewService from './landscape-view.service';
 import { type ILandscapeView } from '@/shared/model/landscape-view.model';
 import useDataUtils from '@/shared/data/data-utils.service';
 import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -12,6 +13,7 @@ export default defineComponent({
     const dataUtils = useDataUtils();
     const landscapeViewService = inject('landscapeViewService', () => new LandscapeViewService());
     const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const landscapeViews: Ref<ILandscapeView[]> = ref([]);
 
@@ -72,6 +74,7 @@ export default defineComponent({
       prepareRemove,
       closeDialog,
       removeLandscapeView,
+      accountService,
       ...dataUtils,
     };
   },

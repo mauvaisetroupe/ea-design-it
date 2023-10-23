@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import ApplicationComponentService from './application-component.service';
 import { DATE_FORMAT } from '@/shared/composables/date-format';
 import { ApplicationComponent } from '@/shared/model/application-component.model';
+import type AccountService from '@/account/account.service';
 
 const error = {
   response: {

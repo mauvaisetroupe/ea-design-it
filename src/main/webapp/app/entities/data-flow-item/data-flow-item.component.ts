@@ -11,7 +11,7 @@ export default defineComponent({
   setup() {
     const dataFlowItemService = inject('dataFlowItemService', () => new DataFlowItemService());
     const alertService = inject('alertService', () => useAlertService(), true);
-    const accountService = inject('accountService', () => new AccountService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const dataFlowItems: Ref<IDataFlowItem[]> = ref([]);
 
@@ -72,6 +72,7 @@ export default defineComponent({
       prepareRemove,
       closeDialog,
       removeDataFlowItem,
+      accountService,
     };
   },
 });

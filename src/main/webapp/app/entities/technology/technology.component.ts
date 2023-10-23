@@ -11,7 +11,7 @@ export default defineComponent({
   setup() {
     const technologyService = inject('technologyService', () => new TechnologyService());
     const alertService = inject('alertService', () => useAlertService(), true);
-    const accountService = inject('accountService', () => new AccountService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const technologies: Ref<ITechnology[]> = ref([]);
 

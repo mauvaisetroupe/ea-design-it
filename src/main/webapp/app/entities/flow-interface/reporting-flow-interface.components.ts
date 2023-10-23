@@ -1,10 +1,10 @@
 import { defineComponent, getCurrentInstance, inject, onMounted, ref, type Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAlertService } from '@/shared/alert/alert.service';
-import { IFlowInterface } from '@/shared/model/flow-interface.model';
+import { type IFlowInterface } from '@/shared/model/flow-interface.model';
 import FlowInterfaceService from './flow-interface.service';
 import AlertService from '@/shared/alert/alert.service';
-import AccountService from '@/account/account.service';
+import type AccountService from '@/account/account.service';
 import ReportingService from '@/eadesignit/reporting.service';
 import { DataFlow } from '@/shared/model/data-flow.model';
 import type { bvToast } from 'bootstrap-vue';
@@ -120,6 +120,8 @@ export default defineComponent({
       }
     };
 
-    return {};
+    return {
+      accountService,
+    };
   },
 });

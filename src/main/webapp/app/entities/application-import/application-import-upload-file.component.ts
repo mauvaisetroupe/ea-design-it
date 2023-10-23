@@ -2,7 +2,7 @@ import { defineComponent, inject, ref, type Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAlertService } from '@/shared/alert/alert.service';
 
-import { IApplicationImport } from '@/shared/model/application-import.model';
+import { type IApplicationImport } from '@/shared/model/application-import.model';
 import ApplicationImportService from './application-import.service';
 
 export default defineComponent({

@@ -24,7 +24,7 @@ export default defineComponent({
 
     function handleFileUpload(): void {
       //excelFile.value = event.target.files[0];
-      excelFileName.value = excelFile.value.name;
+      //excelFileName.value = ref(excelFileName);
     }
 
     async function submitFile() {
@@ -50,6 +50,7 @@ export default defineComponent({
       externalSystemService,
       handleFileUpload,
       submitFile,
+      externalSystems,
     };
   },
 });

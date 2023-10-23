@@ -2,7 +2,7 @@ import { defineComponent, inject, ref, type Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAlertService } from '@/shared/alert/alert.service';
 
-import { IDataFlowImport } from '@/shared/model/data-flow-import.model';
+import { type IDataFlowImport } from '@/shared/model/data-flow-import.model';
 import DataFlowImportService from './data-flow-import.service';
 
 export default defineComponent({
