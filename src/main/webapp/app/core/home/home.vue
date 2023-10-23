@@ -60,8 +60,7 @@
         <router-link class="alert-link" to="/register">Register a new account</router-link>
       </div>
 
-      <!-- <div v-if="$store.writeAuthority"> -->
-      <div>
+      <div v-if="store.writeAuthority">
         <h2>Import</h2>
         <ol>
           <li>
