@@ -3,8 +3,11 @@ import { useRoute, useRouter } from 'vue-router';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 import CapabilityImportService from './capability-import.service';
-import { IApplicationCapabilityImport, IApplicationCapabilityImportItem } from '@/shared/model/application-capability-import.model';
-import { ISummary } from '@/shared/model/summary-sheet.model';
+import {
+  type IApplicationCapabilityImport,
+  type IApplicationCapabilityImportItem,
+} from '@/shared/model/application-capability-import.model';
+import { type ISummary } from '@/shared/model/summary-sheet.model';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -21,6 +24,7 @@ export default defineComponent({
     const excelFile = ref();
     const isFetching = ref(false);
     const fileSubmited = ref(false);
+    const analyzeDone = ref(false);
     const rowsLoaded = ref(false);
     const excelFileName = ref('Browse File');
 
@@ -30,19 +34,18 @@ export default defineComponent({
     // STEP 1 - Upload file and retreive all sheet with name starting with FLW
 
     function handleFileUpload(): void {
-      //excelFile.value = event.target.files[0];
-      excelFileName.value = excelFile.value.name;
+      excelFileName.value = excelFile.value.files[0].name;
     }
 
     async function getSheetnames() {
       isFetching.value = true;
-      fileSubmited.value = true;
       try {
         const res = await capabilityImportService().getSummary(excelFile.value.files[0]);
         summary.value = res.filter(sum => sum).filter(sum => sum.entityType === 'Capability Mapping');
         checkedNames.value = summary.value.map(sum => sum.sheetName);
+        analyzeDone.value = true;
       } catch (error) {
-        alertService().showHttpError(error.response);
+        alertService.showHttpError(error.response);
       } finally {
         isFetching.value = false;
       }
@@ -84,7 +87,7 @@ export default defineComponent({
           isFetching.value = false;
         }
       } catch (error) {
-        alertService().showHttpError(error.response);
+        alertService.showHttpError(error.response);
       } finally {
         isFetching.value = false;
       }
@@ -115,6 +118,11 @@ export default defineComponent({
       rowsLoaded,
       dtos,
       notFilteredDtos,
+      summary,
+      checkedNames,
+      fileSubmited,
+      analyzeDone,
+      filterErrors,
       handleFileUpload,
       getSheetnames,
       selectAll,

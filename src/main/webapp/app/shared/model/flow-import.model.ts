@@ -1,4 +1,4 @@
-import { ImportStatus } from '@/shared/model/enumerations/import-status.model';
+import { type ImportStatus } from '@/shared/model/enumerations/import-status.model';
 export interface IFlowImport {
   id?: number;
   idFlowFromExcel?: string | null;
@@ -47,6 +47,6 @@ export class FlowImport implements IFlowImport {
     public importInterfaceStatus?: ImportStatus | null,
     public importFunctionalFlowStatus?: ImportStatus | null,
     public importDataFlowStatus?: ImportStatus | null,
-    public importStatusMessage?: string | null
+    public importStatusMessage?: string | null,
   ) {}
 }

@@ -9,18 +9,19 @@ export default defineComponent({
   props: {
     capability: {
       type: Object as PropType<ICapability>,
+      required: true,
     },
   },
-  components: {
-    CapabilityTreeItemComponent,
-  },
+  // components: {
+  //   CapabilityTreeItemComponent,
+  // },
   setup(props, context) {
     const isOpen = ref(false);
 
     const fullname = computed(() => {
       let fullname = '';
       let sep = '';
-      let tmpCapability = props.capability;
+      let tmpCapability: ICapability | null | undefined = props.capability;
       while (tmpCapability) {
         fullname = tmpCapability.name + sep + fullname;
         tmpCapability = tmpCapability.parent;
@@ -39,6 +40,11 @@ export default defineComponent({
       }
     }
 
-    return {};
+    return {
+      isFolder,
+      isOpen,
+      toggle,
+      fullname,
+    };
   },
 });

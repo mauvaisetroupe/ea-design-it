@@ -2,10 +2,10 @@ import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { useAlertService } from '@/shared/alert/alert.service';
-import { IFlowImport } from '@/shared/model/flow-import.model';
+import { type IFlowImport } from '@/shared/model/flow-import.model';
 import FlowImportService from './flow-import.service';
 import AlertService from '@/shared/alert/alert.service';
-import { ISummary } from '@/shared/model/summary-sheet.model';
+import { type ISummary } from '@/shared/model/summary-sheet.model';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -28,21 +28,21 @@ export default defineComponent({
     const summary: Ref<ISummary[]> = ref([]);
 
     function handleFileUpload(): void {
-      //excelFile.value = event.target.files[0];
-      excelFileName.value = excelFile.value.name;
+      excelFileName.value = excelFile.value.files[0].name;
     }
 
     // STEP 1 - Upload file and retreive all sheet with name starting with FLW
 
     async function getSheetnames() {
       isFetching.value = true;
-      fileSubmited.value = true;
       try {
         const res = await flowImportService().getSummary(excelFile.value.files[0]);
-        summary.value = res.filter(sum => sum).filter(sum => sum.entityType === 'Capability Mapping');
+        console.log(res);
+        summary.value = res.filter(sum => sum).filter(sum => sum.entityType === 'Landscape');
         checkedNames.value = summary.value.map(sum => sum.sheetName);
       } catch (error) {
-        alertService().showHttpError(error.response);
+        console.error(error);
+        alertService.showHttpError(error.response);
       } finally {
         isFetching.value = false;
       }
@@ -83,7 +83,7 @@ export default defineComponent({
           uploadOneSheet();
         }
       } catch (error) {
-        alertService().showHttpError(error.response);
+        alertService.showHttpError(error.response);
       } finally {
         isFetching.value = false;
       }
@@ -114,6 +114,21 @@ export default defineComponent({
       });
     }
 
-    return {};
+    return {
+      excelFile,
+      isFetching,
+      rowsLoaded,
+      handleFileUpload,
+      submitFile,
+      summary,
+      getSheetnames,
+      selectAll,
+      selectNone,
+      checkedNames,
+      fileSubmited,
+      dtos,
+      excelFileName,
+      filterErrors,
+    };
   },
 });

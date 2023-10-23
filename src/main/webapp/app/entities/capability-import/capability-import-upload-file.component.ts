@@ -50,8 +50,7 @@ export default defineComponent({
     const ADD = Action.ADD;
 
     function handleFileUpload(): void {
-      //excelFile.value = event.target.files[0];
-      excelFileName.value = excelFile.value.name;
+      excelFileName.value = excelFile.value.files[0].name;
     }
 
     async function submitFileForAnalysis() {
@@ -62,10 +61,11 @@ export default defineComponent({
       try {
         const res = await capabilityImportService().uploadFileToAnalysis(excelFile.value.files[0]);
         capabilitiesImportAnalysis.value = res;
+        analysisDone.value = true;
         isFetching.value = false;
-        rowsLoaded.value = true;
       } catch (error) {
         alertService.showHttpError(error.response);
+        analysisDone.value = false;
       } finally {
         isFetching.value = false;
       }
@@ -91,13 +91,15 @@ export default defineComponent({
 
     // Error Handling
 
-    const somethingToImport = computed(() => {
+    const somethingToImport: Ref<boolean> = computed(() => {
       return (
         analysisDone.value &&
-        (capabilitiesImportAnalysis.value?.capabilitiesToAdd?.length ||
-          capabilitiesImportAnalysis.value?.capabilitiesToDelete?.length ||
-          capabilitiesImportAnalysis.value?.capabilitiesToDeleteWithMappings?.length ||
-          capabilitiesImportAnalysis.value?.ancestorsOfCapabilitiesWithMappings?.length)
+        !(
+          !capabilitiesImportAnalysis.value?.capabilitiesToAdd?.length &&
+          !capabilitiesImportAnalysis.value?.capabilitiesToDelete?.length &&
+          !capabilitiesImportAnalysis.value?.capabilitiesToDeleteWithMappings?.length &&
+          !capabilitiesImportAnalysis.value?.ancestorsOfCapabilitiesWithMappings?.length
+        )
       );
     });
 
@@ -117,6 +119,18 @@ export default defineComponent({
       isFetching,
       rowsLoaded,
       somethingToImport,
+      analysisDone,
+      capabilitiesImportAnalysis,
+      toAddOption,
+      toDeleteOption,
+      toDeleteWithMappingOption,
+      toDeleteWithChildMappingOption,
+      capabilitiesImports,
+      filteredCapabilitiesImports,
+      IGNORE,
+      DELETE,
+      FORCE_DELETE,
+      ADD,
       handleFileUpload,
       submitFileForAnalysis,
       confirmUploadedFile,

@@ -6,13 +6,20 @@
     <div v-if="!rowsLoaded">
       <div class="form-group">
         <div class="custom-file">
-          <input type="file" class="custom-file-input" id="customFile" @change="handleFileUpload($event)" :disabled="fileSubmited" />
+          <input
+            type="file"
+            class="custom-file-input"
+            id="customFile"
+            @change="handleFileUpload()"
+            :disabled="fileSubmited"
+            ref="excelFile"
+          />
           <label class="custom-file-label" for="customFile">{{ excelFileName }}</label>
         </div>
       </div>
       <div class="form-group" v-if="excelFile && !analysisDone">
         <button type="submit" class="btn btn-primary mb-2" v-on:click="submitFileForAnalysis()" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon>  Submit File
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> Submit File
         </button>
       </div>
       <div class="form-group" v-if="analysisDone && somethingToImport">
@@ -20,26 +27,29 @@
       </div>
     </div>
 
-    <div v-if="analysisDone"> 
-
+    <div v-if="analysisDone">
       <div v-if="!somethingToImport" class="alert alert-warning">
-          <span>Nothing to import</span>
-     </div>
+        <span>Nothing to import</span>
+      </div>
 
       <div v-if="capabilitiesImportAnalysis.capabilitiesToAdd && capabilitiesImportAnalysis.capabilitiesToAdd.length">
         <h3>Capabilities To Add</h3>
         <div class="d-flex justify-content-end">
-            <b-form-group>
-              <button class="btn btn-success m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToAdd, ADD)">Import All</button>
-              <button class="btn btn-success m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToAdd, IGNORE )">Ignore All</button>
-            </b-form-group> 
-        </div>    
+          <b-form-group>
+            <button class="btn btn-success m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToAdd, ADD)">
+              Import All
+            </button>
+            <button class="btn btn-success m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToAdd, IGNORE)">
+              Ignore All
+            </button>
+          </b-form-group>
+        </div>
         <div>
           <table class="table table-striped">
             <tbody>
               <tr v-for="capabilityAction in capabilitiesImportAnalysis.capabilitiesToAdd" :key="capabilityAction.capability.id">
                 <td>
-                  <CapabilityTreeComponent :capability="capabilityAction.capability"/>
+                  <CapabilityTreeComponent :capability="capabilityAction.capability" />
                 </td>
                 <td>
                   <div class="d-flex justify-content-end">
@@ -52,31 +62,34 @@
                         buttons
                         v-model="capabilityAction.action"
                       ></b-form-radio-group>
-                    </b-form-group> 
-                  </div> 
+                    </b-form-group>
+                  </div>
                 </td>
               </tr>
-            </tbody>  
+            </tbody>
           </table>
-
         </div>
       </div>
-  
+
       <div v-if="capabilitiesImportAnalysis.capabilitiesToDelete && capabilitiesImportAnalysis.capabilitiesToDelete.length">
         <h3>Capabilities To Delete</h3>
         <div class="d-flex justify-content-end">
           <b-form-group>
-            <button class="btn btn-danger m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToDelete, DELETE)">Delete All</button>
-            <button class="btn btn-danger m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToDelete, IGNORE )">Ignore All</button>
-          </b-form-group> 
-        </div>    
+            <button class="btn btn-danger m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToDelete, DELETE)">
+              Delete All
+            </button>
+            <button class="btn btn-danger m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToDelete, IGNORE)">
+              Ignore All
+            </button>
+          </b-form-group>
+        </div>
         <div>
           <table class="table table-striped">
             <tbody>
               <tr v-for="capabilityAction in capabilitiesImportAnalysis.capabilitiesToDelete" :key="capabilityAction.capability.id">
                 <td>
-                  <CapabilityTreeComponent :capability="capabilityAction.capability"/>
-                </td> 
+                  <CapabilityTreeComponent :capability="capabilityAction.capability" />
+                </td>
                 <td>
                   <div class="d-flex justify-content-end">
                     <b-form-group>
@@ -88,31 +101,44 @@
                         buttons
                         v-model="capabilityAction.action"
                       ></b-form-radio-group>
-                    </b-form-group> 
-                  </div> 
+                    </b-form-group>
+                  </div>
                 </td>
-              </tr>         
-            </tbody>  
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
 
-
-      <div v-if="capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings && capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings.length">
+      <div
+        v-if="
+          capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings && capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings.length
+        "
+      >
         <h3>Capabilities To Delete (with associated mapping)</h3>
         <div class="d-flex justify-content-end">
           <b-form-group>
-            <button class="btn btn-danger m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings, FORCE_DELETE)">Delete All</button>
-            <button class="btn btn-danger m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings, IGNORE )">Ignore All</button>
-          </b-form-group> 
-        </div>    
+            <button
+              class="btn btn-danger m-0 p-1"
+              @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings, FORCE_DELETE)"
+            >
+              Delete All
+            </button>
+            <button class="btn btn-danger m-0 p-1" @click="toggleAll(capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings, IGNORE)">
+              Ignore All
+            </button>
+          </b-form-group>
+        </div>
         <div>
           <table class="table table-striped">
             <tbody>
-              <tr v-for="capabilityAction in capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings" :key="capabilityAction.capability.id">
+              <tr
+                v-for="capabilityAction in capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings"
+                :key="capabilityAction.capability.id"
+              >
                 <td>
-                  <CapabilityTreeComponent :capability="capabilityAction.capability"/>
-                </td>  
+                  <CapabilityTreeComponent :capability="capabilityAction.capability" />
+                </td>
                 <td>
                   <div class="d-flex justify-content-end">
                     <b-form-group>
@@ -124,24 +150,32 @@
                         buttons
                         v-model="capabilityAction.action"
                       ></b-form-radio-group>
-                    </b-form-group> 
-                  </div> 
+                    </b-form-group>
+                  </div>
                 </td>
               </tr>
-            </tbody>  
+            </tbody>
           </table>
         </div>
       </div>
 
-      <div v-if="capabilitiesImportAnalysis.ancestorsOfCapabilitiesWithMappings && capabilitiesImportAnalysis.ancestorsOfCapabilitiesWithMappings.length">
+      <div
+        v-if="
+          capabilitiesImportAnalysis.ancestorsOfCapabilitiesWithMappings &&
+          capabilitiesImportAnalysis.ancestorsOfCapabilitiesWithMappings.length
+        "
+      >
         <h3>Capabilities To Delete (with child with Mapping)</h3>
         <div>
           <table class="table table-striped">
-            <tbody>              
-              <tr v-for="capabilityAction in capabilitiesImportAnalysis.ancestorsOfCapabilitiesWithMappings" :key="capabilityAction.capability.id">
+            <tbody>
+              <tr
+                v-for="capabilityAction in capabilitiesImportAnalysis.ancestorsOfCapabilitiesWithMappings"
+                :key="capabilityAction.capability.id"
+              >
                 <td>
-                  <CapabilityTreeComponent :capability="capabilityAction.capability"/>
-                </td>  
+                  <CapabilityTreeComponent :capability="capabilityAction.capability" />
+                </td>
                 <td>
                   <div class="d-flex justify-content-end">
                     <b-form-group>
@@ -153,16 +187,20 @@
                         buttons
                         v-model="capabilityAction.action"
                       ></b-form-radio-group>
-                    </b-form-group> 
-                  </div> 
+                    </b-form-group>
+                  </div>
                 </td>
               </tr>
-            </tbody>  
+            </tbody>
           </table>
         </div>
-      </div>      
+      </div>
 
-      <div v-if="capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings && capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings.length">
+      <div
+        v-if="
+          capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings && capabilitiesImportAnalysis.capabilitiesToDeleteWithMappings.length
+        "
+      >
         <h3>Error lines</h3>
         <div>
           <table class="table table-striped">
@@ -170,26 +208,25 @@
               <tr v-for="(error, i) in capabilitiesImportAnalysis.errorLines" :key="i">
                 <td>
                   {{ error }}
-                </td>  
+                </td>
                 <td>
                   <div class="d-flex justify-content-end">
                     <b-form-group>
                       <b-form-radio-group
                         id="btn-radios-4"
-                        :options="[{ text: 'Ignore', value: 'Ignore'}]"
+                        :options="[{ text: 'Ignore', value: 'Ignore' }]"
                         size="sm"
                         button-variant="outline-danger  active"
                         buttons
                       ></b-form-radio-group>
-                    </b-form-group> 
-                  </div> 
+                    </b-form-group>
+                  </div>
                 </td>
               </tr>
-            </tbody>  
+            </tbody>
           </table>
         </div>
       </div>
-
     </div>
     <div class="table-responsive" v-if="capabilitiesImports && capabilitiesImports.length > 0">
       <table class="table table-striped" aria-describedby="capabilitiesImports">

@@ -1,4 +1,4 @@
-import { ICapability } from './capability.model';
+import { type ICapability } from './capability.model';
 
 export interface ICapabilityImportAnalysisDTO {
   capabilitiesToAdd?: ICapabilityActionDTO[];
@@ -13,7 +13,6 @@ export interface ICapabilityActionDTO {
   action: Action;
 }
 
-
 export enum Action {
   ADD = 'ADD',
   DELETE = 'DELETE',
@@ -21,6 +20,3 @@ export enum Action {
   MOVE = 'MOVE',
   IGNORE = 'IGNORE',
 }
-
-
-

@@ -12,7 +12,14 @@
     <div>
       <div class="form-group">
         <div class="custom-file">
-          <input type="file" class="custom-file-input" id="customFile" @change="handleFileUpload($event)" />
+          <input
+            type="file"
+            class="custom-file-input"
+            id="customFile"
+            @change="handleFileUpload()"
+            ref="excelFile"
+            :disabled="analyzeDone"
+          />
           <label class="custom-file-label" for="customFile">{{ excelFileName }}</label>
         </div>
       </div>
@@ -28,7 +35,7 @@
         </div>
 
         <div class="row m-3">
-          <template v-for="(row, i) in summary">
+          <template v-for="(row, i) in summary" :key="i">
             <div class="col-3">
               <input type="checkbox" v-model="checkedNames" :value="row.sheetName" :id="'CHK-' + row.sheetName" :disabled="fileSubmited" />
               <label :for="'CHK-' + row.sheetName" class=""

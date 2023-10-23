@@ -45,27 +45,27 @@ export default defineComponent({
       await retrieveApplications();
     });
 
-    const removeId: Ref<number> = ref(null);
-    const removeEntity = ref<any>(null);
-    const prepareRemove = (instance: IApplication) => {
-      removeId.value = instance.id;
-      removeEntity.value.show();
-    };
-    const closeDialog = () => {
-      removeEntity.value.hide();
-    };
-    const removeApplication = async () => {
-      try {
-        await applicationService().delete(removeId.value);
-        const message = 'A Application is deleted with identifier ' + removeId.value;
-        alertService.showInfo(message, { variant: 'danger' });
-        removeId.value = null;
-        retrieveApplications();
-        closeDialog();
-      } catch (error) {
-        alertService.showHttpError(error.response);
-      }
-    };
+    //const removeId: Ref<number> = ref(null);
+    // const removeEntity = ref<any>(null);
+    // const prepareRemove = (instance: IApplication) => {
+    //   removeId.value = instance.id;
+    //   removeEntity.value.show();
+    // };
+    // const closeDialog = () => {
+    //   removeEntity.value.hide();
+    // };
+    // const removeApplication = async () => {
+    //   try {
+    //     await applicationService().delete(removeId.value);
+    //     const message = 'A Application is deleted with identifier ' + removeId.value;
+    //     alertService.showInfo(message, { variant: 'danger' });
+    //     removeId.value = null;
+    //     retrieveApplications();
+    //     closeDialog();
+    //   } catch (error) {
+    //     alertService.showHttpError(error.response);
+    //   }
+    // };
 
     return {
       applications,
@@ -73,11 +73,11 @@ export default defineComponent({
       isFetching,
       retrieveApplications,
       clear,
-      removeId,
-      removeEntity,
-      prepareRemove,
-      closeDialog,
-      removeApplication,
+      // removeId,
+      // removeEntity,
+      // prepareRemove,
+      // closeDialog,
+      // removeApplication,
       accountService,
       selectedApplicationIds,
     };

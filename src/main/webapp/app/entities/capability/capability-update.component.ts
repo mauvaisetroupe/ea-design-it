@@ -6,7 +6,7 @@ import CapabilityService from './capability.service';
 import { useValidation } from '@/shared/composables';
 import { useAlertService } from '@/shared/alert/alert.service';
 
-import { type ICapability, Capability } from '@/shared/model/capability.model';
+import { type ICapability, type Capability } from '@/shared/model/capability.model';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },

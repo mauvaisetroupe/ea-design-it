@@ -77,7 +77,7 @@
           </li>
           <li>
             Import
-            <router-link to="flow-import-upload-multifile" data-cy="import-excel-flows">Multiple Landscapes</router-link> Excel file
+            <router-link to="/flow-import-upload-multifile" data-cy="import-excel-flows">Multiple Landscapes</router-link> Excel file
           </li>
           <li>
             Import <router-link to="/capability-import-upload-file" data-cy="import-excel-capabilities">Capabilities</router-link> Excel

@@ -12,7 +12,7 @@
     <div>
       <div class="form-group">
         <div class="custom-file">
-          <input type="file" class="custom-file-input" id="customFile" @change="handleFileUpload($event)" />
+          <input type="file" class="custom-file-input" id="customFile" @change="handleFileUpload()" ref="excelFile" />
           <label class="custom-file-label" for="customFile">{{ excelFileName }}</label>
         </div>
       </div>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="row m-3">
-          <template v-for="(row, i) in summary">
+          <template v-for="(row, i) in summary" :key="i">
             <div class="col-1">
               <input
                 type="checkbox"
@@ -114,9 +114,7 @@
                   flowImport.importStatusMessage
                 }}</span>
               </td>
-              <td>
-                <router-link :to="{ name: 'FlowImportView', params: { flowImportId: flowImport.id } }">{{ flowImport.id }}</router-link>
-              </td>
+              <td>{{ flowImport.id }}</td>
               <td>{{ flowImport.idFlowFromExcel }}</td>
               <td>{{ flowImport.flowAlias }}</td>
               <td>{{ flowImport.sourceElement }}</td>

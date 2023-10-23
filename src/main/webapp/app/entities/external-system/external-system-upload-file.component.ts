@@ -23,8 +23,7 @@ export default defineComponent({
     const excelFileName = ref('Browse File');
 
     function handleFileUpload(): void {
-      //excelFile.value = event.target.files[0];
-      //excelFileName.value = ref(excelFileName);
+      excelFileName.value = excelFile.value.files[0].name;
     }
 
     async function submitFile() {

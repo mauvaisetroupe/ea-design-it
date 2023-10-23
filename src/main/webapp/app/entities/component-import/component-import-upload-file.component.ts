@@ -7,7 +7,7 @@ import { type IApplicationImport } from '@/shared/model/application-import.model
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: 'ExternalSystemUploadFile',
+  name: 'ApplicationComponenetUploadFile',
   setup() {
     const componentImportService = inject('componentImportService', () => new ComponentImportService());
     const alertService = inject('alertService', () => useAlertService(), true);
@@ -15,7 +15,7 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
 
-    const externalSystems: Ref<IApplicationImport[]> = ref([]);
+    const applicationImports: Ref<IApplicationImport[]> = ref([]);
     const excelFile = ref();
     const isFetching = ref(false);
     const fileSubmited = ref(false);
@@ -23,8 +23,7 @@ export default defineComponent({
     const excelFileName = ref('Browse File');
 
     function handleFileUpload(): void {
-      //excelFile.value = event.target.files[0];
-      excelFileName.value = excelFile.value.name;
+      excelFileName.value = excelFile.value.files[0].name;
     }
 
     async function submitFile() {
@@ -32,7 +31,7 @@ export default defineComponent({
       fileSubmited.value = true;
       try {
         const res = await componentImportService().uploadFile(excelFile.value.files[0]);
-        externalSystems.value = res.data;
+        applicationImports.value = res.data;
         isFetching.value = false;
         rowsLoaded.value = true;
       } catch (error) {
@@ -47,6 +46,7 @@ export default defineComponent({
       excelFileName,
       isFetching,
       rowsLoaded,
+      applicationImports,
       componentImportService,
       handleFileUpload,
       submitFile,

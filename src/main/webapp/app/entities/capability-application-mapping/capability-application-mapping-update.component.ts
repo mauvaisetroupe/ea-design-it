@@ -12,7 +12,7 @@ import ApplicationService from '@/entities/application/application.service';
 import { type IApplication } from '@/shared/model/application.model';
 import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
 import { type ILandscapeView } from '@/shared/model/landscape-view.model';
-import { type ICapabilityApplicationMapping, CapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
+import { type ICapabilityApplicationMapping, type CapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
