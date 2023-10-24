@@ -31,30 +31,10 @@
         <b-table
           striped
           borderless
-          :items="filteredRows"
+          :items="landscapeViews"
           :fields="['id', 'diagramName', 'owner', { key: 'actions', label: '', tdClass: 'text-right' }]"
           class="col-12"
         >
-          <!-- <template #thead-top="data">
-            <b-tr>
-              <b-th :colspan="data.columns - 3"></b-th>
-              <b-th>
-                <input type="text" placeholder="Filter Diagram Name" v-model="filterDescription" style="width: 100%" class="m-0" />
-              </b-th>
-              <b-th>
-                <input type="text" placeholder="Filter Owner" v-model="filterDescription" style="width: 100%" class="m-0" />
-              </b-th>
-              <b-th class="float-right">
-                <b-pagination
-                  v-model="currentPage"
-                  :total-rows="filteredRows.length"
-                  :per-page="perPage"
-                  aria-controls="my-table"
-                  class="m-0"
-                ></b-pagination>
-              </b-th>
-            </b-tr>
-          </template> -->
           <template #cell(id)="data">
             <router-link :to="{ name: 'LandscapeViewView', params: { landscapeViewId: data.item.id } }">{{ data.item.id }}</router-link>
           </template>
@@ -93,7 +73,7 @@
                 </button>
               </router-link>
               <b-button
-                v-if="accountService().deleteAuthorities"
+                v-if="accountService.deleteAuthorities"
                 v-on:click="prepareRemove(data.item)"
                 variant="danger"
                 class="btn btn-sm"
