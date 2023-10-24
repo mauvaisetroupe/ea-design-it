@@ -11,6 +11,7 @@ export default defineComponent({
   props: {
     capability: {
       type: Object as PropType<ICapability>,
+      required: true,
     },
     showPath: {
       type: Boolean,
@@ -36,16 +37,16 @@ export default defineComponent({
     //const showApplications: Boolean =props.defaultShowApplications
     const showApplications = ref(false);
     const path = ref([]);
-    const mapNbCapabilitiesByLevel: Map<number, number> = new Map();
-    const mapNbCapabilitiesByLevelAndSubLevel: Map<number, number> = new Map();
-    let nbLevelAsString = ''; // input type range send string
+    let mapNbCapabilitiesByLevel: Map<number, number> = new Map();
+    let mapNbCapabilitiesByLevelAndSubLevel: Map<number, number> = new Map();
+    const nbLevelAsString = ref(''); // input type range send string
 
     function retrieveCapability(capId: number) {
       context.emit('retrieveCapability', capId);
     }
 
     const nbLevel = computed(() => {
-      return parseInt(nbLevelAsString);
+      return parseInt(nbLevelAsString.value);
     });
 
     onMounted(() => {
@@ -57,9 +58,9 @@ export default defineComponent({
       console.log(props.capability?.name);
       console.log(props.defaultNbLevel);
       if (props.defaultNbLevel) {
-        nbLevelAsString = props.defaultNbLevel.toString();
+        nbLevelAsString.value = props.defaultNbLevel.toString();
       } else {
-        nbLevelAsString = Math.min(3, props.capability.level + 3).toString();
+        nbLevelAsString.value = Math.min(3, props.capability.level + 3).toString();
       }
 
       // PATH for breadcrumb
@@ -73,9 +74,9 @@ export default defineComponent({
       path.value.reverse();
 
       // Calculate nb max capabilities by level
-      mapNbCapabilitiesByLevel.value = new Map();
-      mapNbCapabilitiesByLevel.value.set(props.capability.level, 1);
-      mapNbCapabilitiesByLevelAndSubLevel.value = new Map();
+      mapNbCapabilitiesByLevel = new Map();
+      mapNbCapabilitiesByLevel.set(props.capability.level, 1);
+      mapNbCapabilitiesByLevelAndSubLevel = new Map();
 
       calculateMaxByLevel(props.capability);
     }
@@ -84,11 +85,11 @@ export default defineComponent({
       const key = capa.level + 1;
       if (capa.subCapabilities) {
         let max = 0;
-        if (mapNbCapabilitiesByLevel.value.get(key)) {
-          max = mapNbCapabilitiesByLevel.value.get(key);
+        if (mapNbCapabilitiesByLevel.get(key)) {
+          max = mapNbCapabilitiesByLevel.get(key);
         }
         max = Math.max(max, capa.subCapabilities.length);
-        mapNbCapabilitiesByLevel.value.set(key, max);
+        mapNbCapabilitiesByLevel.set(key, max);
         capa.subCapabilities.forEach(c => calculateMaxByLevel(c));
       }
     }
@@ -97,7 +98,9 @@ export default defineComponent({
       showApplications,
       mapNbCapabilitiesByLevel,
       nbLevel,
+      nbLevelAsString,
       retrieveCapability,
+      path,
     };
   },
 });

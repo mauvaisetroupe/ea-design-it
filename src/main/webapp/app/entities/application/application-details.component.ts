@@ -38,7 +38,7 @@ export default defineComponent({
     const refreshingPlantuml = ref(false);
     const groupComponents = ref(true);
 
-    const lco: ICapability = {};
+    const lco: Ref<ICapability> = ref({});
     const showLabels = ref(false);
     const interfaceCurrentPage = ref(1);
     const interfaceFilter = ref('');
@@ -203,7 +203,7 @@ export default defineComponent({
     return {
       alertService,
       application,
-
+      layout,
       previousState,
       retrieveApplication,
       interfaceFilter,

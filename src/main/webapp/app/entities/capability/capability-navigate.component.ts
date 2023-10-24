@@ -23,7 +23,7 @@ export default defineComponent({
     const capability: Ref<ICapability> = ref({});
     const flattenCapabilities: Ref<string[]> = ref([]);
     const filter: Ref<string> = ref('');
-    const isFetching: Ref<boolean> = ref(true);
+    const isFetching: Ref<boolean> = ref(false);
 
     const filteredCapabilities = computed(() => {
       if (filter.value) {
@@ -33,18 +33,21 @@ export default defineComponent({
       }
     });
 
-    const retrieveCapability = async capabilityId => {
+    const retrieveCapability = async (capabilityId: string | null) => {
+      isFetching.value = true;
       try {
         if (!capabilityId) {
           const res = await capabilityService().findRoot();
           capability.value = res;
         } else {
-          const res = await capabilityService().find(capabilityId);
+          const res = await capabilityService().find(parseInt(capabilityId));
           capability.value = res;
         }
         computeflattenCapabilities(capability.value, flattenCapabilities.value, '');
       } catch (error) {
         alertService.showHttpError(error.response);
+      } finally {
+        isFetching.value = false;
       }
     };
 
@@ -65,6 +68,8 @@ export default defineComponent({
 
     if (route.params?.capabilityId) {
       retrieveCapability(route.params.capabilityId);
+    } else {
+      retrieveCapability(null);
     }
 
     return {

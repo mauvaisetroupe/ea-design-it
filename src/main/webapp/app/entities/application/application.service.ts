@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { type IApplication } from '@/shared/model/application.model';
 import { type PlantumlDTO } from '@/shared/model/plantuml-dto';
+import type { ICapability } from '@/shared/model/capability.model';
 
 const baseApiUrl = 'api/applications';
 const basePlantUMLApiUrl = 'api/plantuml/application/get-svg';
@@ -142,8 +143,8 @@ export default class ApplicationService {
     });
   }
 
-  public getCapabilities(id: number): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
+  public getCapabilities(id: number): Promise<ICapability> {
+    return new Promise<ICapability>((resolve, reject) => {
       axios
         .get(`${baseApiUrl}/${id}/capabilities`)
         .then(res => {
