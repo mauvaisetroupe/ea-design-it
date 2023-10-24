@@ -44,6 +44,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import org.apache.poi.EncryptedDocumentException;
+import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -557,7 +558,14 @@ public class FlowImportService {
         validator.validate(bean);
         Set<ConstraintViolation<Object>> violations = validator.validate(bean);
         if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(violations);
+            log.error("Error with bean validation " + bean + " (" + bean.getClass() + ")");
+            if (bean instanceof HibernateProxy) {
+                //https://hibernate.atlassian.net/browse/HVAL-13
+                //https://hibernate.atlassian.net/browse/HV-535
+                log.error("Cannot check bean validation");
+            } else {
+                throw new ConstraintViolationException(violations);
+            }
         }
     }
 }
