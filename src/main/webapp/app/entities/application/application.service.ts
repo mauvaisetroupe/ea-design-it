@@ -110,7 +110,7 @@ export default class ApplicationService {
     groupComponents: boolean,
     showLabels: boolean,
     showLabelIfNumberapplicationsLessThan: number,
-  ) {
+  ): Promise<PlantumlDTO> {
     const params = {
       layout: layout,
       groupComponents: groupComponents,

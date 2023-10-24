@@ -317,7 +317,7 @@
           <button
             @click="navigate"
             class="btn btn-primary"
-            v-if="accountService().writeOrContributor"
+            v-if="accountService.writeOrContributor"
             :disabled="!isOwner(application) || tabIndex != 0"
           >
             <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
