@@ -35,6 +35,7 @@ export default defineComponent({
 
     async function getSheetnames() {
       isFetching.value = true;
+      fileSubmited.value = true;
       try {
         const res = await flowImportService().getSummary(excelFile.value.files[0]);
         console.log(res);
@@ -63,7 +64,6 @@ export default defineComponent({
 
     function submitFile(): void {
       isFetching.value = true;
-      fileSubmited.value = true;
       // send file n times, sheet by sheet
       // this is not optimal, but it's the easier way to have a reactive behavior and avoid time out
       // serialized to avoid database transactional problem

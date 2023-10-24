@@ -12,13 +12,20 @@
     <div>
       <div class="form-group">
         <div class="custom-file">
-          <input type="file" class="custom-file-input" id="customFile" @change="handleFileUpload()" ref="excelFile" />
+          <input
+            type="file"
+            class="custom-file-input"
+            id="customFile"
+            @change="handleFileUpload()"
+            ref="excelFile"
+            :disabled="fileSubmited"
+          />
           <label class="custom-file-label" for="customFile">{{ excelFileName }}</label>
         </div>
       </div>
 
       <div class="form-group" v-if="excelFile && summary.length == 0">
-        <button type="submit" class="btn btn-primary mb-2" v-on:click="getSheetnames()">Submit File</button>
+        <button type="submit" class="btn btn-primary mb-2" v-on:click="getSheetnames()" :disabled="fileSubmited">Submit File</button>
       </div>
 
       <div v-if="summary.length > 0" class="col-md-12">
