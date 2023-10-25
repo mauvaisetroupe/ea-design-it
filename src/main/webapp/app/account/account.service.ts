@@ -129,11 +129,11 @@ export default class AccountService {
     console.log('About to call api/account/anoymous-reader');
     return new Promise(resolve => {
       axios
-        .get<any>('/api/account/anoymous-reader')
+        .get<any>('api/account/anoymous-reader')
         .then(res => {
           this.anonymousReadAllowed = res.data;
           this.initialized = true;
-          console.log('/api/account/anoymous-reader : ' + this.anonymousReadAllowed);
+          console.log('api/account/anoymous-reader : ' + this.anonymousReadAllowed);
           resolve(this.anonymousReadAllowed);
         })
         .catch(() => {
