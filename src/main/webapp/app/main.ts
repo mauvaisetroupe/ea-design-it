@@ -70,7 +70,11 @@ const app = createApp({
       // Make sure login modal is closed
       loginService.hideLogin();
 
-      if (!store.authenticated) {
+      if (!accountService.initialized) {
+        await accountService.retrieveAnonymousProperty();
+        await accountService.loadAccount();
+      }
+      if (!store.authenticated && !accountService.anonymousReadAllowed) {
         await accountService.update();
       }
       if (to.meta?.authorities && to.meta.authorities.length > 0) {

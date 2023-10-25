@@ -19,7 +19,7 @@ export default class AccountService {
 
   public async retrieveProfiles(): Promise<boolean> {
     try {
-      const res = await axios.get<any>('management/info');
+      const res = await axios.get<any>('/management/info');
       if (res.data && res.data.activeProfiles) {
         this.store.setRibbonOnProfiles(res.data['display-ribbon-on-profiles']);
         this.store.setActiveProfiles(res.data['activeProfiles']);
@@ -122,14 +122,18 @@ export default class AccountService {
   }
 
   public retrieveAnonymousProperty(): Promise<boolean> {
+    if (this.initialized) {
+      console.log('retrieveAnonymousProperty already initialized');
+      return Promise.resolve(this.anonymousReadAllowed);
+    }
     console.log('About to call api/account/anoymous-reader');
     return new Promise(resolve => {
       axios
-        .get<any>('api/account/anoymous-reader')
+        .get<any>('/api/account/anoymous-reader')
         .then(res => {
           this.anonymousReadAllowed = res.data;
           this.initialized = true;
-          console.log('api/account/anoymous-reader : ' + this.anonymousReadAllowed);
+          console.log('/api/account/anoymous-reader : ' + this.anonymousReadAllowed);
           resolve(this.anonymousReadAllowed);
         })
         .catch(() => {
