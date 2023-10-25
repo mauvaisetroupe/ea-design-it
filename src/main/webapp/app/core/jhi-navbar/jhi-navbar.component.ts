@@ -29,14 +29,15 @@ export default defineComponent({
     const inProduction = computed(() => store.activeProfiles.indexOf('prod') > -1);
     const authenticated = computed(() => store.authenticated);
     const adminAuthorities = computed(() => store.adminAuthority);
-    const readAuthorities = computed(() => {
-      if (accountService.anonymousReadAllowed) {
-        //anonymous read
-        return true;
-      } else {
-        return store.userAuthority;
-      }
-    });
+
+    const readAuthorities = ref(true);
+
+    if (!accountService?.initialized) {
+      accountService
+        ?.retrieveAnonymousProperty()
+        .then(res => (readAuthorities.value = res))
+        .catch(() => (readAuthorities.value = true));
+    }
 
     const openLogin = () => {
       loginService.openLogin();

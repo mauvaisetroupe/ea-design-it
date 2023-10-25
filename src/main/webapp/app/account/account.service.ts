@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { type AccountStore } from '@/store';
+import { Authority } from '@/shared/security/authority';
 
 export default class AccountService {
   //constructor(private store: AccountStore, private router: VueRouter) {
@@ -93,6 +94,9 @@ export default class AccountService {
   }
 
   private checkAuthorities(authorities: string[]): boolean {
+    if (authorities.includes(Authority.ANONYMOUS_ALLOWED) && this.anonymousReadAllowed) {
+      return true;
+    }
     if (this.userAuthorities) {
       for (const authority of authorities) {
         if (this.userAuthorities.includes(authority)) {
