@@ -5,9 +5,7 @@ import { Authority } from '@/shared/security/authority';
 
 export default class AccountService {
   //constructor(private store: AccountStore, private router: VueRouter) {
-  constructor(private store: AccountStore) {
-    this.init();
-  }
+  constructor(private store: AccountStore) {}
 
   public async update(): Promise<void> {
     if (!this.store.profilesLoaded) {
@@ -55,10 +53,12 @@ export default class AccountService {
       return;
     }
 
-    const promise = this.retrieveAccount();
-    this.store.authenticate(promise);
-    promise.then(() => this.store.authenticate(null));
-    await promise;
+    if (token) {
+      const promise = this.retrieveAccount();
+      this.store.authenticate(promise);
+      promise.then(() => this.store.authenticate(null));
+      await promise;
+    }
   }
 
   public async hasAnyAuthorityAndCheckAuth(authorities: any): Promise<boolean> {

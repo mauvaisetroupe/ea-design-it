@@ -61,6 +61,17 @@ const app = createApp({
     provide('loginService', loginService);
     const store = useStore();
     const accountService = new AccountService(store);
+
+    // Call retrieveAnonymousProperty and wait for result
+    (async function initAccount() {
+      console.log('initAccount - about to read anoymous property from REST');
+      await accountService.retrieveAnonymousProperty();
+      console.log('initAccount - about to load account');
+      await accountService.loadAccount();
+    })();
+
+    console.log('init Account done.');
+
     provide(
       'currentLanguage',
       computed(() => store.account?.langKey ?? navigator.language ?? 'en'),
@@ -70,11 +81,8 @@ const app = createApp({
       // Make sure login modal is closed
       loginService.hideLogin();
 
-      if (!accountService.initialized) {
-        await accountService.retrieveAnonymousProperty();
-        await accountService.loadAccount();
-      }
-      if (!store.authenticated && !accountService.anonymousReadAllowed) {
+      // store user profile if not in mode anonymous
+      if (!store.authenticated && store.account) {
         await accountService.update();
       }
       if (to.meta?.authorities && to.meta.authorities.length > 0) {
