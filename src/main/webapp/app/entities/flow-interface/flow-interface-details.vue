@@ -125,7 +125,7 @@
           custom
           v-slot="{ navigate }"
         >
-          <button @click="navigate" class="btn btn-primary" v-if="accountService().writeOrContributor" :disabled="!isOwner(flowInterface)">
+          <button @click="navigate" class="btn btn-primary" v-if="accountService.writeOrContributor" :disabled="!isOwner(flowInterface)">
             <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
           </button>
         </router-link>
@@ -268,7 +268,7 @@
         </div>
       </div>
     </div>
-    <b-modal ref="detachDataEntity" id="detachDataEntity">
+    <!-- <b-modal ref="detachDataEntity" id="detachDataEntity">
       <span slot="modal-title"
         ><span id="eaDesignItApp.landscapeView.delete.question" data-cy="landscapeViewDeleteDialogHeading"
           >Confirm delete operation</span
@@ -289,7 +289,7 @@
           Delete
         </button>
       </div>
-    </b-modal>
+    </b-modal> -->
   </div>
 </template>
 

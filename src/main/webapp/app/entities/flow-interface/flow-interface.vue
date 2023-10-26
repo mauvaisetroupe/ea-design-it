@@ -42,10 +42,10 @@
             <template #thead-top="data">
               <b-tr>
                 <b-th></b-th>
-                <b-th><input type="text" v-model="filterAlias" :placeholder="'Text filter ' + data.fields[0].label" /></b-th>
-                <b-th><input type="text" v-model="filterSource" :placeholder="'Text filter ' + data.fields[1].label" /></b-th>
-                <b-th><input type="text" v-model="filterTarget" :placeholder="'Text filter ' + data.fields[2].label" /></b-th>
-                <b-th><input type="text" v-model="filterProtocol" :placeholder="'Text filter ' + data.fields[3].label" /></b-th>
+                <b-th><input type="text" v-model="filterAlias" :placeholder="'Text filter ' + data.fields[1].label" /></b-th>
+                <b-th><input type="text" v-model="filterSource" :placeholder="'Text filter ' + data.fields[2].label" /></b-th>
+                <b-th><input type="text" v-model="filterTarget" :placeholder="'Text filter ' + data.fields[3].label" /></b-th>
+                <b-th><input type="text" v-model="filterProtocol" :placeholder="'Text filter ' + data.fields[4].label" /></b-th>
                 <b-th class="float-right">
                   <b-pagination
                     v-model="currentPage"
@@ -113,7 +113,7 @@
                     @click="navigate"
                     class="btn btn-primary btn-sm edit"
                     data-cy="entityEditButton"
-                    v-if="accountService().writeOrContributor"
+                    v-if="accountService.writeOrContributor"
                     :disabled="!isOwner(data.item)"
                   >
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
@@ -121,7 +121,7 @@
                   </button>
                 </router-link>
                 <b-button
-                  v-if="accountService().deleteAuthorities"
+                  v-if="accountService.deleteAuthorities"
                   v-on:click="prepareRemove(data.item)"
                   variant="danger"
                   class="btn btn-sm"
