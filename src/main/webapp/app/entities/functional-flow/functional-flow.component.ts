@@ -1,4 +1,4 @@
-import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
+import { computed, defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import FunctionalFlowService from './functional-flow.service';
 import { type IFunctionalFlow } from '@/shared/model/functional-flow.model';
@@ -13,9 +13,23 @@ export default defineComponent({
     const alertService = inject('alertService', () => useAlertService(), true);
     const accountService = inject<AccountService>('accountService');
 
+    const filteredRows = computed(() => {
+      return functionalFlows.value.filter(row => {
+        const alias = row.alias ? row.alias.toString().toLowerCase() : '';
+        const description = row.description ? row.description.toString().toLowerCase() : '';
+        return alias.includes(filterAlias.value?.toLocaleLowerCase()) && description.includes(filterDescription.value?.toLocaleLowerCase());
+      });
+    });
+
     const functionalFlows: Ref<IFunctionalFlow[]> = ref([]);
 
     const isFetching = ref(false);
+
+    const filterAlias = ref('');
+    const filterDescription = ref('');
+
+    const perPage = ref(10);
+    const currentPage = ref(1);
 
     const clear = () => {};
 
@@ -73,6 +87,11 @@ export default defineComponent({
       closeDialog,
       removeFunctionalFlow,
       accountService,
+      filteredRows,
+      perPage,
+      currentPage,
+      filterDescription,
+      filterAlias,
     };
   },
 });
