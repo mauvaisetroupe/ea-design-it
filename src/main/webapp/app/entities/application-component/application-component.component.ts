@@ -17,6 +17,22 @@ export default defineComponent({
 
     const isFetching = ref(false);
 
+    const fields = [
+      // { key: 'id', sortable: false },
+      { key: 'alias', sortable: true },
+      { key: 'name', sortable: true },
+      { key: 'application', sortable: false },
+      { key: 'description', sortable: false, formatter: 'formatLongText' },
+      { key: 'applicationType', sortable: false },
+      { key: 'softwareType', sortable: false },
+      { key: 'categories', sortable: false },
+      { key: 'technologies', sortable: false },
+    ];
+
+    const currentPage = ref(1);
+    const perPage = ref(10);
+    const filter = ref('');
+
     const clear = () => {};
 
     const retrieveApplicationComponents = async () => {
@@ -73,6 +89,10 @@ export default defineComponent({
       closeDialog,
       removeApplicationComponent,
       accountService,
+      currentPage,
+      perPage,
+      filter,
+      fields,
     };
   },
 });

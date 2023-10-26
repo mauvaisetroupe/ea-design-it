@@ -72,6 +72,7 @@ export default defineComponent({
       prepareRemove,
       closeDialog,
       removeTechnology,
+      accountService,
     };
   },
 });
