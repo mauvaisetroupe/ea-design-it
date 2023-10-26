@@ -148,10 +148,7 @@
             <div class="form-group col-md-6">
               <label class="form-control-label" for="flow-interface-source">Source</label>
               <select
-                :class="{
-                  'form-control valid': !$v.flowInterface.source.$invalid,
-                  'form-control invalid': $v.flowInterface.source.$invalid,
-                }"
+                class="form-control"
                 id="flow-interface-source"
                 data-cy="source"
                 name="source"
@@ -195,18 +192,15 @@
                 </option>
               </select>
             </div>
-            <div v-if="$v.flowInterface.source.$anyDirty && $v.flowInterface.source.$invalid">
-              <small class="form-text text-danger" v-if="!$v.flowInterface.source.required"> This field is required. </small>
+            <div v-if="v$.source.$anyDirty && v$.source.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.source.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
               <label class="form-control-label" for="flow-interface-target">Target</label>
               <select
-                :class="{
-                  'form-control valid': !$v.flowInterface.target.$invalid,
-                  'form-control invalid': $v.flowInterface.target.$invalid,
-                }"
+                class="form-control"
                 id="flow-interface-target"
                 data-cy="target"
                 name="target"
@@ -226,8 +220,8 @@
                 </option>
               </select>
             </div>
-            <div v-if="$v.flowInterface.target.$anyDirty && $v.flowInterface.target.$invalid">
-              <small class="form-text text-danger" v-if="!$v.flowInterface.target.required"> This field is required. </small>
+            <div v-if="v$.target.$anyDirty && v$.target.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.target.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
 
             <div class="form-group col-md-6">

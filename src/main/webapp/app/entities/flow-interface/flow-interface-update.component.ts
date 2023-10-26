@@ -119,6 +119,13 @@ export default defineComponent({
     const v$ = useVuelidate(validationRules, flowInterface as any);
     v$.value.$validate();
 
+    function changeSource(component: IApplicationComponent) {
+      flowInterface.value.source = component.application;
+    }
+
+    function changeTarget(component: IApplicationComponent) {
+      flowInterface.value.target = component.application;
+    }
     return {
       flowInterfaceService,
       alertService,
@@ -131,6 +138,8 @@ export default defineComponent({
       protocols,
       owners,
       v$,
+      changeSource,
+      changeTarget,
     };
   },
   created(): void {},
@@ -165,3 +174,7 @@ export default defineComponent({
     },
   },
 });
+
+// Some code was removed. It was usefull to create a Interface from FunctionalFlow : "Add Interface"
+// As we now use plantuml sequence diagram to create, I guess its now unused
+// cf commit 4528879dcb8b40c86d41ac31cef3e15c6b424c29
