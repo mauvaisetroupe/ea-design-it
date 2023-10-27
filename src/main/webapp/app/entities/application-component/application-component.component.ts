@@ -27,6 +27,7 @@ export default defineComponent({
       { key: 'softwareType', sortable: false },
       { key: 'categories', sortable: false },
       { key: 'technologies', sortable: false },
+      { key: 'actions' },
     ];
 
     const currentPage = ref(1);

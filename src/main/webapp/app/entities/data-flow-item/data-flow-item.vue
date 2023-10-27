@@ -104,7 +104,7 @@
                   </button>
                 </router-link>
                 <b-button
-                  v-if="accountService().deleteAuthorities"
+                  v-if="accountService.deleteAuthorities"
                   v-on:click="prepareRemove(dataFlowItem)"
                   variant="danger"
                   class="btn btn-sm"

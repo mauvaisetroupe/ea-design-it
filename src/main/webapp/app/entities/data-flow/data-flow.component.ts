@@ -1,4 +1,4 @@
-import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
+import { computed, defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import DataFlowService from './data-flow.service';
 import { type IDataFlow } from '@/shared/model/data-flow.model';
@@ -13,11 +13,38 @@ export default defineComponent({
     const alertService = inject('alertService', () => useAlertService(), true);
     const accountService = inject<AccountService>('accountService');
 
+    const filteredRows = computed(() => {
+      return dataFlows.value.filter(row => {
+        const data_id = row.id.toString().toLowerCase();
+        const name = row.resourceName ? row.resourceName.toString().toLowerCase() : '';
+        const description = row.description ? row.description.toString().toLowerCase() : '';
+        const frequency = row.frequency ? row.frequency.toString().toLowerCase() : '';
+        const format = row.format ? row.format.name.toString().toLowerCase() : '';
+        const flowInterface = row.flowInterface ? row.flowInterface.alias.toString().toLowerCase() : '';
+        const protocol =
+          row.flowInterface != null && row.flowInterface.protocol != null ? row.flowInterface.protocol.name.toString().toLowerCase() : '';
+
+        const searchTerm = filter.value.toLowerCase();
+
+        return (
+          data_id.includes(searchTerm) ||
+          name.includes(searchTerm) ||
+          description.includes(searchTerm) ||
+          frequency.includes(searchTerm) ||
+          format.includes(searchTerm) ||
+          flowInterface.includes(searchTerm) ||
+          protocol.includes(searchTerm)
+        );
+      });
+    });
+
     const dataFlows: Ref<IDataFlow[]> = ref([]);
 
     const isFetching = ref(false);
 
     const clear = () => {};
+
+    const filter = ref('');
 
     const retrieveDataFlows = async () => {
       isFetching.value = true;
@@ -73,6 +100,8 @@ export default defineComponent({
       closeDialog,
       removeDataFlow,
       accountService,
+      filteredRows,
+      filter,
     };
   },
 });
