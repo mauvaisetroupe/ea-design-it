@@ -77,7 +77,7 @@
                 v-for="flowGroupOption in flowGroups"
                 :key="flowGroupOption.id"
               >
-                {{ flowGroupOption.alias }}
+                {{ flowGroupOption.id }}
               </option>
             </select>
           </div>

@@ -1,6 +1,7 @@
 import { computed, defineComponent, inject, ref, type Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
+import { email } from '@vuelidate/validators';
 
 import OwnerService from './owner.service';
 import { useValidation } from '@/shared/composables';
@@ -57,7 +58,9 @@ export default defineComponent({
       },
       firstname: {},
       lastname: {},
-      email: {},
+      email: {
+        email,
+      },
       users: {},
     };
     const v$ = useVuelidate(validationRules, owner as any);

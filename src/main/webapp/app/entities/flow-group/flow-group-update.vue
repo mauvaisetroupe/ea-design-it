@@ -63,9 +63,6 @@
               </option>
             </select>
           </div>
-          <div v-if="v$.steps.$anyDirty && v$.steps.$invalid">
-            <small class="form-text text-danger" v-for="error of v$.steps.$errors" :key="error.$uid">{{ error.$message }}</small>
-          </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">

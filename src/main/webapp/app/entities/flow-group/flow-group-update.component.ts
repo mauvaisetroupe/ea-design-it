@@ -65,9 +65,6 @@ export default defineComponent({
       },
       description: {},
       flow: {},
-      steps: {
-        required: validations.required('This field is required.'),
-      },
     };
     const v$ = useVuelidate(validationRules, flowGroup as any);
     v$.value.$validate();
