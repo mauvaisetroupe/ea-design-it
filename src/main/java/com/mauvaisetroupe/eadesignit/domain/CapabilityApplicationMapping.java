@@ -26,7 +26,7 @@ public class CapabilityApplicationMapping implements Serializable {
     @JsonIgnoreProperties(value = { "subCapabilities", "capabilityApplicationMappings" }, allowSetters = true)
     private Capability capability;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JsonIgnoreProperties(
         value = {
             "owner",
@@ -42,7 +42,7 @@ public class CapabilityApplicationMapping implements Serializable {
     )
     private Application application;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
         name = "rel_capability_ap__landscap_b2",
         joinColumns = @JoinColumn(name = "capability_application_mapping_id"),

@@ -25,10 +25,10 @@ public class ExternalReference implements Serializable {
     @Column(name = "external_id")
     private String externalID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private ExternalSystem externalSystem;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "externalIDS")
+    @ManyToMany(mappedBy = "externalIDS")
     @JsonIgnoreProperties(
         value = {
             "owner",
@@ -44,7 +44,7 @@ public class ExternalReference implements Serializable {
     )
     private Set<Application> applications = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "externalIDS")
+    @ManyToMany(mappedBy = "externalIDS")
     @JsonIgnoreProperties(value = { "application", "categories", "technologies", "externalIDS" }, allowSetters = true)
     private Set<ApplicationComponent> components = new HashSet<>();
 
