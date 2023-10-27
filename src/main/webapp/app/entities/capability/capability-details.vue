@@ -50,7 +50,7 @@
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>Back</span>
         </button>
         <router-link
-          v-if="capability.id"
+          v-if="capability.id && accountService.writeAuthorities"
           :to="{ name: 'CapabilityEdit', params: { capabilityId: capability.id } }"
           custom
           v-slot="{ navigate }"

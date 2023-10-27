@@ -36,7 +36,7 @@ export default defineComponent({
     return {
       alertService,
       applicationCategory,
-
+      accountService,
       previousState,
     };
   },

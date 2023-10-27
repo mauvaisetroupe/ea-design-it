@@ -36,7 +36,7 @@ export default defineComponent({
     return {
       alertService,
       owner,
-
+      accountService,
       previousState,
     };
   },
