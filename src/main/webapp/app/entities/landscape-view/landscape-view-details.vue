@@ -325,15 +325,13 @@
       </router-link>
     </div>
     <b-modal ref="removeDiagramEntity" id="removeDiagramEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.landscapeView.delete.question" data-cy="landscapeViewDeleteDialogHeading"
-          >Confirm delete operation</span
-        ></span
-      >
+      <template #modal-title>
+        <span id="eaDesignItApp.landscapeView.delete.question" data-cy="landscapeViewDeleteDialogHeading">Confirm delete operation</span>
+      </template>
       <div class="modal-body">
-        <p id="jhi-delete-landscapeView-heading">Are you sure you want to delete this Landscape View?</p>
+        <p id="jhi-delete-landscapeView-heading">Are you sure you want to delete this Landscape Diagram?</p>
       </div>
-      <div slot="modal-footer">
+      <template #modal-footer>
         <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
         <button
           type="button"
@@ -344,34 +342,36 @@
         >
           Delete
         </button>
-      </div>
+      </template>
     </b-modal>
 
     <b-modal ref="detachFlowEntity" id="detachFlowEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.landscapeView.delete.question" data-cy="landscapeViewDeleteDialogHeading"
-          >Confirm delete operation</span
-        ></span
-      >
+      <template #modal-title>
+        <span id="eaDesignItApp.landscapeView.delete.question" data-cy="landscapeViewDeleteDialogHeading"></span>
+      </template>
       <div class="modal-body">
         <p id="jhi-delete-landscapeView-heading">Are you sure you want to detach this Functional Flow?</p>
       </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDetachDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-landscapeView"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="detachFunctionalFlow()"
-        >
-          Delete
-        </button>
-      </div>
+      <template #modal-footer>
+        <div>
+          <button type="button" class="btn btn-secondary" v-on:click="closeDetachDialog()">Cancel</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="jhi-confirm-delete-landscapeView"
+            data-cy="entityConfirmDeleteButton"
+            v-on:click="detachFunctionalFlow()"
+          >
+            Delete
+          </button>
+        </div>
+      </template>
     </b-modal>
 
     <b-modal ref="addExistingEntity" id="addExistingEntity">
-      <span slot="modal-title">Search for exising Functional Flow</span>
+      <template #modal-title>
+        <span slot="modal-title">Search for exising Functional Flow</span>
+      </template>
       <div class="modal-body">
         <p id="jhi-delete-landscapeView-heading">Search for exising Functional Flow</p>
         <div class="table-responsive" v-if="functionalFlows && functionalFlows.length > 0">
@@ -405,10 +405,10 @@
           </table>
         </div>
       </div>
-      <div slot="modal-footer">
+      <template #modal-footer>
         <button type="button" class="btn btn-secondary" v-on:click="closeSearchFlow()">Cancel</button>
         <button type="button" class="btn btn-primary" id="jhi-confirm-delete-landscapeView" data-cy="entityConfirmDeleteButton">Add</button>
-      </div>
+      </template>
     </b-modal>
   </div>
 </template>

@@ -78,9 +78,11 @@ export default defineComponent({
 
     const allApplications = computed(() => {
       if (!landscapeView.value || !landscapeView.value.flows) return [];
-      return landscapeView.value.flows
-        .flatMap(f => f.allApplications)
-        .filter((value, index, self) => index === self.findIndex(a => a.id === value.id));
+      const allApplicationWithDuplicates = landscapeView.value.flows.flatMap(f => f.allApplications);
+      if (allApplicationWithDuplicates?.length > 0) {
+        allApplicationWithDuplicates.filter((value, index, self) => index === self.findIndex(a => a.id === value.id));
+      }
+      return allApplicationWithDuplicates;
     });
 
     const onlyCapabilitiesPercent = computed(() => {
@@ -99,16 +101,10 @@ export default defineComponent({
       }
     });
 
-    function created() {
-      // https://github.com/bootstrap-vue/bootstrap-vue/issues/2803
-      nextTick(() => {
-        loadTab(applicationId.value);
-      });
-    }
-
     function loadTab(_landscapeID) {
+      console.log('loadTab' + _landscapeID);
       if (sessionStorage.getItem(sessionKey)) {
-        const parts = sessionStorage.getItem(sessionKey.value).split('#');
+        const parts = sessionStorage.getItem(sessionKey).split('#');
         const landId = parseInt(parts[0]);
         const _tabIndex = parseInt(parts[1]);
         const landscapeID = parseInt(_landscapeID);
@@ -125,22 +121,10 @@ export default defineComponent({
 
     const retrieveLandscapeView = async landscapeViewId => {
       try {
+        loadTab(landscapeViewId);
         const res = await landscapeViewService().find(landscapeViewId);
-        landscapeView.value = res.landscape;
-        landscapeView.value.flows.forEach(flow => {
-          const distinctApplications: Record<string, IApplication> = {};
-          flow.steps
-            .map(step => step.flowInterface)
-            .forEach(inter => {
-              if (inter.source) {
-                distinctApplications[inter.source.alias] = inter.source;
-              }
-              if (inter.target) {
-                distinctApplications[inter.target.alias] = inter.target;
-              }
-            });
-          flow.allApplications = Object.values(distinctApplications);
-        });
+        const landscape = res.landscape;
+        conputeAllApplicationsByFlow(landscape);
         if (landscapeView.value && landscapeView.value.flows) {
           // flowsByApplicationID
           landscapeView.value.flows.forEach(f => {
@@ -154,6 +138,7 @@ export default defineComponent({
               });
           });
         }
+        landscapeView.value = landscape;
         consolidatedCapability.value = res.consolidatedCapability;
 
         if (landscapeView.value && landscapeView.value.capabilityApplicationMappings) {
@@ -240,20 +225,20 @@ export default defineComponent({
         );
     }
 
-    // public deleteDiagram(): void {
-    //   this.landscapeViewService()
-    //     .deleteDrawInformation(this.landscapeView.id)
-    //     .then(
-    //       res => {
-    //         this.drawIOToBeSaved = false;
-    //         this.drawIoSVG = '';
-    //       },
-    //       err => {
-    //         this.alertService().showHttpError(this, err.response);
-    //       }
-    //     );
-    //   (<any>this.$refs.removeDiagramEntity).hide();
-    // }
+    function deleteDiagram(): void {
+      landscapeViewService()
+        .deleteDrawInformation(landscapeView.value.id)
+        .then(
+          res => {
+            drawIOToBeSaved.value = false;
+            drawIoSVG.value = '';
+          },
+          err => {
+            alertService.showHttpError(err.response);
+          },
+        );
+      (<any>this.$refs.removeDiagramEntity).hide();
+    }
 
     function receiveMessage(evt) {
       const iframe: HTMLIFrameElement = document.getElementById('myDiv') as HTMLIFrameElement;
@@ -310,9 +295,7 @@ export default defineComponent({
     const addExistingEntity = ref<any>(null);
 
     function prepareRemove(): void {
-      if (removeDiagramEntity.value) {
-        removeDiagramEntity.value.show();
-      }
+      removeDiagramEntity.value.show();
     }
 
     function closeDialog(): void {
@@ -320,10 +303,8 @@ export default defineComponent({
     }
 
     function prepareToDetach(index: number) {
-      if (detachFlowEntity.value) {
-        detachFlowEntity.value.show();
-      }
       flowToDetach.value = index;
+      detachFlowEntity.value.show();
     }
 
     function detachFunctionalFlow() {
@@ -331,7 +312,9 @@ export default defineComponent({
       landscapeViewService()
         .update(landscapeView.value)
         .then(res => {
-          landscapeView.value = res;
+          const landscape = res;
+          conputeAllApplicationsByFlow(landscape);
+          landscapeView.value = landscape;
           closeDetachDialog();
           getPlantUML(landscapeView.value.id);
         });
@@ -366,7 +349,9 @@ export default defineComponent({
       landscapeViewService()
         .update(landscapeView.value)
         .then(res => {
-          landscapeView.value = res;
+          const landscape = res;
+          conputeAllApplicationsByFlow(landscape);
+          landscapeView.value = landscape;
           closeSearchFlow();
           getPlantUML(landscapeView.value.id);
         });
@@ -430,6 +415,23 @@ export default defineComponent({
       });
     });
 
+    function conputeAllApplicationsByFlow(landscape: ILandscapeView) {
+      landscape.flows.forEach(flow => {
+        const distinctApplications: Record<string, IApplication> = {};
+        flow.steps
+          .map(step => step.flowInterface)
+          .forEach(inter => {
+            if (inter.source) {
+              distinctApplications[inter.source.alias] = inter.source;
+            }
+            if (inter.target) {
+              distinctApplications[inter.target.alias] = inter.target;
+            }
+          });
+        flow.allApplications = Object.values(distinctApplications);
+      });
+    }
+
     return {
       alertService,
       landscapeView,
@@ -452,6 +454,7 @@ export default defineComponent({
       drawIOToBeSaved,
       saveDiagram,
       prepareRemove,
+      deleteDiagram,
       exportDrawIOXML,
       isHidden,
       applicationsOnlyInCapabilities,
@@ -471,6 +474,9 @@ export default defineComponent({
       addNew,
       closeSearchFlow,
       layout,
+      removeDiagramEntity,
+      addExistingEntity,
+      detachFlowEntity,
     };
   },
 });
