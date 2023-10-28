@@ -1,4 +1,4 @@
-import { computed, defineComponent, getCurrentInstance, inject, onMounted, ref, type Ref } from 'vue';
+import { computed, defineComponent, inject, onMounted, ref, watch, type Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 
@@ -15,14 +15,6 @@ import type { ILandscapeView } from '@/shared/model/landscape-view.model';
 import ApplicationService from '../application/application.service';
 import { nextTick } from 'process';
 import type { bvToast } from 'bootstrap-vue';
-
-// @Component({
-//   validations,
-//   watch: {
-//     nbLines: 'onLinesChnaged',
-//     plantuml: 'plantumlChange',
-//   },
-// })
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -64,46 +56,11 @@ export default defineComponent({
     const importError = ref('');
     const previewError = ref('');
     const functionalFlowImport: Ref<IPlantumlFlowImport> = ref({});
-    const tabIndex = 1;
+    const tabIndex: Ref<number> = ref(1);
     const landscapeGivenInParameter = ref(false);
 
     const route = useRoute();
     const router = useRouter();
-
-    // beforeRouteEnter(to, from, next) {
-    //   next(vm => {
-    //     if (to.params.functionalFlowId) {
-    //       vm.retrieveFunctionalFlow(to.params.functionalFlowId);
-    //     } else {
-    //       // for creation, go on first tab
-    //       vm.chooseTab(0);
-    //     }
-    //     if (typeof to.params.tabIndex !== 'undefined') {
-    //       vm.chooseTab(parseInt(to.params.tabIndex));
-    //     }
-    //     vm.initRelationships();
-    //   });
-    // }
-
-    function chooseTab(_tabIndex) {
-      if (_tabIndex === 0) {
-        // https://github.com/bootstrap-vue/bootstrap-vue/issues/2803
-        nextTick(() => {
-          tabIndex.valueOf = _tabIndex;
-        });
-      }
-    }
-
-    // created(): void {
-    //   this.currentLanguage = this.$store.getters.currentLanguage;
-    //   this.$store.watch(
-    //     () => this.$store.getters.currentLanguage,
-    //     () => {
-    //       this.currentLanguage = this.$store.getters.currentLanguage;
-    //     }
-    //   );
-    // }
-    function created(): void {}
 
     const previousState = () => router.go(-1);
 
@@ -128,6 +85,12 @@ export default defineComponent({
 
     if (route.params?.functionalFlowId) {
       retrieveFunctionalFlow(route.params.functionalFlowId);
+    } else {
+      // for creation, go on Information TAB
+      // https://github.com/bootstrap-vue/bootstrap-vue/issues/2803
+      nextTick(() => {
+        tabIndex.value = 0;
+      });
     }
 
     // STEP 2 - Retrieve plantuml source from flow ID
@@ -217,7 +180,6 @@ export default defineComponent({
 
     function save(): void {
       isSaving.value = true;
-      const instance = getCurrentInstance() as any;
 
       functionalFlowImport.value.id = functionalFlow.value.id;
       functionalFlowImport.value.alias = functionalFlow.value.alias;
@@ -239,13 +201,7 @@ export default defineComponent({
           if (functionalFlow.value.id) {
             message = 'A FunctionalFlow is updated with identifier ' + param.id;
           }
-          instance.root.$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
+          alertService.showInfo(message);
         })
         .catch(error => {
           isSaving.value = false;
@@ -258,6 +214,19 @@ export default defineComponent({
         .retrieve()
         .then(res => {
           owners.value = res.data;
+        });
+      landscapeViewService()
+        .retrieve()
+        .then(res => {
+          allLandscapes.value = res.data;
+          if (route.query.landscapeViewId) {
+            landscapeGivenInParameter.value = true;
+            allLandscapes.value.forEach(landscape => {
+              if (landscape.id === parseInt(route.query.landscapeViewId as string)) {
+                selectedLandscape.value = landscape;
+              }
+            });
+          }
         });
     };
 
@@ -273,22 +242,21 @@ export default defineComponent({
       return plantuml.value.split(/\r\n|\r|\n/).length;
     });
 
+    watch(nbLines, () => {
+      getPlantUMLImageFromString();
+    });
+
     const lastLine = computed(() => {
       return plantuml.value.split(/\r\n|\r|\n/).slice(-1)[0];
     });
 
-    function onLinesChnaged() {
-      getPlantUMLImageFromString();
-    }
-
-    function plantumlChange() {
+    watch(plantuml, () => {
       plantumlModified.value = true;
-
       //console.log(this.inputSplitted);
       selectedIndex.value = 0;
       wordIndex.value = inputSplitted.value.length - 1;
       focus();
-    }
+    });
 
     const wordIndex = ref(0);
     const selectedIndex = ref(0);

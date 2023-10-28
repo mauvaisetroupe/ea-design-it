@@ -63,7 +63,7 @@ export default defineComponent({
     }
 
     function loadTab(_landscapeID) {
-      if (sessionStorage.getItem(this.sessionKey)) {
+      if (sessionStorage.getItem(sessionKey)) {
         const parts = sessionStorage.getItem(sessionKey).split('#');
         const landId = parseInt(parts[0]);
         const _tabIndex = parseInt(parts[1]);
@@ -97,6 +97,7 @@ export default defineComponent({
 
     if (route.params?.functionalFlowId) {
       retrieveFunctionalFlow(route.params.functionalFlowId);
+      loadTab(route.params?.functionalFlowId);
     }
 
     const previousState = () => router.go(-1);
