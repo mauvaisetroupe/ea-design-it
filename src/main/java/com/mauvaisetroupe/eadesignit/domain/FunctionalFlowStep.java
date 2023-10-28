@@ -34,7 +34,7 @@ public class FunctionalFlowStep implements Serializable, Comparable<FunctionalFl
     @JsonIgnoreProperties(value = { "owner", "steps" }, allowSetters = true)
     private FlowInterface flowInterface;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JsonIgnoreProperties(value = { "flow", "steps" }, allowSetters = true)
     private FlowGroup group;
 

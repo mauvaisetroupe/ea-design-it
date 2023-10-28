@@ -84,7 +84,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
     @JsonIgnoreProperties(value = { "application", "externalIDS" }, allowSetters = true)
     private ApplicationComponent targetComponent;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Protocol protocol;
 
     @ManyToOne

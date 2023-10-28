@@ -42,7 +42,7 @@ export default defineComponent({
     const retrieveLandscapeView = async landscapeViewId => {
       try {
         const res = await landscapeViewService().find(landscapeViewId);
-        landscapeView.value = res;
+        landscapeView.value = res.landscape;
       } catch (error) {
         alertService.showHttpError(error.response);
       }

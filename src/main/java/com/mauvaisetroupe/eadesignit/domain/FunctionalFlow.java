@@ -63,7 +63,7 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     @JsonIgnoreProperties(value = { "flow" }, allowSetters = true)
     private SortedSet<FunctionalFlowStep> steps = new TreeSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner owner;
 
