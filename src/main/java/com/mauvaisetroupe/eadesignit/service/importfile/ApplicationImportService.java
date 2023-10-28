@@ -72,23 +72,18 @@ public class ApplicationImportService {
 
     public Application findOrCreateApplication(ApplicationImport applicationImport) {
         // Check if alias not used for another application
-        Optional<Application> optional = applicationRepository.findByAlias(applicationImport.getIdFromExcel());
-        final Application application;
-        if (optional.isPresent()) {
-            application = optional.get();
-            Assert.isTrue(
-                application.getName().toLowerCase().equals(applicationImport.getName().toLowerCase()),
-                "Cannot change name for application '" +
-                application.getAlias() +
-                "' : '" +
-                application.getName() +
-                "' in database, and '" +
-                applicationImport.getName() +
-                "' in your Excel file. Please correct your Excel file or modify database."
-            );
-        } else {
-            application = new Application();
-        }
+        Application application = applicationRepository.findByAlias(applicationImport.getIdFromExcel()).orElseGet(Application::new);
+
+        Assert.isTrue(
+            application.getId() == null || application.getName().toLowerCase().equals(applicationImport.getName().toLowerCase()),
+            "Cannot change name for application '" +
+            application.getAlias() +
+            "' : '" +
+            application.getName() +
+            "' in database, and '" +
+            applicationImport.getName() +
+            "' in your Excel file. Please correct your Excel file or modify database."
+        );
 
         Application appliWithSameName = applicationRepository.findByNameIgnoreCase(applicationImport.getName());
         if (appliWithSameName != null) {

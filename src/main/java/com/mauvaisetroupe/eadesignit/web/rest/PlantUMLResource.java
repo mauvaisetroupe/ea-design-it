@@ -85,23 +85,19 @@ public class PlantUMLResource {
         @RequestParam(defaultValue = "true") boolean showLabels,
         @RequestParam(defaultValue = "-1") int showLabelIfNumberapplicationsLessThan
     ) throws IOException, BadRequestException {
-        Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findOneWithEagerRelationships(id);
-        if (landscapeViewOptional.isPresent()) {
-            if (!showLabels && showLabelIfNumberapplicationsLessThan > -1) {
-                int nbApplicationsInInterfaces = getApplicationsCount(landscapeViewOptional.get());
-                if (nbApplicationsInInterfaces <= showLabelIfNumberapplicationsLessThan) {
-                    showLabels = true;
-                }
+        LandscapeView landscape = landscapeViewRepository.findOneWithEagerRelationships(id).orElseThrow();
+        if (!showLabels && showLabelIfNumberapplicationsLessThan > -1) {
+            int nbApplicationsInInterfaces = getApplicationsCount(landscape);
+            if (nbApplicationsInInterfaces <= showLabelIfNumberapplicationsLessThan) {
+                showLabels = true;
             }
-            return new PlantumlDTO(
-                this.plantUMLSerializer.getLandscapeDiagramSVG(landscapeViewOptional.get(), layout, groupComponents, true, showLabels),
-                null,
-                null,
-                showLabels
-            );
-        } else {
-            throw new BadRequestException("Cannot find landscape View");
         }
+        return new PlantumlDTO(
+            this.plantUMLSerializer.getLandscapeDiagramSVG(landscape, layout, groupComponents, true, showLabels),
+            null,
+            null,
+            showLabels
+        );
     }
 
     private int getApplicationsCount(LandscapeView landscape) {
@@ -124,18 +120,14 @@ public class PlantUMLResource {
     @GetMapping(value = "plantuml/landscape-view/get-source/{id}")
     public ResponseEntity<Resource> getLandscapeSource(@PathVariable Long id, @RequestParam(defaultValue = "true") boolean showLabels)
         throws IOException, BadRequestException {
-        Optional<LandscapeView> landscapeViewOptional = landscapeViewRepository.findById(id);
-        if (landscapeViewOptional.isPresent()) {
-            String source = this.plantUMLSerializer.getLandscapeDiagramSource(landscapeViewOptional.get(), Layout.elk, showLabels);
-            InputStreamResource inputStreamResource = new InputStreamResource(new ByteArrayInputStream(source.getBytes()));
-            return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + landscapeViewOptional.get().getDiagramName() + ".txt")
-                .contentType(MediaType.parseMediaType("text/plain"))
-                .body(inputStreamResource);
-        } else {
-            throw new BadRequestException("Cannot find landscape View");
-        }
+        LandscapeView landscape = landscapeViewRepository.findById(id).orElseThrow();
+        String source = this.plantUMLSerializer.getLandscapeDiagramSource(landscape, Layout.elk, showLabels);
+        InputStreamResource inputStreamResource = new InputStreamResource(new ByteArrayInputStream(source.getBytes()));
+        return ResponseEntity
+            .ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + landscape.getDiagramName() + ".txt")
+            .contentType(MediaType.parseMediaType("text/plain"))
+            .body(inputStreamResource);
     }
 
     @GetMapping(value = "plantuml/functional-flow/get-svg/{id}")
@@ -143,13 +135,8 @@ public class PlantUMLResource {
         @PathVariable Long id,
         @RequestParam(required = false, defaultValue = "true") DiagramType diagramType
     ) throws IOException, BadRequestException {
-        Optional<FunctionalFlow> functionalFlowOptional = functionalFlowRepository.findById(id);
-
-        if (functionalFlowOptional.isPresent()) {
-            return this.plantUMLSerializer.getFunctionalFlowDiagramSVG(functionalFlowOptional.get(), diagramType);
-        } else {
-            throw new BadRequestException("Cannot find landscape View");
-        }
+        FunctionalFlow functionalFlow = functionalFlowRepository.findById(id).orElseThrow();
+        return this.plantUMLSerializer.getFunctionalFlowDiagramSVG(functionalFlow, diagramType);
     }
 
     @GetMapping(value = "plantuml/functional-flow/get-source/{id}")
@@ -158,24 +145,20 @@ public class PlantUMLResource {
         @RequestParam(required = false, defaultValue = "true") DiagramType diagramType,
         @RequestParam(required = false, defaultValue = "false") boolean preparedForEdition
     ) throws IOException, BadRequestException {
-        Optional<FunctionalFlow> functionalFlowOptional = functionalFlowRepository.findById(id);
+        FunctionalFlow functionalFlow = functionalFlowRepository.findById(id).orElseThrow();
 
-        if (functionalFlowOptional.isPresent()) {
-            String source = this.plantUMLSerializer.getFunctionalFlowDiagramSource(functionalFlowOptional.get(), diagramType);
-            if (preparedForEdition) {
-                Queue<String> interfaces = new LinkedList<>();
-                functionalFlowOptional.get().getSteps().forEach(step -> interfaces.add(step.getFlowInterface().getAlias()));
-                source = plantumlImportService.getPlantUMLSourceForEdition(source, true, true, interfaces);
-            }
-            InputStreamResource inputStreamResource = new InputStreamResource(new ByteArrayInputStream(source.getBytes()));
-            return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=applications.txt")
-                .contentType(MediaType.parseMediaType("text/plain"))
-                .body(inputStreamResource);
-        } else {
-            throw new BadRequestException("Cannot find landscape View");
+        String source = this.plantUMLSerializer.getFunctionalFlowDiagramSource(functionalFlow, diagramType);
+        if (preparedForEdition) {
+            Queue<String> interfaces = new LinkedList<>();
+            functionalFlow.getSteps().forEach(step -> interfaces.add(step.getFlowInterface().getAlias()));
+            source = plantumlImportService.getPlantUMLSourceForEdition(source, true, true, interfaces);
         }
+        InputStreamResource inputStreamResource = new InputStreamResource(new ByteArrayInputStream(source.getBytes()));
+        return ResponseEntity
+            .ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=applications.txt")
+            .contentType(MediaType.parseMediaType("text/plain"))
+            .body(inputStreamResource);
     }
 
     @GetMapping(value = "plantuml/application/get-svg/{id}")
@@ -186,27 +169,21 @@ public class PlantUMLResource {
         @RequestParam(defaultValue = "false") boolean showLabels,
         @RequestParam(defaultValue = "-1") int showLabelIfNumberapplicationsLessThan
     ) throws IOException, BadRequestException {
-        Optional<Application> optional = applicationRepository.findById(id);
-
-        if (optional.isPresent()) {
-            Application appli = optional.get();
-            SortedSet<IFlowInterface> interfaces = flowInterfaceRepository.findBySource_NameOrTarget_Name(appli.getName(), appli.getName());
-            if (!showLabels && showLabelIfNumberapplicationsLessThan > -1) {
-                int nbApplicationsInInterfaces = getApplicationsCount(interfaces);
-                if (nbApplicationsInInterfaces <= showLabelIfNumberapplicationsLessThan) {
-                    showLabels = true;
-                }
+        Application appli = applicationRepository.findById(id).orElseThrow();
+        SortedSet<IFlowInterface> interfaces = flowInterfaceRepository.findBySource_NameOrTarget_Name(appli.getName(), appli.getName());
+        if (!showLabels && showLabelIfNumberapplicationsLessThan > -1) {
+            int nbApplicationsInInterfaces = getApplicationsCount(interfaces);
+            if (nbApplicationsInInterfaces <= showLabelIfNumberapplicationsLessThan) {
+                showLabels = true;
             }
-            SortedSet<FunctionalFlow> flows = functionalFlowRepository.findFunctionalFlowsForInterfacesIn(appli);
-            return new PlantumlDTO(
-                this.plantUMLSerializer.getInterfacesCollectionDiagramSVG(interfaces, layout, groupComponents, showLabels),
-                interfaces,
-                flows,
-                showLabels
-            );
-        } else {
-            throw new BadRequestException("Cannot find landscape View");
         }
+        SortedSet<FunctionalFlow> flows = functionalFlowRepository.findFunctionalFlowsForInterfacesIn(appli);
+        return new PlantumlDTO(
+            this.plantUMLSerializer.getInterfacesCollectionDiagramSVG(interfaces, layout, groupComponents, showLabels),
+            interfaces,
+            flows,
+            showLabels
+        );
     }
 
     private int getApplicationsCount(Set<IFlowInterface> interfaces) {
@@ -222,12 +199,8 @@ public class PlantUMLResource {
 
     @GetMapping(value = "plantuml/application/structure/get-svg/{id}")
     public @ResponseBody String getApplicationStructureSVG(@PathVariable Long id) throws IOException, BadRequestException {
-        Optional<Application> optional = applicationRepository.findOneWithEagerRelationships(id);
-        if (optional.isPresent()) {
-            return this.plantUMLSerializer.getApplicationStructureSVG(optional.get());
-        } else {
-            throw new BadRequestException("Cannot find application");
-        }
+        Application appli = applicationRepository.findOneWithEagerRelationships(id).orElseThrow();
+        return this.plantUMLSerializer.getApplicationStructureSVG(appli);
     }
 
     @GetMapping(value = "plantuml/applications/get-svg")

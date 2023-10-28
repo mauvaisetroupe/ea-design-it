@@ -14,7 +14,7 @@
 # ===================================================================
 
 application:
-  security-anonymous-reader: true
+  security-anonymous-reader: false
 
 logging:
   level:

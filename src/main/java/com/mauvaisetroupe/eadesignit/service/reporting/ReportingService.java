@@ -37,7 +37,7 @@ public class ReportingService {
         DataFlowComparator comparator = new DataFlowComparator();
 
         // INPUTS
-        FlowInterface interfaceToKeep = flowInterfaceRepository.findById(id).get();
+        FlowInterface interfaceToKeep = flowInterfaceRepository.findById(id).orElseThrow();
         Set<FlowInterface> interfacesToMerge = flowInterfaceRepository.findByAliasIn(aliasToMerge);
 
         for (FlowInterface interfaceToMerge : interfacesToMerge) {

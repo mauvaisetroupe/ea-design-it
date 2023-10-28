@@ -108,7 +108,7 @@ public class FunctionalFlowStepResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        FunctionalFlowStep stepFromDB = functionalFlowStepRepository.findById(id).get();
+        FunctionalFlowStep stepFromDB = functionalFlowStepRepository.findById(id).orElseThrow();
         FunctionalFlow oldFlow = stepFromDB.getFlow();
         FlowInterface oldInterface = stepFromDB.getFlowInterface();
         FunctionalFlow newFlow = functionalFlowStep.getFlow();
@@ -219,7 +219,7 @@ public class FunctionalFlowStepResource {
      */
     @DeleteMapping("/functional-flow-steps/{id}")
     public ResponseEntity<Void> deleteFunctionalFlowStep(@PathVariable Long id) {
-        FunctionalFlowStep step = functionalFlowStepRepository.findById(id).get();
+        FunctionalFlowStep step = functionalFlowStepRepository.findById(id).orElseThrow();
 
         FunctionalFlow functionalFlow = step.getFlow();
         functionalFlow.removeSteps(step);

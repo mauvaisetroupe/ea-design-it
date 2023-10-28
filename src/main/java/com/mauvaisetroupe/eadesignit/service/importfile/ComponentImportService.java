@@ -92,23 +92,18 @@ public class ComponentImportService {
         if (!StringUtils.hasText(mapApplicationImportToComponent.getIdFromExcel())) {
             throw new RuntimeException("ID fro component canot be empty");
         }
-        Optional<ApplicationComponent> optional = applicationComponentRepository.findByAlias(
-            mapApplicationImportToComponent.getIdFromExcel()
+        ApplicationComponent component = applicationComponentRepository
+            .findByAlias(mapApplicationImportToComponent.getIdFromExcel())
+            .orElseGet(ApplicationComponent::new);
+
+        Assert.isTrue(
+            component.getId() == null || component.getName().toLowerCase().equals(mapApplicationImportToComponent.getName().toLowerCase()),
+            "Cannot change application name (" +
+            component.getName() +
+            "/" +
+            mapApplicationImportToComponent.getName() +
+            "), please  correrct your Excel file"
         );
-        final ApplicationComponent component;
-        if (optional.isPresent()) {
-            component = optional.get();
-            Assert.isTrue(
-                component.getName().toLowerCase().equals(mapApplicationImportToComponent.getName().toLowerCase()),
-                "Cannot change application name (" +
-                component.getName() +
-                "/" +
-                mapApplicationImportToComponent.getName() +
-                "), please  correrct your Excel file"
-            );
-        } else {
-            component = new ApplicationComponent();
-        }
 
         ApplicationComponent appliWithSameName = applicationComponentRepository.findByNameIgnoreCase(
             mapApplicationImportToComponent.getName()

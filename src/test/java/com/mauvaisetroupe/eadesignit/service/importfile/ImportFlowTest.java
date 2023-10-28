@@ -60,9 +60,7 @@ public class ImportFlowTest {
     }
 
     protected FunctionalFlow checkNbsteps(String flowAlias, int nbSteps) {
-        Optional<FunctionalFlow> optional = functionalFlowRepository.findByAlias(flowAlias);
-        assertTrue(optional.isPresent(), "Could not find alias " + flowAlias);
-        FunctionalFlow flow = optional.get();
+        FunctionalFlow flow = functionalFlowRepository.findByAlias(flowAlias).orElseThrow();
         assertEquals(nbSteps, flow.getSteps().size());
         return flow;
     }

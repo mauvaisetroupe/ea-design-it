@@ -308,9 +308,9 @@ public class PlantumlImportService {
                     }
                 }
                 String interfaceAlias = interfaces.poll();
-                Optional<FlowInterface> optional = interfaceRepository.findByAlias(interfaceAlias);
-                if (optional.isPresent()) {
-                    flowImportLine.setSelectedInterface(optional.get());
+                FlowInterface flowInterface = interfaceRepository.findByAlias(interfaceAlias).orElse(null);
+                if (flowInterface != null) {
+                    flowImportLine.setSelectedInterface(flowInterface);
                 } else {
                     flowImportLine.setInterfaceAlias(interfaceAlias);
                 }
@@ -367,18 +367,15 @@ public class PlantumlImportService {
     public FunctionalFlow saveImport(FlowImport flowImport, Long landscapeId) {
         FunctionalFlow functionalFlow = null;
         if (flowImport.getId() != null) {
-            Optional<FunctionalFlow> optional = functionalFlowRepository.findById(flowImport.getId());
-            if (optional.isPresent()) {
-                functionalFlow = optional.get();
-            } else {
-                log.error("Could not find functionalFlow with ID = " + flowImport.getId());
-            }
+            functionalFlow =
+                functionalFlowRepository
+                    .findById(flowImport.getId())
+                    .orElseGet(() -> {
+                        FunctionalFlow newFlow = new FunctionalFlow();
+                        functionalFlowRepository.save(newFlow);
+                        return newFlow;
+                    });
         }
-        if (functionalFlow == null) {
-            functionalFlow = new FunctionalFlow();
-            functionalFlowRepository.save(functionalFlow);
-        }
-
         functionalFlow = copyFlowImportToFunctionalFlow(flowImport, functionalFlow);
         functionalFlowRepository.save(functionalFlow);
 
@@ -459,9 +456,9 @@ public class PlantumlImportService {
                     flowGroupRepository.save(flowGroup);
 
                     if (flowImportLine.getGroupFlowAlias() != null) {
-                        Optional<FunctionalFlow> option = functionalFlowRepository.findByAlias(flowImportLine.getGroupFlowAlias());
-                        if (option.isPresent()) {
-                            flowGroup.setFlow(option.get());
+                        FunctionalFlow flow = functionalFlowRepository.findByAlias(flowImportLine.getGroupFlowAlias()).orElse(null);
+                        if (flow != null) {
+                            flowGroup.setFlow(flow);
                             flowStepRepository.save(step);
                             flowGroupRepository.save(flowGroup);
                         } else {

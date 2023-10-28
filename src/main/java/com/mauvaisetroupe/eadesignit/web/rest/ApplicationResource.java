@@ -220,8 +220,8 @@ public class ApplicationResource {
     @GetMapping("/applications/{id}/capabilities")
     public Capability getApplicationCapabilities(@PathVariable Long id) {
         log.debug("REST request to get Application : {}", id);
-        Optional<Application> application = applicationRepository.findOneWithEagerRelationships(id);
-        Capability rootCapability = capabilityUtil.buildCapabilityTree(application.get().getCapabilities());
+        Application application = applicationRepository.findOneWithEagerRelationships(id).orElseThrow();
+        Capability rootCapability = capabilityUtil.buildCapabilityTree(application.getCapabilities());
         return rootCapability;
     }
 }

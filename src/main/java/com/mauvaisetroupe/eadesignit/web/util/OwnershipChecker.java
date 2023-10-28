@@ -20,22 +20,22 @@ public class OwnershipChecker {
     private OwnerRepository ownerRepository;
 
     public boolean check(Ownershipable ownershipable) {
-        Optional<String> userLogin = SecurityUtils.getCurrentUserLogin();
         if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.WRITE)) return true;
-
+        String userLogin = SecurityUtils.getCurrentUserLogin().orElse(null);
+        if (!StringUtils.hasText(userLogin)) return false;
+        if (ownershipable == null) return false;
+        if (ownershipable.getOwner() == null) return false;
+        if (ownershipable.getOwner().getUsers() == null) return false;
         if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.CONTRIBUTOR)) {
-            if (StringUtils.hasText(userLogin.get()) && ownershipable.getOwner() != null && ownershipable.getOwner().getUsers() != null) {
-                Optional<Owner> ownerOption = ownerRepository.findById(ownershipable.getOwner().getId());
-                if (ownerOption.isPresent()) {
-                    for (User user : ownerOption.get().getUsers()) {
-                        if (user.getLogin().equals(userLogin.get())) {
-                            return true;
-                        }
+            Owner owner = ownerRepository.findById(ownershipable.getOwner().getId()).orElse(null);
+            if (owner != null) {
+                for (User user : owner.getUsers()) {
+                    if (user.getLogin().equals(userLogin)) {
+                        return true;
                     }
                 }
             }
         }
-
         return false;
     }
 }

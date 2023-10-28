@@ -176,9 +176,9 @@ public class FlowImportService {
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);
             if (flowImport.getFlowAlias() != null) {
-                Optional<FunctionalFlow> optional = flowRepository.findByAlias(flowImport.getFlowAlias());
-                if (optional.isPresent()) {
-                    allFlows.add(optional.get());
+                FunctionalFlow functionalFlow = flowRepository.findByAlias(flowImport.getFlowAlias()).orElse(null);
+                if (functionalFlow != null) {
+                    allFlows.add(functionalFlow);
                 }
                 if (flowImport.isExternal()) {
                     externalFlows.add(flowImport.getFlowAlias());
@@ -242,9 +242,8 @@ public class FlowImportService {
                 flowImport.setImportStatusMessage("IdFlow (interface alias) should not be null");
             } else if (flowImport.isExternal()) {
                 if (flowImport.getFlowAlias() != null) {
-                    Optional<FunctionalFlow> functionalFlowOption = flowRepository.findByAlias(flowImport.getFlowAlias());
-                    if (functionalFlowOption.isPresent()) {
-                        FunctionalFlow functionalFlow = functionalFlowOption.get();
+                    FunctionalFlow functionalFlow = flowRepository.findByAlias(flowImport.getFlowAlias()).orElse(null);
+                    if (functionalFlow != null) {
                         functionalFlow.addLandscape(landscapeView);
                         flowRepository.save(functionalFlow);
                         landscapeViewRepository.save(landscapeView);
@@ -287,9 +286,9 @@ public class FlowImportService {
                             flowGroupRepository.save(flowGroup);
 
                             if (flowImport.getGroupFlowAlias() != null) {
-                                Optional<FunctionalFlow> option = flowRepository.findByAlias(flowImport.getGroupFlowAlias());
-                                if (option.isPresent()) {
-                                    flowGroup.setFlow(option.get());
+                                FunctionalFlow flow = flowRepository.findByAlias(flowImport.getGroupFlowAlias()).orElse(null);
+                                if (flow != null) {
+                                    flowGroup.setFlow(flow);
                                     functionalFlowStepRepository.save(step);
                                     flowGroupRepository.save(flowGroup);
                                 } else {
@@ -367,10 +366,9 @@ public class FlowImportService {
         FunctionalFlow functionalFlow = null;
         try {
             if (StringUtils.hasText(flowImport.getFlowAlias())) {
-                Optional<FunctionalFlow> functionalFlowOption = flowRepository.findByAlias(flowImport.getFlowAlias());
-                if (functionalFlowOption.isPresent()) {
+                functionalFlow = flowRepository.findByAlias(flowImport.getFlowAlias()).orElse(null);
+                if (functionalFlow != null) {
                     flowImport.setImportFunctionalFlowStatus(ImportStatus.EXISTING);
-                    functionalFlow = functionalFlowOption.get();
                 }
             }
             if (functionalFlow == null) {
@@ -390,15 +388,14 @@ public class FlowImportService {
     private FlowInterface findOrCreateInterface(FlowImport flowImport) {
         FlowInterface flowInterface = null;
         try {
-            Optional<FlowInterface> flowInterfaceOption = interfaceRepository.findByAlias(flowImport.getIdFlowFromExcel());
-            if (!flowInterfaceOption.isPresent()) {
+            flowInterface = interfaceRepository.findByAlias(flowImport.getIdFlowFromExcel()).orElse(null);
+            if (flowInterface == null) {
                 flowImport.setImportInterfaceStatus(ImportStatus.NEW);
                 flowInterface = mapToFlowInterface(flowImport);
                 Assert.isTrue(flowInterface.getSource() != null, "Source doesn't exist, pb with:" + flowImport.getSourceElement());
                 Assert.isTrue(flowInterface.getTarget() != null, "Target doesn't exist, pb with:" + flowImport.getTargetElement());
             } else {
                 flowImport.setImportInterfaceStatus(ImportStatus.EXISTING);
-                flowInterface = flowInterfaceOption.get();
                 Assert.isTrue(
                     flowInterface.getSource().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase()) ||
                     (flowInterface.getSourceComponent() != null &&

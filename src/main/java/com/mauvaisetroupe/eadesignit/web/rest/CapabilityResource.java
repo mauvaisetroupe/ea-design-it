@@ -177,8 +177,8 @@ public class CapabilityResource {
     public Capability getRootCapability() {
         List<Capability> capabilities = capabilityRepository.findByLevel(-2);
         Assert.isTrue(capabilities.size() == 1, "Should exist and be unique");
-        Optional<Capability> rootCapabilityOptional = capabilityRepository.findById(capabilities.get(0).getId());
-        return rootCapabilityOptional.get();
+        Capability rootCapability = capabilityRepository.findById(capabilities.get(0).getId()).orElseThrow();
+        return rootCapability;
     }
 
     /**
