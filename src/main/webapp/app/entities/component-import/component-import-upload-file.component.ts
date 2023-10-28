@@ -35,7 +35,7 @@ export default defineComponent({
         isFetching.value = false;
         rowsLoaded.value = true;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       } finally {
         isFetching.value = false;
       }

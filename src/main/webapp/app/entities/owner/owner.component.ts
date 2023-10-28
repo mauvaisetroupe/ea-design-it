@@ -25,7 +25,7 @@ export default defineComponent({
         const res = await ownerService().retrieve();
         owners.value = res.data;
       } catch (err) {
-        alertService.showHttpError(err.response);
+        alertService.showAnyError(err);
       } finally {
         isFetching.value = false;
       }
@@ -57,7 +57,7 @@ export default defineComponent({
         retrieveOwners();
         closeDialog();
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 

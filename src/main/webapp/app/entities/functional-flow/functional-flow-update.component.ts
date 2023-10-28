@@ -122,7 +122,7 @@ export default defineComponent({
         functionalFlow.value = res;
         getPlantUMLSourceFromFlowId(functionalFlowId);
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 
@@ -249,7 +249,7 @@ export default defineComponent({
         })
         .catch(error => {
           isSaving.value = false;
-          alertService.showHttpError(error.response);
+          alertService.showAnyError(error);
         });
     }
 

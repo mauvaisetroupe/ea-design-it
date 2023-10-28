@@ -49,7 +49,7 @@ export default defineComponent({
         const res = await dataFlowService().find(dataFlowId);
         dataFlow.value = res;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 
@@ -133,7 +133,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = false;
-            this.alertService.showHttpError(error.response);
+            this.alertService.showAnyError(error);
           });
       } else {
         this.dataFlowService()
@@ -145,7 +145,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = false;
-            this.alertService.showHttpError(error.response);
+            this.alertService.showAnyError(error);
           });
       }
     },

@@ -23,7 +23,7 @@ export default defineComponent({
         const res = await flowGroupService().find(flowGroupId);
         flowGroup.value = res;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 

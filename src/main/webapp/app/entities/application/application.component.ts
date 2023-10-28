@@ -99,7 +99,7 @@ export default defineComponent({
         applications.value = res.data;
         totalRows.value = applications.value.length;
       } catch (err) {
-        alertService.showHttpError(err.response);
+        alertService.showAnyError(err);
       } finally {
         isFetching.value = false;
       }

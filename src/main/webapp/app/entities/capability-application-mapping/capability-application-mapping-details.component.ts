@@ -26,7 +26,7 @@ export default defineComponent({
         const res = await capabilityApplicationMappingService().find(capabilityApplicationMappingId);
         capabilityApplicationMapping.value = res;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 

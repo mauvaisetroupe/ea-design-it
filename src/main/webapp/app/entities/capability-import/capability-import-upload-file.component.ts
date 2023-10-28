@@ -64,7 +64,7 @@ export default defineComponent({
         analysisDone.value = true;
         isFetching.value = false;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
         analysisDone.value = false;
       } finally {
         isFetching.value = false;
@@ -83,7 +83,7 @@ export default defineComponent({
         filteredCapabilitiesImports.value = res.data;
         rowsLoaded.value = true;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       } finally {
         isFetching.value = false;
       }

@@ -23,7 +23,7 @@ export default defineComponent({
         const res = await externalReferenceService().find(externalReferenceId);
         externalReference.value = res;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 

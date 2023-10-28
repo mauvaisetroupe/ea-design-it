@@ -90,7 +90,7 @@ export default defineComponent({
         const res = await functionalFlowService().find(functionalFlowId);
         functionalFlow.value = res;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
       getPlantUML(functionalFlowId);
     };

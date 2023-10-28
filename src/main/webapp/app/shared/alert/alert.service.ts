@@ -49,7 +49,17 @@ export default class AlertService {
     });
   }
 
+  public showAnyError(error: any) {
+    if (error.response) {
+      this.showHttpError(error.response);
+    } else {
+      console.error(error);
+      this.showError('Unknow Error, please consult console errors to report a bug');
+    }
+  }
+
   public showHttpError(httpErrorResponse: any) {
+    console.log(httpErrorResponse.type);
     let errorMessage: string | null = null;
     switch (httpErrorResponse.status) {
       case 0:
@@ -62,14 +72,6 @@ export default class AlertService {
           if (entry.toLowerCase().endsWith('app-error')) {
             errorMessage = httpErrorResponse.headers[entry];
           }
-          if (errorHeader) {
-            this.showError(instance, errorHeader);
-          } else if (httpErrorResponse.data !== '' && httpErrorResponse.data.fieldErrors) {
-            this.showError(instance, 'Validation error');
-          } else {
-            this.showError(instance, httpErrorResponse.data.message);
-          }
-          break;
         }
         if (!errorMessage && httpErrorResponse.data?.fieldErrors) {
           errorMessage = 'Validation error';

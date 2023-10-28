@@ -35,7 +35,7 @@ export default defineComponent({
         const res = await flowGroupService().retrieve();
         flowGroups.value = res.data;
       } catch (err) {
-        alertService.showHttpError(err.response);
+        alertService.showAnyError(err);
       } finally {
         isFetching.value = false;
       }

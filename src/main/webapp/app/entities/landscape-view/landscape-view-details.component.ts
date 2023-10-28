@@ -155,7 +155,7 @@ export default defineComponent({
           drawIoSVG.value = decodeURIComponent(escape(window.atob(landscapeView.value.compressedDrawSVG)));
         }
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
       getPlantUML(landscapeViewId);
     };
@@ -220,7 +220,7 @@ export default defineComponent({
             drawIOToBeSaved.value = false;
           },
           err => {
-            alertService.showHttpError(err.response);
+            alertService.showAnyError(err);
           },
         );
     }
@@ -234,7 +234,7 @@ export default defineComponent({
             drawIoSVG.value = '';
           },
           err => {
-            alertService.showHttpError(err.response);
+            alertService.showAnyError(err);
           },
         );
       (<any>this.$refs.removeDiagramEntity).hide();

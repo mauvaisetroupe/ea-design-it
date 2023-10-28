@@ -45,7 +45,7 @@ export default defineComponent({
         }
         computeflattenCapabilities(capability.value, flattenCapabilities.value, '');
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       } finally {
         isFetching.value = false;
       }

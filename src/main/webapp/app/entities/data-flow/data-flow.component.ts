@@ -52,7 +52,7 @@ export default defineComponent({
         const res = await dataFlowService().retrieve();
         dataFlows.value = res.data;
       } catch (err) {
-        alertService.showHttpError(err.response);
+        alertService.showAnyError(err);
       } finally {
         isFetching.value = false;
       }
@@ -84,7 +84,7 @@ export default defineComponent({
         retrieveDataFlows();
         closeDialog();
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 

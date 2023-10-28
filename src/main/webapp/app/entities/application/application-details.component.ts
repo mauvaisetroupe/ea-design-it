@@ -101,7 +101,7 @@ export default defineComponent({
 
         application.value = res;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       } finally {
         getPlantUML(applicationId);
         getStructurePlantUML(applicationId);
@@ -170,7 +170,7 @@ export default defineComponent({
           lco.value = consolidatedCapabilities.value;
         })
         .catch(error => {
-          alertService.showHttpError(error.response);
+          alertService.showAnyError(error);
         });
     }
 

@@ -45,7 +45,7 @@ export default defineComponent({
         checkedNames.value = summary.value.map(sum => sum.sheetName);
         analyzeDone.value = true;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       } finally {
         isFetching.value = false;
       }
@@ -87,7 +87,7 @@ export default defineComponent({
           isFetching.value = false;
         }
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       } finally {
         isFetching.value = false;
       }

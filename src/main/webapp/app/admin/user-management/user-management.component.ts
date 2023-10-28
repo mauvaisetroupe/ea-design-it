@@ -117,7 +117,7 @@ export default defineComponent({
           this.closeDialog();
         })
         .catch(error => {
-          this.alertService.showHttpError(error.response);
+          this.alertService.showAnyError(error);
         });
     },
     prepareRemove(instance): void {

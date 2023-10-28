@@ -44,7 +44,7 @@ export default defineComponent({
         const res = await landscapeViewService().find(landscapeViewId);
         landscapeView.value = res.landscape;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 
@@ -107,7 +107,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = false;
-            this.alertService.showHttpError(error.response);
+            this.alertService.showAnyError(error);
           });
       } else {
         this.landscapeViewService()
@@ -119,7 +119,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = false;
-            this.alertService.showHttpError(error.response);
+            this.alertService.showAnyError(error);
           });
       }
     },

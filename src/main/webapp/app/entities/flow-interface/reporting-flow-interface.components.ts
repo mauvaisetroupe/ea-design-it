@@ -55,7 +55,7 @@ export default defineComponent({
           (element as any).mergeList = mergeList;
         });
       } catch (err) {
-        alertService.showHttpError(err.response);
+        alertService.showAnyError(err);
       } finally {
         isFetching.value = false;
       }
@@ -114,7 +114,7 @@ export default defineComponent({
         retrieveAllFlowInterfaces();
         closeMergeDialog();
       } catch (err) {
-        alertService.showHttpError(err.response);
+        alertService.showAnyError(err);
       } finally {
         isFetching.value = false;
       }

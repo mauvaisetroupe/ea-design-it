@@ -25,7 +25,7 @@ export default defineComponent({
         const res = await capabilityService().find(capabilityId);
         capability.value = res;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 

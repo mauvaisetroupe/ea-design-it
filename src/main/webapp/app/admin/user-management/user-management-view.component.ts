@@ -22,7 +22,7 @@ export default defineComponent({
         const response = await userManagementService.get(userId);
         user.value = response.data;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     }
 

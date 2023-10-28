@@ -57,7 +57,7 @@ export default defineComponent({
         const res = await applicationComponentService().find(applicationComponentId);
         applicationComponent.value = res;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 
@@ -154,7 +154,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = false;
-            this.alertService.showHttpError(error.response);
+            this.alertService.showAnyError(error);
           });
       } else {
         this.applicationComponentService()
@@ -166,7 +166,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = false;
-            this.alertService.showHttpError(error.response);
+            this.alertService.showAnyError(error);
           });
       }
     },

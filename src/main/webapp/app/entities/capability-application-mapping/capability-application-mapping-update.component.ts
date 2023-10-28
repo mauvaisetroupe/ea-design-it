@@ -50,7 +50,7 @@ export default defineComponent({
         const res = await capabilityApplicationMappingService().find(capabilityApplicationMappingId);
         capabilityApplicationMapping.value = res;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 
@@ -116,7 +116,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = false;
-            this.alertService.showHttpError(error.response);
+            this.alertService.showAnyError(error);
           });
       } else {
         this.capabilityApplicationMappingService()
@@ -128,7 +128,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = false;
-            this.alertService.showHttpError(error.response);
+            this.alertService.showAnyError(error);
           });
       }
     },

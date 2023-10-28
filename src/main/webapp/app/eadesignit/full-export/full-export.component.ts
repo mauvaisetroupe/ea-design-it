@@ -44,7 +44,7 @@ export default defineComponent({
         capabilitiesMapping.value = res.data;
         checkedCapabilitiesMapping.value = res.data;
       } catch (err) {
-        alertService.showHttpError(err.response);
+        alertService.showAnyError(err);
       } finally {
         isFetching.value = false;
       }

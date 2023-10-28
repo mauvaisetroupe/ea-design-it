@@ -37,7 +37,7 @@ export default defineComponent({
         const res = await flowGroupService().find(flowGroupId);
         flowGroup.value = res;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 
@@ -94,7 +94,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = false;
-            this.alertService.showHttpError(error.response);
+            this.alertService.showAnyError(error);
           });
       } else {
         this.flowGroupService()
@@ -106,7 +106,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = false;
-            this.alertService.showHttpError(error.response);
+            this.alertService.showAnyError(error);
           });
       }
     },

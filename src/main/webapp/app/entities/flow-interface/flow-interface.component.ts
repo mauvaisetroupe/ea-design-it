@@ -57,7 +57,7 @@ export default defineComponent({
         const res = await flowInterfaceService().retrieve();
         flowInterfaces.value = res.data;
       } catch (err) {
-        alertService.showHttpError(err.response);
+        alertService.showAnyError(err);
       } finally {
         isFetching.value = false;
       }
@@ -81,7 +81,7 @@ export default defineComponent({
         retrieveAllFlowInterfaces();
         closeDialog();
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 

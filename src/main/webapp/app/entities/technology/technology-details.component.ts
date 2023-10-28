@@ -25,7 +25,7 @@ export default defineComponent({
         const res = await technologyService().find(technologyId);
         technology.value = res;
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 

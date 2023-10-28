@@ -89,7 +89,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = true;
-            this.alertService.showHttpError(error.response);
+            this.alertService.showAnyError(error);
           });
       } else {
         this.userAccount.langKey = this.userAccount.langKey ?? 'en';
@@ -101,7 +101,7 @@ export default defineComponent({
           })
           .catch(error => {
             this.isSaving = true;
-            this.alertService.showHttpError(error.response);
+            this.alertService.showAnyError(error);
           });
       }
     },

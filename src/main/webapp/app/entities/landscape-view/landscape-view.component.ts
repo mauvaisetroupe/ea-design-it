@@ -27,7 +27,7 @@ export default defineComponent({
         const res = await landscapeViewService().retrieve();
         landscapeViews.value = res.data;
       } catch (err) {
-        alertService.showHttpError(err.response);
+        alertService.showAnyError(err);
       } finally {
         isFetching.value = false;
       }
@@ -59,7 +59,7 @@ export default defineComponent({
         retrieveLandscapeViews();
         closeDialog();
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 

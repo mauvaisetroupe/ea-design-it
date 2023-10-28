@@ -43,7 +43,7 @@ export default defineComponent({
         checkedNames.value = summary.value.map(sum => sum.sheetName);
       } catch (error) {
         console.error(error);
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       } finally {
         isFetching.value = false;
       }
@@ -83,7 +83,7 @@ export default defineComponent({
           uploadOneSheet();
         }
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       } finally {
         isFetching.value = false;
       }

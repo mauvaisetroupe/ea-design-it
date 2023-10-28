@@ -42,7 +42,7 @@ export default defineComponent({
         const res = await applicationComponentService().retrieve();
         applicationComponents.value = res.data;
       } catch (err) {
-        alertService.showHttpError(err.response);
+        alertService.showAnyError(err);
       } finally {
         isFetching.value = false;
       }
@@ -74,7 +74,7 @@ export default defineComponent({
         retrieveApplicationComponents();
         closeDialog();
       } catch (error) {
-        alertService.showHttpError(error.response);
+        alertService.showAnyError(error);
       }
     };
 
