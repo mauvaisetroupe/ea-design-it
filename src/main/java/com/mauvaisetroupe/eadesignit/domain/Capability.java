@@ -2,6 +2,8 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -9,11 +11,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.apache.commons.lang3.ObjectUtils;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.SortNatural;
 
 /**
@@ -21,7 +19,7 @@ import org.hibernate.annotations.SortNatural;
  */
 @Entity
 @Table(name = "capability")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class Capability implements Serializable, Comparable<Capability> {
 
     private static final long serialVersionUID = 1L;
@@ -48,7 +46,6 @@ public class Capability implements Serializable, Comparable<Capability> {
     private Integer level;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @SortNatural
     @JsonIgnoreProperties(value = { "landscapes" }, allowSetters = true)
     private SortedSet<Capability> subCapabilities = new TreeSet<>();
@@ -61,14 +58,13 @@ public class Capability implements Serializable, Comparable<Capability> {
     private Capability parent;
 
     @OneToMany(mappedBy = "capability", fetch = FetchType.LAZY)
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "landscapes" }, allowSetters = true)
     private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Capability(String name, Integer level) {
-        this(name,level,null);
+        this(name, level, null);
     }
 
     public Capability(String name, Integer level, String description) {
@@ -77,9 +73,7 @@ public class Capability implements Serializable, Comparable<Capability> {
         this.description = description;
     }
 
-    public Capability() {
-
-    }
+    public Capability() {}
 
     public Long getId() {
         return this.id;
@@ -180,8 +174,7 @@ public class Capability implements Serializable, Comparable<Capability> {
                 Capability capa = iterator.next();
                 if (capa.getId() != null && capa.getId().equals(capability.getId())) {
                     iterator.remove();
-                }
-                else if (capa.getName() != null) {
+                } else if (capa.getName() != null) {
                     iterator.remove();
                 }
             }
@@ -250,7 +243,7 @@ public class Capability implements Serializable, Comparable<Capability> {
         if (!(o instanceof Capability)) {
             return false;
         }
-        return id != null && id.equals(((Capability) o).id);
+        return getId() != null && getId().equals(((Capability) o).getId());
     }
 
     @Override

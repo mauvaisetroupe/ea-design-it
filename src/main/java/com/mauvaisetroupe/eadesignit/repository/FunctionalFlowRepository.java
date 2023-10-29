@@ -34,9 +34,9 @@ public interface FunctionalFlowRepository extends JpaRepository<FunctionalFlow, 
         "left join fetch f.landscapes l " +
         "left join fetch s.flowInterface i " +
         "left join fetch s.group g " +
-        "left join fetch i.source s " +
-        "left join fetch i.target t " +
-        "where s=:appli or t=:appli "
+        "left join fetch i.source so " +
+        "left join fetch i.target ta " +
+        "where so=:appli or ta=:appli "
     )
     SortedSet<FunctionalFlow> findFunctionalFlowsForInterfacesIn(@Param("appli") Application application);
 

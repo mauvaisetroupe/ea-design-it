@@ -1,4 +1,4 @@
-import { ImportStatus } from '@/shared/model/enumerations/import-status.model';
+import { type ImportStatus } from '@/shared/model/enumerations/import-status.model';
 export interface IApplicationImport {
   id?: number;
   importId?: string | null;
@@ -39,6 +39,6 @@ export class ApplicationImport implements IApplicationImport {
     public owner?: string | null,
     public importStatus?: ImportStatus | null,
     public importStatusMessage?: string | null,
-    public existingApplicationID?: string | null
+    public existingApplicationID?: string | null,
   ) {}
 }

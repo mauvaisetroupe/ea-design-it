@@ -4,9 +4,9 @@
       <span id="owner-heading">Owners</span>
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh list</span>
         </button>
-        <router-link :to="{ name: 'OwnerCreate' }" custom v-slot="{ navigate }" v-if="accountService().writeAuthorities">
+        <router-link :to="{ name: 'OwnerCreate' }" custom v-slot="{ navigate }" v-if="accountService.writeAuthorities">
           <button
             @click="navigate"
             id="jh-create-entity"
@@ -14,14 +14,14 @@
             class="btn btn-primary jh-create-entity create-owner"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Create a new Owner </span>
+            <span>Create a new Owner</span>
           </button>
         </router-link>
       </div>
     </h2>
     <br />
     <div class="alert alert-warning" v-if="!isFetching && owners && owners.length === 0">
-      <span>No owners found</span>
+      <span>No Owners found</span>
     </div>
     <div class="table-responsive" v-if="owners && owners.length > 0">
       <table class="table table-striped" aria-describedby="owners">
@@ -57,7 +57,7 @@
                   :to="{ name: 'OwnerView', params: { ownerId: owner.id } }"
                   custom
                   v-slot="{ navigate }"
-                  v-if="accountService().writeAuthorities"
+                  v-if="accountService.writeAuthorities"
                 >
                   <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
                     <font-awesome-icon icon="eye"></font-awesome-icon>
@@ -69,7 +69,7 @@
                     @click="navigate"
                     class="btn btn-primary btn-sm edit"
                     data-cy="entityEditButton"
-                    v-if="accountService().writeAuthorities"
+                    v-if="accountService.writeAuthorities"
                   >
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                     <span class="d-none d-md-inline">Edit</span>
@@ -92,24 +92,26 @@
       </table>
     </div>
     <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.owner.delete.question" data-cy="ownerDeleteDialogHeading">Confirm delete operation</span></span
-      >
+      <template #modal-title>
+        <span id="eaDesignItApp.owner.delete.question" data-cy="ownerDeleteDialogHeading">Confirm delete operation</span>
+      </template>
       <div class="modal-body">
-        <p id="jhi-delete-owner-heading">Are you sure you want to delete this Owner?</p>
+        <p id="jhi-delete-owner-heading">Are you sure you want to delete Owner {{ removeId }}?</p>
       </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-owner"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeOwner()"
-        >
-          Delete
-        </button>
-      </div>
+      <template #modal-footer>
+        <div>
+          <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="jhi-confirm-delete-owner"
+            data-cy="entityConfirmDeleteButton"
+            v-on:click="removeOwner()"
+          >
+            Delete
+          </button>
+        </div>
+      </template>
     </b-modal>
   </div>
 </template>

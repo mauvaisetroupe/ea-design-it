@@ -18,12 +18,12 @@
               name="resourceName"
               id="data-flow-item-resourceName"
               data-cy="resourceName"
-              :class="{ valid: !$v.dataFlowItem.resourceName.$invalid, invalid: $v.dataFlowItem.resourceName.$invalid }"
-              v-model="$v.dataFlowItem.resourceName.$model"
+              :class="{ valid: !v$.resourceName.$invalid, invalid: v$.resourceName.$invalid }"
+              v-model="v$.resourceName.$model"
               required
             />
-            <div v-if="$v.dataFlowItem.resourceName.$anyDirty && $v.dataFlowItem.resourceName.$invalid">
-              <small class="form-text text-danger" v-if="!$v.dataFlowItem.resourceName.required"> This field is required. </small>
+            <div v-if="v$.resourceName.$anyDirty && v$.resourceName.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.resourceName.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -34,8 +34,8 @@
               name="resourceType"
               id="data-flow-item-resourceType"
               data-cy="resourceType"
-              :class="{ valid: !$v.dataFlowItem.resourceType.$invalid, invalid: $v.dataFlowItem.resourceType.$invalid }"
-              v-model="$v.dataFlowItem.resourceType.$model"
+              :class="{ valid: !v$.resourceType.$invalid, invalid: v$.resourceType.$invalid }"
+              v-model="v$.resourceType.$model"
             />
           </div>
           <div class="form-group">
@@ -46,13 +46,11 @@
               name="description"
               id="data-flow-item-description"
               data-cy="description"
-              :class="{ valid: !$v.dataFlowItem.description.$invalid, invalid: $v.dataFlowItem.description.$invalid }"
-              v-model="$v.dataFlowItem.description.$model"
+              :class="{ valid: !v$.description.$invalid, invalid: v$.description.$invalid }"
+              v-model="v$.description.$model"
             />
-            <div v-if="$v.dataFlowItem.description.$anyDirty && $v.dataFlowItem.description.$invalid">
-              <small class="form-text text-danger" v-if="!$v.dataFlowItem.description.maxLength">
-                This field cannot be longer than 1000 characters.
-              </small>
+            <div v-if="v$.description.$anyDirty && v$.description.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.description.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -63,13 +61,11 @@
               name="contractURL"
               id="data-flow-item-contractURL"
               data-cy="contractURL"
-              :class="{ valid: !$v.dataFlowItem.contractURL.$invalid, invalid: $v.dataFlowItem.contractURL.$invalid }"
-              v-model="$v.dataFlowItem.contractURL.$model"
+              :class="{ valid: !v$.contractURL.$invalid, invalid: v$.contractURL.$invalid }"
+              v-model="v$.contractURL.$model"
             />
-            <div v-if="$v.dataFlowItem.contractURL.$anyDirty && $v.dataFlowItem.contractURL.$invalid">
-              <small class="form-text text-danger" v-if="!$v.dataFlowItem.contractURL.maxLength">
-                This field cannot be longer than 500 characters.
-              </small>
+            <div v-if="v$.contractURL.$anyDirty && v$.contractURL.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.contractURL.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -80,13 +76,13 @@
               name="documentationURL"
               id="data-flow-item-documentationURL"
               data-cy="documentationURL"
-              :class="{ valid: !$v.dataFlowItem.documentationURL.$invalid, invalid: $v.dataFlowItem.documentationURL.$invalid }"
-              v-model="$v.dataFlowItem.documentationURL.$model"
+              :class="{ valid: !v$.documentationURL.$invalid, invalid: v$.documentationURL.$invalid }"
+              v-model="v$.documentationURL.$model"
             />
-            <div v-if="$v.dataFlowItem.documentationURL.$anyDirty && $v.dataFlowItem.documentationURL.$invalid">
-              <small class="form-text text-danger" v-if="!$v.dataFlowItem.documentationURL.maxLength">
-                This field cannot be longer than 500 characters.
-              </small>
+            <div v-if="v$.documentationURL.$anyDirty && v$.documentationURL.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.documentationURL.$errors" :key="error.$uid">{{
+                error.$message
+              }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -95,7 +91,7 @@
               <b-input-group-prepend>
                 <b-form-datepicker
                   aria-controls="data-flow-item-startDate"
-                  v-model="$v.dataFlowItem.startDate.$model"
+                  v-model="v$.startDate.$model"
                   name="startDate"
                   class="form-control"
                   :locale="currentLanguage"
@@ -112,8 +108,8 @@
                 type="text"
                 class="form-control"
                 name="startDate"
-                :class="{ valid: !$v.dataFlowItem.startDate.$invalid, invalid: $v.dataFlowItem.startDate.$invalid }"
-                v-model="$v.dataFlowItem.startDate.$model"
+                :class="{ valid: !v$.startDate.$invalid, invalid: v$.startDate.$invalid }"
+                v-model="v$.startDate.$model"
               />
             </b-input-group>
           </div>
@@ -123,7 +119,7 @@
               <b-input-group-prepend>
                 <b-form-datepicker
                   aria-controls="data-flow-item-endDate"
-                  v-model="$v.dataFlowItem.endDate.$model"
+                  v-model="v$.endDate.$model"
                   name="endDate"
                   class="form-control"
                   :locale="currentLanguage"
@@ -140,8 +136,8 @@
                 type="text"
                 class="form-control"
                 name="endDate"
-                :class="{ valid: !$v.dataFlowItem.endDate.$invalid, invalid: $v.dataFlowItem.endDate.$invalid }"
-                v-model="$v.dataFlowItem.endDate.$model"
+                :class="{ valid: !v$.endDate.$invalid, invalid: v$.endDate.$invalid }"
+                v-model="v$.endDate.$model"
               />
             </b-input-group>
           </div>
@@ -169,7 +165,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.dataFlowItem.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

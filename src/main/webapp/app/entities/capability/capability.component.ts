@@ -1,80 +1,75 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { ICapability } from '@/shared/model/capability.model';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import CapabilityService from './capability.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type ICapability } from '@/shared/model/capability.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class Capability extends Vue {
-  @Inject('capabilityService') private capabilityService: () => CapabilityService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'Capability',
+  setup() {
+    const capabilityService = inject('capabilityService', () => new CapabilityService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const capabilities: Ref<ICapability[]> = ref([]);
 
-  public capabilities: ICapability[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllCapabilitys();
-  }
+    const retrieveCapabilitys = async () => {
+      isFetching.value = true;
+      try {
+        const res = await capabilityService().retrieve();
+        capabilities.value = res.data;
+      } catch (err) {
+        alertService.showAnyError(err);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllCapabilitys();
-  }
+    const handleSyncList = () => {
+      retrieveCapabilitys();
+    };
 
-  public retrieveAllCapabilitys(): void {
-    this.isFetching = true;
-    this.capabilityService()
-      .retrieve()
-      .then(
-        res => {
-          this.capabilities = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveCapabilitys();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: ICapability) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeCapability = async () => {
+      try {
+        await capabilityService().delete(removeId.value);
+        const message = 'A Capability is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveCapabilitys();
+        closeDialog();
+      } catch (error) {
+        alertService.showAnyError(error);
+      }
+    };
 
-  public prepareRemove(instance: ICapability): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeCapability(): void {
-    this.capabilityService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A Capability is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllCapabilitys();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      capabilities,
+      handleSyncList,
+      isFetching,
+      retrieveCapabilitys,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeCapability,
+    };
+  },
+});

@@ -7,10 +7,10 @@ import com.mauvaisetroupe.eadesignit.domain.util.DataFlowComparator;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
+import jakarta.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class ReportingService {
         DataFlowComparator comparator = new DataFlowComparator();
 
         // INPUTS
-        FlowInterface interfaceToKeep = flowInterfaceRepository.findById(id).get();
+        FlowInterface interfaceToKeep = flowInterfaceRepository.findById(id).orElseThrow();
         Set<FlowInterface> interfacesToMerge = flowInterfaceRepository.findByAliasIn(aliasToMerge);
 
         for (FlowInterface interfaceToMerge : interfacesToMerge) {

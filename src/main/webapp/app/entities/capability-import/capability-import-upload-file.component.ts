@@ -1,111 +1,141 @@
-import { mixins } from 'vue-class-component';
-
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 import CapabilityImportService from './capability-import.service';
-import AlertService from '@/shared/alert/alert.service';
-import { ICapabilityImport } from '@/shared/model/capability-import.model';
-import { Action, ICapabilityActionDTO, ICapabilityImportAnalysisDTO } from '@/shared/model/capability-import-analysis.model';
-import { ICapability } from '@/shared/model/capability.model';
+import { type ICapabilityImport } from '@/shared/model/capability-import.model';
+import { type ICapabilityActionDTO, type ICapabilityImportAnalysisDTO } from '@/shared/model/capability-import-analysis.model';
+import { Action } from '@/shared/model/capability-import-analysis.model';
+import { type ICapability } from '@/shared/model/capability.model';
 import CapabilityTreeComponent from '@/entities/capability/component/capability-tree.vue';
- 
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-  components: {
-    CapabilityTreeComponent,
-  },
-})
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'CapabilityImport',
+  components: { CapabilityTreeComponent },
+  setup() {
+    const route = useRoute();
+    const router = useRouter();
 
-export default class CapabilityImport extends Vue {
-  @Inject('capabilityImportService') private capabilityImportService: () => CapabilityImportService;
-  @Inject('alertService') private alertService: () => AlertService;
+    const accountService = inject<AccountService>('accountService');
+    const alertService = inject('alertService', () => useAlertService(), true);
+    const capabilityImportService = inject('capabilityImportService', () => new CapabilityImportService());
 
-  public capabilitiesImports: ICapabilityImport[] = [];
-  public filteredCapabilitiesImports: ICapabilityImport[] = [];
-  public excelFile: File = null;
-  public isFetching = false;
-  public fileSubmited = false;
-  public rowsLoaded = false;
-  public excelFileName = 'Browse File';
-  public toAddOption = [{text: 'Import', value: Action.ADD}, {text: 'Ignore', value: Action.IGNORE}];
-  public toDeleteOption = [{text: 'Delete', value: Action.DELETE}, {text: 'Ignore', value: Action.IGNORE}];
-  public toDeleteWithMappingOption = [{text: 'Force Delete', value: Action.FORCE_DELETE}, {text: 'Ignore', value: Action.IGNORE}];
-  public toDeleteWithChildMappingOption = [{text: 'Ignore', value: Action.IGNORE}];
-  public analysisDone = false;
-  public IGNORE = Action.IGNORE;
-  public DELETE = Action.DELETE;
-  public FORCE_DELETE = Action.FORCE_DELETE;
-  public ADD = Action.ADD;
+    const capabilitiesImports: Ref<ICapabilityImport[]> = ref([]);
+    const filteredCapabilitiesImports: Ref<ICapabilityImport[]> = ref([]);
+    const excelFile = ref();
+    const isFetching = ref(false);
+    const fileSubmited = ref(false);
+    const rowsLoaded = ref(false);
+    const excelFileName = ref('Browse File');
+    const analysisDone = ref(false);
+    const capabilitiesImportAnalysis: Ref<ICapabilityImportAnalysisDTO> = ref({});
 
-  public capabilitiesImportAnalysis: ICapabilityImportAnalysisDTO = {};
+    const toAddOption = [
+      { text: 'Import', value: Action.ADD },
+      { text: 'Ignore', value: Action.IGNORE },
+    ];
+    const toDeleteOption = [
+      { text: 'Delete', value: Action.DELETE },
+      { text: 'Ignore', value: Action.IGNORE },
+    ];
+    const toDeleteWithMappingOption = [
+      { text: 'Force Delete', value: Action.FORCE_DELETE },
+      { text: 'Ignore', value: Action.IGNORE },
+    ];
+    const toDeleteWithChildMappingOption = [{ text: 'Ignore', value: Action.IGNORE }];
+    const IGNORE = Action.IGNORE;
+    const DELETE = Action.DELETE;
+    const FORCE_DELETE = Action.FORCE_DELETE;
+    const ADD = Action.ADD;
 
-  public get somethingToImport() {
-    return this.analysisDone && (
-        this.capabilitiesImportAnalysis?.capabilitiesToAdd?.length >0 ||
-        this.capabilitiesImportAnalysis?.capabilitiesToDelete?.length >0 ||
-        this.capabilitiesImportAnalysis?.capabilitiesToDeleteWithMappings?.length >0 ||
-        this.capabilitiesImportAnalysis?.ancestorsOfCapabilitiesWithMappings?.length >0
-    );
-  }
+    function handleFileUpload(): void {
+      excelFileName.value = excelFile.value.files[0].name;
+    }
 
-  public handleFileUpload(event): void {
-    this.excelFile = event.target.files[0];
-    this.excelFileName = this.excelFile.name;
-  }
+    async function submitFileForAnalysis() {
+      isFetching.value = true;
+      fileSubmited.value = true;
+      capabilitiesImports.value = [];
+      filteredCapabilitiesImports.value = [];
+      try {
+        const res = await capabilityImportService().uploadFileToAnalysis(excelFile.value.files[0]);
+        capabilitiesImportAnalysis.value = res;
+        analysisDone.value = true;
+        isFetching.value = false;
+      } catch (error) {
+        alertService.showAnyError(error);
+        analysisDone.value = false;
+      } finally {
+        isFetching.value = false;
+      }
+    }
 
-  public submitFileForAnalysis(): void {
-    this.isFetching = true;
-    this.fileSubmited = true;
-    this.capabilitiesImports = [];
-    this.filteredCapabilitiesImports = [];
-    this.capabilityImportService()
-      .uploadFileToAnalysis(this.excelFile)
-      .then(
-        res => {
-          this.capabilitiesImportAnalysis = res;
-          this.isFetching = false;
-          this.analysisDone = true;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
+    async function confirmUploadedFile() {
+      isFetching.value = true;
+      fileSubmited.value = true;
+      capabilitiesImports.value = [];
+      filteredCapabilitiesImports.value = [];
+      try {
+        const res = await capabilityImportService().confirmUploadedFile(capabilitiesImportAnalysis.value);
+        analysisDone.value = false;
+        capabilitiesImports.value = res.data;
+        filteredCapabilitiesImports.value = res.data;
+        rowsLoaded.value = true;
+      } catch (error) {
+        alertService.showAnyError(error);
+      } finally {
+        isFetching.value = false;
+      }
+    }
+
+    // Error Handling
+
+    const somethingToImport: Ref<boolean> = computed(() => {
+      return (
+        analysisDone.value &&
+        !(
+          !capabilitiesImportAnalysis.value?.capabilitiesToAdd?.length &&
+          !capabilitiesImportAnalysis.value?.capabilitiesToDelete?.length &&
+          !capabilitiesImportAnalysis.value?.capabilitiesToDeleteWithMappings?.length &&
+          !capabilitiesImportAnalysis.value?.ancestorsOfCapabilitiesWithMappings?.length
+        )
       );
-  }
-
-  public confirmUploadedFile(): void {
-    this.isFetching = true;
-    this.fileSubmited = true;
-    this.capabilitiesImports = [];
-    this.filteredCapabilitiesImports = [];
-    this.capabilityImportService()
-      .confirmUploadedFile(this.capabilitiesImportAnalysis)
-      .then(
-        res => {
-          this.analysisDone = false;
-          this.capabilitiesImports = res.data;
-          this.filteredCapabilitiesImports = res.data;
-          this.isFetching = false;
-          this.rowsLoaded = true;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }  
-
-  // Error Handling
-
-  public filterErrors() {
-    this.filteredCapabilitiesImports = this.filteredCapabilitiesImports.filter(c => c.status === 'ERROR');
-  }
-
-
-  public toggleAll(capabilityActionss: ICapabilityActionDTO[], action: Action) {
-    capabilityActionss.forEach(capaAction => {
-        capaAction.action=action;
     });
-  }
-}
+
+    function filterErrors() {
+      filteredCapabilitiesImports.value = filteredCapabilitiesImports.value.filter(c => c.status === 'ERROR');
+    }
+
+    function toggleAll(capabilityActionss: ICapabilityActionDTO[], action: Action) {
+      capabilityActionss.forEach(capaAction => {
+        capaAction.action = action;
+      });
+    }
+
+    return {
+      excelFile,
+      excelFileName,
+      isFetching,
+      rowsLoaded,
+      somethingToImport,
+      analysisDone,
+      capabilitiesImportAnalysis,
+      toAddOption,
+      toDeleteOption,
+      toDeleteWithMappingOption,
+      toDeleteWithChildMappingOption,
+      capabilitiesImports,
+      filteredCapabilitiesImports,
+      IGNORE,
+      DELETE,
+      FORCE_DELETE,
+      ADD,
+      handleFileUpload,
+      submitFileForAnalysis,
+      confirmUploadedFile,
+      filterErrors,
+      toggleAll,
+    };
+  },
+});

@@ -16,12 +16,12 @@
               name="name"
               id="technology-name"
               data-cy="name"
-              :class="{ valid: !$v.technology.name.$invalid, invalid: $v.technology.name.$invalid }"
-              v-model="$v.technology.name.$model"
+              :class="{ valid: !v$.name.$invalid, invalid: v$.name.$invalid }"
+              v-model="v$.name.$model"
               required
             />
-            <div v-if="$v.technology.name.$anyDirty && $v.technology.name.$invalid">
-              <small class="form-text text-danger" v-if="!$v.technology.name.required"> This field is required. </small>
+            <div v-if="v$.name.$anyDirty && v$.name.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.name.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -32,8 +32,8 @@
               name="type"
               id="technology-type"
               data-cy="type"
-              :class="{ valid: !$v.technology.type.$invalid, invalid: $v.technology.type.$invalid }"
-              v-model="$v.technology.type.$model"
+              :class="{ valid: !v$.type.$invalid, invalid: v$.type.$invalid }"
+              v-model="v$.type.$model"
             />
           </div>
           <div class="form-group">
@@ -44,13 +44,11 @@
               name="description"
               id="technology-description"
               data-cy="description"
-              :class="{ valid: !$v.technology.description.$invalid, invalid: $v.technology.description.$invalid }"
-              v-model="$v.technology.description.$model"
+              :class="{ valid: !v$.description.$invalid, invalid: v$.description.$invalid }"
+              v-model="v$.description.$model"
             />
-            <div v-if="$v.technology.description.$anyDirty && $v.technology.description.$invalid">
-              <small class="form-text text-danger" v-if="!$v.technology.description.maxLength">
-                This field cannot be longer than 250 characters.
-              </small>
+            <div v-if="v$.description.$anyDirty && v$.description.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.description.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
         </div>
@@ -62,7 +60,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.technology.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

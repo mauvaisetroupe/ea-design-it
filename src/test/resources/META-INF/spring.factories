@@ -1,1 +1,2 @@
-org.springframework.test.context.ContextCustomizerFactory = com.mauvaisetroupe.eadesignit.config.TestContainersSpringContextCustomizerFactory
+org.springframework.test.context.ContextCustomizerFactory = com.mauvaisetroupe.\
+    eadesignit.config.SqlTestContainersSpringContextCustomizerFactory

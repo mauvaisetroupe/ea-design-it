@@ -1,80 +1,75 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { IExternalSystem } from '@/shared/model/external-system.model';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import ExternalSystemService from './external-system.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IExternalSystem } from '@/shared/model/external-system.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class ExternalSystem extends Vue {
-  @Inject('externalSystemService') private externalSystemService: () => ExternalSystemService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ExternalSystem',
+  setup() {
+    const externalSystemService = inject('externalSystemService', () => new ExternalSystemService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const externalSystems: Ref<IExternalSystem[]> = ref([]);
 
-  public externalSystems: IExternalSystem[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllExternalSystems();
-  }
+    const retrieveExternalSystems = async () => {
+      isFetching.value = true;
+      try {
+        const res = await externalSystemService().retrieve();
+        externalSystems.value = res.data;
+      } catch (err) {
+        alertService.showAnyError(err);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllExternalSystems();
-  }
+    const handleSyncList = () => {
+      retrieveExternalSystems();
+    };
 
-  public retrieveAllExternalSystems(): void {
-    this.isFetching = true;
-    this.externalSystemService()
-      .retrieve()
-      .then(
-        res => {
-          this.externalSystems = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveExternalSystems();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: IExternalSystem) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeExternalSystem = async () => {
+      try {
+        await externalSystemService().delete(removeId.value);
+        const message = 'A ExternalSystem is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveExternalSystems();
+        closeDialog();
+      } catch (error) {
+        alertService.showAnyError(error);
+      }
+    };
 
-  public prepareRemove(instance: IExternalSystem): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeExternalSystem(): void {
-    this.externalSystemService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A ExternalSystem is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllExternalSystems();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      externalSystems,
+      handleSyncList,
+      isFetching,
+      retrieveExternalSystems,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeExternalSystem,
+    };
+  },
+});

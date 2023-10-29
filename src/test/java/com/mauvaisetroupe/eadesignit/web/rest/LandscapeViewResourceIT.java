@@ -10,11 +10,11 @@ import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ViewPoint;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,13 +23,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 
 /**
  * Integration tests for the {@link LandscapeViewResource} REST controller.
@@ -207,7 +205,7 @@ class LandscapeViewResourceIT {
         int databaseSizeBeforeUpdate = landscapeViewRepository.findAll().size();
 
         // Update the landscapeView
-        LandscapeView updatedLandscapeView = landscapeViewRepository.findById(landscapeView.getId()).get();
+        LandscapeView updatedLandscapeView = landscapeViewRepository.findById(landscapeView.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedLandscapeView are not directly saved in db
         em.detach(updatedLandscapeView);
         updatedLandscapeView
@@ -305,8 +303,7 @@ class LandscapeViewResourceIT {
         partialUpdatedLandscapeView
             .viewpoint(UPDATED_VIEWPOINT)
             .diagramName(UPDATED_DIAGRAM_NAME)
-            .compressedDrawXML(UPDATED_COMPRESSED_DRAW_XML)
-            .compressedDrawSVG(UPDATED_COMPRESSED_DRAW_SVG);
+            .compressedDrawXML(UPDATED_COMPRESSED_DRAW_XML);
 
         restLandscapeViewMockMvc
             .perform(
@@ -323,7 +320,7 @@ class LandscapeViewResourceIT {
         assertThat(testLandscapeView.getViewpoint()).isEqualTo(UPDATED_VIEWPOINT);
         assertThat(testLandscapeView.getDiagramName()).isEqualTo(UPDATED_DIAGRAM_NAME);
         assertThat(testLandscapeView.getCompressedDrawXML()).isEqualTo(UPDATED_COMPRESSED_DRAW_XML);
-        assertThat(testLandscapeView.getCompressedDrawSVG()).isEqualTo(UPDATED_COMPRESSED_DRAW_SVG);
+        assertThat(testLandscapeView.getCompressedDrawSVG()).isEqualTo(DEFAULT_COMPRESSED_DRAW_SVG);
     }
 
     @Test

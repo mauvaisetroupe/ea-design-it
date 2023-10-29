@@ -1,46 +1,50 @@
-import { Component, Vue, Inject, Watch } from 'vue-property-decorator';
-import { Capability } from '@/shared/model/capability.model';
-import { ICapability } from '@/shared/model/capability.model';
-import { PropType } from 'vue';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { type ICapability } from '@/shared/model/capability.model';
+import type { PropType } from 'vue';
+import CapabilityTreeItemComponent from './capability-tree-item.vue';
 
-const CapabilityProps = Vue.extend({
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'CapabilityTreeItemComponent',
   props: {
     capability: {
       type: Object as PropType<ICapability>,
+      required: true,
     },
   },
-});
+  // components: {
+  //   CapabilityTreeItemComponent,
+  // },
+  setup(props, context) {
+    const isOpen = ref(false);
 
-@Component({
-  components: {
-    CapabilityTreeItemComponent,
+    const fullname = computed(() => {
+      let fullname = '';
+      let sep = '';
+      let tmpCapability: ICapability | null | undefined = props.capability;
+      while (tmpCapability) {
+        fullname = tmpCapability.name + sep + fullname;
+        tmpCapability = tmpCapability.parent;
+        sep = ' > ';
+      }
+      return fullname;
+    });
+
+    const isFolder = computed(() => {
+      return props.capability.subCapabilities && props.capability.subCapabilities.length;
+    });
+
+    function toggle() {
+      if (isFolder.value) {
+        isOpen.value = !isOpen.value;
+      }
+    }
+
+    return {
+      isFolder,
+      isOpen,
+      toggle,
+      fullname,
+    };
   },
-})
-export default class CapabilityTreeItemComponent extends CapabilityProps {
- 
-  public isOpen = false;
-
-  public get fullname() {
-    let fullname = '';
-    let sep = '';
-    let tmpCapability = this.capability;
-    while (tmpCapability) {
-      fullname = tmpCapability.name + sep + fullname
-      tmpCapability = tmpCapability.parent;
-      sep = " > ";
-    }
-    return fullname;
-  }
-
-
-  public get isFolder() {
-    return this.capability.subCapabilities && this.capability.subCapabilities.length;
-  }  
-
-  public toggle() {
-    if (this.isFolder) {
-      this.isOpen = !this.isOpen;
-    }
-  }
-
-}
+});

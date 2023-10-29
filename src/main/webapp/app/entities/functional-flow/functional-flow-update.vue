@@ -31,10 +31,10 @@
                 name="alias"
                 id="functional-flow-alias"
                 data-cy="alias"
-                :class="{ valid: !$v.functionalFlow.alias.$invalid, invalid: $v.functionalFlow.alias.$invalid }"
-                v-model="$v.functionalFlow.alias.$model"
+                :class="{ valid: !v$.alias.$invalid, invalid: v$.alias.$invalid }"
+                v-model="v$.alias.$model"
               />
-              <div v-if="$v.functionalFlow.alias.$anyDirty && $v.functionalFlow.alias.$invalid"></div>
+              <div v-if="v$.alias.$anyDirty && v$.alias.$invalid"></div>
             </div>
             <div class="form-group row">
               <label class="col-sm-2 col-form-label" for="functional-flow-description">Description</label>
@@ -44,11 +44,11 @@
                 name="description"
                 id="functional-flow-description"
                 data-cy="description"
-                :class="{ valid: !$v.functionalFlow.description.$invalid, invalid: $v.functionalFlow.description.$invalid }"
-                v-model="$v.functionalFlow.description.$model"
+                :class="{ valid: !v$.description.$invalid, invalid: v$.description.$invalid }"
+                v-model="v$.description.$model"
               />
-              <div v-if="$v.functionalFlow.description.$anyDirty && $v.functionalFlow.description.$invalid">
-                <small class="form-text text-danger" v-if="!$v.functionalFlow.description.maxLength">
+              <div v-if="v$.description.$anyDirty && v$.description.$invalid">
+                <small class="form-text text-danger" v-if="!v$.description.maxLength">
                   This field cannot be longer than 1500 characters.
                 </small>
               </div>
@@ -61,11 +61,11 @@
                 name="comment"
                 id="functional-flow-comment"
                 data-cy="comment"
-                :class="{ valid: !$v.functionalFlow.comment.$invalid, invalid: $v.functionalFlow.comment.$invalid }"
-                v-model="$v.functionalFlow.comment.$model"
+                :class="{ valid: !v$.comment.$invalid, invalid: v$.comment.$invalid }"
+                v-model="v$.comment.$model"
               />
-              <div v-if="$v.functionalFlow.comment.$anyDirty && $v.functionalFlow.comment.$invalid">
-                <small class="form-text text-danger" v-if="!$v.functionalFlow.comment.maxLength">
+              <div v-if="v$.comment.$anyDirty && v$.comment.$invalid">
+                <small class="form-text text-danger" v-if="!v$.comment.maxLength">
                   This field cannot be longer than 1000 characters.
                 </small>
               </div>
@@ -78,8 +78,8 @@
                 name="status"
                 id="functional-flow-status"
                 data-cy="status"
-                :class="{ valid: !$v.functionalFlow.status.$invalid, invalid: $v.functionalFlow.status.$invalid }"
-                v-model="$v.functionalFlow.status.$model"
+                :class="{ valid: !v$.status.$invalid, invalid: v$.status.$invalid }"
+                v-model="v$.status.$model"
               />
             </div>
             <div class="form-group row">
@@ -90,11 +90,11 @@
                 name="documentationURL"
                 id="functional-flow-documentationURL"
                 data-cy="documentationURL"
-                :class="{ valid: !$v.functionalFlow.documentationURL.$invalid, invalid: $v.functionalFlow.documentationURL.$invalid }"
-                v-model="$v.functionalFlow.documentationURL.$model"
+                :class="{ valid: !v$.documentationURL.$invalid, invalid: v$.documentationURL.$invalid }"
+                v-model="v$.documentationURL.$model"
               />
-              <div v-if="$v.functionalFlow.documentationURL.$anyDirty && $v.functionalFlow.documentationURL.$invalid">
-                <small class="form-text text-danger" v-if="!$v.functionalFlow.documentationURL.maxLength">
+              <div v-if="v$.documentationURL.$anyDirty && v$.documentationURL.$invalid">
+                <small class="form-text text-danger" v-if="!v$.documentationURL.maxLength">
                   This field cannot be longer than 500 characters.
                 </small>
               </div>
@@ -107,11 +107,11 @@
                 name="documentationURL2"
                 id="functional-flow-documentationURL2"
                 data-cy="documentationURL2"
-                :class="{ valid: !$v.functionalFlow.documentationURL2.$invalid, invalid: $v.functionalFlow.documentationURL2.$invalid }"
-                v-model="$v.functionalFlow.documentationURL2.$model"
+                :class="{ valid: !v$.documentationURL2.$invalid, invalid: v$.documentationURL2.$invalid }"
+                v-model="v$.documentationURL2.$model"
               />
-              <div v-if="$v.functionalFlow.documentationURL2.$anyDirty && $v.functionalFlow.documentationURL2.$invalid">
-                <small class="form-text text-danger" v-if="!$v.functionalFlow.documentationURL2.maxLength">
+              <div v-if="v$.documentationURL2.$anyDirty && v$.documentationURL2.$invalid">
+                <small class="form-text text-danger" v-if="!v$.documentationURL2.maxLength">
                   This field cannot be longer than 500 characters.
                 </small>
               </div>
@@ -122,7 +122,7 @@
                 <b-input-group-prepend>
                   <b-form-datepicker
                     aria-controls="functional-flow-startDate"
-                    v-model="$v.functionalFlow.startDate.$model"
+                    v-model="v$.startDate.$model"
                     name="startDate"
                     class="form-control"
                     :locale="currentLanguage"
@@ -139,8 +139,8 @@
                   type="text"
                   class="form-control"
                   name="startDate"
-                  :class="{ valid: !$v.functionalFlow.startDate.$invalid, invalid: $v.functionalFlow.startDate.$invalid }"
-                  v-model="$v.functionalFlow.startDate.$model"
+                  :class="{ valid: !v$.startDate.$invalid, invalid: v$.startDate.$invalid }"
+                  v-model="v$.startDate.$model"
                 />
               </b-input-group>
             </div>
@@ -150,7 +150,7 @@
                 <b-input-group-prepend>
                   <b-form-datepicker
                     aria-controls="functional-flow-endDate"
-                    v-model="$v.functionalFlow.endDate.$model"
+                    v-model="v$.endDate.$model"
                     name="endDate"
                     class="form-control"
                     :locale="currentLanguage"
@@ -167,8 +167,8 @@
                   type="text"
                   class="form-control"
                   name="endDate"
-                  :class="{ valid: !$v.functionalFlow.endDate.$invalid, invalid: $v.functionalFlow.endDate.$invalid }"
-                  v-model="$v.functionalFlow.endDate.$model"
+                  :class="{ valid: !v$.endDate.$invalid, invalid: v$.endDate.$invalid }"
+                  v-model="v$.endDate.$model"
                 />
               </b-input-group>
             </div>
@@ -208,10 +208,10 @@
                 v-model="plantuml"
                 @focusout="focusout"
                 @focus="focus"
-                @keydown.13="chooseItem"
+                @keydown.enter="chooseItem"
                 @keydown.tab="chooseItem"
-                @keydown.40="moveDown"
-                @keydown.38="moveUp"
+                @keydown.arrow-down="moveDown"
+                @keydown.arrow-up="moveUp"
               ></textarea>
 
               <ul class="autocomplete-list" v-if="searchMatch.length > 0">
@@ -356,7 +356,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.functionalFlow.$invalid || isSaving || plantumlModified || !aliasesValid"
+            :disabled="v$.$invalid || isSaving || plantumlModified || !aliasesValid"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

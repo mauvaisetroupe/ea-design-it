@@ -1,413 +1,424 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, onMounted, ref, watch, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import { maxLength } from 'vuelidate/lib/validators';
-
-import AlertService from '@/shared/alert/alert.service';
-
-import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
-import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+import FunctionalFlowService from './functional-flow.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import OwnerService from '@/entities/owner/owner.service';
-import { IOwner } from '@/shared/model/owner.model';
-
+import { type IOwner } from '@/shared/model/owner.model';
+import { type IFunctionalFlow, FunctionalFlow } from '@/shared/model/functional-flow.model';
+import type { IPlantumlFlowImport } from '@/shared/model/plantuml-flow-import.model';
 import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
-
-import { IFunctionalFlow, FunctionalFlow } from '@/shared/model/functional-flow.model';
-import FunctionalFlowService from './functional-flow.service';
-
+import type { ILandscapeView } from '@/shared/model/landscape-view.model';
 import ApplicationService from '../application/application.service';
-import { IApplication } from '@/shared/model/application.model';
-import { IPlantumlFlowImport } from '@/shared/model/plantuml-flow-import.model';
-import FlowGroup from '../flow-group/flow-group.component';
+import { nextTick } from 'process';
+import type { bvToast } from 'bootstrap-vue';
 
-const validations: any = {
-  functionalFlow: {
-    alias: {},
-    description: {
-      maxLength: maxLength(1500),
-    },
-    comment: {
-      maxLength: maxLength(1000),
-    },
-    status: {},
-    documentationURL: {
-      maxLength: maxLength(500),
-    },
-    documentationURL2: {
-      maxLength: maxLength(500),
-    },
-    startDate: {},
-    endDate: {},
-  },
-};
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FunctionalFlowUpdate',
+  setup() {
+    //@Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
+    const functionalFlowService = inject('functionalFlowService', () => new FunctionalFlowService());
+    //@Inject('alertService') private alertService: () => AlertService;
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-@Component({
-  validations,
-  watch: {
-    nbLines: 'onLinesChnaged',
-    plantuml: 'plantumlChange',
-  },
-})
-export default class FunctionalFlowUpdate extends Vue {
-  @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
-  @Inject('alertService') private alertService: () => AlertService;
+    //public functionalFlow: IFunctionalFlow = new FunctionalFlow();
+    const functionalFlow: Ref<IFunctionalFlow> = ref(new FunctionalFlow());
 
-  public functionalFlow: IFunctionalFlow = new FunctionalFlow();
+    //@Inject('ownerService') private ownerService: () => OwnerService;
+    const ownerService = inject('ownerService', () => new OwnerService());
 
-  @Inject('ownerService') private ownerService: () => OwnerService;
+    //public owners: IOwner[] = [];
+    const owners: Ref<IOwner[]> = ref([]);
 
-  public owners: IOwner[] = [];
+    //@Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
+    const landscapeViewService = inject('landscapeViewService', () => new LandscapeViewService());
 
-  @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
+    //public allLandscapes: ILandscapeView[] = [];
+    const allLandscapes: Ref<ILandscapeView[]> = ref([]);
+    //public selectedLandscape: ILandscapeView = {};
+    const selectedLandscape: Ref<ILandscapeView> = ref({});
 
-  public allLandscapes: ILandscapeView[] = [];
-  public selectedLandscape: ILandscapeView = {};
+    //@Inject('applicationService') private applicationService: () => ApplicationService;
+    const applicationService = inject('applicationService', () => new ApplicationService());
 
-  @Inject('applicationService') private applicationService: () => ApplicationService;
-  public applications: string[] = [];
+    //public applications: string[] = [];
+    const applications: Ref<string[]> = ref([]);
 
-  public isSaving = false;
-  public currentLanguage = '';
-  public plantuml = '';
-  public plantUMLImage = '';
-  public isFetching = false;
-  public importError = '';
-  public previewError = '';
-  public functionalFlowImport: IPlantumlFlowImport = {};
-  public tabIndex = 1;
-  public landscapeGivenInParameter = false;
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
+    const plantuml = ref('');
+    const plantUMLImage = ref('');
+    const isFetching = ref(false);
+    const importError = ref('');
+    const previewError = ref('');
+    const functionalFlowImport: Ref<IPlantumlFlowImport> = ref({});
+    const tabIndex: Ref<number> = ref(1);
+    const landscapeGivenInParameter = ref(false);
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.functionalFlowId) {
-        vm.retrieveFunctionalFlow(to.params.functionalFlowId);
-      } else {
-        // for creation, go on first tab
-        vm.chooseTab(0);
+    const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1);
+
+    ////////////////////////////////////////////////
+    // On load, retrieve
+    // - FunctionFlow,
+    // - plantUML source fron flowID
+    // - plantUML image
+    // - table with potential interfaces (should be the same than flow detail)
+    /////////////////////////////////////////////////
+
+    // STEP 1 - Retrieve FunctionalFlow
+    const retrieveFunctionalFlow = async functionalFlowId => {
+      try {
+        const res = await functionalFlowService().find(functionalFlowId);
+        functionalFlow.value = res;
+        getPlantUMLSourceFromFlowId(functionalFlowId);
+      } catch (error) {
+        alertService.showAnyError(error);
       }
-      if (typeof to.params.tabIndex !== 'undefined') {
-        vm.chooseTab(parseInt(to.params.tabIndex));
-      }
-      vm.initRelationships();
-    });
-  }
+    };
 
-  public chooseTab(_tabIndex) {
-    if (_tabIndex === 0) {
+    if (route.params?.functionalFlowId) {
+      retrieveFunctionalFlow(route.params.functionalFlowId);
+    } else {
+      // for creation, go on Information TAB
       // https://github.com/bootstrap-vue/bootstrap-vue/issues/2803
-      this.$nextTick(() => {
-        this.tabIndex = _tabIndex;
+      nextTick(() => {
+        tabIndex.value = 0;
       });
     }
-  }
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
+    // STEP 2 - Retrieve plantuml source from flow ID
+    function getPlantUMLSourceFromFlowId(functionalFlowId) {
+      functionalFlowService()
+        .getPlantUMLSource(functionalFlowId, true, true)
+        .then(
+          res => {
+            plantuml.value = res.data;
+            isFetching.value = false;
+            getPlantUMLImageFromString();
+          },
+          err => {
+            console.log(err);
+          },
+        );
+    }
+
+    // STEP 3 : Retrieve plantuml Image from plantuml source
+    function getPlantUMLImageFromString() {
+      functionalFlowService()
+        .getPlantUMLFromString(plantuml.value)
+        .then(
+          res => {
+            plantUMLImage.value = res.data;
+            plantumlModified.value = false;
+            isFetching.value = false;
+            importPlantuml();
+          },
+          err => {
+            console.log(err);
+            plantUMLImage.value = '';
+          },
+        );
+    }
+
+    // STEP 3 : Retrieve interface list from plantuml Source
+    function importPlantuml() {
+      functionalFlowService()
+        .importPlantuml(plantuml.value)
+        .then(
+          res => {
+            functionalFlowImport.value = res.data;
+            if (functionalFlowImport.value && functionalFlowImport.value.flowImportLines) {
+              functionalFlowImport.value.flowImportLines.forEach(step => {
+                if (step.selectedInterface) {
+                  step.interfaceAlias = step.selectedInterface.alias;
+                }
+              });
+            }
+            isFetching.value = false;
+            previewError.value = '';
+          },
+          err => {
+            plantUMLImage.value = '';
+            functionalFlowImport.value = { flowImportLines: [] };
+            previewError.value = err;
+            plantumlModified.value = false;
+          },
+        );
+    }
+
+    function changeInterface(flowimportLine) {
+      if (!flowimportLine.selectedInterface) {
+        flowimportLine.interfaceAlias = '';
+      } else {
+        flowimportLine.interfaceAlias = flowimportLine.selectedInterface.alias;
       }
-    );
-  }
-
-  mounted() {
-    this.applicationService()
-      .retrieve()
-      .then(res => {
-        if (res.data) {
-          this.applications = res.data.map(appli => appli.name);
-        }
-      });
-  }
-
-  get textareaNbLine() {
-    if (this.functionalFlow.steps) {
-      let nb = this.functionalFlow.steps.length;
-      const distinvtID: Set<number> = new Set(
-        this.functionalFlow.steps
-          .map(step => step.group)
-          .filter(group => group) // to filter null values
-          .map(group => group.id)
-      );
-      const nbGroups = distinvtID.size;
-      nb = nb + 2 * nbGroups;
-      const margin = 2;
-      return nb + margin;
     }
-    return 10;
-  }
 
-  ////////////////////////////////////////////////
-  // On load, retrieve
-  // - FunctionFlow,
-  // - plantUML source fron flowID
-  // - plantUML image
-  // - table with potential interfaces (should be the same than flow detail)
-  /////////////////////////////////////////////////
+    function tabChanged() {
+      if (plantumlModified.value) getPlantUMLImageFromString();
+    }
 
-  // STEP 1 - Retrieve FunctionalFlow
-  public retrieveFunctionalFlow(functionalFlowId) {
-    this.functionalFlowService()
-      .find(functionalFlowId)
-      .then(res => {
-        this.functionalFlow = res;
-        this.getPlantUMLSourceFromFlowId(functionalFlowId);
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    //////////////////////////////////////////////////
+    // SAVE
+    //////////////////////////////////////////////////
 
-  // STEP 2 - Retrieve plantuml source from flow ID
-  public getPlantUMLSourceFromFlowId(functionalFlowId) {
-    this.functionalFlowService()
-      .getPlantUMLSource(functionalFlowId, true, true)
-      .then(
-        res => {
-          this.plantuml = res.data;
-          this.isFetching = false;
-          this.getPlantUMLImageFromString();
-        },
-        err => {
-          console.log(err);
-        }
-      );
-  }
+    const creation = computed(() => {
+      return !functionalFlow.value.id;
+    });
 
-  // STEP 3 : Retrieve plantuml Image from plantuml source
-  public getPlantUMLImageFromString() {
-    this.functionalFlowService()
-      .getPlantUMLFromString(this.plantuml)
-      .then(
-        res => {
-          this.plantUMLImage = res.data;
-          this.plantumlModified = false;
-          this.isFetching = false;
-          this.importPlantuml();
-        },
-        err => {
-          console.log(err);
-          this.plantUMLImage = '';
-        }
-      );
-  }
+    const aliasesValid = computed(() => {
+      if (!functionalFlowImport.value || !functionalFlowImport.value.flowImportLines) return true;
+      return !functionalFlowImport.value.flowImportLines.some(step => !step.interfaceAlias || step.interfaceAlias === '');
+    });
 
-  // STEP 3 : Retrieve interface list from plantuml Source
-  public importPlantuml() {
-    this.functionalFlowService()
-      .importPlantuml(this.plantuml)
-      .then(
-        res => {
-          this.functionalFlowImport = res.data;
-          if (this.functionalFlowImport && this.functionalFlowImport.flowImportLines) {
-            this.functionalFlowImport.flowImportLines.forEach(step => {
-              if (step.selectedInterface) {
-                step.interfaceAlias = step.selectedInterface.alias;
+    function save(): void {
+      isSaving.value = true;
+
+      functionalFlowImport.value.id = functionalFlow.value.id;
+      functionalFlowImport.value.alias = functionalFlow.value.alias;
+      functionalFlowImport.value.description = functionalFlow.value.description;
+      functionalFlowImport.value.comment = functionalFlow.value.comment;
+      functionalFlowImport.value.status = functionalFlow.value.status;
+      functionalFlowImport.value.documentationURL = functionalFlow.value.documentationURL;
+      functionalFlowImport.value.documentationURL2 = functionalFlow.value.documentationURL;
+      functionalFlowImport.value.startDate = functionalFlow.value.startDate;
+      functionalFlowImport.value.endDate = functionalFlow.value.endDate;
+      functionalFlowImport.value.owner = functionalFlow.value.owner;
+
+      functionalFlowService()
+        .saveImport(functionalFlowImport.value, selectedLandscape.value.id)
+        .then(param => {
+          isSaving.value = false;
+          router.go(-1);
+          let message = 'A FunctionalFlow is created with identifier ' + param.id;
+          if (functionalFlow.value.id) {
+            message = 'A FunctionalFlow is updated with identifier ' + param.id;
+          }
+          alertService.showInfo(message);
+        })
+        .catch(error => {
+          isSaving.value = false;
+          alertService.showAnyError(error);
+        });
+    }
+
+    const initRelationships = () => {
+      ownerService()
+        .retrieve()
+        .then(res => {
+          owners.value = res.data;
+        });
+      landscapeViewService()
+        .retrieve()
+        .then(res => {
+          allLandscapes.value = res.data;
+          if (route.query.landscapeViewId) {
+            landscapeGivenInParameter.value = true;
+            allLandscapes.value.forEach(landscape => {
+              if (landscape.id === parseInt(route.query.landscapeViewId as string)) {
+                selectedLandscape.value = landscape;
               }
             });
           }
-          this.isFetching = false;
-          this.previewError = '';
-        },
-        err => {
-          this.plantUMLImage = '';
-          this.functionalFlowImport = { flowImportLines: [] };
-          this.previewError = err;
-          this.plantumlModified = false;
-        }
-      );
-  }
-
-  public changeInterface(flowimportLine) {
-    if (!flowimportLine.selectedInterface) {
-      flowimportLine.interfaceAlias = '';
-    } else {
-      flowimportLine.interfaceAlias = flowimportLine.selectedInterface.alias;
-    }
-  }
-
-  public tabChanged() {
-    if (this.plantumlModified) this.getPlantUMLImageFromString();
-  }
-
-  //////////////////////////////////////////////////
-  // SAVE
-  //////////////////////////////////////////////////
-
-  public get creation() {
-    return !this.functionalFlow.id;
-  }
-
-  public get aliasesValid() {
-    if (!this.functionalFlowImport || !this.functionalFlowImport.flowImportLines) return true;
-    return !this.functionalFlowImport.flowImportLines.some(step => !step.interfaceAlias || step.interfaceAlias === '');
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    this.functionalFlowImport.id = this.functionalFlow.id;
-    this.functionalFlowImport.alias = this.functionalFlow.alias;
-    this.functionalFlowImport.description = this.functionalFlow.description;
-    this.functionalFlowImport.comment = this.functionalFlow.comment;
-    this.functionalFlowImport.status = this.functionalFlow.status;
-    this.functionalFlowImport.documentationURL = this.functionalFlow.documentationURL;
-    this.functionalFlowImport.documentationURL2 = this.functionalFlow.documentationURL;
-    this.functionalFlowImport.startDate = this.functionalFlow.startDate;
-    this.functionalFlowImport.endDate = this.functionalFlow.endDate;
-    this.functionalFlowImport.owner = this.functionalFlow.owner;
-
-    this.functionalFlowService()
-      .saveImport(this.functionalFlowImport, this.selectedLandscape.id)
-      .then(param => {
-        this.isSaving = false;
-        this.$router.go(-1);
-        let message = 'A FunctionalFlow is created with identifier ' + param.id;
-        if (this.functionalFlow.id) {
-          message = 'A FunctionalFlow is updated with identifier ' + param.id;
-        }
-        return (this.$root as any).$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'info',
-          solid: true,
-          autoHideDelay: 5000,
         });
-      })
-      .catch(error => {
-        this.isSaving = false;
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    };
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
+    initRelationships();
 
-  public initRelationships(): void {
-    this.ownerService()
-      .retrieve()
-      .then(res => {
-        this.owners = res.data;
-      });
-    this.landscapeViewService()
-      .retrieve()
-      .then(res => {
-        this.allLandscapes = res.data;
-        if (this.$route.query.landscapeViewId) {
-          this.landscapeGivenInParameter = true;
-          this.allLandscapes.forEach(landscape => {
-            if (landscape.id === parseInt(this.$route.query.landscapeViewId as string)) {
-              this.selectedLandscape = landscape;
-            }
-          });
+    ///////////////////////////////////////////////
+    // appliction autocmplete
+    ///////////////////////////////////////////////
+
+    const plantumlModified = ref(false);
+
+    const nbLines = computed(() => {
+      return plantuml.value.split(/\r\n|\r|\n/).length;
+    });
+
+    watch(nbLines, () => {
+      getPlantUMLImageFromString();
+    });
+
+    const lastLine = computed(() => {
+      return plantuml.value.split(/\r\n|\r|\n/).slice(-1)[0];
+    });
+
+    watch(plantuml, () => {
+      plantumlModified.value = true;
+      //console.log(this.inputSplitted);
+      selectedIndex.value = 0;
+      wordIndex.value = inputSplitted.value.length - 1;
+      focus();
+    });
+
+    const wordIndex = ref(0);
+    const selectedIndex = ref(0);
+    const searchMatch: Ref<string[]> = ref([]);
+    const clickedChooseItem = ref(false);
+
+    const listToSearch = computed(() => {
+      const standardItems = applications.value;
+      return standardItems;
+    });
+
+    const currentWord = computed(() => {
+      return plantuml.value.replace(/(\r\n|\n|\r)/gm, ' ').split(' ')[wordIndex.value];
+    });
+
+    const inputSplitted = computed(() => {
+      return plantuml.value.replace(/(\r\n|\n|\r)/gm, ' ').split(' ');
+    });
+
+    function highlightWord(word) {
+      const regex = new RegExp('(' + currentWord.value + ')', 'g');
+      return word.replace(regex, '<mark>$1</mark>');
+    }
+    function setWord(word) {
+      const currentWords = plantuml.value.replace(/(\r\n|\n|\r)/gm, '__br__ ').split(' ');
+      currentWords[wordIndex.value] = currentWords[wordIndex.value].replace(currentWord.value, '"' + word + '" ');
+      wordIndex.value += 1;
+      plantuml.value = currentWords.join(' ').replace(/__br__\s/g, '\n');
+    }
+    function moveDown() {
+      if (selectedIndex.value < searchMatch.value.length - 1) {
+        selectedIndex.value++;
+      }
+    }
+    function moveUp() {
+      if (selectedIndex.value !== -1) {
+        selectedIndex.value--;
+      }
+    }
+    function selectItem(index) {
+      selectedIndex.value = index;
+      chooseItem();
+    }
+    function chooseItem() {
+      clickedChooseItem.value = true;
+
+      if (selectedIndex.value !== -1 && searchMatch.value.length > 0) {
+        setWord(searchMatch.value[selectedIndex.value]);
+        selectedIndex.value = -1;
+      }
+    }
+    function focusout(e) {
+      setTimeout(() => {
+        if (!clickedChooseItem.value) {
+          searchMatch.value = [];
+          selectedIndex.value = -1;
         }
-      });
-  }
-
-  ///////////////////////////////////////////////
-  // appliction autocmplete
-  ///////////////////////////////////////////////
-
-  public plantumlModified = false;
-
-  public get nbLines() {
-    return this.plantuml.split(/\r\n|\r|\n/).length;
-  }
-
-  public get lastLine() {
-    return this.plantuml.split(/\r\n|\r|\n/).slice(-1)[0];
-  }
-
-  public onLinesChnaged() {
-    this.getPlantUMLImageFromString();
-  }
-
-  public plantumlChange() {
-    this.plantumlModified = true;
-
-    //console.log(this.inputSplitted);
-    this.selectedIndex = 0;
-    this.wordIndex = this.inputSplitted.length - 1;
-    this.focus();
-  }
-
-  public wordIndex = 0;
-  public selectedIndex = 0;
-  public searchMatch: string[] = [];
-  public clickedChooseItem = false;
-
-  get listToSearch() {
-    const standardItems = this.applications;
-    return standardItems;
-  }
-
-  get currentWord() {
-    return this.plantuml.replace(/(\r\n|\n|\r)/gm, ' ').split(' ')[this.wordIndex];
-  }
-
-  get inputSplitted() {
-    return this.plantuml.replace(/(\r\n|\n|\r)/gm, ' ').split(' ');
-  }
-
-  highlightWord(word) {
-    const regex = new RegExp('(' + this.currentWord + ')', 'g');
-    return word.replace(regex, '<mark>$1</mark>');
-  }
-  setWord(word) {
-    const currentWords = this.plantuml.replace(/(\r\n|\n|\r)/gm, '__br__ ').split(' ');
-    currentWords[this.wordIndex] = currentWords[this.wordIndex].replace(this.currentWord, '"' + word + '" ');
-    this.wordIndex += 1;
-    this.plantuml = currentWords.join(' ').replace(/__br__\s/g, '\n');
-  }
-  moveDown() {
-    if (this.selectedIndex < this.searchMatch.length - 1) {
-      this.selectedIndex++;
+        clickedChooseItem.value = false;
+      }, 100);
     }
-  }
-  moveUp() {
-    if (this.selectedIndex !== -1) {
-      this.selectedIndex--;
-    }
-  }
-  selectItem(index) {
-    this.selectedIndex = index;
-    this.chooseItem();
-  }
-  chooseItem(e = null) {
-    console.log(e);
-    this.clickedChooseItem = true;
-
-    if (this.selectedIndex !== -1 && this.searchMatch.length > 0) {
-      if (e) {
-        e.preventDefault();
+    function focus() {
+      searchMatch.value = [];
+      if (lastLine.value.includes(':')) {
+        searchMatch.value = [];
+      } else if (!currentWord.value || currentWord.value === '') {
+        console.log(currentWord.value);
+        searchMatch.value = [];
+      } else if (currentWord.value.length > 2) {
+        console.log(currentWord.value);
+        searchMatch.value = listToSearch.value.filter(el => el.toLowerCase().indexOf(currentWord.value.toLowerCase()) >= 0);
+      } else if (searchMatch.value.length === 1 && currentWord.value === searchMatch.value[0]) {
+        searchMatch.value = [];
       }
-      this.setWord(this.searchMatch[this.selectedIndex]);
-      this.selectedIndex = -1;
     }
-  }
-  focusout(e) {
-    setTimeout(() => {
-      if (!this.clickedChooseItem) {
-        this.searchMatch = [];
-        this.selectedIndex = -1;
+
+    const textareaNbLine = computed(() => {
+      if (functionalFlow.value.steps) {
+        let nb = functionalFlow.value.steps.length;
+        const distinvtID: Set<number> = new Set(
+          functionalFlow.value.steps
+            .map(step => step.group)
+            .filter(group => group) // to filter null values
+            .map(group => group.id),
+        );
+        const nbGroups = distinvtID.size;
+        nb = nb + 2 * nbGroups;
+        const margin = 2;
+        return nb + margin;
       }
-      this.clickedChooseItem = false;
-    }, 100);
-  }
-  focus() {
-    this.searchMatch = [];
-    if (this.lastLine.includes(':')) {
-      this.searchMatch = [];
-    } else if (!this.currentWord || this.currentWord === '') {
-      console.log(this.currentWord);
-      this.searchMatch = [];
-    } else if (this.currentWord.length > 2) {
-      console.log(this.currentWord);
-      this.searchMatch = this.listToSearch.filter(el => el.toLowerCase().indexOf(this.currentWord.toLowerCase()) >= 0);
-    } else if (this.searchMatch.length === 1 && this.currentWord === this.searchMatch[0]) {
-      this.searchMatch = [];
-    }
-  }
-}
+      return 10;
+    });
+
+    onMounted(() => {
+      applicationService()
+        .retrieve()
+        .then(res => {
+          if (res.data) {
+            applications.value = res.data.map(appli => appli.name);
+          }
+        });
+    });
+
+    const validations = useValidation();
+    const validationRules = {
+      alias: {},
+      description: {
+        maxLength: validations.maxLength('This field cannot be longer than 1500 characters.', 1500),
+      },
+      comment: {
+        maxLength: validations.maxLength('This field cannot be longer than 1000 characters.', 1000),
+      },
+      status: {},
+      documentationURL: {
+        maxLength: validations.maxLength('This field cannot be longer than 500 characters.', 500),
+      },
+      documentationURL2: {
+        maxLength: validations.maxLength('This field cannot be longer than 500 characters.', 500),
+      },
+      startDate: {},
+      endDate: {},
+      steps: {},
+      owner: {},
+      landscapes: {},
+      dataFlows: {},
+    };
+    const v$ = useVuelidate(validationRules, functionalFlow as any);
+    v$.value.$validate();
+
+    return {
+      functionalFlowService,
+      alertService,
+      functionalFlow,
+      previousState,
+      isSaving,
+      currentLanguage,
+      owners,
+      v$,
+      tabChanged,
+      tabIndex,
+      textareaNbLine,
+      plantuml,
+      focusout,
+      focus,
+      chooseItem,
+      moveDown,
+      moveUp,
+      searchMatch,
+      selectedIndex,
+      selectItem,
+      highlightWord,
+      getPlantUMLImageFromString,
+      plantumlModified,
+      plantUMLImage,
+      previewError,
+      functionalFlowImport,
+      changeInterface,
+      creation,
+      selectedLandscape,
+      allLandscapes,
+      landscapeGivenInParameter,
+      save,
+      aliasesValid,
+    };
+  },
+});

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IDataFormat } from '@/shared/model/data-format.model';
+import { type IDataFormat } from '@/shared/model/data-format.model';
 
 const baseApiUrl = 'api/data-formats';
 

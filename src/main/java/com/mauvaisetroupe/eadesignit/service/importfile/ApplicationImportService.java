@@ -5,13 +5,13 @@ import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ApplicationMapperUtil;
+import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import javax.transaction.Transactional;
 import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,23 +72,18 @@ public class ApplicationImportService {
 
     public Application findOrCreateApplication(ApplicationImport applicationImport) {
         // Check if alias not used for another application
-        Optional<Application> optional = applicationRepository.findByAlias(applicationImport.getIdFromExcel());
-        final Application application;
-        if (optional.isPresent()) {
-            application = optional.get();
-            Assert.isTrue(
-                application.getName().toLowerCase().equals(applicationImport.getName().toLowerCase()),
-                "Cannot change name for application '" +
-                application.getAlias() +
-                "' : '" +
-                application.getName() +
-                "' in database, and '" +
-                applicationImport.getName() +
-                "' in your Excel file. Please correct your Excel file or modify database."
-            );
-        } else {
-            application = new Application();
-        }
+        Application application = applicationRepository.findByAlias(applicationImport.getIdFromExcel()).orElseGet(Application::new);
+
+        Assert.isTrue(
+            application.getId() == null || application.getName().toLowerCase().equals(applicationImport.getName().toLowerCase()),
+            "Cannot change name for application '" +
+            application.getAlias() +
+            "' : '" +
+            application.getName() +
+            "' in database, and '" +
+            applicationImport.getName() +
+            "' in your Excel file. Please correct your Excel file or modify database."
+        );
 
         Application appliWithSameName = applicationRepository.findByNameIgnoreCase(applicationImport.getName());
         if (appliWithSameName != null) {

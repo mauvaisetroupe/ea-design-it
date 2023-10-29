@@ -1,36 +1,41 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { IFlowGroup } from '@/shared/model/flow-group.model';
 import FlowGroupService from './flow-group.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IFlowGroup } from '@/shared/model/flow-group.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class FlowGroupDetails extends Vue {
-  @Inject('flowGroupService') private flowGroupService: () => FlowGroupService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FlowGroupDetails',
+  setup() {
+    const flowGroupService = inject('flowGroupService', () => new FlowGroupService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public flowGroup: IFlowGroup = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.flowGroupId) {
-        vm.retrieveFlowGroup(to.params.flowGroupId);
+    const previousState = () => router.go(-1);
+    const flowGroup: Ref<IFlowGroup> = ref({});
+
+    const retrieveFlowGroup = async flowGroupId => {
+      try {
+        const res = await flowGroupService().find(flowGroupId);
+        flowGroup.value = res;
+      } catch (error) {
+        alertService.showAnyError(error);
       }
-    });
-  }
+    };
 
-  public retrieveFlowGroup(flowGroupId) {
-    this.flowGroupService()
-      .find(flowGroupId)
-      .then(res => {
-        this.flowGroup = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.flowGroupId) {
+      retrieveFlowGroup(route.params.flowGroupId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      flowGroup,
+
+      previousState,
+    };
+  },
+});

@@ -1,136 +1,100 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import { required, maxLength } from 'vuelidate/lib/validators';
-
-import AlertService from '@/shared/alert/alert.service';
-
-import ApplicationService from '@/entities/application/application.service';
-import { IApplication } from '@/shared/model/application.model';
-
-import ApplicationComponentService from '@/entities/application-component/application-component.service';
-import { IApplicationComponent } from '@/shared/model/application-component.model';
-
-import { IApplicationCategory, ApplicationCategory } from '@/shared/model/application-category.model';
 import ApplicationCategoryService from './application-category.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-const validations: any = {
-  applicationCategory: {
-    name: {
-      required,
-    },
-    type: {},
-    description: {
-      maxLength: maxLength(250),
+import { type IApplicationCategory, ApplicationCategory } from '@/shared/model/application-category.model';
+
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ApplicationCategoryUpdate',
+  setup() {
+    const applicationCategoryService = inject('applicationCategoryService', () => new ApplicationCategoryService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+
+    const applicationCategory: Ref<IApplicationCategory> = ref(new ApplicationCategory());
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
+
+    const route = useRoute();
+    const router = useRouter();
+
+    const previousState = () => router.go(-1);
+
+    const retrieveApplicationCategory = async applicationCategoryId => {
+      try {
+        const res = await applicationCategoryService().find(applicationCategoryId);
+        applicationCategory.value = res;
+      } catch (error) {
+        alertService.showAnyError(error);
+      }
+    };
+
+    if (route.params?.applicationCategoryId) {
+      retrieveApplicationCategory(route.params.applicationCategoryId);
+    }
+
+    const initRelationships = () => {};
+
+    initRelationships();
+
+    const validations = useValidation();
+    const validationRules = {
+      name: {
+        required: validations.required('This field is required.'),
+      },
+      type: {},
+      description: {
+        maxLength: validations.maxLength('This field cannot be longer than 250 characters.', 250),
+      },
+      applications: {},
+      components: {},
+    };
+    const v$ = useVuelidate(validationRules, applicationCategory as any);
+    v$.value.$validate();
+
+    return {
+      applicationCategoryService,
+      alertService,
+      applicationCategory,
+      previousState,
+      isSaving,
+      currentLanguage,
+      v$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.applicationCategory.id) {
+        this.applicationCategoryService()
+          .update(this.applicationCategory)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo('A ApplicationCategory is updated with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showAnyError(error);
+          });
+      } else {
+        this.applicationCategoryService()
+          .create(this.applicationCategory)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess('A ApplicationCategory is created with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showAnyError(error);
+          });
+      }
     },
   },
-};
-
-@Component({
-  validations,
-})
-export default class ApplicationCategoryUpdate extends Vue {
-  @Inject('applicationCategoryService') private applicationCategoryService: () => ApplicationCategoryService;
-  @Inject('alertService') private alertService: () => AlertService;
-
-  public applicationCategory: IApplicationCategory = new ApplicationCategory();
-
-  @Inject('applicationService') private applicationService: () => ApplicationService;
-
-  public applications: IApplication[] = [];
-
-  @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
-
-  public applicationComponents: IApplicationComponent[] = [];
-  public isSaving = false;
-  public currentLanguage = '';
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.applicationCategoryId) {
-        vm.retrieveApplicationCategory(to.params.applicationCategoryId);
-      }
-      vm.initRelationships();
-    });
-  }
-
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.applicationCategory.id) {
-      this.applicationCategoryService()
-        .update(this.applicationCategory)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A ApplicationCategory is updated with identifier ' + param.id;
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.applicationCategoryService()
-        .create(this.applicationCategory)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A ApplicationCategory is created with identifier ' + param.id;
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    }
-  }
-
-  public retrieveApplicationCategory(applicationCategoryId): void {
-    this.applicationCategoryService()
-      .find(applicationCategoryId)
-      .then(res => {
-        this.applicationCategory = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {
-    this.applicationService()
-      .retrieve()
-      .then(res => {
-        this.applications = res.data;
-      });
-    this.applicationComponentService()
-      .retrieve()
-      .then(res => {
-        this.applicationComponents = res.data;
-      });
-  }
-}
+});

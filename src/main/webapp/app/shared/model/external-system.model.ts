@@ -4,5 +4,8 @@ export interface IExternalSystem {
 }
 
 export class ExternalSystem implements IExternalSystem {
-  constructor(public id?: number, public externalSystemID?: string | null) {}
+  constructor(
+    public id?: number,
+    public externalSystemID?: string | null,
+  ) {}
 }

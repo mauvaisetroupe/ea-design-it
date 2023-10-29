@@ -7,7 +7,7 @@
     <div v-if="!rowsLoaded">
       <div class="form-group">
         <div class="custom-file">
-          <input type="file" class="custom-file-input" id="customFile" @change="handleFileUpload($event)" />
+          <input ref="excelFile" type="file" class="custom-file-input" id="customFile" @change="handleFileUpload()" />
           <label class="custom-file-label" for="customFile">{{ excelFileName }}</label>
         </div>
       </div>

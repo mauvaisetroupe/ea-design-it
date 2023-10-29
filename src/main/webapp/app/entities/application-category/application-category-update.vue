@@ -3,7 +3,7 @@
     <div class="col-8">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
         <h2 id="eaDesignItApp.applicationCategory.home.createOrEditLabel" data-cy="ApplicationCategoryCreateUpdateHeading">
-          Create or edit a ApplicationCategory
+          Create or edit a Application Category
         </h2>
         <div>
           <div class="form-group" v-if="applicationCategory.id">
@@ -18,12 +18,12 @@
               name="name"
               id="application-category-name"
               data-cy="name"
-              :class="{ valid: !$v.applicationCategory.name.$invalid, invalid: $v.applicationCategory.name.$invalid }"
-              v-model="$v.applicationCategory.name.$model"
+              :class="{ valid: !v$.name.$invalid, invalid: v$.name.$invalid }"
+              v-model="v$.name.$model"
               required
             />
-            <div v-if="$v.applicationCategory.name.$anyDirty && $v.applicationCategory.name.$invalid">
-              <small class="form-text text-danger" v-if="!$v.applicationCategory.name.required"> This field is required. </small>
+            <div v-if="v$.name.$anyDirty && v$.name.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.name.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -34,8 +34,8 @@
               name="type"
               id="application-category-type"
               data-cy="type"
-              :class="{ valid: !$v.applicationCategory.type.$invalid, invalid: $v.applicationCategory.type.$invalid }"
-              v-model="$v.applicationCategory.type.$model"
+              :class="{ valid: !v$.type.$invalid, invalid: v$.type.$invalid }"
+              v-model="v$.type.$model"
             />
           </div>
           <div class="form-group">
@@ -46,13 +46,11 @@
               name="description"
               id="application-category-description"
               data-cy="description"
-              :class="{ valid: !$v.applicationCategory.description.$invalid, invalid: $v.applicationCategory.description.$invalid }"
-              v-model="$v.applicationCategory.description.$model"
+              :class="{ valid: !v$.description.$invalid, invalid: v$.description.$invalid }"
+              v-model="v$.description.$model"
             />
-            <div v-if="$v.applicationCategory.description.$anyDirty && $v.applicationCategory.description.$invalid">
-              <small class="form-text text-danger" v-if="!$v.applicationCategory.description.maxLength">
-                This field cannot be longer than 250 characters.
-              </small>
+            <div v-if="v$.description.$anyDirty && v$.description.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.description.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
         </div>
@@ -64,7 +62,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.applicationCategory.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

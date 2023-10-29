@@ -12,13 +12,20 @@
     <div>
       <div class="form-group">
         <div class="custom-file">
-          <input type="file" class="custom-file-input" id="customFile" @change="handleFileUpload($event)" />
+          <input
+            type="file"
+            class="custom-file-input"
+            id="customFile"
+            @change="handleFileUpload()"
+            ref="excelFile"
+            :disabled="fileSubmited"
+          />
           <label class="custom-file-label" for="customFile">{{ excelFileName }}</label>
         </div>
       </div>
 
       <div class="form-group" v-if="excelFile && summary.length == 0">
-        <button type="submit" class="btn btn-primary mb-2" v-on:click="getSheetnames()">Submit File</button>
+        <button type="submit" class="btn btn-primary mb-2" v-on:click="getSheetnames()" :disabled="fileSubmited">Submit File</button>
       </div>
 
       <div v-if="summary.length > 0" class="col-md-12">
@@ -28,8 +35,8 @@
         </div>
 
         <div class="row m-3">
-          <template v-for="(row, i) in summary">
-            <div class="col-1" :key="'0-' + i">
+          <template v-for="(row, i) in summary" :key="i">
+            <div class="col-1">
               <input
                 type="checkbox"
                 v-model="checkedNames"
@@ -40,7 +47,7 @@
               />
               <label :for="'CHK-' + row.sheetName" class="">{{ row.sheetName }} </label>
             </div>
-            <div class="col-3" :key="'1-' + i">
+            <div class="col-3">
               <label :for="'CHK-' + row.sheetName" class="" v-if="row.landscapeName">
                 {{ row.landscapeName }}
                 <span v-if="row.landscapeExists" class="text-success">(existing)</span>
@@ -48,7 +55,7 @@
               </label>
               <label :for="'CHK-' + row.sheetName" class="" v-else><span class="bg-danger text-white">No Landscape</span></label>
             </div>
-            <div class="col-2" :key="'2-' + i"></div>
+            <div class="col-2"></div>
           </template>
         </div>
         <div class="form-group col-md-12" v-if="excelFile">
@@ -114,9 +121,7 @@
                   flowImport.importStatusMessage
                 }}</span>
               </td>
-              <td>
-                <router-link :to="{ name: 'FlowImportView', params: { flowImportId: flowImport.id } }">{{ flowImport.id }}</router-link>
-              </td>
+              <td>{{ flowImport.id }}</td>
               <td>{{ flowImport.idFlowFromExcel }}</td>
               <td>{{ flowImport.flowAlias }}</td>
               <td>{{ flowImport.sourceElement }}</td>

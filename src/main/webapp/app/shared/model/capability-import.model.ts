@@ -1,6 +1,4 @@
-import { IApplication } from '@/shared/model/application.model';
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
-import { ICapability } from './capability.model';
+import { type ICapability } from './capability.model';
 
 export interface ICapabilityImport {
   l0: ICapability;

@@ -1,48 +1,43 @@
 package com.mauvaisetroupe.eadesignit.config;
 
-import com.mauvaisetroupe.eadesignit.security.AuthoritiesConstants;
-import com.mauvaisetroupe.eadesignit.security.jwt.JWTConfigurer;
-import com.mauvaisetroupe.eadesignit.security.jwt.TokenProvider;
+import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
+import com.mauvaisetroupe.eadesignit.security.*;
+import com.mauvaisetroupe.eadesignit.web.filter.SpaWebFilter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
+import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
-import org.springframework.web.filter.CorsFilter;
-import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.JHipsterProperties;
 
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
-@Import(SecurityProblemSupport.class)
-@ConditionalOnProperty(prefix = "application", name = "security-anonymous-reader", havingValue = "false")
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+@Configuration
+@EnableMethodSecurity(securedEnabled = true)
+public class SecurityConfiguration {
+
+    private final Environment env;
 
     private final JHipsterProperties jHipsterProperties;
 
-    private final TokenProvider tokenProvider;
-
-    private final CorsFilter corsFilter;
-    private final SecurityProblemSupport problemSupport;
-
-    public SecurityConfiguration(
-        TokenProvider tokenProvider,
-        CorsFilter corsFilter,
-        JHipsterProperties jHipsterProperties,
-        SecurityProblemSupport problemSupport
-    ) {
-        this.tokenProvider = tokenProvider;
-        this.corsFilter = corsFilter;
-        this.problemSupport = problemSupport;
+    public SecurityConfiguration(Environment env, JHipsterProperties jHipsterProperties) {
+        this.env = env;
         this.jHipsterProperties = jHipsterProperties;
     }
 
@@ -51,74 +46,119 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    public void configure(WebSecurity web) {
-        web
-            .ignoring()
-            .antMatchers(HttpMethod.OPTIONS, "/**")
-            .antMatchers("/app/**/*.{js,html}")
-            .antMatchers("/i18n/**")
-            .antMatchers("/content/**")
-            .antMatchers("/h2-console/**")
-            .antMatchers("/swagger-ui/**")
-            .antMatchers("/test/**");
-    }
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        // @formatter:off
+    @Bean
+    @ConditionalOnProperty(prefix = "application", name = "security-anonymous-reader", havingValue = "false", matchIfMissing = true)
+    public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         http
-            .csrf()
-            .disable()
-            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling()
-                .authenticationEntryPoint(problemSupport)
-                .accessDeniedHandler(problemSupport)
-        .and()
-            .headers()
-            .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
-        .and()
-            .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
-        .and()
-            .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
-        .and()
-            .frameOptions()
-            .deny()
-        .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-            .authorizeRequests()
-            .antMatchers("/api/authenticate").permitAll()
-            .antMatchers("/api/register").permitAll()
-            .antMatchers("/api/activate").permitAll()
-            .antMatchers("/api/account/reset-password/init").permitAll()
-            .antMatchers("/api/account/reset-password/finish").permitAll()
-            .antMatchers("/api/account/anoymous-reader").permitAll()
-            .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers(HttpMethod.GET,"/api/**").hasAnyAuthority(AuthoritiesConstants.USER)
-            .antMatchers(HttpMethod.POST,"/api/account/**").hasAnyAuthority(AuthoritiesConstants.USER) // change password...
-            .antMatchers(HttpMethod.POST,"/api/**").hasAnyAuthority(AuthoritiesConstants.WRITE)
-            .antMatchers(HttpMethod.PUT,"/api/applications/**").hasAnyAuthority(AuthoritiesConstants.WRITE,AuthoritiesConstants.CONTRIBUTOR)
-            .antMatchers(HttpMethod.PATCH,"/api/applications/**").hasAnyAuthority(AuthoritiesConstants.WRITE,AuthoritiesConstants.CONTRIBUTOR)
-            .antMatchers(HttpMethod.PUT,"/api/flow-interfaces/**").hasAnyAuthority(AuthoritiesConstants.WRITE,AuthoritiesConstants.CONTRIBUTOR)
-            .antMatchers(HttpMethod.PATCH,"/api/flow-interfaces/**").hasAnyAuthority(AuthoritiesConstants.WRITE,AuthoritiesConstants.CONTRIBUTOR)
-            .antMatchers(HttpMethod.PUT,"/api/**").hasAnyAuthority(AuthoritiesConstants.WRITE)
-            .antMatchers(HttpMethod.PATCH,"/api/**").hasAnyAuthority(AuthoritiesConstants.WRITE)
-            .antMatchers(HttpMethod.DELETE,"/api/**").hasAnyAuthority(AuthoritiesConstants.HARD_DELETE)
-            .antMatchers("/management/health").permitAll()
-            .antMatchers("/management/health/**").permitAll()
-            .antMatchers("/management/info").permitAll()
-            .antMatchers("/management/prometheus").permitAll()
-            .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-        .and()
-            .httpBasic()
-        .and()
-            .apply(securityConfigurerAdapter());
-        // @formatter:on
+            .cors(withDefaults())
+            .csrf(csrf -> csrf.disable())
+            .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
+            .headers(headers ->
+                headers
+                    .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
+                    .frameOptions(FrameOptionsConfig::sameOrigin)
+                    .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+                    .permissionsPolicy(permissions ->
+                        permissions.policy(
+                            "camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()"
+                        )
+                    )
+            )
+            .authorizeHttpRequests(authz ->
+                // prettier-ignore
+                authz
+                    .requestMatchers(mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.map"), mvc.pattern("/*.css")).permitAll()
+                    .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
+                    .requestMatchers(mvc.pattern("/assets/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/content/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
+                    .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate")).permitAll()
+                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
+                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/account/anoymous-reader")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/register")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/activate")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers(mvc.pattern("/api/**")).authenticated()
+                    .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers(mvc.pattern("/management/health")).permitAll()
+                    .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/management/info")).permitAll()
+                    .requestMatchers(mvc.pattern("/management/prometheus")).permitAll()
+                    .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+            )
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(exceptions ->
+                exceptions
+                    .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                    .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+            )
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
+            http.authorizeHttpRequests(authz -> authz.requestMatchers(antMatcher("/h2-console/**")).permitAll());
+        }
+        return http.build();
     }
 
-    private JWTConfigurer securityConfigurerAdapter() {
-        return new JWTConfigurer(tokenProvider);
+    @Bean
+    @ConditionalOnProperty(prefix = "application", name = "security-anonymous-reader", havingValue = "true", matchIfMissing = true)
+    public SecurityFilterChain filterChainForNaonymousReading(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+        http
+            .cors(withDefaults())
+            .csrf(csrf -> csrf.disable())
+            .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
+            .headers(headers ->
+                headers
+                    .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
+                    .frameOptions(FrameOptionsConfig::sameOrigin)
+                    .referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
+                    .permissionsPolicy(permissions ->
+                        permissions.policy(
+                            "camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()"
+                        )
+                    )
+            )
+            .authorizeHttpRequests(authz ->
+                // prettier-ignore
+                authz
+                    .requestMatchers(mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.map"), mvc.pattern("/*.css")).permitAll()
+                    .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
+                    .requestMatchers(mvc.pattern("/assets/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/content/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
+                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/**")).permitAll()
+                    .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate")).permitAll()
+                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
+                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/account/anoymous-reader")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/register")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/activate")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers(mvc.pattern("/api/**")).authenticated()
+                    .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers(mvc.pattern("/management/health")).permitAll()
+                    .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
+                    .requestMatchers(mvc.pattern("/management/info")).permitAll()
+                    .requestMatchers(mvc.pattern("/management/prometheus")).permitAll()
+                    .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+            )
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(exceptions ->
+                exceptions
+                    .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                    .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+            )
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
+            http.authorizeHttpRequests(authz -> authz.requestMatchers(antMatcher("/h2-console/**")).permitAll());
+        }
+        return http.build();
+    }
+
+    @Bean
+    MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
+        return new MvcRequestMatcher.Builder(introspector);
     }
 }

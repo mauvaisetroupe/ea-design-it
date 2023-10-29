@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
+import { type ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
 
 const baseApiUrl = 'api/capability-application-mappings';
 

@@ -1,19 +1,16 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import org.apache.commons.lang3.ObjectUtils;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A FunctionalFlowStep.
  */
 @Entity
 @Table(name = "REL_FLOW__INTERFACES", uniqueConstraints = { @UniqueConstraint(columnNames = { "interfaces_id", "flow_id" }) })
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class FunctionalFlowStep implements Serializable, Comparable<FunctionalFlowStep> {
 
     private static final long serialVersionUID = 1L;
@@ -136,7 +133,7 @@ public class FunctionalFlowStep implements Serializable, Comparable<FunctionalFl
         if (!(o instanceof FunctionalFlowStep)) {
             return false;
         }
-        return id != null && id.equals(((FunctionalFlowStep) o).id);
+        return getId() != null && getId().equals(((FunctionalFlowStep) o).getId());
     }
 
     @Override

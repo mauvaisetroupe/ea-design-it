@@ -117,7 +117,7 @@
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span> Back</span>
+          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>Back</span>
         </button>
         <router-link
           v-if="flowInterface.id"
@@ -125,7 +125,7 @@
           custom
           v-slot="{ navigate }"
         >
-          <button @click="navigate" class="btn btn-primary" v-if="accountService().writeOrContributor" :disabled="!isOwner(flowInterface)">
+          <button @click="navigate" class="btn btn-primary" v-if="accountService.writeOrContributor" :disabled="!isOwner(flowInterface)">
             <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span> Edit</span>
           </button>
         </router-link>
@@ -170,7 +170,7 @@
                         @click="navigate"
                         class="btn btn-info btn-sm details"
                         data-cy="entityDetailsButton"
-                        v-if="!accountService().writeAuthorities"
+                        v-if="!accountService.writeAuthorities"
                       >
                         <font-awesome-icon icon="eye"></font-awesome-icon>
                         <span class="d-none d-md-inline">View</span>
@@ -179,14 +179,14 @@
                         @click="navigate"
                         class="btn btn-primary btn-sm edit"
                         data-cy="entityEditButton"
-                        v-if="accountService().writeAuthorities"
+                        v-if="accountService.writeAuthorities"
                       >
                         <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                         <span class="d-none d-md-inline">Edit</span>
                       </button>
                     </router-link>
                     <b-button
-                      v-if="accountService().writeAuthorities"
+                      v-if="accountService.writeAuthorities"
                       v-on:click="prepareToDetach(dataFlow)"
                       variant="warning"
                       class="btn btn-sm"
@@ -206,19 +206,19 @@
           <span>
             <button
             class="btn btn-primary jh-create-entity create-functional-flow"
-            v-if="accountService().writeAuthorities"
+            v-if="accountService.writeAuthorities"
             @click="addNew()"
             >
               <font-awesome-icon icon="plus"></font-awesome-icon>
               <span>Add exisintg Data Flow</span>
             </button>
-            <router-link :to="{ name: 'DataFlowCreate' }" custom v-slot="{ navigate }" v-if="accountService().writeAuthorities">
+            <router-link :to="{ name: 'DataFlowCreate' }" custom v-slot="{ navigate }" v-if="accountService.writeAuthorities">
               <button
               @click="navigate"
               id="jh-create-entity"
               data-cy="entityCreateButton"
               class="btn btn-primary jh-create-entity create-flow-interface"
-              v-if="accountService().writeAuthorities"
+              v-if="accountService.writeAuthorities"
               >
               <font-awesome-icon icon="plus"></font-awesome-icon>
               <span> Create a new Data Flow </span>
@@ -227,7 +227,7 @@
         </span>
       </div>
     -->
-      
+
         <div class="table-responsive" v-if="flowInterface.steps && flowInterface.steps.length > 0">
           <br />
           <br />
@@ -268,7 +268,7 @@
         </div>
       </div>
     </div>
-    <b-modal ref="detachDataEntity" id="detachDataEntity">
+    <!-- <b-modal ref="detachDataEntity" id="detachDataEntity">
       <span slot="modal-title"
         ><span id="eaDesignItApp.landscapeView.delete.question" data-cy="landscapeViewDeleteDialogHeading"
           >Confirm delete operation</span
@@ -289,7 +289,7 @@
           Delete
         </button>
       </div>
-    </b-modal>
+    </b-modal> -->
   </div>
 </template>
 

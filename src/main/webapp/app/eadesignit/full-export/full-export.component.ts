@@ -1,124 +1,142 @@
-import { mixins } from 'vue-class-component';
-
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 import AlertService from '@/shared/alert/alert.service';
 import FullExportService from './full-export.service';
 import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
+import type { ILandscapeView } from '@/shared/model/landscape-view.model';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class FullExport extends Vue {
-  @Inject('fullExportService') private fullExportService: () => FullExportService;
-  @Inject('landscapeViewService') private landscapeViewService: () => LandscapeViewService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FullExport',
+  setup() {
+    const fullExportService = inject('fullExportService', () => new FullExportService());
+    const landscapeViewService = inject('landscapeViewService', () => new LandscapeViewService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public isFetching = false;
+    const route = useRoute();
+    const router = useRouter();
 
-  public applications = true;
-  public applicationComponents = true;
-  public landscapes: ILandscapeView[] = [];
-  public checkedLandscapes: ILandscapeView[] = [];
-  public owner = true;
-  public externalSystem = true;
-  public capabilities = true;
-  public capabilitiesMapping: ILandscapeView[] = [];
-  public checkedCapabilitiesMapping: ILandscapeView[] = [];
-  public capabilitiesMappingWithNoLandscape = true;
-  public functionalFlowsWhithNoLandscape = true;
+    const isFetching = ref(false);
+    const applications = ref(true);
+    const applicationComponents = ref(true);
+    const landscapes: Ref<ILandscapeView[]> = ref([]);
+    const checkedLandscapes: Ref<ILandscapeView[]> = ref([]);
+    const owner = ref(true);
+    const externalSystem = ref(true);
+    const capabilities = ref(true);
+    const capabilitiesMapping: Ref<ILandscapeView[]> = ref([]);
+    const checkedCapabilitiesMapping: Ref<ILandscapeView[]> = ref([]);
+    const capabilitiesMappingWithNoLandscape = ref(true);
+    const functionalFlowsWhithNoLandscape = ref(true);
+    const submited = ref(false);
 
-  public submited = false;
+    onMounted(async () => {
+      await retrieveAllLandscapeViews();
+    });
 
-  public mounted(): void {
-    this.retrieveAllLandscapeViews();
-  }
+    const retrieveLandscapeViews = async () => {
+      isFetching.value = true;
+      try {
+        const res = await landscapeViewService().retrieve();
+        landscapes.value = res.data;
+        checkedLandscapes.value = res.data;
+        capabilitiesMapping.value = res.data;
+        checkedCapabilitiesMapping.value = res.data;
+      } catch (err) {
+        alertService.showAnyError(err);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public retrieveAllLandscapeViews(): void {
-    this.isFetching = true;
-    this.landscapeViewService()
-      .retrieve()
-      .then(
-        res => {
-          this.landscapes = res.data;
-          this.checkedLandscapes = res.data;
-          this.capabilitiesMapping = res.data;
-          this.checkedCapabilitiesMapping = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
-
-  public selectAllLansdcape() {
-    if (!this.submited) {
-      this.checkedLandscapes = [];
-      this.checkedLandscapes.push(...this.landscapes);
+    function selectAllLansdcape() {
+      if (!submited.value) {
+        checkedLandscapes.value = [];
+        checkedLandscapes.value.push(...landscapes.value);
+      }
     }
-  }
 
-  public selectNoLandscape() {
-    if (!this.submited) this.checkedLandscapes = [];
-  }
-
-  public selectAllMapping() {
-    if (!this.submited) {
-      this.checkedCapabilitiesMapping = [];
-      this.checkedCapabilitiesMapping.push(...this.capabilitiesMapping);
-      this.capabilities = true;
+    function selectNoLandscape() {
+      if (!submited.value) checkedLandscapes.value = [];
     }
-  }
 
-  public selectNoMapping() {
-    if (!this.submited) this.checkedCapabilitiesMapping = [];
-  }
-
-  public checkCapa(e) {
-    if (this.checkedCapabilitiesMapping.length > 0) {
-      this.capabilities = true;
+    function selectAllMapping() {
+      if (!submited.value) {
+        checkedCapabilitiesMapping.value = [];
+        checkedCapabilitiesMapping.value.push(...capabilitiesMapping.value);
+        capabilities.value = true;
+      }
     }
-  }
 
-  public exportExcel() {
-    this.submited = true;
-    this.isFetching = true;
-    this.fullExportService()
-      .downloadFile(
-        this.applications,
-        this.applicationComponents,
-        this.owner,
-        this.externalSystem,
-        this.capabilities,
-        this.checkedLandscapes.map(l => l.id),
-        this.checkedCapabilitiesMapping.map(l => l.id),
-        this.capabilitiesMappingWithNoLandscape,
-        this.functionalFlowsWhithNoLandscape
-      )
-      .then(
-        response => {
-          const url = URL.createObjectURL(
-            new Blob([response.data], {
-              type: 'application/vnd.ms-excel',
-            })
-          );
-          const link = document.createElement('a');
-          link.href = url;
-          const today = new Date().toISOString().split('T')[0];
-          const time = new Date().toLocaleTimeString().replace(' ', '_');
-          link.setAttribute('download', 'full-data-export-' + today + '-' + time + '.xlsx');
-          document.body.appendChild(link);
-          link.click();
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
-}
+    function selectNoMapping() {
+      if (!submited.value) checkedCapabilitiesMapping.value = [];
+    }
+
+    function checkCapa(e) {
+      if (checkedCapabilitiesMapping.value.length > 0) {
+        capabilities.value = true;
+      }
+    }
+
+    function exportExcel() {
+      submited.value = true;
+      isFetching.value = true;
+      fullExportService()
+        .downloadFile(
+          applications.value,
+          applicationComponents.value,
+          owner.value,
+          externalSystem.value,
+          capabilities.value,
+          checkedLandscapes.value.map(l => l.id),
+          checkedCapabilitiesMapping.value.map(l => l.id),
+          capabilitiesMappingWithNoLandscape.value,
+          functionalFlowsWhithNoLandscape.value,
+        )
+        .then(
+          response => {
+            const url = URL.createObjectURL(
+              new Blob([response.data], {
+                type: 'application/vnd.ms-excel',
+              }),
+            );
+            const link = document.createElement('a');
+            link.href = url;
+            const today = new Date().toISOString().split('T')[0];
+            const time = new Date().toLocaleTimeString().replace(' ', '_');
+            link.setAttribute('download', 'full-data-export-' + today + '-' + time + '.xlsx');
+            document.body.appendChild(link);
+            link.click();
+            isFetching.value = false;
+          },
+          err => {
+            isFetching.value = false;
+            alertService().showHttpError(err.response);
+          },
+        );
+    }
+
+    return {
+      isFetching,
+      applications,
+      applicationComponents,
+      landscapes,
+      checkedLandscapes,
+      owner,
+      externalSystem,
+      capabilities,
+      capabilitiesMapping,
+      checkedCapabilitiesMapping,
+      capabilitiesMappingWithNoLandscape,
+      functionalFlowsWhithNoLandscape,
+      submited,
+      selectAllLansdcape,
+      selectNoLandscape,
+      selectAllMapping,
+      selectNoMapping,
+      checkCapa,
+      exportExcel,
+    };
+  },
+});

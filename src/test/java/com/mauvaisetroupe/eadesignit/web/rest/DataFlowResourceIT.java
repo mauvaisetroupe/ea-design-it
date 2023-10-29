@@ -10,13 +10,13 @@ import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.Frequency;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +25,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -263,7 +262,7 @@ class DataFlowResourceIT {
         int databaseSizeBeforeUpdate = dataFlowRepository.findAll().size();
 
         // Update the dataFlow
-        DataFlow updatedDataFlow = dataFlowRepository.findById(dataFlow.getId()).get();
+        DataFlow updatedDataFlow = dataFlowRepository.findById(dataFlow.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedDataFlow are not directly saved in db
         em.detach(updatedDataFlow);
         updatedDataFlow
@@ -368,10 +367,10 @@ class DataFlowResourceIT {
 
         partialUpdatedDataFlow
             .resourceType(UPDATED_RESOURCE_TYPE)
-            .description(UPDATED_DESCRIPTION)
             .frequency(UPDATED_FREQUENCY)
             .contractURL(UPDATED_CONTRACT_URL)
-            .endDate(UPDATED_END_DATE);
+            .documentationURL(UPDATED_DOCUMENTATION_URL)
+            .startDate(UPDATED_START_DATE);
 
         restDataFlowMockMvc
             .perform(
@@ -387,12 +386,12 @@ class DataFlowResourceIT {
         DataFlow testDataFlow = dataFlowList.get(dataFlowList.size() - 1);
         assertThat(testDataFlow.getResourceName()).isEqualTo(DEFAULT_RESOURCE_NAME);
         assertThat(testDataFlow.getResourceType()).isEqualTo(UPDATED_RESOURCE_TYPE);
-        assertThat(testDataFlow.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testDataFlow.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testDataFlow.getFrequency()).isEqualTo(UPDATED_FREQUENCY);
         assertThat(testDataFlow.getContractURL()).isEqualTo(UPDATED_CONTRACT_URL);
-        assertThat(testDataFlow.getDocumentationURL()).isEqualTo(DEFAULT_DOCUMENTATION_URL);
-        assertThat(testDataFlow.getStartDate()).isEqualTo(DEFAULT_START_DATE);
-        assertThat(testDataFlow.getEndDate()).isEqualTo(UPDATED_END_DATE);
+        assertThat(testDataFlow.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
+        assertThat(testDataFlow.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testDataFlow.getEndDate()).isEqualTo(DEFAULT_END_DATE);
     }
 
     @Test

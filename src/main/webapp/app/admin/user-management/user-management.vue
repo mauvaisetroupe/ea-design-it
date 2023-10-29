@@ -5,11 +5,11 @@
 
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isLoading">
-          <font-awesome-icon icon="sync" :spin="isLoading"></font-awesome-icon> <span>Refresh List</span>
+          <font-awesome-icon icon="sync" :spin="isLoading"></font-awesome-icon> <span>Refresh list</span>
         </button>
         <router-link custom v-slot="{ navigate }" :to="{ name: 'JhiUserCreate' }">
           <button @click="navigate" class="btn btn-primary jh-create-entity">
-            <font-awesome-icon icon="plus"></font-awesome-icon> <span>Create a new User</span>
+            <font-awesome-icon icon="plus"></font-awesome-icon> <span>Create a new user</span>
           </button>
         </router-link>
       </div>
@@ -32,15 +32,15 @@
             <th scope="col"></th>
             <th scope="col"><span>Profiles</span></th>
             <th scope="col" v-on:click="changeOrder('createdDate')">
-              <span>Created Date</span>
+              <span>Created date</span>
               <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'createdDate'"></jhi-sort-indicator>
             </th>
             <th scope="col" v-on:click="changeOrder('lastModifiedBy')">
-              <span>Last Modified By</span>
+              <span>Modified by</span>
               <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'lastModifiedBy'"></jhi-sort-indicator>
             </th>
             <th scope="col" id="modified-date-sort" v-on:click="changeOrder('lastModifiedDate')">
-              <span>Last Modified Date</span>
+              <span>Modified date</span>
               <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'lastModifiedDate'"></jhi-sort-indicator>
             </th>
             <th scope="col"></th>
@@ -72,9 +72,9 @@
                 <span class="badge badge-info">{{ authority }}</span>
               </div>
             </td>
-            <td>{{ user.createdDate | formatDate }}</td>
+            <td>{{ formatDate(user.createdDate) }}</td>
             <td>{{ user.lastModifiedBy }}</td>
-            <td>{{ user.lastModifiedDate | formatDate }}</td>
+            <td>{{ formatDate(user.lastModifiedDate) }}</td>
             <td class="text-right">
               <div class="btn-group">
                 <router-link :to="{ name: 'JhiUserView', params: { userId: user.login } }" custom v-slot="{ navigate }">
@@ -98,14 +98,16 @@
           </tr>
         </tbody>
       </table>
-      <b-modal ref="removeUser" id="removeUser" @ok="deleteUser()">
+      <b-modal ref="removeUser" id="removeUser" title="Confirm delete operation" @ok="deleteUser()">
         <div class="modal-body">
-          <p id="jhi-delete-user-heading">Are you sure you want to delete this user?</p>
+          <p id="jhi-delete-user-heading">Are you sure you want to delete user {{ removeId }}?</p>
         </div>
-        <div slot="modal-footer">
-          <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-          <button type="button" class="btn btn-primary" id="confirm-delete-user" v-on:click="deleteUser()">Delete</button>
-        </div>
+        <template #modal-footer>
+          <div>
+            <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+            <button type="button" class="btn btn-primary" id="confirm-delete-user" v-on:click="deleteUser()">Delete</button>
+          </div>
+        </template>
       </b-modal>
     </div>
     <div v-show="users && users.length > 0">

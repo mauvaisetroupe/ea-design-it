@@ -15,8 +15,8 @@
             <select
               class="form-control"
               name="viewpoint"
-              :class="{ valid: !$v.landscapeView.viewpoint.$invalid, invalid: $v.landscapeView.viewpoint.$invalid }"
-              v-model="$v.landscapeView.viewpoint.$model"
+              :class="{ valid: !v$.viewpoint.$invalid, invalid: v$.viewpoint.$invalid }"
+              v-model="v$.viewpoint.$model"
               id="landscape-view-viewpoint"
               data-cy="viewpoint"
             >
@@ -31,8 +31,8 @@
               name="diagramName"
               id="landscape-view-diagramName"
               data-cy="diagramName"
-              :class="{ valid: !$v.landscapeView.diagramName.$invalid, invalid: $v.landscapeView.diagramName.$invalid }"
-              v-model="$v.landscapeView.diagramName.$model"
+              :class="{ valid: !v$.diagramName.$invalid, invalid: v$.diagramName.$invalid }"
+              v-model="v$.diagramName.$model"
             />
           </div>
           <div class="form-group">
@@ -57,7 +57,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.landscapeView.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

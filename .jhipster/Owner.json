@@ -37,8 +37,10 @@
       "otherEntityRelationshipName": "owner",
       "ownerSide": true,
       "relationshipName": "users",
+      "relationshipSide": "left",
       "relationshipType": "many-to-many"
     }
   ],
+  "searchEngine": "no",
   "service": "no"
 }

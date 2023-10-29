@@ -1,12 +1,46 @@
-import Vue from 'vue';
+import type { BvToast } from 'bootstrap-vue';
+import { getCurrentInstance } from 'vue';
+
+export const useAlertService = () => {
+  const bvToast = getCurrentInstance().root.proxy['_bv__toast'];
+  if (!bvToast) {
+    throw new Error('BootstrapVue toast component was not found');
+  }
+  return new AlertService({
+    bvToast,
+  });
+};
 
 export default class AlertService {
-  public showError(instance: Vue, message: string, params?: any) {
-    let alertMessage = 'Unkown error';
-    if (message) {
-      alertMessage = message;
-    }
-    (instance.$root as any).$bvToast.toast(alertMessage, {
+  private bvToast: BvToast;
+
+  constructor({ bvToast }: { bvToast: BvToast }) {
+    this.bvToast = bvToast;
+  }
+
+  public showInfo(toastMessage: string, toastOptions?: any) {
+    this.bvToast.toast(toastMessage, {
+      toaster: 'b-toaster-top-center',
+      title: 'Info',
+      variant: 'info',
+      solid: true,
+      autoHideDelay: 5000,
+      ...toastOptions,
+    });
+  }
+
+  public showSuccess(toastMessage: string) {
+    this.bvToast.toast(toastMessage, {
+      toaster: 'b-toaster-top-center',
+      title: 'Success',
+      variant: 'success',
+      solid: true,
+      autoHideDelay: 5000,
+    });
+  }
+
+  public showError(toastMessage: string) {
+    this.bvToast.toast(toastMessage, {
       toaster: 'b-toaster-top-center',
       title: 'Error',
       variant: 'danger',
@@ -15,40 +49,45 @@ export default class AlertService {
     });
   }
 
-  public showHttpError(instance: Vue, httpErrorResponse: any) {
-    if (!httpErrorResponse) {
-      this.showError(instance, 'Unknown error - No http response');
+  public showAnyError(error: any) {
+    if (error.response) {
+      this.showHttpError(error.response);
     } else {
-      switch (httpErrorResponse.status) {
-        case 0:
-          this.showError(instance, 'Server not reachable');
-          break;
-
-        case 400: {
-          const arr = Object.keys(httpErrorResponse.headers);
-          let errorHeader: string | null = null;
-          for (const entry of arr) {
-            if (entry.toLowerCase().endsWith('app-error')) {
-              errorHeader = httpErrorResponse.headers[entry];
-            }
-          }
-          if (errorHeader) {
-            this.showError(instance, errorHeader);
-          } else if (httpErrorResponse.data !== '' && httpErrorResponse.data.fieldErrors) {
-            this.showError(instance, 'Validation error');
-          } else {
-            this.showError(instance, httpErrorResponse.data.message);
-          }
-          break;
-        }
-
-        case 404:
-          this.showError(instance, 'Not found');
-          break;
-
-        default:
-          this.showError(instance, httpErrorResponse.data.message);
-      }
+      console.error(error);
+      this.showError('Unknow Error, please consult console errors to report a bug');
     }
+  }
+
+  public showHttpError(httpErrorResponse: any) {
+    console.log(httpErrorResponse.type);
+    let errorMessage: string | null = null;
+    switch (httpErrorResponse.status) {
+      case 0:
+        errorMessage = 'Server not reachable';
+        break;
+
+      case 400: {
+        const arr = Object.keys(httpErrorResponse.headers);
+        for (const entry of arr) {
+          if (entry.toLowerCase().endsWith('app-error')) {
+            errorMessage = httpErrorResponse.headers[entry];
+          }
+        }
+        if (!errorMessage && httpErrorResponse.data?.fieldErrors) {
+          errorMessage = 'Validation error';
+        } else if (!errorMessage) {
+          errorMessage = httpErrorResponse.data.message;
+        }
+        break;
+      }
+
+      case 404:
+        errorMessage = 'The page does not exist.';
+        break;
+
+      default:
+        errorMessage = httpErrorResponse.data.message;
+    }
+    this.showError(errorMessage);
   }
 }

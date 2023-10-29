@@ -12,13 +12,13 @@ import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.SoftwareType;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationComponentRepository;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -313,7 +312,9 @@ class ApplicationComponentResourceIT {
         int databaseSizeBeforeUpdate = applicationComponentRepository.findAll().size();
 
         // Update the applicationComponent
-        ApplicationComponent updatedApplicationComponent = applicationComponentRepository.findById(applicationComponent.getId()).get();
+        ApplicationComponent updatedApplicationComponent = applicationComponentRepository
+            .findById(applicationComponent.getId())
+            .orElseThrow();
         // Disconnect from session so that the updates on updatedApplicationComponent are not directly saved in db
         em.detach(updatedApplicationComponent);
         updatedApplicationComponent
@@ -423,10 +424,9 @@ class ApplicationComponentResourceIT {
         partialUpdatedApplicationComponent.setId(applicationComponent.getId());
 
         partialUpdatedApplicationComponent
-            .description(UPDATED_DESCRIPTION)
-            .comment(UPDATED_COMMENT)
             .documentationURL(UPDATED_DOCUMENTATION_URL)
-            .softwareType(UPDATED_SOFTWARE_TYPE);
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
 
         restApplicationComponentMockMvc
             .perform(
@@ -442,13 +442,13 @@ class ApplicationComponentResourceIT {
         ApplicationComponent testApplicationComponent = applicationComponentList.get(applicationComponentList.size() - 1);
         assertThat(testApplicationComponent.getAlias()).isEqualTo(DEFAULT_ALIAS);
         assertThat(testApplicationComponent.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testApplicationComponent.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testApplicationComponent.getComment()).isEqualTo(UPDATED_COMMENT);
+        assertThat(testApplicationComponent.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testApplicationComponent.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testApplicationComponent.getDocumentationURL()).isEqualTo(UPDATED_DOCUMENTATION_URL);
-        assertThat(testApplicationComponent.getStartDate()).isEqualTo(DEFAULT_START_DATE);
-        assertThat(testApplicationComponent.getEndDate()).isEqualTo(DEFAULT_END_DATE);
+        assertThat(testApplicationComponent.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testApplicationComponent.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testApplicationComponent.getApplicationType()).isEqualTo(DEFAULT_APPLICATION_TYPE);
-        assertThat(testApplicationComponent.getSoftwareType()).isEqualTo(UPDATED_SOFTWARE_TYPE);
+        assertThat(testApplicationComponent.getSoftwareType()).isEqualTo(DEFAULT_SOFTWARE_TYPE);
         assertThat(testApplicationComponent.getDisplayInLandscape()).isEqualTo(DEFAULT_DISPLAY_IN_LANDSCAPE);
     }
 

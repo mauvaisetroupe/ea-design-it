@@ -10,11 +10,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityApplicationMappingRepository;
+import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +23,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -191,7 +192,7 @@ class CapabilityApplicationMappingResourceIT {
         // Update the capabilityApplicationMapping
         CapabilityApplicationMapping updatedCapabilityApplicationMapping = capabilityApplicationMappingRepository
             .findById(capabilityApplicationMapping.getId())
-            .get();
+            .orElseThrow();
         // Disconnect from session so that the updates on updatedCapabilityApplicationMapping are not directly saved in db
         em.detach(updatedCapabilityApplicationMapping);
 

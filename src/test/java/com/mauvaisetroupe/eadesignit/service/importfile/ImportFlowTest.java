@@ -11,9 +11,9 @@ import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import javax.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,9 +60,7 @@ public class ImportFlowTest {
     }
 
     protected FunctionalFlow checkNbsteps(String flowAlias, int nbSteps) {
-        Optional<FunctionalFlow> optional = functionalFlowRepository.findByAlias(flowAlias);
-        assertTrue(optional.isPresent(), "Could not find alias " + flowAlias);
-        FunctionalFlow flow = optional.get();
+        FunctionalFlow flow = functionalFlowRepository.findByAlias(flowAlias).orElseThrow();
         assertEquals(nbSteps, flow.getSteps().size());
         return flow;
     }

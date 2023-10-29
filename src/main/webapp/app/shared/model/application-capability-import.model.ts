@@ -1,5 +1,5 @@
-import { ICapability } from './capability.model';
-import { ICapabilityImport } from './capability-import.model';
+import { type ICapability } from './capability.model';
+import { type ICapabilityImport } from './capability-import.model';
 
 export interface IApplicationCapabilityImport {
   sheetname?: string;

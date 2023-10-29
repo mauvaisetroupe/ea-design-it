@@ -1,7 +1,5 @@
-import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
-import { IOwner } from '@/shared/model/owner.model';
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
-import { FlowImportLines } from './plantuml-flow-import-lines.model';
+import type { IOwner } from '@/shared/model/owner.model';
+import type { FlowImportLines } from './plantuml-flow-import-lines.model';
 
 export interface IPlantumlFlowImport {
   id?: number;

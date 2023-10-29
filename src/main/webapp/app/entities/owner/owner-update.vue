@@ -16,12 +16,12 @@
               name="name"
               id="owner-name"
               data-cy="name"
-              :class="{ valid: !$v.owner.name.$invalid, invalid: $v.owner.name.$invalid }"
-              v-model="$v.owner.name.$model"
+              :class="{ valid: !v$.name.$invalid, invalid: v$.name.$invalid }"
+              v-model="v$.name.$model"
               required
             />
-            <div v-if="$v.owner.name.$anyDirty && $v.owner.name.$invalid">
-              <small class="form-text text-danger" v-if="!$v.owner.name.required"> This field is required. </small>
+            <div v-if="v$.name.$anyDirty && v$.name.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.name.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -32,8 +32,8 @@
               name="firstname"
               id="owner-firstname"
               data-cy="firstname"
-              :class="{ valid: !$v.owner.firstname.$invalid, invalid: $v.owner.firstname.$invalid }"
-              v-model="$v.owner.firstname.$model"
+              :class="{ valid: !v$.firstname.$invalid, invalid: v$.firstname.$invalid }"
+              v-model="v$.firstname.$model"
             />
           </div>
           <div class="form-group">
@@ -44,8 +44,8 @@
               name="lastname"
               id="owner-lastname"
               data-cy="lastname"
-              :class="{ valid: !$v.owner.lastname.$invalid, invalid: $v.owner.lastname.$invalid }"
-              v-model="$v.owner.lastname.$model"
+              :class="{ valid: !v$.lastname.$invalid, invalid: v$.lastname.$invalid }"
+              v-model="v$.lastname.$model"
             />
           </div>
           <div class="form-group">
@@ -56,11 +56,11 @@
               name="email"
               id="owner-email"
               data-cy="email"
-              :class="{ valid: !$v.owner.email.$invalid, invalid: $v.owner.email.$invalid }"
-              v-model="$v.owner.email.$model"
+              :class="{ valid: !v$.email.$invalid, invalid: v$.email.$invalid }"
+              v-model="v$.email.$model"
             />
-            <div v-if="$v.owner.email.$anyDirty && $v.owner.email.$invalid">
-              <small class="form-text text-danger" v-if="!$v.owner.email.pattern"> This field should follow pattern for "Email". </small>
+            <div v-if="v$.email.$anyDirty && v$.email.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.email.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -88,7 +88,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.owner.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

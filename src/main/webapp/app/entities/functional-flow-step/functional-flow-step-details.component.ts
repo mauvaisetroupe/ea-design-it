@@ -1,36 +1,41 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
 import FunctionalFlowStepService from './functional-flow-step.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class FunctionalFlowStepDetails extends Vue {
-  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FunctionalFlowStepDetails',
+  setup() {
+    const functionalFlowStepService = inject('functionalFlowStepService', () => new FunctionalFlowStepService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public functionalFlowStep: IFunctionalFlowStep = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.functionalFlowStepId) {
-        vm.retrieveFunctionalFlowStep(to.params.functionalFlowStepId);
+    const previousState = () => router.go(-1);
+    const functionalFlowStep: Ref<IFunctionalFlowStep> = ref({});
+
+    const retrieveFunctionalFlowStep = async functionalFlowStepId => {
+      try {
+        const res = await functionalFlowStepService().find(functionalFlowStepId);
+        functionalFlowStep.value = res;
+      } catch (error) {
+        alertService.showAnyError(error);
       }
-    });
-  }
+    };
 
-  public retrieveFunctionalFlowStep(functionalFlowStepId) {
-    this.functionalFlowStepService()
-      .find(functionalFlowStepId)
-      .then(res => {
-        this.functionalFlowStep = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.functionalFlowStepId) {
+      retrieveFunctionalFlowStep(route.params.functionalFlowStepId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      functionalFlowStep,
+
+      previousState,
+    };
+  },
+});

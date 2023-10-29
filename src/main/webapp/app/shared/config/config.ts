@@ -1,5 +1,4 @@
-import Vuex from 'vuex';
-import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
@@ -52,25 +51,9 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown';
 import { faFileExcel } from '@fortawesome/free-solid-svg-icons/faFileExcel';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons/faAngleDown';
 
-import VueCookie from 'vue-cookie';
-import Vuelidate from 'vuelidate';
-import Vue2Filters from 'vue2-filters';
-
-import * as filters from '@/shared/date/filters';
-import { accountStore } from '@/shared/config/store/account-store';
-
-export function initVueApp(vue) {
-  vue.use(VueCookie);
-  vue.use(Vuelidate);
-  vue.use(Vue2Filters);
-  setupAxiosInterceptors(
-    () => console.log('Unauthorized!'),
-    () => console.log('Server error!')
-  );
-  filters.initFilters();
-}
-
 export function initFortAwesome(vue) {
+  vue.component('font-awesome-icon', FontAwesomeIcon);
+
   library.add(
     faArrowLeft,
     faAsterisk,
@@ -118,17 +101,8 @@ export function initFortAwesome(vue) {
     faChevronUp,
     faChevronDown,
     faFileExcel,
-    faAngleDown, 
+    faAngleDown,
     faMinusCircle,
     faPlusCircle,
   );
-}
-
-export function initVueXStore(vue) {
-  vue.use(Vuex);
-  return new Vuex.Store({
-    modules: {
-      accountStore,
-    },
-  });
 }

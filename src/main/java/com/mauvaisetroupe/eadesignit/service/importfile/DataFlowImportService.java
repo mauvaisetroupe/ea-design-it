@@ -74,9 +74,8 @@ public class DataFlowImportService {
 
                 // DataFlow is mandatory linked to Interface
                 if (StringUtils.hasText(dataFlowImport.getFlowInterfaceId())) {
-                    Optional<FlowInterface> optional = flowInterfaceRepository.findByAlias(dataFlowImport.getFlowInterfaceId());
-                    if (optional.isPresent()) {
-                        FlowInterface flowInterface = optional.get();
+                    FlowInterface flowInterface = flowInterfaceRepository.findByAlias(dataFlowImport.getFlowInterfaceId()).orElse(null);
+                    if (flowInterface != null) {
                         dataFlow.setFlowInterface(flowInterface);
                         dataFlowRepository.save(dataFlow);
                     } else {

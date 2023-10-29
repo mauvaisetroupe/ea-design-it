@@ -1,48 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { ICapability } from '@/shared/model/capability.model';
 import CapabilityService from './capability.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type ICapability } from '@/shared/model/capability.model';
+import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
-@Component
-export default class CapabilityDetails extends Vue {
-  @Inject('capabilityService') private capabilityService: () => CapabilityService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'CapabilityDetails',
+  setup() {
+    const capabilityService = inject('capabilityService', () => new CapabilityService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject<AccountService>('accountService');
 
-  public path = [];
+    const route = useRoute();
+    const router = useRouter();
 
-  public capability: ICapability = {};
-  public capabilitiesPlantUMLImage = '';
+    const previousState = () => router.go(-1);
+    const capability: Ref<ICapability> = ref({});
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.capabilityId) {
-        vm.retrieveCapability(to.params.capabilityId);
+    const retrieveCapability = async capabilityId => {
+      try {
+        const res = await capabilityService().find(capabilityId);
+        capability.value = res;
+      } catch (error) {
+        alertService.showAnyError(error);
       }
-    });
-  }
+    };
 
-  public retrieveCapability(capabilityId) {
-    this.capabilityService()
-      .find(capabilityId)
-      .then(res => {
-        this.capability = res;
-        let tmp = this.capability;
-        this.path = [];
-        tmp = tmp.parent;
-        while (tmp) {
-          this.path.push(tmp);
-          tmp = tmp.parent;
-        }
-        this.path.reverse();
-        console.log(this.path);
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.capabilityId) {
+      retrieveCapability(route.params.capabilityId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      capability,
+      previousState,
+      accountService,
+    };
+  },
+});

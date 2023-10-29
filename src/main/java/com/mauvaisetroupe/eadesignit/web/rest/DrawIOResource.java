@@ -40,20 +40,20 @@ public class DrawIOResource {
     public @ResponseBody String getLandscapeXML(@PathVariable("id") Long id)
         throws IOException, BadRequestException, ParserConfigurationException, XPathExpressionException, SAXException {
         log.debug("REST request to get LandscapeView : {}", id);
-        Optional<LandscapeView> landscapeView = landscapeViewRepository.findById(id);
-        MXFileSerializer fileSerializer = new MXFileSerializer(landscapeView.get());
-        if (StringUtils.hasText(landscapeView.get().getCompressedDrawXML())) {
+        LandscapeView landscape = landscapeViewRepository.findById(id).orElseThrow();
+        MXFileSerializer fileSerializer = new MXFileSerializer(landscape);
+        if (StringUtils.hasText(landscape.getCompressedDrawXML())) {
             // If no draw.io XML is persisted, create one in order to have a draft to edit
             String newXML = fileSerializer.updateMXFileXML();
             if (newXML != null) {
-                landscapeView.get().setCompressedDrawSVG(null);
-                landscapeView.get().setCompressedDrawXML(newXML);
+                landscape.setCompressedDrawSVG(null);
+                landscape.setCompressedDrawXML(newXML);
             }
-            return landscapeView.get().getCompressedDrawXML();
+            return landscape.getCompressedDrawXML();
         } else {
             // check if drawio is uptodate, if not remove SVG from database
             // and send updated xml
-            String svgXML = plantUMLSerializer.getLandscapeDiagramSVG(landscapeView.get(), Layout.elk, false, true, true);
+            String svgXML = plantUMLSerializer.getLandscapeDiagramSVG(landscape, Layout.elk, false, true, true);
             //svg needed only for application positioner
             return fileSerializer.createMXFileXML(svgXML);
         }

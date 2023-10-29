@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IApplicationImport } from '@/shared/model/application-import.model';
+import { type IApplicationImport } from '@/shared/model/application-import.model';
 
 const baseApiUrl = 'api/application-imports';
 const apiForImportUrl = 'api/import';

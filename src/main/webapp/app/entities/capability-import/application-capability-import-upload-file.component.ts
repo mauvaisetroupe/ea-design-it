@@ -1,114 +1,133 @@
-import { mixins } from 'vue-class-component';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
 import CapabilityImportService from './capability-import.service';
-import AlertService from '@/shared/alert/alert.service';
-import { IApplicationCapabilityImport, IApplicationCapabilityImportItem } from '@/shared/model/application-capability-import.model';
-import { ISummary } from '@/shared/model/summary-sheet.model';
+import {
+  type IApplicationCapabilityImport,
+  type IApplicationCapabilityImportItem,
+} from '@/shared/model/application-capability-import.model';
+import { type ISummary } from '@/shared/model/summary-sheet.model';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class CapabilityImport extends Vue {
-  @Inject('capabilityImportService') private capabilityImportService: () => CapabilityImportService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'CApplicationCapabilityImport',
+  setup() {
+    const capabilityImportService = inject('capabilityImportService', () => new CapabilityImportService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public dtos: IApplicationCapabilityImport[] = [];
-  public notFilteredDtos: IApplicationCapabilityImport[] = [];
-  public excelFileName = 'Browse File';
-  public excelFile: File = null;
-  public isFetching = false;
-  public fileSubmited = false;
-  public rowsLoaded = false;
+    const route = useRoute();
+    const router = useRouter();
 
-  public checkedNames: string[] = [];
-  public summary: ISummary[] = [];
+    const dtos: Ref<IApplicationCapabilityImport[]> = ref([]);
+    const notFilteredDtos: Ref<IApplicationCapabilityImport[]> = ref([]);
+    const excelFile = ref();
+    const isFetching = ref(false);
+    const fileSubmited = ref(false);
+    const analyzeDone = ref(false);
+    const rowsLoaded = ref(false);
+    const excelFileName = ref('Browse File');
 
-  // STEP 1 - Upload file and retreive all sheet with name starting with FLW
+    const checkedNames: Ref<string[]> = ref([]);
+    const summary: Ref<ISummary[]> = ref([]);
 
-  public handleFileUpload(event): void {
-    console.log(event);
-    this.excelFile = event.target.files[0];
-    this.excelFileName = this.excelFile.name;
-  }
+    // STEP 1 - Upload file and retreive all sheet with name starting with FLW
 
-  public getSheetnames(): void {
-    this.isFetching = true;
-    this.capabilityImportService()
-      .getSummary(this.excelFile)
-      .then(
-        res => {
-          this.isFetching = false;
-          this.summary = res.data.filter(sum => sum).filter(sum => sum.entityType === 'Capability Mapping');
-          this.checkedNames = this.summary.map(sum => sum.sheetName);
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
-
-  public selectAll() {
-    if (!this.fileSubmited) {
-      this.checkedNames = [];
-      this.checkedNames.push(...this.summary.map(sum => sum.sheetName));
+    function handleFileUpload(): void {
+      excelFileName.value = excelFile.value.files[0].name;
     }
-  }
 
-  public selectNone() {
-    if (!this.fileSubmited) this.checkedNames = [];
-  }
+    async function getSheetnames() {
+      isFetching.value = true;
+      try {
+        const res = await capabilityImportService().getSummary(excelFile.value.files[0]);
+        summary.value = res.filter(sum => sum).filter(sum => sum.entityType === 'Capability Mapping');
+        checkedNames.value = summary.value.map(sum => sum.sheetName);
+        analyzeDone.value = true;
+      } catch (error) {
+        alertService.showAnyError(error);
+      } finally {
+        isFetching.value = false;
+      }
+    }
 
-  // Step 2 - Submit de file and selected sheet names
+    function selectAll() {
+      if (!fileSubmited.value) {
+        checkedNames.value = [];
+        checkedNames.value.push(...summary.value.map(sum => sum.sheetName));
+      }
+    }
 
-  public submitFile(): void {
-    this.isFetching = true;
-    this.fileSubmited = true;
-    // send file n times, sheet by sheet
-    // this is not optimal, but it's the easier way to have a reactive behavior and avoid time out
-    // serialized to avoid database transactional problem
-    this.uploadOneSheet();
-  }
+    function selectNone() {
+      if (!fileSubmited.value) checkedNames.value = [];
+    }
 
-  public uploadOneSheet() {
-    const sheetToProcess: string = this.checkedNames.shift();
-    this.capabilityImportService()
-      .uploadMappingFile(this.excelFile, [sheetToProcess])
-      .then(
-        res => {
-          this.dtos.push(...res.data);
-          this.notFilteredDtos.push(...res.data);
-          this.rowsLoaded = true;
-          if (this.checkedNames.length > 0) {
-            this.uploadOneSheet();
-          } else {
-            this.isFetching = false;
+    // Step 2 - Submit de file and selected sheet names
+
+    function submitFile(): void {
+      isFetching.value = true;
+      fileSubmited.value = true;
+      // send file n times, sheet by sheet
+      // this is not optimal, but it's the easier way to have a reactive behavior and avoid time out
+      // serialized to avoid database transactional problem
+      uploadOneSheet();
+    }
+
+    async function uploadOneSheet() {
+      const sheetToProcess: string | undefined = checkedNames.value.shift();
+      const sheetToProcessArray = sheetToProcess ? [sheetToProcess] : [];
+      try {
+        const res = await capabilityImportService().uploadMappingFile(excelFile.value.files[0], sheetToProcessArray);
+        dtos.value.push(...res.data);
+        notFilteredDtos.value.push(...res.data);
+        rowsLoaded.value = true;
+        if (checkedNames.value.length > 0) {
+          uploadOneSheet();
+        } else {
+          isFetching.value = false;
+        }
+      } catch (error) {
+        alertService.showAnyError(error);
+      } finally {
+        isFetching.value = false;
+      }
+    }
+
+    // step 3 - Give possibility to filer errors
+
+    function filterErrors() {
+      dtos.value = [];
+      notFilteredDtos.value.forEach(dto => {
+        const newitems: IApplicationCapabilityImportItem[] = [];
+        dto.dtos.forEach(item => {
+          if (item.importStatus === 'ERROR') {
+            newitems.push(item);
           }
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
-
-  // step 3 - Give possibility to filer errors
-
-  public filterErrors() {
-    this.dtos = [];
-    this.notFilteredDtos.forEach(dto => {
-      const newitems: IApplicationCapabilityImportItem[] = [];
-      dto.dtos.forEach(item => {
-        if (item.importStatus === 'ERROR') {
-          newitems.push(item);
-        }
+        });
+        const newdto: IApplicationCapabilityImport = {};
+        newdto.dtos = newitems;
+        newdto.sheetname = dto.sheetname;
+        dtos.value.push(newdto);
       });
-      let newdto: IApplicationCapabilityImport = {}; 
-      newdto.dtos = newitems;
-      newdto.sheetname = dto.sheetname;
-      this.dtos.push(newdto);
-    });
-  }
-}
+    }
+
+    return {
+      excelFile,
+      excelFileName,
+      isFetching,
+      rowsLoaded,
+      dtos,
+      notFilteredDtos,
+      summary,
+      checkedNames,
+      fileSubmited,
+      analyzeDone,
+      filterErrors,
+      handleFileUpload,
+      getSheetnames,
+      selectAll,
+      selectNone,
+      submitFile,
+    };
+  },
+});

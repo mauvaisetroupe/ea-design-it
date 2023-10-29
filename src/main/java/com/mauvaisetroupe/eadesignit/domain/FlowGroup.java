@@ -1,13 +1,11 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.SortNatural;
 
 /**
@@ -15,7 +13,7 @@ import org.hibernate.annotations.SortNatural;
  */
 @Entity
 @Table(name = "flow_group")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class FlowGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,7 +41,6 @@ public class FlowGroup implements Serializable {
 
     @OneToMany(mappedBy = "group")
     @SortNatural
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "flowInterface", "group" }, allowSetters = true)
     private SortedSet<FunctionalFlowStep> steps = new TreeSet<>();
 
@@ -155,7 +152,7 @@ public class FlowGroup implements Serializable {
         if (!(o instanceof FlowGroup)) {
             return false;
         }
-        return id != null && id.equals(((FlowGroup) o).id);
+        return getId() != null && getId().equals(((FlowGroup) o).getId());
     }
 
     @Override

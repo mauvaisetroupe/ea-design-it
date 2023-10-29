@@ -1,121 +1,129 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { IFlowInterface } from '@/shared/model/flow-interface.model';
+import { computed, defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import FlowInterfaceService from './flow-interface.service';
-import AlertService from '@/shared/alert/alert.service';
-import AccountService from '@/account/account.service';
+import { type IFlowInterface } from '@/shared/model/flow-interface.model';
+import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
+import { useStore } from '@/store';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class FlowInterface extends Vue {
-  @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
-  @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') public accountService: () => AccountService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FlowInterface',
+  setup() {
+    const flowInterfaceService = inject('flowInterfaceService', () => new FlowInterfaceService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject<AccountService>('accountService');
+    const store = useStore();
 
-  public perPage = 10;
-  public currentPage = 1;
+    const perPage = ref(10);
+    const currentPage = ref(1);
 
-  get filteredRows() {
-    return this.flowInterfaces.filter(row => {
-      return (
-        (!this.filterAlias || row.alias?.toLowerCase().includes(this.filterAlias?.toLowerCase())) &&
-        (!this.filterSource ||
-          (row.source?.name?.toLowerCase() + row.sourceComponent?.name?.toLowerCase()).includes(this.filterSource?.toLowerCase())) &&
-        (!this.filterTarget ||
-          (row.target?.name?.toLowerCase() + row.targetComponent?.name?.toLowerCase()).includes(this.filterTarget?.toLowerCase())) &&
-        (!this.filterProtocol || row.protocol?.name?.toLowerCase().includes(this.filterProtocol?.toLowerCase()))
-      );
-    });
-  }
-
-  private removeId: number = null;
-
-  public flowInterfaces: IFlowInterface[] = [];
-
-  public isFetching = false;
-
-  public filterAlias = '';
-  public filterSource = '';
-  public filterTarget = '';
-  public filterProtocol = '';
-
-  public mounted(): void {
-    this.retrieveAllFlowInterfaces();
-    if (this.$route && this.$route.query && this.$route.query.searchTerm) {
-      this.filterProtocol = this.$route.query.searchTerm as string;
-    }
-  }
-
-  public clear(): void {
-    this.retrieveAllFlowInterfaces();
-  }
-
-  public retrieveAllFlowInterfaces(): void {
-    this.isFetching = true;
-    this.flowInterfaceService()
-      .retrieve()
-      .then(
-        res => {
-          this.flowInterfaces = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
-
-  public handleSyncList(): void {
-    this.clear();
-  }
-
-  public prepareRemove(instance: IFlowInterface): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeFlowInterface(): void {
-    this.flowInterfaceService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A FlowInterface is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllFlowInterfaces();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
+    const filteredRows = computed(() => {
+      return flowInterfaces.value.filter(row => {
+        return (
+          (!filterAlias.value || row.alias?.toLowerCase().includes(filterAlias.value?.toLowerCase())) &&
+          (!filterSource.value ||
+            (row.source?.name?.toLowerCase() + row.sourceComponent?.name?.toLowerCase()).includes(filterSource.value?.toLowerCase())) &&
+          (!filterTarget.value ||
+            (row.target?.name?.toLowerCase() + row.targetComponent?.name?.toLowerCase()).includes(filterTarget.value?.toLowerCase())) &&
+          (!filterProtocol.value || row.protocol?.name?.toLowerCase().includes(filterProtocol.value?.toLowerCase()))
+        );
       });
-  }
+    });
 
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
+    const removeId: Ref<number> = ref(-1);
+    const removeEntity = ref<any>(null);
 
-  public isOwner(flowInterface: IFlowInterface): boolean {
-    const username = this.$store.getters.account?.login ?? '';
-    if (this.accountService().writeAuthorities) {
-      return true;
+    const flowInterfaces: Ref<IFlowInterface[]> = ref([]);
+
+    const isFetching = ref(false);
+
+    const filterAlias = ref('');
+    const filterSource = ref('');
+    const filterTarget = ref('');
+    const filterProtocol = ref('');
+
+    onMounted(async () => {
+      await retrieveAllFlowInterfaces();
+    });
+
+    function clear(): void {
+      retrieveAllFlowInterfaces();
     }
-    if (flowInterface.owner && flowInterface.owner.users) {
-      for (const user of flowInterface.owner.users) {
-        if (user.login === username) {
-          return true;
+
+    const retrieveAllFlowInterfaces = async () => {
+      isFetching.value = true;
+      try {
+        const res = await flowInterfaceService().retrieve();
+        flowInterfaces.value = res.data;
+      } catch (err) {
+        alertService.showAnyError(err);
+      } finally {
+        isFetching.value = false;
+      }
+    };
+
+    const handleSyncList = () => {
+      retrieveAllFlowInterfaces();
+    };
+
+    const prepareRemove = (instance: IFlowInterface) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+
+    const removeFlowInterface = async () => {
+      try {
+        await flowInterfaceService().delete(removeId.value);
+        const message = 'A FlowInterface is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = -1;
+        retrieveAllFlowInterfaces();
+        closeDialog();
+      } catch (error) {
+        alertService.showAnyError(error);
+      }
+    };
+
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+
+    function isOwner(flowInterface: IFlowInterface): boolean {
+      const username = store.account?.login ?? '';
+      if (accountService.writeAuthorities) {
+        return true;
+      }
+      if (flowInterface.owner && flowInterface.owner.users) {
+        for (const user of flowInterface.owner.users) {
+          if (user.login === username) {
+            return true;
+          }
         }
       }
+      return false;
     }
-    return false;
-  }
-}
+
+    return {
+      flowInterfaces,
+      handleSyncList,
+      isFetching,
+      retrieveAllFlowInterfaces,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeFlowInterface,
+      accountService,
+      filteredRows,
+      perPage,
+      filterAlias,
+      filterSource,
+      filterTarget,
+      filterProtocol,
+      currentPage,
+      isOwner,
+    };
+  },
+});

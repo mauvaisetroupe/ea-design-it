@@ -244,20 +244,15 @@ public class ApplicationMapperUtil {
         for (Entry<String, String> entry : applicationImport.getExternalIDS().entrySet()) {
             ExternalSystem externalSystem = checkAndGetSystem(entry.getKey());
 
-            Optional<ExternalReference> externalIdOption = externalReferenceRepository.findByExternalSystemAndExternalID(
-                externalSystem,
-                entry.getValue()
-            );
-
-            ExternalReference externalReference = null;
-            if (!externalIdOption.isPresent()) {
-                externalReference = new ExternalReference();
-                externalReference.setExternalSystem(externalSystem);
-                externalReference.setExternalID(entry.getValue());
-                externalReferenceRepository.save(externalReference);
-            } else {
-                externalReference = externalIdOption.get();
-            }
+            ExternalReference externalReference = externalReferenceRepository
+                .findByExternalSystemAndExternalID(externalSystem, entry.getValue())
+                .orElseGet(() -> {
+                    ExternalReference newExternalRef = new ExternalReference();
+                    newExternalRef.setExternalSystem(externalSystem);
+                    newExternalRef.setExternalID(entry.getValue());
+                    externalReferenceRepository.save(newExternalRef);
+                    return newExternalRef;
+                });
             references.add(externalReference);
             externalSystemRepository.findByExternalSystemID(entry.getKey());
         }
@@ -265,10 +260,6 @@ public class ApplicationMapperUtil {
     }
 
     private ExternalSystem checkAndGetSystem(String externalSystemID) {
-        Optional<ExternalSystem> optional = externalSystemRepository.findByExternalSystemID(externalSystemID);
-        if (!optional.isPresent()) {
-            throw new RuntimeException("External System should exist : " + externalSystemID);
-        }
-        return optional.get();
+        return externalSystemRepository.findByExternalSystemID(externalSystemID).orElseThrow();
     }
 }

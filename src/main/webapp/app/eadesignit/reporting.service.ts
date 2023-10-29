@@ -1,4 +1,4 @@
-import { IFlowInterface } from '@/shared/model/flow-interface.model';
+import { type IFlowInterface } from '@/shared/model/flow-interface.model';
 import axios from 'axios';
 
 const baseApiUrl = 'api/reporting';
@@ -29,7 +29,6 @@ export default class ReportingService {
           reject(err);
         });
     });
-    return null;
   }
 
   public retrieveOrphanFlowGroup(): Promise<any> {

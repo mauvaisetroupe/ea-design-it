@@ -1,6 +1,5 @@
 package com.mauvaisetroupe.eadesignit;
 
-import com.mauvaisetroupe.eadesignit.EaDesignItApp;
 import com.mauvaisetroupe.eadesignit.config.AsyncSyncConfiguration;
 import com.mauvaisetroupe.eadesignit.config.EmbeddedSQL;
 import java.lang.annotation.ElementType;

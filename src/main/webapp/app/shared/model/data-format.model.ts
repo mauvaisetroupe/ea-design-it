@@ -4,5 +4,8 @@ export interface IDataFormat {
 }
 
 export class DataFormat implements IDataFormat {
-  constructor(public id?: number, public name?: string) {}
+  constructor(
+    public id?: number,
+    public name?: string,
+  ) {}
 }

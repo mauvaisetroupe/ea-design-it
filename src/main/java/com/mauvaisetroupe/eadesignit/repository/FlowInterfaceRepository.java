@@ -4,15 +4,11 @@ import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.repository.view.FlowInterfaceLight;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
-import javax.persistence.EntityResult;
-import javax.persistence.SqlResultSetMapping;
-import javax.persistence.SqlResultSetMappings;
-import javax.validation.constraints.NotNull;
-import org.apache.xmlbeans.impl.xb.xmlconfig.Extensionconfig.Interface;
 import org.hibernate.query.NativeQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -70,9 +66,9 @@ public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Lo
     @Query(
         value = "select i from FlowInterface i " +
         " left join fetch i.protocol p " +
-        " left join fetch i.source s " +
+        " left join fetch i.source so " +
         " left join fetch i.sourceComponent sc " +
-        " left join fetch i.target t " +
+        " left join fetch i.target ta " +
         " left join fetch i.targetComponent tc " +
         " left join fetch i.steps s " +
         " left join fetch s.flow f " +
@@ -80,5 +76,4 @@ public interface FlowInterfaceRepository extends JpaRepository<FlowInterface, Lo
         " where i.id = :id "
     )
     Optional<FlowInterface> findOneWithEagerRelationships(@Param("id") Long id);
-
 }

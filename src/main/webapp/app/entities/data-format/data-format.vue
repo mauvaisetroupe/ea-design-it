@@ -4,9 +4,9 @@
       <span id="data-format-heading">Data Formats</span>
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh list</span>
         </button>
-        <router-link :to="{ name: 'DataFormatCreate' }" custom v-slot="{ navigate }" v-if="accountService().writeAuthorities">
+        <router-link :to="{ name: 'DataFormatCreate' }" custom v-slot="{ navigate }" v-if="accountService.writeAuthorities">
           <button
             @click="navigate"
             id="jh-create-entity"
@@ -14,14 +14,14 @@
             class="btn btn-primary jh-create-entity create-data-format"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Create a new Data Format </span>
+            <span>Create a new Data Format</span>
           </button>
         </router-link>
       </div>
     </h2>
     <br />
     <div class="alert alert-warning" v-if="!isFetching && dataFormats && dataFormats.length === 0">
-      <span>No dataFormats found</span>
+      <span>No Data Formats found</span>
     </div>
     <div class="table-responsive" v-if="dataFormats && dataFormats.length > 0">
       <table class="table table-striped" aria-describedby="dataFormats">
@@ -51,14 +51,14 @@
                     @click="navigate"
                     class="btn btn-primary btn-sm edit"
                     data-cy="entityEditButton"
-                    v-if="accountService().writeAuthorities"
+                    v-if="accountService.writeAuthorities"
                   >
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                     <span class="d-none d-md-inline">Edit</span>
                   </button>
                 </router-link>
                 <b-button
-                  v-if="accountService().deleteAuthorities"
+                  v-if="accountService.deleteAuthorities"
                   v-on:click="prepareRemove(dataFormat)"
                   variant="danger"
                   class="btn btn-sm"
@@ -75,24 +75,26 @@
       </table>
     </div>
     <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.dataFormat.delete.question" data-cy="dataFormatDeleteDialogHeading">Confirm delete operation</span></span
-      >
+      <template #modal-title>
+        <span id="eaDesignItApp.dataFormat.delete.question" data-cy="dataFormatDeleteDialogHeading">Confirm delete operation</span>
+      </template>
       <div class="modal-body">
-        <p id="jhi-delete-dataFormat-heading">Are you sure you want to delete this Data Format?</p>
+        <p id="jhi-delete-dataFormat-heading">Are you sure you want to delete Data Format {{ removeId }}?</p>
       </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-dataFormat"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeDataFormat()"
-        >
-          Delete
-        </button>
-      </div>
+      <template #modal-footer>
+        <div>
+          <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="jhi-confirm-delete-dataFormat"
+            data-cy="entityConfirmDeleteButton"
+            v-on:click="removeDataFormat()"
+          >
+            Delete
+          </button>
+        </div>
+      </template>
     </b-modal>
   </div>
 </template>

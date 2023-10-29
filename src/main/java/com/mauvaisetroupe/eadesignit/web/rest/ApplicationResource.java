@@ -5,13 +5,13 @@ import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.service.dto.util.CapabilityUtil;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -220,8 +220,8 @@ public class ApplicationResource {
     @GetMapping("/applications/{id}/capabilities")
     public Capability getApplicationCapabilities(@PathVariable Long id) {
         log.debug("REST request to get Application : {}", id);
-        Optional<Application> application = applicationRepository.findOneWithEagerRelationships(id);
-        Capability rootCapability = capabilityUtil.buildCapabilityTree(application.get().getCapabilities());
+        Application application = applicationRepository.findOneWithEagerRelationships(id).orElseThrow();
+        Capability rootCapability = capabilityUtil.buildCapabilityTree(application.getCapabilities());
         return rootCapability;
     }
 }

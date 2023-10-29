@@ -1,18 +1,16 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A Protocol.
  */
 @Entity
 @Table(name = "protocol")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class Protocol implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -116,7 +114,7 @@ public class Protocol implements Serializable {
         if (!(o instanceof Protocol)) {
             return false;
         }
-        return id != null && id.equals(((Protocol) o).id);
+        return getId() != null && getId().equals(((Protocol) o).getId());
     }
 
     @Override

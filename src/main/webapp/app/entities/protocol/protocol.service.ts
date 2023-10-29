@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IProtocol } from '@/shared/model/protocol.model';
+import { type IProtocol } from '@/shared/model/protocol.model';
 
 const baseApiUrl = 'api/protocols';
 

@@ -1,4 +1,4 @@
-import { ImportStatus } from '@/shared/model/enumerations/import-status.model';
+import { type ImportStatus } from '@/shared/model/enumerations/import-status.model';
 export interface IDataFlowImport {
   id?: number;
   dataId?: string | null;
@@ -41,6 +41,6 @@ export class DataFlowImport implements IDataFlowImport {
     public target?: string | null,
     public importDataStatus?: ImportStatus | null,
     public importDataItemStatus?: ImportStatus | null,
-    public importStatusMessage?: string | null
+    public importStatusMessage?: string | null,
   ) {}
 }

@@ -1,6 +1,4 @@
-import { IApplication } from '@/shared/model/application.model';
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
-import { ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
+import { type ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
 
 export interface ICapability {
   id?: number;
@@ -22,6 +20,6 @@ export class Capability implements ICapability {
     public level?: number | null,
     public subCapabilities?: ICapability[] | null,
     public parent?: ICapability | null,
-    public capabilityApplicationMappings?: ICapabilityApplicationMapping[] | null
+    public capabilityApplicationMappings?: ICapabilityApplicationMapping[] | null,
   ) {}
 }

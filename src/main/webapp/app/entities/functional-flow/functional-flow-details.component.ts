@@ -1,159 +1,150 @@
-import { Component, Vue, Inject, Watch } from 'vue-property-decorator';
+import { defineComponent, inject, ref, watch, type Ref, nextTick } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { FunctionalFlow, IFunctionalFlow } from '@/shared/model/functional-flow.model';
 import FunctionalFlowService from './functional-flow.service';
-import AlertService from '@/shared/alert/alert.service';
-import AccountService from '@/account/account.service';
-import ApplicationService from '@/entities/application/application.service';
-import { IApplication } from '@/shared/model/application.model';
-import ProtocolService from '@/entities/protocol/protocol.service';
-import { IProtocol } from '@/shared/model/protocol.model';
-import FlowInterfaceService from '@/entities/flow-interface/flow-interface.service';
-import { IFlowInterface } from '@/shared/model/flow-interface.model';
-import { IFunctionalFlowStep, FunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
-import FunctionalFlowStepService from '@/entities/functional-flow-step/functional-flow-step.service';
+import { type IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { useAlertService } from '@/shared/alert/alert.service';
+import { type IFlowInterface } from '@/shared/model/flow-interface.model';
+import type AccountService from '@/account/account.service';
 
-@Component
-export default class FunctionalFlowDetails extends Vue {
-  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
-  @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
-  @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') public accountService: () => AccountService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FunctionalFlowDetails',
+  setup() {
+    const functionalFlowService = inject('functionalFlowService', () => new FunctionalFlowService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject<AccountService>('accountService');
 
-  @Inject('applicationService') private applicationService: () => ApplicationService;
-  public applications: IApplication[] = [];
+    const route = useRoute();
+    const router = useRouter();
 
-  @Inject('protocolService') private protocolService: () => ProtocolService;
-  public protocols: IProtocol[] = [];
+    const interfaces: Ref<IFlowInterface[]> = ref([]);
 
-  @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
-  public interfaces: IFlowInterface[] = [];
+    const checkedInterface: Ref<IFlowInterface[]> = ref([]);
 
-  public checkedInterface: IFlowInterface[] = [];
+    const sequenceDiagram = ref(true);
 
-  public sequenceDiagram = true;
+    const functionalFlow: Ref<IFunctionalFlow> = ref({});
+    const plantUMLImage = ref('');
 
-  public functionalFlow: IFunctionalFlow = {};
-  public plantUMLImage = '';
+    const searchSourceName = ref('');
+    const searchTargetName = ref('');
+    const searchProtocolName = ref('');
 
-  public searchSourceName = '';
-  public searchTargetName = '';
-  public searchProtocolName = '';
+    const toBeSaved = ref(false);
+    const searchDone = ref(false);
 
-  public toBeSaved = false;
-  public searchDone = false;
+    const indexStepToDetach: Ref<number> = ref(-1);
 
-  public indexStepToDetach: number;
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const applicationIds = [];
 
-  public applicationIds = [];
+    //////////////////////////////
+    // Store current tab in sessionStorage
+    //////////////////////////////
 
-  //////////////////////////////
-  // Store current tab in sessionStorage
-  //////////////////////////////
+    const tabIndex = ref(0);
+    const flowId = ref(-1);
+    const sessionKey = 'flow.detail.tab';
 
-  public tabIndex = 0;
-  public flowId = -1;
-  public sessionKey = 'flow.detail.tab';
-
-  @Watch('tabIndex')
-  public onTabChange(newtab) {
-    if (this.functionalFlow && this.functionalFlow.id) {
-      this.tabIndex = newtab;
-      sessionStorage.setItem(this.sessionKey, this.functionalFlow.id + '#' + this.tabIndex);
-    }
-  }
-
-  public created() {
-    // https://github.com/bootstrap-vue/bootstrap-vue/issues/2803
-    this.$nextTick(() => {
-      this.loadTab(this.flowId);
-    });
-  }
-
-  public loadTab(_landscapeID) {
-    if (sessionStorage.getItem(this.sessionKey)) {
-      const parts = sessionStorage.getItem(this.sessionKey).split('#');
-      const landId = parseInt(parts[0]);
-      const tabIndex = parseInt(parts[1]);
-      const landscapeID = parseInt(_landscapeID);
-      if (landscapeID === landId) {
-        this.tabIndex = tabIndex;
-      } else {
-        sessionStorage.removeItem(this.sessionKey);
-        this.tabIndex = 1;
-      }
-    } else {
-      this.tabIndex = 1;
-    }
-  }
-
-  //for description update
-  public reorderAliasflowToSave: IFunctionalFlow[] = [];
-  //for reordering update
-  public reorderStepToSave: IFunctionalFlowStep[] = [];
-
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.functionalFlowId) {
-        vm.retrieveFunctionalFlow(to.params.functionalFlowId);
-        vm.flowId = parseInt(to.params.functionalFlowId);
+    watch(tabIndex, (newtab, oldtab) => {
+      if (functionalFlow.value && functionalFlow.value.id) {
+        tabIndex.value = newtab;
+        sessionStorage.setItem(sessionKey, functionalFlow.value.id + '#' + tabIndex.value);
       }
     });
-  }
 
-  public changeDiagram() {
-    this.isFetching = true;
-    this.sequenceDiagram = !this.sequenceDiagram;
-    this.getPlantUML(this.functionalFlow.id);
-  }
-
-  public retrieveFunctionalFlow(functionalFlowId) {
-    this.functionalFlowService()
-      .find(functionalFlowId)
-      .then(res => {
-        this.functionalFlow = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
+    function created() {
+      // https://github.com/bootstrap-vue/bootstrap-vue/issues/2803
+      nextTick(() => {
+        loadTab(flowId.value);
       });
-    this.getPlantUML(functionalFlowId);
-  }
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-
-  public getPlantUML(functionalFlowId) {
-    console.log('Entering in method getPlantUML');
-    this.functionalFlowService()
-      .getPlantUML(functionalFlowId, this.sequenceDiagram)
-      .then(
-        res => {
-          this.plantUMLImage = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          console.log(err);
+    function loadTab(_landscapeID) {
+      if (sessionStorage.getItem(sessionKey)) {
+        const parts = sessionStorage.getItem(sessionKey).split('#');
+        const landId = parseInt(parts[0]);
+        const _tabIndex = parseInt(parts[1]);
+        const landscapeID = parseInt(_landscapeID);
+        if (landscapeID === landId) {
+          tabIndex.value = _tabIndex;
+        } else {
+          sessionStorage.removeItem(sessionKey);
+          tabIndex.value = 1;
         }
-      );
-  }
+      } else {
+        tabIndex.value = 1;
+      }
+    }
 
-  public exportPlantUML() {
-    this.functionalFlowService()
-      .getPlantUMLSource(this.functionalFlow.id, this.sequenceDiagram)
-      .then(response => {
-        const url = URL.createObjectURL(
-          new Blob([response.data], {
-            type: 'text/plain',
-          })
+    function changeDiagram() {
+      isFetching.value = true;
+      sequenceDiagram.value = !sequenceDiagram.value;
+      getPlantUML(functionalFlow.value.id);
+    }
+
+    const retrieveFunctionalFlow = async functionalFlowId => {
+      try {
+        const res = await functionalFlowService().find(functionalFlowId);
+        functionalFlow.value = res;
+      } catch (error) {
+        alertService.showAnyError(error);
+      }
+      getPlantUML(functionalFlowId);
+    };
+
+    if (route.params?.functionalFlowId) {
+      retrieveFunctionalFlow(route.params.functionalFlowId);
+      loadTab(route.params?.functionalFlowId);
+    }
+
+    const previousState = () => router.go(-1);
+    function getPlantUML(functionalFlowId) {
+      console.log('Entering in method getPlantUML');
+      functionalFlowService()
+        .getPlantUML(functionalFlowId, sequenceDiagram.value)
+        .then(
+          res => {
+            plantUMLImage.value = res.data;
+            isFetching.value = false;
+          },
+          err => {
+            console.log(err);
+          },
         );
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', this.functionalFlow.alias + '-plantuml.txt');
-        document.body.appendChild(link);
-        link.click();
-      });
-  }
-}
+    }
+
+    function exportPlantUML() {
+      functionalFlowService()
+        .getPlantUMLSource(functionalFlow.value.id, sequenceDiagram.value)
+        .then(response => {
+          const url = URL.createObjectURL(
+            new Blob([response.data], {
+              type: 'text/plain',
+            }),
+          );
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', functionalFlow.value.alias + '-plantuml.txt');
+          document.body.appendChild(link);
+          link.click();
+        });
+    }
+
+    return {
+      alertService,
+      functionalFlow,
+      previousState,
+      tabIndex,
+      plantUMLImage,
+      exportPlantUML,
+      isFetching,
+      sequenceDiagram,
+      getPlantUML,
+      changeDiagram,
+      accountService,
+    };
+  },
+});

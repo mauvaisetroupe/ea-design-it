@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-import { ILandscapeDTO, ILandscapeView } from '@/shared/model/landscape-view.model';
-import { PlantumlDTO } from '@/shared/model/plantuml-dto';
+import { type ILandscapeView } from '@/shared/model/landscape-view.model';
+import { type PlantumlDTO } from '@/shared/model/plantuml-dto';
+import { type ILandscapeDTO } from '@/shared/model/landscape-view.model';
 
 const baseApiUrl = 'api/landscape-views';
 const basePlantUMLApiUrl = 'api/plantuml/landscape-view';
@@ -94,7 +95,7 @@ export default class LandscapeViewService {
     layout: string,
     groupComponents: boolean,
     showLabels: boolean,
-    showLabelIfNumberapplicationsLessThan: number
+    showLabelIfNumberapplicationsLessThan: number,
   ) {
     console.log('showlabels : ' + showLabels);
     return new Promise<PlantumlDTO>((resolve, reject) => {

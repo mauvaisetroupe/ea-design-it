@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
-        <h2 id="eaDesignItApp.dataFormat.home.createOrEditLabel" data-cy="DataFormatCreateUpdateHeading">Create or edit a DataFormat</h2>
+        <h2 id="eaDesignItApp.dataFormat.home.createOrEditLabel" data-cy="DataFormatCreateUpdateHeading">Create or edit a Data Format</h2>
         <div>
           <div class="form-group" v-if="dataFormat.id">
             <label for="id">ID</label>
@@ -16,12 +16,12 @@
               name="name"
               id="data-format-name"
               data-cy="name"
-              :class="{ valid: !$v.dataFormat.name.$invalid, invalid: $v.dataFormat.name.$invalid }"
-              v-model="$v.dataFormat.name.$model"
+              :class="{ valid: !v$.name.$invalid, invalid: v$.name.$invalid }"
+              v-model="v$.name.$model"
               required
             />
-            <div v-if="$v.dataFormat.name.$anyDirty && $v.dataFormat.name.$invalid">
-              <small class="form-text text-danger" v-if="!$v.dataFormat.name.required"> This field is required. </small>
+            <div v-if="v$.name.$anyDirty && v$.name.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.name.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
         </div>
@@ -33,7 +33,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.dataFormat.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

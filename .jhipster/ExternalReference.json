@@ -21,6 +21,7 @@
       "otherEntityName": "externalSystem",
       "otherEntityRelationshipName": "externalReference",
       "relationshipName": "externalSystem",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     },
     {
@@ -29,6 +30,7 @@
       "otherEntityRelationshipName": "externalIDS",
       "ownerSide": false,
       "relationshipName": "applications",
+      "relationshipSide": "right",
       "relationshipType": "many-to-many"
     },
     {
@@ -37,8 +39,10 @@
       "otherEntityRelationshipName": "externalIDS",
       "ownerSide": false,
       "relationshipName": "components",
+      "relationshipSide": "right",
       "relationshipType": "many-to-many"
     }
   ],
+  "searchEngine": "no",
   "service": "no"
 }

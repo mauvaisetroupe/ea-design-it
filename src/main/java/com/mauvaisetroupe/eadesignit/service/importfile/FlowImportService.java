@@ -25,6 +25,14 @@ import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
 import com.mauvaisetroupe.eadesignit.service.FunctionalflowService;
 import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.SummaryImporterService;
+import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import jakarta.validation.constraints.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -35,13 +43,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import javax.transaction.Transactional;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import org.apache.poi.EncryptedDocumentException;
+import org.hibernate.proxy.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,9 +176,9 @@ public class FlowImportService {
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);
             if (flowImport.getFlowAlias() != null) {
-                Optional<FunctionalFlow> optional = flowRepository.findByAlias(flowImport.getFlowAlias());
-                if (optional.isPresent()) {
-                    allFlows.add(optional.get());
+                FunctionalFlow functionalFlow = flowRepository.findByAlias(flowImport.getFlowAlias()).orElse(null);
+                if (functionalFlow != null) {
+                    allFlows.add(functionalFlow);
                 }
                 if (flowImport.isExternal()) {
                     externalFlows.add(flowImport.getFlowAlias());
@@ -239,9 +242,8 @@ public class FlowImportService {
                 flowImport.setImportStatusMessage("IdFlow (interface alias) should not be null");
             } else if (flowImport.isExternal()) {
                 if (flowImport.getFlowAlias() != null) {
-                    Optional<FunctionalFlow> functionalFlowOption = flowRepository.findByAlias(flowImport.getFlowAlias());
-                    if (functionalFlowOption.isPresent()) {
-                        FunctionalFlow functionalFlow = functionalFlowOption.get();
+                    FunctionalFlow functionalFlow = flowRepository.findByAlias(flowImport.getFlowAlias()).orElse(null);
+                    if (functionalFlow != null) {
                         functionalFlow.addLandscape(landscapeView);
                         flowRepository.save(functionalFlow);
                         landscapeViewRepository.save(landscapeView);
@@ -284,9 +286,9 @@ public class FlowImportService {
                             flowGroupRepository.save(flowGroup);
 
                             if (flowImport.getGroupFlowAlias() != null) {
-                                Optional<FunctionalFlow> option = flowRepository.findByAlias(flowImport.getGroupFlowAlias());
-                                if (option.isPresent()) {
-                                    flowGroup.setFlow(option.get());
+                                FunctionalFlow flow = flowRepository.findByAlias(flowImport.getGroupFlowAlias()).orElse(null);
+                                if (flow != null) {
+                                    flowGroup.setFlow(flow);
                                     functionalFlowStepRepository.save(step);
                                     flowGroupRepository.save(flowGroup);
                                 } else {
@@ -364,10 +366,9 @@ public class FlowImportService {
         FunctionalFlow functionalFlow = null;
         try {
             if (StringUtils.hasText(flowImport.getFlowAlias())) {
-                Optional<FunctionalFlow> functionalFlowOption = flowRepository.findByAlias(flowImport.getFlowAlias());
-                if (functionalFlowOption.isPresent()) {
+                functionalFlow = flowRepository.findByAlias(flowImport.getFlowAlias()).orElse(null);
+                if (functionalFlow != null) {
                     flowImport.setImportFunctionalFlowStatus(ImportStatus.EXISTING);
-                    functionalFlow = functionalFlowOption.get();
                 }
             }
             if (functionalFlow == null) {
@@ -387,21 +388,18 @@ public class FlowImportService {
     private FlowInterface findOrCreateInterface(FlowImport flowImport) {
         FlowInterface flowInterface = null;
         try {
-            Optional<FlowInterface> flowInterfaceOption = interfaceRepository.findByAlias(flowImport.getIdFlowFromExcel());
-            if (!flowInterfaceOption.isPresent()) {
+            flowInterface = interfaceRepository.findByAlias(flowImport.getIdFlowFromExcel()).orElse(null);
+            if (flowInterface == null) {
                 flowImport.setImportInterfaceStatus(ImportStatus.NEW);
                 flowInterface = mapToFlowInterface(flowImport);
                 Assert.isTrue(flowInterface.getSource() != null, "Source doesn't exist, pb with:" + flowImport.getSourceElement());
                 Assert.isTrue(flowInterface.getTarget() != null, "Target doesn't exist, pb with:" + flowImport.getTargetElement());
             } else {
                 flowImport.setImportInterfaceStatus(ImportStatus.EXISTING);
-                flowInterface = flowInterfaceOption.get();
                 Assert.isTrue(
                     flowInterface.getSource().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase()) ||
-                    (
-                        flowInterface.getSourceComponent() != null &&
-                        flowInterface.getSourceComponent().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase())
-                    ),
+                    (flowInterface.getSourceComponent() != null &&
+                        flowInterface.getSourceComponent().getName().toLowerCase().equals(flowImport.getSourceElement().toLowerCase())),
                     "Source of interface doesn't match for interface Id='" +
                     flowInterface.getId() +
                     "', source= [" +
@@ -413,10 +411,8 @@ public class FlowImportService {
 
                 Assert.isTrue(
                     flowInterface.getTarget().getName().toLowerCase().equals(flowImport.getTargetElement().toLowerCase()) ||
-                    (
-                        flowInterface.getTargetComponent() != null &&
-                        flowInterface.getTargetComponent().getName().toLowerCase().equals(flowImport.getTargetElement().toLowerCase())
-                    ),
+                    (flowInterface.getTargetComponent() != null &&
+                        flowInterface.getTargetComponent().getName().toLowerCase().equals(flowImport.getTargetElement().toLowerCase())),
                     "Target of interface doesn't match for interface Id='" +
                     flowInterface.getId() +
                     "', target= [" +
@@ -559,7 +555,14 @@ public class FlowImportService {
         validator.validate(bean);
         Set<ConstraintViolation<Object>> violations = validator.validate(bean);
         if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(violations);
+            log.error("Error with bean validation " + bean + " (" + bean.getClass() + ")");
+            if (bean instanceof HibernateProxy) {
+                //https://hibernate.atlassian.net/browse/HVAL-13
+                //https://hibernate.atlassian.net/browse/HV-535
+                log.error("Cannot check bean validation");
+            } else {
+                throw new ConstraintViolationException(violations);
+            }
         }
     }
 }

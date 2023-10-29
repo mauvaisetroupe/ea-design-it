@@ -1,105 +1,109 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { computed, defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import FunctionalFlowService from './functional-flow.service';
-import AlertService from '@/shared/alert/alert.service';
-import AccountService from '@/account/account.service';
+import { type IFunctionalFlow } from '@/shared/model/functional-flow.model';
+import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class FunctionalFlow extends Vue {
-  @Inject('functionalFlowService') private functionalFlowService: () => FunctionalFlowService;
-  @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') public accountService: () => AccountService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FunctionalFlow',
+  setup() {
+    const functionalFlowService = inject('functionalFlowService', () => new FunctionalFlowService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject<AccountService>('accountService');
 
-  get filteredRows() {
-    return this.functionalFlows.filter(row => {
-      const alias = row.alias ? row.alias.toString().toLowerCase() : '';
-      const description = row.description ? row.description.toString().toLowerCase() : '';
-      return alias.includes(this.filterAlias?.toLocaleLowerCase()) && description.includes(this.filterDescription?.toLocaleLowerCase());
-    });
-  }
-
-  private removeId: number = null;
-
-  public functionalFlows: IFunctionalFlow[] = [];
-
-  public isFetching = false;
-
-  public filterAlias = '';
-  public filterDescription = '';
-
-  public deleteInterfaces = true;
-  public deleteDatas = true;
-
-  public perPage = 10;
-  public currentPage = 1;
-
-  public deleteCoherence() {
-    if (!this.deleteInterfaces) {
-      this.deleteDatas = false;
-    }
-  }
-
-  public mounted(): void {
-    this.retrieveAllFunctionalFlows();
-  }
-
-  public clear(): void {
-    this.retrieveAllFunctionalFlows();
-  }
-
-  public retrieveAllFunctionalFlows(): void {
-    this.isFetching = true;
-    this.functionalFlowService()
-      .retrieve()
-      .then(
-        res => {
-          this.functionalFlows = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
-
-  public handleSyncList(): void {
-    this.clear();
-  }
-
-  public prepareRemove(instance: IFunctionalFlow): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeFunctionalFlow(): void {
-    this.functionalFlowService()
-      .delete(this.removeId, this.deleteInterfaces, this.deleteDatas)
-      .then(() => {
-        const message = 'A FunctionalFlow is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllFunctionalFlows();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
+    const filteredRows = computed(() => {
+      return functionalFlows.value.filter(row => {
+        const alias = row.alias ? row.alias.toString().toLowerCase() : '';
+        const description = row.description ? row.description.toString().toLowerCase() : '';
+        return alias.includes(filterAlias.value?.toLocaleLowerCase()) && description.includes(filterDescription.value?.toLocaleLowerCase());
       });
-  }
+    });
 
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    const functionalFlows: Ref<IFunctionalFlow[]> = ref([]);
+
+    const isFetching = ref(false);
+
+    const filterAlias = ref('');
+    const filterDescription = ref('');
+
+    const deleteInterfaces = ref(true);
+    const deleteDatas = ref(true);
+
+    const perPage = ref(10);
+    const currentPage = ref(1);
+
+    function deleteCoherence() {
+      if (!deleteInterfaces.value) {
+        deleteDatas.value = false;
+      }
+    }
+
+    const clear = () => {};
+
+    const retrieveFunctionalFlows = async () => {
+      isFetching.value = true;
+      try {
+        const res = await functionalFlowService().retrieve();
+        functionalFlows.value = res.data;
+      } catch (err) {
+        alertService.showAnyError(err);
+      } finally {
+        isFetching.value = false;
+      }
+    };
+
+    const handleSyncList = () => {
+      retrieveFunctionalFlows();
+    };
+
+    onMounted(async () => {
+      await retrieveFunctionalFlows();
+    });
+
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: IFunctionalFlow) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeFunctionalFlow = async () => {
+      try {
+        await functionalFlowService().delete(removeId.value, deleteInterfaces.value, deleteDatas.value);
+        const message = 'A FunctionalFlow is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveFunctionalFlows();
+        closeDialog();
+      } catch (error) {
+        alertService.showAnyError(error);
+      }
+    };
+
+    return {
+      functionalFlows,
+      handleSyncList,
+      isFetching,
+      retrieveFunctionalFlows,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeFunctionalFlow,
+      accountService,
+      filteredRows,
+      perPage,
+      currentPage,
+      filterDescription,
+      filterAlias,
+      deleteInterfaces,
+      deleteDatas,
+      deleteCoherence,
+    };
+  },
+});

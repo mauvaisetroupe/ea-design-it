@@ -16,12 +16,12 @@
               name="name"
               id="capability-name"
               data-cy="name"
-              :class="{ valid: !$v.capability.name.$invalid, invalid: $v.capability.name.$invalid }"
-              v-model="$v.capability.name.$model"
+              :class="{ valid: !v$.name.$invalid, invalid: v$.name.$invalid }"
+              v-model="v$.name.$model"
               required
             />
-            <div v-if="$v.capability.name.$anyDirty && $v.capability.name.$invalid">
-              <small class="form-text text-danger" v-if="!$v.capability.name.required"> This field is required. </small>
+            <div v-if="v$.name.$anyDirty && v$.name.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.name.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -32,13 +32,11 @@
               name="description"
               id="capability-description"
               data-cy="description"
-              :class="{ valid: !$v.capability.description.$invalid, invalid: $v.capability.description.$invalid }"
-              v-model="$v.capability.description.$model"
+              :class="{ valid: !v$.description.$invalid, invalid: v$.description.$invalid }"
+              v-model="v$.description.$model"
             />
-            <div v-if="$v.capability.description.$anyDirty && $v.capability.description.$invalid">
-              <small class="form-text text-danger" v-if="!$v.capability.description.maxLength">
-                This field cannot be longer than 1500 characters.
-              </small>
+            <div v-if="v$.description.$anyDirty && v$.description.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.description.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -49,13 +47,11 @@
               name="comment"
               id="capability-comment"
               data-cy="comment"
-              :class="{ valid: !$v.capability.comment.$invalid, invalid: $v.capability.comment.$invalid }"
-              v-model="$v.capability.comment.$model"
+              :class="{ valid: !v$.comment.$invalid, invalid: v$.comment.$invalid }"
+              v-model="v$.comment.$model"
             />
-            <div v-if="$v.capability.comment.$anyDirty && $v.capability.comment.$invalid">
-              <small class="form-text text-danger" v-if="!$v.capability.comment.maxLength">
-                This field cannot be longer than 1500 characters.
-              </small>
+            <div v-if="v$.comment.$anyDirty && v$.comment.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.comment.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -66,8 +62,8 @@
               name="level"
               id="capability-level"
               data-cy="level"
-              :class="{ valid: !$v.capability.level.$invalid, invalid: $v.capability.level.$invalid }"
-              v-model.number="$v.capability.level.$model"
+              :class="{ valid: !v$.level.$invalid, invalid: v$.level.$invalid }"
+              v-model.number="v$.level.$model"
             />
           </div>
           <div class="form-group">
@@ -92,7 +88,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.capability.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

@@ -2,20 +2,18 @@ package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.*;
-import javax.validation.constraints.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * DataFlow represents\n- A Event when DataFlow.Protocol=Event
+ * DataFlow represents
+ * - A Event when DataFlow.Protocol=Event
  */
 @Schema(description = "DataFlow represents\n- A Event when DataFlow.Protocol=Event")
 @Entity
 @Table(name = "data_flow_item")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class DataFlowItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -184,7 +182,7 @@ public class DataFlowItem implements Serializable {
         if (!(o instanceof DataFlowItem)) {
             return false;
         }
-        return id != null && id.equals(((DataFlowItem) o).id);
+        return getId() != null && getId().equals(((DataFlowItem) o).getId());
     }
 
     @Override

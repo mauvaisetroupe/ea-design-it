@@ -1,97 +1,99 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { IApplicationComponent } from '@/shared/model/application-component.model';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import ApplicationComponentService from './application-component.service';
-import AlertService from '@/shared/alert/alert.service';
-import AccountService from '@/account/account.service';
+import { type IApplicationComponent } from '@/shared/model/application-component.model';
+import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class ApplicationComponent extends Vue {
-  @Inject('applicationComponentService') private applicationComponentService: () => ApplicationComponentService;
-  @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') public accountService: () => AccountService;
-  private removeId: number = null;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ApplicationComponent',
+  setup() {
+    const applicationComponentService = inject('applicationComponentService', () => new ApplicationComponentService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject<AccountService>('accountService');
 
-  public applicationComponents: IApplicationComponent[] = [];
+    const applicationComponents: Ref<IApplicationComponent[]> = ref([]);
 
-  public isFetching = false;
+    const isFetching = ref(false);
 
-  public fields = [
-    // { key: 'id', sortable: false },
-    { key: 'alias', sortable: true },
-    { key: 'name', sortable: true },
-    { key: 'application', sortable: false },
-    { key: 'description', sortable: false, formatter: 'formatLongText' },
-    { key: 'applicationType', sortable: false },
-    { key: 'softwareType', sortable: false },
-    { key: 'categories', sortable: false },
-    { key: 'technologies', sortable: false },
-  ];
+    const fields = [
+      // { key: 'id', sortable: false },
+      { key: 'alias', sortable: true },
+      { key: 'name', sortable: true },
+      { key: 'application', sortable: false },
+      { key: 'description', sortable: false, formatter: 'formatLongText' },
+      { key: 'applicationType', sortable: false },
+      { key: 'softwareType', sortable: false },
+      { key: 'categories', sortable: false },
+      { key: 'technologies', sortable: false },
+      { key: 'actions' },
+    ];
 
-  public currentPage = 1;
-  public perPage = 10;
-  public filter = '';
+    const currentPage = ref(1);
+    const perPage = ref(10);
+    const filter = ref('');
 
-  public mounted(): void {
-    this.retrieveAllApplicationComponents();
-  }
+    const clear = () => {};
 
-  public clear(): void {
-    this.retrieveAllApplicationComponents();
-  }
+    const retrieveApplicationComponents = async () => {
+      isFetching.value = true;
+      try {
+        const res = await applicationComponentService().retrieve();
+        applicationComponents.value = res.data;
+      } catch (err) {
+        alertService.showAnyError(err);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public retrieveAllApplicationComponents(): void {
-    this.isFetching = true;
-    this.applicationComponentService()
-      .retrieve()
-      .then(
-        res => {
-          this.applicationComponents = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    const handleSyncList = () => {
+      retrieveApplicationComponents();
+    };
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    onMounted(async () => {
+      await retrieveApplicationComponents();
+    });
 
-  public prepareRemove(instance: IApplicationComponent): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: IApplicationComponent) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeApplicationComponent = async () => {
+      try {
+        await applicationComponentService().delete(removeId.value);
+        const message = 'A ApplicationComponent is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveApplicationComponents();
+        closeDialog();
+      } catch (error) {
+        alertService.showAnyError(error);
+      }
+    };
 
-  public removeApplicationComponent(): void {
-    this.applicationComponentService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A ApplicationComponent is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllApplicationComponents();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      applicationComponents,
+      handleSyncList,
+      isFetching,
+      retrieveApplicationComponents,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeApplicationComponent,
+      accountService,
+      currentPage,
+      perPage,
+      filter,
+      fields,
+    };
+  },
+});

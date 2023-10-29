@@ -1,46 +1,27 @@
-import Component from 'vue-class-component';
-import { Inject, Vue } from 'vue-property-decorator';
-import LoginService from '@/account/login.service';
-import AccountService from '@/account/account.service';
-import ExportService from '@/eadesignit/export.service';
+import { type ComputedRef, defineComponent, inject } from 'vue';
+import { useStore } from '@/store';
 
-@Component
-export default class Home extends Vue {
-  @Inject('loginService')
-  private loginService: () => LoginService;
+import type LoginService from '@/account/login.service';
 
-  @Inject('accountService') public accountService: () => AccountService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  setup() {
+    const loginService = inject<LoginService>('loginService');
 
-  @Inject('exportService') private exportService: () => ExportService;
+    const authenticated = inject<ComputedRef<boolean>>('authenticated');
+    const username = inject<ComputedRef<string>>('currentUsername');
 
-  public openLogin(): void {
-    this.loginService().openLogin((<any>this).$root);
-  }
+    const store = useStore();
 
-  public get authenticated(): boolean {
-    return this.$store.getters.authenticated;
-  }
+    const openLogin = () => {
+      loginService.openLogin();
+    };
 
-  public get username(): string {
-    return this.$store.getters.account?.login ?? '';
-  }
-
-  public exportExcel() {
-    this.exportService()
-      .downloadFile()
-      .then(response => {
-        const url = URL.createObjectURL(
-          new Blob([response.data], {
-            type: 'application/vnd.ms-excel',
-          })
-        );
-        const link = document.createElement('a');
-        link.href = url;
-        const today = new Date().toISOString().split('T')[0];
-        const time = new Date().toLocaleTimeString().replace(' ', '_');
-        link.setAttribute('download', 'full-data-export-' + today + '-' + time + '.xlsx');
-        document.body.appendChild(link);
-        link.click();
-      });
-  }
-}
+    return {
+      authenticated,
+      username,
+      openLogin,
+      store,
+    };
+  },
+});

@@ -1,115 +1,100 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import { required, maxLength } from 'vuelidate/lib/validators';
-
-import AlertService from '@/shared/alert/alert.service';
-
-import { IProtocol, Protocol } from '@/shared/model/protocol.model';
 import ProtocolService from './protocol.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
+
+import { type IProtocol, Protocol } from '@/shared/model/protocol.model';
 import { ProtocolType } from '@/shared/model/enumerations/protocol-type.model';
 
-const validations: any = {
-  protocol: {
-    name: {
-      required,
-    },
-    type: {
-      required,
-    },
-    description: {
-      maxLength: maxLength(1000),
-    },
-    scope: {},
-  },
-};
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ProtocolUpdate',
+  setup() {
+    const protocolService = inject('protocolService', () => new ProtocolService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-@Component({
-  validations,
-})
-export default class ProtocolUpdate extends Vue {
-  @Inject('protocolService') private protocolService: () => ProtocolService;
-  @Inject('alertService') private alertService: () => AlertService;
+    const protocol: Ref<IProtocol> = ref(new Protocol());
+    const protocolTypeValues: Ref<string[]> = ref(Object.keys(ProtocolType));
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
-  public protocol: IProtocol = new Protocol();
-  public protocolTypeValues: string[] = Object.keys(ProtocolType);
-  public isSaving = false;
-  public currentLanguage = '';
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.protocolId) {
-        vm.retrieveProtocol(to.params.protocolId);
+    const previousState = () => router.go(-1);
+
+    const retrieveProtocol = async protocolId => {
+      try {
+        const res = await protocolService().find(protocolId);
+        protocol.value = res;
+      } catch (error) {
+        alertService.showAnyError(error);
       }
-    });
-  }
+    };
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.protocol.id) {
-      this.protocolService()
-        .update(this.protocol)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A Protocol is updated with identifier ' + param.id;
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.protocolService()
-        .create(this.protocol)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = 'A Protocol is created with identifier ' + param.id;
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
+    if (route.params?.protocolId) {
+      retrieveProtocol(route.params.protocolId);
     }
-  }
 
-  public retrieveProtocol(protocolId): void {
-    this.protocolService()
-      .find(protocolId)
-      .then(res => {
-        this.protocol = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    const validations = useValidation();
+    const validationRules = {
+      name: {
+        required: validations.required('This field is required.'),
+      },
+      type: {
+        required: validations.required('This field is required.'),
+      },
+      description: {
+        maxLength: validations.maxLength('This field cannot be longer than 1000 characters.', 1000),
+      },
+      scope: {},
+    };
+    const v$ = useVuelidate(validationRules, protocol as any);
+    v$.value.$validate();
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {}
-}
+    return {
+      protocolService,
+      alertService,
+      protocol,
+      previousState,
+      protocolTypeValues,
+      isSaving,
+      currentLanguage,
+      v$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.protocol.id) {
+        this.protocolService()
+          .update(this.protocol)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo('A Protocol is updated with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showAnyError(error);
+          });
+      } else {
+        this.protocolService()
+          .create(this.protocol)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess('A Protocol is created with identifier ' + param.id);
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showAnyError(error);
+          });
+      }
+    },
+  },
+});

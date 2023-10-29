@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IExternalSystem } from '@/shared/model/external-system.model';
+import { type IExternalSystem } from '@/shared/model/external-system.model';
 
 const baseApiUrl = 'api/external-systems';
 const apiForImportUrl = 'api/import';

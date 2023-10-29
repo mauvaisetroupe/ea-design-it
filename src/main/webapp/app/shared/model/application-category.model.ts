@@ -1,5 +1,5 @@
-import { IApplication } from '@/shared/model/application.model';
-import { IApplicationComponent } from '@/shared/model/application-component.model';
+import { type IApplication } from '@/shared/model/application.model';
+import { type IApplicationComponent } from '@/shared/model/application-component.model';
 
 export interface IApplicationCategory {
   id?: number;
@@ -17,6 +17,6 @@ export class ApplicationCategory implements IApplicationCategory {
     public type?: string | null,
     public description?: string | null,
     public applications?: IApplication[] | null,
-    public components?: IApplicationComponent[] | null
+    public components?: IApplicationComponent[] | null,
   ) {}
 }

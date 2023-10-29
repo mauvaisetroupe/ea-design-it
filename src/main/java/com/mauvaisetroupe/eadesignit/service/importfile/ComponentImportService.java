@@ -7,13 +7,13 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationComponentRepository;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ApplicationMapperUtil;
+import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import javax.transaction.Transactional;
 import org.apache.poi.EncryptedDocumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,23 +92,18 @@ public class ComponentImportService {
         if (!StringUtils.hasText(mapApplicationImportToComponent.getIdFromExcel())) {
             throw new RuntimeException("ID fro component canot be empty");
         }
-        Optional<ApplicationComponent> optional = applicationComponentRepository.findByAlias(
-            mapApplicationImportToComponent.getIdFromExcel()
+        ApplicationComponent component = applicationComponentRepository
+            .findByAlias(mapApplicationImportToComponent.getIdFromExcel())
+            .orElseGet(ApplicationComponent::new);
+
+        Assert.isTrue(
+            component.getId() == null || component.getName().toLowerCase().equals(mapApplicationImportToComponent.getName().toLowerCase()),
+            "Cannot change application name (" +
+            component.getName() +
+            "/" +
+            mapApplicationImportToComponent.getName() +
+            "), please  correrct your Excel file"
         );
-        final ApplicationComponent component;
-        if (optional.isPresent()) {
-            component = optional.get();
-            Assert.isTrue(
-                component.getName().toLowerCase().equals(mapApplicationImportToComponent.getName().toLowerCase()),
-                "Cannot change application name (" +
-                component.getName() +
-                "/" +
-                mapApplicationImportToComponent.getName() +
-                "), please  correrct your Excel file"
-            );
-        } else {
-            component = new ApplicationComponent();
-        }
 
         ApplicationComponent appliWithSameName = applicationComponentRepository.findByNameIgnoreCase(
             mapApplicationImportToComponent.getName()

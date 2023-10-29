@@ -15,7 +15,7 @@
           </tr>
         </thead>
 
-        <tr v-for="logger in orderBy(filterBy(loggers, filtered), orderProp, reverse === true ? 1 : -1)" :key="logger.name">
+        <tr v-for="logger in filteredLoggers" :key="logger.name">
           <td>
             <small>{{ logger.name }}</small>
           </td>

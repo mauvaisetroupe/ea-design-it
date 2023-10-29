@@ -12,7 +12,7 @@
     <div v-if="!rowsLoaded">
       <div class="form-group">
         <div class="custom-file">
-          <input type="file" class="custom-file-input" id="customFile" @change="handleFileUpload($event)" />
+          <input type="file" class="custom-file-input" id="customFile" @change="handleFileUpload()" ref="excelFile" />
           <label class="custom-file-label" for="customFile">{{ excelFileName }}</label>
         </div>
       </div>
@@ -75,28 +75,6 @@
         </tbody>
       </table>
     </div>
-    <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.applicationImport.delete.question" data-cy="applicationImportDeleteDialogHeading"
-          >Confirm delete operation</span
-        ></span
-      >
-      <div class="modal-body">
-        <p id="jhi-delete-applicationImport-heading">Are you sure you want to delete this Application Import?</p>
-      </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-applicationImport"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeApplicationImport()"
-        >
-          Delete
-        </button>
-      </div>
-    </b-modal>
   </div>
 </template>
 

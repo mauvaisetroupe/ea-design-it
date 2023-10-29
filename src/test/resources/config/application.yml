@@ -14,7 +14,7 @@
 # ===================================================================
 
 application:
-  security-anonymous-reader: true
+  security-anonymous-reader: false
 
 logging:
   level:
@@ -37,9 +37,6 @@ spring:
     host: localhost
   main:
     allow-bean-definition-overriding: true
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
   messages:
     basename: i18n/messages
   task:
@@ -78,7 +75,7 @@ jhipster:
       enabled: false
       host: localhost
       port: 5000
-      queue-size: 512
+      ring-buffer-size: 512
   security:
     authentication:
       jwt:
@@ -86,6 +83,7 @@ jhipster:
         base64-secret: ZGNhMjhiMjkyMzk0YzhmYzgwODlmNGFjY2ZhNGI5ODJkNDg1OWUyMmU4MGVhMzJiMjQyZTlmNGNkYjdlNjgxYzY0Njg2NDUzODg3NjJiNGUwZDZmOTVlYjk4ODYwZGM4MjJhNjY5MDhlMTI0YWMyMzE5ZTZiNzhhZGIzNzJkYmQ=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
+        token-validity-in-seconds-for-remember-me: 86400
 
 # ===================================================================
 # Application specific properties

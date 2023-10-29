@@ -9,11 +9,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.Owner;
 import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
+import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -47,8 +46,8 @@ class OwnerResourceIT {
     private static final String DEFAULT_LASTNAME = "AAAAAAAAAA";
     private static final String UPDATED_LASTNAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_EMAIL = "ytq@.8't.6";
-    private static final String UPDATED_EMAIL = "G@s${.w";
+    private static final String DEFAULT_EMAIL = "bN}o&7@H.xGlze";
+    private static final String UPDATED_EMAIL = "1qvF@Aqn.TE";
 
     private static final String ENTITY_API_URL = "/api/owners";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -220,7 +219,7 @@ class OwnerResourceIT {
         int databaseSizeBeforeUpdate = ownerRepository.findAll().size();
 
         // Update the owner
-        Owner updatedOwner = ownerRepository.findById(owner.getId()).get();
+        Owner updatedOwner = ownerRepository.findById(owner.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedOwner are not directly saved in db
         em.detach(updatedOwner);
         updatedOwner.name(UPDATED_NAME).firstname(UPDATED_FIRSTNAME).lastname(UPDATED_LASTNAME).email(UPDATED_EMAIL);
@@ -311,7 +310,7 @@ class OwnerResourceIT {
         Owner partialUpdatedOwner = new Owner();
         partialUpdatedOwner.setId(owner.getId());
 
-        partialUpdatedOwner.firstname(UPDATED_FIRSTNAME).lastname(UPDATED_LASTNAME);
+        partialUpdatedOwner.firstname(UPDATED_FIRSTNAME).lastname(UPDATED_LASTNAME).email(UPDATED_EMAIL);
 
         restOwnerMockMvc
             .perform(
@@ -328,7 +327,7 @@ class OwnerResourceIT {
         assertThat(testOwner.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testOwner.getFirstname()).isEqualTo(UPDATED_FIRSTNAME);
         assertThat(testOwner.getLastname()).isEqualTo(UPDATED_LASTNAME);
-        assertThat(testOwner.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        assertThat(testOwner.getEmail()).isEqualTo(UPDATED_EMAIL);
     }
 
     @Test

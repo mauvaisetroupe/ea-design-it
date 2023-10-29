@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { ITechnology } from '@/shared/model/technology.model';
+import { type ITechnology } from '@/shared/model/technology.model';
 
 const baseApiUrl = 'api/technologies';
 

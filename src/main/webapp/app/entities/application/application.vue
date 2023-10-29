@@ -14,14 +14,14 @@
         </button>
         <router-link :to="{ name: 'ApplicationCreate' }" custom v-slot="{ navigate }">
           <button
-            v-if="accountService().writeAuthorities"
+            v-if="accountService.writeAuthorities"
             @click="navigate"
             id="jh-create-entity"
             data-cy="entityCreateButton"
             class="btn btn-primary jh-create-entity create-application"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Create a new Application </span>
+            <span>Create a new Application</span>
           </button>
         </router-link>
         &nbsp;
@@ -32,7 +32,7 @@
     </h2>
     <br />
     <div class="alert alert-warning" v-if="!isFetching && applications && applications.length === 0">
-      <span>No applications found</span>
+      <span>No Applications found</span>
     </div>
 
     <div class="border p-2 m-1" v-if="applications && applications.length > 0">
@@ -127,8 +127,8 @@
       v-if="applications && applications.length > 0"
       :items="filteredApplications"
       :fields="fields"
-      :sort-by.sync="sortBy"
-      :sort-desc.sync="sortDesc"
+      v-model:sort-by="sortBy"
+      v-model:sort-desc="sortDesc"
       sort-icon-left
       responsive
       :filter="filter"

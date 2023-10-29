@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
-        <h2 id="eaDesignItApp.flowGroup.home.createOrEditLabel" data-cy="FlowGroupCreateUpdateHeading">Create or edit a FlowGroup</h2>
+        <h2 id="eaDesignItApp.flowGroup.home.createOrEditLabel" data-cy="FlowGroupCreateUpdateHeading">Create or edit a Flow Group</h2>
         <div>
           <div class="form-group" v-if="flowGroup.id">
             <label for="id">ID</label>
@@ -16,13 +16,11 @@
               name="title"
               id="flow-group-title"
               data-cy="title"
-              :class="{ valid: !$v.flowGroup.title.$invalid, invalid: $v.flowGroup.title.$invalid }"
-              v-model="$v.flowGroup.title.$model"
+              :class="{ valid: !v$.title.$invalid, invalid: v$.title.$invalid }"
+              v-model="v$.title.$model"
             />
-            <div v-if="$v.flowGroup.title.$anyDirty && $v.flowGroup.title.$invalid">
-              <small class="form-text text-danger" v-if="!$v.flowGroup.title.maxLength">
-                This field cannot be longer than 100 characters.
-              </small>
+            <div v-if="v$.title.$anyDirty && v$.title.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.title.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -33,13 +31,11 @@
               name="url"
               id="flow-group-url"
               data-cy="url"
-              :class="{ valid: !$v.flowGroup.url.$invalid, invalid: $v.flowGroup.url.$invalid }"
-              v-model="$v.flowGroup.url.$model"
+              :class="{ valid: !v$.url.$invalid, invalid: v$.url.$invalid }"
+              v-model="v$.url.$model"
             />
-            <div v-if="$v.flowGroup.url.$anyDirty && $v.flowGroup.url.$invalid">
-              <small class="form-text text-danger" v-if="!$v.flowGroup.url.maxLength">
-                This field cannot be longer than 500 characters.
-              </small>
+            <div v-if="v$.url.$anyDirty && v$.url.$invalid">
+              <small class="form-text text-danger" v-for="error of v$.url.$errors" :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
@@ -50,8 +46,8 @@
               name="description"
               id="flow-group-description"
               data-cy="description"
-              :class="{ valid: !$v.flowGroup.description.$invalid, invalid: $v.flowGroup.description.$invalid }"
-              v-model="$v.flowGroup.description.$model"
+              :class="{ valid: !v$.description.$invalid, invalid: v$.description.$invalid }"
+              v-model="v$.description.$model"
             />
           </div>
           <div class="form-group">
@@ -67,9 +63,6 @@
               </option>
             </select>
           </div>
-          <div v-if="$v.flowGroup.steps.$anyDirty && $v.flowGroup.steps.$invalid">
-            <small class="form-text text-danger" v-if="!$v.flowGroup.steps.required"> This field is required. </small>
-          </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
@@ -79,7 +72,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.flowGroup.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

@@ -9,10 +9,10 @@ import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.Protocol;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ProtocolType;
 import com.mauvaisetroupe.eadesignit.repository.ProtocolRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,7 +209,7 @@ class ProtocolResourceIT {
         int databaseSizeBeforeUpdate = protocolRepository.findAll().size();
 
         // Update the protocol
-        Protocol updatedProtocol = protocolRepository.findById(protocol.getId()).get();
+        Protocol updatedProtocol = protocolRepository.findById(protocol.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedProtocol are not directly saved in db
         em.detach(updatedProtocol);
         updatedProtocol.name(UPDATED_NAME).type(UPDATED_TYPE).description(UPDATED_DESCRIPTION).scope(UPDATED_SCOPE);
@@ -300,7 +300,7 @@ class ProtocolResourceIT {
         Protocol partialUpdatedProtocol = new Protocol();
         partialUpdatedProtocol.setId(protocol.getId());
 
-        partialUpdatedProtocol.name(UPDATED_NAME).type(UPDATED_TYPE).description(UPDATED_DESCRIPTION);
+        partialUpdatedProtocol.name(UPDATED_NAME).type(UPDATED_TYPE);
 
         restProtocolMockMvc
             .perform(
@@ -316,7 +316,7 @@ class ProtocolResourceIT {
         Protocol testProtocol = protocolList.get(protocolList.size() - 1);
         assertThat(testProtocol.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testProtocol.getType()).isEqualTo(UPDATED_TYPE);
-        assertThat(testProtocol.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testProtocol.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testProtocol.getScope()).isEqualTo(DEFAULT_SCOPE);
     }
 

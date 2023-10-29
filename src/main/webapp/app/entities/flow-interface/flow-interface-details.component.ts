@@ -1,81 +1,89 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { IFlowInterface } from '@/shared/model/flow-interface.model';
 import FlowInterfaceService from './flow-interface.service';
-import AlertService from '@/shared/alert/alert.service';
-import AccountService from '@/account/account.service';
+import { type IFlowInterface } from '@/shared/model/flow-interface.model';
+import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 import DataFlowService from '@/entities/data-flow/data-flow.service';
-import { IDataFlow } from '@/shared/model/data-flow.model';
+import { type IDataFlow } from '@/shared/model/data-flow.model';
+import { useStore } from '@/store';
 
-@Component
-export default class FlowInterfaceDetails extends Vue {
-  @Inject('flowInterfaceService') private flowInterfaceService: () => FlowInterfaceService;
-  @Inject('alertService') private alertService: () => AlertService;
-  @Inject('accountService') public accountService: () => AccountService;
-  @Inject('dataFlowService') private dataFlowService: () => DataFlowService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FlowInterfaceDetails',
+  setup() {
+    const flowInterfaceService = inject('flowInterfaceService', () => new FlowInterfaceService());
+    const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject<AccountService>('accountService');
+    const dataFlowService = inject('dataFlowService', () => new DataFlowService());
 
-  public flowInterface: IFlowInterface = {};
-  public dataFlowToDetach: IDataFlow;
+    const route = useRoute();
+    const router = useRouter();
+    const store = useStore();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.flowInterfaceId) {
-        vm.retrieveFlowInterface(to.params.flowInterfaceId);
+    const previousState = () => router.go(-1);
+
+    const flowInterface: Ref<IFlowInterface> = ref({});
+
+    const retrieveFlowInterface = async flowInterfaceId => {
+      try {
+        const res = await flowInterfaceService().find(flowInterfaceId);
+        flowInterface.value = res;
+      } catch (error) {
+        alertService.showAnyError(error);
       }
-    });
-  }
+    };
 
-  public retrieveFlowInterface(flowInterfaceId) {
-    this.flowInterfaceService()
-      .find(flowInterfaceId)
-      .then(res => {
-        this.flowInterface = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public previousState() {
-    this.$router.go(-1);
-  }
-
-  public prepareToDetach(dataFlow: IDataFlow) {
-    if (<any>this.$refs.detachDataEntity) {
-      (<any>this.$refs.detachDataEntity).show();
+    if (route.params?.flowInterfaceId) {
+      retrieveFlowInterface(route.params.flowInterfaceId);
     }
-    this.dataFlowToDetach = dataFlow;
-  }
 
-  public detachDataFlow() {
-    this.dataFlowService()
-      .update(this.dataFlowToDetach)
-      .then(res => {
-        this.retrieveFlowInterface(this.flowInterface.id);
-        this.closeDetachDialog();
-      });
-  }
+    // function prepareToDetach(dataFlow: IDataFlow) {
+    //   if (<any>this.$refs.detachDataEntity) {
+    //     (<any>this.$refs.detachDataEntity).show();
+    //   }
+    //   this.dataFlowToDetach = dataFlow;
+    // }
 
-  public closeDetachDialog(): void {
-    (<any>this.$refs.detachDataEntity).hide();
-  }
+    // function detachDataFlow() {
+    //   this.dataFlowService()
+    //     .update(this.dataFlowToDetach)
+    //     .then(res => {
+    //       this.retrieveFlowInterface(this.flowInterface.id);
+    //       this.closeDetachDialog();
+    //     });
+    // }
 
-  public isOwner(flowInterface: IFlowInterface): boolean {
-    const username = this.$store.getters.account?.login ?? '';
-    if (this.accountService().writeAuthorities) {
-      return true;
-    }
-    if (flowInterface.owner && flowInterface.owner.users) {
-      for (const user of flowInterface.owner.users) {
-        if (user.login === username) {
-          return true;
+    // function closeDetachDialog(): void {
+    //   (<any>this.$refs.detachDataEntity).hide();
+    // }
+
+    function isOwner(flowInterface: IFlowInterface): boolean {
+      const username = store.account?.login ?? '';
+      if (accountService.writeAuthorities) {
+        return true;
+      }
+      if (flowInterface.owner && flowInterface.owner.users) {
+        for (const user of flowInterface.owner.users) {
+          if (user.login === username) {
+            return true;
+          }
         }
       }
+      return false;
     }
-    return false;
-  }
 
-  public addNew() {
-    console.log('not implemented');
-  }
-}
+    // function addNew() {
+    //   console.log('not implemented');
+    // }
+
+    return {
+      alertService,
+      flowInterface,
+      accountService,
+      previousState,
+      isOwner,
+    };
+  },
+});

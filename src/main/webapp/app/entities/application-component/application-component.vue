@@ -4,9 +4,9 @@
       <span id="application-component-heading">Application Components</span>
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
-          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh List</span>
+          <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh list</span>
         </button>
-        <router-link :to="{ name: 'ApplicationComponentCreate' }" custom v-slot="{ navigate }" v-if="accountService().writeAuthorities">
+        <router-link :to="{ name: 'ApplicationComponentCreate' }" custom v-slot="{ navigate }" v-if="accountService.writeAuthorities">
           <button
             @click="navigate"
             id="jh-create-entity"
@@ -14,14 +14,14 @@
             class="btn btn-primary jh-create-entity create-application-component"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span> Create a new Application Component </span>
+            <span>Create a new Application Component</span>
           </button>
         </router-link>
       </div>
     </h2>
     <br />
     <div class="alert alert-warning" v-if="!isFetching && applicationComponents && applicationComponents.length === 0">
-      <span>No applicationComponents found</span>
+      <span>No Application Components found</span>
     </div>
 
     <b-table
@@ -111,18 +111,13 @@
             custom
             v-slot="{ navigate }"
           >
-            <button
-              @click="navigate"
-              class="btn btn-primary btn-sm edit"
-              data-cy="entityEditButton"
-              v-if="accountService().writeAuthorities"
-            >
+            <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton" v-if="accountService.writeAuthorities">
               <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
               <span class="d-none d-md-inline">Edit</span>
             </button>
           </router-link>
           <b-button
-            v-if="accountService().deleteAuthorities"
+            v-if="accountService.deleteAuthorities"
             v-on:click="prepareRemove(data.item)"
             variant="danger"
             class="btn btn-sm"
@@ -136,26 +131,28 @@
       </template>
     </b-table>
     <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.applicationComponent.delete.question" data-cy="applicationComponentDeleteDialogHeading"
+      <template #modal-title>
+        <span id="eaDesignItApp.applicationComponent.delete.question" data-cy="applicationComponentDeleteDialogHeading"
           >Confirm delete operation</span
-        ></span
-      >
-      <div class="modal-body">
-        <p id="jhi-delete-applicationComponent-heading">Are you sure you want to delete this Application Component?</p>
-      </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-applicationComponent"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeApplicationComponent()"
         >
-          Delete
-        </button>
+      </template>
+      <div class="modal-body">
+        <p id="jhi-delete-applicationComponent-heading">Are you sure you want to delete Application Component {{ removeId }}?</p>
       </div>
+      <template #modal-footer>
+        <div>
+          <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="jhi-confirm-delete-applicationComponent"
+            data-cy="entityConfirmDeleteButton"
+            v-on:click="removeApplicationComponent()"
+          >
+            Delete
+          </button>
+        </div>
+      </template>
     </b-modal>
   </div>
 </template>

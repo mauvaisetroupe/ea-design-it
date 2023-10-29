@@ -1,0 +1,14 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["src/main/webapp//**/*", "src/main/webapp/app/**/*.vue"],
+  "exclude": ["src/main/webapp/app/**/*.spec.ts"],
+  "compilerOptions": {
+    "lib": ["dom"],
+    "composite": true,
+    "baseUrl": "src/main/webapp/app",
+    "outDir": "target/out-tsc/dist",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  }
+}

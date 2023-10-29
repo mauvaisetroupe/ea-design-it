@@ -1,67 +1,75 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, type Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import ApplicationsDiagramService from './applications-diagram.service';
+import { type IFlowInterface } from '@/shared/model/flow-interface.model';
 
-import applicationsDiagramService from './applications-diagram.service';
-import { IFlowInterface } from '@/shared/model/flow-interface.model';
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ApplicationsDiagram',
+  setup() {
+    const applicationsDiagramService = inject('applicationsDiagramService', () => new ApplicationsDiagramService());
 
-@Component
-export default class ApplicationsDiagram extends Vue {
-  @Inject('applicationsDiagramService') private applicationsDiagramService: () => applicationsDiagramService;
-  public interfaces: IFlowInterface[] = [];
-  public sequenceDiagram = true;
-  public plantUMLImage = '';
-  public applicationIds = [];
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      console.log(to.query.id);
-      vm.generateDiagramForSelection(to.query.id);
-    });
-  }
+    const interfaces: Ref<IFlowInterface[]> = ref([]);
+    const sequenceDiagram: Ref<boolean> = ref(true);
+    const plantUMLImage: Ref<string> = ref('');
+    const applicationIds: Ref<number[]> = ref([]);
 
-  public generateDiagramForSelection(applicationIds: number[]) {
-    this.applicationIds = applicationIds;
-    this.applicationsDiagramService()
-      .createNewFromApplications(applicationIds)
-      .then(res => {
-        this.interfaces = res;
-        this.getPlantUMLforapplications(applicationIds);
-      });
-  }
+    if (route.query?.id) {
+      console.log(route.query.id);
+      generateDiagramForSelection(route.query.id);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
+    function generateDiagramForSelection(applicationIds) {
+      applicationsDiagramService()
+        .createNewFromApplications(applicationIds)
+        .then(res => {
+          interfaces.value = res;
+          getPlantUMLforapplications(applicationIds);
+        });
+    }
 
-  public exportPlantUML() {
-    this.applicationsDiagramService()
-      .getPlantUMSourceforApplications(this.applicationIds)
-      .then(response => {
-        const url = URL.createObjectURL(
-          new Blob([response.data], {
-            type: 'text/plain',
-          })
+    const previousState = () => router.go(-1);
+
+    function exportPlantUML() {
+      applicationsDiagramService()
+        .getPlantUMSourceforApplications(applicationIds.value)
+        .then(response => {
+          const url = URL.createObjectURL(
+            new Blob([response.data], {
+              type: 'text/plain',
+            }),
+          );
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', 'plantuml.txt');
+          document.body.appendChild(link);
+          link.click();
+        });
+    }
+
+    function getPlantUMLforapplications(aplicationIds: number[]) {
+      console.log('Entering in method getPlantUMLforapplications');
+      applicationsDiagramService()
+        .getPlantUMLforApplications(aplicationIds)
+        .then(
+          res => {
+            console.log(res.data);
+            plantUMLImage.value = res.data;
+          },
+          err => {
+            console.log(err);
+          },
         );
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'plantuml.txt');
-        document.body.appendChild(link);
-        link.click();
-      });
-  }
+    }
 
-  public getPlantUMLforapplications(aplicationIds: number[]) {
-    console.log('Entering in method getPlantUMLforapplications');
-    this.applicationsDiagramService()
-      .getPlantUMLforApplications(aplicationIds)
-      .then(
-        res => {
-          console.log(res.data);
-
-          this.plantUMLImage = res.data;
-        },
-        err => {
-          console.log(err);
-        }
-      );
-  }
-}
+    return {
+      plantUMLImage,
+      exportPlantUML,
+      previousState,
+      interfaces,
+    };
+  },
+});

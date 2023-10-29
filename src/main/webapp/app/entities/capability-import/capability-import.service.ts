@@ -1,5 +1,6 @@
-import { ICapabilityImportAnalysisDTO } from '@/shared/model/capability-import-analysis.model';
 import axios from 'axios';
+import { type ICapabilityImportAnalysisDTO } from '@/shared/model/capability-import-analysis.model';
+import type { ISummary } from '@/shared/model/summary-sheet.model';
 
 const apiForImportUrl = 'api/import';
 
@@ -34,7 +35,7 @@ export default class CapabilityImportService {
           reject(err);
         });
     });
-  }  
+  }
 
   public uploadMappingFile(file: File, sheetnames: string[]): Promise<any> {
     const formData: FormData = new FormData();
@@ -57,7 +58,7 @@ export default class CapabilityImportService {
     });
   }
 
-  public getSummary(file: File): Promise<any> {
+  public getSummary(file: File): Promise<ISummary[]> {
     const formData: FormData = new FormData();
     formData.append('file', file);
     return new Promise<any>((resolve, reject) => {
@@ -65,7 +66,7 @@ export default class CapabilityImportService {
         .post(`${apiForImportUrl}/summary`, formData)
         .then(res => {
           console.log(res);
-          resolve(res);
+          resolve(res.data);
         })
         .catch(err => {
           console.log(err);

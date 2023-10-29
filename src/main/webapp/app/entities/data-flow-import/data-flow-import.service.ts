@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IDataFlowImport } from '@/shared/model/data-flow-import.model';
+import { type IDataFlowImport } from '@/shared/model/data-flow-import.model';
 
 const baseApiUrl = 'api/data-flow-imports';
 const apiForImportUrl = 'api/import';

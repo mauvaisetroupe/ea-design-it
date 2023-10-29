@@ -3,7 +3,7 @@
     <div class="col-8">
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
         <h2 id="eaDesignItApp.externalReference.home.createOrEditLabel" data-cy="ExternalReferenceCreateUpdateHeading">
-          Create or edit a ExternalReference
+          Create or edit a External Reference
         </h2>
         <div>
           <div class="form-group" v-if="externalReference.id">
@@ -18,8 +18,8 @@
               name="externalID"
               id="external-reference-externalID"
               data-cy="externalID"
-              :class="{ valid: !$v.externalReference.externalID.$invalid, invalid: $v.externalReference.externalID.$invalid }"
-              v-model="$v.externalReference.externalID.$model"
+              :class="{ valid: !v$.externalID.$invalid, invalid: v$.externalID.$invalid }"
+              v-model="v$.externalID.$model"
             />
           </div>
           <div class="form-group">
@@ -54,7 +54,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.externalReference.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

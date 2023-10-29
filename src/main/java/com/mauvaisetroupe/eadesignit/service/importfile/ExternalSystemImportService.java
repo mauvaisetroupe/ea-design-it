@@ -27,15 +27,14 @@ public class ExternalSystemImportService {
         List<Map<String, Object>> df = excelReader.getSheet(SHEET_NAME);
         for (Map<String, Object> rowMap : df) {
             String name = (String) rowMap.get(EXTERNL_ID);
-            Optional<ExternalSystem> optional = externalSystemRepository.findByExternalSystemID(name);
-            ExternalSystem externalSystem;
-            if (optional.isEmpty()) {
-                externalSystem = new ExternalSystem();
-                externalSystem.setExternalSystemID(name);
-                externalSystemRepository.save(externalSystem);
-            } else {
-                externalSystem = optional.get();
-            }
+            ExternalSystem externalSystem = externalSystemRepository
+                .findByExternalSystemID(name)
+                .orElseGet(() -> {
+                    ExternalSystem newExtSys = new ExternalSystem();
+                    newExtSys.setExternalSystemID(name);
+                    externalSystemRepository.save(newExtSys);
+                    return newExtSys;
+                });
             externalSystems.add(externalSystem);
         }
         return externalSystems;

@@ -9,11 +9,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mauvaisetroupe.eadesignit.IntegrationTest;
 import com.mauvaisetroupe.eadesignit.domain.ExternalReference;
 import com.mauvaisetroupe.eadesignit.repository.ExternalReferenceRepository;
+import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +22,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -172,7 +171,7 @@ class ExternalReferenceResourceIT {
         int databaseSizeBeforeUpdate = externalReferenceRepository.findAll().size();
 
         // Update the externalReference
-        ExternalReference updatedExternalReference = externalReferenceRepository.findById(externalReference.getId()).get();
+        ExternalReference updatedExternalReference = externalReferenceRepository.findById(externalReference.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedExternalReference are not directly saved in db
         em.detach(updatedExternalReference);
         updatedExternalReference.externalID(UPDATED_EXTERNAL_ID);
@@ -262,6 +261,8 @@ class ExternalReferenceResourceIT {
         ExternalReference partialUpdatedExternalReference = new ExternalReference();
         partialUpdatedExternalReference.setId(externalReference.getId());
 
+        partialUpdatedExternalReference.externalID(UPDATED_EXTERNAL_ID);
+
         restExternalReferenceMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedExternalReference.getId())
@@ -274,7 +275,7 @@ class ExternalReferenceResourceIT {
         List<ExternalReference> externalReferenceList = externalReferenceRepository.findAll();
         assertThat(externalReferenceList).hasSize(databaseSizeBeforeUpdate);
         ExternalReference testExternalReference = externalReferenceList.get(externalReferenceList.size() - 1);
-        assertThat(testExternalReference.getExternalID()).isEqualTo(DEFAULT_EXTERNAL_ID);
+        assertThat(testExternalReference.getExternalID()).isEqualTo(UPDATED_EXTERNAL_ID);
     }
 
     @Test

@@ -1,4 +1,4 @@
-import { IUser } from '@/shared/model/user.model';
+import { type IUser } from '@/shared/model/user.model';
 
 export interface IOwner {
   id?: number;
@@ -16,6 +16,6 @@ export class Owner implements IOwner {
     public firstname?: string | null,
     public lastname?: string | null,
     public email?: string | null,
-    public users?: IUser[] | null
+    public users?: IUser[] | null,
   ) {}
 }

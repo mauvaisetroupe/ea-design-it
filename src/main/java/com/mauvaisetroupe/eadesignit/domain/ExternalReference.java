@@ -1,19 +1,17 @@
 package com.mauvaisetroupe.eadesignit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A ExternalReference.
  */
 @Entity
 @Table(name = "external_reference")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@SuppressWarnings("common-java:DuplicatedBlocks")
 public class ExternalReference implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,7 +29,6 @@ public class ExternalReference implements Serializable {
     private ExternalSystem externalSystem;
 
     @ManyToMany(mappedBy = "externalIDS")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
         value = {
             "owner",
@@ -48,7 +45,6 @@ public class ExternalReference implements Serializable {
     private Set<Application> applications = new HashSet<>();
 
     @ManyToMany(mappedBy = "externalIDS")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "application", "categories", "technologies", "externalIDS" }, allowSetters = true)
     private Set<ApplicationComponent> components = new HashSet<>();
 
@@ -165,7 +161,7 @@ public class ExternalReference implements Serializable {
         if (!(o instanceof ExternalReference)) {
             return false;
         }
-        return id != null && id.equals(((ExternalReference) o).id);
+        return getId() != null && getId().equals(((ExternalReference) o).getId());
     }
 
     @Override

@@ -15,12 +15,14 @@
       "otherEntityName": "capability",
       "otherEntityRelationshipName": "capabilityApplicationMapping",
       "relationshipName": "capability",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "application",
       "otherEntityRelationshipName": "capabilityApplicationMapping",
       "relationshipName": "application",
+      "relationshipSide": "right",
       "relationshipType": "many-to-one"
     },
     {
@@ -29,8 +31,10 @@
       "otherEntityRelationshipName": "capabilityApplicationMapping",
       "ownerSide": true,
       "relationshipName": "landscape",
+      "relationshipSide": "left",
       "relationshipType": "many-to-many"
     }
   ],
+  "searchEngine": "no",
   "service": "no"
 }

@@ -10,7 +10,7 @@
       <table id="healthCheck" class="table table-striped" aria-describedby="Health check">
         <thead>
           <tr>
-            <th scope="col">Service Name</th>
+            <th scope="col">Service name</th>
             <th class="text-center" scope="col">Status</th>
             <th class="text-center" scope="col">Details</th>
           </tr>
@@ -35,10 +35,12 @@
       </table>
     </div>
     <b-modal ref="healthModal">
-      <h4 slot="modal-title" v-if="currentHealth" class="modal-title" id="showHealthLabel">
-        <span class="text-capitalize">{{ baseName(currentHealth.name) }}</span>
-        {{ subSystemName(currentHealth.name) }}
-      </h4>
+      <template #modal-title>
+        <h4 v-if="currentHealth" class="modal-title" id="showHealthLabel">
+          <span class="text-capitalize">{{ baseName(currentHealth.name) }}</span>
+          {{ subSystemName(currentHealth.name) }}
+        </h4>
+      </template>
       <health-modal :current-health="currentHealth"></health-modal>
     </b-modal>
   </div>

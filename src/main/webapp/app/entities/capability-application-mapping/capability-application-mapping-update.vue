@@ -6,7 +6,7 @@
           id="eaDesignItApp.capabilityApplicationMapping.home.createOrEditLabel"
           data-cy="CapabilityApplicationMappingCreateUpdateHeading"
         >
-          Create or edit a CapabilityApplicationMapping
+          Create or edit a Capability Application Mapping
         </h2>
         <div>
           <div class="form-group" v-if="capabilityApplicationMapping.id">
@@ -88,7 +88,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.capabilityApplicationMapping.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>Save</span>

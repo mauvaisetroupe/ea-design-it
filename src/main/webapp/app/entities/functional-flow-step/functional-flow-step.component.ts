@@ -1,80 +1,75 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 
 import FunctionalFlowStepService from './functional-flow-step.service';
-import AlertService from '@/shared/alert/alert.service';
+import { type IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class FunctionalFlowStep extends Vue {
-  @Inject('functionalFlowStepService') private functionalFlowStepService: () => FunctionalFlowStepService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'FunctionalFlowStep',
+  setup() {
+    const functionalFlowStepService = inject('functionalFlowStepService', () => new FunctionalFlowStepService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const functionalFlowSteps: Ref<IFunctionalFlowStep[]> = ref([]);
 
-  public functionalFlowSteps: IFunctionalFlowStep[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllFunctionalFlowSteps();
-  }
+    const retrieveFunctionalFlowSteps = async () => {
+      isFetching.value = true;
+      try {
+        const res = await functionalFlowStepService().retrieve();
+        functionalFlowSteps.value = res.data;
+      } catch (err) {
+        alertService.showAnyError(err);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllFunctionalFlowSteps();
-  }
+    const handleSyncList = () => {
+      retrieveFunctionalFlowSteps();
+    };
 
-  public retrieveAllFunctionalFlowSteps(): void {
-    this.isFetching = true;
-    this.functionalFlowStepService()
-      .retrieve()
-      .then(
-        res => {
-          this.functionalFlowSteps = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveFunctionalFlowSteps();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: IFunctionalFlowStep) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeFunctionalFlowStep = async () => {
+      try {
+        await functionalFlowStepService().delete(removeId.value);
+        const message = 'A FunctionalFlowStep is deleted with identifier ' + removeId.value;
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveFunctionalFlowSteps();
+        closeDialog();
+      } catch (error) {
+        alertService.showAnyError(error);
+      }
+    };
 
-  public prepareRemove(instance: IFunctionalFlowStep): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeFunctionalFlowStep(): void {
-    this.functionalFlowStepService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = 'A FunctionalFlowStep is deleted with identifier ' + this.removeId;
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllFunctionalFlowSteps();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      functionalFlowSteps,
+      handleSyncList,
+      isFetching,
+      retrieveFunctionalFlowSteps,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeFunctionalFlowStep,
+    };
+  },
+});

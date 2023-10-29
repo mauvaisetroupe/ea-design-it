@@ -26,10 +26,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.xml.sax.SAXException;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -185,72 +187,75 @@ public class LandscapeViewResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the landscapeView, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/landscape-views/{id}")
-    public ResponseEntity<LandscapeDTO> getLandscapeView(@PathVariable Long id) {
+    public LandscapeDTO getLandscapeView(@PathVariable Long id) {
         log.debug("REST request to get LandscapeView : {}", id);
 
         LandscapeDTO landscapeDTO = new LandscapeDTO();
+        LandscapeView landscape = landscapeViewRepository
+            .findOneWithEagerRelationships(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        Optional<LandscapeView> landscapeView = landscapeViewRepository.findOneWithEagerRelationships(id);
+        if (landscape.getCapabilityApplicationMappings() != null) {
+            // Capabilities, we get root with a subset of tree
 
-        if (landscapeView.isPresent()) {
+            Capability rootCapability = capabilityUtil.buildCapabilityTree(
+                landscape.getCapabilityApplicationMappings().stream().map(cp -> cp.getCapability()).collect(Collectors.toList())
+            );
 
-            LandscapeView landscape = landscapeView.get();
+            // All applications from capabilities
 
-            if (landscape.getCapabilityApplicationMappings()!=null) {
-                
-                // Capabilities, we get root with a subset of tree
+            Set<Application> applicationsFromCapabilities = landscape
+                .getCapabilityApplicationMappings()
+                .stream()
+                .map(cm -> cm.getApplication())
+                .collect(Collectors.toSet());
 
-                Capability rootCapability = capabilityUtil.buildCapabilityTree(
-                    landscapeView.get().getCapabilityApplicationMappings().stream().map(cp -> cp.getCapability()).collect(Collectors.toList())
-                );
+            // All applications from flows
 
-                // All applications from capabilities
-            
-                Set<Application> applicationsFromCapabilities =  landscapeView.get().getCapabilityApplicationMappings().stream().map(cm -> cm.getApplication()).collect(Collectors.toSet());
-
-                // All applications from flows
-                    
-                Set<Application> applicationsFromFlows = new HashSet<>();
-                landscapeView.get().getFlows().stream().flatMap(f -> f.getInterfaces().stream()).forEach( i -> {
+            Set<Application> applicationsFromFlows = new HashSet<>();
+            landscape
+                .getFlows()
+                .stream()
+                .flatMap(f -> f.getInterfaces().stream())
+                .forEach(i -> {
                     applicationsFromFlows.add(i.getSource());
                     applicationsFromFlows.add(i.getTarget());
                 });
-    
-                // Find difference between applications in flows and in capabilities
-                Set<Application> applicationOnlyInCapabilities = applicationsFromCapabilities.stream().filter(a -> !applicationsFromFlows.contains(a)).collect(Collectors.toSet());
-                Set<Application> applicationOnlyInFlows = applicationsFromFlows.stream().filter(a -> !applicationsFromCapabilities.contains(a)).collect(Collectors.toSet());
 
-                landscapeDTO.setConsolidatedCapability(rootCapability);
-                landscapeDTO.setApplicationsOnlyInCapabilities(applicationOnlyInCapabilities);
-                landscapeDTO.setApplicationsOnlyInFlows(applicationOnlyInFlows);
+            // Find difference between applications in flows and in capabilities
+            Set<Application> applicationOnlyInCapabilities = applicationsFromCapabilities
+                .stream()
+                .filter(a -> !applicationsFromFlows.contains(a))
+                .collect(Collectors.toSet());
+            Set<Application> applicationOnlyInFlows = applicationsFromFlows
+                .stream()
+                .filter(a -> !applicationsFromCapabilities.contains(a))
+                .collect(Collectors.toSet());
 
-            }
-            
-            // DrawIO
+            landscapeDTO.setConsolidatedCapability(rootCapability);
+            landscapeDTO.setApplicationsOnlyInCapabilities(applicationOnlyInCapabilities);
+            landscapeDTO.setApplicationsOnlyInFlows(applicationOnlyInFlows);
+        }
 
-            try {
-                MXFileSerializer fileSerializer = new MXFileSerializer(landscapeView.get());
-                if (StringUtils.hasText(landscapeView.get().getCompressedDrawXML())) {
-                    // check if drawio is uptodate, if not remove SVG from database
-                    // and send updated xml
-                    String newXML = fileSerializer.updateMXFileXML();
-                    if (newXML != null) {
-                        landscapeView.get().setCompressedDrawSVG(null);
-                        landscapeView.get().setCompressedDrawXML(newXML);
-                    }
+        // DrawIO
+
+        try {
+            MXFileSerializer fileSerializer = new MXFileSerializer(landscape);
+            if (StringUtils.hasText(landscape.getCompressedDrawXML())) {
+                // check if drawio is uptodate, if not remove SVG from database
+                // and send updated xml
+                String newXML = fileSerializer.updateMXFileXML();
+                if (newXML != null) {
+                    landscape.setCompressedDrawSVG(null);
+                    landscape.setCompressedDrawXML(newXML);
                 }
-            } catch (ParserConfigurationException | XPathExpressionException | SAXException | IOException e) {
-                e.printStackTrace();
             }
-            landscapeDTO.setLandscape(landscapeView.get());
+        } catch (ParserConfigurationException | XPathExpressionException | SAXException | IOException e) {
+            e.printStackTrace();
         }
-        Optional<LandscapeDTO> landscapeDtoOptional;
-        if (landscapeView.isPresent()) {
-            landscapeDtoOptional = Optional.of(landscapeDTO);
-        } else {
-            landscapeDtoOptional = Optional.empty();
-        }
-        return ResponseUtil.wrapOrNotFound(landscapeDtoOptional);
+        landscapeDTO.setLandscape(landscape);
+
+        return landscapeDTO;
     }
 
     /**

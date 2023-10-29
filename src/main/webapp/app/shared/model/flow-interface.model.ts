@@ -1,9 +1,9 @@
-import { IDataFlow } from '@/shared/model/data-flow.model';
-import { IApplication } from '@/shared/model/application.model';
-import { IApplicationComponent } from '@/shared/model/application-component.model';
-import { IProtocol } from '@/shared/model/protocol.model';
-import { IOwner } from '@/shared/model/owner.model';
-import { IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
+import { type IDataFlow } from '@/shared/model/data-flow.model';
+import { type IApplication } from '@/shared/model/application.model';
+import { type IApplicationComponent } from '@/shared/model/application-component.model';
+import { type IProtocol } from '@/shared/model/protocol.model';
+import { type IOwner } from '@/shared/model/owner.model';
+import { type IFunctionalFlowStep } from '@/shared/model/functional-flow-step.model';
 
 export interface IFlowInterface {
   id?: number;
@@ -41,6 +41,6 @@ export class FlowInterface implements IFlowInterface {
     public targetComponent?: IApplicationComponent | null,
     public protocol?: IProtocol | null,
     public owner?: IOwner | null,
-    public steps?: IFunctionalFlowStep[] | null
+    public steps?: IFunctionalFlowStep[] | null,
   ) {}
 }
