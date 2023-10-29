@@ -104,18 +104,6 @@
           &amp; Data Flow Items
         </p>
       </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-landscapeView"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeLandscapeView()"
-        >
-          Delete
-        </button>
-      </div>
       <template #modal-footer>
         <div>
           <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>

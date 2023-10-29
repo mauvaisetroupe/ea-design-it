@@ -21,6 +21,19 @@ export default defineComponent({
 
     const clear = () => {};
 
+    const deleteFunctionalFlows = ref(true);
+    const deleteInterfaces = ref(true);
+    const deleteDatas = ref(true);
+    function deleteCoherence() {
+      if (!deleteFunctionalFlows.value) {
+        deleteInterfaces.value = false;
+        deleteDatas.value = false;
+      }
+      if (!deleteInterfaces.value) {
+        deleteDatas.value = false;
+      }
+    }
+
     const retrieveLandscapeViews = async () => {
       isFetching.value = true;
       try {
@@ -41,8 +54,9 @@ export default defineComponent({
       await retrieveLandscapeViews();
     });
 
-    const removeId: Ref<number> = ref(null);
+    const removeId: Ref<number> = ref(-1);
     const removeEntity = ref<any>(null);
+
     const prepareRemove = (instance: ILandscapeView) => {
       removeId.value = instance.id;
       removeEntity.value.show();
@@ -52,10 +66,10 @@ export default defineComponent({
     };
     const removeLandscapeView = async () => {
       try {
-        await landscapeViewService().delete(removeId.value);
+        await landscapeViewService().delete(removeId.value, deleteFunctionalFlows.value, deleteInterfaces.value, deleteDatas.value);
         const message = 'A LandscapeView is deleted with identifier ' + removeId.value;
         alertService.showInfo(message, { variant: 'danger' });
-        removeId.value = null;
+        removeId.value = -1;
         retrieveLandscapeViews();
         closeDialog();
       } catch (error) {
@@ -76,6 +90,10 @@ export default defineComponent({
       removeLandscapeView,
       accountService,
       ...dataUtils,
+      deleteInterfaces,
+      deleteDatas,
+      deleteCoherence,
+      deleteFunctionalFlows,
     };
   },
 });
