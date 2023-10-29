@@ -139,12 +139,10 @@
       </table>
     </div>
     <b-modal ref="mergeEntity" id="mergeEntity" class="mymodalclass">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.flowInterface.delete.question" data-cy="flowInterfaceDeleteDialogHeading"
-          >Confirm merge operation</span
-        ></span
-      >
-      <div class="modal-body">
+      <template #modal-title>
+        <span id="eaDesignItApp.flowInterface.delete.question" data-cy="flowInterfaceDeleteDialogHeading">Confirm merge operation</span>
+      </template>
+      <div class="modal-body" v-if="interfaceToKeep && interfaceToKeep.source && interfaceToKeep.target">
         <p id="jhi-delete-flowInterface-heading" v-if="interfaceToKeep">
           Are you sure you want to merge flows Interface between <strong>{{ interfaceToKeep.source.name }}</strong> and
           <strong>{{ interfaceToKeep.target.name }}</strong> ?
@@ -160,76 +158,43 @@
                 <th scope="row">keep</th>
                 <th scope="row">merge</th>
                 <th scope="row" colspan="3"><span>Interface</span></th>
-                <th scope="row"><span>Flow</span></th>
-                <th scope="row"><span>Data Id</span></th>
-                <th scope="row"><span>Data Resource Name</span></th>
-                <th scope="row"><span>Data Frequency</span></th>
-                <th scope="row"><span>Data Format</span></th>
+                <th scope="row"><span>Data Flows</span></th>
               </tr>
             </thead>
-            <template v-for="(inter, i) in interfacesToMerge">
-              <template v-for="(dataFlowToMerge, j) in inter.dataFlows">
-                <tr :class="i % 2 == 0 ? 'mycolor' : ''">
-                  <td><input v-if="j == 0" type="radio" :value="inter" v-model="interfaceToKeep" @change="prepareMerge(inter)" /></td>
-                  <td>
-                    <input
-                      v-if="j == 0"
-                      :disabled="inter.alias == interfaceToKeep.alias"
-                      type="checkbox"
-                      :id="inter.alias"
-                      :value="inter.alias"
-                      v-model="checkToMerge"
-                    />
-                  </td>
-                  <td>{{ inter.alias }}</td>
-                  <td>
-                    <span v-if="inter.documentationURL">
-                      <a :href="inter.documentationURL" :title="inter.alias" target="_blank">{{ inter.documentationURL }}</a>
-                    </span>
-                  </td>
-                  <td>
-                    <span v-if="inter.documentationURL2">
-                      <a :href="inter.documentationURL2" :title="inter.alias" target="_blank">{{ inter.documentationURL2 }}</a>
-                    </span>
-                  </td>
-                  <td>
-                    <span v-for="(flow, k) in inter.functionalFlows" :key="flow.id" :title="flow.description">
-                      {{ k > 0 ? ', ' : '' }}
-                      {{ flow.alias }}
-                    </span>
-                  </td>
-                  <td>{{ dataFlowToMerge.id }}</td>
-                  <td>{{ dataFlowToMerge.resourceName }}</td>
-                  <td>{{ dataFlowToMerge.frequency }}</td>
-                  <td>{{ dataFlowToMerge.format ? dataFlowToMerge.format.name : '' }}</td>
-                  <td>{{ dataFlowToMerge.resourceType }}</td>
-                  <td>
-                    <span v-if="dataFlowToMerge.contractURL">
-                      <a
-                        :href="dataFlowToMerge.contractURL"
-                        :title="'dataFlow ' + dataFlowToMerge.id + ' : ' + dataFlowToMerge.resourceName"
-                        target="_blank"
-                        >{{ dataFlowToMerge.contractURL }}</a
-                      >
-                    </span>
-                  </td>
-                  <td>
-                    <span v-if="dataFlowToMerge.documentationURL">
-                      <a :href="dataFlowToMerge.documentationURL" :title="dataFlowToMerge.resourceName" target="_blank">{{
-                        dataFlowToMerge.documentationURL
-                      }}</a>
-                    </span>
-                  </td>
-                  <td>{{ dataFlowToMerge.startDate }}</td>
-                  <td>{{ dataFlowToMerge.endDate }}</td>
-                  <td title="dataFlow description">{{ dataFlowToMerge.description }}</td>
-                </tr>
-              </template>
+            <template v-for="(inter, i) in interfacesToMerge" :key="'1-' + i">
+              <tr :class="i % 2 == 0 ? 'mycolor' : ''">
+                <td><input type="radio" :value="inter" v-model="interfaceToKeep" @change="prepareMerge(inter)" /></td>
+                <td>
+                  <input
+                    :disabled="inter.alias == interfaceToKeep.alias"
+                    type="checkbox"
+                    :id="inter.alias"
+                    :value="inter.alias"
+                    v-model="checkToMerge"
+                  />
+                </td>
+                <td>{{ inter.alias }}</td>
+                <td>
+                  <span v-if="inter.documentationURL">
+                    <a :href="inter.documentationURL" :title="inter.alias" target="_blank">{{ inter.documentationURL }}</a>
+                  </span>
+                </td>
+                <td>
+                  <span v-if="inter.documentationURL2">
+                    <a :href="inter.documentationURL2" :title="inter.alias" target="_blank">{{ inter.documentationURL2 }}</a>
+                  </span>
+                </td>
+                <td>
+                  <span v-for="dataFlowToMerge in inter.dataFlows" :key="dataFlowToMerge.id">
+                    {{ dataFlowToMerge }}
+                  </span>
+                </td>
+              </tr>
             </template>
           </table>
         </div>
       </div>
-      <div slot="modal-footer">
+      <template #modal-footer>
         <button type="button" class="btn btn-secondary" v-on:click="closeMergeDialog()">Cancel</button>
         <button
           type="button"
@@ -241,7 +206,7 @@
         >
           Merge
         </button>
-      </div>
+      </template>
     </b-modal>
   </div>
 </template>

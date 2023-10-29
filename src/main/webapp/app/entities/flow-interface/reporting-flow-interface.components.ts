@@ -21,7 +21,7 @@ export default defineComponent({
     const flowInterfaceService = inject('flowInterfaceService', () => new FlowInterfaceService());
     const reportingService = inject('reportingService', () => new ReportingService());
 
-    const interfaceToKeep: Ref<IFlowInterface> = ref([]);
+    const interfaceToKeep: Ref<IFlowInterface> = ref({});
     const interfacesToMerge: Ref<IFlowInterface[]> = ref([]);
     const checkToMerge: Ref<string[]> = ref([]);
     const flowInterfaces: Ref<IFlowInterface[]> = ref([]);
@@ -96,19 +96,12 @@ export default defineComponent({
     }
 
     const mergeFlowInterface = async () => {
-      const instance = getCurrentInstance() as any;
       isFetching.value = true;
       try {
-        const res = await reportingService().mergeInterfaces();
+        const res = await reportingService().mergeInterfaces(interfaceToKeep.value, checkToMerge.value);
         const message = 'FlowInterfaces ' + checkToMerge.value + ' have been merged and replaced by ' + interfaceToKeep.value.alias;
-        instance.root.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        interfaceToKeep.value = [];
+        alertService.showSuccess(message);
+        interfaceToKeep.value = {};
         interfacesToMerge.value = [];
         checkToMerge.value = [];
         retrieveAllFlowInterfaces();
@@ -122,6 +115,16 @@ export default defineComponent({
 
     return {
       accountService,
+      handleSyncList,
+      isFetching,
+      flowInterfaces,
+      prepareMerge,
+      interfaceToKeep,
+      checkToMerge,
+      interfacesToMerge,
+      closeMergeDialog,
+      mergeFlowInterface,
+      mergeEntity,
     };
   },
 });

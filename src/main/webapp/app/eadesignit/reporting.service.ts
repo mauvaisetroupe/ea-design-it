@@ -29,7 +29,6 @@ export default class ReportingService {
           reject(err);
         });
     });
-    return null;
   }
 
   public retrieveOrphanFlowGroup(): Promise<any> {
