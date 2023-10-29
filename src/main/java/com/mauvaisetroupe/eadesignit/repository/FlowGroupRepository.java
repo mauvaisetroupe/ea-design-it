@@ -2,8 +2,10 @@ package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.FlowGroup;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -16,4 +18,7 @@ public interface FlowGroupRepository extends JpaRepository<FlowGroup, Long> {
 
     @Query("select g from FlowGroup g left join fetch g.steps s left join fetch s.flow f where g.flow is null")
     Set<FlowGroup> findByFlowIsNull();
+
+    @Query("select g from FlowGroup g left join fetch g.steps s left join fetch s.flow f where g.id = :id")
+    Optional<FlowGroup> findByIdEager(@Param("id") Long id);
 }

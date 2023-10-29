@@ -165,7 +165,7 @@ public class FlowGroupResource {
     @GetMapping("/flow-groups/{id}")
     public ResponseEntity<FlowGroup> getFlowGroup(@PathVariable Long id) {
         log.debug("REST request to get FlowGroup : {}", id);
-        Optional<FlowGroup> flowGroup = flowGroupRepository.findById(id);
+        Optional<FlowGroup> flowGroup = flowGroupRepository.findByIdEager(id);
         return ResponseUtil.wrapOrNotFound(flowGroup);
     }
 

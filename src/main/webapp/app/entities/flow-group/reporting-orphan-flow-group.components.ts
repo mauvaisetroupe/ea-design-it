@@ -5,14 +5,12 @@ import { useAlertService } from '@/shared/alert/alert.service';
 import type { IFlowGroup } from '@/shared/model/flow-group.model';
 import ReportingService from '@/eadesignit/reporting.service';
 import AlertService from '@/shared/alert/alert.service';
-import FlowGroupService from './flow-group.service';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
   name: 'FlowGroup',
   setup() {
     const reportingService = inject('reportingService', () => new ReportingService());
-    const flowGroupService = inject('flowGroupService', () => new FlowGroupService());
     const alertService = inject('alertService', () => useAlertService(), true);
 
     const route = useRoute();
@@ -32,7 +30,7 @@ export default defineComponent({
     const retrieveAllFlowGroups = async () => {
       isFetching.value = true;
       try {
-        const res = await flowGroupService().retrieve();
+        const res = await reportingService().retrieveOrphanFlowGroup();
         flowGroups.value = res.data;
       } catch (err) {
         alertService.showAnyError(err);
@@ -46,7 +44,6 @@ export default defineComponent({
     }
 
     return {
-      flowGroups,
       handleSyncList,
       isFetching,
       clear,

@@ -27,10 +27,21 @@
           </dt>
           <dd>
             <div v-if="flowGroup.flow">
-              <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flowGroup.flow.id } }">{{
-                flowGroup.flow.alias
-              }}</router-link>
+              <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: flowGroup.flow.id } }"
+                >{{ flowGroup.flow.alias }} - {{ flowGroup.flow.description }}</router-link
+              >
             </div>
+          </dd>
+          <dt>
+            <span>Functional Flow Steps</span>
+          </dt>
+          <dd>
+            <span v-for="step in flowGroup.steps" :key="step.id">
+              <router-link :to="{ name: 'FunctionalFlowView', params: { functionalFlowId: step.flow?.id } }">
+                {{ step.flow?.alias }} - {{ step.flow?.description }}
+              </router-link>
+              - {{ step.description }} <br />
+            </span>
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
