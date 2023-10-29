@@ -367,14 +367,10 @@ public class PlantumlImportService {
     public FunctionalFlow saveImport(FlowImport flowImport, Long landscapeId) {
         FunctionalFlow functionalFlow = null;
         if (flowImport.getId() != null) {
-            functionalFlow =
-                functionalFlowRepository
-                    .findById(flowImport.getId())
-                    .orElseGet(() -> {
-                        FunctionalFlow newFlow = new FunctionalFlow();
-                        functionalFlowRepository.save(newFlow);
-                        return newFlow;
-                    });
+            functionalFlow = functionalFlowRepository.findById(flowImport.getId()).orElseThrow();
+        } else {
+            functionalFlow = new FunctionalFlow();
+            functionalFlowRepository.save(functionalFlow);
         }
         functionalFlow = copyFlowImportToFunctionalFlow(flowImport, functionalFlow);
         functionalFlowRepository.save(functionalFlow);
