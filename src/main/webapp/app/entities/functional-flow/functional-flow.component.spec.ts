@@ -8,6 +8,7 @@ import FunctionalFlowService from './functional-flow.service';
 import AlertService from '@/shared/alert/alert.service';
 
 type FunctionalFlowComponentType = InstanceType<typeof FunctionalFlow>;
+const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 
 const bModalStub = {
   render: () => {},
@@ -48,6 +49,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           functionalFlowService: () => functionalFlowServiceStub,
+          accountService,
         },
       };
     });

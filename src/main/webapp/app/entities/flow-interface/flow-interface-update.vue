@@ -4,7 +4,6 @@
       <form name="editForm" role="form" novalidate v-on:submit.prevent="save()">
         <h2 id="eaDesignItApp.flowInterface.home.createOrEditLabel" data-cy="FlowInterfaceCreateUpdateHeading">
           <font-awesome-icon icon="grip-lines" style="color: Tomato; font-size: 0.9em"></font-awesome-icon> Create or edit a FlowInterface
-          <span v-if="this.$route.query.functionalFlowId"> for Function Flow {{ this.$route.query.functionalFlowId }}</span>
         </h2>
         <div>
           <div class="form-group" v-if="flowInterface.id">

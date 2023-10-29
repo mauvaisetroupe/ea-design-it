@@ -8,6 +8,7 @@ import OwnerService from './owner.service';
 import AlertService from '@/shared/alert/alert.service';
 
 type OwnerComponentType = InstanceType<typeof Owner>;
+const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 
 const bModalStub = {
   render: () => {},
@@ -48,6 +49,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           ownerService: () => ownerServiceStub,
+          accountService,
         },
       };
     });

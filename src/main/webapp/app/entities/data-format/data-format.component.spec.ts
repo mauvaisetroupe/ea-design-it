@@ -8,6 +8,7 @@ import DataFormatService from './data-format.service';
 import AlertService from '@/shared/alert/alert.service';
 
 type DataFormatComponentType = InstanceType<typeof DataFormat>;
+const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 
 const bModalStub = {
   render: () => {},
@@ -48,6 +49,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           dataFormatService: () => dataFormatServiceStub,
+          accountService,
         },
       };
     });

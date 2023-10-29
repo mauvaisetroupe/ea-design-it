@@ -6,6 +6,7 @@ import sinon, { type SinonStubbedInstance } from 'sinon';
 import ApplicationCategory from './application-category.vue';
 import ApplicationCategoryService from './application-category.service';
 import AlertService from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
 type ApplicationCategoryComponentType = InstanceType<typeof ApplicationCategory>;
 
@@ -19,6 +20,7 @@ const bModalStub = {
 
 describe('Component Tests', () => {
   let alertService: AlertService;
+  const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 
   describe('ApplicationCategory Management Component', () => {
     let applicationCategoryServiceStub: SinonStubbedInstance<ApplicationCategoryService>;
@@ -48,6 +50,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           applicationCategoryService: () => applicationCategoryServiceStub,
+          accountService,
         },
       };
     });

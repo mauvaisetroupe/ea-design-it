@@ -8,6 +8,7 @@ import TechnologyService from './technology.service';
 import AlertService from '@/shared/alert/alert.service';
 
 type TechnologyComponentType = InstanceType<typeof Technology>;
+const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 
 const bModalStub = {
   render: () => {},
@@ -48,6 +49,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           technologyService: () => technologyServiceStub,
+          accountService,
         },
       };
     });

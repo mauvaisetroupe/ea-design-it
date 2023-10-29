@@ -8,6 +8,7 @@ import LandscapeViewService from './landscape-view.service';
 import AlertService from '@/shared/alert/alert.service';
 
 type LandscapeViewComponentType = InstanceType<typeof LandscapeView>;
+const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 
 const bModalStub = {
   render: () => {},
@@ -48,6 +49,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           landscapeViewService: () => landscapeViewServiceStub,
+          accountService,
         },
       };
     });

@@ -8,6 +8,7 @@ import DataFlowService from './data-flow.service';
 import AlertService from '@/shared/alert/alert.service';
 
 type DataFlowComponentType = InstanceType<typeof DataFlow>;
+const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 
 const bModalStub = {
   render: () => {},
@@ -48,6 +49,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           dataFlowService: () => dataFlowServiceStub,
+          accountService,
         },
       };
     });

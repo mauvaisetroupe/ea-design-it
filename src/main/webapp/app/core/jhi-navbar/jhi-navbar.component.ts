@@ -34,7 +34,7 @@ export default defineComponent({
 
     if (!accountService?.initialized) {
       accountService
-        ?.retrieveAnonymousProperty()
+        .retrieveAnonymousProperty()
         .then(res => (readAuthorities.value = res))
         .catch(() => (readAuthorities.value = true));
     }

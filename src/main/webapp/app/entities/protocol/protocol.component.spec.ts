@@ -6,8 +6,10 @@ import sinon, { type SinonStubbedInstance } from 'sinon';
 import Protocol from './protocol.vue';
 import ProtocolService from './protocol.service';
 import AlertService from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
 type ProtocolComponentType = InstanceType<typeof Protocol>;
+const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 
 const bModalStub = {
   render: () => {},
@@ -48,6 +50,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           protocolService: () => protocolServiceStub,
+          accountService,
         },
       };
     });

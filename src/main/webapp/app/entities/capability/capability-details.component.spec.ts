@@ -9,6 +9,7 @@ import CapabilityService from './capability.service';
 import AlertService from '@/shared/alert/alert.service';
 
 type CapabilityDetailsComponentType = InstanceType<typeof CapabilityDetails>;
+const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 
 let route: Partial<RouteLocation>;
 const routerGoMock = vitest.fn();
@@ -49,6 +50,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           capabilityService: () => capabilityServiceStub,
+          accountService,
         },
       };
     });

@@ -6,8 +6,15 @@ import sinon, { type SinonStubbedInstance } from 'sinon';
 import FlowInterface from './flow-interface.vue';
 import FlowInterfaceService from './flow-interface.service';
 import AlertService from '@/shared/alert/alert.service';
+import { createTestingPinia } from '@pinia/testing';
+import { useStore } from '@/store';
+import AccountService from '@/account/account.service';
 
 type FlowInterfaceComponentType = InstanceType<typeof FlowInterface>;
+
+const pinia = createTestingPinia();
+const store = useStore();
+const accountService = new AccountService(store);
 
 const bModalStub = {
   render: () => {},
@@ -48,6 +55,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           flowInterfaceService: () => flowInterfaceServiceStub,
+          accountService,
         },
       };
     });

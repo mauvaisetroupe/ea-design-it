@@ -8,6 +8,7 @@ import ApplicationComponentService from './application-component.service';
 import AlertService from '@/shared/alert/alert.service';
 
 type ApplicationComponentComponentType = InstanceType<typeof ApplicationComponent>;
+const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 
 const bModalStub = {
   render: () => {},
@@ -48,6 +49,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           applicationComponentService: () => applicationComponentServiceStub,
+          accountService,
         },
       };
     });

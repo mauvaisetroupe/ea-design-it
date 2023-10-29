@@ -2,8 +2,14 @@ import { vitest } from 'vitest';
 import { ref } from 'vue';
 import { shallowMount } from '@vue/test-utils';
 import Home from './home.vue';
+import { useStore } from '@/store';
+import AccountService from '@/account/account.service';
+import { createTestingPinia } from '@pinia/testing';
 
 type HomeComponentType = InstanceType<typeof Home>;
+
+const pinia = createTestingPinia();
+const store = useStore();
 
 describe('Home', () => {
   let home: HomeComponentType;
@@ -23,6 +29,8 @@ describe('Home', () => {
           loginService,
           authenticated,
           currentUsername,
+          accountService: new AccountService(store),
+          store,
         },
       },
     });

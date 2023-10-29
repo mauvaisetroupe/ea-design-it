@@ -8,6 +8,7 @@ import JhiNavbar from './jhi-navbar.vue';
 import { useStore } from '@/store';
 import { createRouter } from '@/router';
 import LoginService from '@/account/login.service';
+import AccountService from '@/account/account.service';
 
 type JhiNavbarComponentType = InstanceType<typeof JhiNavbar>;
 
@@ -17,7 +18,11 @@ const store = useStore();
 describe('JhiNavbar', () => {
   let jhiNavbar: JhiNavbarComponentType;
   let loginService: LoginService;
-  const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
+  //const accountService = new AccountService(store);
+  const accountService = {
+    hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)),
+    retrieveAnonymousProperty: vitest.fn().mockImplementation(() => Promise.resolve(true)),
+  };
   let router: Router;
 
   beforeEach(() => {

@@ -7,8 +7,16 @@ import { type RouteLocation } from 'vue-router';
 import FlowInterfaceDetails from './flow-interface-details.vue';
 import FlowInterfaceService from './flow-interface.service';
 import AlertService from '@/shared/alert/alert.service';
+import { createTestingPinia } from '@pinia/testing';
+import { useStore } from '@/store';
+import AccountService from '@/account/account.service';
 
 type FlowInterfaceDetailsComponentType = InstanceType<typeof FlowInterfaceDetails>;
+
+const pinia = createTestingPinia({ stubActions: false });
+const store = useStore();
+
+const accountService = new AccountService(store);
 
 let route: Partial<RouteLocation>;
 const routerGoMock = vitest.fn();
@@ -49,6 +57,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           flowInterfaceService: () => flowInterfaceServiceStub,
+          accountService,
         },
       };
     });

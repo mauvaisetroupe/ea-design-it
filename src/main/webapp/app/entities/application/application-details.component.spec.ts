@@ -7,6 +7,8 @@ import { type RouteLocation } from 'vue-router';
 import ApplicationDetails from './application-details.vue';
 import ApplicationService from './application.service';
 import AlertService from '@/shared/alert/alert.service';
+import type { PlantumlDTO } from '@/shared/model/plantuml-dto';
+import type { ICapability } from '@/shared/model/capability.model';
 
 type ApplicationDetailsComponentType = InstanceType<typeof ApplicationDetails>;
 
@@ -19,6 +21,7 @@ vitest.mock('vue-router', () => ({
 }));
 
 const applicationSample = { id: 123 };
+const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 
 describe('Component Tests', () => {
   let alertService: AlertService;
@@ -49,6 +52,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           applicationService: () => applicationServiceStub,
+          accountService,
         },
       };
     });
@@ -56,7 +60,19 @@ describe('Component Tests', () => {
     describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        applicationServiceStub.find.resolves(applicationSample);
+        const foundApplication = { id: 123 };
+        applicationServiceStub.find.resolves(foundApplication);
+        const plantumldto: PlantumlDTO = {
+          svg: 'string',
+          interfaces: [],
+          flows: [],
+          labelsShown: false,
+        };
+        applicationServiceStub.getPlantUML.resolves(plantumldto);
+        applicationServiceStub.getApplicationStructurePlantUML.resolves('<svg></svg>');
+        const capabilities: ICapability[] = [{}];
+        applicationServiceStub.getCapabilities.resolves(capabilities);
+
         route = {
           params: {
             applicationId: '' + 123,
