@@ -19,6 +19,7 @@ export default defineComponent({
     const currentPage = ref(1);
 
     const filteredRows = computed(() => {
+      if (!flowInterfaces.value) return [];
       return flowInterfaces.value.filter(row => {
         return (
           (!filterAlias.value || row.alias?.toLowerCase().includes(filterAlias.value?.toLowerCase())) &&

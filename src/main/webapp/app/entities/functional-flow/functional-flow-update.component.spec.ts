@@ -9,6 +9,8 @@ import FunctionalFlowService from './functional-flow.service';
 import AlertService from '@/shared/alert/alert.service';
 
 import OwnerService from '@/entities/owner/owner.service';
+import LandscapeViewService from '../landscape-view/landscape-view.service';
+import ApplicationService from '../application/application.service';
 
 type FunctionalFlowUpdateComponentType = InstanceType<typeof FunctionalFlowUpdate>;
 
@@ -31,9 +33,16 @@ describe('Component Tests', () => {
     let functionalFlowServiceStub: SinonStubbedInstance<FunctionalFlowService>;
 
     beforeEach(() => {
-      route = {};
+      route = { query: {} };
       functionalFlowServiceStub = sinon.createStubInstance<FunctionalFlowService>(FunctionalFlowService);
       functionalFlowServiceStub.retrieve.onFirstCall().resolves(Promise.resolve([]));
+      functionalFlowServiceStub.retrieve.resolves(Promise.resolve([]));
+
+      const landscapeViewServiceStub = sinon.createStubInstance<LandscapeViewService>(LandscapeViewService);
+      landscapeViewServiceStub.retrieve.resolves({});
+
+      const applicationServiceStub = sinon.createStubInstance<ApplicationService>(ApplicationService);
+      applicationServiceStub.retrieve.resolves({});
 
       alertService = new AlertService({
         bvToast: {
@@ -56,6 +65,8 @@ describe('Component Tests', () => {
             sinon.createStubInstance<OwnerService>(OwnerService, {
               retrieve: sinon.stub().resolves({}),
             } as any),
+          landscapeViewService: () => landscapeViewServiceStub,
+          applicationService: () => applicationServiceStub,
         },
       };
     });
@@ -106,6 +117,7 @@ describe('Component Tests', () => {
           params: {
             functionalFlowId: '' + functionalFlowSample.id,
           },
+          query: {},
         };
         const wrapper = shallowMount(FunctionalFlowUpdate, { global: mountOptions });
         comp = wrapper.vm;
