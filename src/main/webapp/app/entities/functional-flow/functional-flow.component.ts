@@ -28,8 +28,17 @@ export default defineComponent({
     const filterAlias = ref('');
     const filterDescription = ref('');
 
+    const deleteInterfaces = ref(true);
+    const deleteDatas = ref(true);
+
     const perPage = ref(10);
     const currentPage = ref(1);
+
+    function deleteCoherence() {
+      if (!deleteInterfaces.value) {
+        deleteDatas.value = false;
+      }
+    }
 
     const clear = () => {};
 
@@ -64,7 +73,7 @@ export default defineComponent({
     };
     const removeFunctionalFlow = async () => {
       try {
-        await functionalFlowService().delete(removeId.value);
+        await functionalFlowService().delete(removeId.value, deleteInterfaces.value, deleteDatas.value);
         const message = 'A FunctionalFlow is deleted with identifier ' + removeId.value;
         alertService.showInfo(message, { variant: 'danger' });
         removeId.value = null;
@@ -92,6 +101,9 @@ export default defineComponent({
       currentPage,
       filterDescription,
       filterAlias,
+      deleteInterfaces,
+      deleteDatas,
+      deleteCoherence,
     };
   },
 });
