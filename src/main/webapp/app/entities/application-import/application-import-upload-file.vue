@@ -77,28 +77,6 @@
         </tbody>
       </table>
     </div>
-    <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span id="eaDesignItApp.applicationImport.delete.question" data-cy="applicationImportDeleteDialogHeading"
-          >Confirm delete operation</span
-        ></span
-      >
-      <div class="modal-body">
-        <p id="jhi-delete-applicationImport-heading">Are you sure you want to delete this Application Import?</p>
-      </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-applicationImport"
-          data-cy="entityConfirmDeleteButton"
-          v-on:click="removeApplicationImport()"
-        >
-          Delete
-        </button>
-      </div>
-    </b-modal>
   </div>
 </template>
 

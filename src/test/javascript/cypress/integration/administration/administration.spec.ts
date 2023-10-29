@@ -61,7 +61,7 @@ describe('/admin', () => {
             .should('be.visible')
             .then(() => {
               // Wait iframe to load
-              cy.wait(500); // eslint-disable-line cypress/no-unnecessary-waiting
+              cy.wait(500);
               const getSwaggerIframe = () => {
                 return cy.get(swaggerFrameSelector).its('0.contentDocument.body').should('not.be.empty').then(cy.wrap);
               };

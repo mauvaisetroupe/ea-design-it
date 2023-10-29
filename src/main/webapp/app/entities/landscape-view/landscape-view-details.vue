@@ -370,7 +370,7 @@
 
     <b-modal ref="addExistingEntity" id="addExistingEntity">
       <template #modal-title>
-        <span slot="modal-title">Search for exising Functional Flow</span>
+        <span>Search for exising Functional Flow</span>
       </template>
       <div class="modal-body">
         <p id="jhi-delete-landscapeView-heading">Search for exising Functional Flow</p>

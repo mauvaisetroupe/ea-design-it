@@ -23,7 +23,6 @@ export default defineComponent({
     }
 
     function generateDiagramForSelection(applicationIds) {
-      applicationIds = applicationIds;
       applicationsDiagramService()
         .createNewFromApplications(applicationIds)
         .then(res => {
