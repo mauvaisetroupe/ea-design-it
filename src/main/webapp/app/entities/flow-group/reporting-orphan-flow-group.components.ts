@@ -2,7 +2,7 @@ import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAlertService } from '@/shared/alert/alert.service';
 
-import { IFlowGroup } from '@/shared/model/flow-group.model';
+import type { IFlowGroup } from '@/shared/model/flow-group.model';
 import ReportingService from '@/eadesignit/reporting.service';
 import AlertService from '@/shared/alert/alert.service';
 import FlowGroupService from './flow-group.service';

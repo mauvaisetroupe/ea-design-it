@@ -208,10 +208,10 @@
                 v-model="plantuml"
                 @focusout="focusout"
                 @focus="focus"
-                @keydown.13="chooseItem"
+                @keydown.enter="chooseItem"
                 @keydown.tab="chooseItem"
-                @keydown.40="moveDown"
-                @keydown.38="moveUp"
+                @keydown.arrow-down="moveDown"
+                @keydown.arrow-up="moveUp"
               ></textarea>
 
               <ul class="autocomplete-list" v-if="searchMatch.length > 0">

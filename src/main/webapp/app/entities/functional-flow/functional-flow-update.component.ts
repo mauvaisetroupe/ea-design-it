@@ -300,14 +300,10 @@ export default defineComponent({
       selectedIndex.value = index;
       chooseItem();
     }
-    function chooseItem(e = null) {
-      console.log(e);
+    function chooseItem() {
       clickedChooseItem.value = true;
 
       if (selectedIndex.value !== -1 && searchMatch.value.length > 0) {
-        if (e) {
-          e.preventDefault();
-        }
         setWord(searchMatch.value[selectedIndex.value]);
         selectedIndex.value = -1;
       }

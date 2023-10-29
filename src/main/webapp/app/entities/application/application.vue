@@ -127,8 +127,8 @@
       v-if="applications && applications.length > 0"
       :items="filteredApplications"
       :fields="fields"
-      :sort-by.sync="sortBy"
-      :sort-desc.sync="sortDesc"
+      v-model:sort-by="sortBy"
+      v-model:sort-desc="sortDesc"
       sort-icon-left
       responsive
       :filter="filter"

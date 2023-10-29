@@ -104,7 +104,7 @@ export default defineComponent({
             newitems.push(item);
           }
         });
-        let newdto: IApplicationCapabilityImport = {};
+        const newdto: IApplicationCapabilityImport = {};
         newdto.dtos = newitems;
         newdto.sheetname = dto.sheetname;
         dtos.value.push(newdto);

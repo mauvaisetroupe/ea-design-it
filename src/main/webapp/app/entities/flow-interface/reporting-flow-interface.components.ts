@@ -90,8 +90,8 @@ export default defineComponent({
         }
       });
 
-      if (mergeEntity) {
-        mergeEntity.show();
+      if (mergeEntity.value) {
+        mergeEntity.value.show();
       }
     }
 

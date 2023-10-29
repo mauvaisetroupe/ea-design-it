@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import AlertService from '@/shared/alert/alert.service';
 import FullExportService from './full-export.service';
 import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
+import type { ILandscapeView } from '@/shared/model/landscape-view.model';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -51,18 +51,18 @@ export default defineComponent({
     };
 
     function selectAllLansdcape() {
-      if (!submited) {
+      if (!submited.value) {
         checkedLandscapes.value = [];
-        checkedLandscapes.push(...landscapes.value);
+        checkedLandscapes.value.push(...landscapes.value);
       }
     }
 
     function selectNoLandscape() {
-      if (!submited) checkedLandscapes.value = [];
+      if (!submited.value) checkedLandscapes.value = [];
     }
 
     function selectAllMapping() {
-      if (!submited) {
+      if (!submited.value) {
         checkedCapabilitiesMapping.value = [];
         checkedCapabilitiesMapping.value.push(...capabilitiesMapping.value);
         capabilities.value = true;
@@ -70,7 +70,7 @@ export default defineComponent({
     }
 
     function selectNoMapping() {
-      if (!submited) checkedCapabilitiesMapping.value = [];
+      if (!submited.value) checkedCapabilitiesMapping.value = [];
     }
 
     function checkCapa(e) {
