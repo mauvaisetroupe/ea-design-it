@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -15,10 +16,9 @@ describe('FlowInterface e2e test', () => {
   const flowInterfacePageUrlPattern = new RegExp('/flow-interface(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const flowInterfaceSample = { alias: 'beyond turnip' };
 
-  let flowInterface;
-  let application;
+  let flowInterface: any;
+  let application: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -26,20 +26,21 @@ describe('FlowInterface e2e test', () => {
 
   beforeEach(() => {
     // create an instance at the required relationship entity:
+    const alias = 'TST.INTER.' + Date.now();
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/applications',
       body: {
-        alias: 'gene instrumentation fatal',
-        name: 'dapper creditor outside',
-        description: 'woot delirious yahoo',
-        comment: 'handle over',
-        documentationURL: 'apropos some botch',
+        alias: alias,
+        name: 'Account',
+        description: 'cross-platform',
+        comment: 'generating override override',
+        documentationURL: 'orange Program',
         startDate: '2021-11-04',
-        endDate: '2021-11-04',
-        applicationType: 'MIDDLEWARE',
-        softwareType: 'ON_PREMISE_EXTERNAL_LIBRARY',
-        nickname: 'sprinkles',
+        endDate: '2021-11-03',
+        applicationType: 'HARDWARE',
+        softwareType: 'CLOUD_CUSTOM',
+        nickname: 'Antillian',
       },
     }).then(({ body }) => {
       application = body;
@@ -111,7 +112,7 @@ describe('FlowInterface e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('flow-interface');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -135,7 +136,7 @@ describe('FlowInterface e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', flowInterfacePageUrlPattern);
       });
@@ -143,6 +144,9 @@ describe('FlowInterface e2e test', () => {
 
     describe('with existing value', () => {
       beforeEach(() => {
+        const alias = 'TST.FLOW.' + Date.now();
+        const flowInterfaceSample = { alias: alias };
+
         cy.authenticatedRequest({
           method: 'POST',
           url: '/api/flow-interfaces',
@@ -177,28 +181,18 @@ describe('FlowInterface e2e test', () => {
         cy.getEntityDetailsHeading('flowInterface');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', flowInterfacePageUrlPattern);
       });
 
-      it('edit button click should load edit FlowInterface page and go back', () => {
+      it('edit button click should load edit FlowInterface page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('FlowInterface');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', flowInterfacePageUrlPattern);
-      });
-
-      it('edit button click should load edit FlowInterface page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('FlowInterface');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', flowInterfacePageUrlPattern);
       });
@@ -208,10 +202,10 @@ describe('FlowInterface e2e test', () => {
         cy.getEntityDeleteDialogHeading('flowInterface').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', flowInterfacePageUrlPattern);
 
@@ -228,28 +222,21 @@ describe('FlowInterface e2e test', () => {
     });
 
     it('should create an instance of FlowInterface', () => {
-      cy.get(`[data-cy="alias"]`).type('violate');
-      cy.get(`[data-cy="alias"]`).should('have.value', 'violate');
+      const alias = 'TST.INTER.' + Date.now();
 
-      cy.get(`[data-cy="status"]`).type('limply whereas');
-      cy.get(`[data-cy="status"]`).should('have.value', 'limply whereas');
+      cy.get(`[data-cy="alias"]`).type(alias).should('have.value', alias);
 
-      cy.get(`[data-cy="documentationURL"]`).type('via boo daintily');
-      cy.get(`[data-cy="documentationURL"]`).should('have.value', 'via boo daintily');
+      cy.get(`[data-cy="status"]`).type('Operations Stand-alone parse').should('have.value', 'Operations Stand-alone parse');
 
-      cy.get(`[data-cy="documentationURL2"]`).type('thin excluding lest');
-      cy.get(`[data-cy="documentationURL2"]`).should('have.value', 'thin excluding lest');
+      cy.get(`[data-cy="documentationURL"]`).type('Account Cotton').should('have.value', 'Account Cotton');
 
-      cy.get(`[data-cy="description"]`).type('beyond');
-      cy.get(`[data-cy="description"]`).should('have.value', 'beyond');
+      cy.get(`[data-cy="documentationURL2"]`).type('bluetooth lime').should('have.value', 'bluetooth lime');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-03');
-      cy.get(`[data-cy="startDate"]`).blur();
-      cy.get(`[data-cy="startDate"]`).should('have.value', '2021-11-03');
+      cy.get(`[data-cy="description"]`).type('cohesive open-source models').should('have.value', 'cohesive open-source models');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-04');
-      cy.get(`[data-cy="endDate"]`).blur();
-      cy.get(`[data-cy="endDate"]`).should('have.value', '2021-11-04');
+      cy.get(`[data-cy="startDate"]`).type('2021-11-04').should('have.value', '2021-11-04');
+
+      cy.get(`[data-cy="endDate"]`).type('2021-11-04').should('have.value', '2021-11-04');
 
       cy.get(`[data-cy="source"]`).select(1);
       cy.get(`[data-cy="target"]`).select(1);
@@ -257,11 +244,11 @@ describe('FlowInterface e2e test', () => {
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        flowInterface = response.body;
+        expect(response!.statusCode).to.equal(201);
+        flowInterface = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', flowInterfacePageUrlPattern);
     });

@@ -93,6 +93,8 @@ const app = createApp({
     );
 
     router.beforeResolve(async (to, from, next) => {
+      console.log('AAAAAAAAAAAA');
+
       // Make sure login modal is closed
       loginService.hideLogin();
 

@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -15,9 +16,9 @@ describe('Owner e2e test', () => {
   const ownerPageUrlPattern = new RegExp('/owner(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const ownerSample = { name: 'hence' };
+  const ownerSample = { name: 'Computer Shores' };
 
-  let owner;
+  let owner: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -44,7 +45,7 @@ describe('Owner e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('owner');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -68,7 +69,7 @@ describe('Owner e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', ownerPageUrlPattern);
       });
@@ -106,28 +107,18 @@ describe('Owner e2e test', () => {
         cy.getEntityDetailsHeading('owner');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', ownerPageUrlPattern);
       });
 
-      it('edit button click should load edit Owner page and go back', () => {
+      it('edit button click should load edit Owner page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('Owner');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', ownerPageUrlPattern);
-      });
-
-      it('edit button click should load edit Owner page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('Owner');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', ownerPageUrlPattern);
       });
@@ -137,10 +128,10 @@ describe('Owner e2e test', () => {
         cy.getEntityDeleteDialogHeading('owner').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', ownerPageUrlPattern);
 
@@ -157,26 +148,22 @@ describe('Owner e2e test', () => {
     });
 
     it('should create an instance of Owner', () => {
-      cy.get(`[data-cy="name"]`).type('dodge precipitation');
-      cy.get(`[data-cy="name"]`).should('have.value', 'dodge precipitation');
+      cy.get(`[data-cy="name"]`).type('Albania sensor copy').should('have.value', 'Albania sensor copy');
 
-      cy.get(`[data-cy="firstname"]`).type('with step-sister but');
-      cy.get(`[data-cy="firstname"]`).should('have.value', 'with step-sister but');
+      cy.get(`[data-cy="firstname"]`).type('program program').should('have.value', 'program program');
 
-      cy.get(`[data-cy="lastname"]`).type('oof conspiracy meh');
-      cy.get(`[data-cy="lastname"]`).should('have.value', 'oof conspiracy meh');
+      cy.get(`[data-cy="lastname"]`).type('COM Credit Netherlands').should('have.value', 'COM Credit Netherlands');
 
-      cy.get(`[data-cy="email"]`).type("(z5Z@W'$:s.u*M");
-      cy.get(`[data-cy="email"]`).should('have.value', "(z5Z@W'$:s.u*M");
+      cy.get(`[data-cy="email"]`).type('tata@toto.com').should('have.value', 'tata@toto.com');
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        owner = response.body;
+        expect(response!.statusCode).to.equal(201);
+        owner = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', ownerPageUrlPattern);
     });

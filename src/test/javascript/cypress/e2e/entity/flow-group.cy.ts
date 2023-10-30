@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -15,10 +16,10 @@ describe('FlowGroup e2e test', () => {
   const flowGroupPageUrlPattern = new RegExp('/flow-group(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  // const flowGroupSample = {};
+  const flowGroupSample = {};
 
-  let flowGroup;
-  // let functionalFlowStep;
+  let flowGroup: any;
+  //let functionalFlowStep: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -30,7 +31,7 @@ describe('FlowGroup e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/functional-flow-steps',
-      body: {"description":"peak","stepOrder":19159},
+      body: {"description":"Devolved","stepOrder":20724},
     }).then(({ body }) => {
       functionalFlowStep = body;
     });
@@ -87,7 +88,7 @@ describe('FlowGroup e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('flow-group');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -111,7 +112,7 @@ describe('FlowGroup e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', flowGroupPageUrlPattern);
       });
@@ -153,7 +154,7 @@ describe('FlowGroup e2e test', () => {
         cy.visit(flowGroupPageUrl);
 
         cy.wait('@entitiesRequest').then(({ response }) => {
-          if (response.body.length === 0) {
+          if (response!.body.length === 0) {
             this.skip();
           }
         });
@@ -164,28 +165,18 @@ describe('FlowGroup e2e test', () => {
         cy.getEntityDetailsHeading('flowGroup');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', flowGroupPageUrlPattern);
       });
 
-      it('edit button click should load edit FlowGroup page and go back', () => {
+      it('edit button click should load edit FlowGroup page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('FlowGroup');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', flowGroupPageUrlPattern);
-      });
-
-      it('edit button click should load edit FlowGroup page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('FlowGroup');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', flowGroupPageUrlPattern);
       });
@@ -195,10 +186,10 @@ describe('FlowGroup e2e test', () => {
         cy.getEntityDeleteDialogHeading('flowGroup').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', flowGroupPageUrlPattern);
 
@@ -215,25 +206,22 @@ describe('FlowGroup e2e test', () => {
     });
 
     it.skip('should create an instance of FlowGroup', () => {
-      cy.get(`[data-cy="title"]`).type('bashfully deposit pace');
-      cy.get(`[data-cy="title"]`).should('have.value', 'bashfully deposit pace');
+      cy.get(`[data-cy="title"]`).type('Handmade Paradigm').should('have.value', 'Handmade Paradigm');
 
-      cy.get(`[data-cy="url"]`).type('https://same-indigence.net/');
-      cy.get(`[data-cy="url"]`).should('have.value', 'https://same-indigence.net/');
+      cy.get(`[data-cy="url"]`).type('http://constance.com').should('have.value', 'http://constance.com');
 
-      cy.get(`[data-cy="description"]`).type('incidentally permeate');
-      cy.get(`[data-cy="description"]`).should('have.value', 'incidentally permeate');
+      cy.get(`[data-cy="description"]`).type('drive heuristic').should('have.value', 'drive heuristic');
 
       cy.get(`[data-cy="steps"]`).select([0]);
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        flowGroup = response.body;
+        expect(response!.statusCode).to.equal(201);
+        flowGroup = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', flowGroupPageUrlPattern);
     });

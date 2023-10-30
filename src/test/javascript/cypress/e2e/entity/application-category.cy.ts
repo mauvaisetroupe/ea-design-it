@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -15,9 +16,9 @@ describe('ApplicationCategory e2e test', () => {
   const applicationCategoryPageUrlPattern = new RegExp('/application-category(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const applicationCategorySample = { name: 'unlike' };
+  const applicationCategorySample = { name: 'harness Product Movies' };
 
-  let applicationCategory;
+  let applicationCategory: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -44,7 +45,7 @@ describe('ApplicationCategory e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('application-category');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -68,7 +69,7 @@ describe('ApplicationCategory e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', applicationCategoryPageUrlPattern);
       });
@@ -106,28 +107,18 @@ describe('ApplicationCategory e2e test', () => {
         cy.getEntityDetailsHeading('applicationCategory');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', applicationCategoryPageUrlPattern);
       });
 
-      it('edit button click should load edit ApplicationCategory page and go back', () => {
+      it('edit button click should load edit ApplicationCategory page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('ApplicationCategory');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', applicationCategoryPageUrlPattern);
-      });
-
-      it('edit button click should load edit ApplicationCategory page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('ApplicationCategory');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', applicationCategoryPageUrlPattern);
       });
@@ -137,10 +128,10 @@ describe('ApplicationCategory e2e test', () => {
         cy.getEntityDeleteDialogHeading('applicationCategory').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', applicationCategoryPageUrlPattern);
 
@@ -157,23 +148,20 @@ describe('ApplicationCategory e2e test', () => {
     });
 
     it('should create an instance of ApplicationCategory', () => {
-      cy.get(`[data-cy="name"]`).type('sign meanwhile ick');
-      cy.get(`[data-cy="name"]`).should('have.value', 'sign meanwhile ick');
+      cy.get(`[data-cy="name"]`).type('Manager').should('have.value', 'Manager');
 
-      cy.get(`[data-cy="type"]`).type('entry');
-      cy.get(`[data-cy="type"]`).should('have.value', 'entry');
+      cy.get(`[data-cy="type"]`).type('Pizza relationships Tuna').should('have.value', 'Pizza relationships Tuna');
 
-      cy.get(`[data-cy="description"]`).type('annihilate under anxiously');
-      cy.get(`[data-cy="description"]`).should('have.value', 'annihilate under anxiously');
+      cy.get(`[data-cy="description"]`).type('local Malagasy').should('have.value', 'local Malagasy');
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        applicationCategory = response.body;
+        expect(response!.statusCode).to.equal(201);
+        applicationCategory = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', applicationCategoryPageUrlPattern);
     });

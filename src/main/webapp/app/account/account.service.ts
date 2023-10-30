@@ -53,10 +53,18 @@ export default class AccountService {
       return;
     }
 
-    const promise = this.retrieveAccount();
-    this.store.authenticate(promise);
-    promise.then(() => this.store.authenticate(null));
-    await promise;
+    console.log('UUUUUUU');
+    if (token) {
+      console.log('XXXXXXXX' + token);
+      const promise = this.retrieveAccount();
+      this.store.authenticate(promise);
+      promise.then(() => this.store.authenticate(null));
+      await promise;
+    } else {
+      if (!this.anonymousReadAllowed) {
+        console.error('No token and !anonymousReadAllowed');
+      }
+    }
   }
 
   public async hasAnyAuthorityAndCheckAuth(authorities: any): Promise<boolean> {

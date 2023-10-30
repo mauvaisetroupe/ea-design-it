@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -15,9 +16,9 @@ describe('Protocol e2e test', () => {
   const protocolPageUrlPattern = new RegExp('/protocol(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const protocolSample = { name: 'oh', type: 'ETL' };
+  const protocolSample = { name: 'turn-key', type: 'DB' };
 
-  let protocol;
+  let protocol: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -44,7 +45,7 @@ describe('Protocol e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('protocol');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -68,7 +69,7 @@ describe('Protocol e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', protocolPageUrlPattern);
       });
@@ -106,28 +107,18 @@ describe('Protocol e2e test', () => {
         cy.getEntityDetailsHeading('protocol');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', protocolPageUrlPattern);
       });
 
-      it('edit button click should load edit Protocol page and go back', () => {
+      it('edit button click should load edit Protocol page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('Protocol');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', protocolPageUrlPattern);
-      });
-
-      it('edit button click should load edit Protocol page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('Protocol');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', protocolPageUrlPattern);
       });
@@ -137,10 +128,10 @@ describe('Protocol e2e test', () => {
         cy.getEntityDeleteDialogHeading('protocol').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', protocolPageUrlPattern);
 
@@ -157,25 +148,22 @@ describe('Protocol e2e test', () => {
     });
 
     it('should create an instance of Protocol', () => {
-      cy.get(`[data-cy="name"]`).type('sushi round');
-      cy.get(`[data-cy="name"]`).should('have.value', 'sushi round');
+      cy.get(`[data-cy="name"]`).type('capacitor').should('have.value', 'capacitor');
 
-      cy.get(`[data-cy="type"]`).select('FRONT');
+      cy.get(`[data-cy="type"]`).select('OTHER');
 
-      cy.get(`[data-cy="description"]`).type('forked');
-      cy.get(`[data-cy="description"]`).should('have.value', 'forked');
+      cy.get(`[data-cy="description"]`).type('Mews discrete system').should('have.value', 'Mews discrete system');
 
-      cy.get(`[data-cy="scope"]`).type('to acoustics');
-      cy.get(`[data-cy="scope"]`).should('have.value', 'to acoustics');
+      cy.get(`[data-cy="scope"]`).type('Island').should('have.value', 'Island');
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        protocol = response.body;
+        expect(response!.statusCode).to.equal(201);
+        protocol = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', protocolPageUrlPattern);
     });

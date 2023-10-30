@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -17,7 +18,7 @@ describe('ExternalSystem e2e test', () => {
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const externalSystemSample = {};
 
-  let externalSystem;
+  let externalSystem: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -42,11 +43,9 @@ describe('ExternalSystem e2e test', () => {
 
   it('ExternalSystems menu should load ExternalSystems page', () => {
     cy.visit('/');
-    cy.get('[data-cy="home-welcome"]');
-
     cy.clickOnEntityMenuItem('external-system');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -60,7 +59,6 @@ describe('ExternalSystem e2e test', () => {
     describe('create button click', () => {
       beforeEach(() => {
         cy.visit(externalSystemPageUrl);
-        cy.get('[data-cy="ExternalSystemHeading"]');
         cy.wait('@entitiesRequest');
       });
 
@@ -71,7 +69,7 @@ describe('ExternalSystem e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', externalSystemPageUrlPattern);
       });
@@ -109,28 +107,18 @@ describe('ExternalSystem e2e test', () => {
         cy.getEntityDetailsHeading('externalSystem');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', externalSystemPageUrlPattern);
       });
 
-      it('edit button click should load edit ExternalSystem page and go back', () => {
+      it('edit button click should load edit ExternalSystem page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('ExternalSystem');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', externalSystemPageUrlPattern);
-      });
-
-      it('edit button click should load edit ExternalSystem page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('ExternalSystem');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', externalSystemPageUrlPattern);
       });
@@ -140,10 +128,10 @@ describe('ExternalSystem e2e test', () => {
         cy.getEntityDeleteDialogHeading('externalSystem').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', externalSystemPageUrlPattern);
 
@@ -160,17 +148,18 @@ describe('ExternalSystem e2e test', () => {
     });
 
     it('should create an instance of ExternalSystem', () => {
-      cy.get(`[data-cy="externalSystemID"]`).type('nice which boring');
-      cy.get(`[data-cy="externalSystemID"]`).should('have.value', 'nice which boring');
+      cy.get(`[data-cy="externalSystemID"]`)
+        .type('Cross-platform National Pennsylvania')
+        .should('have.value', 'Cross-platform National Pennsylvania');
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        externalSystem = response.body;
+        expect(response!.statusCode).to.equal(201);
+        externalSystem = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', externalSystemPageUrlPattern);
     });

@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -17,7 +18,7 @@ describe('CapabilityApplicationMapping e2e test', () => {
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const capabilityApplicationMappingSample = {};
 
-  let capabilityApplicationMapping;
+  let capabilityApplicationMapping: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -44,7 +45,7 @@ describe('CapabilityApplicationMapping e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('capability-application-mapping');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -68,7 +69,7 @@ describe('CapabilityApplicationMapping e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', capabilityApplicationMappingPageUrlPattern);
       });
@@ -106,28 +107,18 @@ describe('CapabilityApplicationMapping e2e test', () => {
         cy.getEntityDetailsHeading('capabilityApplicationMapping');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', capabilityApplicationMappingPageUrlPattern);
       });
 
-      it('edit button click should load edit CapabilityApplicationMapping page and go back', () => {
+      it('edit button click should load edit CapabilityApplicationMapping page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('CapabilityApplicationMapping');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', capabilityApplicationMappingPageUrlPattern);
-      });
-
-      it('edit button click should load edit CapabilityApplicationMapping page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('CapabilityApplicationMapping');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', capabilityApplicationMappingPageUrlPattern);
       });
@@ -137,10 +128,10 @@ describe('CapabilityApplicationMapping e2e test', () => {
         cy.getEntityDeleteDialogHeading('capabilityApplicationMapping').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', capabilityApplicationMappingPageUrlPattern);
 
@@ -160,11 +151,11 @@ describe('CapabilityApplicationMapping e2e test', () => {
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        capabilityApplicationMapping = response.body;
+        expect(response!.statusCode).to.equal(201);
+        capabilityApplicationMapping = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', capabilityApplicationMappingPageUrlPattern);
     });

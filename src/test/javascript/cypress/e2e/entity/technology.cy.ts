@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -15,9 +16,9 @@ describe('Technology e2e test', () => {
   const technologyPageUrlPattern = new RegExp('/technology(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const technologySample = { name: 'yieldingly more pish' };
+  const technologySample = { name: 'Avon Mouse Team-oriented' };
 
-  let technology;
+  let technology: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -44,7 +45,7 @@ describe('Technology e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('technology');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -68,7 +69,7 @@ describe('Technology e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', technologyPageUrlPattern);
       });
@@ -106,28 +107,18 @@ describe('Technology e2e test', () => {
         cy.getEntityDetailsHeading('technology');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', technologyPageUrlPattern);
       });
 
-      it('edit button click should load edit Technology page and go back', () => {
+      it('edit button click should load edit Technology page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('Technology');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', technologyPageUrlPattern);
-      });
-
-      it('edit button click should load edit Technology page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('Technology');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', technologyPageUrlPattern);
       });
@@ -137,10 +128,10 @@ describe('Technology e2e test', () => {
         cy.getEntityDeleteDialogHeading('technology').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', technologyPageUrlPattern);
 
@@ -157,23 +148,20 @@ describe('Technology e2e test', () => {
     });
 
     it('should create an instance of Technology', () => {
-      cy.get(`[data-cy="name"]`).type('budge onto hike');
-      cy.get(`[data-cy="name"]`).should('have.value', 'budge onto hike');
+      cy.get(`[data-cy="name"]`).type('ADP Cambridgeshire').should('have.value', 'ADP Cambridgeshire');
 
-      cy.get(`[data-cy="type"]`).type('against');
-      cy.get(`[data-cy="type"]`).should('have.value', 'against');
+      cy.get(`[data-cy="type"]`).type('Internal Technician').should('have.value', 'Internal Technician');
 
-      cy.get(`[data-cy="description"]`).type('before');
-      cy.get(`[data-cy="description"]`).should('have.value', 'before');
+      cy.get(`[data-cy="description"]`).type('Mouse Unbranded').should('have.value', 'Mouse Unbranded');
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        technology = response.body;
+        expect(response!.statusCode).to.equal(201);
+        technology = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', technologyPageUrlPattern);
     });

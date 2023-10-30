@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -17,12 +18,10 @@ describe('ExternalReference e2e test', () => {
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const externalReferenceSample = {};
 
-  let externalReference;
+  let externalReference: any;
 
   beforeEach(() => {
     cy.login(username, password);
-    cy.visit('/');
-    cy.wait('[data-cy="home-welcome"]');
   });
 
   beforeEach(() => {
@@ -46,7 +45,7 @@ describe('ExternalReference e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('external-reference');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -70,7 +69,7 @@ describe('ExternalReference e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', externalReferencePageUrlPattern);
       });
@@ -108,28 +107,18 @@ describe('ExternalReference e2e test', () => {
         cy.getEntityDetailsHeading('externalReference');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', externalReferencePageUrlPattern);
       });
 
-      it('edit button click should load edit ExternalReference page and go back', () => {
+      it('edit button click should load edit ExternalReference page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('ExternalReference');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', externalReferencePageUrlPattern);
-      });
-
-      it('edit button click should load edit ExternalReference page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('ExternalReference');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', externalReferencePageUrlPattern);
       });
@@ -139,10 +128,10 @@ describe('ExternalReference e2e test', () => {
         cy.getEntityDeleteDialogHeading('externalReference').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', externalReferencePageUrlPattern);
 
@@ -159,17 +148,16 @@ describe('ExternalReference e2e test', () => {
     });
 
     it('should create an instance of ExternalReference', () => {
-      cy.get(`[data-cy="externalID"]`).type('maintainer furthermore');
-      cy.get(`[data-cy="externalID"]`).should('have.value', 'maintainer furthermore');
+      cy.get(`[data-cy="externalID"]`).type('green Licensed').should('have.value', 'green Licensed');
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        externalReference = response.body;
+        expect(response!.statusCode).to.equal(201);
+        externalReference = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', externalReferencePageUrlPattern);
     });

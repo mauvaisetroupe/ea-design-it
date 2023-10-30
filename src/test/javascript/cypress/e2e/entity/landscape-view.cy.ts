@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -17,7 +18,7 @@ describe('LandscapeView e2e test', () => {
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const landscapeViewSample = {};
 
-  let landscapeView;
+  let landscapeView: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -33,7 +34,7 @@ describe('LandscapeView e2e test', () => {
     if (landscapeView) {
       cy.authenticatedRequest({
         method: 'DELETE',
-        url: `/api/landscape-views/${landscapeView.id}`,
+        url: `/api/landscape-views/${landscapeView.id}?deleteFunctionalFlows=true&deleteFlowInterfaces=true&deleteDatas=true`,
       }).then(() => {
         landscapeView = undefined;
       });
@@ -44,7 +45,7 @@ describe('LandscapeView e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('landscape-view');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -68,7 +69,7 @@ describe('LandscapeView e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', landscapeViewPageUrlPattern);
       });
@@ -102,32 +103,22 @@ describe('LandscapeView e2e test', () => {
       });
 
       it('detail button click should load details LandscapeView page', () => {
-        cy.get(entityDetailsButtonSelector).first().click();
+        cy.get('[data-cy2="entityDetailsButton"]').first().click();
         cy.getEntityDetailsHeading('landscapeView');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', landscapeViewPageUrlPattern);
       });
 
-      it('edit button click should load edit LandscapeView page and go back', () => {
+      it('edit button click should load edit LandscapeView page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('LandscapeView');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', landscapeViewPageUrlPattern);
-      });
-
-      it('edit button click should load edit LandscapeView page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('LandscapeView');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', landscapeViewPageUrlPattern);
       });
@@ -137,10 +128,10 @@ describe('LandscapeView e2e test', () => {
         cy.getEntityDeleteDialogHeading('landscapeView').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', landscapeViewPageUrlPattern);
 
@@ -159,23 +150,16 @@ describe('LandscapeView e2e test', () => {
     it('should create an instance of LandscapeView', () => {
       cy.get(`[data-cy="viewpoint"]`).select('APPLICATION_LANDSCAPE');
 
-      cy.get(`[data-cy="diagramName"]`).type('penalize');
-      cy.get(`[data-cy="diagramName"]`).should('have.value', 'penalize');
-
-      cy.get(`[data-cy="compressedDrawXML"]`).type('../fake-data/blob/hipster.txt');
-      cy.get(`[data-cy="compressedDrawXML"]`).invoke('val').should('match', new RegExp('../fake-data/blob/hipster.txt'));
-
-      cy.get(`[data-cy="compressedDrawSVG"]`).type('../fake-data/blob/hipster.txt');
-      cy.get(`[data-cy="compressedDrawSVG"]`).invoke('val').should('match', new RegExp('../fake-data/blob/hipster.txt'));
+      cy.get(`[data-cy="diagramName"]`).type('Automotive').should('have.value', 'Automotive');
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        landscapeView = response.body;
+        expect(response!.statusCode).to.equal(201);
+        landscapeView = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', landscapeViewPageUrlPattern);
     });

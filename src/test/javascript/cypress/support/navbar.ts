@@ -45,7 +45,12 @@ Cypress.Commands.add('clickOnAdminMenuItem', (item: string) => {
 
 Cypress.Commands.add('clickOnEntityMenuItem', (entityName: string) => {
   cy.get(navbarSelector).get(entityItemSelector).click();
-  return cy.get(navbarSelector).get(entityItemSelector).get(`.dropdown-item[href="/${entityName}"]`).click();
+  // https://docs.cypress.io/api/commands/get#cyget-in-the-within-command
+  cy.get(navbarSelector)
+    .get(entityItemSelector)
+    .within(() => {
+      cy.get(`.dropdown-item[href="/${entityName}"]`).click();
+    });
 });
 
 declare global {

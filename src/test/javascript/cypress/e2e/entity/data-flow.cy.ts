@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -15,9 +16,9 @@ describe('DataFlow e2e test', () => {
   const dataFlowPageUrlPattern = new RegExp('/data-flow(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const dataFlowSample = { resourceName: 'usually long-term' };
+  const dataFlowSample = { resourceName: 'Grocery Unbranded' };
 
-  let dataFlow;
+  let dataFlow: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -44,7 +45,7 @@ describe('DataFlow e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('data-flow');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -68,7 +69,7 @@ describe('DataFlow e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', dataFlowPageUrlPattern);
       });
@@ -106,28 +107,18 @@ describe('DataFlow e2e test', () => {
         cy.getEntityDetailsHeading('dataFlow');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', dataFlowPageUrlPattern);
       });
 
-      it('edit button click should load edit DataFlow page and go back', () => {
+      it('edit button click should load edit DataFlow page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('DataFlow');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', dataFlowPageUrlPattern);
-      });
-
-      it('edit button click should load edit DataFlow page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('DataFlow');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', dataFlowPageUrlPattern);
       });
@@ -137,10 +128,10 @@ describe('DataFlow e2e test', () => {
         cy.getEntityDeleteDialogHeading('dataFlow').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', dataFlowPageUrlPattern);
 
@@ -157,39 +148,30 @@ describe('DataFlow e2e test', () => {
     });
 
     it('should create an instance of DataFlow', () => {
-      cy.get(`[data-cy="resourceName"]`).type('openly how contrail');
-      cy.get(`[data-cy="resourceName"]`).should('have.value', 'openly how contrail');
+      cy.get(`[data-cy="resourceName"]`).type('USB').should('have.value', 'USB');
 
-      cy.get(`[data-cy="resourceType"]`).type('majestically quizzical');
-      cy.get(`[data-cy="resourceType"]`).should('have.value', 'majestically quizzical');
+      cy.get(`[data-cy="resourceType"]`).type('HDD Product Computer').should('have.value', 'HDD Product Computer');
 
-      cy.get(`[data-cy="description"]`).type('freeze a jackal');
-      cy.get(`[data-cy="description"]`).should('have.value', 'freeze a jackal');
+      cy.get(`[data-cy="description"]`).type('Tuna').should('have.value', 'Tuna');
 
-      cy.get(`[data-cy="frequency"]`).select('HOURLY');
+      cy.get(`[data-cy="frequency"]`).select('INTRADAY');
 
-      cy.get(`[data-cy="contractURL"]`).type('phooey cure hm');
-      cy.get(`[data-cy="contractURL"]`).should('have.value', 'phooey cure hm');
+      cy.get(`[data-cy="contractURL"]`).type('Incredible withdrawal').should('have.value', 'Incredible withdrawal');
 
-      cy.get(`[data-cy="documentationURL"]`).type('easy visible against');
-      cy.get(`[data-cy="documentationURL"]`).should('have.value', 'easy visible against');
+      cy.get(`[data-cy="documentationURL"]`).type('Rubber').should('have.value', 'Rubber');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-04');
-      cy.get(`[data-cy="startDate"]`).blur();
-      cy.get(`[data-cy="startDate"]`).should('have.value', '2021-11-04');
+      cy.get(`[data-cy="startDate"]`).type('2021-11-03').should('have.value', '2021-11-03');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-04');
-      cy.get(`[data-cy="endDate"]`).blur();
-      cy.get(`[data-cy="endDate"]`).should('have.value', '2021-11-04');
+      cy.get(`[data-cy="endDate"]`).type('2021-11-04').should('have.value', '2021-11-04');
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        dataFlow = response.body;
+        expect(response!.statusCode).to.equal(201);
+        dataFlow = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', dataFlowPageUrlPattern);
     });

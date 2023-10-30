@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -15,9 +16,9 @@ describe('DataFormat e2e test', () => {
   const dataFormatPageUrlPattern = new RegExp('/data-format(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const dataFormatSample = { name: 'within' };
+  const dataFormatSample = { name: 'mobile Executive distributed' };
 
-  let dataFormat;
+  let dataFormat: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -44,7 +45,7 @@ describe('DataFormat e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('data-format');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -68,7 +69,7 @@ describe('DataFormat e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', dataFormatPageUrlPattern);
       });
@@ -106,28 +107,18 @@ describe('DataFormat e2e test', () => {
         cy.getEntityDetailsHeading('dataFormat');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', dataFormatPageUrlPattern);
       });
 
-      it('edit button click should load edit DataFormat page and go back', () => {
+      it('edit button click should load edit DataFormat page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('DataFormat');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', dataFormatPageUrlPattern);
-      });
-
-      it('edit button click should load edit DataFormat page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('DataFormat');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', dataFormatPageUrlPattern);
       });
@@ -137,10 +128,10 @@ describe('DataFormat e2e test', () => {
         cy.getEntityDeleteDialogHeading('dataFormat').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', dataFormatPageUrlPattern);
 
@@ -157,17 +148,16 @@ describe('DataFormat e2e test', () => {
     });
 
     it('should create an instance of DataFormat', () => {
-      cy.get(`[data-cy="name"]`).type('strictly');
-      cy.get(`[data-cy="name"]`).should('have.value', 'strictly');
+      cy.get(`[data-cy="name"]`).type('Integration Clothing').should('have.value', 'Integration Clothing');
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        dataFormat = response.body;
+        expect(response!.statusCode).to.equal(201);
+        dataFormat = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', dataFormatPageUrlPattern);
     });

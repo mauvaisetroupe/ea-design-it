@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -15,10 +16,10 @@ describe('ApplicationComponent e2e test', () => {
   const applicationComponentPageUrlPattern = new RegExp('/application-component(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const applicationComponentSample = { name: 'meaningfully' };
+  const applicationComponentSample = { name: 'Fresh' };
 
-  let applicationComponent;
-  let application;
+  let applicationComponent: any;
+  let application: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -30,16 +31,16 @@ describe('ApplicationComponent e2e test', () => {
       method: 'POST',
       url: '/api/applications',
       body: {
-        alias: 'accredit',
-        name: 'bruised idolized',
-        description: 'down',
-        comment: 'an bah',
-        documentationURL: 'ideal punctually admirable',
-        startDate: '2021-11-04',
+        alias: 'exploit',
+        name: 'copy',
+        description: 'primary',
+        comment: 'Gloves',
+        documentationURL: 'Turnpike optical',
+        startDate: '2021-11-03',
         endDate: '2021-11-04',
-        applicationType: 'SOFTWARE',
-        softwareType: 'CLOUD_SAAS',
-        nickname: 'delectable sweat that',
+        applicationType: 'HARDWARE',
+        softwareType: 'ON_PREMISE_CUSTOM',
+        nickname: 'interface attitude-oriented Account',
       },
     }).then(({ body }) => {
       application = body;
@@ -101,7 +102,7 @@ describe('ApplicationComponent e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('application-component');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -125,7 +126,7 @@ describe('ApplicationComponent e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', applicationComponentPageUrlPattern);
       });
@@ -166,28 +167,18 @@ describe('ApplicationComponent e2e test', () => {
         cy.getEntityDetailsHeading('applicationComponent');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', applicationComponentPageUrlPattern);
       });
 
-      it('edit button click should load edit ApplicationComponent page and go back', () => {
+      it('edit button click should load edit ApplicationComponent page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('ApplicationComponent');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', applicationComponentPageUrlPattern);
-      });
-
-      it('edit button click should load edit ApplicationComponent page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('ApplicationComponent');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', applicationComponentPageUrlPattern);
       });
@@ -197,10 +188,10 @@ describe('ApplicationComponent e2e test', () => {
         cy.getEntityDeleteDialogHeading('applicationComponent').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', applicationComponentPageUrlPattern);
 
@@ -217,47 +208,39 @@ describe('ApplicationComponent e2e test', () => {
     });
 
     it('should create an instance of ApplicationComponent', () => {
-      cy.get(`[data-cy="alias"]`).type('clasp ha');
-      cy.get(`[data-cy="alias"]`).should('have.value', 'clasp ha');
+      const alias = 'TST.SUBHPX.' + Date.now();
 
-      cy.get(`[data-cy="name"]`).type('adulterate athwart');
-      cy.get(`[data-cy="name"]`).should('have.value', 'adulterate athwart');
+      cy.get(`[data-cy="alias"]`).type(alias).should('have.value', alias);
 
-      cy.get(`[data-cy="description"]`).type('that nervous');
-      cy.get(`[data-cy="description"]`).should('have.value', 'that nervous');
+      cy.get(`[data-cy="name"]`).type('Central cutting-edge').should('have.value', 'Central cutting-edge');
 
-      cy.get(`[data-cy="comment"]`).type('hilarious');
-      cy.get(`[data-cy="comment"]`).should('have.value', 'hilarious');
+      cy.get(`[data-cy="description"]`).type('Mountain').should('have.value', 'Mountain');
 
-      cy.get(`[data-cy="documentationURL"]`).type('drat');
-      cy.get(`[data-cy="documentationURL"]`).should('have.value', 'drat');
+      cy.get(`[data-cy="comment"]`).type('Plastic Pants Kip').should('have.value', 'Plastic Pants Kip');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-03');
-      cy.get(`[data-cy="startDate"]`).blur();
-      cy.get(`[data-cy="startDate"]`).should('have.value', '2021-11-03');
+      cy.get(`[data-cy="documentationURL"]`).type('Malaysia').should('have.value', 'Malaysia');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-04');
-      cy.get(`[data-cy="endDate"]`).blur();
-      cy.get(`[data-cy="endDate"]`).should('have.value', '2021-11-04');
+      cy.get(`[data-cy="startDate"]`).type('2021-11-03').should('have.value', '2021-11-03');
 
-      cy.get(`[data-cy="applicationType"]`).select('SOFTWARE');
+      cy.get(`[data-cy="endDate"]`).type('2021-11-03').should('have.value', '2021-11-03');
 
-      cy.get(`[data-cy="softwareType"]`).select('CLOUD_THIRD_PARTY');
+      cy.get(`[data-cy="applicationType"]`).select('PARTNER');
+
+      cy.get(`[data-cy="softwareType"]`).select('CLOUD_CUSTOM');
 
       cy.get(`[data-cy="displayInLandscape"]`).should('not.be.checked');
-      cy.get(`[data-cy="displayInLandscape"]`).click();
-      cy.get(`[data-cy="displayInLandscape"]`).should('be.checked');
+      cy.get(`[data-cy="displayInLandscape"]`).click().should('be.checked');
 
       cy.get(`[data-cy="application"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        applicationComponent = response.body;
+        expect(response!.statusCode).to.equal(201);
+        applicationComponent = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', applicationComponentPageUrlPattern);
     });

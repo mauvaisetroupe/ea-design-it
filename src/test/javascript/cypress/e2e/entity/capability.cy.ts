@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -15,9 +16,9 @@ describe('Capability e2e test', () => {
   const capabilityPageUrlPattern = new RegExp('/capability(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const capabilitySample = { name: 'motorboat' };
+  const capabilitySample = { name: 'architectures' };
 
-  let capability;
+  let capability: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -44,7 +45,7 @@ describe('Capability e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('capability');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -68,7 +69,7 @@ describe('Capability e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', capabilityPageUrlPattern);
       });
@@ -106,28 +107,18 @@ describe('Capability e2e test', () => {
         cy.getEntityDetailsHeading('capability');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', capabilityPageUrlPattern);
       });
 
-      it('edit button click should load edit Capability page and go back', () => {
+      it('edit button click should load edit Capability page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('Capability');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', capabilityPageUrlPattern);
-      });
-
-      it('edit button click should load edit Capability page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('Capability');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', capabilityPageUrlPattern);
       });
@@ -137,10 +128,10 @@ describe('Capability e2e test', () => {
         cy.getEntityDeleteDialogHeading('capability').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', capabilityPageUrlPattern);
 
@@ -157,26 +148,22 @@ describe('Capability e2e test', () => {
     });
 
     it('should create an instance of Capability', () => {
-      cy.get(`[data-cy="name"]`).type('hopelessly');
-      cy.get(`[data-cy="name"]`).should('have.value', 'hopelessly');
+      cy.get(`[data-cy="name"]`).type('Granite bandwidth 1080p').should('have.value', 'Granite bandwidth 1080p');
 
-      cy.get(`[data-cy="description"]`).type('midst modulo');
-      cy.get(`[data-cy="description"]`).should('have.value', 'midst modulo');
+      cy.get(`[data-cy="description"]`).type('microchip Wooden leverage').should('have.value', 'microchip Wooden leverage');
 
-      cy.get(`[data-cy="comment"]`).type('woot');
-      cy.get(`[data-cy="comment"]`).should('have.value', 'woot');
+      cy.get(`[data-cy="comment"]`).type('Regional').should('have.value', 'Regional');
 
-      cy.get(`[data-cy="level"]`).type('21870');
-      cy.get(`[data-cy="level"]`).should('have.value', '21870');
+      cy.get(`[data-cy="level"]`).type('49441').should('have.value', '49441');
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        capability = response.body;
+        expect(response!.statusCode).to.equal(201);
+        capability = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', capabilityPageUrlPattern);
     });

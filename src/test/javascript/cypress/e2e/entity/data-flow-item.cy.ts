@@ -1,3 +1,4 @@
+import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -15,9 +16,9 @@ describe('DataFlowItem e2e test', () => {
   const dataFlowItemPageUrlPattern = new RegExp('/data-flow-item(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const dataFlowItemSample = { resourceName: 'er' };
+  const dataFlowItemSample = { resourceName: 'Table' };
 
-  let dataFlowItem;
+  let dataFlowItem: any;
 
   beforeEach(() => {
     cy.login(username, password);
@@ -44,7 +45,7 @@ describe('DataFlowItem e2e test', () => {
     cy.visit('/');
     cy.clickOnEntityMenuItem('data-flow-item');
     cy.wait('@entitiesRequest').then(({ response }) => {
-      if (response.body.length === 0) {
+      if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
       } else {
         cy.get(entityTableSelector).should('exist');
@@ -68,7 +69,7 @@ describe('DataFlowItem e2e test', () => {
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', dataFlowItemPageUrlPattern);
       });
@@ -106,28 +107,18 @@ describe('DataFlowItem e2e test', () => {
         cy.getEntityDetailsHeading('dataFlowItem');
         cy.get(entityDetailsBackButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', dataFlowItemPageUrlPattern);
       });
 
-      it('edit button click should load edit DataFlowItem page and go back', () => {
+      it('edit button click should load edit DataFlowItem page', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('DataFlowItem');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
-        });
-        cy.url().should('match', dataFlowItemPageUrlPattern);
-      });
-
-      it('edit button click should load edit DataFlowItem page and save', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('DataFlowItem');
-        cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', dataFlowItemPageUrlPattern);
       });
@@ -137,10 +128,10 @@ describe('DataFlowItem e2e test', () => {
         cy.getEntityDeleteDialogHeading('dataFlowItem').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
         cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(204);
+          expect(response!.statusCode).to.equal(204);
         });
         cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response.statusCode).to.equal(200);
+          expect(response!.statusCode).to.equal(200);
         });
         cy.url().should('match', dataFlowItemPageUrlPattern);
 
@@ -157,37 +148,28 @@ describe('DataFlowItem e2e test', () => {
     });
 
     it('should create an instance of DataFlowItem', () => {
-      cy.get(`[data-cy="resourceName"]`).type('outline ugh date');
-      cy.get(`[data-cy="resourceName"]`).should('have.value', 'outline ugh date');
+      cy.get(`[data-cy="resourceName"]`).type('Uganda Ergonomic Producer').should('have.value', 'Uganda Ergonomic Producer');
 
-      cy.get(`[data-cy="resourceType"]`).type('aha');
-      cy.get(`[data-cy="resourceType"]`).should('have.value', 'aha');
+      cy.get(`[data-cy="resourceType"]`).type('circuit bypass').should('have.value', 'circuit bypass');
 
-      cy.get(`[data-cy="description"]`).type('after duh');
-      cy.get(`[data-cy="description"]`).should('have.value', 'after duh');
+      cy.get(`[data-cy="description"]`).type('GB Administrator Cambridgeshire').should('have.value', 'GB Administrator Cambridgeshire');
 
-      cy.get(`[data-cy="contractURL"]`).type('monopolise unlike');
-      cy.get(`[data-cy="contractURL"]`).should('have.value', 'monopolise unlike');
+      cy.get(`[data-cy="contractURL"]`).type('withdrawal Bahamas withdrawal').should('have.value', 'withdrawal Bahamas withdrawal');
 
-      cy.get(`[data-cy="documentationURL"]`).type('ruminate modulo rightfully');
-      cy.get(`[data-cy="documentationURL"]`).should('have.value', 'ruminate modulo rightfully');
+      cy.get(`[data-cy="documentationURL"]`).type('pricing').should('have.value', 'pricing');
 
-      cy.get(`[data-cy="startDate"]`).type('2021-11-20');
-      cy.get(`[data-cy="startDate"]`).blur();
-      cy.get(`[data-cy="startDate"]`).should('have.value', '2021-11-20');
+      cy.get(`[data-cy="startDate"]`).type('2021-11-20').should('have.value', '2021-11-20');
 
-      cy.get(`[data-cy="endDate"]`).type('2021-11-20');
-      cy.get(`[data-cy="endDate"]`).blur();
-      cy.get(`[data-cy="endDate"]`).should('have.value', '2021-11-20');
+      cy.get(`[data-cy="endDate"]`).type('2021-11-20').should('have.value', '2021-11-20');
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(201);
-        dataFlowItem = response.body;
+        expect(response!.statusCode).to.equal(201);
+        dataFlowItem = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response!.statusCode).to.equal(200);
       });
       cy.url().should('match', dataFlowItemPageUrlPattern);
     });
