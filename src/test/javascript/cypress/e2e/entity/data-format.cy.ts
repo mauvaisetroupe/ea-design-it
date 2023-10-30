@@ -13,8 +13,8 @@ import {
 describe('DataFormat e2e test', () => {
   const dataFormatPageUrl = '/data-format';
   const dataFormatPageUrlPattern = new RegExp('/data-format(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const dataFormatSample = { name: 'within' };
 
   let dataFormat;

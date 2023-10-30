@@ -13,8 +13,8 @@ import {
 describe('CapabilityApplicationMapping e2e test', () => {
   const capabilityApplicationMappingPageUrl = '/capability-application-mapping';
   const capabilityApplicationMappingPageUrlPattern = new RegExp('/capability-application-mapping(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const capabilityApplicationMappingSample = {};
 
   let capabilityApplicationMapping;

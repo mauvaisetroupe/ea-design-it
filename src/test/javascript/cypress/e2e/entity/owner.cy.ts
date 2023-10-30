@@ -13,8 +13,8 @@ import {
 describe('Owner e2e test', () => {
   const ownerPageUrl = '/owner';
   const ownerPageUrlPattern = new RegExp('/owner(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const ownerSample = { name: 'hence' };
 
   let owner;

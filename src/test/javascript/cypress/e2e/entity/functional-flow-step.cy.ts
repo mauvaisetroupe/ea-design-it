@@ -13,8 +13,8 @@ import {
 describe('FunctionalFlowStep e2e test', () => {
   const functionalFlowStepPageUrl = '/functional-flow-step';
   const functionalFlowStepPageUrlPattern = new RegExp('/functional-flow-step(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   // const functionalFlowStepSample = {};
 
   let functionalFlowStep;

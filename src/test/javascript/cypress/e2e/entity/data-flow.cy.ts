@@ -13,8 +13,8 @@ import {
 describe('DataFlow e2e test', () => {
   const dataFlowPageUrl = '/data-flow';
   const dataFlowPageUrlPattern = new RegExp('/data-flow(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const dataFlowSample = { resourceName: 'usually long-term' };
 
   let dataFlow;

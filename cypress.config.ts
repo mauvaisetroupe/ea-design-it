@@ -1,6 +1,7 @@
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
+  projectId: 'urjhz2',
   video: false,
   fixturesFolder: 'src/test/javascript/cypress/fixtures',
   screenshotsFolder: 'target/cypress/screenshots',
@@ -22,8 +23,10 @@ export default defineConfig({
       return (await import('./src/test/javascript/cypress/plugins/index')).default(on, config);
     },
     baseUrl: 'http://localhost:8080/',
-    specPattern: 'src/test/javascript/cypress/integration/**/*.spec.ts',
+    specPattern: 'src/test/javascript/cypress/e2e/**/*.cy.ts',
     supportFile: 'src/test/javascript/cypress/support/index.ts',
     experimentalRunAllSpecs: true,
+    experimentalStudio: true,
+    requestTimeout: 20000,
   },
 });

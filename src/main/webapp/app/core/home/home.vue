@@ -5,7 +5,7 @@
     </div>
 
     <div class="col-md-9">
-      <h1 class="display-4">Welcome to EA Design IT</h1>
+      <h1 class="display-4" data-cy="home-welcome">Welcome to EA Design IT</h1>
       <div>
         <h2>Introduction</h2>
         <p>

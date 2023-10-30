@@ -13,8 +13,8 @@ import {
 describe('FlowInterface e2e test', () => {
   const flowInterfacePageUrl = '/flow-interface';
   const flowInterfacePageUrlPattern = new RegExp('/flow-interface(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const flowInterfaceSample = { alias: 'beyond turnip' };
 
   let flowInterface;

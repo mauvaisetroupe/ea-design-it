@@ -13,8 +13,8 @@ import {
 describe('LandscapeView e2e test', () => {
   const landscapeViewPageUrl = '/landscape-view';
   const landscapeViewPageUrlPattern = new RegExp('/landscape-view(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const landscapeViewSample = {};
 
   let landscapeView;

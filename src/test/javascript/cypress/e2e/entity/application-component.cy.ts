@@ -13,8 +13,8 @@ import {
 describe('ApplicationComponent e2e test', () => {
   const applicationComponentPageUrl = '/application-component';
   const applicationComponentPageUrlPattern = new RegExp('/application-component(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const applicationComponentSample = { name: 'meaningfully' };
 
   let applicationComponent;

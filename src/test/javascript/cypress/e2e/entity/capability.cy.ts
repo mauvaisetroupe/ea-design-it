@@ -13,8 +13,8 @@ import {
 describe('Capability e2e test', () => {
   const capabilityPageUrl = '/capability';
   const capabilityPageUrlPattern = new RegExp('/capability(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const capabilitySample = { name: 'motorboat' };
 
   let capability;

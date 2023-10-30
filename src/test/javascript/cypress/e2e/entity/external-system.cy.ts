@@ -13,8 +13,8 @@ import {
 describe('ExternalSystem e2e test', () => {
   const externalSystemPageUrl = '/external-system';
   const externalSystemPageUrlPattern = new RegExp('/external-system(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const externalSystemSample = {};
 
   let externalSystem;
@@ -42,6 +42,8 @@ describe('ExternalSystem e2e test', () => {
 
   it('ExternalSystems menu should load ExternalSystems page', () => {
     cy.visit('/');
+    cy.get('[data-cy="home-welcome"]');
+
     cy.clickOnEntityMenuItem('external-system');
     cy.wait('@entitiesRequest').then(({ response }) => {
       if (response.body.length === 0) {
@@ -58,6 +60,7 @@ describe('ExternalSystem e2e test', () => {
     describe('create button click', () => {
       beforeEach(() => {
         cy.visit(externalSystemPageUrl);
+        cy.get('[data-cy="ExternalSystemHeading"]');
         cy.wait('@entitiesRequest');
       });
 
