@@ -17,7 +17,7 @@ export default class AccountService {
 
   public async retrieveProfiles(): Promise<boolean> {
     try {
-      const res = await axios.get<any>('/management/info');
+      const res = await axios.get<any>('management/info');
       if (res.data && res.data.activeProfiles) {
         this.store.setRibbonOnProfiles(res.data['display-ribbon-on-profiles']);
         this.store.setActiveProfiles(res.data['activeProfiles']);
@@ -53,12 +53,10 @@ export default class AccountService {
       return;
     }
 
-    if (token) {
-      const promise = this.retrieveAccount();
-      this.store.authenticate(promise);
-      promise.then(() => this.store.authenticate(null));
-      await promise;
-    }
+    const promise = this.retrieveAccount();
+    this.store.authenticate(promise);
+    promise.then(() => this.store.authenticate(null));
+    await promise;
   }
 
   public async hasAnyAuthorityAndCheckAuth(authorities: any): Promise<boolean> {
@@ -93,6 +91,10 @@ export default class AccountService {
     return this.writeAuthorities || this.contributorAuthorities;
   }
 
+  public get anonymousReadAllowed(): boolean {
+    return this.store.anonymousReadAllowed;
+  }
+
   private checkAuthorities(authorities: string[]): boolean {
     if (authorities.includes(Authority.ANONYMOUS_ALLOWED) && this.anonymousReadAllowed) {
       return true;
@@ -107,45 +109,8 @@ export default class AccountService {
     return false;
   }
 
-  // Anonymous reader
-  public anonymousReadAllowed = true;
-  public initialized = false;
-
-  public init(): void {
-    this.retrieveProfiles();
-    this.retrieveAnonymousProperty();
-    // remember me...
-    const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
-    if (!this.store.account && !this.store.logon && token) {
-      this.retrieveAccount();
-    }
-  }
-
-  public retrieveAnonymousProperty(): Promise<boolean> {
-    if (this.initialized) {
-      console.log('retrieveAnonymousProperty already initialized');
-      return Promise.resolve(this.anonymousReadAllowed);
-    }
-    console.log('About to call api/account/anoymous-reader');
-    return new Promise(resolve => {
-      axios
-        .get<any>('api/account/anoymous-reader')
-        .then(res => {
-          this.anonymousReadAllowed = res.data;
-          this.initialized = true;
-          console.log('api/account/anoymous-reader : ' + this.anonymousReadAllowed);
-          resolve(this.anonymousReadAllowed);
-        })
-        .catch(() => {
-          this.initialized = true;
-          resolve(this.anonymousReadAllowed);
-        });
-    });
-  }
-
   public get readAuthorities(): boolean {
     if (this.anonymousReadAllowed) {
-      //anonymous read
       return true;
     } else {
       return this.store.userAuthority;

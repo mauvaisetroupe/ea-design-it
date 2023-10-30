@@ -1,11 +1,10 @@
-import { computed, defineComponent, inject, ref, type ComputedRef, type Ref } from 'vue';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
 import { useRouter } from 'vue-router';
 import type LoginService from '@/account/login.service';
 import type AccountService from '@/account/account.service';
 import EntitiesMenu from '@/entities/entities-menu.vue';
 
 import { useStore } from '@/store';
-import type AccountService from '@/account/account.service';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -15,9 +14,8 @@ export default defineComponent({
   },
   setup() {
     const loginService = inject<LoginService>('loginService');
-    //const accountService = inject<AccountService>('accountService'); proposed by jhipster
-    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
     const accountService = inject<AccountService>('accountService');
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
     const router = useRouter();
     const store = useStore();
@@ -29,15 +27,7 @@ export default defineComponent({
     const inProduction = computed(() => store.activeProfiles.indexOf('prod') > -1);
     const authenticated = computed(() => store.authenticated);
     const adminAuthorities = computed(() => store.adminAuthority);
-
-    const readAuthorities = ref(true);
-
-    if (!accountService?.initialized) {
-      accountService
-        .retrieveAnonymousProperty()
-        .then(res => (readAuthorities.value = res))
-        .catch(() => (readAuthorities.value = true));
-    }
+    const readAuthorities = computed(() => accountService.readAuthorities);
 
     const openLogin = () => {
       loginService.openLogin();

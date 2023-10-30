@@ -39,6 +39,7 @@ export default defineComponent({
         loginService.hideLogin();
         await accountService.retrieveAccount();
         if (route.path === '/forbidden') {
+          // somethimes, and specifaclly when laoding applicatio, back can push an externnal URL
           //previousState();
           router.push('/');
         }

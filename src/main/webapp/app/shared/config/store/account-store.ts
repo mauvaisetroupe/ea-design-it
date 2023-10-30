@@ -7,6 +7,8 @@ export interface AccountStateStorable {
   profilesLoaded: boolean;
   ribbonOnProfiles: string;
   activeProfiles: string;
+  anonymousReadAllowed: boolean;
+  retrieveAccountTentativeNumber: number;
 }
 
 export const defaultAccountState: AccountStateStorable = {
@@ -16,6 +18,8 @@ export const defaultAccountState: AccountStateStorable = {
   profilesLoaded: false,
   ribbonOnProfiles: '',
   activeProfiles: '',
+  anonymousReadAllowed: false,
+  retrieveAccountTentativeNumber: 0,
 };
 
 export const useAccountStore = defineStore('main', {
@@ -32,6 +36,12 @@ export const useAccountStore = defineStore('main', {
     adminAuthority: state => hasAuthority(state, 'ROLE_ADMIN'),
   },
   actions: {
+    setAnonymousReadAllowed(anonymousReadAllowed: boolean) {
+      this.anonymousReadAllowed = anonymousReadAllowed;
+    },
+    setRetrieveProfileTentative() {
+      this.retrieveAccountTentativeNumber++;
+    },
     authenticate(promise) {
       this.logon = promise;
     },

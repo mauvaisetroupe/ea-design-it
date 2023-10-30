@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
+import axios from 'axios';
 import Vue, { createApp, provide, computed } from 'vue';
 import { createPinia } from 'pinia';
 
@@ -20,6 +21,23 @@ import '../content/scss/vendor.scss';
 const pinia = createPinia();
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
+const anonymousReadAllowedDefaultValue = true;
+function retrieveAnonymousProperty(): Promise<boolean> {
+  console.log('About to call api/account/anoymous-reader');
+  return new Promise(resolve => {
+    axios
+      .get<any>('api/account/anoymous-reader')
+      .then(res => {
+        const anonymousReadAllowed = res.data;
+        console.log('api/account/anoymous-reader : ' + anonymousReadAllowed);
+        resolve(anonymousReadAllowed);
+      })
+      .catch(error => {
+        console.error(error);
+        resolve(anonymousReadAllowedDefaultValue);
+      });
+  });
+}
 
 initBootstrapVue(Vue);
 
@@ -63,12 +81,9 @@ const app = createApp({
     const accountService = new AccountService(store);
 
     // Call retrieveAnonymousProperty and wait for result
-    (async function initAccount() {
-      console.log('initAccount - about to read anoymous property from REST');
-      await accountService.retrieveAnonymousProperty();
-      console.log('initAccount - about to load account');
-      await accountService.loadAccount();
-    })();
+    retrieveAnonymousProperty().then(res => {
+      store.setAnonymousReadAllowed(res);
+    });
 
     console.log('init Account done.');
 
@@ -81,9 +96,13 @@ const app = createApp({
       // Make sure login modal is closed
       loginService.hideLogin();
 
-      // store user profile if not in mode anonymous
-      if (!store.authenticated && store.account) {
+      // application can allow anonymous reading
+      // this capabilities is given by backend (as a ovveridable properites in spring boot)
+      // if anonymousRead is allowed, we should not try to get user profile in router.beforeResolve
+
+      if (!store.authenticated && store.retrieveAccountTentativeNumber <= 2) {
         await accountService.update();
+        store.setRetrieveProfileTentative(); // shouldTryRetrieveAccount -> false
       }
       if (to.meta?.authorities && to.meta.authorities.length > 0) {
         const value = await accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities);
