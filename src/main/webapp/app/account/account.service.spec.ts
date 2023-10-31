@@ -35,7 +35,7 @@ describe('Account Service test suite', () => {
       .resolves({ status: 200, data: { 'display-ribbon-on-profiles': 'dev', activeProfiles: ['dev', 'test'] } });
 
     accountService = new AccountService(store);
-    accountService.anonymousReadAllowed = false;
+    //accountService.anonymousReadAllowed = false;
 
     await accountService.update();
 
