@@ -53,9 +53,7 @@ export default class AccountService {
       return;
     }
 
-    console.log('UUUUUUU');
     if (token) {
-      console.log('XXXXXXXX' + token);
       const promise = this.retrieveAccount();
       this.store.authenticate(promise);
       promise.then(() => this.store.authenticate(null));
