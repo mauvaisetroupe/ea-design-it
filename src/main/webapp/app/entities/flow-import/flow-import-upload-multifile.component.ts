@@ -20,7 +20,9 @@ export default defineComponent({
     const flowImportService = inject('flowImportService', () => new FlowImportService());
     const excelFile = ref();
     const isFetching = ref(false);
+    const fileToBeSubmited = ref(false);
     const fileSubmited = ref(false);
+    const analyseToBeImported = ref(false);
     const rowsLoaded = ref(false);
     const excelFileName = ref('Browse File');
 
@@ -29,6 +31,7 @@ export default defineComponent({
 
     function handleFileUpload(): void {
       excelFileName.value = excelFile.value.files[0].name;
+      fileToBeSubmited.value = true;
     }
 
     // STEP 1 - Upload file and retreive all sheet with name starting with FLW
@@ -50,20 +53,19 @@ export default defineComponent({
     }
 
     function selectAll() {
-      if (!fileSubmited.value) {
-        checkedNames.value = [];
-        checkedNames.value.push(...summary.value.map(sum => sum.sheetName));
-      }
+      checkedNames.value = [];
+      checkedNames.value.push(...summary.value.map(sum => sum.sheetName));
     }
 
     function selectNone() {
-      if (!fileSubmited.value) checkedNames.value = [];
+      checkedNames.value = [];
     }
 
     // Step 2 - Submit de file and selected sheet names
 
     function submitFile(): void {
       isFetching.value = true;
+      analyseToBeImported.value = true;
       // send file n times, sheet by sheet
       // this is not optimal, but it's the easier way to have a reactive behavior and avoid time out
       // serialized to avoid database transactional problem
@@ -129,6 +131,8 @@ export default defineComponent({
       dtos,
       excelFileName,
       filterErrors,
+      fileToBeSubmited,
+      analyseToBeImported,
     };
   },
 });

@@ -25,7 +25,7 @@
       </div>
 
       <div class="form-group" v-if="excelFile && summary.length == 0">
-        <button type="submit" class="btn btn-primary mb-2" v-on:click="getSheetnames()" :disabled="fileSubmited">Submit File</button>
+        <button type="submit" class="btn btn-primary mb-2" v-on:click="getSheetnames()" :disabled="!fileToBeSubmited">Submit File</button>
       </div>
 
       <div v-if="summary.length > 0" class="col-md-12">
@@ -42,7 +42,7 @@
                 v-model="checkedNames"
                 :value="row.sheetName"
                 :id="'CHK-' + row.sheetName"
-                :disabled="fileSubmited"
+                :disabled="analyseToBeImported"
                 checked="false"
               />
               <label :for="'CHK-' + row.sheetName" class="">{{ row.sheetName }} </label>
@@ -57,9 +57,9 @@
             </div>
             <div class="col-2"></div>
           </template>
-        </div>
-        <div class="form-group col-md-12" v-if="excelFile">
-          <button type="submit" class="btn btn-primary mb-2" v-on:click="submitFile()" v-if="!fileSubmited">Submit File</button>
+          <div class="form-group col-md-12" v-if="!analyseToBeImported">
+            <button type="submit" class="btn btn-primary mb-2" v-on:click="submitFile()">Submit File</button>
+          </div>
         </div>
       </div>
     </div>
