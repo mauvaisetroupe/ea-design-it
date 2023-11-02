@@ -32,14 +32,14 @@ public class BusinessObject implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "generalization")
     @JsonIgnoreProperties(
-        value = { "spacilizations", "components", "dataObjects", "owner", "generalization", "container" },
+        value = { "specializations", "components", "dataObjects", "owner", "generalization", "container" },
         allowSetters = true
     )
-    private Set<BusinessObject> spacilizations = new HashSet<>();
+    private Set<BusinessObject> specializations = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "container")
     @JsonIgnoreProperties(
-        value = { "spacilizations", "components", "dataObjects", "owner", "generalization", "container" },
+        value = { "specializations", "components", "dataObjects", "owner", "generalization", "container" },
         allowSetters = true
     )
     private Set<BusinessObject> components = new HashSet<>();
@@ -57,14 +57,14 @@ public class BusinessObject implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
-        value = { "spacilizations", "components", "dataObjects", "owner", "generalization", "container" },
+        value = { "specializations", "components", "dataObjects", "owner", "generalization", "container" },
         allowSetters = true
     )
     private BusinessObject generalization;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
-        value = { "spacilizations", "components", "dataObjects", "owner", "generalization", "container" },
+        value = { "specializations", "components", "dataObjects", "owner", "generalization", "container" },
         allowSetters = true
     )
     private BusinessObject container;
@@ -110,33 +110,33 @@ public class BusinessObject implements Serializable {
         this.implementable = implementable;
     }
 
-    public Set<BusinessObject> getSpacilizations() {
-        return this.spacilizations;
+    public Set<BusinessObject> getSpecializations() {
+        return this.specializations;
     }
 
-    public void setSpacilizations(Set<BusinessObject> businessObjects) {
-        if (this.spacilizations != null) {
-            this.spacilizations.forEach(i -> i.setGeneralization(null));
+    public void setSpecializations(Set<BusinessObject> businessObjects) {
+        if (this.specializations != null) {
+            this.specializations.forEach(i -> i.setGeneralization(null));
         }
         if (businessObjects != null) {
             businessObjects.forEach(i -> i.setGeneralization(this));
         }
-        this.spacilizations = businessObjects;
+        this.specializations = businessObjects;
     }
 
-    public BusinessObject spacilizations(Set<BusinessObject> businessObjects) {
-        this.setSpacilizations(businessObjects);
+    public BusinessObject specializations(Set<BusinessObject> businessObjects) {
+        this.setSpecializations(businessObjects);
         return this;
     }
 
-    public BusinessObject addSpacilizations(BusinessObject businessObject) {
-        this.spacilizations.add(businessObject);
+    public BusinessObject addSpecializations(BusinessObject businessObject) {
+        this.specializations.add(businessObject);
         businessObject.setGeneralization(this);
         return this;
     }
 
-    public BusinessObject removeSpacilizations(BusinessObject businessObject) {
-        this.spacilizations.remove(businessObject);
+    public BusinessObject removeSpecializations(BusinessObject businessObject) {
+        this.specializations.remove(businessObject);
         businessObject.setGeneralization(null);
         return this;
     }

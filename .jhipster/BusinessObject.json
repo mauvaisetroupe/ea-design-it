@@ -21,7 +21,7 @@
       "otherEntityField": "name",
       "otherEntityName": "businessObject",
       "otherEntityRelationshipName": "generalization",
-      "relationshipName": "spacilizations",
+      "relationshipName": "specializations",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
     },
@@ -53,7 +53,7 @@
     {
       "otherEntityField": "name",
       "otherEntityName": "businessObject",
-      "otherEntityRelationshipName": "spacilizations",
+      "otherEntityRelationshipName": "specializations",
       "relationshipName": "generalization",
       "relationshipSide": "right",
       "relationshipType": "many-to-one"

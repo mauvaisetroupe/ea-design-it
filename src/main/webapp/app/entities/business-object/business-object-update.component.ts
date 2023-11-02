@@ -66,7 +66,7 @@ export default defineComponent({
         required: validations.required('This field is required.'),
       },
       implementable: {},
-      spacilizations: {},
+      specializations: {},
       components: {},
       dataObjects: {},
       owner: {},

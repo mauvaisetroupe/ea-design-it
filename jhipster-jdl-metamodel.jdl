@@ -97,7 +97,7 @@ relationship OneToMany {
     FunctionalFlow{steps} to FunctionalFlowStep{flow(alias) required}
 
     /** Archimate Specialization relationship, a BusinessObject could be specialized in a particular type (ex. Cusotmer and Prospect are specialiyzation of Party **/
-    BusinessObject{spacilizations(name)} to BusinessObject{generalization(name)}
+    BusinessObject{specializations(name)} to BusinessObject{generalization(name)}
 	
     /** Archimate Composition relationship, a BusinessObject can be composed of severals BusinessObject */
 	BusinessObject{components(name)} to BusinessObject{container(name)}

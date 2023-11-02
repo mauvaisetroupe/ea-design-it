@@ -96,7 +96,7 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping.class.getName() + ".landscapes");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.BusinessObject.class.getName());
-            createCache(cm, com.mauvaisetroupe.eadesignit.domain.BusinessObject.class.getName() + ".spacilizations");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.BusinessObject.class.getName() + ".specializations");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.BusinessObject.class.getName() + ".components");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.BusinessObject.class.getName() + ".dataObjects");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataObject.class.getName());

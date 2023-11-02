@@ -5,7 +5,7 @@ export interface IBusinessObject {
   id?: number;
   name?: string;
   implementable?: boolean | null;
-  spacilizations?: IBusinessObject[] | null;
+  specializations?: IBusinessObject[] | null;
   components?: IBusinessObject[] | null;
   dataObjects?: IDataObject[] | null;
   owner?: IOwner | null;
@@ -18,7 +18,7 @@ export class BusinessObject implements IBusinessObject {
     public id?: number,
     public name?: string,
     public implementable?: boolean | null,
-    public spacilizations?: IBusinessObject[] | null,
+    public specializations?: IBusinessObject[] | null,
     public components?: IBusinessObject[] | null,
     public dataObjects?: IDataObject[] | null,
     public owner?: IOwner | null,

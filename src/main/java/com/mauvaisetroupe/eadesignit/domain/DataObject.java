@@ -71,7 +71,7 @@ public class DataObject implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
-        value = { "spacilizations", "components", "dataObjects", "owner", "generalization", "container" },
+        value = { "specializations", "components", "dataObjects", "owner", "generalization", "container" },
         allowSetters = true
     )
     private BusinessObject businessObject;
