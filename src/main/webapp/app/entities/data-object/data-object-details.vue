@@ -58,9 +58,7 @@
           </dt>
           <dd>
             <div v-if="dataObject.container">
-              <router-link :to="{ name: 'DataObjectView', params: { dataObjectId: dataObject.container.id } }">{{
-                dataObject.container.name
-              }}</router-link>
+              <a v-on:click="retrieveDataObject(dataObject.container.id)" class="text-primary">{{ dataObject.container.name }}</a>
             </div>
           </dd>
         </dl>

@@ -34,7 +34,7 @@ export default defineComponent({
     return {
       alertService,
       dataObject,
-
+      retrieveDataObject,
       previousState,
     };
   },

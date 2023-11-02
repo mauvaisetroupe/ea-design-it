@@ -31,9 +31,9 @@
           </dt>
           <dd>
             <div v-if="businessObject.generalization">
-              <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: businessObject.generalization.id } }">{{
+              <a v-on:click="retrieveBusinessObject(businessObject.generalization.id)" class="text-primary">{{
                 businessObject.generalization.name
-              }}</router-link>
+              }}</a>
             </div>
           </dd>
           <dt>
@@ -41,9 +41,9 @@
           </dt>
           <dd>
             <div v-if="businessObject.container">
-              <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: businessObject.container.id } }">{{
+              <a v-on:click="retrieveBusinessObject(businessObject.container.id)" class="text-primary">{{
                 businessObject.container.name
-              }}</router-link>
+              }}</a>
             </div>
           </dd>
         </dl>

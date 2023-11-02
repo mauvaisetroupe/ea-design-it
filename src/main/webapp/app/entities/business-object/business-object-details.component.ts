@@ -34,7 +34,7 @@ export default defineComponent({
     return {
       alertService,
       businessObject,
-
+      retrieveBusinessObject,
       previousState,
     };
   },
