@@ -38,6 +38,7 @@ export default defineComponent({
       capability,
       previousState,
       accountService,
+      retrieveCapability,
     };
   },
 });
