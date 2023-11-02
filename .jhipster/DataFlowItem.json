@@ -1,9 +1,7 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20211120191107",
   "documentation": "DataFlow represents\\n- A Event when DataFlow.Protocol=Event",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "data_flow_item",
   "fields": [
     {
@@ -42,12 +40,8 @@
       "fieldType": "LocalDate"
     }
   ],
-  "fluentMethods": true,
   "javadoc": "DataFlow represents\\n- A Event when DataFlow.Protocol=Event",
-  "jpaMetamodelFiltering": false,
   "name": "DataFlowItem",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityName": "dataFlow",
@@ -57,6 +51,5 @@
       "relationshipType": "many-to-one"
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

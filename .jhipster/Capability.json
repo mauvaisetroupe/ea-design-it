@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20220112175700",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "capability",
   "fields": [
     {
@@ -27,11 +25,7 @@
       "fieldType": "Integer"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "Capability",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityField": "name",
@@ -53,10 +47,9 @@
       "otherEntityName": "capabilityApplicationMapping",
       "otherEntityRelationshipName": "capability",
       "relationshipName": "capabilityApplicationMapping",
-      "relationshipSide": "left",
+      "relationshipSide": "right",
       "relationshipType": "one-to-many"
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

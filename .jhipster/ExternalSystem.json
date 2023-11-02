@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20230530161118",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "external_system",
   "fields": [
     {
@@ -10,12 +8,7 @@
       "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "ExternalSystem",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

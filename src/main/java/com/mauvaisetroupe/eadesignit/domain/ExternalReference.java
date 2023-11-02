@@ -39,6 +39,7 @@ public class ExternalReference implements Serializable {
             "externalIDS",
             "applicationsLists",
             "capabilityApplicationMappings",
+            "dataObjects",
         },
         allowSetters = true
     )

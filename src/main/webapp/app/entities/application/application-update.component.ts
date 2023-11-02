@@ -118,6 +118,7 @@ export default defineComponent({
       externalIDS: {},
       applicationsLists: {},
       capabilityApplicationMappings: {},
+      dataObjects: {},
     };
     const v$ = useVuelidate(validationRules, application as any);
     v$.value.$validate();

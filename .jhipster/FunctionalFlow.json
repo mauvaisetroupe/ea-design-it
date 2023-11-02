@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20211104191904",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "flow",
   "fields": [
     {
@@ -47,11 +45,7 @@
       "fieldType": "LocalDate"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "FunctionalFlow",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityName": "functionalFlowStep",
@@ -63,16 +57,14 @@
     {
       "otherEntityField": "name",
       "otherEntityName": "owner",
-      "otherEntityRelationshipName": "functionalFlow",
       "relationshipName": "owner",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "diagramName",
       "otherEntityName": "landscapeView",
       "otherEntityRelationshipName": "flows",
-      "ownerSide": false,
       "relationshipName": "landscape",
       "relationshipSide": "right",
       "relationshipType": "many-to-many"
@@ -80,12 +72,10 @@
     {
       "otherEntityName": "dataFlow",
       "otherEntityRelationshipName": "functionalFlows",
-      "ownerSide": false,
       "relationshipName": "dataFlows",
       "relationshipSide": "right",
       "relationshipType": "many-to-many"
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

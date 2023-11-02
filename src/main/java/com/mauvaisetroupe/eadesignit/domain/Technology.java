@@ -45,6 +45,7 @@ public class Technology implements Serializable {
             "externalIDS",
             "applicationsLists",
             "capabilityApplicationMappings",
+            "dataObjects",
         },
         allowSetters = true
     )
@@ -53,6 +54,13 @@ public class Technology implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "technologies")
     @JsonIgnoreProperties(value = { "application", "categories", "technologies", "externalIDS" }, allowSetters = true)
     private Set<ApplicationComponent> components = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "technologies")
+    @JsonIgnoreProperties(
+        value = { "components", "owner", "application", "technologies", "businessObject", "container" },
+        allowSetters = true
+    )
+    private Set<DataObject> dataObjects = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -167,6 +175,37 @@ public class Technology implements Serializable {
     public Technology removeComponents(ApplicationComponent applicationComponent) {
         this.components.remove(applicationComponent);
         applicationComponent.getTechnologies().remove(this);
+        return this;
+    }
+
+    public Set<DataObject> getDataObjects() {
+        return this.dataObjects;
+    }
+
+    public void setDataObjects(Set<DataObject> dataObjects) {
+        if (this.dataObjects != null) {
+            this.dataObjects.forEach(i -> i.removeTechnologies(this));
+        }
+        if (dataObjects != null) {
+            dataObjects.forEach(i -> i.addTechnologies(this));
+        }
+        this.dataObjects = dataObjects;
+    }
+
+    public Technology dataObjects(Set<DataObject> dataObjects) {
+        this.setDataObjects(dataObjects);
+        return this;
+    }
+
+    public Technology addDataObjects(DataObject dataObject) {
+        this.dataObjects.add(dataObject);
+        dataObject.getTechnologies().add(this);
+        return this;
+    }
+
+    public Technology removeDataObjects(DataObject dataObject) {
+        this.dataObjects.remove(dataObject);
+        dataObject.getTechnologies().remove(this);
         return this;
     }
 

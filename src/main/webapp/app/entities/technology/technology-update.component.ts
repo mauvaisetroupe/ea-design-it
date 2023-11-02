@@ -52,6 +52,7 @@ export default defineComponent({
       },
       applications: {},
       components: {},
+      dataObjects: {},
     };
     const v$ = useVuelidate(validationRules, technology as any);
     v$.value.$validate();

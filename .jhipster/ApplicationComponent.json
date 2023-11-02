@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20211104191908",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "component",
   "fields": [
     {
@@ -56,18 +54,14 @@
       "fieldType": "Boolean"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "ApplicationComponent",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityField": "name",
       "otherEntityName": "application",
       "otherEntityRelationshipName": "applicationsList",
       "relationshipName": "application",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": "required"
     },
@@ -75,7 +69,6 @@
       "otherEntityField": "name",
       "otherEntityName": "applicationCategory",
       "otherEntityRelationshipName": "components",
-      "ownerSide": true,
       "relationshipName": "categories",
       "relationshipSide": "left",
       "relationshipType": "many-to-many"
@@ -84,7 +77,6 @@
       "otherEntityField": "name",
       "otherEntityName": "technology",
       "otherEntityRelationshipName": "components",
-      "ownerSide": true,
       "relationshipName": "technologies",
       "relationshipSide": "left",
       "relationshipType": "many-to-many"
@@ -93,12 +85,10 @@
       "otherEntityField": "externalID",
       "otherEntityName": "externalReference",
       "otherEntityRelationshipName": "components",
-      "ownerSide": true,
       "relationshipName": "externalIDS",
       "relationshipSide": "left",
       "relationshipType": "many-to-many"
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

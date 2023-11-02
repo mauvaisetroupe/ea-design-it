@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20211120084146",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "protocol",
   "fields": [
     {
@@ -27,12 +25,7 @@
       "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "Protocol",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

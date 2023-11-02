@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20211104191906",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "application",
   "fields": [
     {
@@ -56,41 +54,33 @@
       "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "Application",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityField": "name",
       "otherEntityName": "owner",
-      "otherEntityRelationshipName": "application",
       "relationshipName": "owner",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "name",
       "otherEntityName": "owner",
-      "otherEntityRelationshipName": "application",
       "relationshipName": "itOwner",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "name",
       "otherEntityName": "owner",
-      "otherEntityRelationshipName": "application",
       "relationshipName": "businessOwner",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "name",
       "otherEntityName": "applicationCategory",
       "otherEntityRelationshipName": "applications",
-      "ownerSide": true,
       "relationshipName": "categories",
       "relationshipSide": "left",
       "relationshipType": "many-to-many"
@@ -99,7 +89,6 @@
       "otherEntityField": "name",
       "otherEntityName": "technology",
       "otherEntityRelationshipName": "applications",
-      "ownerSide": true,
       "relationshipName": "technologies",
       "relationshipSide": "left",
       "relationshipType": "many-to-many"
@@ -108,7 +97,6 @@
       "otherEntityField": "externalID",
       "otherEntityName": "externalReference",
       "otherEntityRelationshipName": "applications",
-      "ownerSide": true,
       "relationshipName": "externalIDS",
       "relationshipSide": "left",
       "relationshipType": "many-to-many"
@@ -118,17 +106,24 @@
       "otherEntityName": "applicationComponent",
       "otherEntityRelationshipName": "application",
       "relationshipName": "applicationsList",
-      "relationshipSide": "left",
+      "relationshipSide": "right",
       "relationshipType": "one-to-many"
     },
     {
       "otherEntityName": "capabilityApplicationMapping",
       "otherEntityRelationshipName": "application",
       "relationshipName": "capabilityApplicationMapping",
-      "relationshipSide": "left",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "dataObject",
+      "otherEntityRelationshipName": "application",
+      "relationshipName": "dataObjects",
+      "relationshipSide": "right",
       "relationshipType": "one-to-many"
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

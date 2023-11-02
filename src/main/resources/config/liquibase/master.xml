@@ -44,6 +44,11 @@
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 
+    <include file="config/liquibase/changelog/20231102100751_added_entity_BusinessObject.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231102100752_added_entity_DataObject.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231102100751_added_entity_constraints_BusinessObject.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231102100752_added_entity_constraints_DataObject.xml" relativeToChangelogFile="false"/>
+
     <include file="config/liquibase/changelog/20220112175837_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220118183743_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20220122061703_changelog.xml" relativeToChangelogFile="false"/>

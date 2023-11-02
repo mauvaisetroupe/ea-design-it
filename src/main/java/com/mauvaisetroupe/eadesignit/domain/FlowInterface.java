@@ -60,7 +60,14 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
     @NotNull
     @JsonIgnoreProperties(
         value = {
-            "owner", "itOwner", "businessOwner", "capabilityApplicationMappings", "capabilities", "externalIDS", "applicationsLists",
+            "owner",
+            "itOwner",
+            "businessOwner",
+            "capabilityApplicationMappings",
+            "capabilities",
+            "externalIDS",
+            "applicationsLists",
+            "dataObjects",
         },
         allowSetters = true
     )
@@ -70,7 +77,14 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
     @NotNull
     @JsonIgnoreProperties(
         value = {
-            "owner", "itOwner", "businessOwner", "capabilityApplicationMappings", "capabilities", "externalIDS", "applicationsLists",
+            "owner",
+            "itOwner",
+            "businessOwner",
+            "capabilityApplicationMappings",
+            "capabilities",
+            "externalIDS",
+            "applicationsLists",
+            "dataObjects",
         },
         allowSetters = true
     )

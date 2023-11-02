@@ -37,6 +37,7 @@ public class CapabilityApplicationMapping implements Serializable {
             "externalIDS",
             "applicationsLists",
             "capabilityApplicationMappings",
+            "dataObjects",
         },
         allowSetters = true
     )

@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20211104191902",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "landscape_view",
   "fields": [
     {
@@ -25,25 +23,19 @@
       "fieldTypeBlobContent": "text"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "LandscapeView",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityField": "name",
       "otherEntityName": "owner",
-      "otherEntityRelationshipName": "landscapeView",
       "relationshipName": "owner",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "alias",
       "otherEntityName": "functionalFlow",
       "otherEntityRelationshipName": "landscape",
-      "ownerSide": true,
       "relationshipName": "flows",
       "relationshipSide": "left",
       "relationshipType": "many-to-many"
@@ -51,12 +43,10 @@
     {
       "otherEntityName": "capabilityApplicationMapping",
       "otherEntityRelationshipName": "landscape",
-      "ownerSide": false,
       "relationshipName": "capabilityApplicationMapping",
       "relationshipSide": "right",
       "relationshipType": "many-to-many"
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

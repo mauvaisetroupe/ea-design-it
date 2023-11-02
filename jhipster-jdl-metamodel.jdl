@@ -1,3 +1,37 @@
+application {
+  config {
+    applicationType monolith
+    authenticationType jwt
+    baseName EADesignIt
+    blueprints []
+    buildTool maven
+    cacheProvider ehcache
+    clientFramework vue
+    clientTheme none
+    creationTimestamp 1635576559955
+    databaseType sql
+    devDatabaseType h2Disk
+    enableHibernateCache false
+    enableSwaggerCodegen false
+    enableTranslation false
+    jhipsterVersion "8.0.0-rc.1"
+    jwtSecretKey "ZGNhMjhiMjkyMzk0YzhmYzgwODlmNGFjY2ZhNGI5ODJkNDg1OWUyMmU4MGVhMzJiMjQyZTlmNGNkYjdlNjgxYzY0Njg2NDUzODg3NjJiNGUwZDZmOTVlYjk4ODYwZGM4MjJhNjY5MDhlMTI0YWMyMzE5ZTZiNzhhZGIzNzJkYmQ="
+    messageBroker false
+    microfrontends []
+    nativeLanguage en
+    packageName com.mauvaisetroupe.eadesignit
+    prodDatabaseType postgresql
+    reactive false
+    searchEngine false
+    serviceDiscoveryType false
+    testFrameworks [cypress]
+    websocket false
+    withAdminUi true
+  }
+
+  entities Application, ApplicationCategory, ApplicationComponent, Capability, CapabilityApplicationMapping, DataFlow, DataFlowItem, DataFormat, ExternalReference, ExternalSystem, FlowGroup, FlowInterface, FunctionalFlow, FunctionalFlowStep, LandscapeView, Owner, Protocol, Technology, BusinessObject, DataObject
+}
+
 relationship ManyToMany {
 	LandscapeView{flows(alias)} to FunctionalFlow{landscape(diagramName) }
 	
@@ -9,8 +43,9 @@ relationship ManyToMany {
 	
     Application{technologies(name)} to Technology{applications(name)}
 	ApplicationComponent{technologies(name)} to Technology{components(name)}
+    DataObject{technologies(name)} to Technology{dataObjects(name)}
     
-    Owner{users(login)} to User 
+    Owner{users(login)} to User with builtInEntity
 
     Application{externalIDS(externalID)} to ExternalReference{applications(alias)}
     ApplicationComponent{externalIDS(externalID)} to ExternalReference{components(alias)}
@@ -35,6 +70,8 @@ relationship ManyToOne {
     Application{owner(name)} to Owner
     Application{itOwner(name)} to Owner
     Application{businessOwner(name)} to Owner
+	BusinessObject{owner(name)} to Owner
+    DataObject{owner(name)} to Owner    
 	
     DataFlow{format(name)} to DataFormat
     
@@ -48,7 +85,8 @@ relationship ManyToOne {
 	CapabilityApplicationMapping to Capability
     CapabilityApplicationMapping to Application
     
-    
+    /** Archimate Access relationship, a DataObject can be composed of severals DataObject */
+	DataObject{application(name)} to Application{dataObjects(name)}
 	
 }
 
@@ -57,6 +95,18 @@ relationship OneToMany {
 	DataFlow{items} to DataFlowItem{dataFlow}
     Capability{subCapabilities(name)} to Capability{parent(name)}
     FunctionalFlow{steps} to FunctionalFlowStep{flow(alias) required}
+
+    /** Archimate Specialization relationship, a BusinessObject could be specialized in a particular type (ex. Cusotmer and Prospect are specialiyzation of Party **/
+    BusinessObject{spacilizations(name)} to BusinessObject{generalization(name)}
+	
+    /** Archimate Composition relationship, a BusinessObject can be composed of severals BusinessObject */
+	BusinessObject{components(name)} to BusinessObject{container(name)}
+  
+  	/** Archimate Realization relationship, a DataObject is a specific implementation of a moe abstract BusinessObject **/
+	BusinessObject{dataObjects(name)} to DataObject{businessObject(name)}
+    
+    /** Archimate Composition relationship, a DataObject can be composed of severals DataObject */
+	DataObject{components(name)} to DataObject{container(name)}    
 
 }
 
@@ -86,7 +136,7 @@ entity Owner {
 	name String required
 	firstname String
 	lastname String
-    email String pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+    email String pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)  
 }
 
 entity FunctionalFlow(flow) {
@@ -208,6 +258,36 @@ entity Capability {
 entity CapabilityApplicationMapping{
 
 }
+
+
+/**
+ * Business Object as defined in Archimate
+ * A business object could be used to represent information assets that are relevant from a business point of view and can be realized by data objects.
+ */
+entity BusinessObject {
+	name String required
+    implementable Boolean // cannot be implemented by a DataObject
+}
+
+
+/**
+* Data Object as defined in Archimate
+* A data object represents data structured for automated processing.
+* A data object can be accessed by an application function. A data object may realize a business object
+**/
+entity DataObject {
+	name String required
+	type DataObjectType
+}
+
+
+
+enum DataObjectType {
+    GOLDEN_SOURCE
+    READ_ONLY_REPLICA
+    READ_WRITE_REPLICA
+}
+
 
 enum ViewPoint {
   APPLICATION_LANDSCAPE
