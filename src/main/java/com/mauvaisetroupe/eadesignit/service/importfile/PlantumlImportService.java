@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 import net.sourceforge.plantuml.BlockUml;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.core.Diagram;
-import net.sourceforge.plantuml.cucadiagram.Display;
+import net.sourceforge.plantuml.klimt.creole.Display;
 import net.sourceforge.plantuml.sequencediagram.Event;
 import net.sourceforge.plantuml.sequencediagram.Message;
 import net.sourceforge.plantuml.sequencediagram.Note;
@@ -254,7 +254,7 @@ public class PlantumlImportService {
 
                 List<Note> notes = message.getNoteOnMessages();
                 for (Note note : notes) {
-                    String _note = displayToString(note.getStrings());
+                    String _note = displayToString(note.getDisplay());
                     String[] _string = _note.split(",");
                     for (int i = 0; i < _string.length; i++) {
                         //Protocol is the first item
