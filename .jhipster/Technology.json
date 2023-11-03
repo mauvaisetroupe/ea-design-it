@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20211201195304",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "technology",
   "fields": [
     {
@@ -21,17 +19,12 @@
       "fieldValidateRulesMaxlength": "250"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "Technology",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityField": "name",
       "otherEntityName": "application",
       "otherEntityRelationshipName": "technologies",
-      "ownerSide": false,
       "relationshipName": "applications",
       "relationshipSide": "right",
       "relationshipType": "many-to-many"
@@ -40,12 +33,18 @@
       "otherEntityField": "name",
       "otherEntityName": "applicationComponent",
       "otherEntityRelationshipName": "technologies",
-      "ownerSide": false,
       "relationshipName": "components",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "dataObject",
+      "otherEntityRelationshipName": "technologies",
+      "relationshipName": "dataObjects",
       "relationshipSide": "right",
       "relationshipType": "many-to-many"
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

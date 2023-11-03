@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20230530161117",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "external_reference",
   "fields": [
     {
@@ -10,25 +8,19 @@
       "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "ExternalReference",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityField": "externalSystemID",
       "otherEntityName": "externalSystem",
-      "otherEntityRelationshipName": "externalReference",
       "relationshipName": "externalSystem",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "alias",
       "otherEntityName": "application",
       "otherEntityRelationshipName": "externalIDS",
-      "ownerSide": false,
       "relationshipName": "applications",
       "relationshipSide": "right",
       "relationshipType": "many-to-many"
@@ -37,12 +29,10 @@
       "otherEntityField": "alias",
       "otherEntityName": "applicationComponent",
       "otherEntityRelationshipName": "externalIDS",
-      "ownerSide": false,
       "relationshipName": "components",
       "relationshipSide": "right",
       "relationshipType": "many-to-many"
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

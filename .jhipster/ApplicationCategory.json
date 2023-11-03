@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20211124203301",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "application_category",
   "fields": [
     {
@@ -21,17 +19,12 @@
       "fieldValidateRulesMaxlength": "250"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "ApplicationCategory",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityField": "name",
       "otherEntityName": "application",
       "otherEntityRelationshipName": "categories",
-      "ownerSide": false,
       "relationshipName": "applications",
       "relationshipSide": "right",
       "relationshipType": "many-to-many"
@@ -40,12 +33,10 @@
       "otherEntityField": "name",
       "otherEntityName": "applicationComponent",
       "otherEntityRelationshipName": "categories",
-      "ownerSide": false,
       "relationshipName": "components",
       "relationshipSide": "right",
       "relationshipType": "many-to-many"
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

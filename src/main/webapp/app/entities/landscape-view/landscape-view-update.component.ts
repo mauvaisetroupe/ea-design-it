@@ -78,6 +78,7 @@ export default defineComponent({
       owner: {},
       flows: {},
       capabilityApplicationMappings: {},
+      dataObjects: {},
     };
     const v$ = useVuelidate(validationRules, landscapeView as any);
     v$.value.$validate();

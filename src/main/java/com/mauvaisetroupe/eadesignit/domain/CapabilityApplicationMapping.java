@@ -37,6 +37,7 @@ public class CapabilityApplicationMapping implements Serializable {
             "externalIDS",
             "applicationsLists",
             "capabilityApplicationMappings",
+            "dataObjects",
         },
         allowSetters = true
     )
@@ -48,7 +49,7 @@ public class CapabilityApplicationMapping implements Serializable {
         joinColumns = @JoinColumn(name = "capability_application_mapping_id"),
         inverseJoinColumns = @JoinColumn(name = "landscape_id")
     )
-    @JsonIgnoreProperties(value = { "owner", "flows", "capabilityApplicationMappings" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "owner", "flows", "capabilityApplicationMappings", "dataObjects" }, allowSetters = true)
     private Set<LandscapeView> landscapes = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

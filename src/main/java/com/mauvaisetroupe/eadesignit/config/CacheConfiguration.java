@@ -41,6 +41,7 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.LandscapeView.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.LandscapeView.class.getName() + ".flows");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.LandscapeView.class.getName() + ".capabilityApplicationMappings");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.LandscapeView.class.getName() + ".dataObjects");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Owner.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Owner.class.getName() + ".users");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.FunctionalFlow.class.getName());
@@ -56,6 +57,7 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Application.class.getName() + ".externalIDS");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Application.class.getName() + ".applicationsLists");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Application.class.getName() + ".capabilityApplicationMappings");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Application.class.getName() + ".dataObjects");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataFlow.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataFlow.class.getName() + ".items");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataFlow.class.getName() + ".functionalFlows");
@@ -72,6 +74,7 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Technology.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Technology.class.getName() + ".applications");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Technology.class.getName() + ".components");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.Technology.class.getName() + ".dataObjects");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Capability.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Capability.class.getName() + ".subCapabilities");
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.Capability.class.getName() + ".capabilityApplicationMappings");
@@ -84,6 +87,14 @@ public class CacheConfiguration {
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.ExternalSystem.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping.class.getName());
             createCache(cm, com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping.class.getName() + ".landscapes");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.BusinessObject.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.BusinessObject.class.getName() + ".specializations");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.BusinessObject.class.getName() + ".components");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.BusinessObject.class.getName() + ".dataObjects");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataObject.class.getName());
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataObject.class.getName() + ".components");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataObject.class.getName() + ".technologies");
+            createCache(cm, com.mauvaisetroupe.eadesignit.domain.DataObject.class.getName() + ".landscapes");
             // jhipster-needle-ehcache-add-entry
         };
     }

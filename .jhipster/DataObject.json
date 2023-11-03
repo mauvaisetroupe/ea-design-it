@@ -1,0 +1,79 @@
+{
+  "applications": ["EADesignIt"],
+  "changelogDate": "20231103111335",
+  "documentation": "Data Object as defined in Archimate\\nA data object represents data structured for automated processing.\\nA data object can be accessed by an application function. A data object may realize a business object",
+  "entityTableName": "data_object",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "DataObjectType",
+      "fieldValues": "GOLDEN_SOURCE,READ_ONLY_REPLICA,READ_WRITE_REPLICA"
+    }
+  ],
+  "name": "DataObject",
+  "relationships": [
+    {
+      "documentation": "Archimate Composition relationship, a DataObject can be composed of severals DataObject",
+      "otherEntityField": "name",
+      "otherEntityName": "dataObject",
+      "otherEntityRelationshipName": "parent",
+      "relationshipName": "components",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "documentation": "Archimate Access relationship, a DataObject can be composed of severals DataObject",
+      "otherEntityField": "name",
+      "otherEntityName": "application",
+      "otherEntityRelationshipName": "dataObjects",
+      "relationshipName": "application",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "owner",
+      "relationshipName": "owner",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "technology",
+      "otherEntityRelationshipName": "dataObjects",
+      "relationshipName": "technologies",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "diagramName",
+      "otherEntityName": "landscapeView",
+      "otherEntityRelationshipName": "dataObjects",
+      "relationshipName": "landscapes",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "dataObject",
+      "otherEntityRelationshipName": "components",
+      "relationshipName": "parent",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "businessObject",
+      "otherEntityRelationshipName": "dataObjects",
+      "relationshipName": "businessObject",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

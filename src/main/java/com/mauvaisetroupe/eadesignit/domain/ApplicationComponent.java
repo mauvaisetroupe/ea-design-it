@@ -74,6 +74,7 @@ public class ApplicationComponent implements Serializable {
             "externalIDS",
             "applicationsLists",
             "capabilityApplicationMappings",
+            "dataObjects",
         },
         allowSetters = true
     )
@@ -94,7 +95,7 @@ public class ApplicationComponent implements Serializable {
         joinColumns = @JoinColumn(name = "component_id"),
         inverseJoinColumns = @JoinColumn(name = "technologies_id")
     )
-    @JsonIgnoreProperties(value = { "applications", "components" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "applications", "components", "dataObjects" }, allowSetters = true)
     private Set<Technology> technologies = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)

@@ -89,7 +89,7 @@ public class Application implements Serializable {
         joinColumns = @JoinColumn(name = "application_id"),
         inverseJoinColumns = @JoinColumn(name = "technologies_id")
     )
-    @JsonIgnoreProperties(value = { "applications", "components" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "applications", "components", "dataObjects" }, allowSetters = true)
     private Set<Technology> technologies = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -108,6 +108,13 @@ public class Application implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "application")
     @JsonIgnoreProperties(value = { "capability", "application", "landscapes" }, allowSetters = true)
     private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "application")
+    @JsonIgnoreProperties(
+        value = { "components", "application", "owner", "technologies", "landscapes", "parent", "businessObject" },
+        allowSetters = true
+    )
+    private Set<DataObject> dataObjects = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -427,6 +434,37 @@ public class Application implements Serializable {
     public Application removeCapabilityApplicationMapping(CapabilityApplicationMapping capabilityApplicationMapping) {
         this.capabilityApplicationMappings.remove(capabilityApplicationMapping);
         capabilityApplicationMapping.setApplication(null);
+        return this;
+    }
+
+    public Set<DataObject> getDataObjects() {
+        return this.dataObjects;
+    }
+
+    public void setDataObjects(Set<DataObject> dataObjects) {
+        if (this.dataObjects != null) {
+            this.dataObjects.forEach(i -> i.setApplication(null));
+        }
+        if (dataObjects != null) {
+            dataObjects.forEach(i -> i.setApplication(this));
+        }
+        this.dataObjects = dataObjects;
+    }
+
+    public Application dataObjects(Set<DataObject> dataObjects) {
+        this.setDataObjects(dataObjects);
+        return this;
+    }
+
+    public Application addDataObjects(DataObject dataObject) {
+        this.dataObjects.add(dataObject);
+        dataObject.setApplication(this);
+        return this;
+    }
+
+    public Application removeDataObjects(DataObject dataObject) {
+        this.dataObjects.remove(dataObject);
+        dataObject.setApplication(null);
         return this;
     }
 

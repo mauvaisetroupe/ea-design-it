@@ -4,6 +4,7 @@ import { type ITechnology } from '@/shared/model/technology.model';
 import { type IExternalReference } from '@/shared/model/external-reference.model';
 import { type IApplicationComponent } from '@/shared/model/application-component.model';
 import { type ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
+import { type IDataObject } from '@/shared/model/data-object.model';
 
 import { type ApplicationType } from '@/shared/model/enumerations/application-type.model';
 import { type SoftwareType } from '@/shared/model/enumerations/software-type.model';
@@ -27,6 +28,7 @@ export interface IApplication {
   externalIDS?: IExternalReference[] | null;
   applicationsLists?: IApplicationComponent[] | null;
   capabilityApplicationMappings?: ICapabilityApplicationMapping[] | null;
+  dataObjects?: IDataObject[] | null;
 }
 
 export class Application implements IApplication {
@@ -50,5 +52,6 @@ export class Application implements IApplication {
     public externalIDS?: IExternalReference[] | null,
     public applicationsLists?: IApplicationComponent[] | null,
     public capabilityApplicationMappings?: ICapabilityApplicationMapping[] | null,
+    public dataObjects?: IDataObject[] | null,
   ) {}
 }

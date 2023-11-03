@@ -1,6 +1,7 @@
 import { type IOwner } from '@/shared/model/owner.model';
 import { type IFunctionalFlow } from '@/shared/model/functional-flow.model';
 import { type ICapabilityApplicationMapping } from '@/shared/model/capability-application-mapping.model';
+import { type IDataObject } from '@/shared/model/data-object.model';
 
 import { type ViewPoint } from '@/shared/model/enumerations/view-point.model';
 export interface ILandscapeView {
@@ -12,6 +13,7 @@ export interface ILandscapeView {
   owner?: IOwner | null;
   flows?: IFunctionalFlow[] | null;
   capabilityApplicationMappings?: ICapabilityApplicationMapping[] | null;
+  dataObjects?: IDataObject[] | null;
 }
 
 export class LandscapeView implements ILandscapeView {
@@ -24,5 +26,6 @@ export class LandscapeView implements ILandscapeView {
     public owner?: IOwner | null,
     public flows?: IFunctionalFlow[] | null,
     public capabilityApplicationMappings?: ICapabilityApplicationMapping[] | null,
+    public dataObjects?: IDataObject[] | null,
   ) {}
 }

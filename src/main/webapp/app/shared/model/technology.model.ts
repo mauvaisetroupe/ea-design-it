@@ -1,5 +1,6 @@
 import { type IApplication } from '@/shared/model/application.model';
 import { type IApplicationComponent } from '@/shared/model/application-component.model';
+import { type IDataObject } from '@/shared/model/data-object.model';
 
 export interface ITechnology {
   id?: number;
@@ -8,6 +9,7 @@ export interface ITechnology {
   description?: string | null;
   applications?: IApplication[] | null;
   components?: IApplicationComponent[] | null;
+  dataObjects?: IDataObject[] | null;
 }
 
 export class Technology implements ITechnology {
@@ -18,5 +20,6 @@ export class Technology implements ITechnology {
     public description?: string | null,
     public applications?: IApplication[] | null,
     public components?: IApplicationComponent[] | null,
+    public dataObjects?: IDataObject[] | null,
   ) {}
 }

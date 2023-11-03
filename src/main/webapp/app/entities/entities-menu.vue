@@ -72,6 +72,14 @@
       <font-awesome-icon icon="asterisk" />
       <span>Capability Application Mapping</span>
     </b-dropdown-item>
+    <b-dropdown-item to="/business-object">
+      <font-awesome-icon icon="asterisk" />
+      <span>Business Object</span>
+    </b-dropdown-item>
+    <b-dropdown-item to="/data-object">
+      <font-awesome-icon icon="asterisk" />
+      <span>Data Object</span>
+    </b-dropdown-item>
     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
   </div>
 </template>

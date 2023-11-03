@@ -1,9 +1,7 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20211104191907",
   "documentation": "DataFlow represents\\n- A file when Protocol=FILE\\n- A topic when Protocol=Event\\n- A Swagger when Protocol=API\\n- A WSDL when Protocol=SOAP\\n- An XSD when Protocol=ESB, MESSAGING",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "dataflow",
   "fields": [
     {
@@ -49,12 +47,8 @@
       "fieldType": "LocalDate"
     }
   ],
-  "fluentMethods": true,
   "javadoc": "DataFlow represents\\n- A file when Protocol=FILE\\n- A topic when Protocol=Event\\n- A Swagger when Protocol=API\\n- A WSDL when Protocol=SOAP\\n- An XSD when Protocol=ESB, MESSAGING",
-  "jpaMetamodelFiltering": false,
   "name": "DataFlow",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityName": "dataFlowItem",
@@ -66,16 +60,14 @@
     {
       "otherEntityField": "name",
       "otherEntityName": "dataFormat",
-      "otherEntityRelationshipName": "dataFlow",
       "relationshipName": "format",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "alias",
       "otherEntityName": "functionalFlow",
       "otherEntityRelationshipName": "dataFlows",
-      "ownerSide": true,
       "relationshipName": "functionalFlows",
       "relationshipSide": "left",
       "relationshipType": "many-to-many"
@@ -89,6 +81,5 @@
       "relationshipType": "many-to-one"
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

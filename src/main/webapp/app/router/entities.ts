@@ -77,6 +77,14 @@ const CapabilityApplicationMappingUpdate = () =>
 const CapabilityApplicationMappingDetails = () =>
   import('@/entities/capability-application-mapping/capability-application-mapping-details.vue');
 
+const BusinessObject = () => import('@/entities/business-object/business-object.vue');
+const BusinessObjectUpdate = () => import('@/entities/business-object/business-object-update.vue');
+const BusinessObjectDetails = () => import('@/entities/business-object/business-object-details.vue');
+
+const DataObject = () => import('@/entities/data-object/data-object.vue');
+const DataObjectUpdate = () => import('@/entities/data-object/data-object-update.vue');
+const DataObjectDetails = () => import('@/entities/data-object/data-object-details.vue');
+
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default {
@@ -513,6 +521,54 @@ export default {
       path: 'capability-application-mapping/:capabilityApplicationMappingId/view',
       name: 'CapabilityApplicationMappingView',
       component: CapabilityApplicationMappingDetails,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'business-object',
+      name: 'BusinessObject',
+      component: BusinessObject,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'business-object/new',
+      name: 'BusinessObjectCreate',
+      component: BusinessObjectUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'business-object/:businessObjectId/edit',
+      name: 'BusinessObjectEdit',
+      component: BusinessObjectUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'business-object/:businessObjectId/view',
+      name: 'BusinessObjectView',
+      component: BusinessObjectDetails,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'data-object',
+      name: 'DataObject',
+      component: DataObject,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'data-object/new',
+      name: 'DataObjectCreate',
+      component: DataObjectUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'data-object/:dataObjectId/edit',
+      name: 'DataObjectEdit',
+      component: DataObjectUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'data-object/:dataObjectId/view',
+      name: 'DataObjectView',
+      component: DataObjectDetails,
       meta: { authorities: [Authority.USER] },
     },
     // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20220118113150",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "flowstep",
   "fields": [
     {
@@ -16,18 +14,14 @@
       "fieldType": "Integer"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "FunctionalFlowStep",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityField": "alias",
       "otherEntityName": "flowInterface",
       "otherEntityRelationshipName": "steps",
       "relationshipName": "flowInterface",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": "required"
     },
@@ -36,7 +30,7 @@
       "otherEntityName": "flowGroup",
       "otherEntityRelationshipName": "steps",
       "relationshipName": "group",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
@@ -49,6 +43,5 @@
       "relationshipValidateRules": "required"
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

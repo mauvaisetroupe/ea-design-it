@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20211104191903",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "owner",
   "fields": [
     {
@@ -25,22 +23,16 @@
       "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "Owner",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityField": "login",
       "otherEntityName": "user",
-      "otherEntityRelationshipName": "owner",
-      "ownerSide": true,
       "relationshipName": "users",
       "relationshipSide": "left",
-      "relationshipType": "many-to-many"
+      "relationshipType": "many-to-many",
+      "relationshipWithBuiltInEntity": true
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

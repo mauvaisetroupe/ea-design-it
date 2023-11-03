@@ -61,7 +61,7 @@ public class FunctionalFlow implements Serializable {
     private Owner owner;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "flows")
-    @JsonIgnoreProperties(value = { "owner", "flows", "capabilityApplicationMappings" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "owner", "flows", "capabilityApplicationMappings", "dataObjects" }, allowSetters = true)
     private Set<LandscapeView> landscapes = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "functionalFlows")

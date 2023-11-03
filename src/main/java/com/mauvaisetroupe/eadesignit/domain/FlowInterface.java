@@ -65,6 +65,7 @@ public class FlowInterface implements Serializable {
             "externalIDS",
             "applicationsLists",
             "capabilityApplicationMappings",
+            "dataObjects",
         },
         allowSetters = true
     )
@@ -82,6 +83,7 @@ public class FlowInterface implements Serializable {
             "externalIDS",
             "applicationsLists",
             "capabilityApplicationMappings",
+            "dataObjects",
         },
         allowSetters = true
     )

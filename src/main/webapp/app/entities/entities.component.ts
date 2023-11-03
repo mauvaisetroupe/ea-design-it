@@ -18,6 +18,8 @@ import FlowGroupService from './flow-group/flow-group.service';
 import ExternalReferenceService from './external-reference/external-reference.service';
 import ExternalSystemService from './external-system/external-system.service';
 import CapabilityApplicationMappingService from './capability-application-mapping/capability-application-mapping.service';
+import BusinessObjectService from './business-object/business-object.service';
+import DataObjectService from './data-object/data-object.service';
 import UserService from '@/entities/user/user.service';
 // jhipster-needle-add-entity-service-to-entities-component-import - JHipster will import entities services here
 
@@ -44,6 +46,8 @@ export default defineComponent({
     provide('externalReferenceService', () => new ExternalReferenceService());
     provide('externalSystemService', () => new ExternalSystemService());
     provide('capabilityApplicationMappingService', () => new CapabilityApplicationMappingService());
+    provide('businessObjectService', () => new BusinessObjectService());
+    provide('dataObjectService', () => new DataObjectService());
     // jhipster-needle-add-entity-service-to-entities-component - JHipster will import entities services here
   },
 });

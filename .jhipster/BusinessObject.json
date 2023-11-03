@@ -1,0 +1,71 @@
+{
+  "applications": ["EADesignIt"],
+  "changelogDate": "20231103111334",
+  "documentation": "Business Object as defined in Archimate\\nA business object could be used to represent information assets that are relevant from a business point of view and can be realized by data objects.",
+  "entityTableName": "business_object",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "abstractBusinessObject",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "BusinessObject",
+  "relationships": [
+    {
+      "documentation": "Archimate Specialization relationship, a BusinessObject could be specialized in a particular type (ex. Cusotmer and Prospect are specialiyzation of Party",
+      "otherEntityField": "name",
+      "otherEntityName": "businessObject",
+      "otherEntityRelationshipName": "generalization",
+      "relationshipName": "specializations",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "documentation": "Archimate Composition relationship, a BusinessObject can be composed of severals BusinessObject",
+      "otherEntityField": "name",
+      "otherEntityName": "businessObject",
+      "otherEntityRelationshipName": "parent",
+      "relationshipName": "components",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "documentation": "Archimate Realization relationship, a DataObject is a specific implementation of a moe abstract BusinessObject",
+      "otherEntityField": "name",
+      "otherEntityName": "dataObject",
+      "otherEntityRelationshipName": "businessObject",
+      "relationshipName": "dataObjects",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "owner",
+      "relationshipName": "owner",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "businessObject",
+      "otherEntityRelationshipName": "specializations",
+      "relationshipName": "generalization",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "businessObject",
+      "otherEntityRelationshipName": "components",
+      "relationshipName": "parent",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

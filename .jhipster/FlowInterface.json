@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20211104191905",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "interface",
   "fields": [
     {
@@ -41,11 +39,7 @@
       "fieldType": "LocalDate"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "FlowInterface",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityName": "dataFlow",
@@ -57,61 +51,54 @@
     {
       "otherEntityField": "name",
       "otherEntityName": "application",
-      "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "source",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": "required"
     },
     {
       "otherEntityField": "name",
       "otherEntityName": "application",
-      "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "target",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": "required"
     },
     {
       "otherEntityField": "name",
       "otherEntityName": "applicationComponent",
-      "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "sourceComponent",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "name",
       "otherEntityName": "applicationComponent",
-      "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "targetComponent",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "name",
       "otherEntityName": "protocol",
-      "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "protocol",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "name",
       "otherEntityName": "owner",
-      "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "owner",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "functionalFlowStep",
       "otherEntityRelationshipName": "flowInterface",
       "relationshipName": "steps",
-      "relationshipSide": "left",
+      "relationshipSide": "right",
       "relationshipType": "one-to-many"
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

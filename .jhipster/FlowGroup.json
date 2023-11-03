@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20221222092421",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "flow_group",
   "fields": [
     {
@@ -22,29 +20,23 @@
       "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "FlowGroup",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [
     {
       "otherEntityField": "alias",
       "otherEntityName": "functionalFlow",
-      "otherEntityRelationshipName": "flowGroup",
       "relationshipName": "flow",
-      "relationshipSide": "right",
+      "relationshipSide": "left",
       "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "functionalFlowStep",
       "otherEntityRelationshipName": "group",
       "relationshipName": "steps",
-      "relationshipSide": "left",
+      "relationshipSide": "right",
       "relationshipType": "one-to-many",
       "relationshipValidateRules": "required"
     }
   ],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }

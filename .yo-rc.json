@@ -1,5 +1,6 @@
 {
   "generator-jhipster": {
+    "applicationIndex": 0,
     "applicationType": "monolith",
     "authenticationType": "jwt",
     "baseName": "EADesignIt",
@@ -35,16 +36,19 @@
       "FlowGroup",
       "ExternalReference",
       "ExternalSystem",
-      "CapabilityApplicationMapping"
+      "CapabilityApplicationMapping",
+      "BusinessObject",
+      "DataObject"
     ],
     "gradleEnterpriseHost": null,
     "jhipsterVersion": "8.0.0-rc.1",
     "jwtSecretKey": "ZGNhMjhiMjkyMzk0YzhmYzgwODlmNGFjY2ZhNGI5ODJkNDg1OWUyMmU4MGVhMzJiMjQyZTlmNGNkYjdlNjgxYzY0Njg2NDUzODg3NjJiNGUwZDZmOTVlYjk4ODYwZGM4MjJhNjY5MDhlMTI0YWMyMzE5ZTZiNzhhZGIzNzJkYmQ=",
-    "lastLiquibaseTimestamp": 1694379584000,
+    "lastLiquibaseTimestamp": 1699010015000,
     "messageBroker": false,
     "microfrontend": null,
     "microfrontends": [],
     "nativeLanguage": "en",
+    "packageFolder": "com/mauvaisetroupe/eadesignit",
     "packageName": "com.mauvaisetroupe.eadesignit",
     "prodDatabaseType": "postgresql",
     "reactive": false,

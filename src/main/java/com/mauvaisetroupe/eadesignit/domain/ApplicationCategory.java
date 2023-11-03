@@ -45,6 +45,7 @@ public class ApplicationCategory implements Serializable {
             "externalIDS",
             "applicationsLists",
             "capabilityApplicationMappings",
+            "dataObjects",
         },
         allowSetters = true
     )

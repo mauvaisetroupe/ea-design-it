@@ -1,8 +1,6 @@
 {
-  "applications": "*",
+  "applications": ["EADesignIt"],
   "changelogDate": "20211124203300",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "data_format",
   "fields": [
     {
@@ -11,12 +9,7 @@
       "fieldValidateRules": ["required"]
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "DataFormat",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "searchEngine": "no",
-  "service": "no"
+  "searchEngine": "no"
 }
