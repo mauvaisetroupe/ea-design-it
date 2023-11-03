@@ -11,10 +11,10 @@
             <span>{{ businessObject.name }}</span>
           </dd>
           <dt>
-            <span>Implementable</span>
+            <span>Abstract Business Object</span>
           </dt>
           <dd>
-            <span>{{ businessObject.implementable }}</span>
+            <span>{{ businessObject.abstractBusinessObject }}</span>
           </dd>
           <dt>
             <span>Owner</span>
@@ -37,13 +37,11 @@
             </div>
           </dd>
           <dt>
-            <span>Container</span>
+            <span>Parent</span>
           </dt>
           <dd>
-            <div v-if="businessObject.container">
-              <a v-on:click="retrieveBusinessObject(businessObject.container.id)" class="text-primary">{{
-                businessObject.container.name
-              }}</a>
+            <div v-if="businessObject.parent">
+              <a v-on:click="retrieveBusinessObject(businessObject.parent.id)" class="text-primary">{{ businessObject.parent.name }}</a>
             </div>
           </dd>
         </dl>

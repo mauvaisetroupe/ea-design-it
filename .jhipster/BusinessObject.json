@@ -1,6 +1,6 @@
 {
   "applications": ["EADesignIt"],
-  "changelogDate": "20231102100751",
+  "changelogDate": "20231103111334",
   "documentation": "Business Object as defined in Archimate\\nA business object could be used to represent information assets that are relevant from a business point of view and can be realized by data objects.",
   "entityTableName": "business_object",
   "fields": [
@@ -10,7 +10,7 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "implementable",
+      "fieldName": "abstractBusinessObject",
       "fieldType": "Boolean"
     }
   ],
@@ -29,7 +29,7 @@
       "documentation": "Archimate Composition relationship, a BusinessObject can be composed of severals BusinessObject",
       "otherEntityField": "name",
       "otherEntityName": "businessObject",
-      "otherEntityRelationshipName": "container",
+      "otherEntityRelationshipName": "parent",
       "relationshipName": "components",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
@@ -62,7 +62,7 @@
       "otherEntityField": "name",
       "otherEntityName": "businessObject",
       "otherEntityRelationshipName": "components",
-      "relationshipName": "container",
+      "relationshipName": "parent",
       "relationshipSide": "right",
       "relationshipType": "many-to-one"
     }

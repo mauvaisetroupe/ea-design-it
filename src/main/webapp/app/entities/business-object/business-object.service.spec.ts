@@ -82,7 +82,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             name: 'BBBBBB',
-            implementable: true,
+            abstractBusinessObject: true,
           },
           elemDefault,
         );
@@ -133,7 +133,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             name: 'BBBBBB',
-            implementable: true,
+            abstractBusinessObject: true,
           },
           elemDefault,
         );

@@ -27,18 +27,18 @@ public interface BusinessObjectRepository extends JpaRepository<BusinessObject, 
     }
 
     @Query(
-        value = "select businessObject from BusinessObject businessObject left join fetch businessObject.owner left join fetch businessObject.generalization left join fetch businessObject.container",
+        value = "select businessObject from BusinessObject businessObject left join fetch businessObject.owner left join fetch businessObject.generalization left join fetch businessObject.parent",
         countQuery = "select count(businessObject) from BusinessObject businessObject"
     )
     Page<BusinessObject> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select businessObject from BusinessObject businessObject left join fetch businessObject.owner left join fetch businessObject.generalization left join fetch businessObject.container"
+        "select businessObject from BusinessObject businessObject left join fetch businessObject.owner left join fetch businessObject.generalization left join fetch businessObject.parent"
     )
     List<BusinessObject> findAllWithToOneRelationships();
 
     @Query(
-        "select businessObject from BusinessObject businessObject left join fetch businessObject.owner left join fetch businessObject.generalization left join fetch businessObject.container where businessObject.id =:id"
+        "select businessObject from BusinessObject businessObject left join fetch businessObject.owner left join fetch businessObject.generalization left join fetch businessObject.parent where businessObject.id =:id"
     )
     Optional<BusinessObject> findOneWithToOneRelationships(@Param("id") Long id);
 }

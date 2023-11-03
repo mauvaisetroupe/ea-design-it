@@ -160,9 +160,9 @@ describe('BusinessObject e2e test', () => {
       cy.get(`[data-cy="name"]`).type('yet sternly');
       cy.get(`[data-cy="name"]`).should('have.value', 'yet sternly');
 
-      cy.get(`[data-cy="implementable"]`).should('not.be.checked');
-      cy.get(`[data-cy="implementable"]`).click();
-      cy.get(`[data-cy="implementable"]`).should('be.checked');
+      cy.get(`[data-cy="abstractBusinessObject"]`).should('not.be.checked');
+      cy.get(`[data-cy="abstractBusinessObject"]`).click();
+      cy.get(`[data-cy="abstractBusinessObject"]`).should('be.checked');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

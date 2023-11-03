@@ -21,7 +21,7 @@ public class DataObjectRepositoryWithBagRelationshipsImpl implements DataObjectR
 
     @Override
     public Optional<DataObject> fetchBagRelationships(Optional<DataObject> dataObject) {
-        return dataObject.map(this::fetchTechnologies);
+        return dataObject.map(this::fetchTechnologies).map(this::fetchLandscapes);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class DataObjectRepositoryWithBagRelationshipsImpl implements DataObjectR
 
     @Override
     public List<DataObject> fetchBagRelationships(List<DataObject> dataObjects) {
-        return Optional.of(dataObjects).map(this::fetchTechnologies).orElse(Collections.emptyList());
+        return Optional.of(dataObjects).map(this::fetchTechnologies).map(this::fetchLandscapes).orElse(Collections.emptyList());
     }
 
     DataObject fetchTechnologies(DataObject result) {
@@ -50,6 +50,30 @@ public class DataObjectRepositoryWithBagRelationshipsImpl implements DataObjectR
         List<DataObject> result = entityManager
             .createQuery(
                 "select dataObject from DataObject dataObject left join fetch dataObject.technologies where dataObject in :dataObjects",
+                DataObject.class
+            )
+            .setParameter("dataObjects", dataObjects)
+            .getResultList();
+        Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.getId()), order.get(o2.getId())));
+        return result;
+    }
+
+    DataObject fetchLandscapes(DataObject result) {
+        return entityManager
+            .createQuery(
+                "select dataObject from DataObject dataObject left join fetch dataObject.landscapes where dataObject.id = :id",
+                DataObject.class
+            )
+            .setParameter("id", result.getId())
+            .getSingleResult();
+    }
+
+    List<DataObject> fetchLandscapes(List<DataObject> dataObjects) {
+        HashMap<Object, Integer> order = new HashMap<>();
+        IntStream.range(0, dataObjects.size()).forEach(index -> order.put(dataObjects.get(index).getId(), index));
+        List<DataObject> result = entityManager
+            .createQuery(
+                "select dataObject from DataObject dataObject left join fetch dataObject.landscapes where dataObject in :dataObjects",
                 DataObject.class
             )
             .setParameter("dataObjects", dataObjects)

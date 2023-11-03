@@ -67,8 +67,8 @@ public class FunctionalFlow implements Serializable, Comparable<FunctionalFlow> 
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner owner;
 
-    @ManyToMany(mappedBy = "flows", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties(value = { "owner", "flows", "capabilityApplicationMappings" }, allowSetters = true)
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "flows")
+    @JsonIgnoreProperties(value = { "owner", "flows", "capabilityApplicationMappings", "dataObjects" }, allowSetters = true)
     private Set<LandscapeView> landscapes = new HashSet<>();
 
     @ManyToMany(mappedBy = "functionalFlows")

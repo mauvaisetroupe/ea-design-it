@@ -59,6 +59,13 @@ public class LandscapeView implements Serializable {
     @JsonIgnoreProperties(value = { "landscapes" }, allowSetters = true)
     private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "landscapes")
+    @JsonIgnoreProperties(
+        value = { "components", "application", "owner", "technologies", "landscapes", "parent", "businessObject" },
+        allowSetters = true
+    )
+    private Set<DataObject> dataObjects = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -232,6 +239,37 @@ public class LandscapeView implements Serializable {
                 }
             }
         }
+        return this;
+    }
+
+    public Set<DataObject> getDataObjects() {
+        return this.dataObjects;
+    }
+
+    public void setDataObjects(Set<DataObject> dataObjects) {
+        if (this.dataObjects != null) {
+            this.dataObjects.forEach(i -> i.removeLandscapes(this));
+        }
+        if (dataObjects != null) {
+            dataObjects.forEach(i -> i.addLandscapes(this));
+        }
+        this.dataObjects = dataObjects;
+    }
+
+    public LandscapeView dataObjects(Set<DataObject> dataObjects) {
+        this.setDataObjects(dataObjects);
+        return this;
+    }
+
+    public LandscapeView addDataObjects(DataObject dataObject) {
+        this.dataObjects.add(dataObject);
+        dataObject.getLandscapes().add(this);
+        return this;
+    }
+
+    public LandscapeView removeDataObjects(DataObject dataObject) {
+        this.dataObjects.remove(dataObject);
+        dataObject.getLandscapes().remove(this);
         return this;
     }
 

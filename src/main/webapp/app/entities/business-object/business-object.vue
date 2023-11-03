@@ -29,10 +29,10 @@
           <tr>
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Name</span></th>
-            <th scope="row"><span>Implementable</span></th>
+            <th scope="row"><span>Abstract Business Object</span></th>
             <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>Generalization</span></th>
-            <th scope="row"><span>Container</span></th>
+            <th scope="row"><span>Parent</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -44,7 +44,7 @@
               }}</router-link>
             </td>
             <td>{{ businessObject.name }}</td>
-            <td>{{ businessObject.implementable }}</td>
+            <td>{{ businessObject.abstractBusinessObject }}</td>
             <td>
               <div v-if="businessObject.owner">
                 <router-link :to="{ name: 'OwnerView', params: { ownerId: businessObject.owner.id } }">{{
@@ -60,9 +60,9 @@
               </div>
             </td>
             <td>
-              <div v-if="businessObject.container">
-                <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: businessObject.container.id } }">{{
-                  businessObject.container.name
+              <div v-if="businessObject.parent">
+                <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: businessObject.parent.id } }">{{
+                  businessObject.parent.name
                 }}</router-link>
               </div>
             </td>

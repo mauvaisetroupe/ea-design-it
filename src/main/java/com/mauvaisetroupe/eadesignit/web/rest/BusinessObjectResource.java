@@ -129,8 +129,8 @@ public class BusinessObjectResource {
                 if (businessObject.getName() != null) {
                     existingBusinessObject.setName(businessObject.getName());
                 }
-                if (businessObject.getImplementable() != null) {
-                    existingBusinessObject.setImplementable(businessObject.getImplementable());
+                if (businessObject.getAbstractBusinessObject() != null) {
+                    existingBusinessObject.setAbstractBusinessObject(businessObject.getAbstractBusinessObject());
                 }
 
                 return existingBusinessObject;

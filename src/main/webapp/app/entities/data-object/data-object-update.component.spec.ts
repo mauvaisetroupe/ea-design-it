@@ -8,9 +8,10 @@ import DataObjectUpdate from './data-object-update.vue';
 import DataObjectService from './data-object.service';
 import AlertService from '@/shared/alert/alert.service';
 
-import OwnerService from '@/entities/owner/owner.service';
 import ApplicationService from '@/entities/application/application.service';
+import OwnerService from '@/entities/owner/owner.service';
 import TechnologyService from '@/entities/technology/technology.service';
+import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
 import BusinessObjectService from '@/entities/business-object/business-object.service';
 
 type DataObjectUpdateComponentType = InstanceType<typeof DataObjectUpdate>;
@@ -55,16 +56,20 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           dataObjectService: () => dataObjectServiceStub,
-          ownerService: () =>
-            sinon.createStubInstance<OwnerService>(OwnerService, {
-              retrieve: sinon.stub().resolves({}),
-            } as any),
           applicationService: () =>
             sinon.createStubInstance<ApplicationService>(ApplicationService, {
               retrieve: sinon.stub().resolves({}),
             } as any),
+          ownerService: () =>
+            sinon.createStubInstance<OwnerService>(OwnerService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
           technologyService: () =>
             sinon.createStubInstance<TechnologyService>(TechnologyService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
+          landscapeViewService: () =>
+            sinon.createStubInstance<LandscapeViewService>(LandscapeViewService, {
               retrieve: sinon.stub().resolves({}),
             } as any),
           businessObjectService: () =>

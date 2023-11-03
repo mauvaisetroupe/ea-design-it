@@ -9,7 +9,7 @@
     <!--
         Added the entity DataObject.
     -->
-    <changeSet id="20231102100752-1" author="jhipster">
+    <changeSet id="20231103111335-1" author="jhipster">
         <createTable tableName="data_object" remarks="Data Object as defined in Archimate\nA data object represents data structured for automated processing.\nA data object can be accessed by an application function. A data object may realize a business object">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
@@ -20,23 +20,23 @@
             <column name="type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="owner_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <column name="application_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="business_object_id" type="bigint">
+            <column name="owner_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="container_id" type="bigint">
+            <column name="parent_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="business_object_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
 
-    <changeSet id="20231102100752-1-relations" author="jhipster">
+    <changeSet id="20231103111335-1-relations" author="jhipster">
 
         <createTable tableName="rel_data_object__technologies">
             <column name="technologies_id" type="bigint">
@@ -48,8 +48,39 @@
         </createTable>
 
         <addPrimaryKey columnNames="data_object_id, technologies_id" tableName="rel_data_object__technologies"/>
+
+        <createTable tableName="rel_data_object__landscapes">
+            <column name="landscapes_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_object_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="data_object_id, landscapes_id" tableName="rel_data_object__landscapes"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20231103111335-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/data_object.csv"
+                  separator=";"
+                  tableName="data_object"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="name" type="string"/>
+            <column name="type" type="string"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
 </databaseChangeLog>

@@ -65,13 +65,13 @@ export default defineComponent({
       name: {
         required: validations.required('This field is required.'),
       },
-      implementable: {},
+      abstractBusinessObject: {},
       specializations: {},
       components: {},
       dataObjects: {},
       owner: {},
       generalization: {},
-      container: {},
+      parent: {},
     };
     const v$ = useVuelidate(validationRules, businessObject as any);
     v$.value.$validate();

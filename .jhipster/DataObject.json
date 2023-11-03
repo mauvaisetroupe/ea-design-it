@@ -1,6 +1,6 @@
 {
   "applications": ["EADesignIt"],
-  "changelogDate": "20231102100752",
+  "changelogDate": "20231103111335",
   "documentation": "Data Object as defined in Archimate\\nA data object represents data structured for automated processing.\\nA data object can be accessed by an application function. A data object may realize a business object",
   "entityTableName": "data_object",
   "fields": [
@@ -21,17 +21,10 @@
       "documentation": "Archimate Composition relationship, a DataObject can be composed of severals DataObject",
       "otherEntityField": "name",
       "otherEntityName": "dataObject",
-      "otherEntityRelationshipName": "container",
+      "otherEntityRelationshipName": "parent",
       "relationshipName": "components",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
-    },
-    {
-      "otherEntityField": "name",
-      "otherEntityName": "owner",
-      "relationshipName": "owner",
-      "relationshipSide": "left",
-      "relationshipType": "many-to-one"
     },
     {
       "documentation": "Archimate Access relationship, a DataObject can be composed of severals DataObject",
@@ -44,6 +37,13 @@
     },
     {
       "otherEntityField": "name",
+      "otherEntityName": "owner",
+      "relationshipName": "owner",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "name",
       "otherEntityName": "technology",
       "otherEntityRelationshipName": "dataObjects",
       "relationshipName": "technologies",
@@ -51,18 +51,26 @@
       "relationshipType": "many-to-many"
     },
     {
-      "otherEntityField": "name",
-      "otherEntityName": "businessObject",
+      "otherEntityField": "diagramName",
+      "otherEntityName": "landscapeView",
       "otherEntityRelationshipName": "dataObjects",
-      "relationshipName": "businessObject",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-one"
+      "relationshipName": "landscapes",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
     },
     {
       "otherEntityField": "name",
       "otherEntityName": "dataObject",
       "otherEntityRelationshipName": "components",
-      "relationshipName": "container",
+      "relationshipName": "parent",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "businessObject",
+      "otherEntityRelationshipName": "dataObjects",
+      "relationshipName": "businessObject",
       "relationshipSide": "right",
       "relationshipType": "many-to-one"
     }

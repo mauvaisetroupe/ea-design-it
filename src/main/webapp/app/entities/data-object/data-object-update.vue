@@ -40,19 +40,6 @@
             </select>
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="data-object-owner">Owner</label>
-            <select class="form-control" id="data-object-owner" data-cy="owner" name="owner" v-model="dataObject.owner">
-              <option v-bind:value="null"></option>
-              <option
-                v-bind:value="dataObject.owner && ownerOption.id === dataObject.owner.id ? dataObject.owner : ownerOption"
-                v-for="ownerOption in owners"
-                :key="ownerOption.id"
-              >
-                {{ ownerOption.name }}
-              </option>
-            </select>
-          </div>
-          <div class="form-group">
             <label class="form-control-label" for="data-object-application">Application</label>
             <select
               class="form-control"
@@ -70,6 +57,19 @@
                 :key="applicationOption.id"
               >
                 {{ applicationOption.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="data-object-owner">Owner</label>
+            <select class="form-control" id="data-object-owner" data-cy="owner" name="owner" v-model="dataObject.owner">
+              <option v-bind:value="null"></option>
+              <option
+                v-bind:value="dataObject.owner && ownerOption.id === dataObject.owner.id ? dataObject.owner : ownerOption"
+                v-for="ownerOption in owners"
+                :key="ownerOption.id"
+              >
+                {{ ownerOption.name }}
               </option>
             </select>
           </div>
@@ -94,6 +94,39 @@
             </select>
           </div>
           <div class="form-group">
+            <label for="data-object-landscapes">Landscapes</label>
+            <select
+              class="form-control"
+              id="data-object-landscapes"
+              data-cy="landscapes"
+              multiple
+              name="landscapes"
+              v-if="dataObject.landscapes !== undefined"
+              v-model="dataObject.landscapes"
+            >
+              <option
+                v-bind:value="getSelected(dataObject.landscapes, landscapeViewOption)"
+                v-for="landscapeViewOption in landscapeViews"
+                :key="landscapeViewOption.id"
+              >
+                {{ landscapeViewOption.diagramName }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-control-label" for="data-object-parent">Parent</label>
+            <select class="form-control" id="data-object-parent" data-cy="parent" name="parent" v-model="dataObject.parent">
+              <option v-bind:value="null"></option>
+              <option
+                v-bind:value="dataObject.parent && dataObjectOption.id === dataObject.parent.id ? dataObject.parent : dataObjectOption"
+                v-for="dataObjectOption in dataObjects"
+                :key="dataObjectOption.id"
+              >
+                {{ dataObjectOption.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
             <label class="form-control-label" for="data-object-businessObject">Business Object</label>
             <select
               class="form-control"
@@ -113,21 +146,6 @@
                 :key="businessObjectOption.id"
               >
                 {{ businessObjectOption.name }}
-              </option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" for="data-object-container">Container</label>
-            <select class="form-control" id="data-object-container" data-cy="container" name="container" v-model="dataObject.container">
-              <option v-bind:value="null"></option>
-              <option
-                v-bind:value="
-                  dataObject.container && dataObjectOption.id === dataObject.container.id ? dataObject.container : dataObjectOption
-                "
-                v-for="dataObjectOption in dataObjects"
-                :key="dataObjectOption.id"
-              >
-                {{ dataObjectOption.name }}
               </option>
             </select>
           </div>

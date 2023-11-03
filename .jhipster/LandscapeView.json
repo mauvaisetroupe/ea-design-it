@@ -46,6 +46,14 @@
       "relationshipName": "capabilityApplicationMapping",
       "relationshipSide": "right",
       "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "dataObject",
+      "otherEntityRelationshipName": "landscapes",
+      "relationshipName": "dataObjects",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
     }
   ],
   "searchEngine": "no"

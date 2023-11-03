@@ -57,7 +57,7 @@ public class Technology implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "technologies")
     @JsonIgnoreProperties(
-        value = { "components", "owner", "application", "technologies", "businessObject", "container" },
+        value = { "components", "application", "owner", "technologies", "landscapes", "parent", "businessObject" },
         allowSetters = true
     )
     private Set<DataObject> dataObjects = new HashSet<>();

@@ -17,14 +17,6 @@
             <span>{{ dataObject.type }}</span>
           </dd>
           <dt>
-            <span>Owner</span>
-          </dt>
-          <dd>
-            <div v-if="dataObject.owner">
-              <router-link :to="{ name: 'OwnerView', params: { ownerId: dataObject.owner.id } }">{{ dataObject.owner.name }}</router-link>
-            </div>
-          </dd>
-          <dt>
             <span>Application</span>
           </dt>
           <dd>
@@ -32,6 +24,14 @@
               <router-link :to="{ name: 'ApplicationView', params: { applicationId: dataObject.application.id } }">{{
                 dataObject.application.name
               }}</router-link>
+            </div>
+          </dd>
+          <dt>
+            <span>Owner</span>
+          </dt>
+          <dd>
+            <div v-if="dataObject.owner">
+              <router-link :to="{ name: 'OwnerView', params: { ownerId: dataObject.owner.id } }">{{ dataObject.owner.name }}</router-link>
             </div>
           </dd>
           <dt>
@@ -44,6 +44,25 @@
             </span>
           </dd>
           <dt>
+            <span>Landscapes</span>
+          </dt>
+          <dd>
+            <span v-for="(landscapes, i) in dataObject.landscapes" :key="landscapes.id"
+              >{{ i > 0 ? ', ' : '' }}
+              <router-link :to="{ name: 'LandscapeViewView', params: { landscapeViewId: landscapes.id } }">{{
+                landscapes.diagramName
+              }}</router-link>
+            </span>
+          </dd>
+          <dt>
+            <span>Parent</span>
+          </dt>
+          <dd>
+            <div v-if="dataObject.parent">
+              <a v-on:click="retrieveDataObject(dataObject.parent.id)" class="text-primary">{{ dataObject.parent.name }}</a>
+            </div>
+          </dd>
+          <dt>
             <span>Business Object</span>
           </dt>
           <dd>
@@ -51,14 +70,6 @@
               <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: dataObject.businessObject.id } }">{{
                 dataObject.businessObject.name
               }}</router-link>
-            </div>
-          </dd>
-          <dt>
-            <span>Container</span>
-          </dt>
-          <dd>
-            <div v-if="dataObject.container">
-              <a v-on:click="retrieveDataObject(dataObject.container.id)" class="text-primary">{{ dataObject.container.name }}</a>
             </div>
           </dd>
         </dl>

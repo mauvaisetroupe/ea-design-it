@@ -6,12 +6,14 @@ import DataObjectService from './data-object.service';
 import { useValidation } from '@/shared/composables';
 import { useAlertService } from '@/shared/alert/alert.service';
 
-import OwnerService from '@/entities/owner/owner.service';
-import { type IOwner } from '@/shared/model/owner.model';
 import ApplicationService from '@/entities/application/application.service';
 import { type IApplication } from '@/shared/model/application.model';
+import OwnerService from '@/entities/owner/owner.service';
+import { type IOwner } from '@/shared/model/owner.model';
 import TechnologyService from '@/entities/technology/technology.service';
 import { type ITechnology } from '@/shared/model/technology.model';
+import LandscapeViewService from '@/entities/landscape-view/landscape-view.service';
+import { type ILandscapeView } from '@/shared/model/landscape-view.model';
 import BusinessObjectService from '@/entities/business-object/business-object.service';
 import { type IBusinessObject } from '@/shared/model/business-object.model';
 import { type IDataObject, DataObject } from '@/shared/model/data-object.model';
@@ -28,17 +30,21 @@ export default defineComponent({
 
     const dataObjects: Ref<IDataObject[]> = ref([]);
 
-    const ownerService = inject('ownerService', () => new OwnerService());
-
-    const owners: Ref<IOwner[]> = ref([]);
-
     const applicationService = inject('applicationService', () => new ApplicationService());
 
     const applications: Ref<IApplication[]> = ref([]);
 
+    const ownerService = inject('ownerService', () => new OwnerService());
+
+    const owners: Ref<IOwner[]> = ref([]);
+
     const technologyService = inject('technologyService', () => new TechnologyService());
 
     const technologies: Ref<ITechnology[]> = ref([]);
+
+    const landscapeViewService = inject('landscapeViewService', () => new LandscapeViewService());
+
+    const landscapeViews: Ref<ILandscapeView[]> = ref([]);
 
     const businessObjectService = inject('businessObjectService', () => new BusinessObjectService());
 
@@ -71,20 +77,25 @@ export default defineComponent({
         .then(res => {
           dataObjects.value = res.data;
         });
-      ownerService()
-        .retrieve()
-        .then(res => {
-          owners.value = res.data;
-        });
       applicationService()
         .retrieve()
         .then(res => {
           applications.value = res.data;
         });
+      ownerService()
+        .retrieve()
+        .then(res => {
+          owners.value = res.data;
+        });
       technologyService()
         .retrieve()
         .then(res => {
           technologies.value = res.data;
+        });
+      landscapeViewService()
+        .retrieve()
+        .then(res => {
+          landscapeViews.value = res.data;
         });
       businessObjectService()
         .retrieve()
@@ -102,11 +113,12 @@ export default defineComponent({
       },
       type: {},
       components: {},
-      owner: {},
       application: {},
+      owner: {},
       technologies: {},
+      landscapes: {},
+      parent: {},
       businessObject: {},
-      container: {},
     };
     const v$ = useVuelidate(validationRules, dataObject as any);
     v$.value.$validate();
@@ -120,15 +132,17 @@ export default defineComponent({
       isSaving,
       currentLanguage,
       dataObjects,
-      owners,
       applications,
+      owners,
       technologies,
+      landscapeViews,
       businessObjects,
       v$,
     };
   },
   created(): void {
     this.dataObject.technologies = [];
+    this.dataObject.landscapes = [];
   },
   methods: {
     save(): void {

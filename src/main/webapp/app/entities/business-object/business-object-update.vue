@@ -27,15 +27,15 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="business-object-implementable">Implementable</label>
+            <label class="form-control-label" for="business-object-abstractBusinessObject">Abstract Business Object</label>
             <input
               type="checkbox"
               class="form-check"
-              name="implementable"
-              id="business-object-implementable"
-              data-cy="implementable"
-              :class="{ valid: !v$.implementable.$invalid, invalid: v$.implementable.$invalid }"
-              v-model="v$.implementable.$model"
+              name="abstractBusinessObject"
+              id="business-object-abstractBusinessObject"
+              data-cy="abstractBusinessObject"
+              :class="{ valid: !v$.abstractBusinessObject.$invalid, invalid: v$.abstractBusinessObject.$invalid }"
+              v-model="v$.abstractBusinessObject.$model"
             />
           </div>
           <div class="form-group">
@@ -75,19 +75,13 @@
             </select>
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="business-object-container">Container</label>
-            <select
-              class="form-control"
-              id="business-object-container"
-              data-cy="container"
-              name="container"
-              v-model="businessObject.container"
-            >
+            <label class="form-control-label" for="business-object-parent">Parent</label>
+            <select class="form-control" id="business-object-parent" data-cy="parent" name="parent" v-model="businessObject.parent">
               <option v-bind:value="null"></option>
               <option
                 v-bind:value="
-                  businessObject.container && businessObjectOption.id === businessObject.container.id
-                    ? businessObject.container
+                  businessObject.parent && businessObjectOption.id === businessObject.parent.id
+                    ? businessObject.parent
                     : businessObjectOption
                 "
                 v-for="businessObjectOption in businessObjects"

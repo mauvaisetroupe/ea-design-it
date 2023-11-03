@@ -27,26 +27,26 @@ public class BusinessObject implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "implementable")
-    private Boolean implementable;
+    @Column(name = "abstract_business_object")
+    private Boolean abstractBusinessObject;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "generalization")
     @JsonIgnoreProperties(
-        value = { "specializations", "components", "dataObjects", "owner", "generalization", "container" },
+        value = { "specializations", "components", "dataObjects", "owner", "generalization", "parent" },
         allowSetters = true
     )
     private Set<BusinessObject> specializations = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "container")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
     @JsonIgnoreProperties(
-        value = { "specializations", "components", "dataObjects", "owner", "generalization", "container" },
+        value = { "specializations", "components", "dataObjects", "owner", "generalization", "parent" },
         allowSetters = true
     )
     private Set<BusinessObject> components = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "businessObject")
     @JsonIgnoreProperties(
-        value = { "components", "owner", "application", "technologies", "businessObject", "container" },
+        value = { "components", "application", "owner", "technologies", "landscapes", "parent", "businessObject" },
         allowSetters = true
     )
     private Set<DataObject> dataObjects = new HashSet<>();
@@ -57,17 +57,17 @@ public class BusinessObject implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
-        value = { "specializations", "components", "dataObjects", "owner", "generalization", "container" },
+        value = { "specializations", "components", "dataObjects", "owner", "generalization", "parent" },
         allowSetters = true
     )
     private BusinessObject generalization;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
-        value = { "specializations", "components", "dataObjects", "owner", "generalization", "container" },
+        value = { "specializations", "components", "dataObjects", "owner", "generalization", "parent" },
         allowSetters = true
     )
-    private BusinessObject container;
+    private BusinessObject parent;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -97,17 +97,17 @@ public class BusinessObject implements Serializable {
         this.name = name;
     }
 
-    public Boolean getImplementable() {
-        return this.implementable;
+    public Boolean getAbstractBusinessObject() {
+        return this.abstractBusinessObject;
     }
 
-    public BusinessObject implementable(Boolean implementable) {
-        this.setImplementable(implementable);
+    public BusinessObject abstractBusinessObject(Boolean abstractBusinessObject) {
+        this.setAbstractBusinessObject(abstractBusinessObject);
         return this;
     }
 
-    public void setImplementable(Boolean implementable) {
-        this.implementable = implementable;
+    public void setAbstractBusinessObject(Boolean abstractBusinessObject) {
+        this.abstractBusinessObject = abstractBusinessObject;
     }
 
     public Set<BusinessObject> getSpecializations() {
@@ -147,10 +147,10 @@ public class BusinessObject implements Serializable {
 
     public void setComponents(Set<BusinessObject> businessObjects) {
         if (this.components != null) {
-            this.components.forEach(i -> i.setContainer(null));
+            this.components.forEach(i -> i.setParent(null));
         }
         if (businessObjects != null) {
-            businessObjects.forEach(i -> i.setContainer(this));
+            businessObjects.forEach(i -> i.setParent(this));
         }
         this.components = businessObjects;
     }
@@ -162,13 +162,13 @@ public class BusinessObject implements Serializable {
 
     public BusinessObject addComponents(BusinessObject businessObject) {
         this.components.add(businessObject);
-        businessObject.setContainer(this);
+        businessObject.setParent(this);
         return this;
     }
 
     public BusinessObject removeComponents(BusinessObject businessObject) {
         this.components.remove(businessObject);
-        businessObject.setContainer(null);
+        businessObject.setParent(null);
         return this;
     }
 
@@ -229,16 +229,16 @@ public class BusinessObject implements Serializable {
         return this;
     }
 
-    public BusinessObject getContainer() {
-        return this.container;
+    public BusinessObject getParent() {
+        return this.parent;
     }
 
-    public void setContainer(BusinessObject businessObject) {
-        this.container = businessObject;
+    public void setParent(BusinessObject businessObject) {
+        this.parent = businessObject;
     }
 
-    public BusinessObject container(BusinessObject businessObject) {
-        this.setContainer(businessObject);
+    public BusinessObject parent(BusinessObject businessObject) {
+        this.setParent(businessObject);
         return this;
     }
 
@@ -267,7 +267,7 @@ public class BusinessObject implements Serializable {
         return "BusinessObject{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", implementable='" + getImplementable() + "'" +
+            ", abstractBusinessObject='" + getAbstractBusinessObject() + "'" +
             "}";
     }
 }

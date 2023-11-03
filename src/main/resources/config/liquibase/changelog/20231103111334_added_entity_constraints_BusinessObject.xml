@@ -6,7 +6,7 @@
     <!--
         Added the constraints for entity BusinessObject.
     -->
-    <changeSet id="20231102100751-2" author="jhipster">
+    <changeSet id="20231103111334-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="owner_id"
                                  baseTableName="business_object"
@@ -22,9 +22,9 @@
                                  referencedTableName="business_object"
                                  />
 
-        <addForeignKeyConstraint baseColumnNames="container_id"
+        <addForeignKeyConstraint baseColumnNames="parent_id"
                                  baseTableName="business_object"
-                                 constraintName="fk_business_object__container_id"
+                                 constraintName="fk_business_object__parent_id"
                                  referencedColumnNames="id"
                                  referencedTableName="business_object"
                                  />

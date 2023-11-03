@@ -30,18 +30,18 @@ public interface DataObjectRepository extends DataObjectRepositoryWithBagRelatio
     }
 
     @Query(
-        value = "select dataObject from DataObject dataObject left join fetch dataObject.owner left join fetch dataObject.application left join fetch dataObject.businessObject left join fetch dataObject.container",
+        value = "select dataObject from DataObject dataObject left join fetch dataObject.application left join fetch dataObject.owner left join fetch dataObject.parent left join fetch dataObject.businessObject",
         countQuery = "select count(dataObject) from DataObject dataObject"
     )
     Page<DataObject> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select dataObject from DataObject dataObject left join fetch dataObject.owner left join fetch dataObject.application left join fetch dataObject.businessObject left join fetch dataObject.container"
+        "select dataObject from DataObject dataObject left join fetch dataObject.application left join fetch dataObject.owner left join fetch dataObject.parent left join fetch dataObject.businessObject"
     )
     List<DataObject> findAllWithToOneRelationships();
 
     @Query(
-        "select dataObject from DataObject dataObject left join fetch dataObject.owner left join fetch dataObject.application left join fetch dataObject.businessObject left join fetch dataObject.container where dataObject.id =:id"
+        "select dataObject from DataObject dataObject left join fetch dataObject.application left join fetch dataObject.owner left join fetch dataObject.parent left join fetch dataObject.businessObject where dataObject.id =:id"
     )
     Optional<DataObject> findOneWithToOneRelationships(@Param("id") Long id);
 }

@@ -6,20 +6,20 @@
     <!--
         Added the constraints for entity DataObject.
     -->
-    <changeSet id="20231102100752-2" author="jhipster">
-
-        <addForeignKeyConstraint baseColumnNames="owner_id"
-                                 baseTableName="data_object"
-                                 constraintName="fk_data_object__owner_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="owner"
-                                 />
+    <changeSet id="20231103111335-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="application_id"
                                  baseTableName="data_object"
                                  constraintName="fk_data_object__application_id"
                                  referencedColumnNames="id"
                                  referencedTableName="application"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="owner_id"
+                                 baseTableName="data_object"
+                                 constraintName="fk_data_object__owner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="owner"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="data_object_id"
@@ -36,18 +36,32 @@
                                  referencedTableName="technology"
                                  />
 
+        <addForeignKeyConstraint baseColumnNames="data_object_id"
+                                 baseTableName="rel_data_object__landscapes"
+                                 constraintName="fk_rel_data_object__landscapes__data_object_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="data_object"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="landscapes_id"
+                                 baseTableName="rel_data_object__landscapes"
+                                 constraintName="fk_rel_data_object__landscapes__landscapes_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="landscape_view"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="parent_id"
+                                 baseTableName="data_object"
+                                 constraintName="fk_data_object__parent_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="data_object"
+                                 />
+
         <addForeignKeyConstraint baseColumnNames="business_object_id"
                                  baseTableName="data_object"
                                  constraintName="fk_data_object__business_object_id"
                                  referencedColumnNames="id"
                                  referencedTableName="business_object"
-                                 />
-
-        <addForeignKeyConstraint baseColumnNames="container_id"
-                                 baseTableName="data_object"
-                                 constraintName="fk_data_object__container_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="data_object"
                                  />
     </changeSet>
 </databaseChangeLog>

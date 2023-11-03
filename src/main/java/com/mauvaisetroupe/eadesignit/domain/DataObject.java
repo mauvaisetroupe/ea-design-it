@@ -32,16 +32,12 @@ public class DataObject implements Serializable {
     @Column(name = "type")
     private DataObjectType type;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "container")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
     @JsonIgnoreProperties(
-        value = { "components", "owner", "application", "technologies", "businessObject", "container" },
+        value = { "components", "application", "owner", "technologies", "landscapes", "parent", "businessObject" },
         allowSetters = true
     )
     private Set<DataObject> components = new HashSet<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
-    private Owner owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
@@ -60,6 +56,10 @@ public class DataObject implements Serializable {
     )
     private Application application;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
+    private Owner owner;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_data_object__technologies",
@@ -69,19 +69,28 @@ public class DataObject implements Serializable {
     @JsonIgnoreProperties(value = { "applications", "components", "dataObjects" }, allowSetters = true)
     private Set<Technology> technologies = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(
-        value = { "specializations", "components", "dataObjects", "owner", "generalization", "container" },
-        allowSetters = true
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "rel_data_object__landscapes",
+        joinColumns = @JoinColumn(name = "data_object_id"),
+        inverseJoinColumns = @JoinColumn(name = "landscapes_id")
     )
-    private BusinessObject businessObject;
+    @JsonIgnoreProperties(value = { "owner", "flows", "capabilityApplicationMappings", "dataObjects" }, allowSetters = true)
+    private Set<LandscapeView> landscapes = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(
-        value = { "components", "owner", "application", "technologies", "businessObject", "container" },
+        value = { "components", "application", "owner", "technologies", "landscapes", "parent", "businessObject" },
         allowSetters = true
     )
-    private DataObject container;
+    private DataObject parent;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(
+        value = { "specializations", "components", "dataObjects", "owner", "generalization", "parent" },
+        allowSetters = true
+    )
+    private BusinessObject businessObject;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -130,10 +139,10 @@ public class DataObject implements Serializable {
 
     public void setComponents(Set<DataObject> dataObjects) {
         if (this.components != null) {
-            this.components.forEach(i -> i.setContainer(null));
+            this.components.forEach(i -> i.setParent(null));
         }
         if (dataObjects != null) {
-            dataObjects.forEach(i -> i.setContainer(this));
+            dataObjects.forEach(i -> i.setParent(this));
         }
         this.components = dataObjects;
     }
@@ -145,26 +154,13 @@ public class DataObject implements Serializable {
 
     public DataObject addComponents(DataObject dataObject) {
         this.components.add(dataObject);
-        dataObject.setContainer(this);
+        dataObject.setParent(this);
         return this;
     }
 
     public DataObject removeComponents(DataObject dataObject) {
         this.components.remove(dataObject);
-        dataObject.setContainer(null);
-        return this;
-    }
-
-    public Owner getOwner() {
-        return this.owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
-    }
-
-    public DataObject owner(Owner owner) {
-        this.setOwner(owner);
+        dataObject.setParent(null);
         return this;
     }
 
@@ -178,6 +174,19 @@ public class DataObject implements Serializable {
 
     public DataObject application(Application application) {
         this.setApplication(application);
+        return this;
+    }
+
+    public Owner getOwner() {
+        return this.owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public DataObject owner(Owner owner) {
+        this.setOwner(owner);
         return this;
     }
 
@@ -206,6 +215,44 @@ public class DataObject implements Serializable {
         return this;
     }
 
+    public Set<LandscapeView> getLandscapes() {
+        return this.landscapes;
+    }
+
+    public void setLandscapes(Set<LandscapeView> landscapeViews) {
+        this.landscapes = landscapeViews;
+    }
+
+    public DataObject landscapes(Set<LandscapeView> landscapeViews) {
+        this.setLandscapes(landscapeViews);
+        return this;
+    }
+
+    public DataObject addLandscapes(LandscapeView landscapeView) {
+        this.landscapes.add(landscapeView);
+        landscapeView.getDataObjects().add(this);
+        return this;
+    }
+
+    public DataObject removeLandscapes(LandscapeView landscapeView) {
+        this.landscapes.remove(landscapeView);
+        landscapeView.getDataObjects().remove(this);
+        return this;
+    }
+
+    public DataObject getParent() {
+        return this.parent;
+    }
+
+    public void setParent(DataObject dataObject) {
+        this.parent = dataObject;
+    }
+
+    public DataObject parent(DataObject dataObject) {
+        this.setParent(dataObject);
+        return this;
+    }
+
     public BusinessObject getBusinessObject() {
         return this.businessObject;
     }
@@ -216,19 +263,6 @@ public class DataObject implements Serializable {
 
     public DataObject businessObject(BusinessObject businessObject) {
         this.setBusinessObject(businessObject);
-        return this;
-    }
-
-    public DataObject getContainer() {
-        return this.container;
-    }
-
-    public void setContainer(DataObject dataObject) {
-        this.container = dataObject;
-    }
-
-    public DataObject container(DataObject dataObject) {
-        this.setContainer(dataObject);
         return this;
     }
 

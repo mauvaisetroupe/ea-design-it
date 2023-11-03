@@ -113,7 +113,7 @@ public class Application implements Serializable, Ownershipable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "application")
     @JsonIgnoreProperties(
-        value = { "components", "owner", "application", "technologies", "businessObject", "container" },
+        value = { "components", "application", "owner", "technologies", "landscapes", "parent", "businessObject" },
         allowSetters = true
     )
     private Set<DataObject> dataObjects = new HashSet<>();

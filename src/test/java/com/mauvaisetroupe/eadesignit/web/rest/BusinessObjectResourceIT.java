@@ -40,8 +40,8 @@ class BusinessObjectResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final Boolean DEFAULT_IMPLEMENTABLE = false;
-    private static final Boolean UPDATED_IMPLEMENTABLE = true;
+    private static final Boolean DEFAULT_ABSTRACT_BUSINESS_OBJECT = false;
+    private static final Boolean UPDATED_ABSTRACT_BUSINESS_OBJECT = true;
 
     private static final String ENTITY_API_URL = "/api/business-objects";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -70,7 +70,7 @@ class BusinessObjectResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static BusinessObject createEntity(EntityManager em) {
-        BusinessObject businessObject = new BusinessObject().name(DEFAULT_NAME).implementable(DEFAULT_IMPLEMENTABLE);
+        BusinessObject businessObject = new BusinessObject().name(DEFAULT_NAME).abstractBusinessObject(DEFAULT_ABSTRACT_BUSINESS_OBJECT);
         return businessObject;
     }
 
@@ -81,7 +81,7 @@ class BusinessObjectResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static BusinessObject createUpdatedEntity(EntityManager em) {
-        BusinessObject businessObject = new BusinessObject().name(UPDATED_NAME).implementable(UPDATED_IMPLEMENTABLE);
+        BusinessObject businessObject = new BusinessObject().name(UPDATED_NAME).abstractBusinessObject(UPDATED_ABSTRACT_BUSINESS_OBJECT);
         return businessObject;
     }
 
@@ -106,7 +106,7 @@ class BusinessObjectResourceIT {
         assertThat(businessObjectList).hasSize(databaseSizeBeforeCreate + 1);
         BusinessObject testBusinessObject = businessObjectList.get(businessObjectList.size() - 1);
         assertThat(testBusinessObject.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testBusinessObject.getImplementable()).isEqualTo(DEFAULT_IMPLEMENTABLE);
+        assertThat(testBusinessObject.getAbstractBusinessObject()).isEqualTo(DEFAULT_ABSTRACT_BUSINESS_OBJECT);
     }
 
     @Test
@@ -161,7 +161,7 @@ class BusinessObjectResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(businessObject.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].implementable").value(hasItem(DEFAULT_IMPLEMENTABLE.booleanValue())));
+            .andExpect(jsonPath("$.[*].abstractBusinessObject").value(hasItem(DEFAULT_ABSTRACT_BUSINESS_OBJECT.booleanValue())));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -194,7 +194,7 @@ class BusinessObjectResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(businessObject.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.implementable").value(DEFAULT_IMPLEMENTABLE.booleanValue()));
+            .andExpect(jsonPath("$.abstractBusinessObject").value(DEFAULT_ABSTRACT_BUSINESS_OBJECT.booleanValue()));
     }
 
     @Test
@@ -216,7 +216,7 @@ class BusinessObjectResourceIT {
         BusinessObject updatedBusinessObject = businessObjectRepository.findById(businessObject.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedBusinessObject are not directly saved in db
         em.detach(updatedBusinessObject);
-        updatedBusinessObject.name(UPDATED_NAME).implementable(UPDATED_IMPLEMENTABLE);
+        updatedBusinessObject.name(UPDATED_NAME).abstractBusinessObject(UPDATED_ABSTRACT_BUSINESS_OBJECT);
 
         restBusinessObjectMockMvc
             .perform(
@@ -231,7 +231,7 @@ class BusinessObjectResourceIT {
         assertThat(businessObjectList).hasSize(databaseSizeBeforeUpdate);
         BusinessObject testBusinessObject = businessObjectList.get(businessObjectList.size() - 1);
         assertThat(testBusinessObject.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testBusinessObject.getImplementable()).isEqualTo(UPDATED_IMPLEMENTABLE);
+        assertThat(testBusinessObject.getAbstractBusinessObject()).isEqualTo(UPDATED_ABSTRACT_BUSINESS_OBJECT);
     }
 
     @Test
@@ -302,7 +302,7 @@ class BusinessObjectResourceIT {
         BusinessObject partialUpdatedBusinessObject = new BusinessObject();
         partialUpdatedBusinessObject.setId(businessObject.getId());
 
-        partialUpdatedBusinessObject.name(UPDATED_NAME).implementable(UPDATED_IMPLEMENTABLE);
+        partialUpdatedBusinessObject.name(UPDATED_NAME).abstractBusinessObject(UPDATED_ABSTRACT_BUSINESS_OBJECT);
 
         restBusinessObjectMockMvc
             .perform(
@@ -317,7 +317,7 @@ class BusinessObjectResourceIT {
         assertThat(businessObjectList).hasSize(databaseSizeBeforeUpdate);
         BusinessObject testBusinessObject = businessObjectList.get(businessObjectList.size() - 1);
         assertThat(testBusinessObject.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testBusinessObject.getImplementable()).isEqualTo(UPDATED_IMPLEMENTABLE);
+        assertThat(testBusinessObject.getAbstractBusinessObject()).isEqualTo(UPDATED_ABSTRACT_BUSINESS_OBJECT);
     }
 
     @Test
@@ -332,7 +332,7 @@ class BusinessObjectResourceIT {
         BusinessObject partialUpdatedBusinessObject = new BusinessObject();
         partialUpdatedBusinessObject.setId(businessObject.getId());
 
-        partialUpdatedBusinessObject.name(UPDATED_NAME).implementable(UPDATED_IMPLEMENTABLE);
+        partialUpdatedBusinessObject.name(UPDATED_NAME).abstractBusinessObject(UPDATED_ABSTRACT_BUSINESS_OBJECT);
 
         restBusinessObjectMockMvc
             .perform(
@@ -347,7 +347,7 @@ class BusinessObjectResourceIT {
         assertThat(businessObjectList).hasSize(databaseSizeBeforeUpdate);
         BusinessObject testBusinessObject = businessObjectList.get(businessObjectList.size() - 1);
         assertThat(testBusinessObject.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testBusinessObject.getImplementable()).isEqualTo(UPDATED_IMPLEMENTABLE);
+        assertThat(testBusinessObject.getAbstractBusinessObject()).isEqualTo(UPDATED_ABSTRACT_BUSINESS_OBJECT);
     }
 
     @Test

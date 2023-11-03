@@ -30,11 +30,12 @@
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Name</span></th>
             <th scope="row"><span>Type</span></th>
-            <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>Application</span></th>
+            <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>Technologies</span></th>
+            <th scope="row"><span>Landscapes</span></th>
+            <th scope="row"><span>Parent</span></th>
             <th scope="row"><span>Business Object</span></th>
-            <th scope="row"><span>Container</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -46,15 +47,15 @@
             <td>{{ dataObject.name }}</td>
             <td>{{ dataObject.type }}</td>
             <td>
-              <div v-if="dataObject.owner">
-                <router-link :to="{ name: 'OwnerView', params: { ownerId: dataObject.owner.id } }">{{ dataObject.owner.name }}</router-link>
-              </div>
-            </td>
-            <td>
               <div v-if="dataObject.application">
                 <router-link :to="{ name: 'ApplicationView', params: { applicationId: dataObject.application.id } }">{{
                   dataObject.application.name
                 }}</router-link>
+              </div>
+            </td>
+            <td>
+              <div v-if="dataObject.owner">
+                <router-link :to="{ name: 'OwnerView', params: { ownerId: dataObject.owner.id } }">{{ dataObject.owner.name }}</router-link>
               </div>
             </td>
             <td>
@@ -66,16 +67,24 @@
               </span>
             </td>
             <td>
-              <div v-if="dataObject.businessObject">
-                <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: dataObject.businessObject.id } }">{{
-                  dataObject.businessObject.name
+              <span v-for="(landscapes, i) in dataObject.landscapes" :key="landscapes.id"
+                >{{ i > 0 ? ', ' : '' }}
+                <router-link class="form-control-static" :to="{ name: 'LandscapeViewView', params: { landscapeViewId: landscapes.id } }">{{
+                  landscapes.diagramName
+                }}</router-link>
+              </span>
+            </td>
+            <td>
+              <div v-if="dataObject.parent">
+                <router-link :to="{ name: 'DataObjectView', params: { dataObjectId: dataObject.parent.id } }">{{
+                  dataObject.parent.name
                 }}</router-link>
               </div>
             </td>
             <td>
-              <div v-if="dataObject.container">
-                <router-link :to="{ name: 'DataObjectView', params: { dataObjectId: dataObject.container.id } }">{{
-                  dataObject.container.name
+              <div v-if="dataObject.businessObject">
+                <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: dataObject.businessObject.id } }">{{
+                  dataObject.businessObject.name
                 }}</router-link>
               </div>
             </td>
