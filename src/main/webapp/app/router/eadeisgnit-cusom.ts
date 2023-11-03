@@ -24,6 +24,8 @@ const ExternalSystemUploadFile = () => import('@/entities/external-system/extern
 // prettier-ignore
 const FullExport = () => import('@/eadesignit/full-export/full-export.vue');
 
+const DataObjectImportUploadFile = () => import('@/entities/data-object-import/data-object-import-upload-file.vue');
+
 export default [
   {
     path: '/application-import-upload-file',
@@ -89,6 +91,12 @@ export default [
     path: '/full-export',
     name: 'FullExport',
     component: FullExport,
+    meta: { authorities: [Authority.WRITE] },
+  },
+  {
+    path: '/data-object-import-upload-file',
+    name: 'DataObjectImportUploadFile',
+    component: DataObjectImportUploadFile,
     meta: { authorities: [Authority.WRITE] },
   },
 ];

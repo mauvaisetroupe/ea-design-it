@@ -92,7 +92,8 @@
           </li>
           <li>
             Import
-            <router-link to="/functional-flow/new" data-cy="import-sequence-diagram-mapping">Sequence diagram</router-link> Plantuml file
+            <router-link to="/data-object-import-upload-file" data-cy="import-data-objects">Business Objects and Data Objects</router-link>
+            Excel file
           </li>
         </ol>
 

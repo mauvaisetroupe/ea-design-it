@@ -13,6 +13,7 @@ import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationImportService
 import com.mauvaisetroupe.eadesignit.service.importfile.CapabilityImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ComponentImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.DataFlowImportService;
+import com.mauvaisetroupe.eadesignit.service.importfile.DataObjectImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ExcelReader;
 import com.mauvaisetroupe.eadesignit.service.importfile.ExportFullDataService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ExternalSystemImportService;
@@ -23,10 +24,12 @@ import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilit
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilityItemDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportAnalysisDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.DataObjectDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.FlowImportDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.SummarySheetDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.SummaryImporterService;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.ApplicationImportException;
+import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -37,6 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Propagation;
@@ -50,6 +54,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * REST controller for managing {@link com.mauvaisetroupe.eadesignit.domain.ApplicationImport}.
@@ -97,6 +102,9 @@ public class ImportResource {
 
     @Autowired
     private SummaryImporterService summaryImporterService;
+
+    @Autowired
+    private DataObjectImportService dataObjectImportService;
 
     @PostMapping("/import/sheetnames")
     public List<String> getSheetNames(@RequestPart MultipartFile file) throws Exception {
@@ -169,7 +177,7 @@ public class ImportResource {
     }
 
     @PostMapping("/import/capability/upload-file")
-    public CapabilityImportAnalysisDTO  uploadCapabilityFile(@RequestPart MultipartFile file) throws Exception {
+    public CapabilityImportAnalysisDTO uploadCapabilityFile(@RequestPart MultipartFile file) throws Exception {
         return capabilityImportService.analyzeExcel(file.getInputStream(), file.getOriginalFilename());
     }
 
@@ -254,5 +262,15 @@ public class ImportResource {
     @PostMapping("/import/external-system/upload-file")
     public List<ExternalSystem> uploadExternalSystemFile(@RequestPart MultipartFile file) throws Exception {
         return externalSystemImportService.importExcel(file.getInputStream());
+    }
+
+    @PostMapping("/import/data-objects/upload-file")
+    public DataObjectDTO uploadDataObjectsFile(@RequestPart MultipartFile file) throws Exception {
+        try {
+            return dataObjectImportService.importExcel(file.getInputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BadRequestAlertException(e.getMessage(), "IMPORT DO BO", e.getMessage());
+        }
     }
 }

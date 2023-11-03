@@ -44,4 +44,8 @@ public interface DataObjectRepository extends DataObjectRepositoryWithBagRelatio
         "select dataObject from DataObject dataObject left join fetch dataObject.application left join fetch dataObject.owner left join fetch dataObject.parent left join fetch dataObject.businessObject where dataObject.id =:id"
     )
     Optional<DataObject> findOneWithToOneRelationships(@Param("id") Long id);
+
+    Optional<DataObject> findByNameIgnoreCase(String boName);
+
+    Optional<DataObject> findByNameIgnoreCaseAndParentNameIgnoreCase(String boName, String name);
 }

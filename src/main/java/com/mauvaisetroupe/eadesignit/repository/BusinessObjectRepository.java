@@ -41,4 +41,8 @@ public interface BusinessObjectRepository extends JpaRepository<BusinessObject, 
         "select businessObject from BusinessObject businessObject left join fetch businessObject.owner left join fetch businessObject.generalization left join fetch businessObject.parent where businessObject.id =:id"
     )
     Optional<BusinessObject> findOneWithToOneRelationships(@Param("id") Long id);
+
+    Optional<BusinessObject> findByNameIgnoreCase(String string);
+
+    Optional<BusinessObject> findByNameIgnoreCaseAndParentNameIgnoreCase(String name, String parentName);
 }
