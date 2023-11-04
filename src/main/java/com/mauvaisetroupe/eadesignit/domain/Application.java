@@ -112,10 +112,7 @@ public class Application implements Serializable, Ownershipable {
     private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "application")
-    @JsonIgnoreProperties(
-        value = { "components", "application", "owner", "technologies", "landscapes", "parent", "businessObject" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "components", "application", "owner", "technologies", "landscapes" }, allowSetters = true)
     private Set<DataObject> dataObjects = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

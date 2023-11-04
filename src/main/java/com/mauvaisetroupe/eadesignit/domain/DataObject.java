@@ -79,17 +79,11 @@ public class DataObject implements Serializable {
     private Set<LandscapeView> landscapes = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(
-        value = { "components", "application", "owner", "technologies", "landscapes", "parent", "businessObject" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "components", "application", "owner", "technologies", "landscapes" }, allowSetters = true)
     private DataObject parent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(
-        value = { "specializations", "components", "dataObjects", "owner", "generalization", "parent" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "specializations", "components", "dataObjects", "owner" }, allowSetters = true)
     private BusinessObject businessObject;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

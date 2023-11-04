@@ -38,17 +38,11 @@ public class BusinessObject implements Serializable {
     private Set<BusinessObject> specializations = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
-    @JsonIgnoreProperties(
-        value = { "specializations", "components", "dataObjects", "owner", "generalization", "parent" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "specializations", "owner", "generalization", "parent" }, allowSetters = true)
     private Set<BusinessObject> components = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "businessObject")
-    @JsonIgnoreProperties(
-        value = { "components", "application", "owner", "technologies", "landscapes", "parent", "businessObject" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "application", "owner", "technologies", "landscapes", "parent", "businessObject" }, allowSetters = true)
     private Set<DataObject> dataObjects = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
