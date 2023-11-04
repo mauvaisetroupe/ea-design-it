@@ -48,12 +48,13 @@ public class DataObjectImportService {
     @Autowired
     private ApplicationRepository applicationRepository;
 
-    public static final String BUSINESS_OBJECT = "businessobject";
-    public static final String BUSINESS_OBJECT_GENERALIZATION = "generalization";
+    public static final String BUSINESS_OBJECT = "businessobject.fullpath";
+    public static final String BUSINESS_OBJECT_GENERALIZATION = "generalization.fullpath";
     public static final String BUSINESS_OBJECT_ABSTRACT = "abstract";
-    public static final String DATA_OBJECT = "dataobject";
+    public static final String DATA_OBJECT = "dataobject.fullpath";
     public static final String DATA_OBJECT_APPLICATION = "application";
     public static final String LANDSCAPE_NAME_PREFIX = "landscape.";
+    public static final String DATA_OBJECT_TYPE = "dataobject.type";
     public static final String DATA_OBJECT_SHEET_NAME = "BO";
 
     public DataObjectDTO importExcel(InputStream excel) throws IOException {
@@ -73,6 +74,7 @@ public class DataObjectImportService {
             dto.setBusinessobject((String) map.get(BUSINESS_OBJECT));
             dto.setDataobject((String) map.get(DATA_OBJECT));
             dto.setGeneralization((String) map.get(BUSINESS_OBJECT_GENERALIZATION));
+            dto.setType((String) map.get(DATA_OBJECT_TYPE));
             String _abstract = (String) map.get(BUSINESS_OBJECT_ABSTRACT);
             if (_abstract != null && _abstract.toLowerCase().trim().equals("yes")) {
                 dto.setAbstractValue(true);
@@ -118,6 +120,7 @@ public class DataObjectImportService {
                     dataObjectParent = dataObject;
                 }
                 dataObject.setBusinessObject(bo);
+                dataObject.setType(dto.getType());
                 dataObjectRepository.save(dataObject);
 
                 // Create link to Application
@@ -190,11 +193,11 @@ public class DataObjectImportService {
         for (DataObject dataObject : dataObjects) {
             dataObject.setParent(null);
             dataObject.setBusinessObject(null);
-            for (LandscapeView landscapeView : dataObject.getLandscapes()) {
+            for (LandscapeView landscapeView : new ArrayList<>(dataObject.getLandscapes())) {
                 landscapeView.removeDataObjects(dataObject);
                 landscapeViewRepository.save(landscapeView);
             }
-            for (Technology technology : dataObject.getTechnologies()) {
+            for (Technology technology : new ArrayList<>(dataObject.getTechnologies())) {
                 technology.removeDataObjects(dataObject);
                 technologyRepository.save(technology);
             }

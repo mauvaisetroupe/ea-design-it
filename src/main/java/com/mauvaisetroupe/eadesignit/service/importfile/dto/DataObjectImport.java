@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.service.importfile.dto;
 
+import com.mauvaisetroupe.eadesignit.domain.enumeration.DataObjectType;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,6 +16,16 @@ public class DataObjectImport implements Serializable {
     private boolean abstractValue;
     private String dataobject;
     private String application;
+    private DataObjectType type;
+
+    public DataObjectType getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        if (type != null) this.type = DataObjectType.valueOf(type.toUpperCase());
+    }
+
     private List<String> landscapes = new ArrayList<>();
 
     @Override
