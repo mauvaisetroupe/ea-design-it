@@ -301,6 +301,49 @@
             </div>
           </div>
         </b-tab>
+        <b-tab title="Data Objects">
+          <div class="row">
+            <div class="col-12">
+              <div class="row m-2">
+                <b-pagination
+                  v-model="datObjectCurrentPage"
+                  :total-rows="application.dataObjects?.length"
+                  :per-page="dataObjectPerPage"
+                  aria-controls="my-table"
+                  class="m-0"
+                ></b-pagination>
+                <input type="text" v-model="dataObjectFilter" placeholder="Text filter" class="ml-5" />
+              </div>
+
+              <div class="col-12">
+                <b-table
+                  striped
+                  :items="application.dataObjects"
+                  :perPage="dataObjectPerPage"
+                  :current-page="datObjectCurrentPage"
+                  :fields="['businessObject', { key: 'name', label: 'Data Object' }, 'type']"
+                  :filter="dataObjectFilter"
+                  :filter-included-fields="['businessObject', 'name', 'type']"
+                  class="col-12"
+                >
+                  <template #cell(name)="data">
+                    <router-link :to="{ name: 'DataObjectView', params: { dataObjectId: data.item.id } }">
+                      <span v-if="data.item.parent">{{ data.item.parent.name }} / </span>
+                      {{ data.item.name }}
+                    </router-link>
+                  </template>
+
+                  <template #cell(businessObject)="data">
+                    <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: data.item.businessObject.id } }">
+                      <span v-if="data.item.businessObject.parent">{{ data.item.businessObject.parent.name }} / </span>
+                      {{ data.item.businessObject.name }}
+                    </router-link>
+                  </template>
+                </b-table>
+              </div>
+            </div>
+          </div>
+        </b-tab>
       </b-tabs>
     </div>
     <div class="col-12">

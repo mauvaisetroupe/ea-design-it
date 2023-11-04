@@ -200,6 +200,12 @@ export default defineComponent({
       getPlantUML(application.value.id);
     }
 
+    /////////////// TAB Data Object
+
+    const datObjectCurrentPage = ref(1);
+    const dataObjectFilter = ref('');
+    const dataObjectPerPage = ref(10);
+
     return {
       alertService,
       application,
@@ -228,6 +234,11 @@ export default defineComponent({
       routeToCapability,
       isOwner,
       accountService,
+
+      // TAB Data Object
+      datObjectCurrentPage,
+      dataObjectFilter,
+      dataObjectPerPage,
     };
   },
 });
