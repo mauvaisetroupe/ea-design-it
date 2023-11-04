@@ -3,8 +3,22 @@ import axios from 'axios';
 import { type IBusinessObject } from '@/shared/model/business-object.model';
 
 const baseApiUrl = 'api/business-objects';
+const basePlantUMLApiUrl = 'api/plantuml/business-object/get-svg';
 
 export default class BusinessObjectService {
+  public getPlantUML(id: number): string | PromiseLike<string> {
+    return new Promise<string>((resolve, reject) => {
+      axios
+        .get(`${basePlantUMLApiUrl}/${id}`)
+        .then(res => {
+          resolve(res.data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
   public find(id: number): Promise<IBusinessObject> {
     return new Promise<IBusinessObject>((resolve, reject) => {
       axios

@@ -1,11 +1,12 @@
 package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
-import com.mauvaisetroupe.eadesignit.domain.Capability;
+import com.mauvaisetroupe.eadesignit.domain.BusinessObject;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.repository.BusinessObjectRepository;
 import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
@@ -18,20 +19,17 @@ import com.mauvaisetroupe.eadesignit.service.importfile.PlantumlImportService;
 import io.undertow.util.BadRequestException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api")
@@ -53,9 +52,9 @@ public class PlantUMLResource {
     private final FunctionalFlowRepository functionalFlowRepository;
     private final FlowInterfaceRepository flowInterfaceRepository;
     private final ApplicationRepository applicationRepository;
-    private final CapabilityRepository capabilityRepository;
     private final PlantUMLService plantUMLSerializer;
     private final PlantumlImportService plantumlImportService;
+    private final BusinessObjectRepository businessObjectRepository;
 
     private final Logger log = LoggerFactory.getLogger(PlantUMLResource.class);
 
@@ -64,17 +63,17 @@ public class PlantUMLResource {
         FunctionalFlowRepository functionalFlowRepository,
         ApplicationRepository applicationRepository,
         FlowInterfaceRepository flowInterfaceRepository,
-        CapabilityRepository capabilityRepository,
         PlantUMLService plantUMLSerializer,
-        PlantumlImportService plantumlImportService
+        PlantumlImportService plantumlImportService,
+        BusinessObjectRepository businessObjectRepository
     ) {
         this.landscapeViewRepository = landscapeViewRepository;
         this.functionalFlowRepository = functionalFlowRepository;
         this.applicationRepository = applicationRepository;
         this.flowInterfaceRepository = flowInterfaceRepository;
         this.plantUMLSerializer = plantUMLSerializer;
-        this.capabilityRepository = capabilityRepository;
         this.plantumlImportService = plantumlImportService;
+        this.businessObjectRepository = businessObjectRepository;
     }
 
     @GetMapping(value = "plantuml/landscape-view/get-svg/{id}")
@@ -222,5 +221,13 @@ public class PlantUMLResource {
     public @ResponseBody String getSequenceDiagramSVG(@RequestBody String plantumlSource) throws IOException {
         plantumlSource = plantumlImportService.preparePlantUMLSource(plantumlSource);
         return this.plantUMLSerializer.getSVGFromSource(plantumlSource);
+    }
+
+    @GetMapping(value = "plantuml/business-object/get-svg/{id}")
+    public @ResponseBody String getBusinessObjectSVG(@PathVariable Long id) throws IOException, BadRequestException {
+        BusinessObject bo = businessObjectRepository
+            .findOneWithAllChildrens(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return this.plantUMLSerializer.getDatObjectSVG(bo);
     }
 }

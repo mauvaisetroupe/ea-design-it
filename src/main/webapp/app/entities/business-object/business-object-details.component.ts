@@ -29,11 +29,25 @@ export default defineComponent({
 
     if (route.params?.businessObjectId) {
       retrieveBusinessObject(route.params.businessObjectId);
+      getPlantUML(route.params.businessObjectId);
+    }
+
+    // plantuml
+    const plantUMLImage = ref('');
+
+    async function getPlantUML(businessObjectID) {
+      try {
+        const res: string = await businessObjectService().getPlantUML(businessObjectID);
+        plantUMLImage.value = res;
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     return {
       alertService,
       businessObject,
+      plantUMLImage,
       retrieveBusinessObject,
       previousState,
     };

@@ -168,7 +168,7 @@ public class BusinessObjectResource {
     @GetMapping("/business-objects/{id}")
     public ResponseEntity<BusinessObject> getBusinessObject(@PathVariable Long id) {
         log.debug("REST request to get BusinessObject : {}", id);
-        Optional<BusinessObject> businessObject = businessObjectRepository.findOneWithEagerRelationships(id);
+        Optional<BusinessObject> businessObject = businessObjectRepository.findOneWithAllChildrens(id);
         return ResponseUtil.wrapOrNotFound(businessObject);
     }
 

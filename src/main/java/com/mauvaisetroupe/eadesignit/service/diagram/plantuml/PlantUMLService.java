@@ -1,5 +1,7 @@
 package com.mauvaisetroupe.eadesignit.service.diagram.plantuml;
 
+import com.mauvaisetroupe.eadesignit.domain.BusinessObject;
+import com.mauvaisetroupe.eadesignit.domain.DataObject;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
@@ -41,6 +43,9 @@ public class PlantUMLService {
 
     @Autowired
     private PlantUMLBuilder plantUMLBuilder;
+
+    @Autowired
+    private BusinessObjectPlantUMLBuilder businessObjectPlantUMLBuilder;
 
     private String createPlantUMLSource(
         GraphDTO graph,
@@ -197,5 +202,13 @@ public class PlantUMLService {
         plantUMLBuilder.getApplicationStructure(plantUMLSource, application);
         plantUMLBuilder.getPlantumlFooter(plantUMLSource);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
+    }
+
+    public String getDatObjectSVG(BusinessObject bo) throws IOException {
+        StringBuilder plantUMLSource = new StringBuilder();
+        businessObjectPlantUMLBuilder.getPlantumlHeader(plantUMLSource);
+        businessObjectPlantUMLBuilder.getBusinessObjectsBusiness(plantUMLSource, bo);
+        businessObjectPlantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        return businessObjectPlantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 }
