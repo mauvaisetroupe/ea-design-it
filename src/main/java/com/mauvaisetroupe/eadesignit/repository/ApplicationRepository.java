@@ -47,6 +47,11 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
         " left join fetch application.businessOwner" +
         " left join fetch application.externalIDS " +
         " left join fetch application.applicationsLists " +
+        " left join fetch application.dataObjects do" +
+        " left join fetch do.parent dop " +
+        " left join fetch do.businessObject bo " +
+        " left join fetch bo.parent bop " +
+        " left join fetch bo.generalization bog " +
         " where application.id =:id"
     )
     Optional<Application> findOneWithEagerRelationships(@Param("id") Long id);
