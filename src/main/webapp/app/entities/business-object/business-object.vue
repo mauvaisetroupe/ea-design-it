@@ -51,22 +51,18 @@
             </td>
             <td>
               <span v-for="dataObj in businessObject.dataObjects" :key="dataObj.id">
-                <BusinessAndDataObjectFullpath
-                  :objectWithParent="dataObj"
-                  routerView="DataObjectView"
-                  routerParamName="dataObjectId"
-                  v-if="dataObj.type === 'GOLDEN_SOURCE'"
-                />
+                <div v-if="dataObj.type === 'GOLDEN_SOURCE'">
+                  <BusinessAndDataObjectFullpath :objectWithParent="dataObj" routerView="DataObjectView" routerParamName="dataObjectId" />
+                  [{{ dataObj.application?.name }}]
+                </div>
               </span>
             </td>
             <td>
               <span v-for="dataObj in businessObject.dataObjects" :key="dataObj.id">
-                <BusinessAndDataObjectFullpath
-                  :objectWithParent="dataObj"
-                  routerView="DataObjectView"
-                  routerParamName="dataObjectId"
-                  v-if="dataObj.type !== 'GOLDEN_SOURCE'"
-                />
+                <div v-if="dataObj.type !== 'GOLDEN_SOURCE'">
+                  <BusinessAndDataObjectFullpath :objectWithParent="dataObj" routerView="DataObjectView" routerParamName="dataObjectId" />
+                  [{{ dataObj.application?.name }}]
+                </div>
               </span>
             </td>
             <td><input type="checkbox" v-model="businessObject.abstractBusinessObject" disabled="true" /></td>
