@@ -45,28 +45,23 @@ public class BusinessObjectPlantUMLBuilder {
         Set<BusinessObject> allBusinessObjects = new HashSet<>();
         Set<DataObject> allDataObjects = new HashSet<>();
         Set<Application> allApplications = new HashSet<>();
+        findBusinessObjectsAndDataObjectAndApplications(allBusinessObjects, allDataObjects, allApplications, bo2);
+        writeApplicationsAndDataObjects(plantUMLSource, allApplications, allDataObjects);
+        writeBusinessObjects(plantUMLSource, allBusinessObjects);
+    }
 
-        doGetBusinessObjectsAndBusiness(allBusinessObjects, allDataObjects, allApplications, bo2);
+    public void getDataObjectsBusiness(StringBuilder plantUMLSource, DataObject dataObj) {
+        Set<Application> allApplications = new HashSet<>();
+        Set<DataObject> allDataObjects = new HashSet<>();
+        findDataObjectsAndApplications(allDataObjects, dataObj, allApplications);
+        writeApplicationsAndDataObjects(plantUMLSource, allApplications, allDataObjects);
+    }
+
+    private void writeBusinessObjects(StringBuilder plantUMLSource, Set<BusinessObject> allBusinessObjects) {
         for (BusinessObject businessObject : allBusinessObjects) {
             plantUMLSource.append(
                 "rectangle \"--\\n **" + businessObject.getName() + "**\" as BO" + businessObject.getId() + " #business\n"
             );
-        }
-
-        for (DataObject dataObject : allDataObjects) {
-            plantUMLSource.append(
-                "rectangle \"--\\n **" +
-                dataObject.getName() +
-                "** \\n<<" +
-                dataObject.getType() +
-                ">>\" as DO" +
-                dataObject.getId() +
-                " #application\n"
-            );
-        }
-
-        for (Application application : allApplications) {
-            plantUMLSource.append("component \"**" + application.getName() + "**\" as APPLI" + application.getId() + " #application\n");
         }
 
         for (BusinessObject businessObject : allBusinessObjects) {
@@ -83,6 +78,28 @@ public class BusinessObjectPlantUMLBuilder {
                 plantUMLSource.append("BO" + businessObject.getId() + " <|.. DO" + dataObject.getId() + ": realizes \n");
             }
         }
+    }
+
+    private void writeApplicationsAndDataObjects(
+        StringBuilder plantUMLSource,
+        Set<Application> allApplications,
+        Set<DataObject> allDataObjects
+    ) {
+        for (Application application : allApplications) {
+            plantUMLSource.append("component \"**" + application.getName() + "**\" as APPLI" + application.getId() + " #application\n");
+        }
+
+        for (DataObject dataObject : allDataObjects) {
+            plantUMLSource.append(
+                "rectangle \"--\\n **" +
+                dataObject.getName() +
+                "** \\n<<" +
+                dataObject.getType() +
+                ">>\" as DO" +
+                dataObject.getId() +
+                " #application\n"
+            );
+        }
 
         for (DataObject dataObject : allDataObjects) {
             // DO Composition
@@ -94,7 +111,7 @@ public class BusinessObjectPlantUMLBuilder {
         }
     }
 
-    private void doGetBusinessObjectsAndBusiness(
+    private void findBusinessObjectsAndDataObjectAndApplications(
         Set<BusinessObject> businessObjectSet,
         Set<DataObject> dataObjectSet,
         Set<Application> applicationSet,
@@ -102,23 +119,22 @@ public class BusinessObjectPlantUMLBuilder {
     ) {
         businessObjectSet.add(bo);
         for (DataObject dataObject : bo.getDataObjects()) {
-            doGetDataObjects(dataObjectSet, dataObject, applicationSet);
+            findDataObjectsAndApplications(dataObjectSet, dataObject, applicationSet);
         }
 
         for (BusinessObject specialization : bo.getSpecializations()) {
-            doGetBusinessObjectsAndBusiness(businessObjectSet, dataObjectSet, applicationSet, specialization);
+            findBusinessObjectsAndDataObjectAndApplications(businessObjectSet, dataObjectSet, applicationSet, specialization);
         }
         for (BusinessObject component : bo.getComponents()) {
-            doGetBusinessObjectsAndBusiness(businessObjectSet, dataObjectSet, applicationSet, component);
+            findBusinessObjectsAndDataObjectAndApplications(businessObjectSet, dataObjectSet, applicationSet, component);
         }
     }
 
-    private void doGetDataObjects(Set<DataObject> dataObjectSet, DataObject dataObject, Set<Application> applicationSet) {
+    private void findDataObjectsAndApplications(Set<DataObject> dataObjectSet, DataObject dataObject, Set<Application> applicationSet) {
         dataObjectSet.add(dataObject);
         applicationSet.add(dataObject.getApplication());
-
         for (DataObject component : dataObject.getComponents()) {
-            doGetDataObjects(dataObjectSet, component, applicationSet);
+            findDataObjectsAndApplications(dataObjectSet, component, applicationSet);
         }
     }
 

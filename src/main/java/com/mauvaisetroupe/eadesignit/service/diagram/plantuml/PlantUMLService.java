@@ -211,4 +211,12 @@ public class PlantUMLService {
         businessObjectPlantUMLBuilder.getPlantumlFooter(plantUMLSource);
         return businessObjectPlantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
+
+    public String getDatObjectSVG(DataObject dataObject) throws IOException {
+        StringBuilder plantUMLSource = new StringBuilder();
+        businessObjectPlantUMLBuilder.getPlantumlHeader(plantUMLSource);
+        businessObjectPlantUMLBuilder.getDataObjectsBusiness(plantUMLSource, dataObject);
+        businessObjectPlantUMLBuilder.getPlantumlFooter(plantUMLSource);
+        return businessObjectPlantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
+    }
 }

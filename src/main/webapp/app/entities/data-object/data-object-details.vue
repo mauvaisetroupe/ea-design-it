@@ -87,6 +87,7 @@
           </button>
         </router-link>
       </div>
+      <div v-html="plantUMLImage" class="table-responsive my-5" v-if="plantUMLImage"></div>
     </div>
   </div>
 </template>

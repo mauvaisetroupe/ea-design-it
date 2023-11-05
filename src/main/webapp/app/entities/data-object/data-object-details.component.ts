@@ -19,6 +19,7 @@ export default defineComponent({
     const dataObject: Ref<IDataObject> = ref({});
 
     const retrieveDataObject = async dataObjectId => {
+      getPlantUML(dataObjectId);
       try {
         const res = await dataObjectService().find(dataObjectId);
         dataObject.value = res;
@@ -31,11 +32,26 @@ export default defineComponent({
       retrieveDataObject(route.params.dataObjectId);
     }
 
+    // plantuml
+    const plantUMLImage = ref('');
+
+    async function getPlantUML(dataObjectID) {
+      try {
+        const res: string = await dataObjectService().getPlantUML(dataObjectID);
+        plantUMLImage.value = res;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     return {
       alertService,
       dataObject,
       retrieveDataObject,
       previousState,
+
+      // plantuml
+      plantUMLImage,
     };
   },
 });

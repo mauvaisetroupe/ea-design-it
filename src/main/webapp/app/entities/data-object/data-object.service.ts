@@ -3,6 +3,7 @@ import axios from 'axios';
 import { type IDataObject } from '@/shared/model/data-object.model';
 
 const baseApiUrl = 'api/data-objects';
+const basePlantUMLApiUrl = 'api/plantuml/data-object/get-svg';
 
 export default class DataObjectService {
   public find(id: number): Promise<IDataObject> {
@@ -74,6 +75,19 @@ export default class DataObjectService {
     return new Promise<IDataObject>((resolve, reject) => {
       axios
         .patch(`${baseApiUrl}/${entity.id}`, entity)
+        .then(res => {
+          resolve(res.data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public getPlantUML(id: number): string | PromiseLike<string> {
+    return new Promise<string>((resolve, reject) => {
+      axios
+        .get(`${basePlantUMLApiUrl}/${id}`)
         .then(res => {
           resolve(res.data);
         })

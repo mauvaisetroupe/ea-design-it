@@ -2,12 +2,13 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.BusinessObject;
+import com.mauvaisetroupe.eadesignit.domain.DataObject;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.IFlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.BusinessObjectRepository;
-import com.mauvaisetroupe.eadesignit.repository.CapabilityRepository;
+import com.mauvaisetroupe.eadesignit.repository.DataObjectRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
@@ -55,6 +56,7 @@ public class PlantUMLResource {
     private final PlantUMLService plantUMLSerializer;
     private final PlantumlImportService plantumlImportService;
     private final BusinessObjectRepository businessObjectRepository;
+    private final DataObjectRepository dataObjectRepository;
 
     private final Logger log = LoggerFactory.getLogger(PlantUMLResource.class);
 
@@ -65,7 +67,8 @@ public class PlantUMLResource {
         FlowInterfaceRepository flowInterfaceRepository,
         PlantUMLService plantUMLSerializer,
         PlantumlImportService plantumlImportService,
-        BusinessObjectRepository businessObjectRepository
+        BusinessObjectRepository businessObjectRepository,
+        DataObjectRepository dataObjectRepository
     ) {
         this.landscapeViewRepository = landscapeViewRepository;
         this.functionalFlowRepository = functionalFlowRepository;
@@ -74,6 +77,7 @@ public class PlantUMLResource {
         this.plantUMLSerializer = plantUMLSerializer;
         this.plantumlImportService = plantumlImportService;
         this.businessObjectRepository = businessObjectRepository;
+        this.dataObjectRepository = dataObjectRepository;
     }
 
     @GetMapping(value = "plantuml/landscape-view/get-svg/{id}")
@@ -226,6 +230,14 @@ public class PlantUMLResource {
     @GetMapping(value = "plantuml/business-object/get-svg/{id}")
     public @ResponseBody String getBusinessObjectSVG(@PathVariable Long id) throws IOException, BadRequestException {
         BusinessObject bo = businessObjectRepository
+            .findOneWithAllChildrens(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return this.plantUMLSerializer.getDatObjectSVG(bo);
+    }
+
+    @GetMapping(value = "plantuml/data-object/get-svg/{id}")
+    public @ResponseBody String getDataObjectSVG(@PathVariable Long id) throws IOException, BadRequestException {
+        DataObject bo = dataObjectRepository
             .findOneWithAllChildrens(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return this.plantUMLSerializer.getDatObjectSVG(bo);
