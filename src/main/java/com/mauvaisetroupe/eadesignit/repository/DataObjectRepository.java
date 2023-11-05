@@ -45,7 +45,11 @@ public interface DataObjectRepository extends DataObjectRepositoryWithBagRelatio
     )
     Optional<DataObject> findOneWithToOneRelationships(@Param("id") Long id);
 
-    Optional<DataObject> findByNameIgnoreCase(String boName);
+    Optional<DataObject> findByNameIgnoreCaseAndApplicationNameIgnoreCase(String boName, String appliName);
 
-    Optional<DataObject> findByNameIgnoreCaseAndParentNameIgnoreCase(String boName, String name);
+    Optional<DataObject> findByNameIgnoreCaseAndParentNameIgnoreCaseAndApplicationNameIgnoreCase(
+        String boName,
+        String parentName,
+        String appliName
+    );
 }

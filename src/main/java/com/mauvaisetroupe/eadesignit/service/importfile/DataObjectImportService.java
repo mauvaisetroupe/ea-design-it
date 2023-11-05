@@ -116,7 +116,7 @@ public class DataObjectImportService {
                 DataObject dataObjectParent = null;
                 for (int i = 0; i < dos.length; i++) {
                     String doName = dos[i].trim();
-                    dataObject = findOrCreateDO(dataObjectParent, doName);
+                    dataObject = findOrCreateDO(dataObjectParent, doName, dto.getApplication());
                     dataObjectParent = dataObject;
                 }
                 dataObject.setBusinessObject(bo);
@@ -172,14 +172,16 @@ public class DataObjectImportService {
         return bo;
     }
 
-    private DataObject findOrCreateDO(DataObject parent, String dataObjectName) {
+    private DataObject findOrCreateDO(DataObject parent, String dataObjectName, String applicationName) {
         DataObject dataObj;
         dataObj =
             ((parent == null)
-                    ? dataObjectRepository.findByNameIgnoreCase(dataObjectName)
-                    : dataObjectRepository.findByNameIgnoreCaseAndParentNameIgnoreCase(dataObjectName, parent.getName())).orElseGet(
-                    DataObject::new
-                );
+                    ? dataObjectRepository.findByNameIgnoreCaseAndApplicationNameIgnoreCase(dataObjectName, applicationName)
+                    : dataObjectRepository.findByNameIgnoreCaseAndParentNameIgnoreCaseAndApplicationNameIgnoreCase(
+                        dataObjectName,
+                        parent.getName(),
+                        applicationName
+                    )).orElseGet(DataObject::new);
         if (dataObj.getId() == null) {
             dataObj.setName(dataObjectName);
             dataObj.setParent(parent);
