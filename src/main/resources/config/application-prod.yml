@@ -43,7 +43,6 @@ spring:
       auto-commit: false
       schema: public
   jpa:
-    database-platform: tech.jhipster.domain.util.FixedPostgreSQL10Dialect
     properties:
       # when schema not writen in SQL order, random bug : rlation ´flow' does not exist
       hibernate.default_schema: public
