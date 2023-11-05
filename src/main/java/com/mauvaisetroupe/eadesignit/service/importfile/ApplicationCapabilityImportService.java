@@ -62,8 +62,7 @@ public class ApplicationCapabilityImportService {
 
         // remove mapping from landscape and delete  CapabilityMapping if not refernced by another landscape
         Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>(landscape.getCapabilityApplicationMappings());
-        for (CapabilityApplicationMapping cm : capabilityApplicationMappings) {            
-            
+        for (CapabilityApplicationMapping cm : capabilityApplicationMappings) {
             // remove capabilityMapping from landscape
             landscape.removeCapabilityApplicationMapping(cm);
 
@@ -71,10 +70,9 @@ public class ApplicationCapabilityImportService {
             if (cm.getLandscapes() == null || cm.getLandscapes().isEmpty()) {
                 capabilityApplicationMappingRepository.delete(cm);
             }
-
         }
 
-        Map<String,Capability> capabilitiesByFullPath  = capabilityUtil.initCapabilitiesByNameFromDB();
+        Map<String, Capability> capabilitiesByFullPath = capabilityUtil.initCapabilitiesByNameFromDB();
 
         List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(sheetname);
         for (Map<String, Object> map : capabilitiesDF) {
@@ -86,7 +84,7 @@ public class ApplicationCapabilityImportService {
             itemDTO.setApplicationNames(mapArrayToString(map));
 
             // fullpath from ecel does not inclute ROOT >
-            Capability capability = capabilitiesByFullPath.get(capabilityUtil.getCapabilityFullPath(capabilityImportDTO));
+            Capability capability = capabilitiesByFullPath.get(capabilityUtil.getCapabilityFullPath(capabilityImportDTO, false));
             List<Application> applications = findApplication(map, itemDTO);
 
             if (applications.isEmpty()) {
@@ -101,10 +99,8 @@ public class ApplicationCapabilityImportService {
                 log.error(error);
             } else {
                 for (Application application : applications) {
-                    CapabilityApplicationMapping capabilityApplicationMapping = capabilityApplicationMappingRepository.findByApplicationAndCapability(
-                        application,
-                        capability
-                    );
+                    CapabilityApplicationMapping capabilityApplicationMapping =
+                        capabilityApplicationMappingRepository.findByApplicationAndCapability(application, capability);
                     if (capabilityApplicationMapping == null) {
                         capabilityApplicationMapping = new CapabilityApplicationMapping();
                         capabilityApplicationMappingRepository.save(capabilityApplicationMapping);
