@@ -62,13 +62,9 @@
             <font-awesome-icon icon="window-maximize" />
             <span>Capability Map</span>
           </b-dropdown-item>
-          <b-dropdown-item to="/data-flow">
+          <b-dropdown-item to="/business-object">
             <font-awesome-icon icon="folder" />
-            <span>Data Flow : Event topics, Files, Swagger</span>
-          </b-dropdown-item>
-          <b-dropdown-item to="/data-flow-item">
-            <font-awesome-icon icon="clone" />
-            <span>Data Flow Item : Events </span>
+            <span>Business Objects and Data Objects</span>
           </b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item-dropdown

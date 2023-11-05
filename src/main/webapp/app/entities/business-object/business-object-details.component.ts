@@ -19,6 +19,7 @@ export default defineComponent({
     const businessObject: Ref<IBusinessObject> = ref({});
 
     const retrieveBusinessObject = async businessObjectId => {
+      getPlantUML(businessObjectId);
       try {
         const res = await businessObjectService().find(businessObjectId);
         businessObject.value = res;
@@ -29,7 +30,6 @@ export default defineComponent({
 
     if (route.params?.businessObjectId) {
       retrieveBusinessObject(route.params.businessObjectId);
-      getPlantUML(route.params.businessObjectId);
     }
 
     // plantuml

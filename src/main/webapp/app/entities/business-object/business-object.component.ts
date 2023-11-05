@@ -3,10 +3,14 @@ import { defineComponent, inject, onMounted, ref, type Ref } from 'vue';
 import BusinessObjectService from './business-object.service';
 import { type IBusinessObject } from '@/shared/model/business-object.model';
 import { useAlertService } from '@/shared/alert/alert.service';
+import BusinessAndDataObjectFullpath from '@/eadesignit/components/business-data-object-fullpath.vue';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
   name: 'BusinessObject',
+  components: {
+    BusinessAndDataObjectFullpath,
+  },
   setup() {
     const businessObjectService = inject('businessObjectService', () => new BusinessObjectService());
     const alertService = inject('alertService', () => useAlertService(), true);
@@ -20,7 +24,7 @@ export default defineComponent({
     const retrieveBusinessObjects = async () => {
       isFetching.value = true;
       try {
-        const res = await businessObjectService().retrieve();
+        const res = await businessObjectService().retrieve(true);
         businessObjects.value = res.data;
       } catch (err) {
         alertService.showHttpError(err.response);

@@ -2,14 +2,8 @@
   <div class="row justify-content-center">
     <div class="col-8">
       <div v-if="businessObject">
-        <h2 class="jh-entity-heading" data-cy="businessObjectDetailsHeading"><span>Business Object</span> {{ businessObject.id }}</h2>
+        <h2 class="jh-entity-heading" data-cy="businessObjectDetailsHeading"><span>Business Object</span> {{ businessObject.name }}</h2>
         <dl class="row jh-entity-details">
-          <dt>
-            <span>Name</span>
-          </dt>
-          <dd>
-            <span>{{ businessObject.name }}</span>
-          </dd>
           <dt>
             <span>Abstract Business Object</span>
           </dt>

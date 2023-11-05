@@ -153,7 +153,7 @@ public class BusinessObjectResource {
     public List<BusinessObject> getAllBusinessObjects(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all BusinessObjects");
         if (eagerload) {
-            return businessObjectRepository.findAllWithEagerRelationships();
+            return businessObjectRepository.findAllWithAllChildrens();
         } else {
             return businessObjectRepository.findAll();
         }

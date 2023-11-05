@@ -29,10 +29,9 @@
           <tr>
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Name</span></th>
-            <th scope="row"><span>Abstract Business Object</span></th>
-            <th scope="row"><span>Owner</span></th>
-            <th scope="row"><span>Generalization</span></th>
-            <th scope="row"><span>Parent</span></th>
+            <th scope="row"><span>Golden Source Data Objects</span></th>
+            <th scope="row"><span>Replica Data Objects</span></th>
+            <th scope="row"><span>Abstract</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -43,29 +42,34 @@
                 businessObject.id
               }}</router-link>
             </td>
-            <td>{{ businessObject.name }}</td>
-            <td>{{ businessObject.abstractBusinessObject }}</td>
             <td>
-              <div v-if="businessObject.owner">
-                <router-link :to="{ name: 'OwnerView', params: { ownerId: businessObject.owner.id } }">{{
-                  businessObject.owner.name
-                }}</router-link>
-              </div>
+              <BusinessAndDataObjectFullpath
+                :objectWithParent="businessObject"
+                routerView="BusinessObjectView"
+                routerParamName="businessObjectId"
+              />
             </td>
             <td>
-              <div v-if="businessObject.generalization">
-                <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: businessObject.generalization.id } }">{{
-                  businessObject.generalization.name
-                }}</router-link>
-              </div>
+              <span v-for="dataObj in businessObject.dataObjects" :key="dataObj.id">
+                <BusinessAndDataObjectFullpath
+                  :objectWithParent="dataObj"
+                  routerView="DataObjectView"
+                  routerParamName="dataObjectId"
+                  v-if="dataObj.type === 'GOLDEN_SOURCE'"
+                />
+              </span>
             </td>
             <td>
-              <div v-if="businessObject.parent">
-                <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: businessObject.parent.id } }">{{
-                  businessObject.parent.name
-                }}</router-link>
-              </div>
+              <span v-for="dataObj in businessObject.dataObjects" :key="dataObj.id">
+                <BusinessAndDataObjectFullpath
+                  :objectWithParent="dataObj"
+                  routerView="DataObjectView"
+                  routerParamName="dataObjectId"
+                  v-if="dataObj.type !== 'GOLDEN_SOURCE'"
+                />
+              </span>
             </td>
+            <td><input type="checkbox" v-model="businessObject.abstractBusinessObject" disabled="true" /></td>
             <td class="text-right">
               <div class="btn-group">
                 <router-link

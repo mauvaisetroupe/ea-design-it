@@ -42,7 +42,7 @@ public class BusinessObject implements Serializable {
     private Set<BusinessObject> components = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "businessObject")
-    @JsonIgnoreProperties(value = { "application", "owner", "technologies", "landscapes", "parent", "businessObject" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "owner", "technologies", "landscapes", "businessObject" }, allowSetters = true)
     private Set<DataObject> dataObjects = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -57,10 +57,7 @@ public class BusinessObject implements Serializable {
     private BusinessObject generalization;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(
-        value = { "specializations", "components", "dataObjects", "owner", "generalization", "parent" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "specializations", "components", "dataObjects", "owner", "generalization" }, allowSetters = true)
     private BusinessObject parent;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

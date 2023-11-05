@@ -72,25 +72,25 @@ public class BusinessObjectPlantUMLBuilder {
         for (BusinessObject businessObject : allBusinessObjects) {
             // BO Specialization
             for (BusinessObject sp : businessObject.getSpecializations()) {
-                plantUMLSource.append("BO" + businessObject.getId() + " <|--- BO" + sp.getId() + ": specializes \n");
+                plantUMLSource.append("BO" + businessObject.getId() + " <|-- BO" + sp.getId() + ": specializes \n");
             }
             // BO Composition
             for (BusinessObject component : businessObject.getComponents()) {
-                plantUMLSource.append("BO" + businessObject.getId() + " *--- BO" + component.getId() + ": composed in \n");
+                plantUMLSource.append("BO" + businessObject.getId() + " *-- BO" + component.getId() + ": composed in \n");
             }
             // BO - DO
             for (DataObject dataObject : businessObject.getDataObjects()) {
-                plantUMLSource.append("BO" + businessObject.getId() + " <|... DO" + dataObject.getId() + ": realizes \n");
+                plantUMLSource.append("BO" + businessObject.getId() + " <|.. DO" + dataObject.getId() + ": realizes \n");
             }
         }
 
         for (DataObject dataObject : allDataObjects) {
             // DO Composition
             for (DataObject child : dataObject.getComponents()) {
-                plantUMLSource.append("DO" + dataObject.getId() + " *--- DO" + child.getId() + ": composed in \n");
+                plantUMLSource.append("DO" + dataObject.getId() + " *-- DO" + child.getId() + ": composed in \n");
             }
             // DO - APPLI
-            plantUMLSource.append("DO" + dataObject.getId() + " <... APPLI" + dataObject.getApplication().getId() + ": access \n");
+            plantUMLSource.append("DO" + dataObject.getId() + " <.. APPLI" + dataObject.getApplication().getId() + ": access \n");
         }
     }
 

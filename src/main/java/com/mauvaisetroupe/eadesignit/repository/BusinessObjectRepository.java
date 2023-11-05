@@ -63,4 +63,22 @@ public interface BusinessObjectRepository extends JpaRepository<BusinessObject, 
         " where bo_0.id =:id"
     )
     Optional<BusinessObject> findOneWithAllChildrens(@Param("id") Long id);
+
+    @Query(
+        "select bo_0 from BusinessObject bo_0 " +
+        " left join fetch bo_0.generalization bo_g" +
+        " left join fetch bo_0.parent bo_p" +
+        " left join fetch bo_0.specializations sp" +
+        " left join fetch sp.components sp_bo_1" +
+        " left join fetch sp.dataObjects sp_do_1" +
+        " left join fetch sp.components sp_do_1_1" +
+        " left join fetch bo_0.components bo_1" +
+        " left join fetch bo_0.dataObjects do_1" +
+        " left join fetch do_1.application a" +
+        " left join fetch do_1.components do_1_1" +
+        " left join fetch bo_1.components bo_2" +
+        " left join fetch bo_1.dataObjects do_2" +
+        " left join fetch do_2.components do_2_1"
+    )
+    List<BusinessObject> findAllWithAllChildrens();
 }
