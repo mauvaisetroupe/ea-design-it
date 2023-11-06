@@ -20,11 +20,12 @@ import FlowImportService from '@/entities/flow-import/flow-import.service';
 import type { ICapability } from '@/shared/model/capability.model';
 import CapabilityComponent from '@/entities/capability/component/capability.vue';
 import { type IApplication } from '@/shared/model/application.model';
+import BusinessAndDataObjectFullpath from '@/eadesignit/components/business-data-object-fullpath.vue';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
   name: 'LandscapeViewDetails',
-  components: { CapabilityComponent },
+  components: { CapabilityComponent, BusinessAndDataObjectFullpath },
   setup() {
     const landscapeViewService = inject('landscapeViewService', () => new LandscapeViewService());
     const alertService = inject('alertService', () => useAlertService(), true);

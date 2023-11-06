@@ -201,6 +201,38 @@
             ></CapabilityComponent>
           </div>
         </b-tab>
+        <b-tab title="Data Objects" id="tab-dataobjects">
+          <div class="row">
+            <table class="table table-striped" aria-describedby="dataObjects">
+              <thead>
+                <tr>
+                  <th scope="row"><span>Name</span></th>
+                  <th scope="row"><span>Type</span></th>
+                  <th scope="row"><span>Application</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="dataObject in landscapeView.dataObjects" :key="dataObject.id" data-cy="entityTable">
+                  <td>
+                    <BusinessAndDataObjectFullpath
+                      :objectWithParent="dataObject"
+                      routerView="DataObjectView"
+                      routerParamName="dataObjectId"
+                    />
+                  </td>
+                  <td>{{ dataObject.type }}</td>
+                  <td>
+                    <div v-if="dataObject.application">
+                      <router-link :to="{ name: 'ApplicationView', params: { applicationId: dataObject.application.id } }">{{
+                        dataObject.application.name
+                      }}</router-link>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </b-tab>
         <b-tab title="DrawIO" id="tab-drawio">
           <div class="row">
             <div v-if="!drawIoSVG">
