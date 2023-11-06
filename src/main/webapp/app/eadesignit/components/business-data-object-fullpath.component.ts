@@ -15,6 +15,10 @@ export default defineComponent({
     routerParamName: {
       type: String,
     },
+    generalization: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, context) {
     const allObjects: IObjectWithParent[] = computed(() => {

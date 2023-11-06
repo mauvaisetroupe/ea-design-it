@@ -7,7 +7,7 @@
     <span v-else>
       {{ obj.name }}
     </span>
-    <span v-if="obj.generalization">
+    <span v-if="obj.generalization && generalization">
       (<span v-if="routerView && routerParamName">
         <router-link :to="{ name: routerView, params: { [routerParamName]: obj.generalization.id } }">{{
           obj.generalization.name
