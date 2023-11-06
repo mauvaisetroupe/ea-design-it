@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col-12">
       <div v-if="businessObject">
         <h2 class="jh-entity-heading" data-cy="businessObjectDetailsHeading"><span>Business Object</span> {{ businessObject.name }}</h2>
         <dl class="row jh-entity-details">
