@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import DataObjectService from './data-object.service';
 import { type IDataObject } from '@/shared/model/data-object.model';
 import { useAlertService } from '@/shared/alert/alert.service';
+import type AccountService from '@/account/account.service';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -11,6 +12,7 @@ export default defineComponent({
   setup() {
     const dataObjectService = inject('dataObjectService', () => new DataObjectService());
     const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const route = useRoute();
     const router = useRouter();
@@ -49,6 +51,7 @@ export default defineComponent({
       dataObject,
       retrieveDataObject,
       previousState,
+      accountService,
 
       // plantuml
       plantUMLImage,

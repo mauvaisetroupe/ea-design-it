@@ -6,7 +6,7 @@
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon> <span>Refresh list</span>
         </button>
-        <router-link :to="{ name: 'BusinessObjectCreate' }" custom v-slot="{ navigate }">
+        <router-link :to="{ name: 'BusinessObjectCreate' }" custom v-slot="{ navigate }" v-if="accountService.writeAuthorities">
           <button
             @click="navigate"
             id="jh-create-entity"
@@ -29,8 +29,8 @@
           <tr>
             <th scope="row"><span>ID</span></th>
             <th scope="row"><span>Name</span></th>
-            <th scope="row"><span>Golden Source Data Objects</span></th>
-            <th scope="row"><span>Replica Data Objects</span></th>
+            <th scope="row"><span>Golden Source Data Objects @ Application</span></th>
+            <th scope="row"><span>Replica Data Objects @ Application</span></th>
             <th scope="row"><span>Abstract</span></th>
             <th scope="row"></th>
           </tr>
@@ -51,17 +51,23 @@
             </td>
             <td>
               <span v-for="dataObj in businessObject.dataObjects" :key="dataObj.id">
-                <div v-if="dataObj.type === 'GOLDEN_SOURCE'">
-                  <BusinessAndDataObjectFullpath :objectWithParent="dataObj" routerView="DataObjectView" routerParamName="dataObjectId" />
-                  [{{ dataObj.application?.name }}]
+                <div v-if="dataObj.type === 'GOLDEN_SOURCE'" class="font-weight-bold">
+                  <BusinessAndDataObjectFullpath
+                    :objectWithParent="dataObj"
+                    routerView="DataObjectView"
+                    routerParamName="dataObjectId"
+                  />@{{ dataObj.application?.name }}
                 </div>
               </span>
             </td>
             <td>
               <span v-for="dataObj in businessObject.dataObjects" :key="dataObj.id">
-                <div v-if="dataObj.type !== 'GOLDEN_SOURCE'">
-                  <BusinessAndDataObjectFullpath :objectWithParent="dataObj" routerView="DataObjectView" routerParamName="dataObjectId" />
-                  [{{ dataObj.application?.name }}]
+                <div v-if="dataObj.type !== 'GOLDEN_SOURCE'" class="font-weight-bold">
+                  <BusinessAndDataObjectFullpath
+                    :objectWithParent="dataObj"
+                    routerView="DataObjectView"
+                    routerParamName="dataObjectId"
+                  />@{{ dataObj.application?.name }}
                 </div>
               </span>
             </td>
@@ -82,6 +88,7 @@
                   :to="{ name: 'BusinessObjectEdit', params: { businessObjectId: businessObject.id } }"
                   custom
                   v-slot="{ navigate }"
+                  v-if="accountService.writeAuthorities"
                 >
                   <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
@@ -94,6 +101,7 @@
                   class="btn btn-sm"
                   data-cy="entityDeleteButton"
                   v-b-modal.removeEntity
+                  v-if="accountService.writeAuthorities"
                 >
                   <font-awesome-icon icon="times"></font-awesome-icon>
                   <span class="d-none d-md-inline">Delete</span>

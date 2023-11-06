@@ -43,7 +43,7 @@
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>Back</span>
         </button>
         <router-link
-          v-if="businessObject.id"
+          v-if="businessObject.id && accountService.writeAuthorities"
           :to="{ name: 'BusinessObjectEdit', params: { businessObjectId: businessObject.id } }"
           custom
           v-slot="{ navigate }"

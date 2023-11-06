@@ -4,6 +4,7 @@ import BusinessObjectService from './business-object.service';
 import { type IBusinessObject } from '@/shared/model/business-object.model';
 import { useAlertService } from '@/shared/alert/alert.service';
 import BusinessAndDataObjectFullpath from '@/eadesignit/components/business-data-object-fullpath.vue';
+import type AccountService from '@/account/account.service';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -14,6 +15,7 @@ export default defineComponent({
   setup() {
     const businessObjectService = inject('businessObjectService', () => new BusinessObjectService());
     const alertService = inject('alertService', () => useAlertService(), true);
+    const accountService = inject<AccountService>('accountService');
 
     const businessObjects: Ref<IBusinessObject[]> = ref([]);
 
@@ -74,6 +76,7 @@ export default defineComponent({
       prepareRemove,
       closeDialog,
       removeBusinessObject,
+      accountService,
     };
   },
 });

@@ -77,7 +77,7 @@
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>Back</span>
         </button>
         <router-link
-          v-if="dataObject.id"
+          v-if="dataObject.id && accountService.writeAuthorities"
           :to="{ name: 'DataObjectEdit', params: { dataObjectId: dataObject.id } }"
           custom
           v-slot="{ navigate }"
