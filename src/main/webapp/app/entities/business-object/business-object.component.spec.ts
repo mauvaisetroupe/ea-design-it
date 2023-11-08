@@ -8,6 +8,7 @@ import BusinessObjectService from './business-object.service';
 import AlertService from '@/shared/alert/alert.service';
 
 type BusinessObjectComponentType = InstanceType<typeof BusinessObject>;
+const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 
 const bModalStub = {
   render: () => {},
@@ -48,6 +49,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           businessObjectService: () => businessObjectServiceStub,
+          accountService,
         },
       };
     });

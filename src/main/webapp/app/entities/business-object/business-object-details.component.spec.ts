@@ -9,6 +9,7 @@ import BusinessObjectService from './business-object.service';
 import AlertService from '@/shared/alert/alert.service';
 
 type BusinessObjectDetailsComponentType = InstanceType<typeof BusinessObjectDetails>;
+const accountService = { hasAnyAuthorityAndCheckAuth: vitest.fn().mockImplementation(() => Promise.resolve(true)) };
 
 let route: Partial<RouteLocation>;
 const routerGoMock = vitest.fn();
@@ -49,6 +50,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           businessObjectService: () => businessObjectServiceStub,
+          accountService,
         },
       };
     });
