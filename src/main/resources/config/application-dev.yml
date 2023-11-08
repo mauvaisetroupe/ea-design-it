@@ -15,11 +15,11 @@
 
 logging:
   level:
-    ROOT: TRACE
-    tech.jhipster: TRACE
-    org.hibernate.SQL: TRACE
-    com.mauvaisetroupe.eadesignit: TRACE
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    ROOT: INFO
+    tech.jhipster: INFO
+    org.hibernate.SQL: INFO
+    com.mauvaisetroupe.eadesignit: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: INFO
 
 spring:
   devtools:
