@@ -116,6 +116,19 @@ export default class LandscapeViewService {
     });
   }
 
+  public getDataObjectLandscapePlantUML(id: number): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      axios
+        .get(`${basePlantUMLApiUrl}/data-objects/get-svg/${id}`)
+        .then(res => {
+          resolve(res.data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
   public getPlantUMLSource(id: number) {
     return new Promise<any>((resolve, reject) => {
       axios

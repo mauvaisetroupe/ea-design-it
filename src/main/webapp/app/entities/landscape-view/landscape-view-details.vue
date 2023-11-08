@@ -203,25 +203,36 @@
         </b-tab>
         <b-tab title="Data Objects" id="tab-dataobjects">
           <div class="row">
-            <table class="table table-striped" aria-describedby="dataObjects">
+            <table class="table table-striped p-0" aria-describedby="dataObjects">
               <thead>
                 <tr>
-                  <th scope="row"><span>Name</span></th>
+                  <th></th>
+                  <th scope="row"><span>Data Object</span></th>
                   <th scope="row"><span>Type</span></th>
                   <th scope="row"><span>Application</span></th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="dataObject in landscapeView.dataObjects" :key="dataObject.id" data-cy="entityTable">
-                  <td>
+                <tr v-for="(dataObject, index) in landscapeView.dataObjects" :key="dataObject.id" data-cy="entityTable">
+                  <td class="p-2">
+                    <svg width="30" height="30">
+                      <g :fill="dataObject.type === 'GOLDEN_SOURCE' ? '#FFC000' : '#CCDAFF'">
+                        <ellipse ry="5" rx="15" cy="25" cx="15" />
+                        <path d="M0 5h30v20H0z" />
+                      </g>
+                      <ellipse :fill="dataObject.type === 'GOLDEN_SOURCE' ? '#ED8B00' : '#A6B9F7'" ry="5" rx="15" cy="5" cx="15" />
+                      <text fill="#123456" font-size="15" y="25" x="4">{{ index + 1 < 10 ? '0' : '' }}{{ index + 1 }}</text>
+                    </svg>
+                  </td>
+                  <td class="p-2">
                     <BusinessAndDataObjectFullpath
                       :objectWithParent="dataObject"
                       routerView="DataObjectView"
                       routerParamName="dataObjectId"
                     />
                   </td>
-                  <td>{{ dataObject.type }}</td>
-                  <td>
+                  <td class="p-2">{{ dataObject.type }}</td>
+                  <td class="p-2">
                     <div v-if="dataObject.application">
                       <router-link :to="{ name: 'ApplicationView', params: { applicationId: dataObject.application.id } }">{{
                         dataObject.application.name
@@ -231,6 +242,9 @@
                 </tr>
               </tbody>
             </table>
+            <div class="table-responsive my-5" v-if="plantUMLDataObjectsLandscapeImage">
+              <div v-html="plantUMLDataObjectsLandscapeImage" class="table-responsive"></div>
+            </div>
           </div>
         </b-tab>
         <b-tab title="DrawIO" id="tab-drawio">

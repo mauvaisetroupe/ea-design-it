@@ -42,6 +42,7 @@ export default defineComponent({
     const landscapeView: Ref<ILandscapeView> = ref({});
     const consolidatedCapability: Ref<ICapability> = ref({});
     const plantUMLImage = ref('');
+    const plantUMLDataObjectsLandscapeImage = ref('');
 
     const drawIoSVG = ref('');
     const isHidden = ref(true);
@@ -53,6 +54,7 @@ export default defineComponent({
     const flowToDetach: Ref<number> = ref(-1);
     const layout = ref('elk');
     const refreshingPlantuml = ref(false);
+    const refreshingDataObjectsLandscapePlantuml = ref(false);
     const groupComponents = ref(true);
     const showLabels = ref(false);
     const tabIndex = ref(1);
@@ -159,6 +161,7 @@ export default defineComponent({
         alertService.showAnyError(error);
       }
       getPlantUML(landscapeViewId);
+      getDataObjectsLandscapePlantUML(landscapeViewId);
     };
 
     if (route.params?.landscapeViewId) {
@@ -184,6 +187,20 @@ export default defineComponent({
         );
     }
 
+    function getDataObjectsLandscapePlantUML(landscapeViewId) {
+      refreshingDataObjectsLandscapePlantuml.value = true;
+      landscapeViewService()
+        .getDataObjectLandscapePlantUML(landscapeViewId)
+        .then(
+          res => {
+            plantUMLDataObjectsLandscapeImage.value = res;
+            refreshingDataObjectsLandscapePlantuml.value = false;
+          },
+          err => {
+            console.log(err);
+          },
+        );
+    }
     onMounted(async () => {
       window.addEventListener('message', receiveMessage);
     });
@@ -478,6 +495,8 @@ export default defineComponent({
       removeDiagramEntity,
       addExistingEntity,
       detachFlowEntity,
+      refreshingDataObjectsLandscapePlantuml,
+      plantUMLDataObjectsLandscapeImage,
     };
   },
 });

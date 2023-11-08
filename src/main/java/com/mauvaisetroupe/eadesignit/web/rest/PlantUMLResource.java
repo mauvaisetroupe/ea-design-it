@@ -12,6 +12,7 @@ import com.mauvaisetroupe.eadesignit.repository.DataObjectRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.LandscapeWithDataObjectPlantUMLBuilder;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.Layout;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLService.DiagramType;
@@ -57,6 +58,7 @@ public class PlantUMLResource {
     private final PlantumlImportService plantumlImportService;
     private final BusinessObjectRepository businessObjectRepository;
     private final DataObjectRepository dataObjectRepository;
+    private final LandscapeWithDataObjectPlantUMLBuilder landscapeWithDataObjectPlantUMLBuilder;
 
     private final Logger log = LoggerFactory.getLogger(PlantUMLResource.class);
 
@@ -68,7 +70,8 @@ public class PlantUMLResource {
         PlantUMLService plantUMLSerializer,
         PlantumlImportService plantumlImportService,
         BusinessObjectRepository businessObjectRepository,
-        DataObjectRepository dataObjectRepository
+        DataObjectRepository dataObjectRepository,
+        LandscapeWithDataObjectPlantUMLBuilder landscapeWithDataObjectPlantUMLBuilder
     ) {
         this.landscapeViewRepository = landscapeViewRepository;
         this.functionalFlowRepository = functionalFlowRepository;
@@ -78,6 +81,7 @@ public class PlantUMLResource {
         this.plantumlImportService = plantumlImportService;
         this.businessObjectRepository = businessObjectRepository;
         this.dataObjectRepository = dataObjectRepository;
+        this.landscapeWithDataObjectPlantUMLBuilder = landscapeWithDataObjectPlantUMLBuilder;
     }
 
     @GetMapping(value = "plantuml/landscape-view/get-svg/{id}")
@@ -118,6 +122,12 @@ public class PlantUMLResource {
                 });
         }
         return result.size();
+    }
+
+    @GetMapping(value = "plantuml/landscape-view/data-objects/get-svg/{id}")
+    public @ResponseBody String getLandscapeWithDataObjectsSVG(@PathVariable Long id) throws IOException, BadRequestException {
+        LandscapeView landscape = landscapeViewRepository.findOneWithEagerRelationships(id).orElseThrow();
+        return landscapeWithDataObjectPlantUMLBuilder.getLandscapeDiagramSVG(landscape);
     }
 
     @GetMapping(value = "plantuml/landscape-view/get-source/{id}")
