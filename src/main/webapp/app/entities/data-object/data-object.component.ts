@@ -4,10 +4,14 @@ import DataObjectService from './data-object.service';
 import { type IDataObject } from '@/shared/model/data-object.model';
 import { useAlertService } from '@/shared/alert/alert.service';
 import type AccountService from '@/account/account.service';
+import BusinessAndDataObjectFullpath from '@/eadesignit/components/business-data-object-fullpath.vue';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
   name: 'DataObject',
+  components: {
+    BusinessAndDataObjectFullpath,
+  },
   setup() {
     const dataObjectService = inject('dataObjectService', () => new DataObjectService());
     const alertService = inject('alertService', () => useAlertService(), true);
@@ -22,7 +26,7 @@ export default defineComponent({
     const retrieveDataObjects = async () => {
       isFetching.value = true;
       try {
-        const res = await dataObjectService().retrieve();
+        const res = await dataObjectService().retrieve(true);
         dataObjects.value = res.data;
       } catch (err) {
         alertService.showHttpError(err.response);

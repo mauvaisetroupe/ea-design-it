@@ -28,24 +28,28 @@
       <table class="table table-striped" aria-describedby="dataObjects">
         <thead>
           <tr>
-            <th scope="row"><span>ID</span></th>
-            <th scope="row"><span>Name</span></th>
+            <th scope="row"><span>Business Object</span></th>
+            <th scope="row"><span>Data Object</span></th>
             <th scope="row"><span>Type</span></th>
             <th scope="row"><span>Application</span></th>
             <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>Technologies</span></th>
             <th scope="row"><span>Landscapes</span></th>
-            <th scope="row"><span>Parent</span></th>
-            <th scope="row"><span>Business Object</span></th>
             <th scope="row"></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="dataObject in dataObjects" :key="dataObject.id" data-cy="entityTable">
             <td>
-              <router-link :to="{ name: 'DataObjectView', params: { dataObjectId: dataObject.id } }">{{ dataObject.id }}</router-link>
+              <BusinessAndDataObjectFullpath
+                :objectWithParent="dataObject.businessObject"
+                routerView="BusinessObjectView"
+                routerParamName="businessObjectId"
+              />
             </td>
-            <td>{{ dataObject.name }}</td>
+            <td>
+              <BusinessAndDataObjectFullpath :objectWithParent="dataObject" routerView="DataObjectView" routerParamName="dataObjectId" />
+            </td>
             <td>{{ dataObject.type }}</td>
             <td>
               <div v-if="dataObject.application">
@@ -74,20 +78,6 @@
                   landscapes.diagramName
                 }}</router-link>
               </span>
-            </td>
-            <td>
-              <div v-if="dataObject.parent">
-                <router-link :to="{ name: 'DataObjectView', params: { dataObjectId: dataObject.parent.id } }">{{
-                  dataObject.parent.name
-                }}</router-link>
-              </div>
-            </td>
-            <td>
-              <div v-if="dataObject.businessObject">
-                <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: dataObject.businessObject.id } }">{{
-                  dataObject.businessObject.name
-                }}</router-link>
-              </div>
             </td>
             <td class="text-right">
               <div class="btn-group">

@@ -19,10 +19,11 @@ export default class DataObjectService {
     });
   }
 
-  public retrieve(): Promise<any> {
+  public retrieve(eagerload: boolean): Promise<any> {
     return new Promise<any>((resolve, reject) => {
+      const params = { eagerload: eagerload };
       axios
-        .get(baseApiUrl)
+        .get(baseApiUrl, { params })
         .then(res => {
           resolve(res);
         })

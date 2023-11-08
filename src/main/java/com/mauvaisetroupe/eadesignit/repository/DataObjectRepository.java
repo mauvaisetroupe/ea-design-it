@@ -66,4 +66,17 @@ public interface DataObjectRepository extends DataObjectRepositoryWithBagRelatio
         " where do_0.id =:id"
     )
     Optional<DataObject> findOneWithAllChildrens(@Param("id") Long id);
+
+    @Query(
+        "select do_0 from DataObject do_0 " +
+        " left join fetch do_0.application a_0" +
+        " left join fetch do_0.owner " +
+        " left join fetch do_0.parent " +
+        " left join fetch do_0.businessObject " +
+        " left join fetch do_0.components do_1" +
+        " left join fetch do_1.application a_1" +
+        " left join fetch do_1.components do_2 " +
+        " left join fetch do_1.application a_2"
+    )
+    List<DataObject> findAllWithAllChildrens();
 }
