@@ -27,10 +27,10 @@
       <table class="table table-striped" aria-describedby="businessObjects">
         <thead>
           <tr>
-            <th scope="row"><span>ID</span></th>
-            <th scope="row"><span>Name</span></th>
-            <th scope="row"><span>Golden Source Data Objects @ Application</span></th>
-            <th scope="row"><span>Replica Data Objects @ Application</span></th>
+            <th scope="row"><span>Generalization</span></th>
+            <th scope="row"><span>Business Object</span></th>
+            <th scope="row"><span>Golden Sources</span></th>
+            <th scope="row"><span>Replicas </span></th>
             <th scope="row"><span>Abstract</span></th>
             <th scope="row"></th>
           </tr>
@@ -38,9 +38,11 @@
         <tbody>
           <tr v-for="businessObject in businessObjects" :key="businessObject.id" data-cy="entityTable">
             <td>
-              <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: businessObject.id } }">{{
-                businessObject.id
-              }}</router-link>
+              <div v-if="businessObject.generalization">
+                <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: businessObject.generalization.id } }">{{
+                  businessObject.generalization.name
+                }}</router-link>
+              </div>
             </td>
             <td>
               <BusinessAndDataObjectFullpath
@@ -51,23 +53,19 @@
             </td>
             <td>
               <span v-for="dataObj in businessObject.dataObjects" :key="dataObj.id">
-                <div v-if="dataObj.type === 'GOLDEN_SOURCE'" class="font-weight-bold">
-                  <BusinessAndDataObjectFullpath
-                    :objectWithParent="dataObj"
-                    routerView="DataObjectView"
-                    routerParamName="dataObjectId"
-                  />@{{ dataObj.application?.name }}
+                <div v-if="dataObj.type === 'GOLDEN_SOURCE'" class="font-weight-bold text-primary">
+                  <router-link :to="{ name: 'DataObjectView', params: { dataObjectId: dataObj.id } }"
+                    >{{ dataObj.name }}@{{ dataObj.application?.name }}</router-link
+                  >
                 </div>
               </span>
             </td>
             <td>
               <span v-for="dataObj in businessObject.dataObjects" :key="dataObj.id">
-                <div v-if="dataObj.type !== 'GOLDEN_SOURCE'" class="font-weight-bold">
-                  <BusinessAndDataObjectFullpath
-                    :objectWithParent="dataObj"
-                    routerView="DataObjectView"
-                    routerParamName="dataObjectId"
-                  />@{{ dataObj.application?.name }}
+                <div v-if="dataObj.type !== 'GOLDEN_SOURCE'" class="font-weight-bold text-primary">
+                  <router-link :to="{ name: 'DataObjectView', params: { dataObjectId: dataObj.id } }"
+                    >{{ dataObj.name }}@{{ dataObj.application?.name }}</router-link
+                  >
                 </div>
               </span>
             </td>
