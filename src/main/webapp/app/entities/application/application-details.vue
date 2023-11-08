@@ -327,17 +327,19 @@
                   class="col-12"
                 >
                   <template #cell(name)="data">
-                    <router-link :to="{ name: 'DataObjectView', params: { dataObjectId: data.item.id } }">
-                      <span v-if="data.item.parent">{{ data.item.parent.name }} / </span>
-                      {{ data.item.name }}
-                    </router-link>
+                    <BusinessAndDataObjectFullpath
+                      :objectWithParent="data.item"
+                      routerView="DataObjectView"
+                      routerParamName="dataObjectId"
+                    />
                   </template>
 
                   <template #cell(businessObject)="data">
-                    <router-link :to="{ name: 'BusinessObjectView', params: { businessObjectId: data.item.businessObject.id } }">
-                      <span v-if="data.item.businessObject.parent">{{ data.item.businessObject.parent.name }} / </span>
-                      {{ data.item.businessObject.name }}
-                    </router-link>
+                    <BusinessAndDataObjectFullpath
+                      :objectWithParent="data.item.businessObject"
+                      routerView="BusinessObjectView"
+                      routerParamName="businessObjectId"
+                    />
                   </template>
                 </b-table>
               </div>

@@ -11,11 +11,12 @@ import CapabilityComponent from '@/entities/capability/component/capability.vue'
 import { type IFunctionalFlow } from '@/shared/model/functional-flow.model';
 import { type IFLowInterfaceLight, type PlantumlDTO } from '@/shared/model/plantuml-dto';
 import { useStore } from '@/store';
+import BusinessAndDataObjectFullpath from '@/eadesignit/components/business-data-object-fullpath.vue';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
   name: 'ApplicationDetails',
-  components: { CapabilityComponent },
+  components: { CapabilityComponent, BusinessAndDataObjectFullpath },
   setup() {
     const applicationService = inject('applicationService', () => new ApplicationService());
     const alertService = inject('alertService', () => useAlertService(), true);
