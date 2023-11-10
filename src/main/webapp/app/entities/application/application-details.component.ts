@@ -96,6 +96,10 @@ export default defineComponent({
 
     const retrieveApplication = async applicationId => {
       try {
+        getPlantUML(applicationId);
+        getStructurePlantUML(applicationId);
+        retrieveCapabilities(applicationId);
+
         plantUMLImage.value = '';
         capabilitiesPlantUMLImage.value = '';
         const res = await applicationService().find(applicationId);
@@ -103,10 +107,6 @@ export default defineComponent({
         application.value = res;
       } catch (error) {
         alertService.showAnyError(error);
-      } finally {
-        getPlantUML(applicationId);
-        getStructurePlantUML(applicationId);
-        retrieveCapabilities(applicationId);
       }
     };
 

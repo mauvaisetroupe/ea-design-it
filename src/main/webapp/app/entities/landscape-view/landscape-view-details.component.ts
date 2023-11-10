@@ -125,6 +125,13 @@ export default defineComponent({
     const retrieveLandscapeView = async landscapeViewId => {
       try {
         loadTab(landscapeViewId);
+
+        // load landscape schema
+        getPlantUML(landscapeViewId);
+
+        // load golen/replicas schema
+        getDataObjectsLandscapePlantUML(landscapeViewId);
+
         const res = await landscapeViewService().find(landscapeViewId);
         const landscape = res.landscape;
         conputeAllApplicationsByFlow(landscape);
@@ -160,8 +167,6 @@ export default defineComponent({
       } catch (error) {
         alertService.showAnyError(error);
       }
-      getPlantUML(landscapeViewId);
-      getDataObjectsLandscapePlantUML(landscapeViewId);
     };
 
     if (route.params?.landscapeViewId) {
