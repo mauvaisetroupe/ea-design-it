@@ -47,7 +47,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api")
-@Transactional
+@Transactional(readOnly = true)
 public class PlantUMLResource {
 
     private final LandscapeViewRepository landscapeViewRepository;
