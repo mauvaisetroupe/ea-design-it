@@ -23,20 +23,30 @@ const pinia = createPinia();
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 const anonymousReadAllowedDefaultValue = true;
 function retrieveAnonymousProperty(): Promise<boolean> {
-  console.log('About to call api/account/anoymous-reader');
-  return new Promise(resolve => {
-    axios
-      .get<any>('api/account/anoymous-reader')
-      .then(res => {
-        const anonymousReadAllowed = res.data;
-        console.log('api/account/anoymous-reader : ' + anonymousReadAllowed);
-        resolve(anonymousReadAllowed);
-      })
-      .catch(error => {
-        console.error(error);
-        resolve(anonymousReadAllowedDefaultValue);
-      });
-  });
+  const anonymousReadAllowedKey = 'anonymous-read-allow';
+  const _anonymousReadAllowedFromLocalStorage: string | null = localStorage.getItem(anonymousReadAllowedKey);
+  if (!_anonymousReadAllowedFromLocalStorage) {
+    console.log('About to call api/account/anoymous-reader');
+    return new Promise(resolve => {
+      axios
+        .get<any>('api/account/anoymous-reader')
+        .then(res => {
+          const anonymousReadAllowed = res.data;
+          console.log('api/account/anoymous-reader : ' + anonymousReadAllowed);
+          localStorage.setItem(anonymousReadAllowedKey, anonymousReadAllowed);
+          resolve(anonymousReadAllowed);
+        })
+        .catch(error => {
+          console.error(error);
+          resolve(anonymousReadAllowedDefaultValue);
+        });
+    });
+  } else {
+    const anonymousReadAllowed: boolean = _anonymousReadAllowedFromLocalStorage === 'true';
+    return new Promise(() => {
+      return anonymousReadAllowed;
+    });
+  }
 }
 
 initBootstrapVue(Vue);
