@@ -28,7 +28,6 @@ public class LandscapeWithDataObjectPlantUMLBuilder {
         getPlantumlHeader(plantUMLSource);
         getPlantUMLBody(plantUMLSource, landscape);
         getPlantumlFooter(plantUMLSource);
-        System.out.println(plantUMLSource);
         return plantUMLBuilder.getSVGFromSource(plantUMLSource.toString());
     }
 

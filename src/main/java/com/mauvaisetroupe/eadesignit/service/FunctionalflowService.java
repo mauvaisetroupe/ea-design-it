@@ -78,14 +78,14 @@ public class FunctionalflowService {
             }
             // detach dataflow
             for (DataFlow dataFlow : new HashSet<>(flow.getDataFlows())) {
-                System.out.println("before" + flow.getDataFlows().size());
-                System.out.println("before" + dataFlow.getFunctionalFlows().size());
+                // System.out.println("before" + flow.getDataFlows().size());
+                // System.out.println("before" + dataFlow.getFunctionalFlows().size());
 
                 flow.removeDataFlows(dataFlow);
                 dataFlowRepository.save(dataFlow);
                 functionalFlowRepository.save(flow);
-                System.out.println("after" + flow.getDataFlows().size());
-                System.out.println("after" + dataFlow.getFunctionalFlows().size());
+                // System.out.println("after" + flow.getDataFlows().size());
+                // System.out.println("after" + dataFlow.getFunctionalFlows().size());
             }
             // delete Flow
             functionalFlowRepository.delete(flow);
