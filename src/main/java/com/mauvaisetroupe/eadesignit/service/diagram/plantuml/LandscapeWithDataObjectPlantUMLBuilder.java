@@ -7,9 +7,9 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.DataObjectType;
 import com.mauvaisetroupe.eadesignit.service.diagram.plantuml.PlantUMLBuilder.Layout;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -65,49 +65,46 @@ public class LandscapeWithDataObjectPlantUMLBuilder {
             .flatMap(f -> f.getInterfaces().stream())
             .collect(Collectors.toSet());
 
-        Set<Application> allApplications = new HashSet<>();
-        allInterfaces.forEach(i -> {
-            allApplications.add(i.getSource());
-            allApplications.add(i.getTarget());
-        });
-
-        List<DataObject> allDataObjects = allApplications
-            .stream()
-            .flatMap(a -> a.getDataObjects().stream())
-            .collect(Collectors.toSet())
+        // write sprites
+        int dataObjectIndex = 1;
+        Map<Long, Integer> dataObjectMap = new HashMap<>();
+        List<DataObject> allDataObjects = new ArrayList<>(landscape.getDataObjects())
             .stream()
             .sorted(Comparator.comparing(DataObject::getId))
             .collect(Collectors.toList());
-        int dataObjectIndex = 1;
-
-        Map<Long, Integer> dataObjectMap = new HashMap<>();
         for (DataObject dataObj : allDataObjects) {
-            dataObjectMap.put(dataObj.getId(), Integer.valueOf(dataObjectIndex++));
-        }
-        // write sprites
-        for (DataObject dataObject : allDataObjects) {
-            int index = dataObjectMap.get(dataObject.getId());
-            plantUMLSource.append("sprite foo" + index + " " + getSprite(index, dataObject.getType()) + " \n");
+            dataObjectMap.put(dataObj.getId(), Integer.valueOf(dataObjectIndex));
+            plantUMLSource.append("sprite foo" + dataObjectIndex + " " + getSprite(dataObjectIndex, dataObj.getType()) + " \n");
+            dataObjectIndex++;
         }
 
         // We implement a grouped / bidirectional landscape (one single arrow between application, double if needed)
         EdgeMap edgeMap = new EdgeMap(allInterfaces);
 
         for (EdgeMap.Edge edge : edgeMap.bidirectionalConsolidatedMap.values()) {
-            plantUMLSource.append(getComponent(edge.source, dataObjectMap));
+            plantUMLSource.append(getComponent(edge.source, dataObjectMap, edgeMap.getNumberConnections(edge.source.getId())));
             plantUMLSource.append((edge.bidirectional ? "<-->" : "-->"));
-            plantUMLSource.append(getComponent(edge.target, dataObjectMap) + " \n");
+            plantUMLSource.append(getComponent(edge.target, dataObjectMap, edgeMap.getNumberConnections(edge.target.getId())) + " \n");
         }
     }
 
-    private String getComponent(Application application, Map<Long, Integer> dataObjectMap) {
+    private String getComponent(Application application, Map<Long, Integer> dataObjectMap, int nbConnection) {
         StringBuilder component = new StringBuilder();
+
+        String space = getSpaces(application.getName(), nbConnection, Layout.elk);
         component.append("[");
-        component.append(application.getName());
+        component.append(space + application.getName() + space);
+        boolean firstDataObject = true;
         if (application.getDataObjects() != null && application.getDataObjects().size() > 0) {
-            component.append(" \\n\\n ");
             for (DataObject dataObject : application.getDataObjects()) {
-                component.append(" <$foo" + dataObjectMap.get(dataObject.getId()) + "> ");
+                if (dataObjectMap.containsKey(dataObject.getId())) {
+                    // some dataobjects are not presnet in this landscape, do not display them
+                    if (firstDataObject) {
+                        component.append(" \\n\\n ");
+                    }
+                    component.append(" <$foo" + dataObjectMap.get(dataObject.getId()) + "> ");
+                    firstDataObject = false;
+                }
             }
         }
         component.append("]");
@@ -149,6 +146,11 @@ public class LandscapeWithDataObjectPlantUMLBuilder {
             "</text></svg>";
         return template;
     }
+
+    private String getSpaces(String name, int nbConnection, Layout layout) {
+        int factor = layout == Layout.elk ? 3 : 1;
+        return " ".repeat(Math.max(0, factor * nbConnection - name.length()));
+    }
 }
 
 final class EdgeMap {
@@ -178,6 +180,16 @@ final class EdgeMap {
                 }
             }
         }
+    }
+
+    protected int getNumberConnections(Long applicationId) {
+        int nbConnection = 0;
+        for (Edge edge : bidirectionalConsolidatedMap.values()) {
+            if (edge.source.getId() == applicationId || edge.target.getId() == applicationId) {
+                nbConnection++;
+            }
+        }
+        return nbConnection;
     }
 
     private static String getConsolidatedKey(FlowInterface flowInterface) {

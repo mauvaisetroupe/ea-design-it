@@ -206,14 +206,17 @@
             <table class="table table-striped p-0" aria-describedby="dataObjects">
               <thead>
                 <tr>
-                  <th></th>
-                  <th scope="row"><span>Data Object</span></th>
+                  <th scope="row"><span>Business Object</span></th>
+                  <th scope="row" colspan="2"><span>Data Object</span></th>
                   <th scope="row"><span>Type</span></th>
                   <th scope="row"><span>Application</span></th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(dataObject, index) in landscapeView.dataObjects" :key="dataObject.id" data-cy="entityTable">
+                <tr v-for="(dataObject, index) in sortedDataObjects" :key="dataObject.id" data-cy="entityTable">
+                  <td>
+                    {{ dataObject.businessObject?.name }}
+                  </td>
                   <td class="p-2">
                     <svg width="30" height="30">
                       <g :fill="dataObject.type === 'GOLDEN_SOURCE' ? '#FFC000' : '#CCDAFF'">

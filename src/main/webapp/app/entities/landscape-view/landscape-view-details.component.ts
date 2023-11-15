@@ -96,6 +96,13 @@ export default defineComponent({
       return ((100 * applicationsOnlyInFlows.value.length) / allApplications.value.length).toFixed(0);
     });
 
+    const sortedDataObjects = computed(() => {
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      return landscapeView?.value.dataObjects?.sort((a, b) => {
+        return a.id - b.id;
+      });
+    });
+
     //@Watch('tabIndex')
     watch(tabIndex, (newtab, oldtab) => {
       tabIndex.value = newtab;
@@ -502,6 +509,7 @@ export default defineComponent({
       detachFlowEntity,
       refreshingDataObjectsLandscapePlantuml,
       plantUMLDataObjectsLandscapeImage,
+      sortedDataObjects,
     };
   },
 });
