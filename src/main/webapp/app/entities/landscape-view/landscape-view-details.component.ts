@@ -112,7 +112,6 @@ export default defineComponent({
     });
 
     function loadTab(_landscapeID) {
-      console.log('loadTab' + _landscapeID);
       if (sessionStorage.getItem(sessionKey)) {
         const parts = sessionStorage.getItem(sessionKey).split('#');
         const landId = parseInt(parts[0]);

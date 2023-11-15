@@ -15,7 +15,6 @@ export default class LandscapeViewService {
         .get(`${baseApiUrl}/${id}`)
         .then(res => {
           resolve(res.data);
-          console.log(res.data);
         })
         .catch(err => {
           reject(err);
@@ -38,7 +37,6 @@ export default class LandscapeViewService {
 
   public delete(id: number, deleteFunctionalFlows: boolean, deleteFlowInterfaces: boolean, deleteDatas: boolean): Promise<any> {
     const params = { deleteFunctionalFlows: deleteFunctionalFlows, deleteFlowInterfaces: deleteFlowInterfaces, deleteDatas: deleteDatas };
-    console.log(params);
     return new Promise<any>((resolve, reject) => {
       axios
         .delete(`${baseApiUrl}/${id}`, { params })
@@ -97,7 +95,6 @@ export default class LandscapeViewService {
     showLabels: boolean,
     showLabelIfNumberapplicationsLessThan: number,
   ) {
-    console.log('showlabels : ' + showLabels);
     return new Promise<PlantumlDTO>((resolve, reject) => {
       const params = {
         layout: layout,

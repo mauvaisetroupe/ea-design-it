@@ -25,7 +25,6 @@ export default defineComponent({
       const allParents: IObjectWithParent[] = [];
       let currentObj: IObjectWithParent | null = props.objectWithParent;
       while (currentObj) {
-        console.log(currentObj.name);
         allParents.unshift(currentObj);
         currentObj = currentObj.parent;
       }

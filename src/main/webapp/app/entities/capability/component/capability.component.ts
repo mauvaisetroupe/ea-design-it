@@ -55,8 +55,6 @@ export default defineComponent({
 
     //   @Watch('capability')
     function capabilityUpdated() {
-      console.log(props.capability?.name);
-      console.log(props.defaultNbLevel);
       if (props.defaultNbLevel) {
         nbLevelAsString.value = props.defaultNbLevel.toString();
       } else {
