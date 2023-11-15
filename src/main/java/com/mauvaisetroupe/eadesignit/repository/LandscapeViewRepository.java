@@ -41,6 +41,7 @@ public interface LandscapeViewRepository extends JpaRepository<LandscapeView, Lo
         " left join fetch cm.application a " +
         " left join fetch cm.capability ca " +
         " left join fetch l.dataObjects do " +
+        " left join fetch do.businessObject bo " +
         " where l.id =:id"
     )
     Optional<LandscapeView> findOneWithEagerRelationships(@Param("id") Long id);

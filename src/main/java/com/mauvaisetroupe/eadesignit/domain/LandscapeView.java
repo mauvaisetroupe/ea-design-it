@@ -60,7 +60,7 @@ public class LandscapeView implements Serializable {
     private Set<CapabilityApplicationMapping> capabilityApplicationMappings = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "landscapes")
-    @JsonIgnoreProperties(value = { "components", "owner", "technologies", "landscapes", "businessObject" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "components", "owner", "technologies", "landscapes" }, allowSetters = true)
     private Set<DataObject> dataObjects = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
