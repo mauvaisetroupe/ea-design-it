@@ -80,7 +80,7 @@ public class PlantUMLService {
                 // itś not possible to add an URL for an Application or an ApplicationComponent inside a reliation [A] -> [B]
                 // so we need to create a component for each Application / ApplicationComponent
                 // and associate the URL to that componnet
-                plantUMLBuilder.createComponentWithId(plantUMLSource, application, diagramType, false);
+                plantUMLBuilder.createComponentWithId(plantUMLSource, application, diagramType);
                 useID = true;
             }
         } else {
@@ -93,7 +93,7 @@ public class PlantUMLService {
         if (groupComponents) {
             // crerate groups (packages)
             for (Entry<String, List<Application>> groupEntry : graph.getApplicationGroups().entrySet()) {
-                plantUMLBuilder.getPlantumlPackage(plantUMLSource, groupEntry.getKey(), groupEntry.getValue(), useID, false);
+                plantUMLBuilder.getPlantumlPackage(plantUMLSource, groupEntry.getKey(), groupEntry.getValue(), useID);
             }
         }
 

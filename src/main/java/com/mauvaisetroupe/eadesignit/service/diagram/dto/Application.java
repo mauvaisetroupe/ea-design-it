@@ -7,22 +7,12 @@ public class Application {
     private Long id;
     private String name;
     private String url;
-    private Set<String> capabilities;
     private boolean actor;
 
-    public Set<String> getCapabilities() {
-        return capabilities;
-    }
-
-    public void setCapabilities(Set<String> capabilities) {
-        this.capabilities = capabilities;
-    }
-
-    public Application(Long id, String name, String url, Set<String> capabilities, boolean actor) {
+    public Application(Long id, String name, String url, boolean actor) {
         this.id = id;
         this.name = name;
         this.url = url;
-        this.capabilities = capabilities;
         this.actor = actor;
     }
 

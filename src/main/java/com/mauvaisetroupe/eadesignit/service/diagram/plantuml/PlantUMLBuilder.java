@@ -165,28 +165,13 @@ public class PlantUMLBuilder {
         return open + application.getName() + close;
     }
 
-    public void createComponentWithId(
-        StringBuilder plantUMLSource,
-        Application application,
-        DiagramType diagramType,
-        boolean addCapabilities
-    ) {
+    public void createComponentWithId(StringBuilder plantUMLSource, Application application, DiagramType diagramType) {
         if (diagramType == DiagramType.SEQUENCE_DIAGRAM) {
             String type = application.isActor() ? "actor" : "participant";
             plantUMLSource.append(type + " \"" + application.getName() + "\" as C" + application.getId() + "\n");
         } else {
             String type = application.isActor() ? "actor" : "component";
-            if (!addCapabilities || application.getCapabilities() == null || application.getCapabilities().size() == 0) {
-                plantUMLSource.append(type + " \"" + application.getName() + "\" as C" + application.getId() + "\n");
-            } else {
-                plantUMLSource.append(type + " \"" + application.getName() + "\" as C" + application.getId() + "{\n");
-                application
-                    .getCapabilities()
-                    .forEach(c -> {
-                        plantUMLSource.append(" rectangle \"" + application.getId() + "." + c + "\"\n");
-                    });
-                plantUMLSource.append("}\n");
-            }
+            plantUMLSource.append(type + " \"" + application.getName() + "\" as C" + application.getId() + "\n");
         }
         plantUMLSource.append("url of C" + application.getId() + " is [[" + application.getUrl() + "]]\n");
     }
@@ -244,17 +229,11 @@ public class PlantUMLBuilder {
         plantUMLSource.append("End Legend\n");
     }
 
-    public void getPlantumlPackage(
-        StringBuilder plantUMLSource,
-        String packageName,
-        List<Application> applications,
-        boolean useID,
-        boolean addCapabilities
-    ) {
+    public void getPlantumlPackage(StringBuilder plantUMLSource, String packageName, List<Application> applications, boolean useID) {
         plantUMLSource.append("package \"" + packageName + "\" {\n");
         for (Application application : applications) {
             if (useID) {
-                createComponentWithId(plantUMLSource, application, DiagramType.COMPONENT_DIAGRAM, addCapabilities);
+                createComponentWithId(plantUMLSource, application, DiagramType.COMPONENT_DIAGRAM);
             } else {
                 plantUMLSource.append(getComponentByNameOrId(application, useID, DiagramType.COMPONENT_DIAGRAM));
                 plantUMLSource.append("\n");

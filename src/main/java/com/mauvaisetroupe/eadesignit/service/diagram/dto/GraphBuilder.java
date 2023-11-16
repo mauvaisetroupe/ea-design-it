@@ -10,9 +10,7 @@ import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
 import com.mauvaisetroupe.eadesignit.service.diagram.drawio.MXFileSerializer;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedSet;
-import java.util.stream.Collectors;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -31,17 +29,9 @@ public class GraphBuilder {
         for (FunctionalFlow flow : landscape.getFlows()) {
             for (FunctionalFlowStep step : flow.getSteps()) {
                 FlowInterface interface1 = step.getFlowInterface();
-                Application source = getApplication(
-                    interface1.getSource(),
-                    interface1.getSourceComponent(),
-                    getGapabilitiesForLandscape(interface1.getSource(), landscape)
-                );
+                Application source = getApplication(interface1.getSource(), interface1.getSourceComponent());
                 graph.addApplication(source);
-                Application target = getApplication(
-                    interface1.getTarget(),
-                    interface1.getTargetComponent(),
-                    getGapabilitiesForLandscape(interface1.getTarget(), landscape)
-                );
+                Application target = getApplication(interface1.getTarget(), interface1.getTargetComponent());
                 graph.addApplication(target);
                 String id = flow.getId() + "-" + step.getStepOrder();
                 String url = "/functional-flow/" + flow.getId() + "/view";
@@ -70,22 +60,13 @@ public class GraphBuilder {
         return graph;
     }
 
-    private Set<String> getGapabilitiesForLandscape(com.mauvaisetroupe.eadesignit.domain.Application application, LandscapeView landscape) {
-        return application
-            .getCapabilityApplicationMappings()
-            .stream()
-            .filter(c -> c.getLandscapes().contains(landscape))
-            .map(c -> c.getCapability().getName())
-            .collect(Collectors.toSet());
-    }
-
     public GraphDTO createGraph(FunctionalFlow flow, boolean addStepOrder) {
         GraphDTO graph = new GraphDTO();
         for (FunctionalFlowStep step : flow.getSteps()) {
             FlowInterface interface1 = step.getFlowInterface();
-            Application source = getApplication(interface1.getSource(), interface1.getSourceComponent(), null);
+            Application source = getApplication(interface1.getSource(), interface1.getSourceComponent());
             graph.addApplication(source);
-            Application target = getApplication(interface1.getTarget(), interface1.getTargetComponent(), null);
+            Application target = getApplication(interface1.getTarget(), interface1.getTargetComponent());
             graph.addApplication(target);
             String id = flow.getId() + "-" + step.getStepOrder();
             String _label = (addStepOrder ? step.getStepOrder() + ". " : "") + WordUtils.wrap(step.getDescription(), 50, "\\n", false);
@@ -121,9 +102,9 @@ public class GraphBuilder {
     public GraphDTO createGraph(SortedSet<IFlowInterface> interfaces, boolean showLabels) {
         GraphDTO graph = new GraphDTO();
         for (IFlowInterface interface1 : interfaces) {
-            Application source = getApplication(interface1.getSource(), interface1.getSourceComponent(), null);
+            Application source = getApplication(interface1.getSource(), interface1.getSourceComponent());
             graph.addApplication(source);
-            Application target = getApplication(interface1.getTarget(), interface1.getTargetComponent(), null);
+            Application target = getApplication(interface1.getTarget(), interface1.getTargetComponent());
             graph.addApplication(target);
             Long id = interface1.getId();
             String label = interface1.getAlias();
@@ -152,30 +133,24 @@ public class GraphBuilder {
         return graph;
     }
 
-    private Application getApplication(
-        com.mauvaisetroupe.eadesignit.domain.Application application,
-        ApplicationComponent component,
-        Set<String> capabilities
-    ) {
+    private Application getApplication(com.mauvaisetroupe.eadesignit.domain.Application application, ApplicationComponent component) {
         if (component != null && component.getDisplayInLandscape() != null && component.getDisplayInLandscape()) {
             return new Application(
                 component.getId(),
                 application.getName() + " / " + component.getName(),
                 "/application-component/" + component.getId() + "/view",
-                capabilities,
                 application.getApplicationType() == ApplicationType.ACTOR
             );
         } else {
-            return getApplication(application, capabilities);
+            return getApplication(application);
         }
     }
 
-    private Application getApplication(com.mauvaisetroupe.eadesignit.domain.Application application, Set<String> capabilities) {
+    private Application getApplication(com.mauvaisetroupe.eadesignit.domain.Application application) {
         return new Application(
             application.getId(),
             application.getName(),
             "/application/" + application.getId() + "/view",
-            capabilities,
             application.getApplicationType() == ApplicationType.ACTOR
         );
     }
@@ -190,7 +165,7 @@ public class GraphBuilder {
     ) {
         if (component != null && component.getDisplayInLandscape() != null && component.getDisplayInLandscape()) {
             // Add in group the component
-            graph.addApplicationIngroup(groupName, getApplication(myApplication, getGapabilitiesForLandscape(myApplication, landscape)));
+            graph.addApplicationIngroup(groupName, getApplication(myApplication));
             // Add in group the application itself
             // Bug in smetana, cannont add link from/to package,
             // so add the application itself in the package as a subcomponent
@@ -214,7 +189,7 @@ public class GraphBuilder {
             String elementIdValue = ((Element) nodeList.item(i)).getAttribute("elementId");
             Long id = Long.parseLong(elementIdValue.replace(MXFileSerializer.APP_ID_PREFIX, ""));
             String applicationName = ((Element) nodeList.item(i)).getAttribute("value");
-            Application application = new Application(id, applicationName, null, null, false);
+            Application application = new Application(id, applicationName, null, false);
             graph.addApplication(application);
             aMap.put(application.getId(), application);
         }
