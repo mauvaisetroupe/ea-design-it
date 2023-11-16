@@ -65,7 +65,7 @@ export default defineComponent({
     const applicationsOnlyInCapabilities: Ref<IApplication[]> = ref([]);
     const applicationsOnlyInFlows: Ref<IApplication[]> = ref([]);
     const reportToDisplay = computed(() => {
-      return applicationsOnlyInCapabilities.value.length > 0 || applicationsOnlyInFlows.value.length > 0;
+      return applicationsOnlyInCapabilities.value?.length > 0 || applicationsOnlyInFlows.value?.length > 0;
     });
     const capabilitiesByApplicationID = ref(new Object());
     const flowsByApplicationID = ref(new Object());
@@ -130,14 +130,6 @@ export default defineComponent({
 
     const retrieveLandscapeView = async landscapeViewId => {
       try {
-        loadTab(landscapeViewId);
-
-        // load landscape schema
-        getPlantUML(landscapeViewId);
-
-        // load golen/replicas schema
-        getDataObjectsLandscapePlantUML(landscapeViewId);
-
         const res = await landscapeViewService().find(landscapeViewId);
         const landscape = res.landscape;
         conputeAllApplicationsByFlow(landscape);
@@ -176,8 +168,11 @@ export default defineComponent({
     };
 
     if (route.params?.landscapeViewId) {
+      const landscapeViewId: string = route.params?.landscapeViewId;
+      loadTab(landscapeViewId);
+      getPlantUML(landscapeViewId);
+      getDataObjectsLandscapePlantUML(landscapeViewId);
       retrieveLandscapeView(route.params.landscapeViewId);
-      landscapeViewId.value = parseInt(route.params?.landscapeViewId);
     }
 
     const previousState = () => router.go(-1);

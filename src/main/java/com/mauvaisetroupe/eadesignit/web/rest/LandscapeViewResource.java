@@ -4,6 +4,7 @@ import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.repository.LandscapeWithBagRelationshipsImpl;
 import com.mauvaisetroupe.eadesignit.repository.view.LandscapeLight;
 import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
 import com.mauvaisetroupe.eadesignit.service.diagram.drawio.MXFileSerializer;
@@ -56,6 +57,9 @@ public class LandscapeViewResource {
 
     @Autowired
     private LandscapeViewService landscapeViewService;
+
+    @Autowired
+    private LandscapeWithBagRelationshipsImpl landscapeWithBagRelationshipsImpl;
 
     @Autowired
     private CapabilityUtil capabilityUtil;
@@ -195,6 +199,8 @@ public class LandscapeViewResource {
             .findOneWithEagerRelationships(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+        landscape = landscapeWithBagRelationshipsImpl.fetchDataObjects(landscape);
+        landscape = landscapeWithBagRelationshipsImpl.fetchCapanilityApplicationMapping(landscape);
         if (landscape.getCapabilityApplicationMappings() != null) {
             // Capabilities, we get root with a subset of tree
 

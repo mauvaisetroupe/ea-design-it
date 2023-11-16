@@ -29,6 +29,7 @@ public interface LandscapeViewRepository extends JpaRepository<LandscapeView, Lo
         " left join fetch l.owner o " +
         " left join fetch l.flows f " +
         " left join fetch f.landscapes l2 " +
+        " left join fetch l2.owner " +
         " left join fetch f.steps s " +
         " left join fetch s.group g " +
         " left join fetch s.flowInterface fi " +
@@ -37,11 +38,6 @@ public interface LandscapeViewRepository extends JpaRepository<LandscapeView, Lo
         " left join fetch fi.sourceComponent sc " +
         " left join fetch fi.target ta " +
         " left join fetch fi.targetComponent tc " +
-        " left join fetch l.capabilityApplicationMappings cm " +
-        " left join fetch cm.application a " +
-        " left join fetch cm.capability ca " +
-        " left join fetch l.dataObjects do " +
-        " left join fetch do.businessObject bo " +
         " where l.id =:id"
     )
     Optional<LandscapeView> findOneWithEagerRelationships(@Param("id") Long id);

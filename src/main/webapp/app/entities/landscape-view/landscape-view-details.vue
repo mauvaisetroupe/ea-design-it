@@ -302,7 +302,7 @@
         </b-tab>
         <b-tab title="Report" id="tab-report">
           <div>
-            <div v-if="applicationsOnlyInCapabilities.length">
+            <div v-if="applicationsOnlyInCapabilities?.length">
               <h4>[Capability Mapping] Applications with no Functional Flow ({{ onlyCapabilitiesPercent }} %)</h4>
               <b-table
                 :items="applicationsOnlyInCapabilities"
