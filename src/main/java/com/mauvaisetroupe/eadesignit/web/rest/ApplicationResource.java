@@ -3,6 +3,7 @@ package com.mauvaisetroupe.eadesignit.web.rest;
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.repository.ApplicationWithBagRelationshipsImpl;
 import com.mauvaisetroupe.eadesignit.service.dto.util.CapabilityUtil;
 import com.mauvaisetroupe.eadesignit.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
@@ -15,10 +16,12 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -41,9 +44,16 @@ public class ApplicationResource {
 
     private final CapabilityUtil capabilityUtil;
 
-    public ApplicationResource(ApplicationRepository applicationRepository, CapabilityUtil capabilityUtil) {
+    private final ApplicationWithBagRelationshipsImpl applicationWithBagRelationshipsImpl;
+
+    public ApplicationResource(
+        ApplicationRepository applicationRepository,
+        CapabilityUtil capabilityUtil,
+        ApplicationWithBagRelationshipsImpl applicationWithBagRelationshipsImpl
+    ) {
         this.applicationRepository = applicationRepository;
         this.capabilityUtil = capabilityUtil;
+        this.applicationWithBagRelationshipsImpl = applicationWithBagRelationshipsImpl;
     }
 
     /**
@@ -194,10 +204,13 @@ public class ApplicationResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the application, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/applications/{id}")
-    public ResponseEntity<Application> getApplication(@PathVariable Long id) {
+    public Application getApplication(@PathVariable Long id) {
         log.debug("REST request to get Application : {}", id);
-        Optional<Application> application = applicationRepository.findOneWithEagerRelationships(id);
-        return ResponseUtil.wrapOrNotFound(application);
+        Application application = applicationRepository
+            .findOneWithEagerRelationships(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        application = applicationWithBagRelationshipsImpl.fetchDataObjects(application);
+        return application;
     }
 
     /**
