@@ -191,7 +191,7 @@ public class FunctionalFlowResource {
     @GetMapping("/functional-flows/{id}")
     public ResponseEntity<FunctionalFlow> getFunctionalFlow(@PathVariable Long id) {
         log.debug("REST request to get FunctionalFlow : {}", id);
-        Optional<FunctionalFlow> functionalFlow = functionalFlowRepository.findById(id);
+        Optional<FunctionalFlow> functionalFlow = functionalFlowRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(functionalFlow);
     }
 

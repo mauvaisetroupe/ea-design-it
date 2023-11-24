@@ -42,4 +42,17 @@ public interface FunctionalFlowRepository extends JpaRepository<FunctionalFlow, 
     SortedSet<FunctionalFlow> findFunctionalFlowsForInterfacesIn(@Param("appli") Application application);
 
     SortedSet<FunctionalFlow> findByLandscapesIsEmpty();
+
+    @Query(
+        "select f from FunctionalFlow f " +
+        "left join fetch f.steps s " +
+        "left join fetch f.landscapes l " +
+        "left join fetch l.owner " +
+        "left join fetch s.flowInterface i " +
+        "left join fetch s.group g " +
+        "left join fetch i.source so " +
+        "left join fetch i.target ta " +
+        " where f.id =:id"
+    )
+    Optional<FunctionalFlow> findOneWithEagerRelationships(@Param("id") Long id);
 }
