@@ -1,4 +1,3 @@
-import { ILandscapeView } from '@/shared/model/landscape-view.model';
 import axios from 'axios';
 
 const apiForImportUrl = 'api/import';
@@ -14,7 +13,7 @@ export default class FullExportService {
     landscapes: number[],
     capabilitiesMapping: number[],
     capabilitiesMappingWithNoLandscape: boolean,
-    functionalFlowsWhithNoLandscape: boolean
+    functionalFlowsWhithNoLandscape: boolean,
   ): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios

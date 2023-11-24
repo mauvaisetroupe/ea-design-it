@@ -24,7 +24,7 @@ public interface CapabilityApplicationMappingRepository extends JpaRepository<Ca
 
     @Query(
         "select distinct cm from CapabilityApplicationMapping cm " +
-        " left join fetch cm.landscapes l " +
+        //        " left join fetch cm.landscapes l " +
         " left join fetch cm.capability c3 " +
         " left join fetch c3.parent c2 " +
         " left join fetch c2.parent c1 " +

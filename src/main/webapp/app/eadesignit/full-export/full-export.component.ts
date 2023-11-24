@@ -35,7 +35,7 @@ export default defineComponent({
       await retrieveAllLandscapeViews();
     });
 
-    const retrieveLandscapeViews = async () => {
+    const retrieveAllLandscapeViews = async () => {
       isFetching.value = true;
       try {
         const res = await landscapeViewService().retrieve();
