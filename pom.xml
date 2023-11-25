@@ -71,6 +71,7 @@
         <profile.no-liquibase/>
         <profile.test/>
         <profile.tls/>
+        <profile.oracle/>
         <properties-maven-plugin.version>1.2.0</properties-maven-plugin.version>
         <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
         <spotless-maven-plugin.version>2.40.0</spotless-maven-plugin.version>
@@ -884,7 +885,7 @@
             </activation>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.tls}${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>dev${profile.tls}${profile.no-liquibase}${profile.oracle}</spring.profiles.active>
                 <profile.test>testdev</profile.test>
                 <liquibase-plugin.hibernate-dialect>org.hibernate.dialect.H2Dialect</liquibase-plugin.hibernate-dialect>
                 <liquibase-plugin.driver>org.h2.Driver</liquibase-plugin.driver>
@@ -1037,7 +1038,7 @@
             <id>prod</id>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}${profile.no-liquibase}</spring.profiles.active>
+                <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}${profile.no-liquibase}${profile.oracle}</spring.profiles.active>
                 <profile.test>testprod</profile.test>
                 <liquibase-plugin.hibernate-dialect>org.hibernate.dialect.PostgreSQLDialect</liquibase-plugin.hibernate-dialect>
                 <liquibase-plugin.driver>org.postgresql.Driver</liquibase-plugin.driver>
@@ -1131,11 +1132,17 @@
             </dependencies>
         </profile>
         <profile>
+            <id>oracle</id>
+            <properties>
+                <profile.oracle>,oracle</profile.oracle>
+            </properties>
+        </profile>        
+        <profile>
             <id>tls</id>
             <properties>
                 <profile.tls>,tls</profile.tls>
             </properties>
-        </profile>
+        </profile>        
         <profile>
             <id>war</id>
             <build>

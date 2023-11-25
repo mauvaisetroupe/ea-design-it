@@ -29,6 +29,8 @@ import tech.jhipster.config.h2.H2ConfigurationHelper;
 @Configuration
 public class WebConfigurer implements ServletContextInitializer, WebServerFactoryCustomizer<WebServerFactory> {
 
+    private static final String ORACLE = "oracle";
+
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
     private final Environment env;
@@ -47,7 +49,9 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         }
 
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
-            initH2Console(servletContext);
+            if (!env.acceptsProfiles(Profiles.of(ORACLE))) {
+                initH2Console(servletContext);
+            }
         }
         log.info("Web application fully configured");
     }

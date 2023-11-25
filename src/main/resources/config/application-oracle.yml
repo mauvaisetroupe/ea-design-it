@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:oracle:thin:@localhost:1521:ORCLCDB
+    username: EADesignIt
+    password: EADesignIt
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  jpa:
+    properties:
+      # when schema not writen in SQL order, random bug : rlation ´flow' does not exist
+      hibernate.default_schema:
+  h2:
+    console:
+      # disable spring boot built-in h2-console since we start it manually with correct configuration
+      enabled: false

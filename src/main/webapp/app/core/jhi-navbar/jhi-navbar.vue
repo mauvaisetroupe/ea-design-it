@@ -143,7 +143,7 @@
             <font-awesome-icon icon="book" />
             <span>API</span>
           </b-dropdown-item>
-          <b-dropdown-item v-if="!inProduction" href="./h2-console/" target="_tab">
+          <b-dropdown-item v-if="!inProduction && h2Database" href="./h2-console/" target="_tab">
             <font-awesome-icon icon="database" />
             <span>Database</span>
           </b-dropdown-item>

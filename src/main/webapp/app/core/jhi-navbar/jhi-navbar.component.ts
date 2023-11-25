@@ -25,6 +25,8 @@ export default defineComponent({
 
     const openAPIEnabled = computed(() => store.activeProfiles.indexOf('api-docs') > -1);
     const inProduction = computed(() => store.activeProfiles.indexOf('prod') > -1);
+    const h2Database = computed(() => store.activeProfiles.indexOf('oracle') < 0);
+
     const authenticated = computed(() => store.authenticated);
     const adminAuthorities = computed(() => store.adminAuthority);
     const readAuthorities = computed(() => accountService.readAuthorities);
@@ -62,6 +64,7 @@ export default defineComponent({
       authenticated,
       adminAuthorities,
       readAuthorities,
+      h2Database,
     };
   },
   methods: {

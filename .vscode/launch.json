@@ -1,4 +1,5 @@
 { "version": "0.2.0", "configurations": [
+
     {
       "type": "java",
       "name": "Launch MXFileSerializer",
@@ -21,6 +22,14 @@
       "mainClass": "com.mauvaisetroupe.eadesignit.EaDesignItApp",
       "projectName": "ea-design-it",
       "vmArgs": " -Dspring.profiles.active=prod"      
+    },
+    {
+      "type": "java",
+      "name": "Launch EaDesignItApp DEV ORACLE",
+      "request": "launch",
+      "mainClass": "com.mauvaisetroupe.eadesignit.EaDesignItApp",
+      "projectName": "ea-design-it",
+      "vmArgs": " -Dspring.profiles.active=dev,oracle"      
     },
     {
       "type": "java",
