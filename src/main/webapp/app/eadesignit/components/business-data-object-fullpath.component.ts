@@ -31,7 +31,6 @@ export default defineComponent({
       return allParents;
     });
 
-    const to = { name: props.routerView, params: { businessObjectId: props.objectWithParent.id } };
     return {
       allObjects,
     };
