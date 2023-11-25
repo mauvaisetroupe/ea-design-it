@@ -86,7 +86,9 @@ public class BusinessObjectPlantUMLBuilder {
         Set<DataObject> allDataObjects
     ) {
         for (Application application : allApplications) {
-            plantUMLSource.append("component \"**" + application.getName() + "**\" as APPLI" + application.getId() + " #application\n");
+            if (application != null) {
+                plantUMLSource.append("component \"**" + application.getName() + "**\" as APPLI" + application.getId() + " #application\n");
+            }
         }
 
         for (DataObject dataObject : allDataObjects) {
@@ -107,7 +109,9 @@ public class BusinessObjectPlantUMLBuilder {
                 plantUMLSource.append("DO" + dataObject.getId() + " *-- DO" + child.getId() + ": composed in \n");
             }
             // DO - APPLI
-            plantUMLSource.append("DO" + dataObject.getId() + " <.. APPLI" + dataObject.getApplication().getId() + ": access \n");
+            if (dataObject.getApplication() != null) {
+                plantUMLSource.append("DO" + dataObject.getId() + " <.. APPLI" + dataObject.getApplication().getId() + ": access \n");
+            }
         }
     }
 

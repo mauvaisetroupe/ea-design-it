@@ -79,4 +79,8 @@ public interface DataObjectRepository extends DataObjectRepositoryWithBagRelatio
         " left join fetch do_1.application a_2"
     )
     List<DataObject> findAllWithAllChildrens();
+
+    Optional<DataObject> findByNameIgnoreCase(String dataObjectName);
+
+    Optional<DataObject> findByNameIgnoreCaseAndParentNameIgnoreCase(String dataObjectName, String name);
 }

@@ -116,7 +116,12 @@ public class DataObjectImportService {
                 DataObject dataObjectParent = null;
                 for (int i = 0; i < dos.length; i++) {
                     String doName = dos[i].trim();
-                    dataObject = findOrCreateDO(dataObjectParent, doName, dto.getApplication());
+                    String appName = null;
+                    if (i == dos.length - 1) {
+                        // application in excel file is for DO, not DO parents
+                        appName = dto.getApplication();
+                    }
+                    dataObject = findOrCreateDO(dataObjectParent, doName, appName);
                     dataObjectParent = dataObject;
                 }
                 dataObject.setBusinessObject(bo);
@@ -127,7 +132,7 @@ public class DataObjectImportService {
                 if (StringUtils.hasText(dto.getApplication())) {
                     Application application = applicationRepository.findByNameIgnoreCase(dto.getApplication());
                     if (application == null) {
-                        throw new IllegalStateException("Cannot find application " + dto.getApplication());
+                        throw new IllegalStateException("Cannot find application [" + dto.getApplication() + "]");
                     }
                     dataObject.setApplication(application);
                     dataObjectRepository.save(dataObject);
@@ -174,14 +179,23 @@ public class DataObjectImportService {
 
     private DataObject findOrCreateDO(DataObject parent, String dataObjectName, String applicationName) {
         DataObject dataObj;
-        dataObj =
-            ((parent == null)
-                    ? dataObjectRepository.findByNameIgnoreCaseAndApplicationNameIgnoreCase(dataObjectName, applicationName)
-                    : dataObjectRepository.findByNameIgnoreCaseAndParentNameIgnoreCaseAndApplicationNameIgnoreCase(
-                        dataObjectName,
-                        parent.getName(),
-                        applicationName
-                    )).orElseGet(DataObject::new);
+        if (StringUtils.hasText(applicationName)) {
+            dataObj =
+                ((parent == null)
+                        ? dataObjectRepository.findByNameIgnoreCaseAndApplicationNameIgnoreCase(dataObjectName, applicationName)
+                        : dataObjectRepository.findByNameIgnoreCaseAndParentNameIgnoreCaseAndApplicationNameIgnoreCase(
+                            dataObjectName,
+                            parent.getName(),
+                            applicationName
+                        )).orElseGet(DataObject::new);
+        } else {
+            dataObj =
+                ((parent == null)
+                        ? dataObjectRepository.findByNameIgnoreCase(dataObjectName)
+                        : dataObjectRepository.findByNameIgnoreCaseAndParentNameIgnoreCase(dataObjectName, parent.getName())).orElseGet(
+                        DataObject::new
+                    );
+        }
         if (dataObj.getId() == null) {
             dataObj.setName(dataObjectName);
             dataObj.setParent(parent);
