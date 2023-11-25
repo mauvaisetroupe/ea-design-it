@@ -234,7 +234,8 @@ public class ImportResource {
         @RequestParam(value = "landscapes[]", required = false, defaultValue = "") List<Long> landscapes,
         @RequestParam(value = "capabilitiesMapping[]", required = false, defaultValue = "") List<Long> capabilitiesMapping,
         @RequestParam boolean capabilitiesMappingWithNoLandscape,
-        @RequestParam boolean functionalFlowsWhithNoLandscape
+        @RequestParam boolean functionalFlowsWhithNoLandscape,
+        @RequestParam(defaultValue = "true") boolean businessAndDataObjects
     ) throws IOException {
         ByteArrayOutputStream file = exportFullDataService.getallData(
             applications,
@@ -245,7 +246,8 @@ public class ImportResource {
             landscapes,
             capabilitiesMapping,
             capabilitiesMappingWithNoLandscape,
-            functionalFlowsWhithNoLandscape
+            functionalFlowsWhithNoLandscape,
+            businessAndDataObjects
         );
         ByteArrayResource byteArrayResource = new ByteArrayResource(file.toByteArray());
 

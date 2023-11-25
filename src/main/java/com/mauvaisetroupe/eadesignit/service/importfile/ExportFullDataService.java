@@ -49,6 +49,9 @@ public class ExportFullDataService {
     @Autowired
     FunctionalFlowRepository flowRepository;
 
+    @Autowired
+    BusinessAndDataObjectExportService businessAndDataObjectExportService;
+
     public ByteArrayOutputStream getallData(
         boolean exportApplications,
         boolean exportComponents,
@@ -58,7 +61,8 @@ public class ExportFullDataService {
         List<Long> landscapesToExport,
         List<Long> capabilitiesMappingToExport,
         boolean exportCapabilitiesWithNoLandscape,
-        boolean functionalFlowsWhithNoLandscape
+        boolean functionalFlowsWhithNoLandscape,
+        boolean businessAndDataObjects
     ) throws IOException {
         Workbook workbook = new XSSFWorkbook();
         Sheet summarySheet = workbook.createSheet(SummaryImporterService.SUMMARY_SHEET);
@@ -67,6 +71,7 @@ public class ExportFullDataService {
         Sheet ownerSheet = workbook.createSheet(ApplicationImportService.OWNER_SHEET_NAME);
         Sheet externalSystemSheet = workbook.createSheet(ExternalSystemImportService.SHEET_NAME);
         Sheet capabilitiesSheet = workbook.createSheet(CapabilityImportService.CAPABILITY_SHEET_NAME);
+        Sheet businessObjectsSheet = workbook.createSheet(DataObjectImportService.DATA_OBJECT_SHEET_NAME);
 
         int lineNb = 0;
         int nbcolumn = 0;
@@ -155,6 +160,17 @@ public class ExportFullDataService {
             exportCapabilitiesWithNoLandscape
         );
         addCapabilitieMappingsSummary(workbook, summarySheet, capabilityMappingDTOs, lineNb);
+
+        // Business and Data Objects
+        if (businessAndDataObjects) {
+            addBusinessAndDataObjectsSummary(workbook, summarySheet, businessObjectsSheet.getSheetName(), lineNb);
+            businessAndDataObjectExportService.writeDatObjects(businessObjectsSheet);
+            ExcelUtils.autoSizeAllColumns(businessObjectsSheet);
+            ExcelUtils.addHeaderColorAndFilte(workbook, businessObjectsSheet);
+            // find business bobjects with no data object
+            //businessObjectRepository.findAllWithAllChildrens();
+
+        }
 
         // Close stream
         ExcelUtils.autoSizeAllColumns(summarySheet);
@@ -245,6 +261,15 @@ public class ExportFullDataService {
             createHyperlink(workbook, capabilityMappingDTO.getSheetName(), cell);
             row.createCell(columnNb++).setCellValue(capabilityMappingDTO.getLandscape());
         }
+    }
+
+    private void addBusinessAndDataObjectsSummary(Workbook workbook, Sheet summarySheet, String businessSheetName, int lineNb) {
+        Row row = summarySheet.createRow(lineNb);
+        int columnNb = 0;
+        row.createCell(columnNb++).setCellValue("Business and Data Objects");
+        // Link to shet
+        Cell cell = row.createCell(columnNb++);
+        createHyperlink(workbook, businessSheetName, cell);
     }
 
     private void createHyperlink(Workbook workbook, String sheetName, Cell cell) {

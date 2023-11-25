@@ -91,22 +91,23 @@ public class DataObjectImportService {
             }
 
             // Create Business Objects from full path
-            String[] bos = dto.getBusinessobject().split("\\w*>\\w*");
             BusinessObject bo = null;
-            BusinessObject parent = null;
-            for (int i = 0; i < bos.length; i++) {
-                String boName = bos[i].trim();
-                bo = findOrCreateBO(parent, boName);
-                parent = bo;
-            }
-            bo.setAbstractBusinessObject(dto.isAbstractValue());
-            businessObjectRepository.save(bo);
-
-            // Create Business Object from Generalization
-            if (StringUtils.hasText(dto.getGeneralization())) {
-                BusinessObject generalization = findOrCreateBO(null, dto.getGeneralization());
-                bo.setGeneralization(generalization);
+            if (dto.getBusinessobject() != null) {
+                String[] bos = dto.getBusinessobject().split("\\w*>\\w*");
+                BusinessObject parent = null;
+                for (int i = 0; i < bos.length; i++) {
+                    String boName = bos[i].trim();
+                    bo = findOrCreateBO(parent, boName);
+                    parent = bo;
+                }
+                bo.setAbstractBusinessObject(dto.isAbstractValue());
                 businessObjectRepository.save(bo);
+                // Create Business Object from Generalization
+                if (StringUtils.hasText(dto.getGeneralization())) {
+                    BusinessObject generalization = findOrCreateBO(null, dto.getGeneralization());
+                    bo.setGeneralization(generalization);
+                    businessObjectRepository.save(bo);
+                }
             }
 
             // Create Data Object from fullpath
