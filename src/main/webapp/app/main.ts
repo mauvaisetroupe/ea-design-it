@@ -43,8 +43,10 @@ function retrieveAnonymousProperty(): Promise<boolean> {
     });
   } else {
     const anonymousReadAllowed: boolean = _anonymousReadAllowedFromLocalStorage === 'true';
-    return new Promise(() => {
-      return anonymousReadAllowed;
+    console.log('_anonymousReadAllowedFromLocalStorage : ' + _anonymousReadAllowedFromLocalStorage);
+    console.log("_anonymousReadAllowedFromLocalStorage === 'true' : " + (_anonymousReadAllowedFromLocalStorage === 'true'));
+    return new Promise(resolve => {
+      resolve(anonymousReadAllowed);
     });
   }
 }
@@ -88,11 +90,14 @@ const app = createApp({
     const loginService = new LoginService({ emit });
     provide('loginService', loginService);
     const store = useStore();
+    store.setAnonymousReadAllowed(anonymousReadAllowedDefaultValue);
     const accountService = new AccountService(store);
 
     // Call retrieveAnonymousProperty and wait for result
     retrieveAnonymousProperty().then(res => {
       store.setAnonymousReadAllowed(res);
+      console.log('store.anonymousReadAllowed (after set) : ' + store.anonymousReadAllowed);
+      console.log('accountService.anonymousReadAllowed : ' + accountService.anonymousReadAllowed);
     });
 
     console.log('init Account done.');
