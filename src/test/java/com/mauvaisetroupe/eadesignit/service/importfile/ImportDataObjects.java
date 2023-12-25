@@ -18,7 +18,7 @@ public class ImportDataObjects extends ImportFlowTest {
 
     @Test
     @Transactional
-    void testImportDataObjects() throws EncryptedDocumentException, IOException {
+    void testImportDataObjectsWithIncorrectLine() throws EncryptedDocumentException, IOException {
         String filename = "/junit/05-import-multi-flows-with-capas-and-dataobjects.xlsx";
 
         // Party		yes
@@ -62,6 +62,8 @@ public class ImportDataObjects extends ImportFlowTest {
         file = this.getClass().getResourceAsStream(filename);
         dataObjectImportService.importExcel(file);
 
+        assertEquals(11, dataObjectRepository.findAll().size());
+
         List<DataObject> allCustomerDO = dataObjectRepository.findByNameIgnoreCase("Customer");
         assertEquals(4, allCustomerDO.size());
 
@@ -95,5 +97,85 @@ public class ImportDataObjects extends ImportFlowTest {
             application_0005
         );
         assertTrue(RiskDOOptional.isPresent());
+
+        // Prospect	                            GOLDEN_SOURCE	        APPLICATION-0001	Payment Landscape
+        // Prospect	                            READ_ONLY_REPLICA	    APPLICATION-0002	Payment Landscape
+        // Prospect > External Assets	        READ_ONLY_REPLICA	    APPLICATION-0001	Payment Landscape
+        // Prospect > External Assets	        GOLDEN_SOURCE	        APPLICATION-0002	Payment Landscape
+        // Prospect > External Assets > Cash	GOLDEN_SOURCE	        APPLICATION-0003	Payment Landscape // INCORRECT
+        assertEquals(2, dataObjectRepository.findByNameIgnoreCase("Prospect").size());
+        assertEquals(2, dataObjectRepository.findByNameIgnoreCase("External Assets").size());
+
+        for (String appName : new String[] { "APPLICATION-0001", "APPLICATION-0002" }) {
+            Application app = applicationRepository.findByNameIgnoreCase(appName);
+            assertThat(
+                dataObjectRepository
+                    .findByNameIgnoreCaseAndParentAndApplication(
+                        "External Assets",
+                        dataObjectRepository.findByNameIgnoreCaseAndParentAndApplication("Prospect", null, app).orElseThrow(),
+                        app
+                    )
+                    .isPresent()
+            );
+        }
+    }
+
+    @Test
+    @Transactional
+    void testImportDataObjectsWithCorrectLine() throws EncryptedDocumentException, IOException {
+        String filename = "/junit/05-import-multi-flows-with-capas-and-dataobjects-corrected.xlsx";
+
+        assertEquals(0, applicationRepository.findAll().size());
+        assertEquals(0, landscapeViewRepository.findAll().size());
+        assertEquals(0, functionalFlowRepository.findAll().size());
+
+        /////////////////////
+        // Import APPLICATION
+        /////////////////////
+        InputStream file = this.getClass().getResourceAsStream(filename);
+        applicationImportService.importExcel(file, "WE.DONT.CARE.NOT.USED");
+
+        ///////////////////////////
+        // Import FLW.01, ... FLW.04
+        ///////////////////////////
+
+        file = this.getClass().getResourceAsStream(filename);
+        flowImportService.importExcelWithMultiFLWSheets(file, "FLW.01");
+        file = this.getClass().getResourceAsStream(filename);
+        flowImportService.importExcelWithMultiFLWSheets(file, "FLW.02");
+        file = this.getClass().getResourceAsStream(filename);
+        flowImportService.importExcelWithMultiFLWSheets(file, "FLW.03");
+        file = this.getClass().getResourceAsStream(filename);
+        flowImportService.importExcelWithMultiFLWSheets(file, "FLW.04");
+        checkNbLandscapes(4);
+
+        file = this.getClass().getResourceAsStream(filename);
+        dataObjectImportService.importExcel(file);
+
+        assertEquals(14, dataObjectRepository.findAll().size());
+
+        // Prospect	                            GOLDEN_SOURCE	        APPLICATION-0001	Payment Landscape
+        // Prospect	                            READ_ONLY_REPLICA	    APPLICATION-0002	Payment Landscape
+        // Prospect > External Assets	        READ_ONLY_REPLICA	    APPLICATION-0001	Payment Landscape
+        // Prospect > External Assets	        GOLDEN_SOURCE	        APPLICATION-0002	Payment Landscape
+        // Prospect 	                        GOLDEN_SOURCE	        APPLICATION-0003	Payment Landscape
+        // Prospect > External Assets           GOLDEN_SOURCE	        APPLICATION-0003	Payment Landscape
+        // Prospect > External Assets > Cash	GOLDEN_SOURCE	        APPLICATION-0003	Payment Landscape
+
+        assertEquals(3, dataObjectRepository.findByNameIgnoreCase("Prospect").size());
+        assertEquals(3, dataObjectRepository.findByNameIgnoreCase("External Assets").size());
+
+        for (String appName : new String[] { "APPLICATION-0001", "APPLICATION-0002", "APPLICATION-0003" }) {
+            Application app = applicationRepository.findByNameIgnoreCase(appName);
+            assertThat(
+                dataObjectRepository
+                    .findByNameIgnoreCaseAndParentAndApplication(
+                        "External Assets",
+                        dataObjectRepository.findByNameIgnoreCaseAndParentAndApplication("Prospect", null, app).orElseThrow(),
+                        app
+                    )
+                    .isPresent()
+            );
+        }
     }
 }

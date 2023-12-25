@@ -121,36 +121,40 @@ public class DataObjectImportService {
 
             // Create Data Object from fullpath
             if (StringUtils.hasText(dto.getDataobject())) {
-                String[] dos = dto.getDataobject().split("\\w*>\\w*");
-                DataObject dataObject = null;
-                DataObject dataObjectParent = null;
-                for (int i = 0; i < dos.length; i++) {
-                    String doName = dos[i].trim();
-                    // application in excel file is for DO but also for DO parents
-                    dataObject = findOrCreateDO(doName, dataObjectParent, application);
-                    dataObjectParent = dataObject;
-                }
-                dataObject.setBusinessObject(bo);
-                dataObject.setType(dto.getType());
-                dataObjectRepository.save(dataObject);
-
-                // Create link to Application
-                if (application != null) {
-                    dataObject.setApplication(application);
-                    dataObjectRepository.save(dataObject);
-                }
-
-                // create link to landascape
-                if (dto.getLandscapes() != null && dto.getLandscapes().size() > 0) {
-                    for (String landscapename : dto.getLandscapes()) {
-                        LandscapeView landscape = landscapeViewRepository.findByDiagramNameIgnoreCase(landscapename);
-                        if (landscape == null) {
-                            throw new IllegalStateException("Cannot find landscape " + landscapename);
-                        }
-                        dataObject.addLandscapes(landscape);
-                        landscapeViewRepository.save(landscape);
+                try {
+                    if (application == null) {
+                        dto.setErrorMessage("Application should not be null");
+                        dto.setImportStatus(ImportStatus.ERROR);
+                        throw new IllegalStateException();
                     }
-                    dataObjectRepository.save(dataObject);
+
+                    String[] dos = dto.getDataobject().split("\\w*>\\w*");
+                    DataObject dataObjectParent = null;
+                    if (dos.length > 1) {
+                        dataObjectParent = checkParentExist(dos, application);
+                        if (dataObjectParent == null) {
+                            dto.setErrorMessage("All DataObject parents should be exist and be declared in a previous line");
+                            dto.setImportStatus(ImportStatus.ERROR);
+                            throw new IllegalStateException();
+                        }
+                    }
+                    String dataObjectName = dos[dos.length - 1].trim();
+                    DataObject dataObject = findOrCreateDO(dataObjectName, dataObjectParent, application);
+
+                    // create link to landascape
+                    if (dto.getLandscapes() != null && dto.getLandscapes().size() > 0) {
+                        for (String landscapename : dto.getLandscapes()) {
+                            LandscapeView landscape = landscapeViewRepository.findByDiagramNameIgnoreCase(landscapename);
+                            if (landscape == null) {
+                                throw new IllegalStateException("Cannot find landscape " + landscapename);
+                            }
+                            dataObject.addLandscapes(landscape);
+                            landscapeViewRepository.save(landscape);
+                        }
+                        dataObjectRepository.save(dataObject);
+                    }
+                } catch (IllegalStateException e) {
+                    log.error("Error with line " + map);
                 }
             }
             result.add(dto);
@@ -160,6 +164,20 @@ public class DataObjectImportService {
         dataObjectDTO.setSheetname(DATA_OBJECT_SHEET_NAME);
         dataObjectDTO.setDtos(result);
         return dataObjectDTO;
+    }
+
+    private DataObject checkParentExist(String[] dos, Application application) {
+        DataObject dataObjectParent = null;
+        DataObject dataObject = null;
+        for (int i = 0; i < dos.length - 1; i++) {
+            String doName = dos[i].trim();
+            dataObject =
+                dataObjectRepository.findByNameIgnoreCaseAndParentAndApplication(doName, dataObjectParent, application).orElse(null);
+
+            if (dataObject == null) return null;
+            dataObjectParent = dataObject;
+        }
+        return dataObject;
     }
 
     private BusinessObject findOrCreateBO(BusinessObject parent, String boName) {
@@ -187,6 +205,7 @@ public class DataObjectImportService {
         if (dataObj.getId() == null) {
             dataObj.setName(dataObjectName);
             dataObj.setParent(parent);
+            dataObj.setApplication(application);
             dataObjectRepository.save(dataObj);
         }
         return dataObj;

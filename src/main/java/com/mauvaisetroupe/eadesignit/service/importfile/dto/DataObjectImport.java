@@ -17,6 +17,8 @@ public class DataObjectImport implements Serializable {
     private String dataobject;
     private String application;
     private DataObjectType type;
+    private ImportStatus importStatus;
+    private String errorMessage;
 
     public DataObjectType getType() {
         return type;
@@ -58,9 +60,6 @@ public class DataObjectImport implements Serializable {
     public void setLandscapes(List<String> landscapes) {
         this.landscapes = landscapes;
     }
-
-    private ImportStatus importStatus;
-    private String errorMessage;
 
     public ImportStatus getImportStatus() {
         return importStatus;
