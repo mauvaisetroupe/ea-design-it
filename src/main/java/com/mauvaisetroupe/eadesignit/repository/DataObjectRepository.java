@@ -1,5 +1,6 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
+import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.DataObject;
 import java.util.List;
 import java.util.Optional;
@@ -45,14 +46,6 @@ public interface DataObjectRepository extends DataObjectRepositoryWithBagRelatio
     )
     Optional<DataObject> findOneWithToOneRelationships(@Param("id") Long id);
 
-    Optional<DataObject> findByNameIgnoreCaseAndApplicationNameIgnoreCase(String boName, String appliName);
-
-    Optional<DataObject> findByNameIgnoreCaseAndParentNameIgnoreCaseAndApplicationNameIgnoreCase(
-        String boName,
-        String parentName,
-        String appliName
-    );
-
     @Query(
         "select do_0 from DataObject do_0 " +
         " left join fetch do_0.application a_0" +
@@ -80,7 +73,6 @@ public interface DataObjectRepository extends DataObjectRepositoryWithBagRelatio
     )
     List<DataObject> findAllWithAllChildrens();
 
-    Optional<DataObject> findByNameIgnoreCase(String dataObjectName);
-
-    Optional<DataObject> findByNameIgnoreCaseAndParentNameIgnoreCase(String dataObjectName, String name);
+    Optional<DataObject> findByNameIgnoreCaseAndParentAndApplication(String boName, DataObject parent, Application application);
+    List<DataObject> findByNameIgnoreCase(String boName);
 }

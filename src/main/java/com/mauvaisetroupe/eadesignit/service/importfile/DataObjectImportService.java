@@ -110,6 +110,15 @@ public class DataObjectImportService {
                 }
             }
 
+            // Find Application when exists
+            Application application = null;
+            if (StringUtils.hasText(dto.getApplication())) {
+                application = applicationRepository.findByNameIgnoreCase(dto.getApplication());
+                if (application == null) {
+                    throw new IllegalStateException("Cannot find application [" + dto.getApplication() + "]");
+                }
+            }
+
             // Create Data Object from fullpath
             if (StringUtils.hasText(dto.getDataobject())) {
                 String[] dos = dto.getDataobject().split("\\w*>\\w*");
@@ -117,12 +126,8 @@ public class DataObjectImportService {
                 DataObject dataObjectParent = null;
                 for (int i = 0; i < dos.length; i++) {
                     String doName = dos[i].trim();
-                    String appName = null;
-                    if (i == dos.length - 1) {
-                        // application in excel file is for DO, not DO parents
-                        appName = dto.getApplication();
-                    }
-                    dataObject = findOrCreateDO(dataObjectParent, doName, appName);
+                    // application in excel file is for DO but also for DO parents
+                    dataObject = findOrCreateDO(doName, dataObjectParent, application);
                     dataObjectParent = dataObject;
                 }
                 dataObject.setBusinessObject(bo);
@@ -130,11 +135,7 @@ public class DataObjectImportService {
                 dataObjectRepository.save(dataObject);
 
                 // Create link to Application
-                if (StringUtils.hasText(dto.getApplication())) {
-                    Application application = applicationRepository.findByNameIgnoreCase(dto.getApplication());
-                    if (application == null) {
-                        throw new IllegalStateException("Cannot find application [" + dto.getApplication() + "]");
-                    }
+                if (application != null) {
                     dataObject.setApplication(application);
                     dataObjectRepository.save(dataObject);
                 }
@@ -152,7 +153,6 @@ public class DataObjectImportService {
                     dataObjectRepository.save(dataObject);
                 }
             }
-
             result.add(dto);
         }
 
@@ -178,25 +178,12 @@ public class DataObjectImportService {
         return bo;
     }
 
-    private DataObject findOrCreateDO(DataObject parent, String dataObjectName, String applicationName) {
+    private DataObject findOrCreateDO(String dataObjectName, DataObject parent, Application application) {
         DataObject dataObj;
-        if (StringUtils.hasText(applicationName)) {
-            dataObj =
-                ((parent == null)
-                        ? dataObjectRepository.findByNameIgnoreCaseAndApplicationNameIgnoreCase(dataObjectName, applicationName)
-                        : dataObjectRepository.findByNameIgnoreCaseAndParentNameIgnoreCaseAndApplicationNameIgnoreCase(
-                            dataObjectName,
-                            parent.getName(),
-                            applicationName
-                        )).orElseGet(DataObject::new);
-        } else {
-            dataObj =
-                ((parent == null)
-                        ? dataObjectRepository.findByNameIgnoreCase(dataObjectName)
-                        : dataObjectRepository.findByNameIgnoreCaseAndParentNameIgnoreCase(dataObjectName, parent.getName())).orElseGet(
-                        DataObject::new
-                    );
-        }
+        dataObj =
+            dataObjectRepository
+                .findByNameIgnoreCaseAndParentAndApplication(dataObjectName, parent, application)
+                .orElseGet(DataObject::new);
         if (dataObj.getId() == null) {
             dataObj.setName(dataObjectName);
             dataObj.setParent(parent);
