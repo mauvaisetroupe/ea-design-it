@@ -235,7 +235,7 @@ public class FlowImportService {
         for (Map<String, Object> map : flowsDF) {
             FlowImport flowImport = mapArrayToFlowImport(map);
 
-            if (flowImport.getIdFlowFromExcel() == null) {
+            if (flowImport.getIdFlowFromExcel() == null && !flowImport.isExternal()) {
                 flowImport.setImportFunctionalFlowStatus(ImportStatus.ERROR);
                 flowImport.setImportInterfaceStatus(ImportStatus.ERROR);
                 flowImport.setImportDataFlowStatus(ImportStatus.ERROR);
