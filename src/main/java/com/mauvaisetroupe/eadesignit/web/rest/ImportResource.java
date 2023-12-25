@@ -178,7 +178,7 @@ public class ImportResource {
 
     @PostMapping("/import/capability/upload-file")
     public CapabilityImportAnalysisDTO uploadCapabilityFile(@RequestPart MultipartFile file) throws Exception {
-        return capabilityImportService.analyzeExcel(file.getInputStream(), file.getOriginalFilename());
+        return capabilityImportService.analyzeExcel(file.getInputStream());
     }
 
     @PostMapping("/import/capability/confirm-uploaded-file")

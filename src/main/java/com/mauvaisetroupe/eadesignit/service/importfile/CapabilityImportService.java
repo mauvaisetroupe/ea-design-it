@@ -56,8 +56,7 @@ public class CapabilityImportService {
     public static final String SUR_DOMAIN_DESCRIPTION = "Sur-domaine Description";
     public static final String FULL_PATH = "full.path";
 
-    public CapabilityImportAnalysisDTO analyzeExcel(InputStream excel, String originalFilename)
-        throws EncryptedDocumentException, IOException {
+    public CapabilityImportAnalysisDTO analyzeExcel(InputStream excel) throws EncryptedDocumentException, IOException {
         CapabilityImportAnalysisDTO analysisDTO = new CapabilityImportAnalysisDTO();
         ExcelReader capabilityFlowExcelReader = new ExcelReader(excel);
         List<Map<String, Object>> capabilitiesDF = capabilityFlowExcelReader.getSheet(CAPABILITY_SHEET_NAME);
