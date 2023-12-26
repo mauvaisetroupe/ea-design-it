@@ -433,6 +433,8 @@ class LandscapeViewResourceIT {
                     .queryParam("deleteFunctionalFlows", "true")
                     .queryParam("deleteFlowInterfaces", "true")
                     .queryParam("deleteDatas", "true")
+                    .queryParam("deleteCapabilityMappings", "false")
+                    .queryParam("deleteDataObjects", "false")
                     .accept(MediaType.APPLICATION_JSON)
             )
             .andExpect(status().isNoContent());
