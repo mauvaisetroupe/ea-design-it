@@ -5,7 +5,7 @@
 
     <groupId>com.mauvaisetroupe.eadesignit</groupId>
     <artifactId>ea-design-it</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <packaging>jar</packaging>
     <name>EA Design It</name>
     <description>Description for EA Design It</description>
