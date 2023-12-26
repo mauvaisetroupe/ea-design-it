@@ -24,6 +24,9 @@ export default defineComponent({
     const deleteFunctionalFlows = ref(true);
     const deleteInterfaces = ref(true);
     const deleteDatas = ref(true);
+    const deleteCapabilityMappings = ref(false);
+    const deleteDataObjects = ref(false);
+
     function deleteCoherence() {
       if (!deleteFunctionalFlows.value) {
         deleteInterfaces.value = false;
@@ -66,7 +69,14 @@ export default defineComponent({
     };
     const removeLandscapeView = async () => {
       try {
-        await landscapeViewService().delete(removeId.value, deleteFunctionalFlows.value, deleteInterfaces.value, deleteDatas.value);
+        await landscapeViewService().delete(
+          removeId.value,
+          deleteFunctionalFlows.value,
+          deleteInterfaces.value,
+          deleteDatas.value,
+          deleteCapabilityMappings.value,
+          deleteDataObjects.value,
+        );
         const message = 'A LandscapeView is deleted with identifier ' + removeId.value;
         alertService.showInfo(message, { variant: 'danger' });
         removeId.value = -1;
@@ -94,6 +104,8 @@ export default defineComponent({
       deleteDatas,
       deleteCoherence,
       deleteFunctionalFlows,
+      deleteCapabilityMappings,
+      deleteDataObjects,
     };
   },
 });

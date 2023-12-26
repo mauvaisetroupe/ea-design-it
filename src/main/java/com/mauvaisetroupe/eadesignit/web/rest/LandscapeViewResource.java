@@ -275,10 +275,19 @@ public class LandscapeViewResource {
         @PathVariable Long id,
         @RequestParam boolean deleteFunctionalFlows,
         @RequestParam boolean deleteFlowInterfaces,
-        @RequestParam boolean deleteDatas
+        @RequestParam boolean deleteDatas,
+        @RequestParam boolean deleteCapabilityMappings,
+        @RequestParam boolean deleteDataObjects
     ) {
         log.debug("REST request to delete LandscapeView : {}, {}, {}, {}", id, deleteFunctionalFlows, deleteFlowInterfaces, deleteDatas);
-        landscapeViewService.delete(id, deleteFunctionalFlows, deleteFlowInterfaces, deleteDatas);
+        landscapeViewService.delete(
+            id,
+            deleteFunctionalFlows,
+            deleteFlowInterfaces,
+            deleteDatas,
+            deleteCapabilityMappings,
+            deleteDataObjects
+        );
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

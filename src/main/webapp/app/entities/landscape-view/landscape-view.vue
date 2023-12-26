@@ -103,6 +103,11 @@
           <input type="checkbox" v-model="deleteDatas" @change="deleteCoherence()" :disabled="!deleteInterfaces" /> Delete unused Data Flows
           &amp; Data Flow Items
         </p>
+        <p><input type="checkbox" v-model="deleteCapabilityMappings" @change="deleteCoherence()" /> Delete unused Capability Mappings</p>
+        <p>
+          <input type="checkbox" v-model="deleteDataObjects" @change="deleteCoherence()" disabled /> Delete unused Data Objects (not
+          implemented)
+        </p>
       </div>
       <template #modal-footer>
         <div>

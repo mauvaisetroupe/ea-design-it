@@ -1,17 +1,22 @@
 package com.mauvaisetroupe.eadesignit.service;
 
+import com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping;
 import com.mauvaisetroupe.eadesignit.domain.DataFlow;
+import com.mauvaisetroupe.eadesignit.domain.DataObject;
 import com.mauvaisetroupe.eadesignit.domain.FlowGroup;
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlowStep;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.repository.CapabilityApplicationMappingRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataFlowRepository;
+import com.mauvaisetroupe.eadesignit.repository.DataObjectRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowGroupRepository;
 import com.mauvaisetroupe.eadesignit.repository.FlowInterfaceRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowStepRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 /**
  * Service Implementation for managing {@link LandscapeView}.
@@ -51,6 +57,12 @@ public class LandscapeViewService {
     @Autowired
     private FlowGroupRepository flowGroupRepository;
 
+    @Autowired
+    private CapabilityApplicationMappingRepository capabilityApplicationMappingRepository;
+
+    @Autowired
+    private DataObjectRepository dataObjectRepository;
+
     /**
      * Delete the landscapeView by id.
      *
@@ -58,9 +70,20 @@ public class LandscapeViewService {
      * @param deleteDatas
      * @param deleteFlowInterface
      * @param deleteFunctionalFlow
+     * @param deleteDataObjects
+     * @param deleteCapabilityMappings
      */
-    public void delete(Long id, boolean deleteFunctionalFlow, boolean deleteFlowInterface, boolean deleteDatas) {
+    public void delete(
+        Long id,
+        boolean deleteFunctionalFlow,
+        boolean deleteFlowInterface,
+        boolean deleteDatas,
+        boolean deleteCapabilityMappings,
+        boolean deleteDataObjects
+    ) {
         log.debug("Request to delete LandscapeView : {}", id);
+
+        Assert.isTrue(!deleteDataObjects, "Not implemented due to complexity with parents relationships");
         // delete landscape and all entities without references to other landscape
 
         LandscapeView landscapeView = landscapeViewRepository.getById(id);
@@ -90,6 +113,21 @@ public class LandscapeViewService {
             landscapeView.removeFlows(flow);
             functionalFlowRepository.save(flow);
         }
+
+        // Detach all CapabilitiesMapping
+        Set<CapabilityApplicationMapping> landscapeCapabilitiesMappings = new HashSet<>(landscapeView.getCapabilityApplicationMappings());
+        for (CapabilityApplicationMapping capabilityApplicationMapping : landscapeCapabilitiesMappings) {
+            landscapeView.removeCapabilityApplicationMapping(capabilityApplicationMapping);
+            capabilityApplicationMappingRepository.save(capabilityApplicationMapping);
+        }
+
+        // Detach all DataObjectes
+        Set<DataObject> landsccapeDataObjects = new HashSet<>(landscapeView.getDataObjects());
+        for (DataObject dataObject : landsccapeDataObjects) {
+            landscapeView.removeDataObjects(dataObject);
+            dataObjectRepository.save(dataObject);
+        }
+
         // delete landscape
         landscapeViewRepository.deleteById(id);
 
@@ -171,6 +209,15 @@ public class LandscapeViewService {
                     (dataFlow.getItems() == null || dataFlow.getItems().isEmpty())
                 ) {
                     dataFlowRepository.delete(dataFlow);
+                }
+            }
+        }
+
+        // delete capabilitiesmapping not linked to another landscape
+        if (deleteCapabilityMappings) {
+            for (CapabilityApplicationMapping capabilityApplicationMapping : landscapeCapabilitiesMappings) {
+                if (capabilityApplicationMapping.getLandscapes() == null || capabilityApplicationMapping.getLandscapes().isEmpty()) {
+                    capabilityApplicationMappingRepository.delete(capabilityApplicationMapping);
                 }
             }
         }

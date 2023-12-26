@@ -35,8 +35,21 @@ export default class LandscapeViewService {
     });
   }
 
-  public delete(id: number, deleteFunctionalFlows: boolean, deleteFlowInterfaces: boolean, deleteDatas: boolean): Promise<any> {
-    const params = { deleteFunctionalFlows: deleteFunctionalFlows, deleteFlowInterfaces: deleteFlowInterfaces, deleteDatas: deleteDatas };
+  public delete(
+    id: number,
+    deleteFunctionalFlows: boolean,
+    deleteFlowInterfaces: boolean,
+    deleteDatas: boolean,
+    deleteCapabilityMappings: boolean,
+    deleteDataObjects: boolean,
+  ): Promise<any> {
+    const params = {
+      deleteFunctionalFlows: deleteFunctionalFlows,
+      deleteFlowInterfaces: deleteFlowInterfaces,
+      deleteDatas: deleteDatas,
+      deleteCapabilityMappings: deleteCapabilityMappings,
+      deleteDataObjects: deleteDataObjects,
+    };
     return new Promise<any>((resolve, reject) => {
       axios
         .delete(`${baseApiUrl}/${id}`, { params })
