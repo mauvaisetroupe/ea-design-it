@@ -1,4 +1,5 @@
 import { type IOwner } from '@/shared/model/owner.model';
+import { type IOrganizationalEntity } from '@/shared/model/organizational-entity.model';
 import { type IApplicationCategory } from '@/shared/model/application-category.model';
 import { type ITechnology } from '@/shared/model/technology.model';
 import { type IExternalReference } from '@/shared/model/external-reference.model';
@@ -23,6 +24,7 @@ export interface IApplication {
   owner?: IOwner | null;
   itOwner?: IOwner | null;
   businessOwner?: IOwner | null;
+  organizationalEntity?: IOrganizationalEntity | null;
   categories?: IApplicationCategory[] | null;
   technologies?: ITechnology[] | null;
   //  capabilities?: ICapability[] | null;
@@ -48,6 +50,7 @@ export class Application implements IApplication {
     public owner?: IOwner | null,
     public itOwner?: IOwner | null,
     public businessOwner?: IOwner | null,
+    public organizationalEntity?: IOrganizationalEntity | null,
     public categories?: IApplicationCategory[] | null,
     public technologies?: ITechnology[] | null,
     //    public capabilities?: ICapability[] | null,

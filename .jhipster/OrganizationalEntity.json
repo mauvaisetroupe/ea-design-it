@@ -1,0 +1,24 @@
+{
+  "applications": ["EADesignIt"],
+  "changelogDate": "20231226120642",
+  "entityTableName": "organizational_entity",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    }
+  ],
+  "name": "OrganizationalEntity",
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "application",
+      "otherEntityRelationshipName": "organizationalEntity",
+      "relationshipName": "applications",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no"
+}

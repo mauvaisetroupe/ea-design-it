@@ -34,6 +34,7 @@ public class ExternalReference implements Serializable {
             "owner",
             "itOwner",
             "businessOwner",
+            "organizationalEntity",
             "categories",
             "technologies",
             "externalIDS",

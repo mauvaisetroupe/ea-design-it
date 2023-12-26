@@ -230,6 +230,29 @@
             </select>
           </div>
           <div class="form-group">
+            <label class="form-control-label" for="application-organizationalEntity">Organizational Entity</label>
+            <select
+              class="form-control"
+              id="application-organizationalEntity"
+              data-cy="organizationalEntity"
+              name="organizationalEntity"
+              v-model="application.organizationalEntity"
+            >
+              <option v-bind:value="null"></option>
+              <option
+                v-bind:value="
+                  application.organizationalEntity && organizationalEntityOption.id === application.organizationalEntity.id
+                    ? application.organizationalEntity
+                    : organizationalEntityOption
+                "
+                v-for="organizationalEntityOption in organizationalEntities"
+                :key="organizationalEntityOption.id"
+              >
+                {{ organizationalEntityOption.name }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="application-categories">Categories</label>
             <select
               class="form-control"

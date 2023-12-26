@@ -136,6 +136,17 @@
                   }}</router-link>
                 </span>
               </dd>
+              <dt>
+                <span>Organizational Entity</span>
+              </dt>
+              <dd>
+                <div v-if="application.organizationalEntity">
+                  <router-link
+                    :to="{ name: 'OrganizationalEntityView', params: { organizationalEntityId: application.organizationalEntity.id } }"
+                    >{{ application.organizationalEntity.name }}</router-link
+                  >
+                </div>
+              </dd>
             </dl>
           </div>
         </b-tab>

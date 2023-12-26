@@ -1,0 +1,24 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="lionel (generated)" id="1703608047847-5">
+        <createTable tableName="organizational_entity">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="organizational_entityPK"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1703608047847-6">
+        <addColumn tableName="application">
+            <column name="organizational_entity_id" type="bigint"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1703608047847-7">
+        <addUniqueConstraint columnNames="name" constraintName="UC_ORGANIZATIONAL_ENTITYNAME_COL" tableName="organizational_entity"/>
+    </changeSet>
+    <changeSet author="lionel (generated)" id="1703608047847-9">
+        <addForeignKeyConstraint baseColumnNames="organizational_entity_id" baseTableName="application" constraintName="FKlyam6yk1l7o8cf8l6f658aif7" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="organizational_entity" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

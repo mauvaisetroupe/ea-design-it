@@ -88,6 +88,10 @@ const DataObject = () => import('@/entities/data-object/data-object.vue');
 const DataObjectUpdate = () => import('@/entities/data-object/data-object-update.vue');
 const DataObjectDetails = () => import('@/entities/data-object/data-object-details.vue');
 
+const OrganizationalEntity = () => import('@/entities/organizational-entity/organizational-entity.vue');
+const OrganizationalEntityUpdate = () => import('@/entities/organizational-entity/organizational-entity-update.vue');
+const OrganizationalEntityDetails = () => import('@/entities/organizational-entity/organizational-entity-details.vue');
+
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default {
@@ -584,6 +588,30 @@ export default {
       path: 'data-object/:dataObjectId/view',
       name: 'DataObjectView',
       component: DataObjectDetails,
+      meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
+    },
+    {
+      path: 'organizational-entity',
+      name: 'OrganizationalEntity',
+      component: OrganizationalEntity,
+      meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
+    },
+    {
+      path: 'organizational-entity/new',
+      name: 'OrganizationalEntityCreate',
+      component: OrganizationalEntityUpdate,
+      meta: { authorities: [Authority.WRITE] },
+    },
+    {
+      path: 'organizational-entity/:organizationalEntityId/edit',
+      name: 'OrganizationalEntityEdit',
+      component: OrganizationalEntityUpdate,
+      meta: { authorities: [Authority.WRITE] },
+    },
+    {
+      path: 'organizational-entity/:organizationalEntityId/view',
+      name: 'OrganizationalEntityView',
+      component: OrganizationalEntityDetails,
       meta: { authorities: [Authority.USER, Authority.ANONYMOUS_ALLOWED] },
     },
     // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

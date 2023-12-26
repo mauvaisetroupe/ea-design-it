@@ -29,7 +29,7 @@ application {
     withAdminUi true
   }
 
-  entities Application, ApplicationCategory, ApplicationComponent, Capability, CapabilityApplicationMapping, DataFlow, DataFlowItem, DataFormat, ExternalReference, ExternalSystem, FlowGroup, FlowInterface, FunctionalFlow, FunctionalFlowStep, LandscapeView, Owner, Protocol, Technology, BusinessObject, DataObject
+  entities Application, ApplicationCategory, ApplicationComponent, Capability, CapabilityApplicationMapping, DataFlow, DataFlowItem, DataFormat, ExternalReference, ExternalSystem, FlowGroup, FlowInterface, FunctionalFlow, FunctionalFlowStep, LandscapeView, Owner, Protocol, Technology, BusinessObject, DataObject, OrganizationalEntity
 }
 
 relationship ManyToMany {
@@ -385,4 +385,14 @@ relationship ManyToOne {
 	DataObject{application(name)} to Application{dataObjects(name)}
     BusinessObject{owner(name)} to Owner
     DataObject{owner(name)} to Owner    
+}
+
+// OrganizationalEntity to Brnach, Subsidiaries, ...
+
+entity OrganizationalEntity {
+    name String required unique
+}
+
+relationship ManyToOne {
+    Application{organizationalEntity(name)} to OrganizationalEntity{applications(name)}
 }

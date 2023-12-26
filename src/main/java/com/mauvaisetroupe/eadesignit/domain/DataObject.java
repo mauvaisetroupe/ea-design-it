@@ -45,6 +45,7 @@ public class DataObject implements Serializable {
             "owner",
             "itOwner",
             "businessOwner",
+            "organizationalEntity",
             "categories",
             "technologies",
             "externalIDS",

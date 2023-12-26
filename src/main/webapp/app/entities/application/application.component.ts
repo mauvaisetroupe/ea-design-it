@@ -46,6 +46,7 @@ export default defineComponent({
       { key: 'businessOwner.name', sortable: false, label: 'Business Owner' },
       { key: 'categories', sortable: false },
       { key: 'technologies', sortable: false },
+      { key: 'organizationalEntity', sortable: false },
       //{ key: 'capabilities', sortable: false },
       // {key:'externalIDS', sortable: false},
       // {key:'applicationsLists', sortable: false},

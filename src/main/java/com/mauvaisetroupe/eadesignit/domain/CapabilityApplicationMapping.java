@@ -32,6 +32,7 @@ public class CapabilityApplicationMapping implements Serializable {
             "owner",
             "itOwner",
             "businessOwner",
+            "organizationalEntity",
             "categories",
             "technologies",
             "externalIDS",

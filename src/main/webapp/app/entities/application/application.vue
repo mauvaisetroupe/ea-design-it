@@ -194,6 +194,10 @@
           >
         </span>
       </template>
+
+      <template #cell(organizationalEntity)="row">
+        {{ row.item.organizationalEntity?.name }}
+      </template>
     </b-table>
   </div>
 </template>

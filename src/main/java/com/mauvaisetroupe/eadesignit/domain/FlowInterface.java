@@ -69,6 +69,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
             "applicationsLists",
             "capabilityApplicationMappings",
             "dataObjects",
+            "organizationalEntity",
         },
         allowSetters = true
     )
@@ -87,6 +88,7 @@ public class FlowInterface implements Serializable, Comparable<FlowInterface>, O
             "applicationsLists",
             "capabilityApplicationMappings",
             "dataObjects",
+            "organizationalEntity",
         },
         allowSetters = true
     )

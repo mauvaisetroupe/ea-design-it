@@ -76,6 +76,10 @@ public class Application implements Serializable, Ownershipable {
     @JsonIgnoreProperties(value = { "users" }, allowSetters = true)
     private Owner businessOwner;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "applications" }, allowSetters = true)
+    private OrganizationalEntity organizationalEntity;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_application__categories",
@@ -296,6 +300,19 @@ public class Application implements Serializable, Ownershipable {
 
     public Application businessOwner(Owner owner) {
         this.setBusinessOwner(owner);
+        return this;
+    }
+
+    public OrganizationalEntity getOrganizationalEntity() {
+        return this.organizationalEntity;
+    }
+
+    public void setOrganizationalEntity(OrganizationalEntity organizationalEntity) {
+        this.organizationalEntity = organizationalEntity;
+    }
+
+    public Application organizationalEntity(OrganizationalEntity organizationalEntity) {
+        this.setOrganizationalEntity(organizationalEntity);
         return this;
     }
 
