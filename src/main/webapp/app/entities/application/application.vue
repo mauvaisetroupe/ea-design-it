@@ -96,6 +96,11 @@
               <input class="form-check-input" type="checkbox" id="businessOwner" value="businessOwner" v-model="filterOn" />
               <label class="form-check-label" for="businessOwner">Business Owner</label>
             </div>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="checkbox" id="organizationalEntity" value="organizationalEntity" v-model="filterOn" />
+              <label class="form-check-label" for="organizationalEntity">Organizational Entity</label>
+            </div>
           </div>
         </div>
         <div class="row p-2">
