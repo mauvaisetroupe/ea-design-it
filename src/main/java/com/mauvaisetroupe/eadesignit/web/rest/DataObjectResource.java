@@ -152,7 +152,7 @@ public class DataObjectResource {
     public List<DataObject> getAllDataObjects(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all DataObjects");
         if (eagerload) {
-            return dataObjectRepository.findAllWithAllChildrens();
+            return dataObjectRepository.findAllWithEagerRelationships();
         } else {
             return dataObjectRepository.findAll();
         }
