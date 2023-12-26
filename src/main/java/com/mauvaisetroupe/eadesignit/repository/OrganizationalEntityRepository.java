@@ -1,6 +1,7 @@
 package com.mauvaisetroupe.eadesignit.repository;
 
 import com.mauvaisetroupe.eadesignit.domain.OrganizationalEntity;
+import com.mauvaisetroupe.eadesignit.domain.Owner;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface OrganizationalEntityRepository extends JpaRepository<OrganizationalEntity, Long> {}
+public interface OrganizationalEntityRepository extends JpaRepository<OrganizationalEntity, Long> {
+    OrganizationalEntity findByNameIgnoreCase(String ownerName);
+}

@@ -6,6 +6,7 @@ import com.mauvaisetroupe.eadesignit.domain.ApplicationComponent;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.domain.ExternalReference;
 import com.mauvaisetroupe.eadesignit.domain.ExternalSystem;
+import com.mauvaisetroupe.eadesignit.domain.OrganizationalEntity;
 import com.mauvaisetroupe.eadesignit.domain.Owner;
 import com.mauvaisetroupe.eadesignit.domain.Technology;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ApplicationType;
@@ -14,6 +15,7 @@ import com.mauvaisetroupe.eadesignit.domain.util.EnumUtil;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationCategoryRepository;
 import com.mauvaisetroupe.eadesignit.repository.ExternalReferenceRepository;
 import com.mauvaisetroupe.eadesignit.repository.ExternalSystemRepository;
+import com.mauvaisetroupe.eadesignit.repository.OrganizationalEntityRepository;
 import com.mauvaisetroupe.eadesignit.repository.OwnerRepository;
 import com.mauvaisetroupe.eadesignit.repository.TechnologyRepository;
 import java.util.HashSet;
@@ -45,7 +47,7 @@ public class ApplicationMapperUtil {
     public static final String BUSINESS_OWNER = "business.owner";
     public static final String IT_OWNER = "it.owner";
     public static final String APPLICATION_EXTERNALID_ = "externalID.";
-
+    public static final String APPLICATION_ORGANIZATIONAL_ENTITY = "organizational.entity";
     public static final String COMPONENT_ID = "component.id";
     public static final String COMPONENT_NAME = "component.name";
     public static final String COMPONENT_DISPLAY_IN_LANDSCAPE = "Display in Landscape";
@@ -60,19 +62,22 @@ public class ApplicationMapperUtil {
     private final OwnerRepository ownerRepository;
     private final ExternalSystemRepository externalSystemRepository;
     private final ExternalReferenceRepository externalReferenceRepository;
+    private final OrganizationalEntityRepository organizationalEntityRepository;
 
     public ApplicationMapperUtil(
         ApplicationCategoryRepository applicationCategoryRepository,
         TechnologyRepository technologyRepository,
         OwnerRepository ownerRepository,
         ExternalSystemRepository externalSystemRepository,
-        ExternalReferenceRepository externalReferenceRepository
+        ExternalReferenceRepository externalReferenceRepository,
+        OrganizationalEntityRepository organizationalEntityRepository
     ) {
         this.applicationCategoryRepository = applicationCategoryRepository;
         this.technologyRepository = technologyRepository;
         this.ownerRepository = ownerRepository;
         this.externalSystemRepository = externalSystemRepository;
         this.externalReferenceRepository = externalReferenceRepository;
+        this.organizationalEntityRepository = organizationalEntityRepository;
     }
 
     public ApplicationImport mapArrayToImportApplication(Map<String, Object> map) {
@@ -101,6 +106,7 @@ public class ApplicationMapperUtil {
                 }
             }
         }
+        applicationImport.setOrganizationalEntity((String) map.get(APPLICATION_ORGANIZATIONAL_ENTITY));
 
         //
         // Component specificiies
@@ -139,6 +145,7 @@ public class ApplicationMapperUtil {
 
         Set<ExternalReference> references = getExternalReferencesFromImport(applicationImport);
         application.setExternalIDS(references);
+        application.setOrganizationalEntity(getOrganizationalEntity(applicationImport.getOrganizationalEntity()));
     }
 
     public void mapApplicationImportToComponent(ApplicationImport applicationImport, final ApplicationComponent application) {
@@ -214,6 +221,19 @@ public class ApplicationMapperUtil {
             }
         }
         return owner;
+    }
+
+    private OrganizationalEntity getOrganizationalEntity(String organizationalEntityName) {
+        OrganizationalEntity organizationalEntity = null;
+        if (StringUtils.hasText(organizationalEntityName)) {
+            organizationalEntity = organizationalEntityRepository.findByNameIgnoreCase(organizationalEntityName);
+            if (organizationalEntity == null) {
+                organizationalEntity = new OrganizationalEntity();
+                organizationalEntity.setName(organizationalEntityName);
+                organizationalEntityRepository.save(organizationalEntity);
+            }
+        }
+        return organizationalEntity;
     }
 
     public void mapArrayToOwner(Map<String, Object> map) {

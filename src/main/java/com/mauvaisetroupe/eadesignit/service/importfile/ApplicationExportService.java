@@ -93,6 +93,7 @@ public class ApplicationExportService {
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_OWNER);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.IT_OWNER);
         headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.BUSINESS_OWNER);
+        headerRow.createCell(column++).setCellValue(ApplicationMapperUtil.APPLICATION_ORGANIZATIONAL_ENTITY);
 
         Map<String, Integer> externalOrder = writeExternalSystemHeader(column, headerRow);
 
@@ -134,6 +135,10 @@ public class ApplicationExportService {
             column++;
             if (application.getBusinessOwner() != null) {
                 row.createCell(column).setCellValue(application.getBusinessOwner().getName());
+            }
+            column++;
+            if (application.getOrganizationalEntity() != null) {
+                row.createCell(column).setCellValue(application.getOrganizationalEntity().getName());
             }
             column++;
 

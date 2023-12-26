@@ -54,6 +54,8 @@ public class ApplicationImport implements Serializable {
 
     private Map<String, String> externalIDS = new HashMap<>();
 
+    private String organizationalEntity;
+
     public Map<String, String> getExternalIDS() {
         return externalIDS;
     }
@@ -212,5 +214,13 @@ public class ApplicationImport implements Serializable {
 
     public void setExistingApplicationID(String existingApplicationID) {
         this.existingApplicationID = existingApplicationID;
+    }
+
+    public String getOrganizationalEntity() {
+        return organizationalEntity;
+    }
+
+    public void setOrganizationalEntity(String organizationalEntity) {
+        this.organizationalEntity = organizationalEntity;
     }
 }
