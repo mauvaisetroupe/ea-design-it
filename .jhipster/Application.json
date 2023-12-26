@@ -79,6 +79,14 @@
     },
     {
       "otherEntityField": "name",
+      "otherEntityName": "organizationalEntity",
+      "otherEntityRelationshipName": "applications",
+      "relationshipName": "organizationalEntity",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "name",
       "otherEntityName": "applicationCategory",
       "otherEntityRelationshipName": "applications",
       "relationshipName": "categories",

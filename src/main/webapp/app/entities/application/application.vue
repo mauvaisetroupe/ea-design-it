@@ -41,6 +41,7 @@
             <th scope="row"><span>Owner</span></th>
             <th scope="row"><span>It Owner</span></th>
             <th scope="row"><span>Business Owner</span></th>
+            <th scope="row"><span>Organizational Entity</span></th>
             <th scope="row"><span>Categories</span></th>
             <th scope="row"><span>Technologies</span></th>
             <th scope="row"><span>External IDS</span></th>
@@ -81,6 +82,14 @@
                 <router-link :to="{ name: 'OwnerView', params: { ownerId: application.businessOwner.id } }">{{
                   application.businessOwner.name
                 }}</router-link>
+              </div>
+            </td>
+            <td>
+              <div v-if="application.organizationalEntity">
+                <router-link
+                  :to="{ name: 'OrganizationalEntityView', params: { organizationalEntityId: application.organizationalEntity.id } }"
+                  >{{ application.organizationalEntity.name }}</router-link
+                >
               </div>
             </td>
             <td>

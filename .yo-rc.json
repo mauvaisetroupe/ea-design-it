@@ -38,12 +38,13 @@
       "ExternalSystem",
       "CapabilityApplicationMapping",
       "BusinessObject",
-      "DataObject"
+      "DataObject",
+      "OrganizationalEntity"
     ],
     "gradleEnterpriseHost": null,
     "jhipsterVersion": "8.0.0-rc.1",
     "jwtSecretKey": "ZGNhMjhiMjkyMzk0YzhmYzgwODlmNGFjY2ZhNGI5ODJkNDg1OWUyMmU4MGVhMzJiMjQyZTlmNGNkYjdlNjgxYzY0Njg2NDUzODg3NjJiNGUwZDZmOTVlYjk4ODYwZGM4MjJhNjY5MDhlMTI0YWMyMzE5ZTZiNzhhZGIzNzJkYmQ=",
-    "lastLiquibaseTimestamp": 1699010015000,
+    "lastLiquibaseTimestamp": 1703592402000,
     "messageBroker": false,
     "microfrontend": null,
     "microfrontends": [],

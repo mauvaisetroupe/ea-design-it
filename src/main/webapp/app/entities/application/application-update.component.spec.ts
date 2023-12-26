@@ -9,6 +9,7 @@ import ApplicationService from './application.service';
 import AlertService from '@/shared/alert/alert.service';
 
 import OwnerService from '@/entities/owner/owner.service';
+import OrganizationalEntityService from '@/entities/organizational-entity/organizational-entity.service';
 import ApplicationCategoryService from '@/entities/application-category/application-category.service';
 import TechnologyService from '@/entities/technology/technology.service';
 import ExternalReferenceService from '@/entities/external-reference/external-reference.service';
@@ -57,6 +58,10 @@ describe('Component Tests', () => {
           applicationService: () => applicationServiceStub,
           ownerService: () =>
             sinon.createStubInstance<OwnerService>(OwnerService, {
+              retrieve: sinon.stub().resolves({}),
+            } as any),
+          organizationalEntityService: () =>
+            sinon.createStubInstance<OrganizationalEntityService>(OrganizationalEntityService, {
               retrieve: sinon.stub().resolves({}),
             } as any),
           applicationCategoryService: () =>

@@ -29,6 +29,13 @@
                                  referencedTableName="owner"
                                  />
 
+        <addForeignKeyConstraint baseColumnNames="organizational_entity_id"
+                                 baseTableName="application"
+                                 constraintName="fk_application__organizational_entity_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="organizational_entity"
+                                 />
+
         <addForeignKeyConstraint baseColumnNames="application_id"
                                  baseTableName="rel_application__categories"
                                  constraintName="fk_rel_application__categories__application_id"

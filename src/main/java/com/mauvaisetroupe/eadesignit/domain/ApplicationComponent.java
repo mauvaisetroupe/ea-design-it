@@ -69,6 +69,7 @@ public class ApplicationComponent implements Serializable {
             "owner",
             "itOwner",
             "businessOwner",
+            "organizationalEntity",
             "categories",
             "technologies",
             "externalIDS",

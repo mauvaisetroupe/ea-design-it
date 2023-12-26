@@ -8,6 +8,8 @@ import { useAlertService } from '@/shared/alert/alert.service';
 
 import OwnerService from '@/entities/owner/owner.service';
 import { type IOwner } from '@/shared/model/owner.model';
+import OrganizationalEntityService from '@/entities/organizational-entity/organizational-entity.service';
+import { type IOrganizationalEntity } from '@/shared/model/organizational-entity.model';
 import ApplicationCategoryService from '@/entities/application-category/application-category.service';
 import { type IApplicationCategory } from '@/shared/model/application-category.model';
 import TechnologyService from '@/entities/technology/technology.service';
@@ -30,6 +32,10 @@ export default defineComponent({
     const ownerService = inject('ownerService', () => new OwnerService());
 
     const owners: Ref<IOwner[]> = ref([]);
+
+    const organizationalEntityService = inject('organizationalEntityService', () => new OrganizationalEntityService());
+
+    const organizationalEntities: Ref<IOrganizationalEntity[]> = ref([]);
 
     const applicationCategoryService = inject('applicationCategoryService', () => new ApplicationCategoryService());
 
@@ -70,6 +76,11 @@ export default defineComponent({
         .retrieve()
         .then(res => {
           owners.value = res.data;
+        });
+      organizationalEntityService()
+        .retrieve()
+        .then(res => {
+          organizationalEntities.value = res.data;
         });
       applicationCategoryService()
         .retrieve()
@@ -113,6 +124,7 @@ export default defineComponent({
       owner: {},
       itOwner: {},
       businessOwner: {},
+      organizationalEntity: {},
       categories: {},
       technologies: {},
       externalIDS: {},
@@ -133,6 +145,7 @@ export default defineComponent({
       isSaving,
       currentLanguage,
       owners,
+      organizationalEntities,
       applicationCategories,
       technologies,
       externalReferences,

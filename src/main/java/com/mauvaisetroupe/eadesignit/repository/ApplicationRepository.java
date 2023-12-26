@@ -30,18 +30,18 @@ public interface ApplicationRepository extends ApplicationRepositoryWithBagRelat
     }
 
     @Query(
-        value = "select application from Application application left join fetch application.owner left join fetch application.itOwner left join fetch application.businessOwner",
+        value = "select application from Application application left join fetch application.owner left join fetch application.itOwner left join fetch application.businessOwner left join fetch application.organizationalEntity",
         countQuery = "select count(application) from Application application"
     )
     Page<Application> findAllWithToOneRelationships(Pageable pageable);
 
     @Query(
-        "select application from Application application left join fetch application.owner left join fetch application.itOwner left join fetch application.businessOwner"
+        "select application from Application application left join fetch application.owner left join fetch application.itOwner left join fetch application.businessOwner left join fetch application.organizationalEntity"
     )
     List<Application> findAllWithToOneRelationships();
 
     @Query(
-        "select application from Application application left join fetch application.owner left join fetch application.itOwner left join fetch application.businessOwner where application.id =:id"
+        "select application from Application application left join fetch application.owner left join fetch application.itOwner left join fetch application.businessOwner left join fetch application.organizationalEntity where application.id =:id"
     )
     Optional<Application> findOneWithToOneRelationships(@Param("id") Long id);
 }

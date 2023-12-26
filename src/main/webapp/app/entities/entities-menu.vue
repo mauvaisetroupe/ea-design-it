@@ -80,6 +80,10 @@
       <font-awesome-icon icon="asterisk" />
       <span>Data Object</span>
     </b-dropdown-item>
+    <b-dropdown-item to="/organizational-entity">
+      <font-awesome-icon icon="asterisk" />
+      <span>Organizational Entity</span>
+    </b-dropdown-item>
     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
   </div>
 </template>
