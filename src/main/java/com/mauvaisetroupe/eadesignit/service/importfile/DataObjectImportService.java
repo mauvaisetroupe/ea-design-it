@@ -140,6 +140,9 @@ public class DataObjectImportService {
                     }
                     String dataObjectName = dos[dos.length - 1].trim();
                     DataObject dataObject = findOrCreateDO(dataObjectName, dataObjectParent, application);
+                    // overwrite a value
+                    dataObject.setBusinessObject(bo);
+                    dataObject.setType(dto.getType());
 
                     // create link to landascape
                     if (dto.getLandscapes() != null && dto.getLandscapes().size() > 0) {
