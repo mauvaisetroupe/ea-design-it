@@ -9,10 +9,13 @@ import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
+import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,6 +27,26 @@ public class ApplicationImportTest extends ImportFlowTest {
 
     @Autowired
     ApplicationRepository applicationRepository;
+
+    @AfterEach
+    @BeforeEach
+    @Transactional
+    public void clearDatabase() {
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+        //SELECT 'jdbcTemplate.execute("TRUNCATE TABLE ' ||  table_schema || '.' || table_name || ';");' AS sql_statement FROM information_schema.tables WHERE table_schema = 'PUBLIC' ORDER BY table_name;
+        jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY FALSE");
+
+        List<String> tableNames = getAllTableNames();
+
+        // Truncate tables in reverse order
+        for (int i = tableNames.size() - 1; i >= 0; i--) {
+            String tableName = tableNames.get(i);
+            String truncateQuery = "TRUNCATE TABLE " + tableName;
+            jdbcTemplate.execute(truncateQuery);
+        }
+        jdbcTemplate.execute("SET REFERENTIAL_INTEGRITY FALSE");
+    }
 
     @Test
     void testNullable() throws EncryptedDocumentException, IOException {
