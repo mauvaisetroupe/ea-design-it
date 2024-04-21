@@ -6,7 +6,9 @@ import com.mauvaisetroupe.eadesignit.domain.ExternalSystem;
 import com.mauvaisetroupe.eadesignit.domain.FlowImport;
 import com.mauvaisetroupe.eadesignit.domain.FunctionalFlow;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.dto.ApplicationsImportDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationCapabilityImportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationExportService;
 import com.mauvaisetroupe.eadesignit.service.importfile.ApplicationImportService;
@@ -25,6 +27,7 @@ import com.mauvaisetroupe.eadesignit.service.importfile.dto.ApplicationCapabilit
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportAnalysisDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.DataObjectDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.FlowImportDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.SummarySheetDTO;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.SummaryImporterService;
@@ -118,9 +121,18 @@ public class ImportResource {
     }
 
     @PostMapping("/import/application/upload-file")
-    public List<ApplicationImport> uploadFile(@RequestPart MultipartFile file) throws Exception {
+    public ApplicationsImportDTO uploadFile(@RequestPart MultipartFile file) throws Exception {
+        List<ApplicationImport> applicationImports = null;
+        ApplicationsImportDTO applicationsImportDTO = new ApplicationsImportDTO();
         try {
-            return applicationImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+            applicationImports = applicationImportService.importExcel(file.getInputStream(), file.getOriginalFilename());
+            applicationsImportDTO.setApplicationImports(applicationImports);
+            return applicationsImportDTO;
+        } catch (ErrorLineException e) {
+            applicationsImportDTO.setErrorLines(e.getErrorLines());
+            applicationsImportDTO.setStatus(ImportStatus.ERROR);
+            applicationsImportDTO.setErrorMessage(e.getMessage());
+            return applicationsImportDTO;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ApplicationImportException(e.getMessage());

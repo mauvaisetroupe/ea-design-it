@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.DataObject;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +19,7 @@ public class ImportDataObjects extends ImportFlowTest {
 
     @Test
     @Transactional
-    void testImportDataObjectsWithIncorrectLine() throws EncryptedDocumentException, IOException {
+    void testImportDataObjectsWithIncorrectLine() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "/junit/05-import-multi-flows-with-capas-and-dataobjects.xlsx";
 
         // Party		yes
@@ -122,7 +123,7 @@ public class ImportDataObjects extends ImportFlowTest {
 
     @Test
     @Transactional
-    void testImportDataObjectsWithCorrectLine() throws EncryptedDocumentException, IOException {
+    void testImportDataObjectsWithCorrectLine() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "/junit/05-import-multi-flows-with-capas-and-dataobjects-corrected.xlsx";
 
         assertEquals(0, applicationRepository.findAll().size());

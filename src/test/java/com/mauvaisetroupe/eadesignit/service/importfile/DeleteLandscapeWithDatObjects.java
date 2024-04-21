@@ -9,6 +9,7 @@ import com.mauvaisetroupe.eadesignit.repository.CapabilityApplicationMappingRepo
 import com.mauvaisetroupe.eadesignit.repository.DataObjectRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
 import java.io.IOException;
 import org.apache.poi.EncryptedDocumentException;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ public class DeleteLandscapeWithDatObjects {
 
     @Test
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
-    void testDeleteLandscapeWithDataObject() throws EncryptedDocumentException, IOException {
+    void testDeleteLandscapeWithDataObject() throws EncryptedDocumentException, IOException, ErrorLineException {
         assertEquals(0, landscapeViewRepository.findAll().size());
         assertEquals(0, functionalFlowRepository.findAll().size());
 

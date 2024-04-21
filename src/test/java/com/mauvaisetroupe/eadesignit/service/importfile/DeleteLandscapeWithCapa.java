@@ -10,6 +10,7 @@ import com.mauvaisetroupe.eadesignit.repository.CapabilityApplicationMappingRepo
 import com.mauvaisetroupe.eadesignit.repository.DataObjectRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
 import java.io.IOException;
 import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
@@ -46,7 +47,7 @@ public class DeleteLandscapeWithCapa {
 
     @Test
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
-    void testDeleteLandscapeWithCapabilities() throws EncryptedDocumentException, IOException {
+    void testDeleteLandscapeWithCapabilities() throws EncryptedDocumentException, IOException, ErrorLineException {
         assertEquals(0, applicationRepository.findAll().size());
         assertEquals(0, landscapeViewRepository.findAll().size());
         assertEquals(0, functionalFlowRepository.findAll().size());

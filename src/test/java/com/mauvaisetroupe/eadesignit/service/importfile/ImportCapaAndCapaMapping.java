@@ -6,6 +6,7 @@ import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.Capability;
 import com.mauvaisetroupe.eadesignit.domain.CapabilityApplicationMapping;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportAnalysisDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +17,7 @@ public class ImportCapaAndCapaMapping extends ImportFlowTest {
 
     @Test
     @Transactional
-    void testImportSimpleExample() throws EncryptedDocumentException, IOException {
+    void testImportSimpleExample() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "/junit/05-import-multi-flows-with-capas-and-dataobjects.xlsx";
 
         assertEquals(0, applicationRepository.findAll().size());

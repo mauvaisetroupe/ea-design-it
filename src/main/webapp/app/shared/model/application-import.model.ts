@@ -1,4 +1,16 @@
 import { type ImportStatus } from '@/shared/model/enumerations/import-status.model';
+
+export interface ErrorLine {
+  errorMessage: string;
+}
+
+export interface IApplicationsImportDTO {
+  status?: ImportStatus | null;
+  errorMessage?: string | null;
+  applicationImports?: IApplicationImport[] | null;
+  errorLines?: ErrorLine[] | null;
+}
+
 export interface IApplicationImport {
   id?: number;
   importId?: string | null;

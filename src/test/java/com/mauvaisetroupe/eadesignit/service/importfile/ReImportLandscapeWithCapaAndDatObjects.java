@@ -3,6 +3,7 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportAnalysisDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +14,7 @@ public class ReImportLandscapeWithCapaAndDatObjects extends ImportFlowTest {
 
     @Test
     @Transactional
-    void testReimportLandscapeWithCapabilities() throws EncryptedDocumentException, IOException {
+    void testReimportLandscapeWithCapabilities() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "/junit/05-import-multi-flows-with-capas-and-dataobjects.xlsx";
 
         assertEquals(0, applicationRepository.findAll().size());
@@ -59,7 +60,7 @@ public class ReImportLandscapeWithCapaAndDatObjects extends ImportFlowTest {
 
     @Test
     @Transactional
-    void testReimportLandscapeWithDataObjects() throws EncryptedDocumentException, IOException {
+    void testReimportLandscapeWithDataObjects() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "/junit/05-import-multi-flows-with-capas-and-dataobjects.xlsx";
 
         assertEquals(0, applicationRepository.findAll().size());

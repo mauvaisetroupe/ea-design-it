@@ -4,6 +4,8 @@ import com.mauvaisetroupe.eadesignit.domain.Application;
 import com.mauvaisetroupe.eadesignit.domain.ApplicationImport;
 import com.mauvaisetroupe.eadesignit.domain.enumeration.ImportStatus;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLine;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ApplicationMapperUtil;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
@@ -36,12 +38,20 @@ public class ApplicationImportService {
 
     @Transactional
     public List<ApplicationImport> importExcel(InputStream inputStream, String originalFilename)
-        throws EncryptedDocumentException, IOException {
+        throws EncryptedDocumentException, IOException, ErrorLineException {
         ExcelReader excelReader = new ExcelReader(inputStream);
 
+        List<ErrorLine> errorLines = new ArrayList();
+
+        // Browse Owner sheet and update or create Owners
         List<Map<String, Object>> ownerDF = excelReader.getSheet(OWNER_SHEET_NAME);
         for (Map<String, Object> map : ownerDF) {
-            applicationMapperUtil.mapArrayToOwner(map);
+            try {
+                applicationMapperUtil.mapArrayToOwner(map);
+            } catch (Exception e) {
+                log.error("Error adding owner  " + map, e);
+                errorLines.add(new ErrorLine("Error adding owner  " + map));
+            }
         }
 
         List<Map<String, Object>> applicationDF = excelReader.getSheet(APPLICATION_SHEET_NAME);
@@ -49,28 +59,36 @@ public class ApplicationImportService {
 
         List<ApplicationImport> result = new ArrayList<ApplicationImport>();
         for (Map<String, Object> map : applicationDF) {
-            // Map to ApplicationImport DTO
-            ApplicationImport applicationImport = applicationMapperUtil.mapArrayToImportApplication(map);
+            try {
+                // Map to ApplicationImport DTO
+                ApplicationImport applicationImport = applicationMapperUtil.mapArrayToImportApplication(map);
 
-            // Check if Application with same Alias and Name already exist
-            Application application = findOrCreateApplication(applicationImport);
-            if (application.getId() != null) {
-                applicationImport.setImportStatus(ImportStatus.EXISTING);
-            } else {
-                applicationImport.setImportStatus(ImportStatus.NEW);
+                // Check if Application with same Alias and Name already exist
+                Application application = findApplication(applicationImport);
+                if (application.getId() != null) {
+                    applicationImport.setImportStatus(ImportStatus.EXISTING);
+                } else {
+                    applicationImport.setImportStatus(ImportStatus.NEW);
+                }
+
+                // Map ApplicationImport DTO to Application
+                applicationMapperUtil.mapApplicationImportToApplication(applicationImport, application);
+
+                applicationRepository.save(application);
+                result.add(applicationImport);
+            } catch (Exception e) {
+                log.error("Error adding application  " + map, e);
+                errorLines.add(new ErrorLine("Error adding application  " + map + ". Error message = " + e.getMessage()));
             }
-
-            // Map ApplicationImport DTO to Application
-            applicationMapperUtil.mapApplicationImportToApplication(applicationImport, application);
-
-            applicationRepository.save(application);
-            result.add(applicationImport);
+        }
+        if (!errorLines.isEmpty()) {
+            throw new ErrorLineException("Error importing Applications Excel File", errorLines);
         }
 
         return result;
     }
 
-    public Application findOrCreateApplication(ApplicationImport applicationImport) {
+    public Application findApplication(ApplicationImport applicationImport) {
         // Check if alias not used for another application
         Application application = applicationRepository.findByAlias(applicationImport.getIdFromExcel()).orElseGet(Application::new);
 

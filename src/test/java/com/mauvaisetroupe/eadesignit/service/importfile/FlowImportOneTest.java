@@ -9,6 +9,7 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -42,7 +43,7 @@ public class FlowImportOneTest extends ImportFlowTest {
     }
 
     @Test
-    void testImport1() throws EncryptedDocumentException, IOException {
+    void testImport1() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filemame = "02-import-flows.xlsx";
 
         InputStream file1 = this.getClass().getResourceAsStream("/junit/01-import-applications.xlsx");
@@ -56,7 +57,7 @@ public class FlowImportOneTest extends ImportFlowTest {
     }
 
     @Test
-    void testImport2() throws EncryptedDocumentException, IOException {
+    void testImport2() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filemame = "02-import-flows-02.xlsx";
 
         InputStream file1 = this.getClass().getResourceAsStream("/junit/01-import-applications.xlsx");
@@ -69,7 +70,7 @@ public class FlowImportOneTest extends ImportFlowTest {
     }
 
     @Test
-    void shouldImportExternal1() throws EncryptedDocumentException, IOException {
+    void shouldImportExternal1() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "02-import-flows.xlsx";
 
         // creat CYP.02 marked as external... should now be added during import
@@ -89,7 +90,7 @@ public class FlowImportOneTest extends ImportFlowTest {
     }
 
     @Test
-    void shouldImportExternal2() throws EncryptedDocumentException, IOException {
+    void shouldImportExternal2() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "02-import-flows-02.xlsx";
 
         // creat CYP.02 marked as external... should now be added during import

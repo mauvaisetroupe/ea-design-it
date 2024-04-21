@@ -137,15 +137,15 @@ public class ApplicationMapperUtil {
         application.setAlias(applicationImport.getIdFromExcel());
         application.setApplicationType(getApplicationType(applicationImport));
         application.setSoftwareType(getSoftwareType(applicationImport));
-        application.setTechnologies(getTechnologies(applicationImport));
-        application.setCategories(getCategories(applicationImport));
-        application.setOwner(getOwner(applicationImport.getOwner()));
-        application.setItOwner(getOwner(applicationImport.getItOwner()));
-        application.setBusinessOwner(getOwner(applicationImport.getBusinessOwner()));
+        application.setTechnologies(findOrCreateTechnologies(applicationImport));
+        application.setCategories(findOrCreateCategories(applicationImport));
+        application.setOwner(findOrCreateOwner(applicationImport.getOwner()));
+        application.setItOwner(findOrCreateOwner(applicationImport.getItOwner()));
+        application.setBusinessOwner(findOrCreateOwner(applicationImport.getBusinessOwner()));
 
         Set<ExternalReference> references = getExternalReferencesFromImport(applicationImport);
         application.setExternalIDS(references);
-        application.setOrganizationalEntity(getOrganizationalEntity(applicationImport.getOrganizationalEntity()));
+        application.setOrganizationalEntity(findOrCreateOrganizationalEntity(applicationImport.getOrganizationalEntity()));
     }
 
     public void mapApplicationImportToComponent(ApplicationImport applicationImport, final ApplicationComponent application) {
@@ -155,8 +155,8 @@ public class ApplicationMapperUtil {
         application.setAlias(applicationImport.getIdFromExcel());
         application.setApplicationType(getApplicationType(applicationImport));
         application.setSoftwareType(getSoftwareType(applicationImport));
-        application.setTechnologies(getTechnologies(applicationImport));
-        application.setCategories(getCategories(applicationImport));
+        application.setTechnologies(findOrCreateTechnologies(applicationImport));
+        application.setCategories(findOrCreateCategories(applicationImport));
 
         Set<ExternalReference> references = getExternalReferencesFromImport(applicationImport);
         application.setExternalIDS(references);
@@ -180,7 +180,7 @@ public class ApplicationMapperUtil {
         return applicationType;
     }
 
-    private Set<Technology> getTechnologies(ApplicationImport applicationImport) {
+    private Set<Technology> findOrCreateTechnologies(ApplicationImport applicationImport) {
         Set<Technology> technologies = new HashSet<>();
         for (String _technology : applicationImport.getTechnologies()) {
             if (StringUtils.hasText(_technology)) {
@@ -196,7 +196,7 @@ public class ApplicationMapperUtil {
         return technologies;
     }
 
-    private Set<ApplicationCategory> getCategories(ApplicationImport applicationImport) {
+    private Set<ApplicationCategory> findOrCreateCategories(ApplicationImport applicationImport) {
         Set<ApplicationCategory> categories = new HashSet<>();
         for (String _category : applicationImport.getCategories()) {
             ApplicationCategory applicationCategory = applicationCategoryRepository.findByNameIgnoreCase(_category);
@@ -210,7 +210,7 @@ public class ApplicationMapperUtil {
         return categories;
     }
 
-    private Owner getOwner(String ownerName) {
+    private Owner findOrCreateOwner(String ownerName) {
         Owner owner = null;
         if (StringUtils.hasText(ownerName)) {
             owner = ownerRepository.findByNameIgnoreCase(ownerName);
@@ -223,7 +223,7 @@ public class ApplicationMapperUtil {
         return owner;
     }
 
-    private OrganizationalEntity getOrganizationalEntity(String organizationalEntityName) {
+    private OrganizationalEntity findOrCreateOrganizationalEntity(String organizationalEntityName) {
         OrganizationalEntity organizationalEntity = null;
         if (StringUtils.hasText(organizationalEntityName)) {
             organizationalEntity = organizationalEntityRepository.findByNameIgnoreCase(organizationalEntityName);
@@ -252,6 +252,8 @@ public class ApplicationMapperUtil {
             Matcher matcher = pattern.matcher(potentialEmail);
             if (matcher.matches()) {
                 owner.setEmail(potentialEmail);
+            } else {
+                owner.setEmail(null);
             }
         }
         ownerRepository.save(owner);

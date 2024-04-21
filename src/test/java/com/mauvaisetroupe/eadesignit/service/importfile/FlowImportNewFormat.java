@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.mauvaisetroupe.eadesignit.domain.FlowInterface;
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.SummaryImporterService;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +17,7 @@ import org.junit.jupiter.api.Test;
 public class FlowImportNewFormat extends ImportFlowTest {
 
     @Test
-    void testImportSimpleExample() throws EncryptedDocumentException, IOException {
+    void testImportSimpleExample() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "/junit/04-import-multi-flows.xlsx";
 
         assertEquals(0, applicationRepository.findAll().size());
@@ -79,7 +80,7 @@ public class FlowImportNewFormat extends ImportFlowTest {
     }
 
     @Test
-    void testImportWithNoLandscapeAssociated() throws EncryptedDocumentException, IOException {
+    void testImportWithNoLandscapeAssociated() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "/junit/04-import-multi-flows.xlsx";
 
         assertEquals(0, applicationRepository.findAll().size());
@@ -163,7 +164,7 @@ public class FlowImportNewFormat extends ImportFlowTest {
     }
 
     @Test
-    void testUpdateAmExisingFlow() throws EncryptedDocumentException, IOException {
+    void testUpdateAmExisingFlow() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "/junit/04-import-multi-flows.xlsx";
 
         assertEquals(0, applicationRepository.findAll().size());
@@ -194,7 +195,7 @@ public class FlowImportNewFormat extends ImportFlowTest {
     }
 
     @Test
-    void testExistingInterface() throws EncryptedDocumentException, IOException {
+    void testExistingInterface() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "/junit/04-import-multi-flows.xlsx";
 
         assertEquals(0, applicationRepository.findAll().size());
@@ -229,7 +230,7 @@ public class FlowImportNewFormat extends ImportFlowTest {
     }
 
     @Test
-    void testIdemPotent() throws EncryptedDocumentException, IOException {
+    void testIdemPotent() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "/junit/04-import-multi-flows.xlsx";
 
         assertEquals(0, applicationRepository.findAll().size());

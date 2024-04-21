@@ -28,11 +28,26 @@
     </div>
 
     <br />
-    <div class="alert alert-warning" v-if="rowsLoaded && applicationImports && applicationImports.length === 0">
+    <div class="alert alert-warning" v-if="rowsLoaded && applicationsImportDTO?.applicationImports?.length === 0">
       <span>No applicationImports found</span>
     </div>
 
-    <div class="table-responsive" v-if="applicationImports && applicationImports.length > 0">
+    <div class="table-responsive" v-if="applicationsImportDTO?.errorLines?.length > 0">
+      <table class="table table-striped" aria-describedby="applicationImports">
+        <thead>
+          <tr>
+            <th scope="row"><span>Error Message</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(errorLine, i) in applicationsImportDTO?.errorLines" :key="i" data-cy="entityTable">
+            <td>{{ errorLine.errorMessage }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-responsive" v-if="applicationsImportDTO?.applicationImports?.length > 0">
       <table class="table table-striped" aria-describedby="applicationImports">
         <thead>
           <tr>
@@ -56,7 +71,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="applicationImport in applicationImports" :key="applicationImport.id" data-cy="entityTable">
+          <tr v-for="applicationImport in applicationsImportDTO?.applicationImports" :key="applicationImport.id" data-cy="entityTable">
             <td>{{ applicationImport.id }}</td>
             <td>{{ applicationImport.importId }}</td>
             <td>{{ applicationImport.excelFileName }}</td>

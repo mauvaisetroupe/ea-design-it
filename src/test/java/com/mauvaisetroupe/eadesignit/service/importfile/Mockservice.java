@@ -6,6 +6,7 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
 import com.mauvaisetroupe.eadesignit.service.LandscapeViewService;
 import com.mauvaisetroupe.eadesignit.service.importfile.dto.CapabilityImportAnalysisDTO;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.poi.EncryptedDocumentException;
@@ -40,7 +41,7 @@ public class Mockservice {
 
     String filename = "/junit/05-import-multi-flows-with-capas-and-dataobjects.xlsx";
 
-    public void createLandscape() throws EncryptedDocumentException, IOException {
+    public void createLandscape() throws EncryptedDocumentException, IOException, ErrorLineException {
         /////////////////////
         // Import APPLICATION
         /////////////////////

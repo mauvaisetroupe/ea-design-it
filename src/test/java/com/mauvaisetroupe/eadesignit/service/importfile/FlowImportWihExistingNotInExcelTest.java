@@ -5,6 +5,7 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -30,7 +31,7 @@ public class FlowImportWihExistingNotInExcelTest extends ImportFlowTest {
     ApplicationRepository applicationRepository;
 
     @Test
-    void testShouldRemoveFlowIfNotInExecl() throws EncryptedDocumentException, IOException {
+    void testShouldRemoveFlowIfNotInExecl() throws EncryptedDocumentException, IOException, ErrorLineException {
         // Id flow	Alias flow	External	Source Element	Target Element
         // TRAD.001	CYP.01		APPLICATION-0001	APPLICATION-0002
         // TRAD.002	CYP.01		APPLICATION-0002	APPLICATION-0003

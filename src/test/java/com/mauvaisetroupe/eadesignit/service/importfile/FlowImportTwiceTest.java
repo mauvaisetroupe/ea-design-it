@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
 public class FlowImportTwiceTest extends ImportFlowTest {
 
     @Test
-    void testImportTwice1() throws EncryptedDocumentException, IOException {
+    void testImportTwice1() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "02-import-flows.xlsx";
 
         assertEquals(0, applicationRepository.findAll().size());
@@ -45,7 +46,7 @@ public class FlowImportTwiceTest extends ImportFlowTest {
     }
 
     @Test
-    void testImportTwice2() throws EncryptedDocumentException, IOException {
+    void testImportTwice2() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filename = "02-import-flows-02.xlsx";
 
         assertEquals(0, applicationRepository.findAll().size());

@@ -6,6 +6,7 @@ import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.ApplicationRepository;
 import com.mauvaisetroupe.eadesignit.repository.FunctionalFlowRepository;
 import com.mauvaisetroupe.eadesignit.repository.LandscapeViewRepository;
+import com.mauvaisetroupe.eadesignit.service.importfile.dto.ErrorLineException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -34,7 +35,7 @@ public class FlowImportSubComponentTest extends ImportFlowTest {
     ApplicationRepository applicationRepository;
 
     @Test
-    void testImport2() throws EncryptedDocumentException, IOException {
+    void testImport2() throws EncryptedDocumentException, IOException, ErrorLineException {
         String filemame = "03-import-flows.xlsx";
 
         InputStream file1 = this.getClass().getResourceAsStream("/junit/01-import-applications.xlsx");
