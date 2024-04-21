@@ -30,6 +30,7 @@ export default defineComponent({
     const capabilitiesMappingWithNoLandscape = ref(true);
     const functionalFlowsWhithNoLandscape = ref(true);
     const submited = ref(false);
+    const businessAndDataObjects = ref(true);
 
     onMounted(async () => {
       await retrieveAllLandscapeViews();
@@ -93,6 +94,7 @@ export default defineComponent({
           checkedCapabilitiesMapping.value.map(l => l.id),
           capabilitiesMappingWithNoLandscape.value,
           functionalFlowsWhithNoLandscape.value,
+          businessAndDataObjects.value,
         )
         .then(
           response => {
@@ -137,6 +139,7 @@ export default defineComponent({
       selectNoMapping,
       checkCapa,
       exportExcel,
+      businessAndDataObjects,
     };
   },
 });

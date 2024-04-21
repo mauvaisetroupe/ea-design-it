@@ -14,6 +14,7 @@ export default class FullExportService {
     capabilitiesMapping: number[],
     capabilitiesMappingWithNoLandscape: boolean,
     functionalFlowsWhithNoLandscape: boolean,
+    businessAndDataObjects: boolean,
   ): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios
@@ -29,6 +30,7 @@ export default class FullExportService {
             capabilitiesMapping: capabilitiesMapping,
             capabilitiesMappingWithNoLandscape: capabilitiesMappingWithNoLandscape,
             functionalFlowsWhithNoLandscape: functionalFlowsWhithNoLandscape,
+            businessAndDataObjects: businessAndDataObjects,
           },
         })
         .then(res => {

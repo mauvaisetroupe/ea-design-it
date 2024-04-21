@@ -66,12 +66,11 @@ public class ExportFullDataService {
     ) throws IOException {
         Workbook workbook = new XSSFWorkbook();
         Sheet summarySheet = workbook.createSheet(SummaryImporterService.SUMMARY_SHEET);
-        Sheet appliSheet = workbook.createSheet(ApplicationImportService.APPLICATION_SHEET_NAME);
-        Sheet componentSheet = workbook.createSheet(ComponentImportService.COMPONENT_SHEET_NAME);
-        Sheet ownerSheet = workbook.createSheet(ApplicationImportService.OWNER_SHEET_NAME);
-        Sheet externalSystemSheet = workbook.createSheet(ExternalSystemImportService.SHEET_NAME);
-        Sheet capabilitiesSheet = workbook.createSheet(CapabilityImportService.CAPABILITY_SHEET_NAME);
-        Sheet businessObjectsSheet = workbook.createSheet(DataObjectImportService.DATA_OBJECT_SHEET_NAME);
+
+        Sheet appliSheet = null;
+        Sheet componentSheet = null;
+        Sheet ownerSheet = null;
+        Sheet externalSystemSheet = null;
 
         int lineNb = 0;
         int nbcolumn = 0;
@@ -83,6 +82,7 @@ public class ExportFullDataService {
 
         // External Systems
         if (exportExternalSystem) {
+            externalSystemSheet = workbook.createSheet(ExternalSystemImportService.SHEET_NAME);
             externalSystemExportService.writeExternalSytemSheet(externalSystemSheet, workbook);
             ExcelUtils.autoSizeAllColumns(externalSystemSheet);
             ExcelUtils.addHeaderColorAndFilte(workbook, externalSystemSheet);
@@ -90,29 +90,24 @@ public class ExportFullDataService {
 
         // Application, ApplicationComponent, Owner & ExternalSystem
         if (exportApplications) {
+            appliSheet = workbook.createSheet(ApplicationImportService.APPLICATION_SHEET_NAME);
             applicationExportService.writeApplication(appliSheet);
             ExcelUtils.autoSizeAllColumns(appliSheet);
             ExcelUtils.addHeaderColorAndFilte(workbook, appliSheet);
         }
         if (exportComponents) {
+            componentSheet = workbook.createSheet(ComponentImportService.COMPONENT_SHEET_NAME);
             applicationExportService.writeComponent(componentSheet);
             ExcelUtils.autoSizeAllColumns(componentSheet);
             ExcelUtils.addHeaderColorAndFilte(workbook, componentSheet);
         }
         if (exportOwner) {
+            ownerSheet = workbook.createSheet(ApplicationImportService.OWNER_SHEET_NAME);
             applicationExportService.writeOwner(ownerSheet);
             ExcelUtils.autoSizeAllColumns(ownerSheet);
             ExcelUtils.addHeaderColorAndFilte(workbook, ownerSheet);
         }
-        addApplicationSummary(
-            workbook,
-            summarySheet,
-            appliSheet.getSheetName(),
-            componentSheet.getSheetName(),
-            ownerSheet.getSheetName(),
-            externalSystemSheet.getSheetName(),
-            lineNb
-        );
+        addApplicationSummary(workbook, summarySheet, appliSheet, componentSheet, ownerSheet, externalSystemSheet, lineNb);
         lineNb += 4;
 
         // Landcsacpes
@@ -147,6 +142,7 @@ public class ExportFullDataService {
 
         // Capabilities
         if (exportCapabilities) {
+            Sheet capabilitiesSheet = workbook.createSheet(CapabilityImportService.CAPABILITY_SHEET_NAME);
             capabilityExportService.writeCapabilities(capabilitiesSheet, workbook);
             ExcelUtils.autoSizeAllColumns(capabilitiesSheet);
             ExcelUtils.addHeaderColorAndFilte(workbook, capabilitiesSheet);
@@ -164,6 +160,7 @@ public class ExportFullDataService {
 
         // Business and Data Objects
         if (businessAndDataObjects) {
+            Sheet businessObjectsSheet = workbook.createSheet(DataObjectImportService.DATA_OBJECT_SHEET_NAME);
             addBusinessAndDataObjectsSummary(workbook, summarySheet, businessObjectsSheet.getSheetName(), lineNb);
             businessAndDataObjectExportService.writeDatObjects(businessObjectsSheet);
             ExcelUtils.autoSizeAllColumns(businessObjectsSheet);
@@ -185,35 +182,43 @@ public class ExportFullDataService {
     private void addApplicationSummary(
         Workbook workbook,
         Sheet summarySheet,
-        String appSheet,
-        String componentSheet,
-        String ownerSheet,
-        String externalSystemSheet,
+        Sheet appSheet,
+        Sheet componentSheet,
+        Sheet ownerSheet,
+        Sheet externalSystemSheet,
         int lineNb
     ) {
-        Row row = summarySheet.createRow(lineNb++);
         int columnNb = 0;
-        row.createCell(columnNb++).setCellValue("Application");
-        Cell cell = row.createCell(columnNb++);
-        createHyperlink(workbook, appSheet, cell);
+        if (appSheet != null) {
+            Row row = summarySheet.createRow(lineNb++);
+            row.createCell(columnNb++).setCellValue("Application");
+            Cell cell = row.createCell(columnNb++);
+            createHyperlink(workbook, appSheet.getSheetName(), cell);
+        }
 
-        row = summarySheet.createRow(lineNb++);
-        columnNb = 0;
-        row.createCell(columnNb++).setCellValue("Application Component");
-        cell = row.createCell(columnNb++);
-        createHyperlink(workbook, componentSheet, cell);
+        if (componentSheet != null) {
+            Row row = summarySheet.createRow(lineNb++);
+            columnNb = 0;
+            row.createCell(columnNb++).setCellValue("Application Component");
+            Cell cell = row.createCell(columnNb++);
+            createHyperlink(workbook, componentSheet.getSheetName(), cell);
+        }
 
-        row = summarySheet.createRow(lineNb++);
-        columnNb = 0;
-        row.createCell(columnNb++).setCellValue("Owner");
-        cell = row.createCell(columnNb++);
-        createHyperlink(workbook, ownerSheet, cell);
+        if (ownerSheet != null) {
+            Row row = summarySheet.createRow(lineNb++);
+            columnNb = 0;
+            row.createCell(columnNb++).setCellValue("Owner");
+            Cell cell = row.createCell(columnNb++);
+            createHyperlink(workbook, ownerSheet.getSheetName(), cell);
+        }
 
-        row = summarySheet.createRow(lineNb++);
-        columnNb = 0;
-        row.createCell(columnNb++).setCellValue("ExternalSystem");
-        cell = row.createCell(columnNb++);
-        createHyperlink(workbook, externalSystemSheet, cell);
+        if (externalSystemSheet != null) {
+            Row row = summarySheet.createRow(lineNb++);
+            columnNb = 0;
+            row.createCell(columnNb++).setCellValue("ExternalSystem");
+            Cell cell = row.createCell(columnNb++);
+            createHyperlink(workbook, externalSystemSheet.getSheetName(), cell);
+        }
     }
 
     private void addSummryFlow(Workbook workbook, Sheet summarySheet, LandscapeView landscape, String flowSheetName, int lineNb) {

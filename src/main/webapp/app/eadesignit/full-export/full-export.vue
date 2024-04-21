@@ -43,6 +43,13 @@
         <label>Capabilities</label>
       </div>
     </div>
+    <h3>Business & Data Objects</h3>
+    <div class="row m-3">
+      <div class="col-4">
+        <input type="checkbox" v-model="businessAndDataObjects" />
+        <label>Business & Data Objects</label>
+      </div>
+    </div>
     <div>
       <h3>Capabilities In Landscape</h3>
       [<a @click="selectAllMapping">Select All</a>] [<a @click="selectNoMapping">Select None</a>]
