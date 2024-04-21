@@ -159,7 +159,8 @@ public class ExportFullDataService {
             capabilitiesMappingToExport,
             exportCapabilitiesWithNoLandscape
         );
-        addCapabilitieMappingsSummary(workbook, summarySheet, capabilityMappingDTOs, lineNb);
+        int nbmappings = addCapabilitieMappingsSummary(workbook, summarySheet, capabilityMappingDTOs, lineNb);
+        lineNb = lineNb + nbmappings;
 
         // Business and Data Objects
         if (businessAndDataObjects) {
@@ -247,7 +248,7 @@ public class ExportFullDataService {
         createHyperlink(workbook, capabilitySheetName, cell);
     }
 
-    private void addCapabilitieMappingsSummary(
+    private int addCapabilitieMappingsSummary(
         Workbook workbook,
         Sheet summarySheet,
         List<CapabilityMappingDTO> capabilityMappingDTOs,
@@ -261,6 +262,7 @@ public class ExportFullDataService {
             createHyperlink(workbook, capabilityMappingDTO.getSheetName(), cell);
             row.createCell(columnNb++).setCellValue(capabilityMappingDTO.getLandscape());
         }
+        return capabilityMappingDTOs == null ? 0 : capabilityMappingDTOs.size();
     }
 
     private void addBusinessAndDataObjectsSummary(Workbook workbook, Sheet summarySheet, String businessSheetName, int lineNb) {
