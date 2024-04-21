@@ -2,6 +2,7 @@ package com.mauvaisetroupe.eadesignit.service.importfile;
 
 import com.mauvaisetroupe.eadesignit.domain.BusinessObject;
 import com.mauvaisetroupe.eadesignit.domain.DataObject;
+import com.mauvaisetroupe.eadesignit.domain.LandscapeView;
 import com.mauvaisetroupe.eadesignit.repository.BusinessObjectRepository;
 import com.mauvaisetroupe.eadesignit.repository.DataObjectRepository;
 import com.mauvaisetroupe.eadesignit.service.importfile.util.ExcelUtils;
@@ -54,6 +55,11 @@ public class BusinessAndDataObjectExportService {
         headerRow.createCell(column++).setCellValue(DataObjectImportService.DATA_OBJECT_APPLICATION);
 
         List<DataObject> dataObjects = dataObjectRepository.findAllWithAllChildrens();
+        int maxNbLandscape = dataObjects.stream().map(dob -> dob.getLandscapes().size()).mapToInt(v -> v).max().orElse(0);
+        for (int i = 1; i < maxNbLandscape + 1; i++) {
+            headerRow.createCell(column++).setCellValue(DataObjectImportService.LANDSCAPE_NAME_PREFIX + i);
+        }
+
         for (DataObject datObject : dataObjects) {
             column = 0;
             Row row = sheet.createRow(rownb++);
@@ -75,9 +81,14 @@ public class BusinessAndDataObjectExportService {
             }
             column++;
             if (datObject.getApplication() != null) {
-                row.createCell(column++).setCellValue(datObject.getApplication().getName());
+                row.createCell(column).setCellValue(datObject.getApplication().getName());
             }
             column++;
+            if (datObject.getLandscapes() != null) {
+                for (LandscapeView landscape : datObject.getLandscapes()) {
+                    row.createCell(column++).setCellValue(landscape.getDiagramName());
+                }
+            }
         }
 
         List<BusinessObject> orphanBusinessObjects = businessObjectRepository
