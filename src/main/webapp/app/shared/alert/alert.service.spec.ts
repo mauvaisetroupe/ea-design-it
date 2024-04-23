@@ -132,13 +132,14 @@ describe('Alert Service test suite', () => {
         message,
       },
     };
-
+    const expectedMessage =
+      'Server responded with a status of 500 (Internal Server Error). Please consult browser console errors to report a bug';
     // WHEN
     alertService.showHttpError(httpErrorResponse);
 
     // THEN
     expect(toastStub).toBeCalledTimes(1);
-    expect(toastStub).toBeCalledWith(message, {
+    expect(toastStub).toBeCalledWith(expectedMessage, {
       toaster: 'b-toaster-top-center',
       title: 'Error',
       variant: 'danger',
