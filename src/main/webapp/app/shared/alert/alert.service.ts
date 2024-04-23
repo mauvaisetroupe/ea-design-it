@@ -54,12 +54,12 @@ export default class AlertService {
       this.showHttpError(error.response);
     } else {
       console.error(error);
-      this.showError('Unknow Error, please consult console errors to report a bug');
+      this.showError('Unknow Error, please consult browser console errors to report a bug');
     }
   }
 
   public showHttpError(httpErrorResponse: any) {
-    console.log(httpErrorResponse.type);
+    console.log(httpErrorResponse);
     let errorMessage: string | null = null;
     switch (httpErrorResponse.status) {
       case 0:
@@ -81,13 +81,28 @@ export default class AlertService {
         break;
       }
 
+      case 500: {
+        errorMessage =
+          'Server responded with a status of 500 (Internal Server Error). Please consult browser console errors to report a bug';
+        break;
+      }
+
       case 404:
         errorMessage = 'The page does not exist.';
         break;
 
       default:
-        errorMessage = httpErrorResponse.data.message;
+        errorMessage = httpErrorResponse?.data?.message;
     }
+    errorMessage = guessError(errorMessage, httpErrorResponse);
     this.showError(errorMessage);
   }
+}
+
+function guessError(errorMessage: string | null, httpErrorResponse: any): string | null {
+  const concatString = httpErrorResponse?.data?.message + ' ' + httpErrorResponse?.data?.detail;
+  if (concatString.toLowerCase().includes('constraint violation')) {
+    return 'Error during operation : integrity constraint violation';
+  }
+  return errorMessage;
 }

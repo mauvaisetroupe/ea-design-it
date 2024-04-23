@@ -133,6 +133,8 @@ const app = createApp({
 
     setupAxiosInterceptors(
       error => {
+        console.error('Error onUnauthenticated');
+        console.error(error);
         const url = error.response?.config?.url;
         const status = error.status || error.response.status;
         if (status === 401) {
@@ -147,6 +149,8 @@ const app = createApp({
         return Promise.reject(error);
       },
       error => {
+        console.error('Error onServerError');
+        console.log(error);
         return Promise.reject(error);
       },
     );
